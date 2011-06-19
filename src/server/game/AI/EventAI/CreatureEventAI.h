@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CREATURE_EAI_H
-#define TRINITY_CREATURE_EAI_H
+#ifndef CREATURE_EAI_H
+#define CREATURE_EAI_H
 
 #include "Common.h"
 #include "Creature.h"

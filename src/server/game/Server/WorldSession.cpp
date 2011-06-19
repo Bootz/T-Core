@@ -145,7 +145,7 @@ void WorldSession::SendPacket(WorldPacket const *packet)
     if (!m_Socket)
         return;
 
-#ifdef TRINITY_DEBUG
+#ifdef DEBUG
     // Code for network use statistic
     static uint64 sendPacketCount = 0;
     static uint64 sendPacketBytes = 0;
@@ -177,7 +177,7 @@ void WorldSession::SendPacket(WorldPacket const *packet)
         sendLastPacketCount = 1;
         sendLastPacketBytes = packet->wpos();               // wpos is real written size
     }
-#endif                                                      // !TRINITY_DEBUG
+#endif                                                      // !DEBUG
 
     if (m_Socket->SendPacket (*packet) == -1)
         m_Socket->CloseSocket ();

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CELLIMPL_H
-#define TRINITY_CELLIMPL_H
+#ifndef CELLIMPL_H
+#define CELLIMPL_H
 
 #include <cmath>
 

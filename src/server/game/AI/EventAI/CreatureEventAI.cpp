@@ -66,7 +66,7 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
         {
 
             //Debug check
-            #ifndef TRINITY_DEBUG
+            #ifndef DEBUG
             if ((*i).event_flags & EFLAG_DEBUG_ONLY)
                 continue;
             #endif

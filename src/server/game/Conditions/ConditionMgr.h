@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CONDITIONMGR_H
-#define TRINITY_CONDITIONMGR_H
+#ifndef CONDITIONMGR_H
+#define CONDITIONMGR_H
 
 #include "LootMgr.h"
 

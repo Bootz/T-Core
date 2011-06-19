@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_OBJECTACCESSOR_H
-#define TRINITY_OBJECTACCESSOR_H
+#ifndef OBJECTACCESSOR_H
+#define OBJECTACCESSOR_H
 
 #include "Define.h"
 #include <ace/Singleton.h>

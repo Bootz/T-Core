@@ -19,8 +19,8 @@
 /// @{
 /// \file
 
-#ifndef _TRINITY_RARUNNABLE_H_
-#define _TRINITY_RARUNNABLE_H_
+#ifndef _RARUNNABLE_H_
+#define _RARUNNABLE_H_
 
 #include "Common.h"
 
@@ -38,5 +38,5 @@ private:
 
 };
 
-#endif /* _TRINITY_RARUNNABLE_H_ */
+#endif /* _RARUNNABLE_H_ */
 /// @}

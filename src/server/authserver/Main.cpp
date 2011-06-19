@@ -33,8 +33,8 @@
 #include "RealmList.h"
 #include "RealmAcceptor.h"
 
-#ifndef _TRINITY_REALM_CONFIG
-# define _TRINITY_REALM_CONFIG  "authserver.conf"
+#ifndef _REALM_CONFIG
+# define _REALM_CONFIG  "authserver.conf"
 #endif
 
 bool StartDB();
@@ -73,7 +73,7 @@ extern int main(int argc, char **argv)
 {
     sLog->SetLogDB(false);
     // Command line parsing to get the configuration file name
-    char const *cfg_file = _TRINITY_REALM_CONFIG;
+    char const *cfg_file = _REALM_CONFIG;
     int c = 1;
     while(c < argc)
     {

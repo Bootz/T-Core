@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDDEFINES_H
-#define TRINITY_GRIDDEFINES_H
+#ifndef GRIDDEFINES_H
+#define GRIDDEFINES_H
 
 #include "Common.h"
 #include "NGrid.h"

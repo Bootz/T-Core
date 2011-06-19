@@ -769,7 +769,7 @@ Map::CreatureRelocation(Creature *creature, float x, float y, float z, float ang
     // delay creature move for grid/cell to grid/cell moves
     if (old_cell.DiffCell(new_cell) || old_cell.DiffGrid(new_cell))
     {
-        #ifdef TRINITY_DEBUG
+        #ifdef DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) added to moving list from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", creature->GetGUIDLow(), creature->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
         AddCreatureToMoveList(creature, x, y, z, ang);
@@ -821,7 +821,7 @@ void Map::MoveAllCreaturesInMoveList()
             if (!CreatureRespawnRelocation(c))
             {
                 // ... or unload (if respawn grid also not loaded)
-                #ifdef TRINITY_DEBUG
+                #ifdef DEBUG
                     sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) cannot be move to unloaded respawn grid.", c->GetGUIDLow(), c->GetEntry());
                 #endif
                 AddObjectToRemoveList(c);
@@ -838,7 +838,7 @@ bool Map::CreatureCellRelocation(Creature *c, Cell new_cell)
         // if in same cell then none do
         if (old_cell.DiffCell(new_cell))
         {
-            #ifdef TRINITY_DEBUG
+            #ifdef DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved in grid[%u, %u] from cell[%u, %u] to cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.CellX(), new_cell.CellY());
             #endif
 
@@ -847,7 +847,7 @@ bool Map::CreatureCellRelocation(Creature *c, Cell new_cell)
         }
         else
         {
-            #ifdef TRINITY_DEBUG
+            #ifdef DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved in same grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY());
             #endif
         }
@@ -860,7 +860,7 @@ bool Map::CreatureCellRelocation(Creature *c, Cell new_cell)
     {
         EnsureGridLoadedAtEnter(new_cell);
 
-        #ifdef TRINITY_DEBUG
+        #ifdef DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Active creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
 
@@ -873,7 +873,7 @@ bool Map::CreatureCellRelocation(Creature *c, Cell new_cell)
     // in diff. loaded grid normal creature
     if (loaded(GridPair(new_cell.GridX(), new_cell.GridY())))
     {
-        #ifdef TRINITY_DEBUG
+        #ifdef DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
 
@@ -885,7 +885,7 @@ bool Map::CreatureCellRelocation(Creature *c, Cell new_cell)
     }
 
     // fail to move: normal creature attempt move to unloaded grid
-    #ifdef TRINITY_DEBUG
+    #ifdef DEBUG
         sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) attempted to move from grid[%u, %u]cell[%u, %u] to unloaded grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
     #endif
     return false;
@@ -902,7 +902,7 @@ bool Map::CreatureRespawnRelocation(Creature *c)
     c->CombatStop();
     c->GetMotionMaster()->Clear();
 
-    #ifdef TRINITY_DEBUG
+    #ifdef DEBUG
         sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to respawn grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), c->GetCurrentCell().GridX(), c->GetCurrentCell().GridY(), c->GetCurrentCell().CellX(), c->GetCurrentCell().CellY(), resp_cell.GridX(), resp_cell.GridY(), resp_cell.CellX(), resp_cell.CellY());
     #endif
 

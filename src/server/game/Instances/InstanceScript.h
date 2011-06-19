@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_INSTANCE_DATA_H
-#define TRINITY_INSTANCE_DATA_H
+#ifndef INSTANCE_DATA_H
+#define INSTANCE_DATA_H
 
 #include "ZoneScript.h"
 #include "World.h"

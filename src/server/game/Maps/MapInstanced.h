@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MAP_INSTANCED_H
-#define TRINITY_MAP_INSTANCED_H
+#ifndef MAP_INSTANCED_H
+#define MAP_INSTANCED_H
 
 #include "Map.h"
 #include "InstanceSaveMgr.h"

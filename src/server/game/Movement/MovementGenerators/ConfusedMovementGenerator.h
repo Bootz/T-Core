@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CONFUSEDGENERATOR_H
-#define TRINITY_CONFUSEDGENERATOR_H
+#ifndef CONFUSEDGENERATOR_H
+#define CONFUSEDGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "DestinationHolder.h"

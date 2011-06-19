@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDLOADER_H
-#define TRINITY_GRIDLOADER_H
+#ifndef GRIDLOADER_H
+#define GRIDLOADER_H
 
 /**
   @class GridLoader

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTSCRIPT_H
-#define TRINITY_SMARTSCRIPT_H
+#ifndef SMARTSCRIPT_H
+#define SMARTSCRIPT_H
 
 #include "Common.h"
 #include "Creature.h"

@@ -1,6 +1,6 @@
 
-#ifndef TRINITY_SPELLAURAEFFECTS_H
-#define TRINITY_SPELLAURAEFFECTS_H
+#ifndef SPELLAURAEFFECTS_H
+#define SPELLAURAEFFECTS_H
 
 class Unit;
 class DynamicObject;

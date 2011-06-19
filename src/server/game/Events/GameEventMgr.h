@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GAMEEVENT_MGR_H
-#define TRINITY_GAMEEVENT_MGR_H
+#ifndef GAMEEVENT_MGR_H
+#define GAMEEVENT_MGR_H
 
 #include "Common.h"
 #include "SharedDefines.h"

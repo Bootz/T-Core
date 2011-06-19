@@ -82,7 +82,7 @@ void MapManager::checkAndCorrectGridStatesArray()
             ok = false;
             si_GridStates[i] = i_GridStates[i];
         }
-        #ifdef TRINITY_DEBUG
+        #ifdef DEBUG
         // inner class checking only when compiled with debug
         if (!si_GridStates[i]->checkMagic())
         {

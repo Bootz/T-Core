@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FACTORY_HOLDER
-#define TRINITY_FACTORY_HOLDER
+#ifndef FACTORY_HOLDER
+#define FACTORY_HOLDER
 
 #include "Define.h"
 #include "Dynamic/TypeList.h"
