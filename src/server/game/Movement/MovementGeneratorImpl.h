@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MOVEMENTGENERATOR_IMPL_H
-#define TRINITY_MOVEMENTGENERATOR_IMPL_H
+#ifndef MOVEMENTGENERATOR_IMPL_H
+#define MOVEMENTGENERATOR_IMPL_H
 
 #include "MovementGenerator.h"
 

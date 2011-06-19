@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DESTINATIONHOLDERIMP_H
-#define TRINITY_DESTINATIONHOLDERIMP_H
+#ifndef DESTINATIONHOLDERIMP_H
+#define DESTINATIONHOLDERIMP_H
 
 #include "MapManager.h"
 #include "DestinationHolder.h"

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FLEEINGMOVEMENTGENERATOR_H
-#define TRINITY_FLEEINGMOVEMENTGENERATOR_H
+#ifndef FLEEINGMOVEMENTGENERATOR_H
+#define FLEEINGMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "DestinationHolder.h"

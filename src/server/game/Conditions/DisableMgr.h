@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DISABLEMGR_H
-#define TRINITY_DISABLEMGR_H
+#ifndef DISABLEMGR_H
+#define DISABLEMGR_H
 
 #include <ace/Singleton.h>
 
@@ -75,4 +75,4 @@ class DisableMgr
 
 #define sDisableMgr ACE_Singleton<DisableMgr, ACE_Null_Mutex>::instance()
 
-#endif //TRINITY_DISABLEMGR_H
+#endif //DISABLEMGR_H

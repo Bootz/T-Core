@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_POINTMOVEMENTGENERATOR_H
-#define TRINITY_POINTMOVEMENTGENERATOR_H
+#ifndef POINTMOVEMENTGENERATOR_H
+#define POINTMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "DestinationHolder.h"

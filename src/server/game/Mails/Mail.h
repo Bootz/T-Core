@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TRINITY_MAIL_H
-#define TRINITY_MAIL_H
+#ifndef MAIL_H
+#define MAIL_H
 
 #include "Common.h"
 #include <map>

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_TRAVELLER_H
-#define TRINITY_TRAVELLER_H
+#ifndef TRAVELLER_H
+#define TRAVELLER_H
 
 #include "Creature.h"
 #include "Player.h"

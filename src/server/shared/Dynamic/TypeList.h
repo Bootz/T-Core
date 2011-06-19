@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_TYPELIST_H
-#define TRINITY_TYPELIST_H
+#ifndef TYPELIST_H
+#define TYPELIST_H
 
 /*
   @struct TypeList

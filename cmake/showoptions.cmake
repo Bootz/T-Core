@@ -1,6 +1,6 @@
 # output generic information about the core and buildtype chosen
 message("")
-message("* TrinityCore commithash : ${rev_hash_str}")
+message("* TrilliumEMU commithash : ${rev_hash_str}")
 if( UNIX )
   message("* Build binaries in      : ${CMAKE_BUILD_TYPE} mode")
 endif()

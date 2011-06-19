@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_IDLEMOVEMENTGENERATOR_H
-#define TRINITY_IDLEMOVEMENTGENERATOR_H
+#ifndef IDLEMOVEMENTGENERATOR_H
+#define IDLEMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 

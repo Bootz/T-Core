@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_OBJECTGRIDLOADER_H
-#define TRINITY_OBJECTGRIDLOADER_H
+#ifndef OBJECTGRIDLOADER_H
+#define OBJECTGRIDLOADER_H
 
 #include "TypeList.h"
 #include "Define.h"
