@@ -1,6 +1,5 @@
 Cleanup game folder. and cpp files.
 Cleanup scripts.
-cleanup sql folder.
 add Database Structure.
 Begin to write Spell System.
 Write new Opcodes System.
