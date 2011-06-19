@@ -646,8 +646,8 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
     if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
-        Trinity::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> say_do(say_builder);
+        World::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        World::LocalizedPacketDo<World::AchievementChatBuilder> say_do(say_builder);
         guild->BroadcastWorker(say_do, GetPlayer());
     }
 
@@ -664,16 +664,16 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     // if player is in world he can tell his friends about new achievement
     else if (GetPlayer()->IsInWorld())
     {
-        CellPair p = Trinity::ComputeCellPair(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
+        CellPair p = World::ComputeCellPair(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
 
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
         cell.SetNoCreate();
 
-        Trinity::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> say_do(say_builder);
-        Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> > say_worker(GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-        TypeContainerVisitor<Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+        World::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        World::LocalizedPacketDo<World::AchievementChatBuilder> say_do(say_builder);
+        World::PlayerDistWorker<World::LocalizedPacketDo<World::AchievementChatBuilder> > say_worker(GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+        TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
         cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
     }
 

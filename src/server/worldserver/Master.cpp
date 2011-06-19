@@ -50,7 +50,7 @@ extern int m_ServiceStatus;
 #endif
 
 /// Handle worldservers's termination signals
-class WorldServerSignalHandler : public Trinity::SignalHandler
+class WorldServerSignalHandler : public World::SignalHandler
 {
     public:
         virtual void HandleSignal(int SigNum)

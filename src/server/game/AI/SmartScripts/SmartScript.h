@@ -155,14 +155,14 @@ class SmartScript
         {
             GameObject* pGameObject = NULL;
 
-            CellPair p(Trinity::ComputeCellPair(pSearchObject->GetPositionX(), pSearchObject->GetPositionY()));
+            CellPair p(World::ComputeCellPair(pSearchObject->GetPositionX(), pSearchObject->GetPositionY()));
             Cell cell(p);
             cell.data.Part.reserved = ALL_DISTRICT;
 
-            Trinity::GameObjectWithDbGUIDCheck goCheck(*pSearchObject, guid);
-            Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck> checker(pSearchObject, pGameObject, goCheck);
+            World::GameObjectWithDbGUIDCheck goCheck(*pSearchObject, guid);
+            World::GameObjectSearcher<World::GameObjectWithDbGUIDCheck> checker(pSearchObject, pGameObject, goCheck);
 
-            TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
+            TypeContainerVisitor<World::GameObjectSearcher<World::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
             cell.Visit(p, objectChecker, *pSearchObject->GetMap());
 
             return pGameObject;
@@ -171,14 +171,14 @@ class SmartScript
         Creature* FindCreatureNear(WorldObject* pSearchObject, uint32 guid) const
         {
             Creature* crea = NULL;
-            CellPair p(Trinity::ComputeCellPair(pSearchObject->GetPositionX(), pSearchObject->GetPositionY()));
+            CellPair p(World::ComputeCellPair(pSearchObject->GetPositionX(), pSearchObject->GetPositionY()));
             Cell cell(p);
             cell.data.Part.reserved = ALL_DISTRICT;
 
-            Trinity::CreatureWithDbGUIDCheck target_check(pSearchObject, guid);
-            Trinity::CreatureSearcher<Trinity::CreatureWithDbGUIDCheck> checker(pSearchObject, crea, target_check);
+            World::CreatureWithDbGUIDCheck target_check(pSearchObject, guid);
+            World::CreatureSearcher<World::CreatureWithDbGUIDCheck> checker(pSearchObject, crea, target_check);
 
-            TypeContainerVisitor<Trinity::CreatureSearcher <Trinity::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
+            TypeContainerVisitor<World::CreatureSearcher <World::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
             cell.Visit(p, unit_checker, *pSearchObject->GetMap());
 
             return crea;

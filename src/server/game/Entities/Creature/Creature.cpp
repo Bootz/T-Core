@@ -673,14 +673,14 @@ void Creature::DoFleeToGetAssistance()
     {
         Creature* pCreature = NULL;
 
-        CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+        CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
         cell.SetNoCreate();
-        Trinity::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
-        Trinity::CreatureLastSearcher<Trinity::NearestAssistCreatureInCreatureRangeCheck> searcher(this, pCreature, u_check);
+        World::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
+        World::CreatureLastSearcher<World::NearestAssistCreatureInCreatureRangeCheck> searcher(this, pCreature, u_check);
 
-        TypeContainerVisitor<Trinity::CreatureLastSearcher<Trinity::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
+        TypeContainerVisitor<World::CreatureLastSearcher<World::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
 
         cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 
@@ -1789,7 +1789,7 @@ SpellEntry const *Creature::reachWithSpellCure(Unit *pVictim)
 // select nearest hostile unit within the given distance (regardless of threat list).
 Unit* Creature::SelectNearestTarget(float dist) const
 {
-    CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+    CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
@@ -1800,11 +1800,11 @@ Unit* Creature::SelectNearestTarget(float dist) const
         if (dist == 0.0f)
             dist = MAX_VISIBILITY_DISTANCE;
 
-        Trinity::NearestHostileUnitCheck u_check(this, dist);
-        Trinity::UnitLastSearcher<Trinity::NearestHostileUnitCheck> searcher(this, target, u_check);
+        World::NearestHostileUnitCheck u_check(this, dist);
+        World::UnitLastSearcher<World::NearestHostileUnitCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<Trinity::UnitLastSearcher<Trinity::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<Trinity::UnitLastSearcher<Trinity::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<World::UnitLastSearcher<World::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<World::UnitLastSearcher<World::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -1816,7 +1816,7 @@ Unit* Creature::SelectNearestTarget(float dist) const
 // select nearest hostile unit within the given attack distance (i.e. distance is ignored if > than ATTACK_DISTANCE), regardless of threat list.
 Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
 {
-    CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+    CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
@@ -1830,11 +1830,11 @@ Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
     }
 
     {
-        Trinity::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
-        Trinity::UnitLastSearcher<Trinity::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
+        World::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
+        World::UnitLastSearcher<World::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<Trinity::UnitLastSearcher<Trinity::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<Trinity::UnitLastSearcher<Trinity::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<World::UnitLastSearcher<World::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<World::UnitLastSearcher<World::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
@@ -1868,15 +1868,15 @@ void Creature::CallAssistance()
             std::list<Creature*> assistList;
 
             {
-                CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+                CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
                 Cell cell(p);
                 cell.data.Part.reserved = ALL_DISTRICT;
                 cell.SetNoCreate();
 
-                Trinity::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
-                Trinity::CreatureListSearcher<Trinity::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
+                World::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
+                World::CreatureListSearcher<World::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
 
-                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+                TypeContainerVisitor<World::CreatureListSearcher<World::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
                 cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
             }
@@ -1901,15 +1901,15 @@ void Creature::CallForHelp(float fRadius)
     if (fRadius <= 0.0f || !getVictim() || isPet() || isCharmed())
         return;
 
-    CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+    CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    Trinity::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), fRadius);
-    Trinity::CreatureWorker<Trinity::CallOfHelpCreatureInRangeDo> worker(this, u_do);
+    World::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), fRadius);
+    World::CreatureWorker<World::CallOfHelpCreatureInRangeDo> worker(this, u_do);
 
-    TypeContainerVisitor<Trinity::CreatureWorker<Trinity::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
+    TypeContainerVisitor<World::CreatureWorker<World::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
 
     cell.Visit(p, grid_creature_searcher, *GetMap(), *this, fRadius);
 }

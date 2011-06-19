@@ -2410,8 +2410,8 @@ void AuraEffect::HandleFeignDeath(AuraApplication const* aurApp, uint8 mode, boo
         */
 
         UnitList targets;
-        Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
-        Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
+        World::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
+        World::UnitListSearcher<World::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
         target->VisitNearbyObject(target->GetMap()->GetVisibilityRange(), searcher);
         for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {
@@ -5652,15 +5652,15 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                         // eff_radius == 0
                         float radius = GetSpellMaxRange(GetSpellProto(), false);
 
-                        CellPair p(Trinity::ComputeCellPair(target->GetPositionX(), target->GetPositionY()));
+                        CellPair p(World::ComputeCellPair(target->GetPositionX(), target->GetPositionY()));
                         Cell cell(p);
                         cell.data.Part.reserved = ALL_DISTRICT;
 
-                        Trinity::AnyUnfriendlyVisibleUnitInObjectRangeCheck u_check(target, target, radius);
-                        Trinity::UnitListSearcher<Trinity::AnyUnfriendlyVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
+                        World::AnyUnfriendlyVisibleUnitInObjectRangeCheck u_check(target, target, radius);
+                        World::UnitListSearcher<World::AnyUnfriendlyVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
 
-                        TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
-                        TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
+                        TypeContainerVisitor<World::UnitListSearcher<World::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
+                        TypeContainerVisitor<World::UnitListSearcher<World::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
 
                         cell.Visit(p, grid_object_checker,  *GetBase()->GetOwner()->GetMap(), *target, radius);
                         cell.Visit(p, world_object_checker, *GetBase()->GetOwner()->GetMap(), *target, radius);

@@ -429,14 +429,14 @@ class spell_rotface_ooze_flood : public SpellScriptLoader
 
                 std::list<Creature*> triggers;
                 GetHitUnit()->GetCreatureListWithEntryInGrid(triggers, GetHitUnit()->GetEntry(), 12.5f);
-                triggers.sort(Trinity::ObjectDistanceOrderPred(GetHitUnit()));
+                triggers.sort(World::ObjectDistanceOrderPred(GetHitUnit()));
                 GetHitUnit()->CastSpell(triggers.back(), uint32(GetEffectValue()), false, NULL, NULL, GetOriginalCaster() ? GetOriginalCaster()->GetGUID() : 0);
             }
 
             void FilterTargets(std::list<Unit*>& targetList)
             {
                 // get 2 targets except 2 nearest
-                targetList.sort(Trinity::ObjectDistanceOrderPred(GetCaster()));
+                targetList.sort(World::ObjectDistanceOrderPred(GetCaster()));
 
                 // .resize() runs pop_back();
                 if (targetList.size() > 4)

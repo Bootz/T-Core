@@ -1222,8 +1222,8 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
     Player* pl = m_session->GetPlayer();
     GameObject* obj = NULL;
-    Trinity::NearestGameObjectCheck check(*pl);
-    Trinity::GameObjectLastSearcher<Trinity::NearestGameObjectCheck> searcher(pl, obj, check);
+    World::NearestGameObjectCheck check(*pl);
+    World::GameObjectLastSearcher<World::NearestGameObjectCheck> searcher(pl, obj, check);
     pl->VisitNearbyGridObject(999, searcher);
     return obj;
 }
@@ -1240,14 +1240,14 @@ GameObject* ChatHandler::GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid
     if (!obj && sObjectMgr->GetGOData(lowguid))                   // guid is DB guid of object
     {
         // search near player then
-        CellPair p(Trinity::ComputeCellPair(pl->GetPositionX(), pl->GetPositionY()));
+        CellPair p(World::ComputeCellPair(pl->GetPositionX(), pl->GetPositionY()));
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
 
-        Trinity::GameObjectWithDbGUIDCheck go_check(*pl, lowguid);
-        Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
+        World::GameObjectWithDbGUIDCheck go_check(*pl, lowguid);
+        World::GameObjectSearcher<World::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
 
-        TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<World::GameObjectSearcher<World::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *pl->GetMap());
     }
 

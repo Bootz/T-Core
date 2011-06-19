@@ -252,7 +252,7 @@ void Map::RemoveFromGrid(T* obj, NGridType *grid, Cell const& cell)
 template<class T>
 void Map::SwitchGridContainers(T* obj, bool on)
 {
-    CellPair p = Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
+    CellPair p = World::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
     {
         sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
@@ -386,7 +386,7 @@ bool Map::EnsureGridLoaded(const Cell &cell)
 
 void Map::LoadGrid(float x, float y)
 {
-    CellPair pair = Trinity::ComputeCellPair(x, y);
+    CellPair pair = World::ComputeCellPair(x, y);
     Cell cell(pair);
     EnsureGridLoaded(cell);
 }
@@ -395,7 +395,7 @@ bool Map::Add(Player* player)
 {
     // Check if we are adding to correct map
     ASSERT (player->GetMap() == this);
-    CellPair p = Trinity::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
+    CellPair p = World::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
     {
         sLog->outError("Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), p.x_coord, p.y_coord);
@@ -426,7 +426,7 @@ template<class T>
 void
 Map::Add(T *obj)
 {
-    CellPair p = Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
+    CellPair p = World::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
     {
         sLog->outError("Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
@@ -467,9 +467,9 @@ bool Map::loaded(const GridPair &p) const
     return (getNGrid(p.x_coord, p.y_coord) && isGridObjectDataLoaded(p.x_coord, p.y_coord));
 }
 
-void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<Trinity::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<Trinity::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
+void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<World::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<World::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
 {
-    CellPair standing_cell(Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY()));
+    CellPair standing_cell(World::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY()));
 
     // Check for correctness of standing_cell, it also avoids problems with update_cell
     if (standing_cell.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || standing_cell.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
@@ -519,11 +519,11 @@ void Map::Update(const uint32 &t_diff)
     /// update active cells around players and active objects
     resetMarkedCells();
 
-    Trinity::ObjectUpdater updater(t_diff);
+    World::ObjectUpdater updater(t_diff);
     // for creature
-    TypeContainerVisitor<Trinity::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
+    TypeContainerVisitor<World::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
     // for pets
-    TypeContainerVisitor<Trinity::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
+    TypeContainerVisitor<World::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
 
     // the player iterator is stored in the map object
     // to make sure calls to Map::Remove don't invalidate it
@@ -610,9 +610,9 @@ void Map::ProcessRelocationNotifies(const uint32 & diff)
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                Trinity::DelayedUnitRelocation cell_relocation(cell, pair, *this, MAX_VISIBILITY_DISTANCE);
-                TypeContainerVisitor<Trinity::DelayedUnitRelocation, GridTypeMapContainer  > grid_object_relocation(cell_relocation);
-                TypeContainerVisitor<Trinity::DelayedUnitRelocation, WorldTypeMapContainer > world_object_relocation(cell_relocation);
+                World::DelayedUnitRelocation cell_relocation(cell, pair, *this, MAX_VISIBILITY_DISTANCE);
+                TypeContainerVisitor<World::DelayedUnitRelocation, GridTypeMapContainer  > grid_object_relocation(cell_relocation);
+                TypeContainerVisitor<World::DelayedUnitRelocation, WorldTypeMapContainer > world_object_relocation(cell_relocation);
                 Visit(cell, grid_object_relocation);
                 Visit(cell, world_object_relocation);
             }
@@ -662,7 +662,7 @@ void Map::Remove(Player* player, bool remove)
     player->RemoveFromWorld();
     SendRemoveTransports(player);
 
-    CellPair p = Trinity::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
+    CellPair p = World::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
         sLog->outCrash("Map::Remove: Player is in invalid cell!");
     else
@@ -695,7 +695,7 @@ Map::Remove(T *obj, bool remove)
     if (obj->isActiveObject())
         RemoveFromActive(obj);
 
-    CellPair p = Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
+    CellPair p = World::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
         sLog->outError("Map::Remove: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
     else
@@ -728,8 +728,8 @@ Map::PlayerRelocation(Player* player, float x, float y, float z, float orientati
 {
     ASSERT(player);
 
-    CellPair old_val = Trinity::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
-    CellPair new_val = Trinity::ComputeCellPair(x, y);
+    CellPair old_val = World::ComputeCellPair(player->GetPositionX(), player->GetPositionY());
+    CellPair new_val = World::ComputeCellPair(x, y);
 
     Cell old_cell(old_val);
     Cell new_cell(new_val);
@@ -760,7 +760,7 @@ Map::CreatureRelocation(Creature *creature, float x, float y, float z, float ang
 
     Cell old_cell = creature->GetCurrentCell();
 
-    CellPair new_val = Trinity::ComputeCellPair(x, y);
+    CellPair new_val = World::ComputeCellPair(x, y);
     Cell new_cell(new_val);
 
     if (!respawnRelocationOnFail && !getNGrid(new_cell.GridX(), new_cell.GridY()))
@@ -803,7 +803,7 @@ void Map::MoveAllCreaturesInMoveList()
         i_creaturesToMove.erase(iter);
 
         // calculate cells
-        CellPair new_val = Trinity::ComputeCellPair(cm.x, cm.y);
+        CellPair new_val = World::ComputeCellPair(cm.x, cm.y);
         Cell new_cell(new_val);
 
         // do move or do move to respawn or remove creature if previous all fail
@@ -896,7 +896,7 @@ bool Map::CreatureRespawnRelocation(Creature *c)
     float resp_x, resp_y, resp_z, resp_o;
     c->GetRespawnCoord(resp_x, resp_y, resp_z, &resp_o);
 
-    CellPair resp_val = Trinity::ComputeCellPair(resp_x, resp_y);
+    CellPair resp_val = World::ComputeCellPair(resp_x, resp_y);
     Cell resp_cell(resp_val);
 
     c->CombatStop();
@@ -1822,7 +1822,7 @@ bool Map::CheckGridIntegrity(Creature* c, bool moved) const
 {
     Cell const& cur_cell = c->GetCurrentCell();
 
-    CellPair xy_val = Trinity::ComputeCellPair(c->GetPositionX(), c->GetPositionY());
+    CellPair xy_val = World::ComputeCellPair(c->GetPositionX(), c->GetPositionY());
     Cell xy_cell(xy_val);
     if (xy_cell != cur_cell)
     {
@@ -1846,19 +1846,19 @@ void Map::UpdateObjectVisibility(WorldObject* obj, Cell cell, CellPair cellpair)
 {
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
-    Trinity::VisibleChangesNotifier notifier(*obj);
-    TypeContainerVisitor<Trinity::VisibleChangesNotifier, WorldTypeMapContainer > player_notifier(notifier);
+    World::VisibleChangesNotifier notifier(*obj);
+    TypeContainerVisitor<World::VisibleChangesNotifier, WorldTypeMapContainer > player_notifier(notifier);
     cell.Visit(cellpair, player_notifier, *this, *obj, obj->GetVisibilityRange());
 }
 
 void Map::UpdateObjectsVisibilityFor(Player* player, Cell cell, CellPair cellpair)
 {
-    Trinity::VisibleNotifier notifier(*player);
+    World::VisibleNotifier notifier(*player);
 
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
-    TypeContainerVisitor<Trinity::VisibleNotifier, WorldTypeMapContainer > world_notifier(notifier);
-    TypeContainerVisitor<Trinity::VisibleNotifier, GridTypeMapContainer  > grid_notifier(notifier);
+    TypeContainerVisitor<World::VisibleNotifier, WorldTypeMapContainer > world_notifier(notifier);
+    TypeContainerVisitor<World::VisibleNotifier, GridTypeMapContainer  > grid_notifier(notifier);
     cell.Visit(cellpair, world_notifier, *this, *player, player->GetVisibilityRange());
     cell.Visit(cellpair, grid_notifier,  *this, *player, player->GetVisibilityRange());
 
@@ -2096,7 +2096,7 @@ bool Map::ActiveObjectsNearGrid(uint32 x, uint32 y) const
     {
         Player* plr = iter->getSource();
 
-        CellPair p = Trinity::ComputeCellPair(plr->GetPositionX(), plr->GetPositionY());
+        CellPair p = World::ComputeCellPair(plr->GetPositionX(), plr->GetPositionY());
         if ((cell_min.x_coord <= p.x_coord && p.x_coord <= cell_max.x_coord) &&
             (cell_min.y_coord <= p.y_coord && p.y_coord <= cell_max.y_coord))
             return true;
@@ -2106,7 +2106,7 @@ bool Map::ActiveObjectsNearGrid(uint32 x, uint32 y) const
     {
         WorldObject* obj = *iter;
 
-        CellPair p = Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
+        CellPair p = World::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
         if ((cell_min.x_coord <= p.x_coord && p.x_coord <= cell_max.x_coord) &&
             (cell_min.y_coord <= p.y_coord && p.y_coord <= cell_max.y_coord))
             return true;
@@ -2124,12 +2124,12 @@ void Map::AddToActive(Creature* c)
     {
         float x, y, z;
         c->GetRespawnCoord(x, y, z);
-        GridPair p = Trinity::ComputeGridPair(x, y);
+        GridPair p = World::ComputeGridPair(x, y);
         if (getNGrid(p.x_coord, p.y_coord))
             getNGrid(p.x_coord, p.y_coord)->incUnloadActiveLock();
         else
         {
-            GridPair p2 = Trinity::ComputeGridPair(c->GetPositionX(), c->GetPositionY());
+            GridPair p2 = World::ComputeGridPair(c->GetPositionX(), c->GetPositionY());
             sLog->outError("Active creature (GUID: %u Entry: %u) added to grid[%u, %u] but spawn grid[%u, %u] was not loaded.",
                 c->GetGUIDLow(), c->GetEntry(), p.x_coord, p.y_coord, p2.x_coord, p2.y_coord);
         }
@@ -2145,12 +2145,12 @@ void Map::RemoveFromActive(Creature* c)
     {
         float x, y, z;
         c->GetRespawnCoord(x, y, z);
-        GridPair p = Trinity::ComputeGridPair(x, y);
+        GridPair p = World::ComputeGridPair(x, y);
         if (getNGrid(p.x_coord, p.y_coord))
             getNGrid(p.x_coord, p.y_coord)->decUnloadActiveLock();
         else
         {
-            GridPair p2 = Trinity::ComputeGridPair(c->GetPositionX(), c->GetPositionY());
+            GridPair p2 = World::ComputeGridPair(c->GetPositionX(), c->GetPositionY());
             sLog->outError("Active creature (GUID: %u Entry: %u) removed from grid[%u, %u] but spawn grid[%u, %u] was not loaded.",
                 c->GetGUIDLow(), c->GetEntry(), p.x_coord, p.y_coord, p2.x_coord, p2.y_coord);
         }

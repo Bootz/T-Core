@@ -284,7 +284,7 @@ enum SpellTargets
 
 class Spell
 {
-    friend struct Trinity::SpellNotifierCreatureAndPlayer;
+    friend struct World::SpellNotifierCreatureAndPlayer;
     friend void Unit::SetCurrentCastedSpell(Spell* pSpell);
     friend class SpellScript;
     public:

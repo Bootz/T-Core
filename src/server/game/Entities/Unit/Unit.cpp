@@ -1653,7 +1653,7 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
     // We're going to call functions which can modify content of the list during iteration over it's elements
     // Let's copy the list so we can prevent iterator invalidation
     AuraEffectList vSchoolAbsorbCopy(pVictim->GetAuraEffectsByType(SPELL_AURA_SCHOOL_ABSORB));
-    vSchoolAbsorbCopy.sort(Trinity::AbsorbAuraOrderPred());
+    vSchoolAbsorbCopy.sort(World::AbsorbAuraOrderPred());
 
     // absorb without mana cost
     for (AuraEffectList::iterator itr = vSchoolAbsorbCopy.begin(); (itr != vSchoolAbsorbCopy.end()) && (dmgInfo.GetDamage() > 0); ++itr)
@@ -14706,8 +14706,8 @@ void Unit::UpdateReactives(uint32 p_time)
 Unit* Unit::SelectNearbyTarget(float dist) const
 {
     std::list<Unit *> targets;
-    Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
-    Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(this, targets, u_check);
+    World::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
+    World::UnitListSearcher<World::AnyUnfriendlyUnitInObjectRangeCheck> searcher(this, targets, u_check);
     VisitNearbyObject(dist, searcher);
 
     // remove current target
@@ -16370,7 +16370,7 @@ void Unit::UpdateObjectVisibility(bool forced)
     {
         WorldObject::UpdateObjectVisibility(true);
         // call MoveInLineOfSight for nearby creatures
-        Trinity::AIRelocationNotifier notifier(*this);
+        World::AIRelocationNotifier notifier(*this);
         VisitNearbyObject(GetVisibilityRange(), notifier);
     }
 }
@@ -17056,7 +17056,7 @@ void Unit::NearTeleportTo(float x, float y, float z, float orientation, bool cas
 bool Unit::SetPosition(float x, float y, float z, float orientation, bool teleport)
 {
     // prevent crash when a bad coord is sent by the client
-    if (!Trinity::IsValidMapCoord(x, y, z, orientation))
+    if (!World::IsValidMapCoord(x, y, z, orientation))
     {
         sLog->outDebug(LOG_FILTER_UNITS, "Unit::SetPosition(%f, %f, %f) .. bad coordinates!", x, y, z);
         return false;
