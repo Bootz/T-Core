@@ -1347,6 +1347,7 @@ enum Opcodes
     CMSG_TRANSFORM                                  = 0x4577, // 4.0.6a
     SMSG_UNKNOWN_1310                               = 0x2E88, // 4.0.6a
     CMSG_REDIRECT_AUTH_PROOF                        = 0x0100, // 4.0.6a
+    CMSG_AUTO_DECLINE_GUILD_INVITES                 = 0x8589, // 4.0.6a
     CMSG_SET_PRIMARY_TALENT_TREE                    = 0xFEA8, // 4.0.6a
     CMSG_RETURN_TO_GRAVEYARD                        = 0x0593, // 4.0.6a
     NUM_MSG_TYPES                                   = 0x51F //                      (last unknown opcode + 1.)
