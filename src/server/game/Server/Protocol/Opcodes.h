@@ -1343,7 +1343,7 @@ enum Opcodes
     UMSG_UNKNOWN_1305                               = 0x519, //
     UMSG_UNKNOWN_1306                               = 0x51A, //
     CMSG_COMMENTATOR_SKIRMISH_QUEUE_COMMAND         = 0x6DC8, // 4.0.6a
-    SMSG_UNKNOWN_1309                               = 0x51D, //
+    CMSG_TRANSFORM                                  = 0x4577, // 4.0.6a
     SMSG_UNKNOWN_1310                               = 0x2E88, // 4.0.6a
     NUM_MSG_TYPES                                   = 0x51F //                      (last unknown opcode + 1.)
 };
