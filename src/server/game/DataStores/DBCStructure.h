@@ -548,34 +548,30 @@ struct AreaGroupEntry
 
 struct AreaPOIEntry
 {
-    uint32 id;              //0
-    uint32 icon[11];        //1-11
-    float x;                //12
-    float y;                //13
-    float z;                //14
-    uint32 mapId;           //15
-    //uint32 val1;          //16
-    uint32 zoneId;          //17
-    //char* name[16];       //18-33
-    //uint32 name_flag;     //34
-    //char* name2[16];      //35-50
-    //uint32 name_flag2;    //51
-    uint32 worldState;      //52
-    //uint32 val2;          //53
+    uint32 mapId;           //14
+    //uint32 val1;          //15
+    uint32 zoneId;          //16
+    //DBCString name;       //17 - name
+    //DBCString name2;      //18 - name2
+    uint32 worldState;      //19
+    //uint32 val2;          //20
+    //uint32 unk;           //21
 };
 
 struct AreaTriggerEntry
 {
-    uint32  id;                                             // 0        m_ID
-    uint32  mapid;                                          // 1        m_ContinentID
-    float   x;                                              // 2        m_x
-    float   y;                                              // 3        m_y
-    float   z;                                              // 4        m_z
-    float   radius;                                         // 5        m_radius
-    float   box_x;                                          // 6        m_box_length
-    float   box_y;                                          // 7        m_box_width
-    float   box_z;                                          // 8        m_box_heigh
-    float   box_orientation;                                // 9        m_box_yaw
+    int32   mapid[8];                                       // 1-8 mapid
+    uint32  type;                                           // 9 (3 - BG, 4 - arena)
+    //uint32 canJoinAsGroup;                                // 10 (0 or 1)
+    DBCString name;                                         // 11
+    uint32 maxGroupSize;                                    // 12 maxGroupSize, used for checking if queue as group
+    uint32 HolidayWorldStateId;                             // 13 new 3.1
+    uint32 minLevel;                                        // 14, min level (sync with PvPDifficulty.dbc content)
+    uint32 maxLevel;                                        // 15, max level (sync with PvPDifficulty.dbc content)
+    //uint32 maxGroupSizeRated;                             // 16 4.0.1
+    //uint32 unk;                                           // 17 - 4.0.6.13596
+    //uint32 maxPlayers;                                    // 18 4.0.1
+    //uint32 unk1;                                          // 19 4.0.3, value 2 for Rated Battlegrounds
 };
 
 struct AuctionHouseEntry
@@ -783,10 +779,17 @@ struct CurrencyCategoryEntry
 
 struct CurrencyTypesEntry
 {
-    //uint32    ID;                                         // 0        not used
-    uint32    ItemId;                                       // 1        used as real index
-    //uint32    Category;                                   // 2        may be category
-    uint32    BitIndex;                                     // 3        bit index in PLAYER_FIELD_KNOWN_CURRENCIES (1 << (index-1))
+    uint32    ID;                                         // 0        not used
+    //uint32    Category;                                   // 1        may be category
+    //DBCString name;                                       // 2
+    //DBCString iconName;                                   // 3
+    //uint32                                                // 4
+    //uint32                                                // 5
+    //uint32                                                // 6
+    //uint32                                                // 7
+    //uint32                                                // 8
+    //uint32                                                // 9
+    //char* description;                                    // 10
 };
 
 struct DestructibleModelDataEntry
@@ -819,7 +822,7 @@ struct DungeonEncounterEntry
     uint32 difficulty;                                      // 2        instance mode
     //uint32 unk0;                                          // 3
     uint32 encounterIndex;                                  // 4        encounter index for creating completed mask
-    char*  encounterName[16];                               // 5-20     encounter name
+    DBCString encounterName;                                // 5-20     encounter name
     //uint32 nameFlags;                                     // 21
     //uint32 unk1;                                          // 22
 };
