@@ -3835,11 +3835,11 @@ void ObjectMgr::LoadQuests()
             sLog->outErrorDb("Quest %u has `Method` = %u, expected values are 0, 1 or 2.", qinfo->GetQuestId(), qinfo->GetQuestMethod());
         }
 
-        if (qinfo->QuestFlags & ~QUEST_FLAGS_DB_ALLOWED)
+        if (qinfo->QuestFlags & ~QUEST_TRILLIUM_FLAGS_DB_ALLOWED)
         {
             sLog->outErrorDb("Quest %u has `SpecialFlags` = %u > max allowed value. Correct `SpecialFlags` to value <= %u",
-                qinfo->GetQuestId(), qinfo->QuestFlags  >> 20, QUEST_FLAGS_DB_ALLOWED >> 20);
-            qinfo->QuestFlags &= QUEST_FLAGS_DB_ALLOWED;
+                qinfo->GetQuestId(), qinfo->QuestFlags  >> 20, QUEST_TRILLIUM_FLAGS_DB_ALLOWED >> 20);
+            qinfo->QuestFlags &= QUEST_TRILLIUM_FLAGS_DB_ALLOWED;
         }
 
         if (qinfo->QuestFlags & QUEST_FLAGS_DAILY && qinfo->QuestFlags & QUEST_FLAGS_WEEKLY)
@@ -3850,7 +3850,7 @@ void ObjectMgr::LoadQuests()
 
         if (qinfo->QuestFlags & QUEST_FLAGS_DAILY)
         {
-            if (!(qinfo->QuestFlags & QUEST_FLAGS_REPEATABLE))
+            if (!(qinfo->QuestFlags & QUEST_TRILLIUM_FLAGS_REPEATABLE))
             {
                 sLog->outErrorDb("Daily Quest %u not marked as repeatable in `SpecialFlags`, added.", qinfo->GetQuestId());
                 qinfo->QuestFlags |= QUEST_FLAGS_REPEATABLE;
@@ -4089,7 +4089,7 @@ void ObjectMgr::LoadQuests()
                     // no changes, quest can't be done for this requirement
                 }
 
-                qinfo->SetFlag(QUEST_FLAGS_DELIVER);
+                qinfo->SetFlag(QUEST_TRILLIUM_FLAGS_DELIVER);
 
                 if (!sObjectMgr->GetItemTemplate(id))
                 {
@@ -4157,12 +4157,12 @@ void ObjectMgr::LoadQuests()
 
                     if (found)
                     {
-                        if (!qinfo->HasFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT))
+                        if (!qinfo->HasFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT))
                         {
                             sLog->outErrorDb("Spell (id: %u) have SPELL_EFFECT_QUEST_COMPLETE or SPELL_EFFECT_SEND_EVENT for quest %u and ReqCreatureOrGOId%d = 0, but quest not have flag QUEST_FLAGS_EXPLORATION_OR_EVENT. Quest flags or ReqCreatureOrGOId%d must be fixed, quest modified to enable objective.", spellInfo->Id, qinfo->QuestId, j+1, j+1);
 
                             // this will prevent quest completing without objective
-                            const_cast<Quest*>(qinfo)->SetFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT);
+                            const_cast<Quest*>(qinfo)->SetFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT);
                         }
                     }
                     else
@@ -4196,7 +4196,7 @@ void ObjectMgr::LoadQuests()
             {
                 // In fact SpeakTo and Kill are quite same: either you can speak to mob:SpeakTo or you can't:Kill/Cast
 
-                qinfo->SetFlag(QUEST_FLAGS_KILL_OR_CAST | QUEST_FLAGS_SPEAKTO);
+                qinfo->SetFlag(QUEST_TRILLIUM_FLAGS_KILL_OR_CAST | QUEST_TRILLIUM_FLAGS_SPEAKTO);
 
                 if (!qinfo->ReqCreatureOrGOCount[j])
                 {
@@ -4406,7 +4406,7 @@ void ObjectMgr::LoadQuests()
         if (qinfo->ExclusiveGroup)
             mExclusiveQuestGroups.insert(std::pair<int32, uint32>(qinfo->ExclusiveGroup, qinfo->GetQuestId()));
         if (qinfo->LimitTime)
-            qinfo->SetFlag(QUEST_FLAGS_TIMED);
+            qinfo->SetFlag(QUEST_TRILLIUM_FLAGS_TIMED);
     }
 
     // check QUEST_FLAGS_EXPLORATION_OR_EVENT for spell with SPELL_EFFECT_QUEST_COMPLETE
@@ -4429,12 +4429,12 @@ void ObjectMgr::LoadQuests()
             if (!quest)
                 continue;
 
-            if (!quest->HasFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT))
+            if (!quest->HasFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT))
             {
                 sLog->outErrorDb("Spell (id: %u) have SPELL_EFFECT_QUEST_COMPLETE for quest %u , but quest not have flag QUEST_FLAGS_EXPLORATION_OR_EVENT. Quest flags must be fixed, quest modified to enable objective.", spellInfo->Id, quest_id);
 
                 // this will prevent quest completing without objective
-                const_cast<Quest*>(quest)->SetFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT);
+                const_cast<Quest*>(quest)->SetFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT);
             }
         }
     }
@@ -4625,13 +4625,13 @@ void ObjectMgr::LoadScripts(ScriptsType type)
                     continue;
                 }
 
-                if (!quest->HasFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT))
+                if (!quest->HasFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT))
                 {
                     sLog->outErrorDb("Table `%s` has quest (ID: %u) in SCRIPT_COMMAND_QUEST_EXPLORED in `datalong` for script id %u, but quest not have flag QUEST_FLAGS_EXPLORATION_OR_EVENT in quest flags. Script command or quest flags wrong. Quest modified to require objective.",
                         tableName.c_str(), tmp.QuestExplored.QuestID, tmp.id);
 
                     // this will prevent quest completing without objective
-                    const_cast<Quest*>(quest)->SetFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT);
+                    const_cast<Quest*>(quest)->SetFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT);
 
                     // continue; - quest objective requirement set and command can be allowed
                 }
@@ -5580,12 +5580,12 @@ void ObjectMgr::LoadQuestAreaTriggers()
             continue;
         }
 
-        if (!quest->HasFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT))
+        if (!quest->HasFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT))
         {
             sLog->outErrorDb("Table `areatrigger_involvedrelation` has record (id: %u) for not quest %u, but quest not have flag QUEST_FLAGS_EXPLORATION_OR_EVENT. Trigger or quest flags must be fixed, quest modified to require objective.", trigger_ID, quest_ID);
 
             // this will prevent quest completing without objective
-            const_cast<Quest*>(quest)->SetFlag(QUEST_FLAGS_EXPLORATION_OR_EVENT);
+            const_cast<Quest*>(quest)->SetFlag(QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT);
 
             // continue; - quest modified to required objective and trigger can be allowed.
         }
@@ -6306,14 +6306,12 @@ void ObjectMgr::SetHighestGuids()
         sGroupMgr->SetGroupDbStoreSize((*result)[0].GetUInt32()+1);
 }
 
-
-
 uint32 ObjectMgr::GenerateAuctionID()
 {
     if (m_auctionid >= 0xFFFFFFFE)
     {
         sLog->outError("Auctions ids overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
     return m_auctionid++;
 }
@@ -6323,7 +6321,7 @@ uint64 ObjectMgr::GenerateEquipmentSetGuid()
     if (m_equipmentSetGuid >= uint64(0xFFFFFFFFFFFFFFFELL))
     {
         sLog->outError("EquipmentSet guid overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
     return m_equipmentSetGuid++;
 }
@@ -6333,7 +6331,7 @@ uint32 ObjectMgr::GenerateMailID()
     if (m_mailid >= 0xFFFFFFFE)
     {
         sLog->outError("Mail ids overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
     return m_mailid++;
 }
@@ -6346,63 +6344,63 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
             if (m_hiItemGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Item guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiItemGuid++;
         case HIGHGUID_UNIT:
             if (m_hiCreatureGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Creature guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCreatureGuid++;
         case HIGHGUID_PET:
             if (m_hiPetGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Pet guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiPetGuid++;
         case HIGHGUID_VEHICLE:
             if (m_hiVehicleGuid >= 0x00FFFFFF)
             {
                 sLog->outError("Vehicle guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiVehicleGuid++;
         case HIGHGUID_PLAYER:
             if (m_hiCharGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Players guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCharGuid++;
         case HIGHGUID_GAMEOBJECT:
             if (m_hiGoGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Gameobject guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiGoGuid++;
         case HIGHGUID_CORPSE:
             if (m_hiCorpseGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Corpse guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCorpseGuid++;
         case HIGHGUID_DYNAMICOBJECT:
             if (m_hiDoGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("DynamicObject guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiDoGuid++;
         case HIGHGUID_MO_TRANSPORT:
             if (m_hiMoTransGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("MO Transport guid overflow!! Can't continue, shutting down server. ");
-                Trillium::StopNow(ERROR_EXIT_CODE);
+                World::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiMoTransGuid++;
         default:

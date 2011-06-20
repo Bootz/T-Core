@@ -215,8 +215,8 @@ m_activeNonPlayersIter(m_activeNonPlayers.end()), i_gridExpiry(expiry), i_script
 void Map::InitVisibilityDistance()
 {
     //init visibility for continents
-    m_VisibleDistance = Trillium::GetMaxVisibleDistanceOnContinents();
-    m_VisibilityNotifyPeriod = Trillium::GetVisibilityNotifyPeriodOnContinents();
+    m_VisibleDistance = World::GetMaxVisibleDistanceOnContinents();
+    m_VisibilityNotifyPeriod = World::GetVisibilityNotifyPeriodOnContinents();
 }
 
 // Template specialization of utility methods
@@ -2191,8 +2191,8 @@ InstanceMap::~InstanceMap()
 void InstanceMap::InitVisibilityDistance()
 {
     //init visibility distance for instances
-    m_VisibleDistance = Trillium::GetMaxVisibleDistanceInInstances();
-    m_VisibilityNotifyPeriod = Trillium::GetVisibilityNotifyPeriodInInstances();
+    m_VisibleDistance = World::GetMaxVisibleDistanceInInstances();
+    m_VisibilityNotifyPeriod = World::GetVisibilityNotifyPeriodInInstances();
 }
 
 /*
@@ -2579,8 +2579,8 @@ BattlegroundMap::~BattlegroundMap()
 void BattlegroundMap::InitVisibilityDistance()
 {
     //init visibility distance for BG/Arenas
-    m_VisibleDistance = Trillium::GetMaxVisibleDistanceInBGArenas();
-    m_VisibilityNotifyPeriod = Trillium::GetVisibilityNotifyPeriodInBGArenas();
+    m_VisibleDistance = World::GetMaxVisibleDistanceInBGArenas();
+    m_VisibilityNotifyPeriod = World::GetVisibilityNotifyPeriodInBGArenas();
 }
 
 bool BattlegroundMap::CanEnter(Player* player)

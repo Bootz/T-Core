@@ -47,7 +47,7 @@ uint32 GroupMgr::GenerateNewGroupDbStoreId()
     if (newStorageId == NextGroupDbStoreId)
     {
         sLog->outError("Group storage ID overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
 
     return newStorageId;
@@ -85,7 +85,7 @@ uint32 GroupMgr::GenerateGroupId()
     if (NextGroupId >= 0xFFFFFFFE)
     {
         sLog->outError("Group guid overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
     return NextGroupId++;
 }

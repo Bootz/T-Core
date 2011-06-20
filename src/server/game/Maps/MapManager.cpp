@@ -403,7 +403,7 @@ uint32 MapManager::GenerateInstanceId()
     if (newInstanceId == _nextInstanceId)
     {
         sLog->outError("Instance ID overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
 
     // Allocate space if necessary

@@ -144,19 +144,19 @@ enum __QuestFlags
     QUEST_FLAGS_OBJ_TEXT       = 0x00040000,                // use Objective text as Complete text
     QUEST_FLAGS_AUTO_ACCEPT    = 0x00080000,                // The client recognizes this flag as auto-accept. However, NONE of the current quests (3.3.5a) have this flag. Maybe blizz used to use it, or will use it in the future.
 
-    // Flags for set SpecialFlags in DB if required but used only at server
-    QUEST_FLAGS_REPEATABLE           = 0x00100000,   // Set by 1 in SpecialFlags from DB
-    QUEST_FLAGS_EXPLORATION_OR_EVENT = 0x00200000,   // Set by 2 in SpecialFlags from DB (if reequired area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script)
-    QUEST_FLAGS_AUTO_ACCEPT          = 0x00400000,  // Set by 4 in SpecialFlags in DB if the quest is to be auto-accepted.
-    QUEST_FLAGS_DF_QUEST             = 0x00800000,  // Set by 8 in SpecialFlags in DB if the quest is used by Dungeon Finder.
+    // Trinity flags for set SpecialFlags in DB if required but used only at server
+    QUEST_TRILLIUM_FLAGS_REPEATABLE           = 0x00100000,   // Set by 1 in SpecialFlags from DB
+    QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT = 0x00200000,   // Set by 2 in SpecialFlags from DB (if reequired area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script)
+    QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT          = 0x00400000,  // Set by 4 in SpecialFlags in DB if the quest is to be auto-accepted.
+    QUEST_TRILLIUM_FLAGS_DF_QUEST             = 0x00800000,  // Set by 8 in SpecialFlags in DB if the quest is used by Dungeon Finder.
 
-    QUEST_FLAGS_DB_ALLOWED = 0xFFFFF | QUEST_FLAGS_REPEATABLE | QUEST_FLAGS_EXPLORATION_OR_EVENT | QUEST_FLAGS_AUTO_ACCEPT | QUEST_FLAGS_DF_QUEST,
+    QUEST_TRILLIUM_FLAGS_DB_ALLOWED = 0xFFFFF | QUEST_TRILLIUM_FLAGS_REPEATABLE | QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT | QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT | QUEST_TRILLIUM_FLAGS_DF_QUEST,
 
-    // Flags for internal use only
-    QUEST_FLAGS_DELIVER              = 0x04000000,   // Internal flag computed only
-    QUEST_FLAGS_SPEAKTO              = 0x08000000,   // Internal flag computed only
-    QUEST_FLAGS_KILL_OR_CAST         = 0x10000000,   // Internal flag computed only
-    QUEST_FLAGS_TIMED                = 0x20000000,   // Internal flag computed only
+    // Trinity flags for internal use only
+    QUEST_TRILLIUM_FLAGS_DELIVER              = 0x04000000,   // Internal flag computed only
+    QUEST_TRILLIUM_FLAGS_SPEAKTO              = 0x08000000,   // Internal flag computed only
+    QUEST_TRILLIUM_FLAGS_KILL_OR_CAST         = 0x10000000,   // Internal flag computed only
+    QUEST_TRILLIUM_FLAGS_TIMED                = 0x20000000,   // Internal flag computed only
 };
 
 struct QuestLocale
@@ -252,7 +252,7 @@ class Quest
         bool   IsAutoAccept() const { return QuestFlags & QUEST_FLAGS_AUTO_ACCEPT; }
         bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25; }
         bool   IsAllowedInRaid() const;
-        bool   IsDFQuest() const { return QuestFlags & QUEST_FLAGS_DF_QUEST; }
+        bool   IsDFQuest() const { return QuestFlags & QUEST_TRILLIUM_FLAGS_DF_QUEST; }
         uint32 CalculateHonorGain(uint8 level) const;
 
         // multiple values

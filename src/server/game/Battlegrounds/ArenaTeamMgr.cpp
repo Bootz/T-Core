@@ -77,7 +77,7 @@ uint32 ArenaTeamMgr::GenerateArenaTeamId()
     if (NextArenaTeamId >= 0xFFFFFFFE)
     {
         sLog->outError("Arena team ids overflow!! Can't continue, shutting down server. ");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
     }
     return NextArenaTeamId++;
 }
