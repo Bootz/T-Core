@@ -13455,20 +13455,21 @@ Powers Unit::GetPowerTypeByAuraGroup(UnitMods unitMod) const
 
 float Unit::GetTotalAttackPowerValue(WeaponAttackType attType) const
 {
-    if (attType == RANGED_ATTACK)
-    {
-        int32 ap = GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS);
-        if (ap < 0)
-            return 0.0f;
-        return ap * (1.0f + GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
-    }
-    else
-    {
-        int32 ap = GetInt32Value(UNIT_FIELD_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS);
-        if (ap < 0)
-            return 0.0f;
-        return ap * (1.0f + GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
-    }
+    //if (attType == RANGED_ATTACK)
+    //{
+    //    int32 ap = GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS);
+    //    if (ap < 0)
+    //        return 0.0f;
+    //    return ap * (1.0f + GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
+    //}
+    //else
+    //{
+    //    int32 ap = GetInt32Value(UNIT_FIELD_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS);
+    //    if (ap < 0)
+    //        return 0.0f;
+    //    return ap * (1.0f + GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
+    //}
+    return 0.0f; // This is only for temp atm.
 }
 
 float Unit::GetWeaponDamageRange(WeaponAttackType attType , WeaponDamageRange type) const

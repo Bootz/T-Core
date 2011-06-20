@@ -970,7 +970,7 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
     SetByteValue(PLAYER_BYTES_3, 0, gender);
     SetByteValue(PLAYER_BYTES_3, 3, 0);                     // BattlefieldArenaFaction (0 or 1)
 
-    SetUInt32Value(PLAYER_GUILDID, 0);
+    //SetUInt32Value(PLAYER_GUILDID, 0);
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
 
@@ -979,9 +979,7 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
     SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
 
     SetUInt32Value(PLAYER_FIELD_KILLS, 0);
-    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 0);
-    SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
-    SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
+    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS, 0);
 
     // set starting level
     uint32 start_level = getClass() != CLASS_DEATH_KNIGHT
@@ -3178,10 +3176,10 @@ void Player::InitStatsForLevel(bool reapplyMods)
     SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, 0.0f);
 
     SetInt32Value(UNIT_FIELD_ATTACK_POWER,            0);
-    SetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS,       0);
+    /*SetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS,       0);*/
     SetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER, 0.0f);
     SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER,     0);
-    SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0);
+    /*SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0);*/
     SetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER, 0.0f);
 
     // Base crit values (will be recalculated in UpdateAllStats() at loading and in _ApplyAllStatBonuses() at reset
@@ -4439,7 +4437,6 @@ bool Player::resetTalents(bool no_cost)
 void Player::SetFreeTalentPoints(uint32 points)
 {
     sScriptMgr->OnPlayerFreeTalentPointsChanged(this, points);
-    SetUInt32Value(PLAYER_CHARACTER_POINTS1, points);
 }
 
 Mail* Player::GetMail(uint32 id)
@@ -4537,7 +4534,7 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER + 0);
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER + 1);
     updateVisualBits.SetBit(PLAYER_FLAGS);
-    updateVisualBits.SetBit(PLAYER_GUILDID);
+    //updateVisualBits.SetBit(PLAYER_GUILDID);
     updateVisualBits.SetBit(PLAYER_GUILDRANK);
     updateVisualBits.SetBit(PLAYER_BYTES);
     updateVisualBits.SetBit(PLAYER_BYTES_2);
@@ -5222,7 +5219,7 @@ void Player::CreateCorpse()
 
     corpse->SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, GetNativeDisplayId());
 
-    corpse->SetUInt32Value(CORPSE_FIELD_GUILD, GetGuildId());
+    //corpse->SetUInt32Value(CORPSE_FIELD_GUILD, GetGuildId());
 
     uint32 iDisplayID;
     uint32 iIventoryType;
@@ -7059,16 +7056,12 @@ void Player::UpdateHonorFields()
         // update yesterday's contribution
         if (m_lastHonorUpdateTime >= yesterday)
         {
-            SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
-
             // this is the first update today, reset today's contribution
-            SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
             SetUInt32Value(PLAYER_FIELD_KILLS, MAKE_PAIR32(0, kills_today));
         }
         else
         {
             // no honor/kills yesterday or today, reset
-            SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
             SetUInt32Value(PLAYER_FIELD_KILLS, 0);
         }
     }
@@ -7157,7 +7150,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
             // and those in a lifetime
-            ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 1, true);
+            ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS, 1, true);
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL);
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_CLASS, pVictim->getClass());
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_RACE, pVictim->getRace());
@@ -7201,8 +7194,6 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
     // add honor points
     ModifyHonorPoints(honor);
 
-    ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
-
     if (InBattleground() && honor > 0)
     {
         if (Battleground *bg = GetBattleground())
@@ -7240,7 +7231,6 @@ void Player::SetHonorPoints(uint32 value)
 {
     if (value > sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS))
         value = sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS);
-    SetUInt32Value(PLAYER_FIELD_HONOR_CURRENCY, value);
     if (value)
         AddKnownCurrency(ITEM_HONOR_POINTS_ID);
 }
@@ -7249,7 +7239,6 @@ void Player::SetArenaPoints(uint32 value)
 {
     if (value > sWorld->getIntConfig(CONFIG_MAX_ARENA_POINTS))
         value = sWorld->getIntConfig(CONFIG_MAX_ARENA_POINTS);
-    SetUInt32Value(PLAYER_FIELD_ARENA_CURRENCY, value);
     if (value)
         AddKnownCurrency(ITEM_ARENA_POINTS_ID);
 }
@@ -8538,7 +8527,7 @@ void Player::_ApplyAllLevelScaleItemMods(bool apply)
 void Player::_ApplyAmmoBonuses()
 {
     // check ammo
-    uint32 ammo_id = GetUInt32Value(PLAYER_AMMO_ID);
+    uint32 ammo_id = 0;
     if (!ammo_id)
         return;
 
@@ -11846,10 +11835,6 @@ void Player::SetAmmo(uint32 item)
     if (!item)
         return;
 
-    // already set
-    if (GetUInt32Value(PLAYER_AMMO_ID) == item)
-        return;
-
     // check ammo
     if (item)
     {
@@ -11861,15 +11846,11 @@ void Player::SetAmmo(uint32 item)
         }
     }
 
-    SetUInt32Value(PLAYER_AMMO_ID, item);
-
     _ApplyAmmoBonuses();
 }
 
 void Player::RemoveAmmo()
 {
-    SetUInt32Value(PLAYER_AMMO_ID, 0);
-
     m_ammoDPS = 0.0f;
 
     if (CanModifyStats())
@@ -16467,9 +16448,9 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetUInt32());
 
-    SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
+    //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
 
-    SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
+    //SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
 
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[65].GetUInt8());
@@ -16541,9 +16522,9 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     }
 
     SetHonorPoints(fields[40].GetUInt32());
-    SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, fields[41].GetUInt32());
-    SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, fields[42].GetUInt32());
-    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[43].GetUInt32());
+    //SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, fields[41].GetUInt32());
+    //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, fields[42].GetUInt32());
+    //SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[43].GetUInt32());
     SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[44].GetUInt16());
     SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[45].GetUInt16());
 
@@ -18266,11 +18247,11 @@ void Player::SaveToDB()
 
     ss << GetHonorPoints() << ", ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION) << ", ";
+    ss << uint32(0) << ", ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION) << ", ";
+    ss << uint32(0) << ", ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ", ";
+    ss << uint32(0) << ", ";
 
     ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ", ";
 
@@ -18278,7 +18259,7 @@ void Player::SaveToDB()
 
     ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ", ";
 
-    ss << GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES) << ", ";
+    ss << uint64(0) << ", ";
 
     ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ", ";
 
@@ -18314,7 +18295,7 @@ void Player::SaveToDB()
 
     ss << "', ";
 
-    ss << GetUInt32Value(PLAYER_AMMO_ID) << ", '";
+    ss << uint32(0) << ", '";
     for (uint32 i = 0; i < KNOWN_TITLES_SIZE*2; ++i)
         ss << GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i) << " ";
 
@@ -23669,8 +23650,7 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
 
 void Player::AddKnownCurrency(uint32 itemId)
 {
-    if (CurrencyTypesEntry const* ctEntry = sCurrencyTypesStore.LookupEntry(itemId))
-        SetFlag64(PLAYER_FIELD_KNOWN_CURRENCIES, (1LL << (ctEntry->BitIndex-1)));
+
 }
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)

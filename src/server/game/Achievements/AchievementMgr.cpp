@@ -1427,7 +1427,7 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
                 break;
             }
             case ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL:
-                SetCriteriaProgress(achievementCriteria, GetPlayer()->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS));
+                SetCriteriaProgress(achievementCriteria, GetPlayer()->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS));
                 break;
             case ACHIEVEMENT_CRITERIA_TYPE_HK_CLASS:
                 if (!miscValue1 || miscValue1 != achievementCriteria->hk_class.classID)

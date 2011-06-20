@@ -3903,7 +3903,7 @@ void Spell::WriteAmmoToPacket(WorldPacket * data)
                 ammoDisplayID = pItem->GetTemplate()->DisplayInfoID;
             else
             {
-                uint32 ammoID = m_caster->ToPlayer()->GetUInt32Value(PLAYER_AMMO_ID);
+                uint32 ammoID = 0;
                 if (ammoID)
                 {
                     ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(ammoID);
@@ -4360,7 +4360,7 @@ void Spell::TakeAmmo()
                 m_caster->ToPlayer()->DestroyItemCount(pItem, count, true);
             }
         }
-        else if (uint32 ammo = m_caster->ToPlayer()->GetUInt32Value(PLAYER_AMMO_ID))
+        else if (uint32 ammo = 0)
             m_caster->ToPlayer()->DestroyItemCount(ammo, 1, true);
     }
 }
@@ -6209,7 +6209,7 @@ SpellCastResult Spell::CheckItems()
                     case ITEM_SUBCLASS_WEAPON_BOW:
                     case ITEM_SUBCLASS_WEAPON_CROSSBOW:
                     {
-                        uint32 ammo = m_caster->ToPlayer()->GetUInt32Value(PLAYER_AMMO_ID);
+                        uint32 ammo = 0;
                         if (!ammo)
                         {
                             // Requires No Ammo
@@ -6242,11 +6242,11 @@ SpellCastResult Spell::CheckItems()
                                 return SPELL_FAILED_NO_AMMO;
                         }
 
-                        if (!m_caster->ToPlayer()->HasItemCount(ammo, 1))
-                        {
-                            m_caster->ToPlayer()->SetUInt32Value(PLAYER_AMMO_ID, 0);
-                            return SPELL_FAILED_NO_AMMO;
-                        }
+                        //if (!m_caster->ToPlayer()->HasItemCount(ammo, 1))
+                        //{
+                        //    m_caster->ToPlayer()->SetUInt32Value(PLAYER_AMMO_ID, 0);
+                        //    return SPELL_FAILED_NO_AMMO;
+                        //}
                     };  break;
                     case ITEM_SUBCLASS_WEAPON_WAND:
                         break;
