@@ -29,7 +29,7 @@
 
 template<class T>
 inline void
-World::VisibleNotifier::Visit(GridRefManager<T> &m)
+Trillium::VisibleNotifier::Visit(GridRefManager<T> &m)
 {
     for (typename GridRefManager<T>::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
@@ -39,7 +39,7 @@ World::VisibleNotifier::Visit(GridRefManager<T> &m)
 }
 
 inline void
-World::ObjectUpdater::Visit(CreatureMapType &m)
+Trillium::ObjectUpdater::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         if (iter->getSource()->IsInWorld())
@@ -51,7 +51,7 @@ World::ObjectUpdater::Visit(CreatureMapType &m)
 // WorldObject searchers & workers
 
 template<class Check>
-void World::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void Trillium::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 {
     // already found
     if (i_object)
@@ -71,7 +71,7 @@ void World::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 {
     // already found
     if (i_object)
@@ -91,7 +91,7 @@ void World::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 {
     // already found
     if (i_object)
@@ -111,7 +111,7 @@ void World::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
+void Trillium::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 {
     // already found
     if (i_object)
@@ -131,7 +131,7 @@ void World::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
+void Trillium::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
     // already found
     if (i_object)
@@ -151,7 +151,7 @@ void World::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -160,7 +160,7 @@ void World::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -169,7 +169,7 @@ void World::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
+void Trillium::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 {
     for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -178,7 +178,7 @@ void World::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void Trillium::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 {
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -187,7 +187,7 @@ void World::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void World::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
+void Trillium::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
     for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -198,7 +198,7 @@ void World::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 // Gameobject searchers
 
 template<class Check>
-void World::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void Trillium::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
 {
     // already found
     if (i_object)
@@ -218,7 +218,7 @@ void World::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void World::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+void Trillium::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 {
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -231,7 +231,7 @@ void World::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void World::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void Trillium::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 {
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -242,7 +242,7 @@ void World::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 // Unit searchers
 
 template<class Check>
-void World::UnitSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::UnitSearcher<Check>::Visit(CreatureMapType &m)
 {
     // already found
     if (i_object)
@@ -262,7 +262,7 @@ void World::UnitSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::UnitSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::UnitSearcher<Check>::Visit(PlayerMapType &m)
 {
     // already found
     if (i_object)
@@ -282,7 +282,7 @@ void World::UnitSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -295,7 +295,7 @@ void World::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -308,7 +308,7 @@ void World::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::UnitListSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::UnitListSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -317,7 +317,7 @@ void World::UnitListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::UnitListSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::UnitListSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -328,7 +328,7 @@ void World::UnitListSearcher<Check>::Visit(CreatureMapType &m)
 // Creature searchers
 
 template<class Check>
-void World::CreatureSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::CreatureSearcher<Check>::Visit(CreatureMapType &m)
 {
     // already found
     if (i_object)
@@ -348,7 +348,7 @@ void World::CreatureSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -361,7 +361,7 @@ void World::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
+void Trillium::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -370,7 +370,7 @@ void World::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void World::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -379,7 +379,7 @@ void World::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void World::PlayerSearcher<Check>::Visit(PlayerMapType &m)
+void Trillium::PlayerSearcher<Check>::Visit(PlayerMapType &m)
 {
     // already found
     if (i_object)
@@ -399,7 +399,7 @@ void World::PlayerSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Builder>
-void World::LocalizedPacketDo<Builder>::operator()(Player* p)
+void Trillium::LocalizedPacketDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx+1;
@@ -424,7 +424,7 @@ void World::LocalizedPacketDo<Builder>::operator()(Player* p)
 }
 
 template<class Builder>
-void World::LocalizedPacketListDo<Builder>::operator()(Player* p)
+void Trillium::LocalizedPacketListDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx+1;

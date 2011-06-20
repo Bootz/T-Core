@@ -3485,15 +3485,15 @@ bool ChatHandler::HandleRespawnCommand(const char* /*args*/)
         return true;
     }
 
-    CellPair p(World::ComputeCellPair(pl->GetPositionX(), pl->GetPositionY()));
+    CellPair p(Trillium::ComputeCellPair(pl->GetPositionX(), pl->GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::RespawnDo u_do;
-    World::WorldObjectWorker<World::RespawnDo> worker(pl, u_do);
+    Trillium::RespawnDo u_do;
+    Trillium::WorldObjectWorker<Trillium::RespawnDo> worker(pl, u_do);
 
-    TypeContainerVisitor<World::WorldObjectWorker<World::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+    TypeContainerVisitor<Trillium::WorldObjectWorker<Trillium::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
     cell.Visit(p, obj_worker, *pl->GetMap());
 
     return true;

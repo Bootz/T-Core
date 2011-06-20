@@ -1590,7 +1590,7 @@ void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
     {
         if (mask & 1)
         {
-            CellPair cell_pair = World::ComputeCellPair(data->posX, data->posY);
+            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
             uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
@@ -1606,7 +1606,7 @@ void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
     {
         if (mask & 1)
         {
-            CellPair cell_pair = World::ComputeCellPair(data->posX, data->posY);
+            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
             uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
@@ -1903,7 +1903,7 @@ void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
     {
         if (mask & 1)
         {
-            CellPair cell_pair = World::ComputeCellPair(data->posX, data->posY);
+            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
             uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
@@ -1919,7 +1919,7 @@ void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data
     {
         if (mask & 1)
         {
-            CellPair cell_pair = World::ComputeCellPair(data->posX, data->posY);
+            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
             uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
@@ -4606,7 +4606,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
                     continue;
                 }
 
-                if (!World::IsValidMapCoord(tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation))
+                if (!Trillium::IsValidMapCoord(tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation))
                 {
                     sLog->outErrorDb("Table `%s` has invalid coordinates (X: %f Y: %f Z: %f O: %f) in SCRIPT_COMMAND_TELEPORT_TO for script id %u",
                         tableName.c_str(), tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation, tmp.id);
@@ -4704,7 +4704,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
 
             case SCRIPT_COMMAND_TEMP_SUMMON_CREATURE:
             {
-                if (!World::IsValidMapCoord(tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation))
+                if (!Trillium::IsValidMapCoord(tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation))
                 {
                     sLog->outErrorDb("Table `%s` has invalid coordinates (X: %f Y: %f Z: %f O: %f) in SCRIPT_COMMAND_TEMP_SUMMON_CREATURE for script id %u",
                         tableName.c_str(), tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation, tmp.id);
@@ -6313,7 +6313,7 @@ uint32 ObjectMgr::GenerateAuctionID()
     if (m_auctionid >= 0xFFFFFFFE)
     {
         sLog->outError("Auctions ids overflow!! Can't continue, shutting down server. ");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
     }
     return m_auctionid++;
 }
@@ -6323,7 +6323,7 @@ uint64 ObjectMgr::GenerateEquipmentSetGuid()
     if (m_equipmentSetGuid >= uint64(0xFFFFFFFFFFFFFFFELL))
     {
         sLog->outError("EquipmentSet guid overflow!! Can't continue, shutting down server. ");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
     }
     return m_equipmentSetGuid++;
 }
@@ -6333,7 +6333,7 @@ uint32 ObjectMgr::GenerateMailID()
     if (m_mailid >= 0xFFFFFFFE)
     {
         sLog->outError("Mail ids overflow!! Can't continue, shutting down server. ");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
     }
     return m_mailid++;
 }
@@ -6346,63 +6346,63 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
             if (m_hiItemGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Item guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiItemGuid++;
         case HIGHGUID_UNIT:
             if (m_hiCreatureGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Creature guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCreatureGuid++;
         case HIGHGUID_PET:
             if (m_hiPetGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Pet guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiPetGuid++;
         case HIGHGUID_VEHICLE:
             if (m_hiVehicleGuid >= 0x00FFFFFF)
             {
                 sLog->outError("Vehicle guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiVehicleGuid++;
         case HIGHGUID_PLAYER:
             if (m_hiCharGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Players guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCharGuid++;
         case HIGHGUID_GAMEOBJECT:
             if (m_hiGoGuid >= 0x00FFFFFE)
             {
                 sLog->outError("Gameobject guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiGoGuid++;
         case HIGHGUID_CORPSE:
             if (m_hiCorpseGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("Corpse guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiCorpseGuid++;
         case HIGHGUID_DYNAMICOBJECT:
             if (m_hiDoGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("DynamicObject guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiDoGuid++;
         case HIGHGUID_MO_TRANSPORT:
             if (m_hiMoTransGuid >= 0xFFFFFFFE)
             {
                 sLog->outError("MO Transport guid overflow!! Can't continue, shutting down server. ");
-                World::StopNow(ERROR_EXIT_CODE);
+                Trillium::StopNow(ERROR_EXIT_CODE);
             }
             return m_hiMoTransGuid++;
         default:
@@ -7134,7 +7134,7 @@ void ObjectMgr::LoadPointsOfInterest()
         POI.data                 = fields[5].GetUInt32();
         POI.icon_name            = fields[6].GetString();
 
-        if (!World::IsValidMapCoord(POI.x, POI.y))
+        if (!Trillium::IsValidMapCoord(POI.x, POI.y))
         {
             sLog->outErrorDb("Table `points_of_interest` (Entry: %u) have invalid coordinates (X: %f Y: %f), ignored.", point_id, POI.x, POI.y);
             continue;

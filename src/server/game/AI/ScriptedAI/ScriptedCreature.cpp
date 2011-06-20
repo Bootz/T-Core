@@ -374,8 +374,8 @@ void ScriptedAI::DoTeleportAll(float fX, float fY, float fZ, float fO)
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float fRange, uint32 uiMinHPDiff)
 {
     Unit* pUnit = NULL;
-    World::MostHPMissingInRange u_check(me, fRange, uiMinHPDiff);
-    World::UnitLastSearcher<World::MostHPMissingInRange> searcher(me, pUnit, u_check);
+    Trillium::MostHPMissingInRange u_check(me, fRange, uiMinHPDiff);
+    Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange> searcher(me, pUnit, u_check);
     me->VisitNearbyObject(fRange, searcher);
 
     return pUnit;
@@ -384,8 +384,8 @@ Unit* ScriptedAI::DoSelectLowestHpFriendly(float fRange, uint32 uiMinHPDiff)
 std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
 {
     std::list<Creature*> pList;
-    World::FriendlyCCedInRange u_check(me, fRange);
-    World::CreatureListSearcher<World::FriendlyCCedInRange> searcher(me, pList, u_check);
+    Trillium::FriendlyCCedInRange u_check(me, fRange);
+    Trillium::CreatureListSearcher<Trillium::FriendlyCCedInRange> searcher(me, pList, u_check);
     me->VisitNearbyObject(fRange, searcher);
     return pList;
 }
@@ -393,8 +393,8 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
 std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellid)
 {
     std::list<Creature*> pList;
-    World::FriendlyMissingBuffInRange u_check(me, fRange, uiSpellid);
-    World::CreatureListSearcher<World::FriendlyMissingBuffInRange> searcher(me, pList, u_check);
+    Trillium::FriendlyMissingBuffInRange u_check(me, fRange, uiSpellid);
+    Trillium::CreatureListSearcher<Trillium::FriendlyMissingBuffInRange> searcher(me, pList, u_check);
     me->VisitNearbyObject(fRange, searcher);
     return pList;
 }
@@ -403,14 +403,14 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float fMinimumRange)
 {
     Player* pPlayer = NULL;
 
-    CellPair pair(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+    CellPair pair(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
     Cell cell(pair);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::PlayerAtMinimumRangeAway check(me, fMinimumRange);
-    World::PlayerSearcher<World::PlayerAtMinimumRangeAway> searcher(me, pPlayer, check);
-    TypeContainerVisitor<World::PlayerSearcher<World::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
+    Trillium::PlayerAtMinimumRangeAway check(me, fMinimumRange);
+    Trillium::PlayerSearcher<Trillium::PlayerAtMinimumRangeAway> searcher(me, pPlayer, check);
+    TypeContainerVisitor<Trillium::PlayerSearcher<Trillium::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(me->GetMap()));
 

@@ -934,17 +934,17 @@ void hyjalAI::JustDied(Unit* /*killer*/)
 }
 void hyjalAI::HideNearPos(float x, float y)
 {
-    CellPair pair(World::ComputeCellPair(x, y));
+    CellPair pair(Trillium::ComputeCellPair(x, y));
     Cell cell(pair);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
     // First get all creatures.
     std::list<Creature*> creatures;
-    World::AllFriendlyCreaturesInGrid creature_check(me);
-    World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
+    Trillium::AllFriendlyCreaturesInGrid creature_check(me);
+    Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
     TypeContainerVisitor
-        <World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid>,
+        <Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid>,
         GridTypeMapContainer> creature_visitor(creature_searcher);
 
                                                             // Get Creatures
@@ -961,14 +961,14 @@ void hyjalAI::HideNearPos(float x, float y)
 }
 void hyjalAI::RespawnNearPos(float x, float y)
 {
-    CellPair p(World::ComputeCellPair(x, y));
+    CellPair p(Trillium::ComputeCellPair(x, y));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::RespawnDo u_do;
-    World::WorldObjectWorker<World::RespawnDo> worker(me, u_do);
-    TypeContainerVisitor<World::WorldObjectWorker<World::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+    Trillium::RespawnDo u_do;
+    Trillium::WorldObjectWorker<Trillium::RespawnDo> worker(me, u_do);
+    TypeContainerVisitor<Trillium::WorldObjectWorker<Trillium::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
     cell.Visit(p, obj_worker, *me->GetMap());
 }
 void hyjalAI::WaypointReached(uint32 i)
@@ -992,17 +992,17 @@ void hyjalAI::WaypointReached(uint32 i)
         }
         //do some talking
         //all alive guards walk near here
-        CellPair pair(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+        CellPair pair(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
         Cell cell(pair);
         cell.data.Part.reserved = ALL_DISTRICT;
         cell.SetNoCreate();
 
         // First get all creatures.
         std::list<Creature*> creatures;
-        World::AllFriendlyCreaturesInGrid creature_check(me);
-        World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
+        Trillium::AllFriendlyCreaturesInGrid creature_check(me);
+        Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
         TypeContainerVisitor
-            <World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid>,
+            <Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid>,
             GridTypeMapContainer> creature_visitor(creature_searcher);
 
         cell.Visit(pair, creature_visitor, *(me->GetMap()));
@@ -1034,16 +1034,16 @@ void hyjalAI::DoOverrun(uint32 faction, const uint32 diff)
     {
         if (TeleportTimer <= diff)
         {
-            CellPair pair(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+            CellPair pair(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
             Cell cell(pair);
             cell.data.Part.reserved = ALL_DISTRICT;
             cell.SetNoCreate();
 
             std::list<Creature*> creatures;
-            World::AllFriendlyCreaturesInGrid creature_check(me);
-            World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
+            Trillium::AllFriendlyCreaturesInGrid creature_check(me);
+            Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid> creature_searcher(me, creatures, creature_check);
             TypeContainerVisitor
-                <World::CreatureListSearcher<World::AllFriendlyCreaturesInGrid>,
+                <Trillium::CreatureListSearcher<Trillium::AllFriendlyCreaturesInGrid>,
                 GridTypeMapContainer> creature_visitor(creature_searcher);
 
             cell.Visit(pair, creature_visitor, *(me->GetMap()));

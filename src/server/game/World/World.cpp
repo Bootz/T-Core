@@ -75,20 +75,20 @@
 #include "SmartAI.h"
 #include "Channel.h"
 
-volatile bool World::m_stopEvent = false;
-uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
-volatile uint32 World::m_worldLoopCounter = 0;
+volatile bool Trillium::m_stopEvent = false;
+uint8 Trillium::m_ExitCode = SHUTDOWN_EXIT_CODE;
+volatile uint32 Trillium::m_worldLoopCounter = 0;
 
-float World::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
-float World::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
-float World::m_MaxVisibleDistanceInBGArenas   = DEFAULT_VISIBILITY_BGARENAS;
+float Trillium::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
+float Trillium::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
+float Trillium::m_MaxVisibleDistanceInBGArenas   = DEFAULT_VISIBILITY_BGARENAS;
 
-int32 World::m_visibility_notify_periodOnContinents = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
-int32 World::m_visibility_notify_periodInInstances  = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
-int32 World::m_visibility_notify_periodInBGArenas   = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+int32 Trillium::m_visibility_notify_periodOnContinents = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+int32 Trillium::m_visibility_notify_periodInInstances  = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+int32 Trillium::m_visibility_notify_periodInBGArenas   = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
 
 /// World constructor
-World::World()
+Trillium::World()
 {
     m_playerLimit = 0;
     m_allowedSecurityLevel = SEC_PLAYER;
@@ -116,7 +116,7 @@ World::World()
 }
 
 /// World destructor
-World::~World()
+Trillium::~World()
 {
     ///- Empty the kicked session set
     while (!m_sessions.empty())
@@ -136,7 +136,7 @@ World::~World()
 }
 
 /// Find a player in a specified zone
-Player* World::FindPlayerInZone(uint32 zone)
+Player* Trillium::FindPlayerInZone(uint32 zone)
 {
     ///- circle through active sessions and return the first player found in the zone
     SessionMap::const_iterator itr;
@@ -158,12 +158,12 @@ Player* World::FindPlayerInZone(uint32 zone)
     return NULL;
 }
 
-bool World::IsClosed() const
+bool Trillium::IsClosed() const
 {
     return m_isClosed;
 }
 
-void World::SetClosed(bool val)
+void Trillium::SetClosed(bool val)
 {
     m_isClosed = val;
 
@@ -171,20 +171,20 @@ void World::SetClosed(bool val)
     sScriptMgr->OnOpenStateChange(!val);
 }
 
-void World::SetMotd(const std::string& motd)
+void Trillium::SetMotd(const std::string& motd)
 {
     m_motd = motd;
 
     sScriptMgr->OnMotdChange(m_motd);
 }
 
-const char* World::GetMotd() const
+const char* Trillium::GetMotd() const
 {
     return m_motd.c_str();
 }
 
 /// Find a session by its id
-WorldSession* World::FindSession(uint32 id) const
+WorldSession* Trillium::FindSession(uint32 id) const
 {
     SessionMap::const_iterator itr = m_sessions.find(id);
 
@@ -195,7 +195,7 @@ WorldSession* World::FindSession(uint32 id) const
 }
 
 /// Remove a given session
-bool World::RemoveSession(uint32 id)
+bool Trillium::RemoveSession(uint32 id)
 {
     ///- Find the session, kick the user, but we can't delete session at this moment to prevent iterator invalidation
     SessionMap::const_iterator itr = m_sessions.find(id);
@@ -210,13 +210,13 @@ bool World::RemoveSession(uint32 id)
     return true;
 }
 
-void World::AddSession(WorldSession* s)
+void Trillium::AddSession(WorldSession* s)
 {
     addSessQueue.add(s);
 }
 
 void
-World::AddSession_(WorldSession* s)
+Trillium::AddSession_(WorldSession* s)
 {
     ASSERT (s);
 
@@ -288,7 +288,7 @@ World::AddSession_(WorldSession* s)
     }
 }
 
-bool World::HasRecentlyDisconnected(WorldSession* session)
+bool Trillium::HasRecentlyDisconnected(WorldSession* session)
 {
     if (!session)
         return false;
@@ -310,7 +310,7 @@ bool World::HasRecentlyDisconnected(WorldSession* session)
     return false;
  }
 
-int32 World::GetQueuePos(WorldSession* sess)
+int32 Trillium::GetQueuePos(WorldSession* sess)
 {
     uint32 position = 1;
 
@@ -321,7 +321,7 @@ int32 World::GetQueuePos(WorldSession* sess)
     return 0;
 }
 
-void World::AddQueuedPlayer(WorldSession* sess)
+void Trillium::AddQueuedPlayer(WorldSession* sess)
 {
     sess->SetInQueue(true);
     m_QueuedPlayer.push_back(sess);
@@ -330,7 +330,7 @@ void World::AddQueuedPlayer(WorldSession* sess)
     sess->SendAuthResponse(AUTH_WAIT_QUEUE, false, GetQueuePos(sess));
 }
 
-bool World::RemoveQueuedPlayer(WorldSession* sess)
+bool Trillium::RemoveQueuedPlayer(WorldSession* sess)
 {
     // sessions count including queued to remove (if removed_session set)
     uint32 sessions = GetActiveSessionCount();
@@ -389,7 +389,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
 }
 
 /// Initialize config values
-void World::LoadConfigSettings(bool reload)
+void Trillium::LoadConfigSettings(bool reload)
 {
     if (reload)
     {
@@ -1188,7 +1188,7 @@ void World::LoadConfigSettings(bool reload)
 }
 
 /// Initialize the World
-void World::SetInitialWorldSettings()
+void Trillium::SetInitialWorldSettings()
 {
     ///- Server startup begin
     uint32 startupBegin = getMSTime();
@@ -1732,7 +1732,7 @@ void World::SetInitialWorldSettings()
     sLog->outString();
 }
 
-void World::DetectDBCLang()
+void Trillium::DetectDBCLang()
 {
     uint8 m_lang_confid = sConfig->GetIntDefault("DBC.Locale", 255);
 
@@ -1776,7 +1776,7 @@ void World::DetectDBCLang()
     sLog->outString();
 }
 
-void World::RecordTimeDiff(const char *text, ...)
+void Trillium::RecordTimeDiff(const char *text, ...)
 {
     if (m_updateTimeCount != 1)
         return;
@@ -1802,7 +1802,7 @@ void World::RecordTimeDiff(const char *text, ...)
     m_currentTime = thisTime;
 }
 
-void World::LoadAutobroadcasts()
+void Trillium::LoadAutobroadcasts()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -1835,7 +1835,7 @@ void World::LoadAutobroadcasts()
 }
 
 /// Update the World !
-void World::Update(uint32 diff)
+void Trillium::Update(uint32 diff)
 {
     m_updateTime = diff;
 
@@ -1997,7 +1997,7 @@ void World::Update(uint32 diff)
     sScriptMgr->OnWorldUpdate(diff);
 }
 
-void World::ForceGameEventUpdate()
+void Trillium::ForceGameEventUpdate()
 {
     m_timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
     uint32 nextGameEvent = sGameEventMgr->Update();
@@ -2006,7 +2006,7 @@ void World::ForceGameEventUpdate()
 }
 
 /// Send a packet to all players (except self if mentioned)
-void World::SendGlobalMessage(WorldPacket* packet, WorldSession* self, uint32 team)
+void Trillium::SendGlobalMessage(WorldPacket* packet, WorldSession* self, uint32 team)
 {
     SessionMap::const_iterator itr;
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2023,7 +2023,7 @@ void World::SendGlobalMessage(WorldPacket* packet, WorldSession* self, uint32 te
 }
 
 /// Send a packet to all GMs (except self if mentioned)
-void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 team)
+void Trillium::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 team)
 {
     SessionMap::iterator itr;
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2040,7 +2040,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 
     }
 }
 
-namespace Trinity
+namespace Trillium
 {
     class WorldWorldTextBuilder
     {
@@ -2095,16 +2095,16 @@ namespace Trinity
             int32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 
 /// Send a System Message to all players (except self if mentioned)
-void World::SendWorldText(int32 string_id, ...)
+void Trillium::SendWorldText(int32 string_id, ...)
 {
     va_list ap;
     va_start(ap, string_id);
 
-    World::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    World::LocalizedPacketListDo<World::WorldWorldTextBuilder> wt_do(wt_builder);
+    Trillium::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Trillium::LocalizedPacketListDo<Trillium::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2117,13 +2117,13 @@ void World::SendWorldText(int32 string_id, ...)
 }
 
 /// Send a System Message to all GMs (except self if mentioned)
-void World::SendGMText(int32 string_id, ...)
+void Trillium::SendGMText(int32 string_id, ...)
 {
     va_list ap;
     va_start(ap, string_id);
 
-    World::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    World::LocalizedPacketListDo<World::WorldWorldTextBuilder> wt_do(wt_builder);
+    Trillium::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Trillium::LocalizedPacketListDo<Trillium::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2139,7 +2139,7 @@ void World::SendGMText(int32 string_id, ...)
 }
 
 /// DEPRECATED, only for debug purpose. Send a System Message to all players (except self if mentioned)
-void World::SendGlobalText(const char* text, WorldSession* self)
+void Trillium::SendGlobalText(const char* text, WorldSession* self)
 {
     WorldPacket data;
 
@@ -2157,7 +2157,7 @@ void World::SendGlobalText(const char* text, WorldSession* self)
 }
 
 /// Send a packet to all players (or players selected team) in the zone (except self if mentioned)
-void World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self, uint32 team)
+void Trillium::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self, uint32 team)
 {
     SessionMap::const_iterator itr;
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2175,7 +2175,7 @@ void World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self
 }
 
 /// Send a System Message to all players in the zone (except self if mentioned)
-void World::SendZoneText(uint32 zone, const char* text, WorldSession* self, uint32 team)
+void Trillium::SendZoneText(uint32 zone, const char* text, WorldSession* self, uint32 team)
 {
     WorldPacket data;
     ChatHandler::FillMessageData(&data, NULL, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, 0, text, NULL);
@@ -2183,7 +2183,7 @@ void World::SendZoneText(uint32 zone, const char* text, WorldSession* self, uint
 }
 
 /// Kick (and save) all players
-void World::KickAll()
+void Trillium::KickAll()
 {
     m_QueuedPlayer.clear();                                 // prevent send queue update packet and login queued sessions
 
@@ -2193,7 +2193,7 @@ void World::KickAll()
 }
 
 /// Kick (and save) all players with security level less `sec`
-void World::KickAllLess(AccountTypes sec)
+void Trillium::KickAllLess(AccountTypes sec)
 {
     // session not removed at kick and will removed in next update tick
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2202,7 +2202,7 @@ void World::KickAllLess(AccountTypes sec)
 }
 
 /// Ban an account or ban an IP address, duration will be parsed using TimeStringToSecs if it is positive, otherwise permban
-BanReturn World::BanAccount(BanMode mode, std::string nameOrIP, std::string duration, std::string reason, std::string author)
+BanReturn Trillium::BanAccount(BanMode mode, std::string nameOrIP, std::string duration, std::string reason, std::string author)
 {
     uint32 duration_secs = TimeStringToSecs(duration);
     PreparedQueryResult resultAccounts = PreparedQueryResult(NULL); //used for kicking
@@ -2280,7 +2280,7 @@ BanReturn World::BanAccount(BanMode mode, std::string nameOrIP, std::string dura
 }
 
 /// Remove a ban from an account or IP address
-bool World::RemoveBanAccount(BanMode mode, std::string nameOrIP)
+bool Trillium::RemoveBanAccount(BanMode mode, std::string nameOrIP)
 {
     PreparedStatement* stmt = NULL;
     if (mode == BAN_IP)
@@ -2309,7 +2309,7 @@ bool World::RemoveBanAccount(BanMode mode, std::string nameOrIP)
 }
 
 /// Ban an account or ban an IP address, duration will be parsed using TimeStringToSecs if it is positive, otherwise permban
-BanReturn World::BanCharacter(std::string name, std::string duration, std::string reason, std::string author)
+BanReturn Trillium::BanCharacter(std::string name, std::string duration, std::string reason, std::string author)
 {
     Player *pBanned = sObjectMgr->GetPlayer(name.c_str());
     uint32 guid = 0;
@@ -2350,7 +2350,7 @@ BanReturn World::BanCharacter(std::string name, std::string duration, std::strin
 }
 
 /// Remove a ban from a character
-bool World::RemoveBanCharacter(std::string name)
+bool Trillium::RemoveBanCharacter(std::string name)
 {
     Player *pBanned = sObjectMgr->GetPlayer(name.c_str());
     uint32 guid = 0;
@@ -2380,7 +2380,7 @@ bool World::RemoveBanCharacter(std::string name)
 }
 
 /// Update the game time
-void World::_UpdateGameTime()
+void Trillium::_UpdateGameTime()
 {
     ///- update the time
     time_t thisTime = time(NULL);
@@ -2409,7 +2409,7 @@ void World::_UpdateGameTime()
 }
 
 /// Shutdown the server
-void World::ShutdownServ(uint32 time, uint32 options, uint8 exitcode)
+void Trillium::ShutdownServ(uint32 time, uint32 options, uint8 exitcode)
 {
     // ignore if server shutdown at next tick
     if (m_stopEvent)
@@ -2437,7 +2437,7 @@ void World::ShutdownServ(uint32 time, uint32 options, uint8 exitcode)
 }
 
 /// Display a shutdown message to the user(s)
-void World::ShutdownMsg(bool show, Player* player)
+void Trillium::ShutdownMsg(bool show, Player* player)
 {
     // not show messages for idle shutdown mode
     if (m_ShutdownMask & SHUTDOWN_MASK_IDLE)
@@ -2462,7 +2462,7 @@ void World::ShutdownMsg(bool show, Player* player)
 }
 
 /// Cancel a planned server shutdown
-void World::ShutdownCancel()
+void Trillium::ShutdownCancel()
 {
     // nothing cancel or too later
     if (!m_ShutdownTimer || m_stopEvent)
@@ -2481,7 +2481,7 @@ void World::ShutdownCancel()
 }
 
 /// Send a server message to the user(s)
-void World::SendServerMessage(ServerMessageType type, const char *text, Player* player)
+void Trillium::SendServerMessage(ServerMessageType type, const char *text, Player* player)
 {
     WorldPacket data(SMSG_SERVER_MESSAGE, 50);              // guess size
     data << uint32(type);
@@ -2494,7 +2494,7 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
         SendGlobalMessage(&data);
 }
 
-void World::UpdateSessions(uint32 diff)
+void Trillium::UpdateSessions(uint32 diff)
 {
     ///- Add new sessions
     WorldSession* sess;
@@ -2524,7 +2524,7 @@ void World::UpdateSessions(uint32 diff)
 }
 
 // This handles the issued and queued CLI commands
-void World::ProcessCliCommands()
+void Trillium::ProcessCliCommands()
 {
     CliCommandHolder::Print* zprint = NULL;
     void* callbackArg = NULL;
@@ -2542,7 +2542,7 @@ void World::ProcessCliCommands()
     }
 }
 
-void World::SendAutoBroadcast()
+void Trillium::SendAutoBroadcast()
 {
     if (m_Autobroadcasts.empty())
         return;
@@ -2577,7 +2577,7 @@ void World::SendAutoBroadcast()
     sLog->outDetail("AutoBroadcast: '%s'", msg.c_str());
 }
 
-void World::UpdateRealmCharCount(uint32 accountId)
+void Trillium::UpdateRealmCharCount(uint32 accountId)
 {
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_CHARACTER_COUNT);
     stmt->setUInt32(0, accountId);
@@ -2585,7 +2585,7 @@ void World::UpdateRealmCharCount(uint32 accountId)
     m_realmCharCallbacks.insert(result);
 }
 
-void World::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)
+void Trillium::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)
 {
     if (resultCharCount)
     {
@@ -2606,14 +2606,14 @@ void World::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)
     }
 }
 
-void World::InitWeeklyQuestResetTime()
+void Trillium::InitWeeklyQuestResetTime()
 {
     time_t wstime = uint64(sWorld->getWorldState(WS_WEEKLY_QUEST_RESET_TIME));
     time_t curtime = time(NULL);
     m_NextWeeklyQuestReset = wstime < curtime ? curtime : time_t(wstime);
 }
 
-void World::InitDailyQuestResetTime()
+void Trillium::InitDailyQuestResetTime()
 {
     time_t mostRecentQuestTime;
 
@@ -2647,7 +2647,7 @@ void World::InitDailyQuestResetTime()
         m_NextDailyQuestReset = (curTime >= curDayResetTime) ? curDayResetTime + DAY : curDayResetTime;
 }
 
-void World::InitRandomBGResetTime()
+void Trillium::InitRandomBGResetTime()
 {
     time_t bgtime = uint64(sWorld->getWorldState(WS_BG_DAILY_RESET_TIME));
     if (!bgtime)
@@ -2674,7 +2674,7 @@ void World::InitRandomBGResetTime()
         sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
-void World::ResetDailyQuests()
+void Trillium::ResetDailyQuests()
 {
     sLog->outDetail("Daily quests reset for all characters.");
     CharacterDatabase.Execute("DELETE FROM character_queststatus_daily");
@@ -2686,14 +2686,14 @@ void World::ResetDailyQuests()
     sPoolMgr->ChangeDailyQuests();
 }
 
-void World::LoadDBAllowedSecurityLevel()
+void Trillium::LoadDBAllowedSecurityLevel()
 {
     QueryResult result = LoginDatabase.PQuery("SELECT allowedSecurityLevel from realmlist WHERE id = '%d'", realmID);
     if (result)
         SetPlayerSecurityLimit(AccountTypes(result->Fetch()->GetUInt16()));
 }
 
-void World::SetPlayerSecurityLimit(AccountTypes _sec)
+void Trillium::SetPlayerSecurityLimit(AccountTypes _sec)
 {
     AccountTypes sec = _sec < SEC_CONSOLE ? _sec : SEC_PLAYER;
     bool update = sec > m_allowedSecurityLevel;
@@ -2702,7 +2702,7 @@ void World::SetPlayerSecurityLimit(AccountTypes _sec)
         KickAllLess(m_allowedSecurityLevel);
 }
 
-void World::ResetWeeklyQuests()
+void Trillium::ResetWeeklyQuests()
 {
     CharacterDatabase.Execute("DELETE FROM character_queststatus_weekly");
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2716,7 +2716,7 @@ void World::ResetWeeklyQuests()
     sPoolMgr->ChangeWeeklyQuests();
 }
 
-void World::ResetRandomBG()
+void Trillium::ResetRandomBG()
 {
     sLog->outDetail("Random BG status reset for all characters.");
     CharacterDatabase.Execute("DELETE FROM character_battleground_random");
@@ -2728,13 +2728,13 @@ void World::ResetRandomBG()
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
-void World::UpdateMaxSessionCounters()
+void Trillium::UpdateMaxSessionCounters()
 {
     m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size()-m_QueuedPlayer.size()));
     m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(m_QueuedPlayer.size()));
 }
 
-void World::LoadDBVersion()
+void Trillium::LoadDBVersion()
 {
     QueryResult result = WorldDatabase.Query("SELECT db_version, script_version, cache_id FROM version LIMIT 1");
     if (result)
@@ -2754,17 +2754,17 @@ void World::LoadDBVersion()
         m_CreatureEventAIVersion = "Unknown creature EventAI.";
 }
 
-void World::ProcessStartEvent()
+void Trillium::ProcessStartEvent()
 {
     isEventKillStart = true;
 }
 
-void World::ProcessStopEvent()
+void Trillium::ProcessStopEvent()
 {
     isEventKillStart = false;
 }
 
-void World::UpdateAreaDependentAuras()
+void Trillium::UpdateAreaDependentAuras()
 {
     SessionMap::const_iterator itr;
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2775,7 +2775,7 @@ void World::UpdateAreaDependentAuras()
         }
 }
 
-void World::LoadWorldStates()
+void Trillium::LoadWorldStates()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -2803,7 +2803,7 @@ void World::LoadWorldStates()
 }
 
 // Setting a worldstate will save it to DB
-void World::setWorldState(uint32 index, uint64 value)
+void Trillium::setWorldState(uint32 index, uint64 value)
 {
     WorldStatesMap::const_iterator it = m_worldstates.find(index);
     if (it != m_worldstates.end())
@@ -2813,13 +2813,13 @@ void World::setWorldState(uint32 index, uint64 value)
     m_worldstates[index] = value;
 }
 
-uint64 World::getWorldState(uint32 index) const
+uint64 Trillium::getWorldState(uint32 index) const
 {
     WorldStatesMap::const_iterator it = m_worldstates.find(index);
     return it != m_worldstates.end() ? it->second : 0;
 }
 
-void World::ProcessQueryCallbacks()
+void Trillium::ProcessQueryCallbacks()
 {
     PreparedQueryResult result;
 

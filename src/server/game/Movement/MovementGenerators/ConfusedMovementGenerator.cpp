@@ -49,8 +49,8 @@ ConfusedMovementGenerator<T>::Initialize(T &unit)
     {
         float wanderX = x + wander_distance*(float)rand_norm() - wander_distance/2;
         float wanderY = y + wander_distance*(float)rand_norm() - wander_distance/2;
-        World::NormalizeMapCoord(wanderX);
-        World::NormalizeMapCoord(wanderY);
+        Trillium::NormalizeMapCoord(wanderX);
+        Trillium::NormalizeMapCoord(wanderY);
 
         float new_z = map->GetHeight(wanderX, wanderY, z, true);
         if (new_z > INVALID_HEIGHT && unit.IsWithinLOS(wanderX, wanderY, new_z))

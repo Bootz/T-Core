@@ -430,8 +430,8 @@ void GameObject::Update(uint32 diff)
                     // search unfriendly creature
                     if (owner)                    // hunter trap
                     {
-                        World::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
-                        World::UnitSearcher<World::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, ok, checker);
+                        Trillium::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
+                        Trillium::UnitSearcher<Trillium::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, ok, checker);
                         VisitNearbyGridObject(radius, searcher);
                         if (!ok) VisitNearbyWorldObject(radius, searcher);
                     }
@@ -440,8 +440,8 @@ void GameObject::Update(uint32 diff)
                         // environmental damage spells already have around enemies targeting but this not help in case not existed GO casting support
                         // affect only players
                         Player* player = NULL;
-                        World::AnyPlayerInObjectRangeCheck checker(this, radius);
-                        World::PlayerSearcher<World::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
+                        Trillium::AnyPlayerInObjectRangeCheck checker(this, radius);
+                        Trillium::PlayerSearcher<Trillium::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
                         VisitNearbyWorldObject(radius, searcher);
                         ok = player;
                     }
@@ -944,14 +944,14 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
     GameObject* trapGO = NULL;
     {
         // using original GO distance
-        CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
+        CellPair p(Trillium::ComputeCellPair(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
 
-        World::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
-        World::GameObjectLastSearcher<World::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
+        Trillium::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
+        Trillium::GameObjectLastSearcher<Trillium::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
 
-        TypeContainerVisitor<World::GameObjectLastSearcher<World::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<Trillium::GameObjectLastSearcher<Trillium::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *GetMap(), *target, range);
     }
 
@@ -964,13 +964,13 @@ GameObject* GameObject::LookupFishingHoleAround(float range)
 {
     GameObject* ok = NULL;
 
-    CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
+    CellPair p(Trillium::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
-    World::NearestGameObjectFishingHole u_check(*this, range);
-    World::GameObjectSearcher<World::NearestGameObjectFishingHole> checker(this, ok, u_check);
+    Trillium::NearestGameObjectFishingHole u_check(*this, range);
+    Trillium::GameObjectSearcher<Trillium::NearestGameObjectFishingHole> checker(this, ok, u_check);
 
-    TypeContainerVisitor<World::GameObjectSearcher<World::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
+    TypeContainerVisitor<Trillium::GameObjectSearcher<Trillium::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
     cell.Visit(p, grid_object_checker, *GetMap(), *this, range);
 
     return ok;

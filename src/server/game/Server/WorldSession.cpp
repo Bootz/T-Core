@@ -72,7 +72,7 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
     if (opHandle.packetProcessing == PROCESS_INPLACE)
         return true;
 
-    //thread-unsafe packets should be processed in World::UpdateSessions()
+    //thread-unsafe packets should be processed in Trillium::UpdateSessions()
     if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
         return true;
 
@@ -323,7 +323,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     ProcessQueryCallbacks();
 
     //check if we are safe to proceed with logout
-    //logout procedure should happen only in World::UpdateSessions() method!!!
+    //logout procedure should happen only in Trillium::UpdateSessions() method!!!
     if (updater.ProcessLogout())
     {
         time_t currTime = time(NULL);

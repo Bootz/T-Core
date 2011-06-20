@@ -1569,8 +1569,8 @@ void WorldObject::GetRandomPoint(const Position &pos, float distance, float &ran
     rand_y = pos.m_positionY + new_dist * sin(angle);
     rand_z = pos.m_positionZ;
 
-    World::NormalizeMapCoord(rand_x);
-    World::NormalizeMapCoord(rand_y);
+    Trillium::NormalizeMapCoord(rand_x);
+    Trillium::NormalizeMapCoord(rand_y);
     UpdateGroundPositionZ(rand_x, rand_y, rand_z);            // update to LOS height if available
 }
 
@@ -1583,7 +1583,7 @@ void WorldObject::UpdateGroundPositionZ(float x, float y, float &z) const
 
 bool Position::IsPositionValid() const
 {
-    return World::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
+    return Trillium::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
 }
 
 bool WorldObject::isValid() const
@@ -1842,7 +1842,7 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
     }
 }
 
-namespace Trinity
+namespace Trillium
 {
     class MonsterChatBuilder
     {
@@ -1883,72 +1883,72 @@ namespace Trinity
             uint32 i_language;
             uint64 i_targetGUID;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 
 void WorldObject::MonsterSay(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterCustomChatBuilder> say_do(say_build);
-    World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Trillium::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> say_do(say_build);
+    Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterSay(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterChatBuilder> say_do(say_build);
-    World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Trillium::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> say_do(say_build);
+    Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterYell(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterCustomChatBuilder> say_do(say_build);
-    World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Trillium::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> say_do(say_build);
+    Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterChatBuilder> say_do(say_build);
-    World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Trillium::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> say_do(say_build);
+    Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    World::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterChatBuilder> say_do(say_build);
+    Trillium::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> say_do(say_build);
 
     uint32 zoneid = GetZoneId();
 
@@ -1967,16 +1967,16 @@ void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsB
 
 void WorldObject::MonsterTextEmote(int32 textId, uint64 TargetGuid, bool IsBossEmote)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
-    World::LocalizedPacketDo<World::MonsterChatBuilder> say_do(say_build);
-    World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
-    TypeContainerVisitor<World::PlayerDistWorker<World::LocalizedPacketDo<World::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Trillium::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
+    Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> say_do(say_build);
+    Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
+    TypeContainerVisitor<Trillium::PlayerDistWorker<Trillium::LocalizedPacketDo<Trillium::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
 }
 
@@ -2037,13 +2037,13 @@ void Unit::BuildHeartBeatMsg(WorldPacket *data) const
 
 void WorldObject::SendMessageToSetInRange(WorldPacket *data, float dist, bool /*bToSelf*/)
 {
-    World::MessageDistDeliverer notifier(this, data, dist);
+    Trillium::MessageDistDeliverer notifier(this, data, dist);
     VisitNearbyWorldObject(dist, notifier);
 }
 
 void WorldObject::SendMessageToSet(WorldPacket *data, Player const* skipped_rcvr)
 {
-    World::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    Trillium::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2391,8 +2391,8 @@ Creature* WorldObject::SummonTrigger(float x, float y, float z, float ang, uint3
 Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive)
 {
     Creature *creature = NULL;
-    World::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
-    World::CreatureLastSearcher<World::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
+    Trillium::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
+    Trillium::CreatureLastSearcher<Trillium::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
     VisitNearbyObject(range, searcher);
     return creature;
 }
@@ -2400,42 +2400,42 @@ Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive
 GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range)
 {
     GameObject *go = NULL;
-    World::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
-    World::GameObjectLastSearcher<World::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
+    Trillium::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
+    Trillium::GameObjectLastSearcher<Trillium::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
 }
 
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange)
 {
-    CellPair pair(World::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
+    CellPair pair(Trillium::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::AllGameObjectsWithEntryInRange check(this, uiEntry, fMaxSearchRange);
-    World::GameObjectListSearcher<World::AllGameObjectsWithEntryInRange> searcher(this, lList, check);
-    TypeContainerVisitor<World::GameObjectListSearcher<World::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    Trillium::AllGameObjectsWithEntryInRange check(this, uiEntry, fMaxSearchRange);
+    Trillium::GameObjectListSearcher<Trillium::AllGameObjectsWithEntryInRange> searcher(this, lList, check);
+    TypeContainerVisitor<Trillium::GameObjectListSearcher<Trillium::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()));
 }
 
 void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange)
 {
-    CellPair pair(World::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
+    CellPair pair(Trillium::ComputeCellPair(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::AllCreaturesOfEntryInRange check(this, uiEntry, fMaxSearchRange);
-    World::CreatureListSearcher<World::AllCreaturesOfEntryInRange> searcher(this, lList, check);
-    TypeContainerVisitor<World::CreatureListSearcher<World::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    Trillium::AllCreaturesOfEntryInRange check(this, uiEntry, fMaxSearchRange);
+    Trillium::CreatureListSearcher<Trillium::AllCreaturesOfEntryInRange> searcher(this, lList, check);
+    TypeContainerVisitor<Trillium::CreatureListSearcher<Trillium::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()));
 }
 
 /*
-namespace Trinity
+namespace Trillium
 {
     class NearUsedPosDo
     {
@@ -2504,7 +2504,7 @@ namespace Trinity
             float              i_angle;
             ObjectPosSelector& i_selector;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 */
 
 //===================================================================================================
@@ -2514,8 +2514,8 @@ void WorldObject::GetNearPoint2D(float &x, float &y, float distance2d, float abs
     x = GetPositionX() + (GetObjectSize() + distance2d) * cos(absAngle);
     y = GetPositionY() + (GetObjectSize() + distance2d) * sin(absAngle);
 
-    World::NormalizeMapCoord(x);
-    World::NormalizeMapCoord(y);
+    Trillium::NormalizeMapCoord(x);
+    Trillium::NormalizeMapCoord(y);
 }
 
 void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle) const
@@ -2542,16 +2542,16 @@ void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float 
 
     // adding used positions around object
     {
-        CellPair p(World::ComputeCellPair(GetPositionX(), GetPositionY()));
+        CellPair p(Trillium::ComputeCellPair(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
         cell.SetNoCreate();
 
-        World::NearUsedPosDo u_do(*this, searcher, absAngle, selector);
-        World::WorldObjectWorker<World::NearUsedPosDo> worker(this, u_do);
+        Trillium::NearUsedPosDo u_do(*this, searcher, absAngle, selector);
+        Trillium::WorldObjectWorker<Trillium::NearUsedPosDo> worker(this, u_do);
 
-        TypeContainerVisitor<World::WorldObjectWorker<World::NearUsedPosDo>, GridTypeMapContainer  > grid_obj_worker(worker);
-        TypeContainerVisitor<World::WorldObjectWorker<World::NearUsedPosDo>, WorldTypeMapContainer > world_obj_worker(worker);
+        TypeContainerVisitor<Trillium::WorldObjectWorker<Trillium::NearUsedPosDo>, GridTypeMapContainer  > grid_obj_worker(worker);
+        TypeContainerVisitor<Trillium::WorldObjectWorker<Trillium::NearUsedPosDo>, WorldTypeMapContainer > world_obj_worker(worker);
 
         CellLock<GridReadGuard> cell_lock(cell, p);
         cell_lock->Visit(cell_lock, grid_obj_worker,  *GetMap(), *this, distance2d);
@@ -2649,8 +2649,8 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
     angle += m_orientation;
     pos.m_positionX += dist * cos(angle);
     pos.m_positionY += dist * sin(angle);
-    World::NormalizeMapCoord(pos.m_positionX);
-    World::NormalizeMapCoord(pos.m_positionY);
+    Trillium::NormalizeMapCoord(pos.m_positionX);
+    Trillium::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.m_orientation = m_orientation;
 }
@@ -2698,8 +2698,8 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
         }
     }
 
-    World::NormalizeMapCoord(pos.m_positionX);
-    World::NormalizeMapCoord(pos.m_positionY);
+    Trillium::NormalizeMapCoord(pos.m_positionX);
+    Trillium::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.m_orientation = m_orientation;
 }
@@ -2739,8 +2739,8 @@ void WorldObject::DestroyForNearbyPlayers()
         return;
 
     std::list<Player*> targets;
-    World::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange());
-    World::PlayerListSearcher<World::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
+    Trillium::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange());
+    Trillium::PlayerListSearcher<Trillium::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
@@ -2763,7 +2763,7 @@ void WorldObject::DestroyForNearbyPlayers()
 void WorldObject::UpdateObjectVisibility(bool /*forced*/)
 {
     //updates object's visibility for nearby players
-    World::VisibleChangesNotifier notifier(*this);
+    Trillium::VisibleChangesNotifier notifier(*this);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2828,7 +2828,7 @@ struct WorldObjectChangeAccumulator
 
 void WorldObject::BuildUpdate(UpdateDataMapType& data_map)
 {
-    CellPair p = World::ComputeCellPair(GetPositionX(), GetPositionY());
+    CellPair p = Trillium::ComputeCellPair(GetPositionX(), GetPositionY());
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();

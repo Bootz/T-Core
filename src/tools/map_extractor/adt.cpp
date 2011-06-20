@@ -51,6 +51,7 @@ bool ADT_file::prepareLoadedData()
     //mcnk_offsets
     int ptr = 0;
     int found = 0;
+	bool size;
     while (ptr < size)
     {
         if((buffer + ptr)[0] == 'K' &&

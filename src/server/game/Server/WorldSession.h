@@ -164,7 +164,7 @@ public:
 };
 
 //class used to filer only thread-unsafe packets from queue
-//in order to update only be used in World::UpdateSessions()
+//in order to update only be used in Trillium::UpdateSessions()
 class WorldSessionFilter : public PacketFilter
 {
 public:

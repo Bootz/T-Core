@@ -495,14 +495,14 @@ public:
             float x, y, z;
             me->GetPosition(x, y, z);
 
-            CellPair pair(World::ComputeCellPair(x, y));
+            CellPair pair(Trillium::ComputeCellPair(x, y));
             Cell cell(pair);
             cell.data.Part.reserved = ALL_DISTRICT;
             cell.SetNoCreate();
 
-            World::AllCreaturesOfEntryInRange check(me, entry, 100);
-            World::CreatureListSearcher<World::AllCreaturesOfEntryInRange> searcher(me, templist, check);
-            TypeContainerVisitor<World::CreatureListSearcher<World::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+            Trillium::AllCreaturesOfEntryInRange check(me, entry, 100);
+            Trillium::CreatureListSearcher<Trillium::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+            TypeContainerVisitor<Trillium::CreatureListSearcher<Trillium::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
             cell.Visit(pair, cSearcher, *(me->GetMap()));
 
             for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)

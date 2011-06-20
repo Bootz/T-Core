@@ -26,8 +26,8 @@
 
 #include "CompilerDefs.h"
 
-#define LITTLEENDIAN 0
-#define BIGENDIAN    1
+//#define LITTLEENDIAN 0
+//#define BIGENDIAN    1
 
 #if !defined(ENDIAN)
 #  if defined (ACE_BIG_ENDIAN)
