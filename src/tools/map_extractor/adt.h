@@ -283,7 +283,15 @@ public:
     ~ADT_file();
     void free();
 
-    adt_MHDR *a_grid;
+    adt_MCNK* getMCNK(uint8 y, uint8 x)
+    {
+        if (mcnk_offsets[y][x])
+            return mcnk_offsets[y][x];
+        return 0;
+    }
+    
+    adt_MHDR* a_grid;
+    adt_MCNK* mcnk_offsets[ADT_CELLS_PER_GRID][ADT_CELLS_PER_GRID];
 };
 
 #endif
