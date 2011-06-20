@@ -1646,7 +1646,7 @@ class Player : public Unit, public GridObject<Player>
         uint32 GetGlyph(uint8 slot) { return m_Glyphs[m_activeSpec][slot]; }
 
         uint32 GetFreePrimaryProfessionPoints() const { return profPoints; }
-        void SetFreePrimaryProfessions(uint16 profs) { profPoints, profs); }
+        void SetFreePrimaryProfessions(uint16 profs) { profPoints, profs; }
         void InitPrimaryProfessions();
 
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
@@ -1770,7 +1770,7 @@ class Player : public Unit, public GridObject<Player>
         void RemoveFromGroup(RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT) { RemoveFromGroup(GetGroup(), GetGUID(), method); }
         void SendUpdateToOutOfRangeGroupMembers();
 
-        void SetInGuild(uint32 GuildId) { guild, GuildId); }
+        void SetInGuild(uint32 GuildId) { guild, GuildId; }
         void SetRank(uint8 rankId) { SetUInt32Value(PLAYER_GUILDRANK, rankId); }
         uint8 GetRank() { return uint8(GetUInt32Value(PLAYER_GUILDRANK)); }
         void SetGuildIdInvited(uint32 GuildId) { m_GuildIdInvited = GuildId; }
@@ -2000,8 +2000,8 @@ class Player : public Unit, public GridObject<Player>
         /*********************************************************/
         void UpdateHonorFields();
         bool RewardHonor(Unit *pVictim, uint32 groupsize, int32 honor = -1, bool pvptoken = false);
-        uint32 GetHonorPoints() const { return GetUInt32Value(PLAYER_FIELD_HONOR_CURRENCY); }
-        uint32 GetArenaPoints() const { return GetUInt32Value(PLAYER_FIELD_ARENA_CURRENCY); }
+        uint32 GetHonorPoints() const { return talentPoints; }
+        uint32 GetArenaPoints() const { return talentPoints; }
         void ModifyHonorPoints(int32 value);
         void ModifyArenaPoints(int32 value);
         uint32 GetMaxPersonalArenaRatingRequirement(uint32 minarenaslot) const;
