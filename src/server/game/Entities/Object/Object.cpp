@@ -1842,7 +1842,7 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
     }
 }
 
-namespace Trinity
+namespace Trillium
 {
     class MonsterChatBuilder
     {

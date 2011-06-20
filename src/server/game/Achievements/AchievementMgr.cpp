@@ -41,7 +41,7 @@
 #include "Map.h"
 #include "InstanceScript.h"
 
-namespace Trinity
+namespace Trillium
 {
     class AchievementChatBuilder
     {

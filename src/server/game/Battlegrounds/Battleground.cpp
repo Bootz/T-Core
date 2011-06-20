@@ -36,7 +36,7 @@
 #include "SpellAuraEffects.h"
 #include "Util.h"
 
-namespace Trinity
+namespace Trillium
 {
     class BattlegroundChatBuilder
     {
