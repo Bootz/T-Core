@@ -58,14 +58,14 @@ class WorldServerSignalHandler : public Trillium::SignalHandler
             switch (SigNum)
             {
                 case SIGINT:
-                    Trillium::StopNow(RESTART_EXIT_CODE);
+                    World::StopNow(RESTART_EXIT_CODE);
                     break;
                 case SIGTERM:
                 #ifdef _WIN32
                 case SIGBREAK:
                     if (m_ServiceStatus != 1)
                 #endif /* _WIN32 */
-                    Trillium::StopNow(SHUTDOWN_EXIT_CODE);
+                    World::StopNow(SHUTDOWN_EXIT_CODE);
                     break;
             }
         }
@@ -88,15 +88,15 @@ public:
         w_loops = 0;
         m_lastchange = 0;
         w_lastchange = 0;
-        while (!Trillium::IsStopped())
+        while (!World::IsStopped())
         {
             ACE_Based::Thread::Sleep(1000);
             uint32 curtime = getMSTime();
             // normal work
-            if (w_loops != Trillium::m_worldLoopCounter)
+            if (w_loops != World::m_worldLoopCounter)
             {
                 w_lastchange = curtime;
-                w_loops = Trillium::m_worldLoopCounter;
+                w_loops = World::m_worldLoopCounter;
             }
             // possible freeze
             else if (getMSTimeDiff(w_lastchange, curtime) > _delaytime)
@@ -268,7 +268,7 @@ int Master::Run()
     if (sWorldSocketMgr->StartNetwork(wsport, bind_ip.c_str ()) == -1)
     {
         sLog->outError("Failed to start network");
-        Trillium::StopNow(ERROR_EXIT_CODE);
+        World::StopNow(ERROR_EXIT_CODE);
         // go down and shutdown the server
     }
 
@@ -354,7 +354,7 @@ int Master::Run()
     //UnloadScriptingModule();
 
     // Exit the process with specified return value
-    return Trillium::GetExitCode();
+    return World::GetExitCode();
 }
 
 /// Initialize connection to the databases
