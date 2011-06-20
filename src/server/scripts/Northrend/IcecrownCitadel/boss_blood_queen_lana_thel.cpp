@@ -368,7 +368,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                                 ++targetCount;
                             if (Is25ManRaid())
                                 ++targetCount;
-                            World::RandomResizeList<Player*>(targets, targetCount);
+                            Trillium::RandomResizeList<Player*>(targets, targetCount);
                             if (targets.size() > 1)
                             {
                                 Talk(SAY_PACT_OF_THE_DARKFALLEN);
@@ -391,7 +391,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                         {
                             std::list<Player*> targets;
                             SelectRandomTarget(false, &targets);
-                            World::RandomResizeList<Player*>(targets, uint32(Is25ManRaid() ? 4 : 2));
+                            Trillium::RandomResizeList<Player*>(targets, uint32(Is25ManRaid() ? 4 : 2));
                             for (std::list<Player*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                                 DoCast(*itr, SPELL_TWILIGHT_BLOODBOLT);
                             DoCast(me, SPELL_TWILIGHT_BLOODBOLT_TARGET);
@@ -454,7 +454,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
 
                 if (includeOfftank)
                 {
-                    tempTargets.sort(World::ObjectDistanceOrderPred(me->getVictim()));
+                    tempTargets.sort(Trillium::ObjectDistanceOrderPred(me->getVictim()));
                     return tempTargets.front();
                 }
 

@@ -50,7 +50,7 @@ extern int m_ServiceStatus;
 #endif
 
 /// Handle worldservers's termination signals
-class WorldServerSignalHandler : public World::SignalHandler
+class WorldServerSignalHandler : public Trillium::SignalHandler
 {
     public:
         virtual void HandleSignal(int SigNum)
@@ -58,14 +58,14 @@ class WorldServerSignalHandler : public World::SignalHandler
             switch (SigNum)
             {
                 case SIGINT:
-                    World::StopNow(RESTART_EXIT_CODE);
+                    Trillium::StopNow(RESTART_EXIT_CODE);
                     break;
                 case SIGTERM:
                 #ifdef _WIN32
                 case SIGBREAK:
                     if (m_ServiceStatus != 1)
                 #endif /* _WIN32 */
-                    World::StopNow(SHUTDOWN_EXIT_CODE);
+                    Trillium::StopNow(SHUTDOWN_EXIT_CODE);
                     break;
             }
         }
@@ -88,15 +88,15 @@ public:
         w_loops = 0;
         m_lastchange = 0;
         w_lastchange = 0;
-        while (!World::IsStopped())
+        while (!Trillium::IsStopped())
         {
             ACE_Based::Thread::Sleep(1000);
             uint32 curtime = getMSTime();
             // normal work
-            if (w_loops != World::m_worldLoopCounter)
+            if (w_loops != Trillium::m_worldLoopCounter)
             {
                 w_lastchange = curtime;
-                w_loops = World::m_worldLoopCounter;
+                w_loops = Trillium::m_worldLoopCounter;
             }
             // possible freeze
             else if (getMSTimeDiff(w_lastchange, curtime) > _delaytime)
@@ -268,7 +268,7 @@ int Master::Run()
     if (sWorldSocketMgr->StartNetwork(wsport, bind_ip.c_str ()) == -1)
     {
         sLog->outError("Failed to start network");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
         // go down and shutdown the server
     }
 
@@ -354,7 +354,7 @@ int Master::Run()
     //UnloadScriptingModule();
 
     // Exit the process with specified return value
-    return World::GetExitCode();
+    return Trillium::GetExitCode();
 }
 
 /// Initialize connection to the databases

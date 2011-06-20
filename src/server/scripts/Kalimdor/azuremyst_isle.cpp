@@ -524,8 +524,8 @@ public:
         {
             float radius = 50.0f;
             std::list<Player*> players;
-            World::AnyPlayerInObjectRangeCheck checker(me, radius);
-            World::PlayerListSearcher<World::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+            Trillium::AnyPlayerInObjectRangeCheck checker(me, radius);
+            Trillium::PlayerListSearcher<Trillium::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
             me->VisitNearbyWorldObject(radius, searcher);
 
             for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)

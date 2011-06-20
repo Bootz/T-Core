@@ -2152,8 +2152,8 @@ ObjectList* SmartScript::GetWorldObjectsInDist(float dist)
     WorldObject* obj = GetBaseObject();
     if (obj)
     {
-        World::AllWorldObjectsInRange u_check(obj, dist);
-        World::WorldObjectListSearcher<World::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
+        Trillium::AllWorldObjectsInRange u_check(obj, dist);
+        Trillium::WorldObjectListSearcher<Trillium::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
         obj->VisitNearbyObject(dist, searcher);
     }
     return targets;
@@ -2870,17 +2870,17 @@ uint32 SmartScript::DoChat(int8 id, uint64 whisperGuid)
 Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
 {
     if (!me) return NULL;
-    CellPair p(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+    CellPair p(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
     Unit* pUnit = NULL;
 
-    World::MostHPMissingInRange u_check(me, range, MinHPDiff);
-    World::UnitLastSearcher<World::MostHPMissingInRange> searcher(me, pUnit, u_check);
+    Trillium::MostHPMissingInRange u_check(me, range, MinHPDiff);
+    Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange> searcher(me, pUnit, u_check);
 
-    TypeContainerVisitor<World::UnitLastSearcher<World::MostHPMissingInRange>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+    TypeContainerVisitor<Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
     cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, range);
     return pUnit;
@@ -2889,15 +2889,15 @@ Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
 void SmartScript::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
 {
     if (!me) return;
-    CellPair p(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+    CellPair p(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::FriendlyCCedInRange u_check(me, range);
-    World::CreatureListSearcher<World::FriendlyCCedInRange> searcher(me, _list, u_check);
+    Trillium::FriendlyCCedInRange u_check(me, range);
+    Trillium::CreatureListSearcher<Trillium::FriendlyCCedInRange> searcher(me, _list, u_check);
 
-    TypeContainerVisitor<World::CreatureListSearcher<World::FriendlyCCedInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+    TypeContainerVisitor<Trillium::CreatureListSearcher<Trillium::FriendlyCCedInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
     cell.Visit(p, grid_creature_searcher, *me->GetMap());
 }
@@ -2905,15 +2905,15 @@ void SmartScript::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
 void SmartScript::DoFindFriendlyMissingBuff(std::list<Creature*>& list, float range, uint32 spellid)
 {
     if (!me) return;
-    CellPair p(World::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+    CellPair p(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    World::FriendlyMissingBuffInRange u_check(me, range, spellid);
-    World::CreatureListSearcher<World::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    Trillium::FriendlyMissingBuffInRange u_check(me, range, spellid);
+    Trillium::CreatureListSearcher<Trillium::FriendlyMissingBuffInRange> searcher(me, list, u_check);
 
-    TypeContainerVisitor<World::CreatureListSearcher<World::FriendlyMissingBuffInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+    TypeContainerVisitor<Trillium::CreatureListSearcher<Trillium::FriendlyMissingBuffInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
     cell.Visit(p, grid_creature_searcher, *me->GetMap());
 }

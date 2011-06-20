@@ -118,7 +118,7 @@ namespace Trillium
             int32 _arg1;
             int32 _arg2;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 
 template<class Do>
 void Battleground::BroadcastWorker(Do& _do)
@@ -849,7 +849,7 @@ uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
 {
     //variable kills means how many honorable kills you scored (so we need kills * honor_for_one_kill)
     uint32 maxLevel = std::min(GetMaxLevel(), 80U);
-    return World::Honor::hk_honor_at_level(maxLevel, float(kills));
+    return Trillium::Honor::hk_honor_at_level(maxLevel, float(kills));
 }
 
 uint32 Battleground::GetBattlemasterEntry() const
@@ -1582,8 +1582,8 @@ bool Battleground::AddSpiritGuide(uint32 type, float x, float y, float z, float 
 
 void Battleground::SendMessageToAll(int32 entry, ChatMsg type, Player const* source)
 {
-    World::BattlegroundChatBuilder bg_builder(type, entry, source);
-    World::LocalizedPacketDo<World::BattlegroundChatBuilder> bg_do(bg_builder);
+    Trillium::BattlegroundChatBuilder bg_builder(type, entry, source);
+    Trillium::LocalizedPacketDo<Trillium::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 
@@ -1592,8 +1592,8 @@ void Battleground::PSendMessageToAll(int32 entry, ChatMsg type, Player const* so
     va_list ap;
     va_start(ap, source);
 
-    World::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
-    World::LocalizedPacketDo<World::BattlegroundChatBuilder> bg_do(bg_builder);
+    Trillium::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
+    Trillium::LocalizedPacketDo<Trillium::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 
     va_end(ap);
@@ -1630,8 +1630,8 @@ void Battleground::SendWarningToAll(int32 entry, ...)
 
 void Battleground::SendMessage2ToAll(int32 entry, ChatMsg type, Player const* source, int32 arg1, int32 arg2)
 {
-    World::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
-    World::LocalizedPacketDo<World::Battleground2ChatBuilder> bg_do(bg_builder);
+    Trillium::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
+    Trillium::LocalizedPacketDo<Trillium::Battleground2ChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 

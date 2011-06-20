@@ -27,7 +27,7 @@
 #include "ObjectAccessor.h"
 #include "CellImpl.h"
 
-using namespace Trinity;
+using namespace Trillium;
 
 void
 VisibleNotifier::SendToSelf()
@@ -214,7 +214,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
         if (player != viewPoint && !viewPoint->IsPositionValid())
             continue;
 
-        CellPair pair2(World::ComputeCellPair(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
+        CellPair pair2(Trillium::ComputeCellPair(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
         Cell cell2(pair2);
         //cell.SetNoCreate(); need load cells around viewPoint or player, that's why its commented
 

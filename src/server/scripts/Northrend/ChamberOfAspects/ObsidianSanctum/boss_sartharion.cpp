@@ -540,8 +540,8 @@ public:
         void CastLavaStrikeOnTarget(Unit* target)
         {
             std::list<Creature*> pFireCyclonesList;
-            World::AllCreaturesOfEntryInRange checker(me, NPC_FIRE_CYCLONE, 200.0f);
-            World::CreatureListSearcher<World::AllCreaturesOfEntryInRange> searcher(me, pFireCyclonesList, checker);
+            Trillium::AllCreaturesOfEntryInRange checker(me, NPC_FIRE_CYCLONE, 200.0f);
+            Trillium::CreatureListSearcher<Trillium::AllCreaturesOfEntryInRange> searcher(me, pFireCyclonesList, checker);
             me->VisitNearbyObject(200.0f, searcher);
 
             if(pFireCyclonesList.empty())

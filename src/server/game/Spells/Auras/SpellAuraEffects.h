@@ -273,7 +273,7 @@ class AuraEffect
         void HandlePeriodicPowerBurnManaAuraTick(Unit* target, Unit* caster) const;
 };
 
-namespace Trinity
+namespace Trillium
 {
     // Binary predicate for sorting the priority of absorption aura effects
     class AbsorbAuraOrderPred

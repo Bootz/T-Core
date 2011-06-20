@@ -256,7 +256,7 @@ void ThreatContainer::update()
 {
     if (iDirty && iThreatList.size() >1)
     {
-        iThreatList.sort(World::ThreatOrderPred());
+        iThreatList.sort(Trillium::ThreatOrderPred());
     }
     iDirty = false;
 }

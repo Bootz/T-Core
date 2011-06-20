@@ -34,7 +34,7 @@
 class Player;
 //class Map;
 
-namespace Trinity
+namespace Trillium
 {
     struct VisibleNotifier
     {

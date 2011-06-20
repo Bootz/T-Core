@@ -366,7 +366,7 @@ public:
             if (targets.empty())
                 return false;
 
-            targets.sort(World::ObjectDistanceOrderPred(me));
+            targets.sort(Trillium::ObjectDistanceOrderPred(me));
             Unit *pTarget = targets.front();
             if (pTarget)
             {

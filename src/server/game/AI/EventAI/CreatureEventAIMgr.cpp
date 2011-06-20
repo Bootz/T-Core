@@ -133,7 +133,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Summons()
         temp.orientation = fields[4].GetFloat();
         temp.SpawnTimeSecs = fields[5].GetUInt32();
 
-        if (!World::IsValidMapCoord(temp.position_x, temp.position_y, temp.position_z, temp.orientation))
+        if (!Trillium::IsValidMapCoord(temp.position_x, temp.position_y, temp.position_z, temp.orientation))
         {
             sLog->outErrorDb("CreatureEventAI:  Summon id %u have wrong coordinates (%f, %f, %f, %f), skipping.", i, temp.position_x, temp.position_y, temp.position_z, temp.orientation);
             continue;

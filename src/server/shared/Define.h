@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEFINE_H
-#define DEFINE_H
+#ifndef _DEFINE_H
+#define _DEFINE_H
 
 #include <sys/types.h>
 
@@ -26,19 +26,19 @@
 
 #include "CompilerDefs.h"
 
-#define LITTLEENDIAN 0
-#define BIGENDIAN    1
+#define TRILLIUM_LITTLEENDIAN 0
+#define TRILLIUM_BIGENDIAN    1
 
-#if !defined(ENDIAN)
+#if !defined(TRILLIUM_ENDIAN)
 #  if defined (ACE_BIG_ENDIAN)
-#    define ENDIAN BIGENDIAN
+#    define TRILLIUM_ENDIAN TRILLIUM_BIGENDIAN
 #  else //ACE_BYTE_ORDER != ACE_BIG_ENDIAN
-#    define ENDIAN LITTLEENDIAN
+#    define TRILLIUM_ENDIAN TRILLIUM_LITTLEENDIAN
 #  endif //ACE_BYTE_ORDER
-#endif //ENDIAN
+#endif //TRILLIUM_ENDIAN
 
 #if PLATFORM == PLATFORM_WINDOWS
-#  define PATH_MAX MAX_PATH
+#  define TRILLIUM_PATH_MAX MAX_PATH
 #  ifndef DECLSPEC_NORETURN
 #    define DECLSPEC_NORETURN __declspec(noreturn)
 #  endif //DECLSPEC_NORETURN
@@ -46,18 +46,18 @@
 #    define DECLSPEC_DEPRECATED __declspec(deprecated)
 #  endif //DECLSPEC_DEPRECATED
 #else //PLATFORM != PLATFORM_WINDOWS
-#  define PATH_MAX PATH_MAX
+#  define TRILLIUM_PATH_MAX PATH_MAX
 #  define DECLSPEC_NORETURN
 #  define DECLSPEC_DEPRECATED
 #endif //PLATFORM
 
 #if !defined(COREDEBUG)
-#  define INLINE inline
+#  define TRILLIUM_INLINE inline
 #else //COREDEBUG
-#  if !defined(DEBUG)
-#    define DEBUG
-#  endif //DEBUG
-#  define INLINE
+#  if !defined(TRILLIUM_DEBUG)
+#    define TRILLIUM_DEBUG
+#  endif //TRILLIUM_DEBUG
+#  define TRILLIUM_INLINE
 #endif //!COREDEBUG
 
 #if COMPILER == COMPILER_GNU
@@ -79,4 +79,4 @@ typedef ACE_UINT32 uint32;
 typedef ACE_UINT16 uint16;
 typedef ACE_UINT8 uint8;
 
-#endif //DEFINE_H
+#endif //TRILLIUM_DEFINE_H

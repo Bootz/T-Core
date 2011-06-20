@@ -10,8 +10,8 @@ bool isHole(int holes, int i, int j)
 {
     int testi = i / 2;
     int testj = j / 4;
-    if(testi > 3) testi = 3;
-    if(testj > 3) testj = 3;
+    if (testi > 3) testi = 3;
+    if (testj > 3) testj = 3;
     return (holes & holetab_h[testi] & holetab_v[testj]) != 0;
 }
 
@@ -48,6 +48,33 @@ bool ADT_file::prepareLoadedData()
     if (!a_grid->prepareLoadedData())
         return false;
 
+    //mcnk_offsets
+    int ptr = 0;
+    int found = 0;
+	bool size;
+    while (ptr < size)
+    {
+        if((buffer + ptr)[0] == 'K' &&
+           (buffer + ptr)[1] == 'N' &&
+           (buffer + ptr)[2] == 'C' &&
+           (buffer + ptr)[3] == 'M')
+        {
+            adt_MCNK * mcnk = (adt_MCNK*)(buffer + ptr);
+            assert(mcnk->iy < ADT_CELLS_PER_GRID);
+            assert(mcnk->ix < ADT_CELLS_PER_GRID);
+            mcnk_offsets[mcnk->iy][mcnk->ix] = mcnk;
+            ptr += 4;//go to size
+            ptr += 4 + *((uint32*)(buffer + ptr));//skip all datas AND size.
+            found ++;
+            mcnk->prepareLoadedData();
+        }
+        else 
+        {
+            ptr += 4;//go to size
+            ptr += 4 + *((uint32*)(buffer + ptr)); //skip all datas AND size.
+        }
+    }
+    assert(found == 256);
     return true;
 }
 
@@ -104,6 +131,7 @@ bool adt_MCNK::prepareLoadedData()
     // Check height map
     if (offsMCVT && !getMCVT()->prepareLoadedData())
         return false;
+
     // Check liquid data
     if (offsMCLQ && !getMCLQ()->prepareLoadedData())
         return false;

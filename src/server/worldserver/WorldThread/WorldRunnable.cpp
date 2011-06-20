@@ -48,10 +48,10 @@ void WorldRunnable::run()
 
     sScriptMgr->OnStartup();
 
-    ///- While we have not World::m_stopEvent, update the world
-    while (!World::IsStopped())
+    ///- While we have not Trillium::m_stopEvent, update the world
+    while (!Trillium::IsStopped())
     {
-        ++World::m_worldLoopCounter;
+        ++Trillium::m_worldLoopCounter;
         realCurrTime = getMSTime();
 
         uint32 diff = getMSTimeDiff(realPrevTime, realCurrTime);
@@ -73,7 +73,7 @@ void WorldRunnable::run()
 
         #ifdef _WIN32
             if (m_ServiceStatus == 0)
-                World::StopNow(SHUTDOWN_EXIT_CODE);
+                Trillium::StopNow(SHUTDOWN_EXIT_CODE);
 
             while (m_ServiceStatus == 2)
                 Sleep(1000);

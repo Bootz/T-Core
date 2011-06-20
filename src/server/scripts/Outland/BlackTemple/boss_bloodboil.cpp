@@ -158,7 +158,7 @@ public:
             }
 
             //Sort the list of players
-            targets.sort(World::ObjectDistanceOrderPred(me, false));
+            targets.sort(Trillium::ObjectDistanceOrderPred(me, false));
             //Resize so we only get top 5
             targets.resize(5);
 

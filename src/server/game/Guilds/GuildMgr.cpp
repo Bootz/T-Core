@@ -44,7 +44,7 @@ uint32 GuildMgr::GenerateGuildId()
     if (NextGuildId >= 0xFFFFFFFE)
     {
         sLog->outError("Guild ids overflow!! Can't continue, shutting down server. ");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
     }
     return NextGuildId++;
 }

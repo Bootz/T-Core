@@ -84,7 +84,7 @@ char ** cli_completion(const char * text, int start, int /*end*/)
 
 int cli_hook_func(void)
 {
-       if (World::IsStopped())
+       if (Trillium::IsStopped())
            rl_done = 1;
        return 0;
 }
@@ -479,7 +479,7 @@ bool ChatHandler::HandleCharacterEraseCommand(const char* args){
 bool ChatHandler::HandleServerExitCommand(const char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_EXIT);
-    World::StopNow(SHUTDOWN_EXIT_CODE);
+    Trillium::StopNow(SHUTDOWN_EXIT_CODE);
     return true;
 }
 
@@ -575,8 +575,8 @@ void CliRunnable::run()
     // later it will be printed after command queue updates
     printf("TC>");
 
-    ///- As long as the World is running (no World::m_stopEvent), get the command line and handle it
-    while (!World::IsStopped())
+    ///- As long as the World is running (no Trillium::m_stopEvent), get the command line and handle it
+    while (!Trillium::IsStopped())
     {
         fflush(stdout);
 
@@ -623,7 +623,7 @@ void CliRunnable::run()
         }
         else if (feof(stdin))
         {
-            World::StopNow(SHUTDOWN_EXIT_CODE);
+            Trillium::StopNow(SHUTDOWN_EXIT_CODE);
         }
 
     }

@@ -21,7 +21,7 @@
 
 #include <ace/Event_Handler.h>
 
-namespace Trinity
+namespace Trillium
 {
 
 /// Handle termination signals

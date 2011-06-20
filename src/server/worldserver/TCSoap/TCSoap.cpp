@@ -44,7 +44,7 @@ void TCSoapRunnable::run()
 
     sLog->outString("TCSoap: bound to http://%s:%d", m_host.c_str(), m_port);
 
-    while(!World::IsStopped())
+    while(!Trillium::IsStopped())
     {
         if (!soap_valid_socket(soap_accept(&soap)))
             continue;   // ran into an accept timeout

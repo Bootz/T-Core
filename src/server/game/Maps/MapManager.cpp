@@ -290,7 +290,7 @@ void MapManager::DoDelayedMovesAndRemoves()
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 {
-    GridPair p = World::ComputeGridPair(x, y);
+    GridPair p = Trillium::ComputeGridPair(x, y);
 
     int gx=63-p.x_coord;
     int gy=63-p.y_coord;
@@ -403,7 +403,7 @@ uint32 MapManager::GenerateInstanceId()
     if (newInstanceId == _nextInstanceId)
     {
         sLog->outError("Instance ID overflow!! Can't continue, shutting down server. ");
-        World::StopNow(ERROR_EXIT_CODE);
+        Trillium::StopNow(ERROR_EXIT_CODE);
     }
 
     // Allocate space if necessary

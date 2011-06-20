@@ -79,7 +79,7 @@ void RARunnable::run()
 
     sLog->outString("Starting Trinity RA on port %d on %s", raport, stringip.c_str());
 
-    while (!World::IsStopped())
+    while (!Trillium::IsStopped())
     {
         // don't be too smart to move this outside the loop
         // the run_reactor_event_loop will modify interval
