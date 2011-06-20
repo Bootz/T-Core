@@ -43,9 +43,9 @@ typedef char const* const* DBCString;                       //char* DBCStrings[M
 
 struct AchievementEntry
 {
-    int32    requiredFaction;                               // 1       -1=all, 0=horde, 1=alliance
-    int32    mapID;                                         // 2       -1=none
-    //uint32 parentAchievement;                             // 3        its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
+    int32    requiredFaction;                               // 1     -1=all, 0=horde, 1=alliance
+    int32    mapID;                                         // 2     -1=none
+    //uint32 parentAchievement;                             // 3     its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
     DBCString name;                                         // 4     m_title_lang
     //char *description;                                    // 5     m_description_lang
     uint32    categoryId;                                   // 6     m_category
