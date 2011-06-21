@@ -84,7 +84,7 @@ char ** cli_completion(const char * text, int start, int /*end*/)
 
 int cli_hook_func(void)
 {
-       if (Trillium::IsStopped())
+       if (World::IsStopped())
            rl_done = 1;
        return 0;
 }
