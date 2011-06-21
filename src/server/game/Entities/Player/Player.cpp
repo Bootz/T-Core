@@ -5222,7 +5222,7 @@ void Player::CreateCorpse()
 
     corpse->SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, GetNativeDisplayId());
 
-    corpse->SetUInt32Value(CORPSE_FIELD_GUILD, GetGuildId());
+    //corpse->SetUInt32Value(CORPSE_FIELD_GUILD, GetGuildId());
 
     uint32 iDisplayID;
     uint32 iIventoryType;
@@ -7059,16 +7059,16 @@ void Player::UpdateHonorFields()
         // update yesterday's contribution
         if (m_lastHonorUpdateTime >= yesterday)
         {
-            SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
+            //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
 
             // this is the first update today, reset today's contribution
-            SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
-            SetUInt32Value(PLAYER_FIELD_KILLS, MAKE_PAIR32(0, kills_today));
+            //SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
+            //SetUInt32Value(PLAYER_FIELD_KILLS, MAKE_PAIR32(0, kills_today));
         }
         else
         {
             // no honor/kills yesterday or today, reset
-            SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
+            //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
             SetUInt32Value(PLAYER_FIELD_KILLS, 0);
         }
     }
@@ -7201,7 +7201,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
     // add honor points
     ModifyHonorPoints(honor);
 
-    ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
+    //ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
     if (InBattleground() && honor > 0)
     {
@@ -8537,7 +8537,7 @@ void Player::_ApplyAllLevelScaleItemMods(bool apply)
 
 void Player::_ApplyAmmoBonuses()
 {
-    // check ammo
+    /* //check ammo
     uint32 ammo_id = GetUInt32Value(PLAYER_AMMO_ID);
     if (!ammo_id)
         return;
@@ -8556,7 +8556,7 @@ void Player::_ApplyAmmoBonuses()
     m_ammoDPS = currentAmmoDPS;
 
     if (CanModifyStats())
-        UpdateDamagePhysical(RANGED_ATTACK);
+        UpdateDamagePhysical(RANGED_ATTACK); */
 }
 
 bool Player::CheckAmmoCompatibility(const ItemTemplate *ammo_proto) const
@@ -11843,6 +11843,7 @@ InventoryResult Player::CanUseAmmo(uint32 item) const
 
 void Player::SetAmmo(uint32 item)
 {
+    /*
     if (!item)
         return;
 
@@ -11863,17 +11864,18 @@ void Player::SetAmmo(uint32 item)
 
     SetUInt32Value(PLAYER_AMMO_ID, item);
 
-    _ApplyAmmoBonuses();
+    _ApplyAmmoBonuses(); */
 }
 
 void Player::RemoveAmmo()
 {
+    /*
     SetUInt32Value(PLAYER_AMMO_ID, 0);
 
     m_ammoDPS = 0.0f;
 
     if (CanModifyStats())
-        UpdateDamagePhysical(RANGED_ATTACK);
+        UpdateDamagePhysical(RANGED_ATTACK); */
 }
 
 // Return stored item (if stored to stack, it can diff. from pItem). And pItem ca be deleted in this case.
@@ -16467,9 +16469,9 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetUInt32());
 
-    SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
+    //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
 
-    SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
+    //SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
 
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[65].GetUInt8());

@@ -1262,8 +1262,8 @@ void WorldSession::HandleInspectHonorStatsOpcode(WorldPacket& recv_data)
     data << uint64(player->GetGUID());
     data << uint8(player->GetHonorPoints());
     data << uint32(player->GetUInt32Value(PLAYER_FIELD_KILLS));
-    data << uint32(player->GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
-    data << uint32(player->GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION));
+    //data << uint32(player->GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
+    //data << uint32(player->GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION));
     data << uint32(player->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS));
     SendPacket(&data);
 }
