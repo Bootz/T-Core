@@ -560,18 +560,19 @@ struct AreaPOIEntry
 
 struct AreaTriggerEntry
 {
-    int32   mapid[8];                                       // 1-8 mapid
-    uint32  type;                                           // 9 (3 - BG, 4 - arena)
-    //uint32 canJoinAsGroup;                                // 10 (0 or 1)
-    DBCString name;                                         // 11
-    uint32 maxGroupSize;                                    // 12 maxGroupSize, used for checking if queue as group
-    uint32 HolidayWorldStateId;                             // 13 new 3.1
-    uint32 minLevel;                                        // 14, min level (sync with PvPDifficulty.dbc content)
-    uint32 maxLevel;                                        // 15, max level (sync with PvPDifficulty.dbc content)
-    //uint32 maxGroupSizeRated;                             // 16 4.0.1
-    //uint32 unk;                                           // 17 - 4.0.6.13596
-    //uint32 maxPlayers;                                    // 18 4.0.1
-    //uint32 unk1;                                          // 19 4.0.3, value 2 for Rated Battlegrounds
+    uint32  id;                                             // 0        m_ID
+    uint32  mapid;                                          // 1        m_ContinentID
+    float   x;                                              // 2        m_x
+    float   y;                                              // 3        m_y
+    float   z;                                              // 4        m_z
+    //uint32                                                // 5
+    //uint32                                                // 6
+    //uint32                                                // 7
+    float   radius;                                         // 8        m_radius
+    float   box_x;                                          // 9        m_box_length
+    float   box_y;                                          // 10       m_box_width
+    float   box_z;                                          // 11       m_box_heigh
+    float   box_orientation;                                // 12       m_box_yaw
 };
 
 struct AuctionHouseEntry
