@@ -1,0 +1,10 @@
+Cleanup game folder. and cpp files.
+Cleanup scripts.
+add Database Structure.
+Begin to write Spell System.
+Write new Opcodes System.
+Write a new DB.
+Make Forum.
+Make Domain.
+
+Please Edit this file if you change anything.
