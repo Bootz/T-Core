@@ -852,11 +852,12 @@ class spell_pool_of_tar : public CreatureScript
     public:
         spell_pool_of_tar() : CreatureScript("spell_pool_of_tar") { }
 
-        struct spell_pool_of_tarAI : public PassiveAI
+        struct spell_pool_of_tarAI : public ScriptedAI
         {
-            spell_pool_of_tarAI(Creature* creature) : PassiveAI(creature)
+            spell_pool_of_tarAI(Creature* creature) : ScriptedAI(creature)
             {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                me->SetReactState(REACT_PASSIVE)
                 me->AddAura(SPELL_TAR_PASSIVE, me);
             }
 
@@ -876,6 +877,8 @@ class spell_pool_of_tar : public CreatureScript
         {
             return new spell_pool_of_tarAI(creature);
         }
+
+        void UpdateAI(uint32 const diff) {}
 };
 
 class npc_colossus : public CreatureScript
