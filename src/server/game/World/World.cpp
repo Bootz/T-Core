@@ -403,7 +403,7 @@ void World::LoadConfigSettings(bool reload)
 
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerAmountLimit(sConfig->GetIntDefault("PlayerLimit", 100));
-    SetMotd(sConfig->GetStringDefault("Motd", "Welcome to a Trinity Core Server."));
+    SetMotd(sConfig->GetStringDefault("Motd", "Welcome to a TrilliumEMU Server."));
 
     ///- Read ticket system setting from the config file
     m_bool_configs[CONFIG_ALLOW_TICKETS] = sConfig->GetBoolDefault("AllowTickets", true);
@@ -1229,7 +1229,7 @@ void World::SetInitialWorldSettings()
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     sLog->outString();
-    sLog->outString("Loading Trinity strings...");
+    sLog->outString("Loading strings...");
     if (!sObjectMgr->LoadTrinityStrings())
         exit(1);                                            // Error message displayed in function already
 

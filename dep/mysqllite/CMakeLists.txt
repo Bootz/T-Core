@@ -1,3 +1,4 @@
+# Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
 # Copyright (C) 2006 MySQL AB
 # Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
 #
