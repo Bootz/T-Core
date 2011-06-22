@@ -1,3 +1,4 @@
+# Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
 # Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
@@ -6,7 +7,7 @@
 #
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   
 
 if( USE_COREPCH )
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
