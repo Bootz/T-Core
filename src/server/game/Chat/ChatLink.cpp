@@ -382,7 +382,7 @@ bool AchievementChatLink::ValidateName(char* buffer, const char* context)
 
     bool res = false;
     for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
-        if (*_achievement->name[i] && strcmp(_achievement->name[i], buffer) == 0)
+        if (_achievement->name[i] && strcmp(_achievement->name[i], buffer) == 0)
         {
             res = true;
             break;

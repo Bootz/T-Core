@@ -49,13 +49,13 @@ struct AchievementEntry
     int32    mapID;                                         // 2     -1=none
     //uint32 parentAchievement;                             // 3     its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
     DBCString name;                                         // 4     m_title_lang
-    //char *description;                                    // 5     m_description_lang
+    //DBCString description;                                // 5     m_description_lang
     uint32    categoryId;                                   // 6     m_category
     uint32    points;                                       // 7     m_points
     //uint32 OrderInCategory;                               // 8     m_ui_order
     uint32    flags;                                        // 9     m_flags
     //uint32    icon;                                       // 10    m_iconID
-    //char *titleReward;                                    // 11    m_reward_lang
+    //DBCString titleReward;                                // 11    m_reward_lang
     uint32 count;                                           // 12    m_minimum_criteria - need this count of completed criterias (own or referenced achievement criterias)
     uint32 refAchievement;                                  // 13    m_shares_criteria - referenced achievement (counting of all completed criterias)
 };
@@ -64,9 +64,8 @@ struct AchievementCategoryEntry
 {
     uint32    ID;                                           // 0
     uint32    parentCategory;                               // 1 -1 for main category
-    //char *name[16];                                       // 2-17
-    //uint32 name_flags;                                    // 18
-    //uint32    sortOrder;                                  // 19
+    //DBCString name;                                       // 2
+    //uint32    sortOrder;                                  // 3
 };
 
 struct AchievementCriteriaEntry
@@ -257,18 +256,18 @@ struct AchievementCriteriaEntry
             uint32  teamtype;                               // 3 {2, 3, 5}
         } highest_team_rating;
 
-        // ACHIEVEMENT_CRITERIA_TYPE_REACH_TEAM_RATING      = 39
+        // ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_PERSONAL_RATING      = 39
         struct
         {
             uint32  teamtype;                               // 3 {2, 3, 5}
-            uint32  PersonalRating;                             // 4
+            uint32  PersonalRating;                         // 4
         } highest_personal_rating;
 
         // ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL      = 40
         struct
         {
             uint32  skillID;                                // 3
-            uint32  skillLevel;                             // 4 apprentice=1, journeyman=2, expert=3, artisan=4, master=5, grand master=6
+            uint32  skillLevel;                             // 4 apprentice=1, journeyman=2, expert=3, artisan=4, master=5, grand master=6, professional illustrious grand master=7
         } learn_skill_level;
 
         // ACHIEVEMENT_CRITERIA_TYPE_USE_ITEM               = 41
@@ -505,15 +504,19 @@ struct AchievementCriteriaEntry
         uint32  additionalRequirement_value;
     } additionalRequirements[MAX_CRITERIA_REQUIREMENTS];
 
-    //char*  name[16];                                      // 9-24
-    //uint32 name_flags;                                    // 25
-    uint32  flags;                                          // 26
-    uint32  timedType;                                      // 27
-    uint32  timerStartEvent;                                // 28 Alway appears with timed events
-                                                            // for timed spells it is spell id for
-                                                            // timed kills it is creature id
-    uint32  timeLimit;                                      // 29 time limit in seconds
-    //uint32 showOrder;                                     // 30 show order
+    DBCString  name;                                        // 9
+    uint32  completionFlag;                                 // 10
+    uint32  timedType;                                      // 11 Only appears with timed achievements, seems to be the type of starting a timed Achievement, only type 1 and some of type 6 need manual starting
+                                                            // 1: ByEventId(?) (serverside IDs),    2: ByQuestId,   5: ByCastSpellId(?)
+                                                            // 6: BySpellIdTarget(some of these are unknown spells, some not, some maybe spells)
+                                                            // 7: ByKillNpcId,  9: ByUseItemId
+    uint32  timerStartEvent;                                // 12 Alway appears with timed events, used internally to start the achievement, store 
+    uint32  timeLimit;                                      // 13 time limit in seconds
+    uint32  showOrder;                                      // 14 show order
+    //uint32 unk1;                                          // 15 only one value, still unknown
+    //uint32 unk2;                                          // 16 all zeros
+    //uint32 moreRequirement[3];                            // 17-19
+    //uint32 moreRequirementValue[3];                       // 20-22
 };
 
 struct AreaTableEntry
