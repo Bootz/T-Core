@@ -131,7 +131,7 @@ public:
         bool m_bIsActiveWithRANULF;
         bool m_bIsActiveWithTORGYN;
         bool kingsBane; // Achievement King's Bane
-		
+        
         uint8 m_uiActiveOrder[4];
         uint8 m_uiActivedNumber;
 
