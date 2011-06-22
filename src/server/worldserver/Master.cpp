@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
  *
@@ -131,7 +131,7 @@ int Master::Run()
     sLog->outString(" TrilliumEMU" );
     sLog->outString(" Welcome to TrilliumEMU" );
     sLog->outString(" The project is based on TrinityCore" );
-    sLog->outString(" http://trillium-emu.maweb.eu" );
+    sLog->outString(" http://www.trilliumemu.com" );
     sLog->outString("===========================================================\n" );  
 
 #ifdef USE_SFMT_FOR_RNG

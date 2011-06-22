@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
  *
@@ -108,7 +108,7 @@ extern int main(int argc, char **argv)
     sLog->outString(" TrilliumEMU" );
     sLog->outString(" Welcome to TrilliumEMU" );
     sLog->outString(" The project is based on TrinityCore" );
-    sLog->outString(" http://trillium-emu.maweb.eu" );
+    sLog->outString(" http://www.trilliumemu.com" );
     sLog->outString("===========================================================\n" );    
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
