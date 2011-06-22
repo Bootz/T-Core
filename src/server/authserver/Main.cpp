@@ -103,6 +103,13 @@ extern int main(int argc, char **argv)
     sLog->outString("%s (authserver)", _FULLVERSION);
     sLog->outString("<Ctrl-C> to stop.\n");
     sLog->outString("Using configuration file %s.", cfg_file);
+    
+    sLog->outString("===========================================================" );
+    sLog->outString(" TrilliumEMU" );
+    sLog->outString(" Welcome to TrilliumEMU" );
+    sLog->outString(" The project is based on TrinityCore" );
+    sLog->outString(" http://trillium-emu.maweb.eu" );
+    sLog->outString("===========================================================\n" );    
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
