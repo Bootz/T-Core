@@ -172,7 +172,7 @@ public:
 
             return 0;
         }
-		
+        
         void JustDied(Unit* /*killer*/)
         {
             DoScriptText(SAY_DEATH, me);
