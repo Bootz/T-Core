@@ -37,6 +37,9 @@ project website at http://www.getmangos.com/.
 For further information on the TrinityCore project, please visit our
 project website at http://www.trinitycore.org.
 
+For further information on the TrilliumEMU project, please visit our
+project website at http://www.trilliumemu.com.
+
 API documentation can be obtained by running the "make doc" command inside
 the doc directory.
 
