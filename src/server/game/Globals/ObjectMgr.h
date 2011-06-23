@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
  *

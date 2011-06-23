@@ -1,4 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://trillium-emu.maweb.eu/>
+# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
 # Copyright (C) 2008-2010 Trinity <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
