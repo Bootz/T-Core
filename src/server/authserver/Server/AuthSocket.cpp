@@ -189,7 +189,7 @@ const AuthHandler table[] =
     { XFER_CANCEL,              STATUS_CONNECTED, &AuthSocket::_HandleXferCancel        }
 };
 
-#define AUTH_TOTAL_COMMANDS 8
+#define AUTH_TOTAL_COMMANDS sizeof(table)/sizeof(AuthHandler)
 
 // Holds the MD5 hash of client patches present on the server
 Patcher PatchesCache;
@@ -342,7 +342,9 @@ bool AuthSocket::_HandleLogonChallenge()
 
     _login = (const char*)ch->I;
     _build = ch->build;
-    _expversion = (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+    _expversion = (AuthHelper::IsPostCataAcceptedClientBuild(_build) ? POST_CATA_EXP_FLAG : NO_VALID_EXP_FLAG) |
+                  (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) |
+                  (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
 
     pkt << (uint8)AUTH_LOGON_CHALLENGE;
     pkt << (uint8)0x00;
@@ -377,7 +379,6 @@ bool AuthSocket::_HandleLogonChallenge()
             {
                 sLog->outStaticDebug("[AuthChallenge] Account '%s' is locked to IP - '%s'", _login.c_str(), fields[3].GetCString());
                 sLog->outStaticDebug("[AuthChallenge] Player address is '%s'", ip_address.c_str());
-
                 if (strcmp(fields[3].GetCString(), ip_address.c_str()))
                 {
                     sLog->outStaticDebug("[AuthChallenge] Account IP differs");
@@ -536,25 +537,21 @@ bool AuthSocket::_HandleLogonProof()
     memcpy(t, S.AsByteArray(32), 32);
 
     for (int i = 0; i < 16; ++i)
+    {
         t1[i] = t[i * 2];
-
+	}
     sha.Initialize();
     sha.UpdateData(t1, 16);
     sha.Finalize();
-
     for (int i = 0; i < 20; ++i)
         vK[i * 2] = sha.GetDigest()[i];
-
     for (int i = 0; i < 16; ++i)
         t1[i] = t[i * 2 + 1];
-
     sha.Initialize();
     sha.UpdateData(t1, 16);
     sha.Finalize();
-
     for (int i = 0; i < 20; ++i)
         vK[i * 2 + 1] = sha.GetDigest()[i];
-
     K.SetBinary(vK, 40);
 
     uint8 hash[20];
@@ -566,10 +563,8 @@ bool AuthSocket::_HandleLogonProof()
     sha.Initialize();
     sha.UpdateBigNumbers(&g, NULL);
     sha.Finalize();
-
     for (int i = 0; i < 20; ++i)
         hash[i] ^= sha.GetDigest()[i];
-
     BigNumber t3;
     t3.SetBinary(hash, 20);
 
@@ -610,7 +605,7 @@ bool AuthSocket::_HandleLogonProof()
         sha.UpdateBigNumbers(&A, &M, &K, NULL);
         sha.Finalize();
 
-        if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
+        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_CATA_EXP_FLAG))                 // 2.x and 4.x clients
         {
             sAuthLogonProof_S proof;
             memcpy(proof.M2, sha.GetDigest(), 20);
@@ -637,8 +632,8 @@ bool AuthSocket::_HandleLogonProof()
     {
         char data[4] = { AUTH_LOGON_PROOF, WOW_FAIL_UNKNOWN_ACCOUNT, 3, 0 };
         socket().send(data, sizeof(data));
-
-        sLog->outBasic("[AuthChallenge] account %s tried to login with wrong password!", _login.c_str());
+        
+        sLog->outBasic("[AuthChallenge] account %s tried to login with wrong password!",_login.c_str ());
 
         uint32 MaxWrongPassCount = sConfig->GetIntDefault("WrongPass.MaxCount", 0);
         if (MaxWrongPassCount > 0)
@@ -704,7 +699,6 @@ bool AuthSocket::_HandleReconnectChallenge()
 #if ENDIAN == BIGENDIAN
     EndianConvert(*((uint16*)(buf[0])));
 #endif
-
     uint16 remaining = ((sAuthLogonChallenge_C *)&buf[0])->size;
     sLog->outStaticDebug("[ReconnectChallenge] got header, body is %#04x bytes", remaining);
 
@@ -785,7 +779,9 @@ bool AuthSocket::_HandleReconnectProof()
         pkt << (uint8)0x00;
         pkt << (uint16)0x00;                               // 2 bytes zeros
         socket().send((char const*)pkt.contents(), pkt.size());
+
         _authed = true;
+
         return true;
     }
     else
@@ -806,7 +802,7 @@ bool AuthSocket::_HandleRealmList()
     socket().recv_skip(5);
 
     // Get the user id (else close the connection)
-    // No SQL injection (prepared statement)
+    // No SQL injection (prepared statement)    
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_ACCIDBYNAME);
     stmt->setString(0, _login);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
@@ -830,14 +826,21 @@ bool AuthSocket::_HandleRealmList()
     for (RealmList::RealmMap::const_iterator i = sRealmList->begin(); i != sRealmList->end(); ++i)
     {
         // don't work with realms which not compatible with the client
-        if ((_expversion & POST_BC_EXP_FLAG) && i->second.gamebuild != _build)
-            continue;
-        else if ((_expversion & PRE_BC_EXP_FLAG) && !AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
+        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_CATA_EXP_FLAG))
+        {
+            if (i->second.gamebuild != _build)
+            {
+                sLog->outStaticDebug("Realm not added because of not correct build : %u != %u", i->second.gamebuild, _build);
+                continue;
+            }
+        }
+        else if (_expversion & PRE_BC_EXP_FLAG) // 1.12.1 and 1.12.2 clients are compatible with eachother
+            if (!AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
                 continue;
 
         uint8 AmountOfCharacters;
 
-        // No SQL injection. id of realm is controlled by the database.
+        // No SQL injection. id of realm is controlled by the database.        
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_NUMCHARSONREALM);
         stmt->setUInt32(0, i->second.m_ID);
         stmt->setUInt32(1, id);
@@ -850,7 +853,7 @@ bool AuthSocket::_HandleRealmList()
         uint8 lock = (i->second.allowedSecurityLevel > _accountSecurityLevel) ? 1 : 0;
 
         pkt << i->second.icon;                              // realm type
-        if ( _expversion & POST_BC_EXP_FLAG )               // only 2.x and 3.x clients
+        if (_expversion & (POST_BC_EXP_FLAG | POST_CATA_EXP_FLAG))               // only 2.x and 4.x clients
             pkt << lock;                                    // if 1, then realm locked
         pkt << i->second.color;                             // if 2, then realm is offline
         pkt << i->first;
@@ -858,15 +861,15 @@ bool AuthSocket::_HandleRealmList()
         pkt << i->second.populationLevel;
         pkt << AmountOfCharacters;
         pkt << i->second.timezone;                          // realm category
-        if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
+        if (_expversion & (POST_BC_EXP_FLAG | POST_CATA_EXP_FLAG))                 // 2.x and 4.x clients
             pkt << (uint8)0x2C;                             // unk, may be realm number/id?
         else
-            pkt << (uint8)0x0;                              // 1.12.1 and 1.12.2 clients
+            pkt << (uint8) 0x0;
 
         ++RealmListSize;
     }
 
-    if ( _expversion & POST_BC_EXP_FLAG )                   // 2.x and 3.x clients
+    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_CATA_EXP_FLAG))
     {
         pkt << (uint8)0x10;
         pkt << (uint8)0x00;
@@ -880,7 +883,7 @@ bool AuthSocket::_HandleRealmList()
     // make a ByteBuffer which stores the RealmList's size
     ByteBuffer RealmListSizeBuffer;
     RealmListSizeBuffer << (uint32)0;
-    if (_expversion & POST_BC_EXP_FLAG)                     // only 2.x and 3.x clients
+    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_CATA_EXP_FLAG))                     // only 2.x and 4.x clients
         RealmListSizeBuffer << (uint16)RealmListSize;
     else
         RealmListSizeBuffer << (uint32)RealmListSize;
@@ -924,6 +927,7 @@ bool AuthSocket::_HandleXferCancel()
 
     // Close and delete the socket
     socket().recv_skip(1);                                         //clear input buffer
+
     socket().shutdown();
 
     return true;
@@ -964,23 +968,21 @@ void PatcherRunnable::run() {}
 void Patcher::LoadPatchesInfo()
 {
     DIR *dirp;
-    struct dirent *dp;
+    //int errno;
+    struct dirent * dp;
     dirp = opendir("./patches/");
-
     if (!dirp)
         return;
-
     while (dirp)
     {
         errno = 0;
         if ((dp = readdir(dirp)) != NULL)
         {
             int l = strlen(dp->d_name);
-
             if (l < 8)
                 continue;
 
-            if (!memcmp(&dp->d_name[l - 4], ".mpq", 4))
+            if (!memcmp(&dp->d_name[l-4],".mpq",4))
                 LoadPatchMD5(dp->d_name);
         }
         else
@@ -997,6 +999,7 @@ void Patcher::LoadPatchesInfo()
     if (dirp)
         closedir(dirp);
 }
+
 #else
 void Patcher::LoadPatchesInfo()
 {
@@ -1006,7 +1009,9 @@ void Patcher::LoadPatchesInfo()
         return;                                             // no patches were found
 
     do
+    {
         LoadPatchMD5(fil.cFileName);
+    }
     while (FindNextFile(hFil, &fil));
 }
 #endif
@@ -1019,7 +1024,6 @@ void Patcher::LoadPatchMD5(char *szFileName)
     path += szFileName;
     FILE *pPatch = fopen(path.c_str(), "rb");
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Loading patch info from %s\n", path.c_str());
-
     if (!pPatch)
     {
         sLog->outError("Error loading patch %s\n", path.c_str());
@@ -1036,7 +1040,6 @@ void Patcher::LoadPatchMD5(char *szFileName)
         size_t read = fread(buf, 1, 512 * 1024, pPatch);
         MD5_Update(&ctx, buf, read);
     }
-
     delete [] buf;
     fclose(pPatch);
 

@@ -23,12 +23,11 @@
 
 #include "RealmSocket.h"
 #include "Log.h"
-
 #ifndef MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0
-#endif
 
 RealmSocket::Session::Session(void) {}
+
 
 RealmSocket::Session::~Session(void) { }
 
@@ -60,7 +59,7 @@ int RealmSocket::open(void * arg)
 
     if (peer().get_remote_addr(addr) == -1)
     {
-        sLog->outError("Error %s while opening realm socket!", ACE_OS::strerror(errno));
+        sLog->outError("RealmSocket::open: peer ().get_remote_addr errno = %s", ACE_OS::strerror (errno));
         return -1;
     }
 
@@ -70,7 +69,7 @@ int RealmSocket::open(void * arg)
     if (Base::open(arg) == -1)
         return -1;
 
-    if (session_)
+    if (session_ != NULL)
         session_->OnAccept();
 
     // reactor takes care of the socket from now on
@@ -158,8 +157,8 @@ bool RealmSocket::send(const char *buf, size_t len)
         return true;
 
     ACE_Data_Block db(len, ACE_Message_Block::MB_DATA, (const char*)buf, 0, 0, ACE_Message_Block::DONT_DELETE, 0);
-    ACE_Message_Block message_block(&db, ACE_Message_Block::DONT_DELETE, 0);
 
+    ACE_Message_Block message_block(&db, ACE_Message_Block::DONT_DELETE, 0);
     message_block.wr_ptr(len);
 
     if (msg_queue()->is_empty())
@@ -169,7 +168,6 @@ bool RealmSocket::send(const char *buf, size_t len)
 
         if (n < 0)
             return false;
-
         size_t un = size_t(n);
         if (un == len)
             return true;
@@ -180,7 +178,7 @@ bool RealmSocket::send(const char *buf, size_t len)
 
     ACE_Message_Block *mb = message_block.clone();
 
-    if (msg_queue()->enqueue_tail(mb, (ACE_Time_Value *)(&ACE_Time_Value::zero)) == -1)
+    if (msg_queue()->enqueue_tail(mb, (ACE_Time_Value *) &ACE_Time_Value::zero) == -1)
     {
         mb->release();
         return false;
@@ -205,7 +203,7 @@ int RealmSocket::handle_output(ACE_HANDLE)
         return 0;
     }
 
-    if (msg_queue()->dequeue_head(mb, (ACE_Time_Value *)(&ACE_Time_Value::zero)) == -1)
+    if (msg_queue()->dequeue_head(mb, (ACE_Time_Value *) &ACE_Time_Value::zero) == -1)
         return -1;
 
     ssize_t n = noblk_send(*mb);
@@ -244,7 +242,7 @@ int RealmSocket::handle_close(ACE_HANDLE h, ACE_Reactor_Mask)
     if (h == ACE_INVALID_HANDLE)
         peer().close_writer();
 
-    if (session_)
+    if (session_ != NULL)
         session_->OnClose();
 
     reactor()->remove_handler(this, ACE_Event_Handler::DONT_CALL | ACE_Event_Handler::ALL_EVENTS_MASK);
@@ -270,6 +268,7 @@ int RealmSocket::handle_input(ACE_HANDLE)
     if (session_ != NULL)
     {
         session_->OnRead();
+
         input_buffer_.crunch();
     }
 
