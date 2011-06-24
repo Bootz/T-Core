@@ -227,7 +227,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
     ///- Retrieve packets from the receive queue and call the appropriate handlers
     /// not process packets if socket already closed
-    WorldPacket* packet = NULL;
+    WorldPacket *packet = NULL;
     while (m_Socket && !m_Socket->IsClosed() && _recvQueue.next(packet, updater))
     {
         const OpcodeHandler* opHandle = opcodeTable[packet->GetOpcode()];
@@ -245,10 +245,10 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     }
                     else if (_player->IsInWorld())
                     {
-                            sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                            (this->*opHandle->handler)(*packet);
-                            if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
-                                LogUnprocessedTail(packet);
+                        sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
+                        (this->*opHandle->handler)(*packet);
+                        if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
+                            LogUnprocessedTail(packet);
                     }
                     // lag can cause STATUS_LOGGEDIN opcodes to arrive after the player started a transfer
                     break;
@@ -283,20 +283,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     if (m_inQueue)
                     {
                         LogUnexpectedOpcode(packet, "STATUS_AUTHED", "the player not pass queue yet");
-                            break;
-                        }
-
-                        // single from authed time opcodes send in to after logout time
-                        // and before other STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT opcodes.
-                        if (packet->GetOpcode() != CMSG_SET_ACTIVE_VOICE_CHANNEL)
-                            m_playerRecentlyLogout = false;
-
-                        sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                        (this->*opHandle.handler)(*packet);
-                        if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
-                            LogUnprocessedTail(packet);
                         break;
                     }
+
                     // single from authed time opcodes send in to after logout time
                     // and before other STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT opcodes.
                     if (packet->GetOpcode() != CMSG_SET_ACTIVE_VOICE_CHANNEL)
@@ -318,7 +307,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
                     break;
             }
-}
+        }
         catch(ByteBufferException &)
         {
             sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.",
@@ -327,7 +316,6 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             {
                 sLog->outDebug(LOG_FILTER_NETWORKIO, "Dumping error causing packet:");
                 packet->hexlike();
-                }
             }
         }
 
@@ -337,7 +325,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     ProcessQueryCallbacks();
 
     //check if we are safe to proceed with logout
-    //logout procedure should happen only in Trillium::UpdateSessions() method!!!
+    //logout procedure should happen only in World::UpdateSessions() method!!!
     if (updater.ProcessLogout())
     {
         time_t currTime = time(NULL);

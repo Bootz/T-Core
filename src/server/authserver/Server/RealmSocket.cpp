@@ -283,3 +283,4 @@ void RealmSocket::set_session(Session* session)
 
     session_ = session;
 }
+#endif
