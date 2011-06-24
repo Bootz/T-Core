@@ -25,6 +25,7 @@
 #define __WORLDSESSION_H
 
 #include "Common.h"
+#include "Opcodes.h"
 #include "SharedDefines.h"
 #include "AddonMgr.h"
 #include "DatabaseEnv.h"

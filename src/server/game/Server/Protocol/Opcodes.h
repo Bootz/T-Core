@@ -35,6 +35,9 @@
 /// List of Opcodes
 enum Opcodes
 {
+    NUM_OPCODE_HANDLERS = (0xFFFF+1),
+    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS, // must be >= NUM_OPCODE_HANDLERS
+
 /*  NAME                                              OPC       VERSION*/
     MSG_NULL_ACTION                                 = 0x000, //
     CMSG_BOOTME                                     = 0x001, //
@@ -122,6 +125,7 @@ enum Opcodes
     SMSG_PET_NAME_QUERY_RESPONSE                    = 0x68AC, // 4.0.6a
     CMSG_GUILD_QUERY                                = 0xAFC4, // 4.0.6a
     SMSG_GUILD_QUERY_RESPONSE                       = 0x3F80, // 4.0.6a
+    CMSG_COMMENTATOR_START_WARGAME                  = 0x8588, // 4.0.6a
     CMSG_ITEM_QUERY_SINGLE                          = 0x056, //
     CMSG_ITEM_QUERY_MULTIPLE                        = 0x057, //
     SMSG_ITEM_QUERY_SINGLE_RESPONSE                 = 0x0C4E, // 4.0.6a
@@ -182,10 +186,28 @@ enum Opcodes
     CMSG_GUILD_DISBAND                              = 0x372D, // 4.0.6a
     CMSG_GUILD_LEADER                               = 0x2650, // 4.0.6a
     CMSG_GUILD_MOTD                                 = 0x272D, // 4.0.6a
+    CMSG_QUERY_GUILD_REWARDS                        = 0x2210, // 4.0.6a
+    CMSG_QUERY_GUILD_MAX_XP                         = 0x350D, // 4.0.6a
+    CMSG_QUERY_GUILD_XP                             = 0x3509, // 4.0.6a
     SMSG_GUILD_EVENT                                = 0xB7C4, // 4.0.6a
     SMSG_GUILD_COMMAND_RESULT                       = 0x23C0, // 4.0.6a
     UMSG_UPDATE_GUILD                               = 0x094, // (OUTDATED)
-    CMSG_MESSAGECHAT                                = 0x095, //
+    CMSG_MESSAGECHAT_SAY                            = 0x002A, // 4.0.6a
+    CMSG_MESSAGECHAT_YELL                           = 0x0802, // 4.0.6a
+    CMSG_MESSAGECHAT_CHANNEL                        = 0x0821, // 4.0.6a
+    CMSG_MESSAGECHAT_WHISPER                        = 0x0000, // 4.0.6a
+    CMSG_MESSAGECHAT_GUILD                          = 0x0823, // 4.0.6a
+    CMSG_MESSAGECHAT_OFFICER                        = 0x0861, // 4.0.6a
+    CMSG_MESSAGECHAT_AFK                            = 0x086B, // 4.0.6a
+    CMSG_MESSAGECHAT_DND                            = 0x0003, // 4.0.6a
+    CMSG_MESSAGECHAT_EMOTE                          = 0x0042, // 4.0.6a
+    CMSG_MESSAGECHAT_PARTY                          = 0x084B, // 4.0.6a
+    CMSG_MESSAGECHAT_PARTY_LEADER                   = 0x080B, // 4.0.6a
+    CMSG_MESSAGECHAT_RAID                           = 0x0803, // 4.0.6a
+    CMSG_MESSAGECHAT_RAID_LEADER                    = 0x0863, // 4.0.6a
+    CMSG_MESSAGECHAT_BATTLEGROUND                   = 0x0063, // 4.0.6a
+    CMSG_MESSAGECHAT_BATTLEGROUND_LEADER            = 0x0860, // 4.0.6a
+    CMSG_MESSAGECHAT_RAID_WARNING                   = 0x0061, // 4.0.6a
     SMSG_MESSAGECHAT                                = 0x61E4, // 4.0.6a
     CMSG_JOIN_CHANNEL                               = 0x0002, // 4.0.6a
     CMSG_LEAVE_CHANNEL                              = 0x000B, // 4.0.6a
@@ -471,8 +493,7 @@ enum Opcodes
     CMSG_TRAINER_LIST                               = 0xE5AC, // 4.0.6a
     SMSG_TRAINER_LIST                               = 0xBBE0, // 4.0.6a
     CMSG_TRAINER_BUY_SPELL                          = 0xFDC8, // 4.0.6a
-    SMSG_TRAINER_BUY_SUCCEEDED                      = 0x1B3, //
-    SMSG_TRAINER_BUY_FAILED                         = 0x1B4, //
+    SMSG_TRAINER_BUY_RESULT                         = 0x6DEC, // 4.0.6a
     CMSG_BINDER_ACTIVATE                            = 0xA48C, // 4.0.6a
     SMSG_PLAYERBINDERROR                            = 0xEEC8, // 4.0.6a
     CMSG_BANKER_ACTIVATE                            = 0xE7E0, // 4.0.6a
@@ -577,6 +598,7 @@ enum Opcodes
     CMSG_GMTICKET_SYSTEMSTATUS                      = 0xACE0, // 4.0.6a
     SMSG_GMTICKET_SYSTEMSTATUS                      = 0xB9C0, // 4.0.6a
     CMSG_SPIRIT_HEALER_ACTIVATE                     = 0xF3AC, // 4.0.6a
+    SMSG_QUEST_FORCE_REMOVED                        = 0x34E8, // 4.0.6a
     CMSG_SET_STAT_CHEAT                             = 0x21D, //
     SMSG_QUEST_FORCE_REMOVE                         = 0x21E, // (uint32 questid)
     CMSG_SKILL_BUY_STEP                             = 0x21F, //
@@ -600,6 +622,8 @@ enum Opcodes
     CMSG_GUILD_RANK                                 = 0x2709, // 4.0.6a
     CMSG_GUILD_ADD_RANK                             = 0x2309, // 4.0.6a
     CMSG_GUILD_DEL_RANK                             = 0x2129, // 4.0.6a
+    CMSG_GUILD_SWITCH_RANK                          = 0x233, //
+    CMSG_GUILD_SET_NOTE                             = 0x232D, // 4.0.6a
     CMSG_GUILD_SET_PUBLIC_NOTE                      = 0x234, //
     CMSG_GUILD_SET_OFFICER_NOTE                     = 0x235, //
     SMSG_LOGIN_VERIFY_WORLD                         = 0x28C0, // 4.0.6a
@@ -759,10 +783,14 @@ enum Opcodes
     CMSG_MOVE_WATER_WALK_ACK                        = 0x21C4, // 4.0.6a
     CMSG_MOVE_NOT_ACTIVE_MOVER                      = 0xB9A8, // 4.0.6a
     SMSG_PLAY_SOUND                                 = 0x2EA8, // 4.0.6a
-    CMSG_BATTLEFIELD_STATUS                         = 0x2D3, //
-    SMSG_BATTLEFIELD_STATUS                         = 0x2D4, //
+    CMSG_BATTLEFIELD_STATUS                         = 0x8188, // 4.0.6a
+    SMSG_BATTLEFIELD_STATUS1                        = 0x454C, // 4.0.6a
+    SMSG_BATTLEFIELD_STATUS2                        = 0x051E, // 4.0.6a
+    SMSG_BATTLEFIELD_STATUS3                        = 0x081C, // 4.0.6a
+    SMSG_BATTLEFIELD_STATUS4                        = 0x4C4C, // 4.0.6a
     CMSG_BATTLEFIELD_PORT                           = 0x0E11, // 4.0.6a
-    MSG_INSPECT_HONOR_STATS                         = 0x2D6, //
+    CMSG_INSPECT_HONOR_STATS                        = 0x0E93, // 4.0.6a
+    SMSG_INSPECT_HONOR_STATS                        = 0x005E, // 4.0.6a
     CMSG_BATTLEMASTER_HELLO                         = 0x2D7, //
     CMSG_MOVE_START_SWIM_CHEAT                      = 0x26C0, // 4.0.6a
     CMSG_MOVE_STOP_SWIM_CHEAT                       = 0x6988, // 4.0.6a
@@ -773,6 +801,7 @@ enum Opcodes
     SMSG_FORCE_TURN_RATE_CHANGE                     = 0x375E, //
     CMSG_FORCE_TURN_RATE_CHANGE_ACK                 = 0xE384, // 4.0.6a
     MSG_PVP_LOG_DATA                                = 0x0C0E, // 4.0.6a
+    CMSG_BATTLEFIELD_REQUEST_SCORE_DATA             = 0x0493, // 4.0.6a
     CMSG_LEAVE_BATTLEFIELD                          = 0x7DC4, // 4.0.6a
     CMSG_AREA_SPIRIT_HEALER_QUERY                   = 0xA6C0, // 4.0.6a
     CMSG_AREA_SPIRIT_HEALER_QUEUE                   = 0xF388, // 4.0.6a
@@ -781,7 +810,8 @@ enum Opcodes
     SMSG_WARDEN_DATA                                = 0xF8A0, // 4.0.6a
     CMSG_WARDEN_DATA                                = 0x2F84, // 4.0.6a
     SMSG_GROUP_JOINED_BATTLEGROUND                  = 0x0D1E, // 4.0.6a
-    MSG_BATTLEGROUND_PLAYER_POSITIONS               = 0x2E9, //
+    CMSG_BATTLEGROUND_PLAYER_POSITIONS              = 0x0293, // 4.0.6a
+    SMSG_BATTLEGROUND_PLAYER_POSITIONS              = 0x045C, // 4.0.6a
     CMSG_PET_STOP_ATTACK                            = 0x2EA, //
     SMSG_BINDER_CONFIRM                             = 0x33C4, // 4.0.6a
     SMSG_BATTLEGROUND_PLAYER_JOINED                 = 0x494C, // 4.0.6a
@@ -909,11 +939,13 @@ enum Opcodes
     CMSG_SET_LFG_COMMENT                            = 0xE1C4, // 4.0.6a
     SMSG_LFG_UPDATE_PLAYER                          = 0xE284, // 4.0.6a
     SMSG_LFG_UPDATE_PARTY                           = 0x2CE8, // 4.0.6a
+    SMSG_LFG_UPDATE_LIST                            = 0x3880, // 4.0.6a
     SMSG_LFG_UPDATE_SEARCH                          = 0x3880, // 4.0.6a
     CMSG_LFG_SET_ROLES                              = 0xE8CC, // 4.0.6a
     CMSG_LFG_SET_NEEDS                              = 0x36B, //
     CMSG_LFG_SET_BOOT_VOTE                          = 0x36C, //
     SMSG_LFG_BOOT_PLAYER                            = 0x36D, //
+    SMSG_LFG_BOOT_PROPOSAL_UPDATE                   = 0x36E, //
     CMSG_LFD_PLAYER_LOCK_INFO_REQUEST               = 0xE5E8, // 4.0.6a
     SMSG_LFG_PLAYER_INFO                            = 0xE088, // 4.0.6a
     CMSG_LFG_TELEPORT                               = 0xFA88, // 4.0.6a
@@ -1179,6 +1211,7 @@ enum Opcodes
     SMSG_CHAR_CUSTOMIZE                             = 0x2da4, // 4.0.6a
     SMSG_PET_RENAMEABLE                             = 0xB6C8, // 4.0.6a
     CMSG_REQUEST_VEHICLE_EXIT                       = 0xB3CC, // 4.0.6a
+    CMSG_REQUEST_PLAYER_VEHICLE_EXIT                = 0x208C, // 4.0.6a
     CMSG_REQUEST_VEHICLE_PREV_SEAT                  = 0x2DE4, // 4.0.6a
     CMSG_REQUEST_VEHICLE_NEXT_SEAT                  = 0x64E4, // 4.0.6a
     CMSG_REQUEST_VEHICLE_SWITCH_SEAT                = 0xA8CC, // 4.0.6a
@@ -1353,7 +1386,6 @@ enum Opcodes
     CMSG_GROUP_SET_ROLES                            = 0x8509, // 4.0.6a
     CMSG_WORLD_LOGIN                                = 0x8508, // 4.0.6a
     CMSG_RETURN_TO_GRAVEYARD                        = 0x0593, // 4.0.6a
-    NUM_MSG_TYPES                                   = 0x51F //                      (last unknown opcode + 1.)
 };
 
 /// Player state
@@ -1376,22 +1408,43 @@ enum PacketProcessing
 
 class WorldPacket;
 
+typedef void(WorldSession::*pOpcodeHandler)(WorldPacket& recvPacket);
+
 struct OpcodeHandler
 {
+    OpcodeHandler() {}
+    OpcodeHandler(const char* _name, SessionStatus _status, PacketProcessing _processing, pOpcodeHandler _handler)
+        : name(_name), status(_status), packetProcessing(_processing), handler(_handler) {}
+
     char const* name;
     SessionStatus status;
     PacketProcessing packetProcessing;
-    void (WorldSession::*handler)(WorldPacket& recvPacket);
+    pOpcodeHandler handler;
 };
 
-extern OpcodeHandler opcodeTable[NUM_MSG_TYPES];
+#define DEFINE_OPCODE_HANDLER(opcode, status, processing, handler)                              \
+    if (opcode < NUM_OPCODE_HANDLERS) {                                                         \
+        if (opcodeTable[opcode] != NULL)                                                        \
+        {                                                                                       \
+            sLog->outError("Tried to override handler of %s with %s (opcode %u)",               \
+                opcodeTable[opcode]->name, #opcode, opcode);                                    \
+        }                                                                                       \
+        else opcodeTable[opcode] = new OpcodeHandler(#opcode, status, processing, handler);     \
+    }
+
+extern OpcodeHandler* opcodeTable[NUM_OPCODE_HANDLERS];
+void InitOpcodes();
 
 /// Lookup opcode name for human understandable logging
-inline const char* LookupOpcodeName(uint16 id)
+inline const char* LookupOpcodeName(Opcodes id)
 {
-    if (id >= NUM_MSG_TYPES)
-        return "Received unknown opcode, it's more than max!";
-    return opcodeTable[id].name;
+    if (id < NUM_OPCODE_HANDLERS)
+    {
+        OpcodeHandler* handler = opcodeTable[uint32(id)];
+        return handler ? handler->name : "UNKNOWN OPCODE";
+    }
+else
+        return "UNKNOWN OPCODE";
 }
 #endif
 /// @}
