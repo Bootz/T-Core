@@ -40,8 +40,8 @@
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
-char serviceName[] = "SkyFireAuth";
-char serviceLongName[] = "SkyFireAuth service";
+char serviceName[] = "TrilliumAuth";
+char serviceLongName[] = "TrilliumAuth service";
 char serviceDescription[] = "Cataclysm Server";
 /*
  * -1 - not in service mode
