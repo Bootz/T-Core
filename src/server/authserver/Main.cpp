@@ -36,7 +36,7 @@
 
 #ifndef _REALM_CONFIG
 # define _REALM_CONFIG  "authserver.conf"
-#endif
+#endif // _REALM_CONFIG
 
 bool StartDB();
 void StopDB();
@@ -65,8 +65,7 @@ public:
 void usage(const char *prog)
 {
     sLog->outString("Usage: \n %s [<options>]\n"
-        "    -c config_file           use config_file as configuration file\n\r",
-        prog);
+        "    -c config_file           use config_file as configuration file\n\r", prog);
 }
 
 // Launch the auth server
@@ -162,7 +161,7 @@ extern int main(int argc, char **argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
+        sLog->outError("TrilliumAuth server can not bind to %s:%d", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -204,9 +203,9 @@ extern int main(int argc, char **argv)
         if (Prio)
         {
             if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-                sLog->outString("The auth server process priority class has been set to HIGH");
+                sLog->outString("The TrilliumAuth server process priority class has been set to HIGH");
             else
-                sLog->outError("Can't set auth server process priority class.");
+                sLog->outError("Can't set Auth Server process priority class.");
             sLog->outString();
         }
     }
