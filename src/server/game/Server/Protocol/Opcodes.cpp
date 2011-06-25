@@ -1279,4 +1279,4 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
 
 #undef DEFINE_OPCODE_HANDLER
-};
+}
