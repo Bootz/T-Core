@@ -642,7 +642,7 @@ SimpleFactionsList const* GetFactionTeamList(uint32 faction)
     return NULL;
 }
 
-/*const char* GetPetName(uint32 petfamily)
+const char* GetPetName(uint32 petfamily)
 {
     if (!petfamily)
         return NULL;
@@ -650,7 +650,7 @@ SimpleFactionsList const* GetFactionTeamList(uint32 faction)
     if (!pet_family)
         return NULL;
     return pet_family->Name?pet_family->Name:NULL;
-}*/
+}
 
 TalentSpellPos const* GetTalentSpellPos(uint32 spellId)
 {

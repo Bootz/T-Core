@@ -29,7 +29,7 @@
 typedef std::list<uint32> SimpleFactionsList;
 SimpleFactionsList const* GetFactionTeamList(uint32 faction);
 
-const char* GetPetName(uint32 petfamily, uint32 dbclang);
+const char* GetPetName(uint32 petfamily);
 uint32 GetTalentSpellCost(uint32 spellId);
 TalentSpellPos const* GetTalentSpellPos(uint32 spellId);
 
