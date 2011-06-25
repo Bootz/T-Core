@@ -1389,7 +1389,7 @@ enum Opcodes
     CMSG_SET_PRIMARY_TALENT_TREE                    = 0xFEA8, // 4.0.6a
     CMSG_GROUP_SET_ROLES                            = 0x8509, // 4.0.6a
     CMSG_WORLD_LOGIN                                = 0x8508, // 4.0.6a
-    CMSG_RETURN_TO_GRAVEYARD                        = 0x0593, // 4.0.6a
+    CMSG_RETURN_TO_GRAVEYARD                        = 0x0593  // 4.0.6a
 };
 
 /// Player state
@@ -1425,16 +1425,6 @@ struct OpcodeHandler
     PacketProcessing packetProcessing;
     pOpcodeHandler handler;
 };
-
-#define DEFINE_OPCODE_HANDLER(opcode, status, processing, handler)                              \
-    if (opcode < NUM_OPCODE_HANDLERS) {                                                         \
-        if (opcodeTable[opcode] != NULL)                                                        \
-        {                                                                                       \
-            sLog->outError("Tried to override handler of %s with %s (opcode %u)",               \
-                opcodeTable[opcode]->name, #opcode, opcode);                                    \
-        }                                                                                       \
-        else opcodeTable[opcode] = new OpcodeHandler(#opcode, status, processing, handler);     \
-    }
 
 extern OpcodeHandler* opcodeTable[NUM_OPCODE_HANDLERS];
 void InitOpcodes();
