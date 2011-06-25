@@ -6801,7 +6801,7 @@ std::string ObjectMgr::GeneratePetName(uint32 entry)
     if (list0.empty() || list1.empty())
     {
         CreatureTemplate const *cinfo = GetCreatureTemplate(entry);
-        const char* petname = GetPetName(cinfo->family);
+        const char* petname = GetPetName(cinfo->family, sWorld->GetDefaultDbcLocale());
         if (!petname)
             return cinfo->Name;
 
