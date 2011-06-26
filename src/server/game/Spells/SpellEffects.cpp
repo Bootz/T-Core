@@ -2101,10 +2101,10 @@ void Spell::EffectUnlearnSpecialization(SpellEffIndex effIndex)
 
 void Spell::EffectPowerDrain(SpellEffIndex effIndex)
 {
-    if (m_spellInfo->EffectMiscValue[effIndex] < 0 || m_spellInfo->EffectMiscValue[effIndex] >= int8(MAX_POWERS))
+    if (m_spellInfo->GetEffectMiscValue(effIndex) < 0 || m_spellInfo->GetEffectMiscValue(effIndex) >= int8(MAX_POWERS))
         return;
 
-    Powers powerType = Powers(m_spellInfo->EffectMiscValue[effIndex]);
+    Powers powerType = Powers(m_spellInfo->GetEffectMiscValue(effIndex));
 
     if (!unitTarget || !unitTarget->isAlive() || unitTarget->getPowerType() != powerType || damage < 0)
         return;
@@ -2138,7 +2138,7 @@ void Spell::EffectSendEvent(SpellEffIndex effIndex)
     /*
     we do not handle a flag dropping or clicking on flag in battleground by sendevent system
     */
-    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell ScriptStart %u for spellid %u in EffectSendEvent ", m_spellInfo->EffectMiscValue[effIndex], m_spellInfo->Id);
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell ScriptStart %u for spellid %u in EffectSendEvent ", m_spellInfo->GetEffectMiscValue(effIndex), m_spellInfo->Id);
 
     Object *pTarget;
     if (focusObject)
@@ -2153,18 +2153,18 @@ void Spell::EffectSendEvent(SpellEffIndex effIndex)
     if (unitTarget)
     {
         if (ZoneScript* zoneScript = unitTarget->GetZoneScript())
-            zoneScript->ProcessEvent(unitTarget, m_spellInfo->EffectMiscValue[effIndex]);
+            zoneScript->ProcessEvent(unitTarget, m_spellInfo->GetEffectMiscValue(effIndex));
     }
 
-    m_caster->GetMap()->ScriptsStart(sEventScripts, m_spellInfo->EffectMiscValue[effIndex], m_caster, pTarget);
+    m_caster->GetMap()->ScriptsStart(sEventScripts, m_spellInfo->GetEffectMiscValue(effIndex), m_caster, pTarget);
 }
 
 void Spell::EffectPowerBurn(SpellEffIndex effIndex)
 {
-    if (m_spellInfo->EffectMiscValue[effIndex] < 0 || m_spellInfo->EffectMiscValue[effIndex] >= int8(MAX_POWERS))
+    if (m_spellInfo->GetEffectMiscValue(effIndex) < 0 || m_spellInfo->GetEffectMiscValue(effIndex) >= int8(MAX_POWERS))
         return;
 
-    Powers powerType = Powers(m_spellInfo->EffectMiscValue[effIndex]);
+    Powers powerType = Powers(m_spellInfo->GetEffectMiscValue(effIndex));
 
     if (!unitTarget || !unitTarget->isAlive() || unitTarget->getPowerType() != powerType || damage < 0)
         return;
@@ -2564,10 +2564,10 @@ void Spell::EffectEnergize(SpellEffIndex effIndex)
     if (!unitTarget->isAlive())
         return;
 
-    if (m_spellInfo->EffectMiscValue[effIndex] < 0 || m_spellInfo->EffectMiscValue[effIndex] >= int8(MAX_POWERS))
+    if (m_spellInfo->GetEffectMiscValue(effIndex) < 0 || m_spellInfo->GetEffectMiscValue(effIndex) >= int8(MAX_POWERS))
         return;
 
-    Powers power = Powers(m_spellInfo->EffectMiscValue[effIndex]);
+    Powers power = Powers(m_spellInfo->GetEffectMiscValue(effIndex));
 
     // Some level depends spells
     int level_multiplier = 0;
@@ -2669,10 +2669,10 @@ void Spell::EffectEnergizePct(SpellEffIndex effIndex)
     if (!unitTarget->isAlive())
         return;
 
-    if (m_spellInfo->EffectMiscValue[effIndex] < 0 || m_spellInfo->EffectMiscValue[effIndex] >= int8(MAX_POWERS))
+    if (m_spellInfo->GetEffectMiscValue(effIndex) < 0 || m_spellInfo->GetEffectMiscValue(effIndex) >= int8(MAX_POWERS))
         return;
 
-    Powers power = Powers(m_spellInfo->EffectMiscValue[effIndex]);
+    Powers power = Powers(m_spellInfo->GetEffectMiscValue(effIndex));
 
     uint32 maxPower = unitTarget->GetMaxPower(power);
     if (maxPower == 0)
@@ -3135,7 +3135,7 @@ void Spell::EffectLearnSpell(SpellEffIndex effIndex)
 
     Player* player = (Player*)unitTarget;
 
-    uint32 spellToLearn = (m_spellInfo->Id == 483 || m_spellInfo->Id == 55884) ? damage : m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 spellToLearn = (m_spellInfo->Id == 483 || m_spellInfo->Id == 55884) ? damage : m_spellInfo->GetEffectTriggerSpell(effIndex);
     player->learnSpell(spellToLearn, false);
 
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell: Player %u has learned spell %u from NpcGUID=%u", player->GetGUIDLow(), spellToLearn, m_caster->GetGUIDLow());
@@ -3831,7 +3831,7 @@ void Spell::EffectLearnPetSpell(SpellEffIndex effIndex)
     if (!pet->isAlive())
         return;
 
-    SpellEntry const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->EffectTriggerSpell[effIndex]);
+    SpellEntry const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->GetEffectTriggerSpell(effIndex));
     if (!learn_spellproto)
         return;
 
@@ -5565,7 +5565,7 @@ void Spell::EffectApplyGlyph(SpellEffIndex effIndex)
     }
 
     // apply new one
-    if (uint32 glyph = m_spellInfo->EffectMiscValue[effIndex])
+    if (uint32 glyph = m_spellInfo->GetEffectMiscValue(effIndex))
     {
         if (GlyphPropertiesEntry const *gp = sGlyphPropertiesStore.LookupEntry(glyph))
         {
@@ -5611,7 +5611,7 @@ void Spell::EffectEnchantHeldItem(SpellEffIndex effIndex)
     if (!item ->IsEquipped())
         return;
 
-    if (m_spellInfo->EffectMiscValue[effIndex])
+    if (m_spellInfo->GetEffectMiscValue(effIndex))
     {
         uint32 enchant_id = m_spellInfo->GetEffectMiscValue(effIndex);
         int32 duration = GetSpellDuration(m_spellInfo);          //Try duration index first ..
@@ -5696,7 +5696,7 @@ void Spell::EffectFeedPet(SpellEffIndex effIndex)
     _player->DestroyItemCount(foodItem, count, true);
     // TODO: fix crash when a spell has two effects, both pointed at the same item target
 
-    m_caster->CastCustomSpell(pet, m_spellInfo->EffectTriggerSpell[effIndex], &benefit, NULL, NULL, true);
+    m_caster->CastCustomSpell(pet, m_spellInfo->GetEffectTriggerSpell(effIndex), &benefit, NULL, NULL, true);
 }
 
 void Spell::EffectDismissPet(SpellEffIndex effIndex)
@@ -6306,7 +6306,7 @@ void Spell::EffectTransmitted(SpellEffIndex effIndex)
     if (m_targets.HasDst())
         m_targets.m_dstPos.GetPosition(fx, fy, fz);
     //FIXME: this can be better check for most objects but still hack
-    else if (m_spellInfo->GetEffectRadiusIndex()[effIndex] && m_spellInfo->speed == 0)
+    else if (m_spellInfo->GetEffectRadiusIndex(effIndex) && m_spellInfo->speed == 0)
     {
         float dis = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(m_spellInfo->GetEffectRadiusIndex(effIndex)));
         m_caster->GetClosePoint(fx, fy, fz, DEFAULT_WORLD_OBJECT_SIZE, dis);
