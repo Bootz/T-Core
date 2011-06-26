@@ -11130,6 +11130,7 @@ uint32 Unit::SpellCriticalHealingBonus(SpellEntry const *spellProto, uint32 dama
 
 uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint32 healamount, DamageEffectType damagetype, uint32 stack)
 {
+    SpellClassOptionsEntry const* SpellClass = NULL;
     // For totems get healing bonus from owner (statue isn't totem in fact)
     if (GetTypeId() == TYPEID_UNIT && ToCreature()->isTotem())
         if (Unit* owner = GetOwner())
@@ -11257,7 +11258,7 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
     else // scripted bonus
     {
         // Gift of the Naaru
-        if (spellProto->SpellFamilyFlags[2] & 0x80000000 && spellProto->SpellIconID == 329)
+        if (SpellClass->SpellFamilyFlags[2] & 0x80000000 && spellProto->SpellIconID == 329)
         {
             scripted = true;
             int32 apBonus = int32(std::max(GetTotalAttackPowerValue(BASE_ATTACK), GetTotalAttackPowerValue(RANGED_ATTACK)));
@@ -11267,7 +11268,7 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
                 DoneTotal += int32(DoneAdvertisedBenefit * 0.377f); //37.7% of BH per tick
         }
         // Earthliving - 0.45% of normal hot coeff
-        else if (spellProto->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && spellProto->SpellFamilyFlags[1] & 0x80000)
+        else if (spellProto->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && SpellClass->SpellFamilyFlags[1] & 0x80000)
             factorMod *= 0.45f;
         // Already set to scripted? so not uses healing bonus coefficient
         // No heal coeff for SPELL_DAMAGE_CLASS_NONE class spells by default
@@ -11350,7 +11351,7 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
         modOwner->ApplySpellMod(spellProto->Id, damagetype == DOT ? SPELLMOD_DOT : SPELLMOD_DAMAGE, heal);
 
     // Nourish cast
-    if (spellProto->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellProto->SpellFamilyFlags[1] & 0x2000000)
+    if (spellProto->GetSpellFamilyName() == SPELLFAMILY_DRUID && SpellClass->SpellFamilyFlags[1] & 0x2000000)
     {
         // Rejuvenation, Regrowth, Lifebloom, or Wild Growth
         if (pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_HEAL, SPELLFAMILY_DRUID, 0x50, 0x4000010, 0))
@@ -13007,6 +13008,7 @@ int32 Unit::CalcSpellDuration(SpellEntry const* spellProto)
 
 int32 Unit::ModSpellDuration(SpellEntry const* spellProto, Unit const* target, int32 duration, bool positive)
 {
+    SpellClassOptionsEntry const* spellClass = NULL;
     // don't mod permament auras duration
     if (duration < 0)
         return duration;
@@ -13081,7 +13083,7 @@ int32 Unit::ModSpellDuration(SpellEntry const* spellProto, Unit const* target, i
         switch (spellProto->GetSpellFamilyName())
         {
             case SPELLFAMILY_DRUID:
-                if (spellProto->SpellFamilyFlags[0] & 0x100)
+                if (spellClass->SpellFamilyFlags[0] & 0x100)
                 {
                     // Glyph of Thorns
                     if (AuraEffect* aurEff = GetAuraEffect(57862, 0))
@@ -13089,13 +13091,13 @@ int32 Unit::ModSpellDuration(SpellEntry const* spellProto, Unit const* target, i
                 }
                 break;
             case SPELLFAMILY_PALADIN:
-                if (spellProto->SpellFamilyFlags[0] & 0x00000002)
+                if (spellClass->SpellFamilyFlags[0] & 0x00000002)
                 {
                     // Glyph of Blessing of Might
                     if (AuraEffect* aurEff = GetAuraEffect(57958, 0))
                         duration += aurEff->GetAmount() * MINUTE * IN_MILLISECONDS;
                 }
-                else if (spellProto->SpellFamilyFlags[0] & 0x00010000)
+                else if (spellClass->SpellFamilyFlags[0] & 0x00010000)
                 {
                     // Glyph of Blessing of Wisdom
                     if (AuraEffect* aurEff = GetAuraEffect(57979, 0))

@@ -1844,12 +1844,6 @@ struct SpellEntry
 
     uint32 GetSpellFamilyName() const;
 
-    /************************/
-    /* SpellShapeshiftEntry */
-    /************************/
-
-    uint32 GetStances() const;
-
 private:
     // prevent creating custom entries (copy data from original in fact)
     SpellEntry(SpellEntry const&);                      // DON'T must have implementation
