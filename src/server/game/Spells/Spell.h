@@ -505,6 +505,7 @@ class Spell
         const SpellTargetRestrictionsEntry * const m_spellTarget;
         const SpellEquippedItemsEntry * const m_spellEquipped;
         const SpellReagentsEntry * const m_spellReagent;
+        const SpellTotemsEntry * const m_spellTotems;
         Item* m_CastItem;
         uint64 m_castItemGUID;
         uint8 m_cast_count;
