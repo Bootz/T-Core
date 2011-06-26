@@ -6521,7 +6521,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffIndex effIndex)
     DispelChargesList steal_list;
 
     // Create dispel mask by dispel type
-    uint32 dispelMask  = GetDispellMask(DispelType(m_spellInfo->EffectMiscValue[effIndex]));
+    uint32 dispelMask  = GetDispellMask(DispelType(m_spellInfo->GetEffectMiscValue(effIndex)));
     Unit::AuraMap const& auras = unitTarget->GetOwnedAuras();
     for (Unit::AuraMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {
@@ -6530,7 +6530,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffIndex effIndex)
         if (!aurApp)
             continue;
 
-        if ((1<<aura->GetSpellProto()->Dispel) & dispelMask)
+        if ((1<<aura->GetSpellProto()->GetDispel()) & dispelMask)
         {
             // Need check for passive? this
             if (!aurApp->IsPositive() || aura->IsPassive() || aura->GetSpellProto()->AttributesEx4 & SPELL_ATTR4_NOT_STEALABLE)
@@ -6618,7 +6618,7 @@ void Spell::EffectKillCreditPersonal(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    unitTarget->ToPlayer()->KilledMonsterCredit(m_spellInfo->EffectMiscValue[effIndex], 0);
+    unitTarget->ToPlayer()->KilledMonsterCredit(m_spellInfo->GetEffectMiscValue(effIndex), 0);
 }
 
 void Spell::EffectKillCredit(SpellEffIndex effIndex)
@@ -6642,7 +6642,7 @@ void Spell::EffectQuestFail(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    unitTarget->ToPlayer()->FailQuest(m_spellInfo->EffectMiscValue[effIndex]);
+    unitTarget->ToPlayer()->FailQuest(m_spellInfo->GetEffectMiscValue(effIndex));
 }
 
 void Spell::EffectQuestStart(SpellEffIndex effIndex)
@@ -6651,7 +6651,7 @@ void Spell::EffectQuestStart(SpellEffIndex effIndex)
         return;
 
     Player* player = unitTarget->ToPlayer();
-    if (Quest const* qInfo = sObjectMgr->GetQuestTemplate(m_spellInfo->EffectMiscValue[effIndex]))
+    if (Quest const* qInfo = sObjectMgr->GetQuestTemplate(m_spellInfo->GetEffectMiscValue(effIndex)))
     {
         if (player->CanTakeQuest(qInfo, false) && player->CanAddQuest(qInfo, false))
         {
@@ -6677,7 +6677,7 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
     if (count == 0) count = 1;
     for (uint32 j = 0; j < MAX_RUNES && count > 0; ++j)
     {
-        if (plr->GetRuneCooldown(j) && plr->GetCurrentRune(j) == RuneType(m_spellInfo->EffectMiscValue[effIndex]))
+        if (plr->GetRuneCooldown(j) && plr->GetCurrentRune(j) == RuneType(m_spellInfo->GetEffectMiscValue(effIndex)))
         {
             plr->SetRuneCooldown(j, 0);
             --count;
@@ -6863,7 +6863,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const *
         if (summon->HasUnitTypeMask(UNIT_MASK_GUARDIAN))
             ((Guardian*)summon)->InitStatsForLevel(level);
 
-        if (properties && properties->GetCategory() == SUMMON_CATEGORY_ALLY)
+        if (properties && properties->Category == SUMMON_CATEGORY_ALLY)
             summon->setFaction(caster->getFaction());
 
         if (summon->HasUnitTypeMask(UNIT_MASK_MINION) && m_targets.HasDst())
@@ -6998,7 +6998,7 @@ void Spell::EffectRemoveAura(SpellEffIndex effIndex)
     if (!unitTarget)
         return;
     // there may be need of specifying casterguid of removed auras
-    unitTarget->RemoveAurasDueToSpell(m_spellInfo->EffectTriggerSpell[effIndex]);
+    unitTarget->RemoveAurasDueToSpell(m_spellInfo->GetEffectTriggerSpell(effIndex));
 }
 
 void Spell::EffectCastButtons(SpellEffIndex effIndex)
@@ -7007,8 +7007,8 @@ void Spell::EffectCastButtons(SpellEffIndex effIndex)
         return;
 
     Player* p_caster = m_caster->ToPlayer();
-    uint32 button_id = m_spellInfo->EffectMiscValue[effIndex] + 132;
-    uint32 n_buttons = m_spellInfo->EffectMiscValueB[effIndex];
+    uint32 button_id = m_spellInfo->GetEffectMiscValue(effIndex) + 132;
+    uint32 n_buttons = m_spellInfo->GetEffectMiscValueB(effIndex);
 
     for (; n_buttons; n_buttons--, button_id++)
     {
@@ -7071,7 +7071,7 @@ void Spell::EffectBind(SpellEffIndex effIndex)
 
     uint32 area_id;
     WorldLocation loc;
-    if (m_spellInfo->EffectImplicitTargetA[effIndex] == TARGET_DST_DB || m_spellInfo->EffectImplicitTargetB[effIndex] == TARGET_DST_DB)
+    if (m_spellInfo->EffectImplicitTargetAeffIndex] == TARGET_DST_DB || m_spellInfo->EffectImplicitTargetB[effIndex] == TARGET_DST_DB)
     {
         SpellTargetPosition const* st = sSpellMgr->GetSpellTargetPosition(m_spellInfo->Id);
         if (!st)
