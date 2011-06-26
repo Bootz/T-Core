@@ -5146,7 +5146,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     pTempItem = m_caster->ToPlayer()->GetItemByGuid(m_targets.getItemTargetGUID());
 
                 // we need a go target, or an openable item target in case of TARGET_GAMEOBJECT_ITEM
-                if (m_spellInfo->EffectImplicitTargetA[i] == TARGET_GAMEOBJECT_ITEM &&
+                if (m_spellInfo->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_ITEM &&
                     !m_targets.getGOTarget() &&
                     (!pTempItem || !pTempItem->GetTemplate()->LockID || !pTempItem->IsLocked()))
                     return SPELL_FAILED_BAD_TARGETS;
@@ -5543,8 +5543,8 @@ SpellCastResult Spell::CheckPetCast(Unit* target)
 
         for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         {
-            if (SpellTargetType[m_spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_UNIT_TARGET
-                || SpellTargetType[m_spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_DEST_TARGET)
+            if (SpellTargetType[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] == TARGET_TYPE_UNIT_TARGET
+                || SpellTargetType[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] == TARGET_TYPE_DEST_TARGET)
             {
                 if (!target)
                     return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
@@ -6855,7 +6855,7 @@ int32 Spell::CalculateDamageDone(Unit *unit, const uint32 effectMask, float * mu
 
             if (m_damage > 0)
             {
-                if (IsAreaEffectTarget[m_spellInfo->EffectImplicitTargetA[i]] || IsAreaEffectTarget[m_spellInfo->EffectImplicitTargetB[i]])
+                if (IsAreaEffectTarget[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] || IsAreaEffectTarget[m_spellInfo->GetEffectImplicitTargetBByIndex(i)])
                 {
                     m_damage = int32(float(m_damage) * unit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_AOE_DAMAGE_AVOIDANCE, m_spellInfo->SchoolMask));
                     if (m_caster->GetTypeId() == TYPEID_UNIT)
