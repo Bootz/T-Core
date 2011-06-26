@@ -6837,7 +6837,7 @@ int32 Spell::CalculateDamageDone(Unit *unit, const uint32 effectMask, float * mu
             m_damage = 0;
             damage = CalculateDamage(i, NULL);
 
-            switch(m_spellInfo->Effect[i])
+            switch(m_spellInfo->GetSpellEffectIdByIndex(i))
             {
                 case SPELL_EFFECT_SCHOOL_DAMAGE:
                     SpellDamageSchoolDmg((SpellEffIndex)i);
@@ -6912,7 +6912,7 @@ SpellCastResult Spell::CanOpenLock(uint32 effIndex, uint32 lockId, SkillType& sk
                 reqKey = true;
 
                 // wrong locktype, skip
-                if (uint32(m_spellInfo->EffectMiscValue[effIndex]) != lockInfo->Index[j])
+                if (uint32(m_spellInfo->GetEffectMiscValue(effIndex)) != lockInfo->Index[j])
                     continue;
 
                 skillId = SkillByLockType(LockType(lockInfo->Index[j]));
