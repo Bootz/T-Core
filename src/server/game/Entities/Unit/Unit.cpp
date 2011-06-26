@@ -8250,7 +8250,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
             case SPELLFAMILY_WARLOCK:
             {
                 // Drain Soul
-                if (auraSpellInfo->SpellFamilyFlags[0] & 0x4000)
+                if (spellClass->SpellFamilyFlags[0] & 0x4000)
                 {
                     // Improved Drain Soul
                     Unit::AuraEffectList const& mAddFlatModifier = GetAuraEffectsByType(SPELL_AURA_DUMMY);
@@ -8477,7 +8477,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                             // procspell is triggered spell but we need mana cost of original casted spell
                             uint32 originalSpellId = procSpell->Id;
                             // Holy Shock heal
-                            if (ummyClass->SpellFamilyFlags[1] & 0x00010000)
+                            if (spellClass->SpellFamilyFlags[1] & 0x00010000)
                             {
                                 switch(procSpell->Id)
                                 {
@@ -10357,7 +10357,8 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
     AuraEffectList const& mOverrideClassScript= owner->GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
     for (AuraEffectList::const_iterator i = mOverrideClassScript.begin(); i != mOverrideClassScript.end(); ++i)
     {
-        if (!(*i)->IsAffectedOnSpell(spellProto))
+        SpellClassOptionsEntry const* spellProto1 = NULL;
+        if (!(*i)->IsAffectedOnSpell(spellProto1))
             continue;
 
         switch ((*i)->GetMiscValue())
@@ -10673,10 +10674,11 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
         }
     }
 
+    SpellClassOptionsEntry const* spellProto1 = NULL;
     // From caster spells
     AuraEffectList const& mOwnerTaken = pVictim->GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_FROM_CASTER);
     for (AuraEffectList::const_iterator i = mOwnerTaken.begin(); i != mOwnerTaken.end(); ++i)
-        if ((*i)->GetCasterGUID() == GetGUID() && (*i)->IsAffectedOnSpell(spellProto))
+        if ((*i)->GetCasterGUID() == GetGUID() && (*i)->IsAffectedOnSpell(spellProto1))
             sumNegativeMod += (*i)->GetAmount();
 
     // Mod damage from spell mechanic
@@ -10917,7 +10919,8 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                 AuraEffectList const& mOverrideClassScript = GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
                 for (AuraEffectList::const_iterator i = mOverrideClassScript.begin(); i != mOverrideClassScript.end(); ++i)
                 {
-                    if (!((*i)->IsAffectedOnSpell(spellProto)))
+                    SpellClassOptionsEntry const* spellProto1 = NULL;
+                    if (!((*i)->IsAffectedOnSpell(spellProto1)))
                         continue;
                     int32 modChance = 0;
                     switch((*i)->GetMiscValue())
@@ -11149,7 +11152,8 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
     AuraEffectList const& mOverrideClassScript= owner->GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
     for (AuraEffectList::const_iterator i = mOverrideClassScript.begin(); i != mOverrideClassScript.end(); ++i)
     {
-        if (!(*i)->IsAffectedOnSpell(spellProto))
+        SpellClassOptionsEntry const* spellProto1 = NULL;
+        if (!(*i)->IsAffectedOnSpell(spellProto1))
             continue;
         switch((*i)->GetMiscValue())
         {
@@ -11377,9 +11381,10 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
             AddPctF(TakenTotalMod, maxval_hot);
     }
 
+    SpellClassOptionsEntry const* spellProto1 = NULL;
     AuraEffectList const& mHealingGet= pVictim->GetAuraEffectsByType(SPELL_AURA_MOD_HEALING_RECEIVED);
     for (AuraEffectList::const_iterator i = mHealingGet.begin(); i != mHealingGet.end(); ++i)
-        if (GetGUID() == (*i)->GetCasterGUID() && (*i)->IsAffectedOnSpell(spellProto))
+        if (GetGUID() == (*i)->GetCasterGUID() && (*i)->IsAffectedOnSpell(spellProto1))
             AddPctN(TakenTotalMod, (*i)->GetAmount());
 
     heal = (int32(heal) + TakenTotal) * TakenTotalMod;
@@ -11677,7 +11682,7 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
                                 ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
                                 AddPctN(DoneTotalMod, (*i)->GetAmount());
                     }
-                    else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellProto()))
+                    else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellEquipped()))
                         AddPctN(DoneTotalMod, (*i)->GetAmount());
                 }
         }
@@ -11697,10 +11702,10 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
 
                 Item* item = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
 
-                if (item && !item->IsBroken() && item->IsFitToSpellRequirements((*i)->GetSpellProto()))
+                if (item && !item->IsBroken() && item->IsFitToSpellRequirements((*i)->GetSpellEquipped()))
                     AddPctN(DoneTotalMod, (*i)->GetAmount());
             }
-            else if (ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellProto()))
+            else if (ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellEquipped()))
                 AddPctN(DoneTotalMod, (*i)->GetAmount());
         }
 
@@ -11720,7 +11725,8 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
     AuraEffectList const& mOverrideClassScript = owner->GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
     for (AuraEffectList::const_iterator i = mOverrideClassScript.begin(); i != mOverrideClassScript.end(); ++i)
     {
-        if (!(*i)->IsAffectedOnSpell(spellProto))
+        SpellClassOptionsEntry const* spellProto1 = NULL;
+        if (!(*i)->IsAffectedOnSpell(spellProto1))
             continue;
 
         switch ((*i)->GetMiscValue())
@@ -11785,10 +11791,11 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
         if ((*i)->GetMiscValue() & GetMeleeDamageSchoolMask())
             AddPctN(TakenTotalMod, (*i)->GetAmount());
 
+    SpellClassOptionsEntry const* spellProto1 = NULL;
     // From caster spells
     AuraEffectList const& mOwnerTaken = pVictim->GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_FROM_CASTER);
     for (AuraEffectList::const_iterator i = mOwnerTaken.begin(); i != mOwnerTaken.end(); ++i)
-        if ((*i)->GetCasterGUID() == GetGUID() && (*i)->IsAffectedOnSpell(spellProto))
+        if ((*i)->GetCasterGUID() == GetGUID() && (*i)->IsAffectedOnSpell(spellProto1))
             AddPctN(TakenTotalMod, (*i)->GetAmount());
 
     // .. taken pct (special attacks)
@@ -14600,7 +14607,7 @@ bool Unit::IsPolymorphed() const
     if (!spellInfo)
         return false;
 
-    return GetSpellSpecific(spellInfo) == SPELL_SPECIFIC_MAGE_POLYMORPH;
+    return GetSpellSpecific(spellInfo, 0) == SPELL_SPECIFIC_MAGE_POLYMORPH;
 }
 
 void Unit::SetDisplayId(uint32 modelId)
@@ -15048,8 +15055,9 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
             return false;
     }
 
+    SpellClassOptionsEntry const* procSpell1 = NULL;
     // Check spellProcEvent data requirements
-    if (!sSpellMgr->IsSpellProcEventCanTriggeredBy(spellProcEvent, EventProcFlag, procSpell, procFlag, procExtra, active))
+    if (!sSpellMgr->IsSpellProcEventCanTriggeredBy(spellProcEvent, EventProcFlag, procSpell1, procFlag, procExtra, active))
         return false;
     // In most cases req get honor or XP from kill
     if (EventProcFlag & PROC_FLAG_KILL && GetTypeId() == TYPEID_PLAYER)
@@ -15130,12 +15138,13 @@ bool Unit::HandleAuraRaidProcFromChargeWithValue(AuraEffect *triggeredByAura)
 {
     // aura can be deleted at casts
     SpellEntry const* spellProto = triggeredByAura->GetSpellProto();
+    SpellClassOptionsEntry const* spellClass = triggeredByAura->GetSpellClass();
     uint32 effIdx = triggeredByAura->GetEffIndex();
     int32 heal = triggeredByAura->GetAmount();
     uint64 caster_guid = triggeredByAura->GetCasterGUID();
 
     //Currently only Prayer of Mending
-    if (!(spellProto->GetSpellFamilyName() == SPELLFAMILY_PRIEST && spellProto->SpellFamilyFlags[1] & 0x20))
+    if (!(spellProto->GetSpellFamilyName() == SPELLFAMILY_PRIEST && spellClass->SpellFamilyFlags[1] & 0x20))
     {
         sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Unit::HandleAuraRaidProcFromChargeWithValue, received not handled spell: %u", spellProto->Id);
         return false;
