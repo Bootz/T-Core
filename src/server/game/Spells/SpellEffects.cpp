@@ -3207,7 +3207,7 @@ void Spell::EffectDispel(SpellEffIndex effIndex)
         std::advance(itr, urand(0, dispel_list.size() - 1));
 
         bool success = false;
-        // 2.4.3 Patch Notes: "Dispel effects will no longer attempt to remove effects that have 100% dispel resistance."
+        // 2.4.3 Patch Notes: "GetDispel() effects will no longer attempt to remove effects that have 100% dispel resistance."
         if (!GetDispelChance(itr->first->GetCaster(), unitTarget, itr->first->GetId(), !unitTarget->IsFriendlyTo(m_caster), &success))
         {
             dispel_list.erase(itr);
@@ -6561,7 +6561,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffIndex effIndex)
         std::advance(itr, urand(0, steal_list.size() - 1));
 
         bool success = false;
-        // 2.4.3 Patch Notes: "Dispel effects will no longer attempt to remove effects that have 100% dispel resistance."
+        // 2.4.3 Patch Notes: "GetDispel() effects will no longer attempt to remove effects that have 100% dispel resistance."
         if (!GetDispelChance(itr->first->GetCaster(), unitTarget, itr->first->GetId(), !unitTarget->IsFriendlyTo(m_caster), &success))
         {
             steal_list.erase(itr);

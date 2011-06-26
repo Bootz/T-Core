@@ -6206,10 +6206,10 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     RemoveMovementImpairingAuras();
                     break;
                 }
-                // Glyph of Dispel Magic
+                // Glyph of GetDispel() Magic
                 case 55677:
                 {
-                    // Dispel Magic shares spellfamilyflag with abolish disease
+                    // GetDispel() Magic shares spellfamilyflag with abolish disease
                     if (procSpell->SpellIconID != 74)
                         return false;
                     if (!target || !target->IsFriendlyTo(this))
@@ -11482,11 +11482,11 @@ bool Unit::IsImmunedToSpell(SpellEntry const* spellInfo)
     if (spellInfo->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
         return false;
 
-    if (spellInfo->Dispel)
+    if (spellInfo->GetDispel())
     {
         SpellImmuneList const& dispelList = m_spellImmune[IMMUNITY_DISPEL];
         for (SpellImmuneList::const_iterator itr = dispelList.begin(); itr != dispelList.end(); ++itr)
-            if (itr->type == spellInfo->Dispel)
+            if (itr->type == spellInfo->GetDispel())
                 return true;
     }
 
@@ -11548,7 +11548,7 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
         // Check for immune to application of harmful magical effects
         AuraEffectList const& immuneAuraApply = GetAuraEffectsByType(SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL);
         for (AuraEffectList::const_iterator iter = immuneAuraApply.begin(); iter != immuneAuraApply.end(); ++iter)
-            if (spellInfo->Dispel == DISPEL_MAGIC &&                                      // Magic debuff
+            if (spellInfo->GetDispel() == DISPEL_MAGIC &&                                      // Magic debuff
                 ((*iter)->GetMiscValue() & GetSpellSchoolMask(spellInfo)) &&  // Check school
                 !IsPositiveEffect(spellInfo->Id, index))                                  // Harmful
                 return true;
@@ -11931,14 +11931,14 @@ void Unit::ApplySpellDispelImmunity(const SpellEntry * spellProto, DispelType ty
     {
         // Create dispel mask by dispel type
         uint32 dispelMask = GetDispellMask(type);
-        // Dispel all existing auras vs current dispel type
+        // GetDispel() all existing auras vs current dispel type
         AuraApplicationMap& auras = GetAppliedAuras();
         for (AuraApplicationMap::iterator itr = auras.begin(); itr != auras.end();)
         {
             SpellEntry const* spell = itr->second->GetBase()->GetSpellProto();
-            if ((1<<spell->Dispel) & dispelMask)
+            if ((1<<spell->GetDispel()) & dispelMask)
             {
-                // Dispel aura
+                // GetDispel() aura
                 RemoveAura(itr);
             }
             else
@@ -13029,8 +13029,8 @@ int32 Unit::ModSpellDuration(SpellEntry const* spellProto, Unit const* target, i
             AddPctN(duration, durationMod);
 
         // there are only negative mods currently
-        durationMod_always = target->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL, spellProto->Dispel);
-        durationMod_not_stack = target->GetMaxNegativeAuraModifierByMiscValue(SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL_NOT_STACK, spellProto->Dispel);
+        durationMod_always = target->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL, spellProto->GetDispel());
+        durationMod_not_stack = target->GetMaxNegativeAuraModifierByMiscValue(SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL_NOT_STACK, spellProto->GetDispel());
 
         durationMod = 0;
         if (durationMod_always > durationMod_not_stack)
