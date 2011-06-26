@@ -5146,7 +5146,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     pTempItem = m_caster->ToPlayer()->GetItemByGuid(m_targets.getItemTargetGUID());
 
                 // we need a go target, or an openable item target in case of TARGET_GAMEOBJECT_ITEM
-                if (m_spellInfo->EffectImplicitTargetA[i] == TARGET_GAMEOBJECT_ITEM &&
+                if (m_spellInfo->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_ITEM &&
                     !m_targets.getGOTarget() &&
                     (!pTempItem || !pTempItem->GetTemplate()->LockID || !pTempItem->IsLocked()))
                     return SPELL_FAILED_BAD_TARGETS;
@@ -5973,7 +5973,7 @@ SpellCastResult Spell::CheckItems()
         uint32 totems = 2;
         for (int i = 0; i < 2 ; ++i)
         {
-            if (m_spellInfo->Totem[i] != 0)
+            if (m_spellInfo->GetSpellEffectIdByIndex(i) != 0)
             {
                 if (p_caster->HasItemCount(m_spellInfo->Totem[i], 1))
                 {

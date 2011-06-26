@@ -6899,7 +6899,7 @@ void Spell::GetSummonPosition(uint32 i, Position &pos, float radius, uint32 coun
         else
         {
             //This is a workaround. Do not have time to write much about it
-            switch (m_spellInfo->EffectImplicitTargetA[i])
+            switch (m_spellInfo->GetEffectImplicitTargetAByIndex(i))
             {
                 case TARGET_MINION:
                 case TARGET_DEST_CASTER_RANDOM:
