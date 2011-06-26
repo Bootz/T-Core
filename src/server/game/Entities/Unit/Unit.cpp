@@ -10770,7 +10770,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
             for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
             {
                 if (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEALTH_LEECH ||
-                    (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
+                    (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_LEECH))
                 {
                     CastingTime /= 2;
                     break;
@@ -11210,7 +11210,7 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
 
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        switch (spellProto->EffectApplyAuraName[i])
+        switch (spellProto->GetEffectApplyAuraName(i))
         {
             // These auras do not use healing coeff
             case SPELL_AURA_PERIODIC_LEECH:
@@ -11218,7 +11218,7 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
                 scripted = true;
                 break;
         }
-        if (spellProto->Effect[i] == SPELL_EFFECT_HEALTH_LEECH)
+        if (spellProto->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_HEALTH_LEECH)
             scripted = true;
     }
 
@@ -11287,17 +11287,17 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
                     uint32 x = 0;
                     for (uint8 j = 0; j < MAX_SPELL_EFFECTS; j++)
                     {
-                        if (spellProto->Effect[j] == SPELL_EFFECT_APPLY_AURA && (
-                            spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_DAMAGE ||
-                            spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
+                        if (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && (
+                            spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_DAMAGE ||
+                            spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_LEECH))
                         {
                             x = j;
                             break;
                         }
                     }
                     int32 DotTicks = 6;
-                    if (spellProto->EffectAmplitude[x] != 0)
-                        DotTicks = DotDuration / spellProto->EffectAmplitude[x];
+                    if (spellProto->GetEffectAmplitude(x) != 0)
+                        DotTicks = DotDuration / spellProto->GetEffectAmplitude(x);
                     if (DotTicks)
                     {
                         DoneAdvertisedBenefit = DoneAdvertisedBenefit * int32(stack) / DotTicks;
