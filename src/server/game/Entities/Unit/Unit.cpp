@@ -7393,7 +7393,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Water Shield
                 if (AuraEffect const* aurEff = GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_SHAMAN, 0, 0x00000020, 0))
                 {
-                    uint32 spell = aurEff->GetSpellProto()->EffectTriggerSpell[aurEff->GetEffIndex()];
+                    uint32 spell = aurEff->GetSpellProto()->GetEffectTriggerSpell(aurEff->GetEffIndex());
                     CastSpell(this, spell, true, castItem, triggeredByAura);
                     return true;
                 }
@@ -7752,7 +7752,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
     // if not handled by custom case, get triggered spell from dummySpell proto
     if (!triggered_spell_id)
-        triggered_spell_id = dummySpell->EffectTriggerSpell[triggeredByAura->GetEffIndex()];
+        triggered_spell_id = dummySpell->GetEffectTriggerSpell(triggeredByAura->GetEffIndex());
 
     // processed charge only counting case
     if (!triggered_spell_id)
@@ -8845,7 +8845,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         // Enlightenment (trigger only from mana cost spells)
         case 35095:
         {
-            if (!procSpell || procSpell->powerType != POWER_MANA || (procSpell->GetManaCost() == 0 && procSpell->ManaCostPercentage == 0 && procSpell->manaCostPerlevel == 0))
+            if (!procSpell || procSpell->powerType != POWER_MANA || (procSpell->GetManaCost() == 0 && procSpell->GetManaCostPercentage() == 0 && procSpell->manaCostPerlevel == 0))
                 return false;
             break;
         }
