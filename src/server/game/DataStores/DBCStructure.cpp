@@ -351,14 +351,7 @@ uint32 SpellEntry::GetSpellFamilyName() const
     return classOpt ? classOpt->SpellFamilyName : 0;
 }
 
-flag96 SpellEntry::GetSpellFamilyFlags() const
-{
-    SpellClassOptionsEntry const* classOpt = GetSpellClassOptions();
-    return classOpt ? classOpt->SpellFamilyFlags : flag96(0);
-}
-
 // Return Methods.
-
 SpellAuraOptionsEntry const* SpellEntry::GetSpellAuraOptions() const
 {
     return SpellAuraOptionsId ? sSpellAuraOptionsStore.LookupEntry(SpellAuraOptionsId) : NULL;

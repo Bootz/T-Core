@@ -2124,7 +2124,7 @@ void Spell::EffectPowerDrain(SpellEffIndex effIndex)
     // Don`t restore from self drain
     if (m_caster != unitTarget)
     {
-        gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellInfo, effIndex, m_originalCaster, this);
+        gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellEffect, effIndex, m_originalCaster, this);
 
         int32 gain = int32(newDamage * gainMultiplier);
 
@@ -2185,7 +2185,7 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex)
     int32 newDamage = -(unitTarget->ModifyPower(powerType, -power));
 
     // NO - Not a typo - EffectPowerBurn uses effect value multiplier - not effect damage multiplier
-    float dmgMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellInfo, effIndex, m_originalCaster, this);
+    float dmgMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellEffect, effIndex, m_originalCaster, this);
 
     // add log data before multiplication (need power amount, not damage)
     ExecuteLogEffectTakeTargetPower(effIndex, unitTarget, powerType, newDamage, 0.0f);

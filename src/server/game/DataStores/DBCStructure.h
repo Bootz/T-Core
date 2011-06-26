@@ -1843,7 +1843,6 @@ struct SpellEntry
     /**************************/
 
     uint32 GetSpellFamilyName() const;
-    flag96 GetSpellFamilyFlags() const;
 
     /************************/
     /* SpellShapeshiftEntry */

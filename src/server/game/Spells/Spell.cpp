@@ -5860,13 +5860,13 @@ SpellCastResult Spell::CheckItems()
                 // Mana Potion, Rage Potion, Thistle Tea(Rogue), ...
                 if (m_spellInfo->Effect[i] == SPELL_EFFECT_ENERGIZE)
                 {
-                    if (m_spellInfo->EffectMiscValue[i] < 0 || m_spellInfo->EffectMiscValue[i] >= int8(MAX_POWERS))
+                    if (m_spellInfo->GetEffectMiscValue(i) < 0 || m_spellInfo->GetEffectMiscValue(i) >= int8(MAX_POWERS))
                     {
                         failReason = SPELL_FAILED_ALREADY_AT_FULL_POWER;
                         continue;
                     }
 
-                    Powers power = Powers(m_spellInfo->EffectMiscValue[i]);
+                    Powers power = Powers(m_spellInfo->GetEffectMiscValue(i));
                     if (m_targets.getUnitTarget()->GetPower(power) == m_targets.getUnitTarget()->GetMaxPower(power))
                     {
                         failReason = SPELL_FAILED_ALREADY_AT_FULL_POWER;
@@ -6764,13 +6764,13 @@ void Spell::CalculateDamageDoneForAllTargets()
     float multiplier[MAX_SPELL_EFFECTS];
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         if (m_applyMultiplierMask & (1 << i))
-            multiplier[i] = SpellMgr::CalculateSpellEffectDamageMultiplier(m_spellInfo, i, m_originalCaster, this);
+            multiplier[i] = SpellMgr::CalculateSpellEffectDamageMultiplier(m_spellEffect, i, m_originalCaster, this);
 
     bool usesAmmo = true;
     Unit::AuraEffectList const& Auras = m_caster->GetAuraEffectsByType(SPELL_AURA_ABILITY_CONSUME_NO_AMMO);
     for (Unit::AuraEffectList::const_iterator j = Auras.begin(); j != Auras.end(); ++j)
     {
-        if ((*j)->IsAffectedOnSpell(m_spellInfo))
+        if ((*j)->IsAffectedOnSpell(m_spellClass))
             usesAmmo=false;
     }
 

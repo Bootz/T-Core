@@ -5100,6 +5100,7 @@ bool Unit::HandleSpellCritChanceAuraProc(Unit *pVictim, uint32 /*damage*/, AuraE
 bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* triggeredByAura, SpellEntry const* procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown)
 {
     SpellEntry const* dummySpell = triggeredByAura->GetSpellProto();
+    SpellClassOptionsEntry const* dummyClass = triggeredByAura->GetSpellClass();
     uint32 effIndex = triggeredByAura->GetEffIndex();
     int32  triggerAmount = triggeredByAura->GetAmount();
 
@@ -6162,10 +6163,10 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 40438:
                 {
                     // Shadow Word: Pain
-                    if (procSpell->SpellFamilyFlags[0] & 0x8000)
+                    if (dummyClass->SpellFamilyFlags[0] & 0x8000)
                         triggered_spell_id = 40441;
                     // Renew
-                    else if (procSpell->SpellFamilyFlags[0] & 0x40)
+                    else if (dummyClass->SpellFamilyFlags[0] & 0x40)
                         triggered_spell_id = 40440;
                     else
                         return false;
@@ -6251,13 +6252,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Priest T10 Healer 2P Bonus
                 case 70770:
                     // Flash Heal
-                    if (procSpell->SpellFamilyFlags[0] & 0x800)
+                    if (dummyClass->SpellFamilyFlags[0] & 0x800)
                     {
                         triggered_spell_id = 70772;
                         SpellEntry const* blessHealing = sSpellStore.LookupEntry(triggered_spell_id);
                         if (!blessHealing)
                             return false;
-                        basepoints0 = int32(CalculatePctN(damage, triggerAmount) / (GetSpellMaxDuration(blessHealing) / blessHealing->EffectAmplitude[0]));
+                        basepoints0 = int32(CalculatePctN(damage, triggerAmount) / (GetSpellMaxDuration(blessHealing) / blessHealing->GetEffectAmplitude(0)));
                     }
                     break;
             }
