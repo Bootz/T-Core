@@ -7863,7 +7863,7 @@ bool Unit::HandleModDamagePctTakenAuraProc(Unit *pVictim, uint32 /*damage*/, Aur
         case SPELLFAMILY_PALADIN:
         {
             // Blessing of Sanctuary
-            if (dummySpell->SpellFamilyFlags[0] & 0x10000000)
+            if (dummyClass->SpellFamilyFlags[0] & 0x10000000)
             {
                 switch (getPowerType())
                 {
@@ -7910,7 +7910,7 @@ bool Unit::HandleModDamagePctTakenAuraProc(Unit *pVictim, uint32 /*damage*/, Aur
 bool Unit::HandleAuraProc(Unit* pVictim, uint32 damage, Aura * triggeredByAura, SpellEntry const* procSpell, uint32 /*procFlag*/, uint32 procEx, uint32 cooldown, bool * handled)
 {
     SpellEntry const* dummySpell = triggeredByAura->GetSpellProto();
-    SpellClassOptionsEntry const* procClass = NULL;
+    SpellClassOptionsEntry const* procClass = triggeredByAura->GetSpellClass();
     switch(dummySpell->GetSpellFamilyName())
     {
         case SPELLFAMILY_GENERIC:
@@ -7952,7 +7952,7 @@ bool Unit::HandleAuraProc(Unit* pVictim, uint32 damage, Aura * triggeredByAura, 
             if (dummySpell->SpellIconID == 3021)
             {
                 // Flash of Light HoT on Flash of Light when Sacred Shield active
-                if (procSpell->SpellFamilyFlags[0] & 0x40000000 && procSpell->SpellIconID == 242)
+                if (procClass->SpellFamilyFlags[0] & 0x40000000 && procSpell->SpellIconID == 242)
                 {
                     *handled = true;
                     if (pVictim->HasAura(53601))
@@ -8540,7 +8540,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                     default:
                     {
                         // Lightning Shield (overwrite non existing triggered spell call in spell.dbc
-                        if (auraSpellInfo->SpellFamilyFlags[0] & 0x400)
+                        if (spellClass->SpellFamilyFlags[0] & 0x400)
                         {
                             trigger_spell_id = sSpellMgr->GetSpellWithRank(26364, sSpellMgr->GetSpellRank(auraSpellInfo->Id));
                         }
@@ -10389,8 +10389,8 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                 for (AuraApplicationMap::const_iterator itr = victimAuras.begin(); itr != victimAuras.end(); ++itr)
                 {
                     Aura const* aura = itr->second->GetBase();
-                    SpellEntry const* m_spell = aura->GetSpellProto();
-                    if (m_spell->GetSpellFamilyName() != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[1] & 0x0004071B || m_spell->SpellFamilyFlags[0] & 0x8044C402))
+                    SpellClassOptionsEntry const* m_spell = aura->GetSpellClass();
+                    if (m_spell->SpellFamilyName != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[1] & 0x0004071B || m_spell->SpellFamilyFlags[0] & 0x8044C402))
                         continue;
                     modPercent += stepPercent * aura->GetStackAmount();
                     if (modPercent >= maxPercent)
@@ -11569,21 +11569,22 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
 
 bool Unit::IsDamageToThreatSpell(SpellEntry const* spellInfo) const
 {
+    SpellClassOptionsEntry const* spellClass = NULL;
     if (!spellInfo)
         return false;
 
     switch(spellInfo->GetSpellFamilyName())
     {
         case SPELLFAMILY_WARLOCK:
-            if (spellInfo->SpellFamilyFlags[0] == 0x100) // Searing Pain
+            if (spellClass->SpellFamilyFlags[0] == 0x100) // Searing Pain
                 return true;
             break;
         case SPELLFAMILY_SHAMAN:
-            if (spellInfo->SpellFamilyFlags[0] == SPELLFAMILYFLAG_SHAMAN_FROST_SHOCK)
+            if (spellClass->SpellFamilyFlags[0] == SPELLFAMILYFLAG_SHAMAN_FROST_SHOCK)
                 return true;
             break;
         case SPELLFAMILY_DEATHKNIGHT:
-            if (spellInfo->SpellFamilyFlags[1] == 0x20000000) // Rune Strike
+            if (spellClass->SpellFamilyFlags[1] == 0x20000000) // Rune Strike
                 return true;
             break;
     }
