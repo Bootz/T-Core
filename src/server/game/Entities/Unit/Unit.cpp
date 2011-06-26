@@ -9639,7 +9639,7 @@ void Unit::ModifyAuraState(AuraState flag, bool apply)
                     SpellEntry const* spellInfo = sSpellStore.LookupEntry(itr->first);
                     if (!spellInfo || !IsPassiveSpell(itr->first))
                         continue;
-                    if (spellInfo->CasterAuraState == uint32(flag))
+                    if (spellInfo->GetCasterAuraState() == uint32(flag))
                         CastSpell(this, itr->first, true, NULL);
                 }
             }
@@ -9652,7 +9652,7 @@ void Unit::ModifyAuraState(AuraState flag, bool apply)
                     SpellEntry const* spellInfo = sSpellStore.LookupEntry(itr->first);
                     if (!spellInfo || !IsPassiveSpell(itr->first))
                         continue;
-                    if (spellInfo->CasterAuraState == uint32(flag))
+                    if (spellInfo->GetCasterAuraState() == uint32(flag))
                         CastSpell(this, itr->first, true, NULL);
                 }
             }
@@ -9670,7 +9670,7 @@ void Unit::ModifyAuraState(AuraState flag, bool apply)
                 for (Unit::AuraApplicationMap::iterator itr = tAuras.begin(); itr != tAuras.end();)
                 {
                     SpellEntry const* spellProto = (*itr).second->GetBase()->GetSpellProto();
-                    if (spellProto->CasterAuraState == uint32(flag))
+                    if (spellProto->GetCasterAuraState() == uint32(flag))
                         RemoveAura(itr);
                     else
                         ++itr;
@@ -9890,7 +9890,7 @@ void Unit::SetMinion(Minion *minion, bool apply)
                 if (spInfo->Effect[i] != SPELL_EFFECT_SUMMON)
                     continue;
 
-                RemoveAllMinionsByEntry(spInfo->EffectMiscValue[i]);
+                RemoveAllMinionsByEntry(spInfo->GetEffectMiscValue(i));
             }
         }
 
@@ -10745,17 +10745,17 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                     uint8 x = 0;
                     for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
                     {
-                        if (spellProto->Effect[j] == SPELL_EFFECT_APPLY_AURA && (
-                            spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_DAMAGE ||
-                            spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
+                        if (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && (
+                            spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_DAMAGE ||
+                            spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_LEECH))
                         {
                             x = j;
                             break;
                         }
                     }
                     int32 DotTicks = 6;
-                    if (spellProto->EffectAmplitude[x] != 0)
-                        DotTicks = DotDuration / spellProto->EffectAmplitude[x];
+                    if (spellProto->GetEffectAmplitude(x) != 0)
+                        DotTicks = DotDuration / spellProto->GetEffectAmplitude(x);
                     if (DotTicks)
                     {
                         DoneAdvertisedBenefit /= DotTicks;
@@ -10769,8 +10769,8 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
             // 50% for damage and healing spells for leech spells from damage bonus and 0% from healing
             for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
             {
-                if (spellProto->Effect[j] == SPELL_EFFECT_HEALTH_LEECH ||
-                    (spellProto->Effect[j] == SPELL_EFFECT_APPLY_AURA && spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
+                if (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEALTH_LEECH ||
+                    (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
                 {
                     CastingTime /= 2;
                     break;
@@ -10819,9 +10819,9 @@ int32 Unit::SpellBaseDamageBonus(SpellSchoolMask schoolMask)
     AuraEffectList const& mDamageDone = GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_DONE);
     for (AuraEffectList::const_iterator i = mDamageDone.begin(); i != mDamageDone.end(); ++i)
         if (((*i)->GetMiscValue() & schoolMask) != 0 &&
-        (*i)->GetSpellProto()->EquippedItemClass == -1 &&
+        (*i)->GetSpellEquipped()->EquippedItemClass == -1 &&
                                                             // -1 == any item class (not wand then)
-        (*i)->GetSpellProto()->EquippedItemInventoryTypeMask == 0)
+        (*i)->GetSpellEquipped()->EquippedItemInventoryTypeMask == 0)
                                                             // 0 == any inventory type (not wand then)
             DoneAdvertisedBenefit += (*i)->GetAmount();
 
