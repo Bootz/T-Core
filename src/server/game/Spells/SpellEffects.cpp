@@ -3605,7 +3605,7 @@ void Spell::EffectEnchantItemTmp(SpellEffIndex effIndex)
         {
             if (Item* item = p_caster->GetWeaponForAttack(WeaponAttackType(j)))
             {
-                if (item->IsFitToSpellRequirements(m_spellInfo))
+                if (item->IsFitToSpellRequirements(m_spellEquipped))
                 {
                     Spell* spell = new Spell(m_caster, spellInfo, true);
                     SpellCastTargets targets;
@@ -5307,7 +5307,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         case SPELLFAMILY_DEATHKNIGHT:
         {
             // Pestilence
-            if (m_spellInfo->SpellFamilyFlags[1]&0x10000)
+            if (m_spellClass->SpellFamilyFlags[1]&0x10000)
             {
                 // Get diseases on target of spell
                 if (m_targets.getUnitTarget() &&  // Glyph of Disease - cast on unit target too to refresh aura
@@ -5327,7 +5327,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         case SPELLFAMILY_WARRIOR:
         {
             // Shattering Throw
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x00400000)
+            if (m_spellClass->SpellFamilyFlags[1] & 0x00400000)
             {
                 if (!unitTarget)
                     return;
@@ -5365,7 +5365,7 @@ void Spell::EffectSanctuary(SpellEffIndex /*effIndex*/)
     // Vanish allows to remove all threat and cast regular stealth so other spells can be used
     if (m_caster->GetTypeId() == TYPEID_PLAYER
         && m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_ROGUE
-        && (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_ROGUE_VANISH))
+        && (m_spellClass->SpellFamilyFlags[0] & SPELLFAMILYFLAG_ROGUE_VANISH))
     {
         m_caster->ToPlayer()->RemoveAurasByType(SPELL_AURA_MOD_ROOT);
         // Overkill
