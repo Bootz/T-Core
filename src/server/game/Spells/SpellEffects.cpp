@@ -1898,10 +1898,10 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
 
 void Spell::CalculateJumpSpeeds(uint8 i, float dist, float & speedXY, float & speedZ)
 {
-    if (m_spellInfo->EffectMiscValue[i])
-        speedZ = float(m_spellInfo->EffectMiscValue[i])/10;
-    else if (m_spellInfo->EffectMiscValueB[i])
-        speedZ = float(m_spellInfo->EffectMiscValueB[i])/10;
+    if (m_spellInfo->GetEffectMiscValue(i))
+        speedZ = float(m_spellInfo->GetEffectMiscValue(i)) / 10;
+    else if (m_spellInfo->GetEffectMiscValueB(i))
+        speedZ = float(m_spellInfo->GetEffectMiscValueB(i)) / 10;
     else
         speedZ = 10.0f;
     speedXY = dist * 10.0f / speedZ;
@@ -2092,7 +2092,7 @@ void Spell::EffectUnlearnSpecialization(SpellEffIndex effIndex)
         return;
 
     Player* _player = unitTarget->ToPlayer();
-    uint32 spellToUnlearn = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 spellToUnlearn = m_spellInfo->GetEffectTriggerSpell(effIndex);
 
     _player->removeSpell(spellToUnlearn);
 
@@ -2170,7 +2170,7 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex)
         return;
 
     // burn x% of target's mana, up to maximum of 2x% of caster's mana (Mana Burn)
-    if (m_spellInfo->ManaCostPercentage)
+    if (m_spellInfo->GetManaCostPercentage())
     {
         int32 maxDamage = int32(CalculatePctN(m_caster->GetMaxPower(powerType), damage * 2));
         damage = int32(CalculatePctN(unitTarget->GetMaxPower(powerType), damage));
@@ -2226,7 +2226,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
             addhealth += damageAmount;
         }
         // Swiftmend - consumes Regrowth or Rejuvenation
-        else if (m_spellInfo->TargetAuraState == AURA_STATE_SWIFTMEND && unitTarget->HasAuraState(AURA_STATE_SWIFTMEND, m_spellInfo, m_caster))
+        else if (m_spellInfo->GetTargetAuraState() == AURA_STATE_SWIFTMEND && unitTarget->HasAuraState(AURA_STATE_SWIFTMEND, m_spellInfo, m_caster))
         {
             Unit::AuraEffectList const& RejorRegr = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_HEAL);
             // find most short by duration
@@ -2476,8 +2476,8 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
 
 void Spell::EffectCreateItem(SpellEffIndex effIndex)
 {
-    DoCreateItem(effIndex, m_spellInfo->EffectItemType[effIndex]);
-    ExecuteLogEffectCreateItem(effIndex, m_spellInfo->EffectItemType[effIndex]);
+    DoCreateItem(effIndex, m_spellInfo->GetEffectItemType(effIndex));
+    ExecuteLogEffectCreateItem(effIndex, m_spellInfo->GetEffectItemType(effIndex));
 }
 
 void Spell::EffectCreateItem2(SpellEffIndex effIndex)
@@ -2486,7 +2486,7 @@ void Spell::EffectCreateItem2(SpellEffIndex effIndex)
         return;
     Player* player = (Player*)m_caster;
 
-    uint32 item_id = m_spellInfo->EffectItemType[effIndex];
+    uint32 item_id = m_spellInfo->GetEffectItemType(effIndex);
 
     if (item_id)
         DoCreateItem(effIndex, item_id);
@@ -2868,7 +2868,7 @@ void Spell::EffectSummonChangeItem(SpellEffIndex effIndex)
     if (m_CastItem->GetOwnerGUID() != player->GetGUID())
         return;
 
-    uint32 newitemid = m_spellInfo->EffectItemType[effIndex];
+    uint32 newitemid = m_spellInfo->GetEffectItemType(effIndex);
     if (!newitemid)
         return;
 
@@ -2958,13 +2958,13 @@ void Spell::EffectProficiency(SpellEffIndex /*effIndex*/)
         return;
     Player* p_target = unitTarget->ToPlayer();
 
-    uint32 subClassMask = m_spellInfo->EquippedItemSubClassMask;
-    if (m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && !(p_target->GetWeaponProficiency() & subClassMask))
+    uint32 subClassMask = m_spellInfo->GetEquippedItemSubClassMask();
+    if (m_spellInfo->GetEquippedItemClass() == ITEM_CLASS_WEAPON && !(p_target->GetWeaponProficiency() & subClassMask))
     {
         p_target->AddWeaponProficiency(subClassMask);
         p_target->SendProficiency(ITEM_CLASS_WEAPON, p_target->GetWeaponProficiency());
     }
-    if (m_spellInfo->EquippedItemClass == ITEM_CLASS_ARMOR && !(p_target->GetArmorProficiency() & subClassMask))
+    if (m_spellInfo->GetEquippedItemClass() == ITEM_CLASS_ARMOR && !(p_target->GetArmorProficiency() & subClassMask))
     {
         p_target->AddArmorProficiency(subClassMask);
         p_target->SendProficiency(ITEM_CLASS_ARMOR, p_target->GetArmorProficiency());
@@ -2977,10 +2977,10 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
     if (!entry)
         return;
 
-    SummonPropertiesEntry const *properties = sSummonPropertiesStore.LookupEntry(m_spellInfo->EffectMiscValueB[effIndex]);
+    SummonPropertiesEntry const *properties = sSummonPropertiesStore.LookupEntry(m_spellInfo->GetEffectMiscValueB(effIndex));
     if (!properties)
     {
-        sLog->outError("EffectSummonType: Unhandled summon type %u", m_spellInfo->EffectMiscValueB[effIndex]);
+        sLog->outError("EffectSummonType: Unhandled summon type %u", m_spellInfo->GetEffectMiscValueB(effIndex));
         return;
     }
 
