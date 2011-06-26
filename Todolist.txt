@@ -4,7 +4,13 @@
 |    3.) Write new Spell System.                |
  \_____________________________________________/
  /                                            /
- \__________________________________________|
+ |   4.) Fix world Login                     |
+ |   5.) Implemented Spell Stats System      |
+ |   6.) Drop Old Spells from Core           |
+ |   7.) Implemented new DB2 Loader          |
+ |   8.) Fixed the Style in Forum            |
+ |   9.) Install a Bot in Mirc Channel!      |
+ \__________________________________________/
  /                                           \
 |    4.) Start with updating the DB           \
  \_____________________________________________\
