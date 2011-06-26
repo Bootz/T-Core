@@ -1494,7 +1494,7 @@ struct SoundEntriesEntry
 // SpellAuraOptions.dbc
 struct SpellAuraOptionsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0       m_ID
     uint32    StackAmount;                                  // 1       m_cumulativeAura
     uint32    procChance;                                   // 2       m_procChance
     uint32    procCharges;                                  // 3       m_procCharges
@@ -1503,57 +1503,57 @@ struct SpellAuraOptionsEntry
 
 struct SpellAuraRestrictionsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
-    uint32    CasterAuraState;                              // 20       m_casterAuraState
-    uint32    TargetAuraState;                              // 21       m_targetAuraState
-    uint32    CasterAuraStateNot;                           // 22       m_excludeCasterAuraState
-    uint32    TargetAuraStateNot;                           // 23       m_excludeTargetAuraState
-    uint32    casterAuraSpell;                              // 24       m_casterAuraSpell
-    uint32    targetAuraSpell;                              // 25       m_targetAuraSpell
-    uint32    excludeCasterAuraSpell;                       // 26       m_excludeCasterAuraSpell
-    uint32    excludeTargetAuraSpell;                       // 27       m_excludeTargetAuraSpell
+    uint32    Id;                                           // 0       m_ID
+    uint32    CasterAuraState;                              // 1       m_casterAuraState
+    uint32    TargetAuraState;                              // 2       m_targetAuraState
+    uint32    CasterAuraStateNot;                           // 3       m_excludeCasterAuraState
+    uint32    TargetAuraStateNot;                           // 4       m_excludeTargetAuraState
+    uint32    casterAuraSpell;                              // 5       m_casterAuraSpell
+    uint32    targetAuraSpell;                              // 6       m_targetAuraSpell
+    uint32    excludeCasterAuraSpell;                       // 7       m_excludeCasterAuraSpell
+    uint32    excludeTargetAuraSpell;                       // 8       m_excludeTargetAuraSpell
 };
 
 // SpellCastingRequirements.dbc
 struct SpellCastingRequirementsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
-    uint32    FacingCasterFlags;                            // 20       m_facingCasterFlags
-    //uint32    MinFactionId;                               // 159      m_minFactionID not used
-    //uint32    MinReputation;                              // 160      m_minReputation not used
-    int32     AreaGroupId;                                  // 164      m_requiredAreaGroupId
-    //uint32    RequiredAuraVision;                         // 161      m_requiredAuraVision not used
-    uint32    RequiresSpellFocus;                           // 19       m_requiresSpellFocus
+    uint32    Id;                                           // 0       m_ID
+    uint32    FacingCasterFlags;                            // 1       m_facingCasterFlags
+    //uint32    MinFactionId;                               // 2       m_minFactionID not used
+    //uint32    MinReputation;                              // 3       m_minReputation not used
+    int32     AreaGroupId;                                  // 4       m_requiredAreaGroupId
+    //uint32    RequiredAuraVision;                         // 3       m_requiredAuraVision not used
+    uint32    RequiresSpellFocus;                           // 6       m_requiresSpellFocus
 };
 
 // SpellCategories.dbc
 struct SpellCategoriesEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    Category;                                     // 1        m_category
-    uint32    DmgClass;                                     // 153      m_defenseType
-    uint32    Dispel;                                       // 2        m_dispelType
-    uint32    Mechanic;                                     // 3        m_mechanic
-    uint32    PreventionType;                               // 154      m_preventionType
-    uint32    StartRecoveryCategory;                        // 145      m_startRecoveryCategory
+    uint32    DmgClass;                                     // 2        m_defenseType
+    uint32    Dispel;                                       // 3        m_dispelType
+    uint32    Mechanic;                                     // 4        m_mechanic
+    uint32    PreventionType;                               // 5        m_preventionType
+    uint32    StartRecoveryCategory;                        // 6        m_startRecoveryCategory
 };
 
 // SpellClassOptions.dbc
 struct SpellClassOptionsEntry
 {
     uint32    Id;                                           // 0        m_ID
-    //uint32    modalNextSpell;                             // 50       m_modalNextSpell not used
-    flag96    SpellFamilyFlags;                             // 209-211
-    uint32    SpellFamilyName;                              // 148      m_spellClassSet
+    //uint32    modalNextSpell;                             // 1        m_modalNextSpell not used
+    flag96    SpellFamilyFlags;                             // 2-4
+    uint32    SpellFamilyName;                              // 5        m_spellClassSet
 };
 
 // SpellCooldowns.dbc
 struct SpellCooldownsEntry
 {
     //uint32    Id;                                           // 0        m_ID
-    uint32    CategoryRecoveryTime;                         // 30       m_categoryRecoveryTime
-    uint32    RecoveryTime;                                 // 30       m_recoveryTime
-    uint32    StartRecoveryTime;                            // 146      m_startRecoveryTime
+    uint32    CategoryRecoveryTime;                         // 30         m_categoryRecoveryTime
+    uint32    RecoveryTime;                                 // 30         m_recoveryTime
+    uint32    StartRecoveryTime;                            // 146        m_startRecoveryTime
 };
 
 // SpellEffect.dbc
