@@ -1871,7 +1871,7 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
     {
         m_targets.m_dstPos.GetPosition(x, y, z);
 
-        if (m_spellInfo->GetEffectImplicitTargetA(effIndex) == TARGET_DEST_TARGET_BACK)
+        if (m_spellInfo->GetEffectImplicitTargetAByIndex(effIndex) == TARGET_DEST_TARGET_BACK)
         {
             // explicit cast data from client or server-side cast
             // some spell at client send caster

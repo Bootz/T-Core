@@ -7706,11 +7706,11 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 {
                     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
                     {
-                        if (procSpell->Effect[i] == SPELL_EFFECT_HEAL)
+                        if (procSpell->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_HEAL)
                         {
                             triggered_spell_id = 21399;
                         }
-                        else if (procSpell->Effect[i] == SPELL_EFFECT_ENERGIZE)
+                        else if (procSpell->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_ENERGIZE)
                         {
                             triggered_spell_id = 21400;
                         }
@@ -7984,7 +7984,7 @@ bool Unit::HandleAuraProc(Unit* pVictim, uint32 damage, Aura * triggeredByAura, 
                 // Lookup base amount mana restore
                 for (uint8 i = 0; i<MAX_SPELL_EFFECTS; i++)
                 {
-                    if (procSpell->Effect[i] == SPELL_EFFECT_ENERGIZE)
+                    if (procSpell->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_ENERGIZE)
                     {
                         // value multiplied by 2 because you should get twice amount
                         int32 mana = SpellMgr::CalculateSpellEffectAmount(procSpell, i) * 2;
