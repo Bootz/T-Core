@@ -11310,8 +11310,8 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
             // 50% for damage and healing spells for leech spells from damage bonus and 0% from healing
             for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
             {
-                if (spellProto->Effect[j] == SPELL_EFFECT_HEALTH_LEECH ||
-                    (spellProto->Effect[j] == SPELL_EFFECT_APPLY_AURA && spellProto->EffectApplyAuraName[j] == SPELL_AURA_PERIODIC_LEECH))
+                if (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEALTH_LEECH ||
+                    (spellProto->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA && spellProto->GetEffectApplyAuraName(j) == SPELL_AURA_PERIODIC_LEECH))
                 {
                     CastingTime /= 2;
                     break;
@@ -11404,7 +11404,7 @@ int32 Unit::SpellBaseHealingBonus(SpellSchoolMask schoolMask)
         for (AuraEffectList::const_iterator i = mHealingDoneOfStatPercent.begin(); i != mHealingDoneOfStatPercent.end(); ++i)
         {
             // stat used dependent from misc value (stat index)
-            Stats usedStat = Stats((*i)->GetSpellProto()->EffectMiscValue[(*i)->GetEffIndex()]);
+            Stats usedStat = Stats((*i)->GetSpellProto()->GetEffectMiscValue((*i)->GetEffIndex()));
             AdvertisedBenefit += int32(CalculatePctN(GetStat(usedStat), (*i)->GetAmount()));
         }
 
@@ -11482,11 +11482,11 @@ bool Unit::IsImmunedToSpell(SpellEntry const* spellInfo)
     if (spellInfo->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
         return false;
 
-    if (spellInfo->Dispel)
+    if (spellInfo->GetDispel())
     {
         SpellImmuneList const& dispelList = m_spellImmune[IMMUNITY_DISPEL];
         for (SpellImmuneList::const_iterator itr = dispelList.begin(); itr != dispelList.end(); ++itr)
-            if (itr->type == spellInfo->Dispel)
+            if (itr->type == spellInfo->GetDispel())
                 return true;
     }
 
@@ -11502,7 +11502,7 @@ bool Unit::IsImmunedToSpell(SpellEntry const* spellInfo)
     {
         // State/effect immunities applied by aura expect full spell immunity
         // Ignore effects with mechanic, they are supposed to be checked separately
-        if (!spellInfo->EffectMechanic[i])
+        if (!spellInfo->GetEffectMechanic(i))
             if (IsImmunedToSpellEffect(spellInfo, i))
                 return true;
     }
@@ -11525,13 +11525,13 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
     if (!spellInfo)
         return false;
     // If m_immuneToEffect type contain this effect type, IMMUNE effect.
-    uint32 effect = spellInfo->Effect[index];
+    uint32 effect = spellInfo->GetSpellEffectIdByIndex(index);
     SpellImmuneList const& effectList = m_spellImmune[IMMUNITY_EFFECT];
     for (SpellImmuneList::const_iterator itr = effectList.begin(); itr != effectList.end(); ++itr)
         if (itr->type == effect)
             return true;
 
-    if (uint32 mechanic = spellInfo->EffectMechanic[index])
+    if (uint32 mechanic = spellInfo->GetEffectMechanic(index))
     {
         SpellImmuneList const& mechanicList = m_spellImmune[IMMUNITY_MECHANIC];
         for (SpellImmuneList::const_iterator itr = mechanicList.begin(); itr != mechanicList.end(); ++itr)
@@ -11539,7 +11539,7 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
                 return true;
     }
 
-    if (uint32 aura = spellInfo->EffectApplyAuraName[index])
+    if (uint32 aura = spellInfo->GetEffectApplyAuraName(index))
     {
         SpellImmuneList const& list = m_spellImmune[IMMUNITY_STATE];
         for (SpellImmuneList::const_iterator itr = list.begin(); itr != list.end(); ++itr)
@@ -11548,7 +11548,7 @@ bool Unit::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) con
         // Check for immune to application of harmful magical effects
         AuraEffectList const& immuneAuraApply = GetAuraEffectsByType(SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL);
         for (AuraEffectList::const_iterator iter = immuneAuraApply.begin(); iter != immuneAuraApply.end(); ++iter)
-            if (spellInfo->Dispel == DISPEL_MAGIC &&                                      // Magic debuff
+            if (spellInfo->GetDispel() == DISPEL_MAGIC &&                                      // Magic debuff
                 ((*iter)->GetMiscValue() & GetSpellSchoolMask(spellInfo)) &&  // Check school
                 !IsPositiveEffect(spellInfo->Id, index))                                  // Harmful
                 return true;
@@ -11633,7 +11633,7 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
         bool normalized = false;
         if (spellProto)
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                if (spellProto->Effect[i] == SPELL_EFFECT_NORMALIZED_WEAPON_DMG)
+                if (spellProto->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_NORMALIZED_WEAPON_DMG)
                 {
                     normalized = true;
                     break;
@@ -11663,15 +11663,15 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
         {
                 if ((*i)->GetMiscValue() & GetSpellSchoolMask(spellProto))
                 {
-                    if ((*i)->GetSpellProto()->EquippedItemClass == -1)
+                    if ((*i)->GetSpellEquipped()->EquippedItemClass == -1)
                     {
                         AddPctN(DoneTotalMod, (*i)->GetAmount());
                     }
                     else if (!((*i)->GetSpellProto()->AttributesEx5 & SPELL_ATTR5_SPECIAL_ITEM_CLASS_CHECK))
                     {
-                        if ((*i)->GetSpellProto()->EquippedItemClass & spellProto->EquippedItemClass)
-                            if (((*i)->GetSpellProto()->EquippedItemSubClassMask == 0) ||
-                                ((*i)->GetSpellProto()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
+                        if ((*i)->GetSpellEquipped()->EquippedItemClass & spellProto->EquippedItemClass)
+                            if (((*i)->GetSpellEquipped()->EquippedItemSubClassMask == 0) ||
+                                ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
                                 AddPctN(DoneTotalMod, (*i)->GetAmount());
                     }
                     else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellProto()))
