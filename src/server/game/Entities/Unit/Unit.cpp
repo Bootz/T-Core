@@ -8497,7 +8497,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                                 return false;
                             }
                             // percent stored in effect 1 (class scripts) base points
-                            int32 cost = int32(originalSpell->GetManaCost() + CalculatePctU(GetCreateMana(), originalSpell->ManaCostPercentage));
+                            int32 cost = int32(originalSpell->GetManaCost() + CalculatePctU(GetCreateMana(), originalSpell->GetManaCostPercentage()));
                             basepoints0 = CalculatePctN(cost, SpellMgr::CalculateSpellEffectAmount(auraSpellInfo, 1));
                             trigger_spell_id = 20272;
                             target = this;
