@@ -1,15 +1,12 @@
   ______________________________________________
  /   1.) Cleanup game folder. and cpp files.    |
 |    2.) Cleanup scripts.                       |
-|    3.) Write new Opcodes System.              |
-|    4.) Write new Spell System.                |
+|    3.) Write new Spell System.                |
  \_____________________________________________/
  /                                            /
-|    5.) Make Forum.                         /
-|    6.) Make Domain.                       |
  \__________________________________________|
  /                                           \
-|    7.) Start with updating the DB           \
+|    4.) Start with updating the DB           \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|
