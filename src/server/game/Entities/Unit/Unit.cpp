@@ -7907,7 +7907,7 @@ bool Unit::HandleModDamagePctTakenAuraProc(Unit *pVictim, uint32 /*damage*/, Aur
 bool Unit::HandleAuraProc(Unit* pVictim, uint32 damage, Aura * triggeredByAura, SpellEntry const* procSpell, uint32 /*procFlag*/, uint32 procEx, uint32 cooldown, bool * handled)
 {
     SpellEntry const* dummySpell = triggeredByAura->GetSpellProto();
-
+    SpellClassOptionsEntry const* procClass = NULL;
     switch(dummySpell->GetSpellFamilyName())
     {
         case SPELLFAMILY_GENERIC:
@@ -7960,7 +7960,7 @@ bool Unit::HandleAuraProc(Unit* pVictim, uint32 damage, Aura * triggeredByAura, 
                     }
                 }
                 // but should not proc on non-critical Holy Shocks
-                else if ((procSpell->SpellFamilyFlags[0] & 0x200000 || procSpell->SpellFamilyFlags[1] & 0x10000) && !(procEx & PROC_EX_CRITICAL_HIT))
+                else if ((procClass->SpellFamilyFlags[0] & 0x200000 || procClass->SpellFamilyFlags[1] & 0x10000) && !(procEx & PROC_EX_CRITICAL_HIT))
                     *handled = true;
                 break;
             }

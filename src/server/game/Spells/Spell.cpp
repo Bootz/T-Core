@@ -5973,9 +5973,9 @@ SpellCastResult Spell::CheckItems()
         uint32 totems = 2;
         for (int i = 0; i < 2 ; ++i)
         {
-            if (m_spellInfo->GetSpellEffectIdByIndex(i) != 0)
+            if (m_spellTotems->Totem[i] != 0)
             {
-                if (p_caster->HasItemCount(m_spellInfo->Totem[i], 1))
+                if (p_caster->HasItemCount(m_spellTotems->Totem[i], 1))
                 {
                     totems -= 1;
                     continue;
@@ -5990,9 +5990,9 @@ SpellCastResult Spell::CheckItems()
         uint32 TotemCategory = 2;
         for (int i= 0; i < 2; ++i)
         {
-            if (m_spellInfo->TotemCategory[i] != 0)
+            if (m_spellTotems->TotemCategory[i] != 0)
             {
-                if (p_caster->HasItemTotemCategory(m_spellInfo->TotemCategory[i]))
+                if (p_caster->HasItemTotemCategory(m_spellTotems->TotemCategory[i]))
                 {
                     TotemCategory -= 1;
                     continue;
@@ -6524,7 +6524,7 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
         return true;
 
     //Check targets for LOS visibility (except spells without range limitations)
-    switch(m_spellInfo->Effect[eff])
+    switch(m_spellInfo->GetSpellEffectIdByIndex(eff))
     {
         case SPELL_EFFECT_SUMMON_PLAYER:                    // from anywhere
             break;
@@ -6795,7 +6795,7 @@ void Spell::CalculateDamageDoneForAllTargets()
             {
                 if (!(mask & 1<<i))
                     continue;
-                switch (m_spellInfo->Effect[i])
+                switch (m_spellInfo->GetSpellEffectIdByIndex(i))
                 {
                     case SPELL_EFFECT_SCHOOL_DAMAGE:
                     case SPELL_EFFECT_WEAPON_DAMAGE:
