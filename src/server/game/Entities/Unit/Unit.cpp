@@ -6455,7 +6455,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                 bool isWrathSpell = (dummyClass->SpellFamilyFlags[0] & 1);
 
-                if (!roll_chance_f(dummySpell->procChance * (isWrathSpell ? 0.6f : 1.0f)))
+                if (!roll_chance_f(dummySpell->GetProcChance() * (isWrathSpell ? 0.6f : 1.0f)))
                     return false;
 
                 target = this;
@@ -6906,7 +6906,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                         chance = 15.0f;
                     }
                     // Judgement (any)
-                    else if (GetSpellSpecific(procSpell) == SPELL_SPECIFIC_JUDGEMENT)
+                    else if (GetSpellSpecific(procSpell, 0) == SPELL_SPECIFIC_JUDGEMENT)
                     {
                         triggered_spell_id = 40472;
                         chance = 50.0f;
@@ -7146,17 +7146,17 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                         return false;
 
                     float chance;
-                    if (procSpell->SpellFamilyFlags[0] & 0x1)
+                    if (dummyClass->SpellFamilyFlags[0] & 0x1)
                     {
                         triggered_spell_id = 40465;         // Lightning Bolt
                         chance = 15.0f;
                     }
-                    else if (procSpell->SpellFamilyFlags[0] & 0x80)
+                    else if (dummyClass->SpellFamilyFlags[0] & 0x80)
                     {
                         triggered_spell_id = 40465;         // Lesser Healing Wave
                         chance = 10.0f;
                     }
-                    else if (procSpell->SpellFamilyFlags[1] & 0x00000010)
+                    else if (dummyClass->SpellFamilyFlags[1] & 0x00000010)
                     {
                         triggered_spell_id = 40466;         // Stormstrike
                         chance = 50.0f;
@@ -7203,7 +7203,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 67228:
                 {
                     // Lava Burst
-                    if (procSpell->SpellFamilyFlags[1] & 0x1000)
+                    if (dummyClass->SpellFamilyFlags[1] & 0x1000)
                     {
                         triggered_spell_id = 71824;
                         SpellEntry const* triggeredSpell = sSpellStore.LookupEntry(triggered_spell_id);
@@ -7217,7 +7217,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 70808:
                 {
                     // Chain Heal
-                    if ((procSpell->SpellFamilyFlags[0] & 0x100) && (procEx & PROC_EX_CRITICAL_HIT))
+                    if ((dummyClass->SpellFamilyFlags[0] & 0x100) && (procEx & PROC_EX_CRITICAL_HIT))
                     {
                         triggered_spell_id = 70809;
                         SpellEntry const* triggeredSpell = sSpellStore.LookupEntry(triggered_spell_id);
@@ -7231,7 +7231,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 70811:
                 {
                     // Lightning Bolt & Chain Lightning
-                    if (procSpell->SpellFamilyFlags[0] & 0x3)
+                    if (dummyClass->SpellFamilyFlags[0] & 0x3)
                     {
                         if (ToPlayer()->HasSpellCooldown(16166))
                         {
@@ -7393,7 +7393,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Water Shield
                 if (AuraEffect const* aurEff = GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_SHAMAN, 0, 0x00000020, 0))
                 {
-                    uint32 spell = aurEff->GetSpellProto()->EffectTriggerSpell[aurEff->GetEffIndex()];
+                    uint32 spell = aurEff->GetSpellProto()->GetEffectTriggerSpell(aurEff->GetEffIndex());
                     CastSpell(this, spell, true, castItem, triggeredByAura);
                     return true;
                 }
@@ -7443,18 +7443,18 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 }
 
                 // Chain Lightning
-                if (procSpell->SpellFamilyFlags[0] & 0x2)
-                {
-                    // Chain lightning has [LightOverload_Proc_Chance] / [Max_Number_of_Targets] chance to proc of each individual target hit.
-                    // A maxed LO would have a 33% / 3 = 11% chance to proc of each target.
-                    // LO chance was already "accounted" at the proc chance roll, now need to divide the chance by [Max_Number_of_Targets]
-                    float chance = 100.0f / procSpell->EffectChainTarget[effIndex];
-                    if (!roll_chance_f(chance))
-                        return false;
+                //if (procSpell->SpellFamilyFlags[0] & 0x2)
+                //{
+                //    // Chain lightning has [LightOverload_Proc_Chance] / [Max_Number_of_Targets] chance to proc of each individual target hit.
+                //    // A maxed LO would have a 33% / 3 = 11% chance to proc of each target.
+                //    // LO chance was already "accounted" at the proc chance roll, now need to divide the chance by [Max_Number_of_Targets]
+                //    float chance = 100.0f / procSpell->EffectChainTarget[effIndex];
+                //    if (!roll_chance_f(chance))
+                //        return false;
 
-                    // Remove cooldown (Chain Lightning - have GetCategory() Recovery time)
-                    ToPlayer()->RemoveSpellCooldown(spellId);
-                }
+                //    // Remove cooldown (Chain Lightning - have GetCategory() Recovery time)
+                //    ToPlayer()->RemoveSpellCooldown(spellId);
+                //}
 
                 CastSpell(pVictim, spellId, true, castItem, triggeredByAura);
 
@@ -7752,7 +7752,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
     // if not handled by custom case, get triggered spell from dummySpell proto
     if (!triggered_spell_id)
-        triggered_spell_id = dummySpell->EffectTriggerSpell[triggeredByAura->GetEffIndex()];
+        triggered_spell_id = dummySpell->GetEffectTriggerSpell(triggeredByAura->GetEffIndex());
 
     // processed charge only counting case
     if (!triggered_spell_id)
