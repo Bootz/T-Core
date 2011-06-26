@@ -10330,7 +10330,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                             ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
                             AddPctN(DoneTotalMod, (*i)->GetAmount());
                 }
-                else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellProto()))
+                else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellEquipped()))
                     AddPctN(DoneTotalMod, (*i)->GetAmount());
             }
     }
