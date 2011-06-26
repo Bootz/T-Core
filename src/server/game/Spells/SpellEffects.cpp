@@ -7071,7 +7071,7 @@ void Spell::EffectBind(SpellEffIndex effIndex)
 
     uint32 area_id;
     WorldLocation loc;
-    if (m_spellInfo->EffectImplicitTargetAeffIndex] == TARGET_DST_DB || m_spellInfo->EffectImplicitTargetB[effIndex] == TARGET_DST_DB)
+    if (m_spellInfo->GetEffectImplicitTargetAByIndex(effIndex) == TARGET_DST_DB || m_spellInfo->GetEffectImplicitTargetBByIndex(effIndex) == TARGET_DST_DB)
     {
         SpellTargetPosition const* st = sSpellMgr->GetSpellTargetPosition(m_spellInfo->Id);
         if (!st)
