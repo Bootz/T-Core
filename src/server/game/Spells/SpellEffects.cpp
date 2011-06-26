@@ -6018,7 +6018,7 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
             return;
 
     // Typhoon
-    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellInfo->SpellFamilyFlags[1] & 0x01000000)
+    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellClass->SpellFamilyFlags[1] & 0x01000000)
     {
         // Glyph of Typhoon
         if (m_caster->HasAura(62135))
@@ -6026,7 +6026,7 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
     }
 
     // Thunderstorm
-    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellInfo->SpellFamilyFlags[1] & 0x00002000)
+    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellClass->SpellFamilyFlags[1] & 0x00002000)
     {
         // Glyph of Thunderstorm
         if (m_caster->HasAura(62132))
@@ -6042,13 +6042,13 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
         ratio = ratio * ratio * ratio * 0.1f; // volume = length^3
     else
         ratio = 0.1f; // dbc value ratio
-    float speedxy = float(m_spellInfo->EffectMiscValue[effIndex]) * ratio;
+    float speedxy = float(m_spellInfo->GetEffectMiscValue(effIndex)) * ratio;
     float speedz = float(damage) * ratio;
     if (speedxy < 0.1f && speedz < 0.1f)
         return;
 
     float x, y;
-    if (m_spellInfo->Effect[effIndex] == SPELL_EFFECT_KNOCK_BACK_DEST)
+    if (m_spellInfo->GetSpellEffectIdByIndex(effIndex) == SPELL_EFFECT_KNOCK_BACK_DEST)
     {
         if (m_targets.HasDst())
             m_targets.m_dstPos.GetPosition(x, y);
@@ -6065,7 +6065,7 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
 
 void Spell::EffectLeapBack(SpellEffIndex effIndex)
 {
-    float speedxy = float(m_spellInfo->EffectMiscValue[effIndex])/10;
+    float speedxy = float(m_spellInfo->GetEffectMiscValue(effIndex)) / 10;
     float speedz = float(damage/10);
     if (!speedxy)
     {
