@@ -529,7 +529,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                         damage += int32(CalculatePctU(pdamage * baseTotalTicks, pct_dir));
 
                         uint32 pct_dot = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, (effIndex + 2)) / 3;
-                        m_spellValue->EffectBasePoints[1] = SpellMgr::CalculateSpellEffectBaseAmount(int32(CalculatePctU(pdamage * baseTotalTicks, pct_dot)), m_spellInfo, 1);
+                        m_spellValue->EffectBasePoints[1] = SpellMgr::CalculateSpellEffectBaseAmount(int32(CalculatePctU(pdamage * baseTotalTicks, pct_dot)), m_spellEffect, 1);
 
                         apply_direct_bonus = false;
                         // Glyph of Conflagrate
@@ -1562,7 +1562,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
 void Spell::EffectTriggerSpellWithValue(SpellEffIndex effIndex)
 {
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
 
     // normal case
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
@@ -1581,7 +1581,7 @@ void Spell::EffectTriggerSpellWithValue(SpellEffIndex effIndex)
 
 void Spell::EffectTriggerRitualOfSummoning(SpellEffIndex effIndex)
 {
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
@@ -1600,7 +1600,7 @@ void Spell::EffectForceCast(SpellEffIndex effIndex)
     if (!unitTarget)
         return;
 
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
 
     // normal case
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
@@ -1643,7 +1643,7 @@ void Spell::EffectForceCastWithValue(SpellEffIndex effIndex)
     if (!unitTarget)
         return;
 
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
 
     // normal case
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
@@ -1669,7 +1669,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
         return;
     }
 
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
     Unit* originalCaster = NULL;
 
     // special cases
@@ -1728,7 +1728,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
             if (!spell)
                 return;
 
-            for (uint32 j = 0; j < spell->StackAmount; ++j)
+            for (uint32 j = 0; j < spell->GetStackAmount(); ++j)
                 m_caster->CastSpell(unitTarget, spell->Id, true);
             return;
         }
@@ -1740,7 +1740,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
             if (!spell)
                 return;
 
-            for (uint32 j = 0; j < spell->StackAmount; ++j)
+            for (uint32 j = 0; j < spell->GetStackAmount(); ++j)
                 m_caster->CastSpell(unitTarget, spell->Id, true);
             return;
         }
@@ -1760,7 +1760,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
                 // remove all harmful spells on you...
                 SpellEntry const* spell = iter->second->GetBase()->GetSpellProto();
                 if ((spell->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC // only affect magic spells
-                    || ((1<<spell->Dispel) & dispelMask))
+                    || ((1<<spell->GetDispel()) & dispelMask))
                     // ignore positive and passive auras
                     && !iter->second->IsPositive() && !iter->second->GetBase()->IsPassive())
                 {
@@ -1813,7 +1813,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
 
 void Spell::EffectTriggerMissileSpell(SpellEffIndex effIndex)
 {
-    uint32 triggered_spell_id = m_spellInfo->EffectTriggerSpell[effIndex];
+    uint32 triggered_spell_id = m_spellInfo->GetEffectTriggerSpell(effIndex);
 
     // normal case
     SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
@@ -5716,10 +5716,10 @@ void Spell::EffectDismissPet(SpellEffIndex effIndex)
 
 void Spell::EffectSummonObject(SpellEffIndex effIndex)
 {
-    uint32 go_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 go_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     uint8 slot = 0;
-    switch(m_spellInfo->Effect[effIndex])
+    switch(m_spellInfo->GetSpellEffectIdByIndex(effIndex))
     {
         case SPELL_EFFECT_SUMMON_OBJECT_SLOT1: slot = 0; break;
         case SPELL_EFFECT_SUMMON_OBJECT_SLOT2: slot = 1; break;
@@ -5876,7 +5876,7 @@ void Spell::EffectReputation(SpellEffIndex effIndex)
 
     int32  rep_change = damage;//+1;           // field store reputation change -1
 
-    uint32 faction_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 faction_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction_id);
 
@@ -5901,7 +5901,7 @@ void Spell::EffectQuestComplete(SpellEffIndex effIndex)
     else
         return;
 
-    uint32 questId = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 questId = m_spellInfo->GetEffectMiscValue(effIndex);
     if (questId)
     {
         Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
@@ -5939,7 +5939,7 @@ void Spell::EffectSelfResurrect(SpellEffIndex effIndex)
     if (damage < 0)
     {
         health = uint32(-damage);
-        mana = m_spellInfo->EffectMiscValue[effIndex];
+        mana = m_spellInfo->GetEffectMiscValue(effIndex);
     }
     // percent case
     else
@@ -6090,7 +6090,7 @@ void Spell::EffectQuestClear(SpellEffIndex effIndex)
     if (!pPlayer)
         return;
 
-    uint32 quest_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 quest_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
 

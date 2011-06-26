@@ -6185,13 +6185,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     int EffIndex = 0;
                     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
                     {
-                        if (GoPoH->Effect[i] == SPELL_EFFECT_APPLY_AURA)
+                        if (GoPoH->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_APPLY_AURA)
                         {
                             EffIndex = i;
                             break;
                         }
                     }
-                    int32 tickcount = GetSpellMaxDuration(GoPoH) / GoPoH->EffectAmplitude[EffIndex];
+                    int32 tickcount = GetSpellMaxDuration(GoPoH) / GoPoH->GetEffectAmplitude(EffIndex);
                     if (!tickcount)
                         return false;
 

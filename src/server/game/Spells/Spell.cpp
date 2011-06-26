@@ -5893,25 +5893,25 @@ SpellCastResult Spell::CheckItems()
         if (!m_targets.getItemTarget())
             return SPELL_FAILED_ITEM_GONE;
 
-        if (!m_targets.getItemTarget()->IsFitToSpellRequirements(m_spellInfo))
+        if (!m_targets.getItemTarget()->IsFitToSpellRequirements(m_spellEquipped))
             return SPELL_FAILED_EQUIPPED_ITEM_CLASS;
     }
     // if not item target then required item must be equipped
     else
     {
-        if (m_caster->GetTypeId() == TYPEID_PLAYER && !m_caster->ToPlayer()->HasItemFitToSpellRequirements(m_spellInfo))
+        if (m_caster->GetTypeId() == TYPEID_PLAYER && !m_caster->ToPlayer()->HasItemFitToSpellRequirements(m_spellEquipped))
             return SPELL_FAILED_EQUIPPED_ITEM_CLASS;
     }
 
     // check spell focus object
-    if (m_spellInfo->RequiresSpellFocus)
+    if (m_spellInfo->GetRequiresSpellFocus())
     {
         CellPair p(Trillium::ComputeCellPair(m_caster->GetPositionX(), m_caster->GetPositionY()));
         Cell cell(p);
         cell.data.Part.reserved = ALL_DISTRICT;
 
         GameObject* ok = NULL;
-        Trillium::GameObjectFocusCheck go_check(m_caster, m_spellInfo->RequiresSpellFocus);
+        Trillium::GameObjectFocusCheck go_check(m_caster, m_spellInfo->GetRequiresSpellFocus());
         Trillium::GameObjectSearcher<Trillium::GameObjectFocusCheck> checker(m_caster, ok, go_check);
 
         TypeContainerVisitor<Trillium::GameObjectSearcher<Trillium::GameObjectFocusCheck>, GridTypeMapContainer > object_checker(checker);
