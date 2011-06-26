@@ -6465,9 +6465,9 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
     }
 
     // Check Aura spell req (need for AoE spells)
-    if (m_spellInfo->targetAuraSpell && !target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellInfo->targetAuraSpell, m_caster)))
+    if (m_spellRestrictions->targetAuraSpell && !target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellRestrictions->targetAuraSpell, m_caster)))
         return false;
-    if (m_spellInfo->excludeTargetAuraSpell && target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellInfo->excludeTargetAuraSpell, m_caster)))
+    if (m_spellRestrictions->excludeTargetAuraSpell && target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellRestrictions->excludeTargetAuraSpell, m_caster)))
         return false;
 
     // Check targets for not_selectable unit flag and remove

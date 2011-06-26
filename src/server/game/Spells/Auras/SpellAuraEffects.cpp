@@ -6249,7 +6249,7 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     caster->ProcDamageAndSpell(target, procAttacker, procVictim, procEx, damage, BASE_ATTACK, GetSpellProto());
     int32 new_damage = caster->DealDamage(target, damage, &cleanDamage, DOT, GetSpellSchoolMask(GetSpellProto()), GetSpellProto(), false);
 
-    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellProto(), GetEffIndex(), caster);
+    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellEffect(), GetEffIndex(), caster);
 
     uint32 heal = uint32(caster->SpellHealingBonus(caster, GetSpellProto(), uint32(new_damage * gainMultiplier), DOT, GetBase()->GetStackAmount()));
 
@@ -6278,7 +6278,7 @@ void AuraEffect::HandlePeriodicHealthFunnelAuraTick(Unit* target, Unit* caster) 
     caster->ModifyHealth(-(int32)damage);
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "PeriodicTick: donator %u target %u damage %u.", caster->GetEntry(), target->GetEntry(), damage);
 
-    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellProto(), GetEffIndex(), caster);
+    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellEffect(), GetEffIndex(), caster);
 
     damage = int32(damage * gainMultiplier);
 
@@ -6439,7 +6439,7 @@ void AuraEffect::HandlePeriodicManaLeechAuraTick(Unit* target, Unit* caster) con
 
     int32 drainedAmount = target->ModifyPower(powerType, -drainAmount);
 
-    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellProto(), GetEffIndex(), caster);
+    float gainMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellEffect(), GetEffIndex(), caster);
 
     SpellPeriodicAuraLogInfo pInfo(this, drainedAmount, 0, 0, 0, gainMultiplier, false);
     target->SendPeriodicAuraLog(&pInfo);
@@ -6581,7 +6581,7 @@ void AuraEffect::HandlePeriodicPowerBurnManaAuraTick(Unit* target, Unit* caster)
 
     uint32 gain = uint32(-target->ModifyPower(powerType, -damage));
 
-    float dmgMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellProto(), GetEffIndex(), caster);
+    float dmgMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(GetSpellEffect(), GetEffIndex(), caster);
 
     SpellEntry const* spellProto = GetSpellProto();
     // maybe has to be sent different to client, but not by SMSG_PERIODICAURALOG
