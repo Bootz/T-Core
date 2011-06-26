@@ -5845,9 +5845,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     // Todo: Check if this amount is blizzlike
                     vehicleBase->ModifyHealth(int32(vehicleBase->CountPctFromMaxHealth(1)));
-
-                    // Despawns the scrapbot
-                    ToCreature()->DespawnOrUnsummon();
                     break;
                 }
             }
@@ -8141,7 +8138,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
     int32 triggerAmount = triggeredByAura->GetAmount();
 
     // Set trigger spell id, target, custom basepoints
-    uint32 trigger_spell_id = auraSpellInfo->EffectTriggerSpell[triggeredByAura->GetEffIndex()];
+    uint32 trigger_spell_id = auraSpellInfo->GetEffectTriggerSpell(triggeredByAura->GetEffIndex());
 
     Unit*  target = NULL;
     int32  basepoints0 = 0;
@@ -8371,7 +8368,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                     if (!TriggerPS)
                         return false;
 
-                    basepoints0 = CalculatePctN(int32(damage), triggerAmount) / (GetSpellMaxDuration(TriggerPS) / TriggerPS->EffectAmplitude[0]);
+                    basepoints0 = CalculatePctN(int32(damage), triggerAmount) / (GetSpellMaxDuration(TriggerPS) / TriggerPS->GetEffectAmplitude(0));
                     basepoints0 += pVictim->GetRemainingPeriodicAmount(GetGUID(), trigger_spell_id, SPELL_AURA_PERIODIC_DAMAGE);
                     break;
                 }
@@ -8477,7 +8474,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                             // procspell is triggered spell but we need mana cost of original casted spell
                             uint32 originalSpellId = procSpell->Id;
                             // Holy Shock heal
-                            if (procSpell->SpellFamilyFlags[1] & 0x00010000)
+                            if (ummyClass->SpellFamilyFlags[1] & 0x00010000)
                             {
                                 switch(procSpell->Id)
                                 {

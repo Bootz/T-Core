@@ -401,7 +401,7 @@ void SpellCastTargets::write (ByteBuffer & data)
 }
 
 Spell::Spell(Unit* Caster, SpellEntry const *info, bool triggered, uint64 originalCasterGUID, bool skipCheck):
-m_spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(info, Caster)), m_spellEffect(), m_spellRestrictions(),
+m_spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(info, Caster)), m_spellEffect(), m_spellRestrictions(), m_spellReagent(),
 m_spellClass(), m_spellTarget(), m_spellEquipped(), m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
 {
     m_customAttr = sSpellMgr->GetSpellCustomAttr(m_spellInfo->Id);
@@ -1360,14 +1360,16 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask, bool 
         if (m_spellInfo->speed > 0.0f && unit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) && unit->GetCharmerOrOwnerGUID() != m_caster->GetGUID())
             return SPELL_MISS_EVADE;
 
-        if (!m_caster->IsFriendlyTo(unit))
+        // check for IsHostileTo() instead of !IsFriendlyTo()
+        // ex: spell 47463 needs to be casted by different units on the same neutral target
+        if (m_caster->IsHostileTo(unit))
         {
             unit->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_HITBYSPELL);
             //TODO: This is a hack. But we do not know what types of stealth should be interrupted by CC
             if ((m_customAttr & SPELL_ATTR0_CU_AURA_CC) && unit->IsControlledByPlayer())
                 unit->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
         }
-        else
+        else if (m_caster->IsFriendlyTo(unit))
         {
             // for delayed spells ignore negative spells (after duel end) for friendly targets
             // TODO: this cause soul transfer bugged
@@ -5840,10 +5842,10 @@ SpellCastResult Spell::CheckItems()
             for (int i = 0; i < MAX_SPELL_EFFECTS; i++)
             {
                     // skip check, pet not required like checks, and for TARGET_UNIT_PET m_targets.getUnitTarget() is not the real target but the caster
-                    if (m_spellInfo->EffectImplicitTargetA[i] == TARGET_UNIT_PET)
+                    if (m_spellInfo->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_PET)
                     continue;
 
-                if (m_spellInfo->Effect[i] == SPELL_EFFECT_HEAL)
+                if (m_spellInfo->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_HEAL)
                 {
                     if (m_targets.getUnitTarget()->IsFullHealth())
                     {
@@ -5858,7 +5860,7 @@ SpellCastResult Spell::CheckItems()
                 }
 
                 // Mana Potion, Rage Potion, Thistle Tea(Rogue), ...
-                if (m_spellInfo->Effect[i] == SPELL_EFFECT_ENERGIZE)
+                if (m_spellInfo->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_ENERGIZE)
                 {
                     if (m_spellInfo->GetEffectMiscValue(i) < 0 || m_spellInfo->GetEffectMiscValue(i) >= int8(MAX_POWERS))
                     {
@@ -5939,11 +5941,11 @@ SpellCastResult Spell::CheckItems()
         {
             for (uint32 i = 0; i < MAX_SPELL_REAGENTS; i++)
             {
-                if (m_spellInfo->Reagent[i] <= 0)
+                if (m_spellReagent->Reagent[i] <= 0)
                     continue;
 
-                uint32 itemid    = m_spellInfo->Reagent[i];
-                uint32 itemcount = m_spellInfo->ReagentCount[i];
+                uint32 itemid    = m_spellReagent->Reagent[i];
+                uint32 itemcount = m_spellReagent->ReagentCount[i];
 
                 // if CastItem is also spell reagent
                 if (m_CastItem && m_CastItem->GetEntry() == itemid)
@@ -6006,7 +6008,7 @@ SpellCastResult Spell::CheckItems()
     // special checks for spell effects
     for (int i = 0; i < MAX_SPELL_EFFECTS; i++)
     {
-        switch (m_spellInfo->Effect[i])
+        switch (m_spellInfo->GetSpellEffectIdByIndex(i))
         {
             case SPELL_EFFECT_CREATE_ITEM:
             case SPELL_EFFECT_CREATE_ITEM_2:
@@ -6496,7 +6498,7 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
             return false;
     }
 
-    switch(m_spellInfo->EffectApplyAuraName[eff])
+    switch(m_spellInfo->GetEffectApplyAuraName(eff))
     {
         case SPELL_AURA_NONE:
         default:
