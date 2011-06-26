@@ -2234,7 +2234,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
             for (Unit::AuraEffectList::const_iterator i = RejorRegr.begin(); i != RejorRegr.end(); ++i)
             {
                 if ((*i)->GetSpellProto()->GetSpellFamilyName() == SPELLFAMILY_DRUID
-                    && (*i)->GetSpellProto()->SpellFamilyFlags[0] & 0x50)
+                    && (*i)->GetSpellClass()->SpellFamilyFlags[0] & 0x50)
                 {
                     if (!targetAura || (*i)->GetBase()->GetDuration() < targetAura->GetBase()->GetDuration())
                         targetAura = *i;
@@ -2255,7 +2255,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
 
             int32 tickcount = 0;
             // Rejuvenation
-            if (targetAura->GetSpellProto()->SpellFamilyFlags[0] & 0x10)
+            if (targetAura->GetSpellClass()->SpellFamilyFlags[0] & 0x10)
                 tickcount = 4;
             // Regrowth
             else // if (targetAura->GetSpellProto()->SpellFamilyFlags[0] & 0x40)
@@ -2271,7 +2271,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
             //addhealth = caster->SpellHealingBonus(m_spellInfo, addhealth, HEAL, unitTarget);
         }
         // Glyph of Nourish
-        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellInfo->SpellFamilyFlags[1] & 0x2000000)
+        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellClass->SpellFamilyFlags[1] & 0x2000000)
         {
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL);
 
@@ -2289,7 +2289,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
         else if (m_spellInfo->Id == 33778)
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL, m_spellValue->EffectBasePoints[1]);
         // Riptide - increase healing done by Chain Heal
-        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellInfo->SpellFamilyFlags[0] & 0x100)
+        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellClass->SpellFamilyFlags[0] & 0x100)
         {
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL);
             if (AuraEffect * aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_HEAL, SPELLFAMILY_SHAMAN, 0, 0, 0x10, m_originalCasterGUID))
@@ -2300,7 +2300,7 @@ void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
             }
         }
         // Death Pact - return pct of max health to caster
-        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && m_spellInfo->SpellFamilyFlags[0] & 0x00080000)
+        else if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && m_spellClass->SpellFamilyFlags[0] & 0x00080000)
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
         else
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL);
@@ -2350,7 +2350,7 @@ void Spell::EffectHealthLeech(SpellEffIndex effIndex)
 
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "HealthLeech :%i", damage);
 
-    float healMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellInfo, effIndex, m_originalCaster, this);
+    float healMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(m_spellEffect, effIndex, m_originalCaster, this);
 
     m_damage += damage;
     // get max possible damage, don't count overkill for heal
@@ -2996,7 +2996,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
 
     TempSummon *summon = NULL;
 
-    switch (properties->GetCategory())
+    switch (properties->Category)
     {
         case SUMMON_CATEGORY_WILD:
         case SUMMON_CATEGORY_ALLY:
@@ -3170,9 +3170,9 @@ void Spell::EffectDispel(SpellEffIndex effIndex)
         if (aura->IsPassive())
             continue;
 
-        if ((1<<aura->GetSpellProto()->Dispel) & dispelMask)
+        if ((1<<aura->GetSpellProto()->GetDispel()) & dispelMask)
         {
-            if (aura->GetSpellProto()->Dispel == DISPEL_MAGIC)
+            if (aura->GetSpellProto()->GetDispel() == DISPEL_MAGIC)
             {
                 bool positive = aurApp->IsPositive() ? (!(aura->GetSpellProto()->AttributesEx & SPELL_ATTR1_NEGATIVE)) : false;
 
@@ -3454,7 +3454,7 @@ void Spell::EffectEnchantItemPerm(SpellEffIndex effIndex)
         p_caster->DestroyItemCount(itemTarget, count, true);
         unitTarget=p_caster;
         // and add a scroll
-        DoCreateItem(effIndex, m_spellInfo->EffectItemType[effIndex]);
+        DoCreateItem(effIndex, m_spellInfo->GetEffectItemType(effIndex));
         itemTarget=NULL;
         m_targets.setItemTarget(NULL);
     }
@@ -3567,7 +3567,7 @@ void Spell::EffectEnchantItemTmp(SpellEffIndex effIndex)
     // Rockbiter Weapon apply to both weapon
     if (!itemTarget)
     return;
-    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellInfo->SpellFamilyFlags[0] & 0x400000)
+    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_SHAMAN && m_spellClass->SpellFamilyFlags[0] & 0x400000)
     {
         uint32 spell_id = 0;
 
