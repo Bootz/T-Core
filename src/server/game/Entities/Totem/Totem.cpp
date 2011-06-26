@@ -139,7 +139,7 @@ bool Totem::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) co
     if (GetEntry() == 5925)
         return false;
 
-    switch (spellInfo->EffectApplyAuraName[index])
+    switch (spellInfo->GetEffectApplyAuraName(index))
     {
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_LEECH:

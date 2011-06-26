@@ -94,7 +94,10 @@ class Aura
         virtual ~Aura();
 
         SpellEntry const* GetSpellProto() const { return m_spellProto; }
-        uint32 GetId() const{ return GetSpellProto()->Id; }
+        SpellClassOptionsEntry const* GetSpellClass() const { return m_spellClass; }
+        SpellEquippedItemsEntry const* GetSpellEquipped() const { return m_spellEquipped; }
+        uint32 GetId() const { return GetSpellProto()->Id; }
+        uint32 GetClassId() const { return GetSpellClass()->Id; }
 
         uint64 GetCastItemGUID() const { return m_castItemGuid; }
         uint64 const& GetCasterGUID() const { return m_casterGuid; }
@@ -147,7 +150,7 @@ class Aura
 
         bool IsPassive() const;
         bool IsDeathPersistent() const;
-        bool IsRemovedOnShapeLost(Unit* target) const { return (GetCasterGUID() == target->GetGUID() && m_spellProto->Stances && !(m_spellProto->AttributesEx2 & SPELL_ATTR2_NOT_NEED_SHAPESHIFT) && !(m_spellProto->Attributes & SPELL_ATTR0_NOT_SHAPESHIFT)); }
+        bool IsRemovedOnShapeLost(Unit* target) const { return (GetCasterGUID() == target->GetGUID() && m_spellProto->GetStances() && !(m_spellProto->AttributesEx2 & SPELL_ATTR2_NOT_NEED_SHAPESHIFT) && !(m_spellProto->Attributes & SPELL_ATTR0_NOT_SHAPESHIFT)); }
         bool CanBeSaved() const;
         bool IsRemoved() const { return m_isRemoved; }
         bool CanBeSentToClient() const;
@@ -199,6 +202,9 @@ class Aura
         void _DeleteRemovedApplications();
     protected:
         SpellEntry const* const m_spellProto;
+        SpellClassOptionsEntry const* const m_spellClass;
+        SpellEquippedItemsEntry const* const m_spellEquipped;
+        SpellPowerEntry const* const m_spellPower;
         uint64 const m_casterGuid;
         uint64 const m_castItemGuid;                        // it is NOT safe to keep a pointer to the item because it may get deleted
         time_t const m_applyTime;

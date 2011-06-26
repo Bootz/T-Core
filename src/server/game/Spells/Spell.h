@@ -243,8 +243,8 @@ struct SpellValue
     explicit SpellValue(SpellEntry const* proto)
     {
         for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-            EffectBasePoints[i] = proto->EffectBasePoints[i];
-        MaxAffectedTargets = proto->MaxAffectedTargets;
+            EffectBasePoints[i] = proto->GetEffectBasePoints(i);
+        MaxAffectedTargets = proto->GetMaxAffectedTargets();
         RadiusMod = 1.0f;
         AuraStackAmount = 1;
     }
@@ -499,6 +499,11 @@ class Spell
         void HandleThreatSpells(uint32 spellId);
 
         const SpellEntry * const m_spellInfo;
+        const SpellEffectEntry * const m_spellEffect;
+        const SpellAuraRestrictionsEntry * const m_spellRestrictions;
+        const SpellClassOptionsEntry * const m_spellClass;
+        const SpellTargetRestrictionsEntry * const m_spellTarget;
+        const SpellEquippedItemsEntry * const m_spellEquipped;
         Item* m_CastItem;
         uint64 m_castItemGUID;
         uint8 m_cast_count;
@@ -520,7 +525,7 @@ class Spell
         }
         bool IsTriggered() const {return m_IsTriggeredSpell;};
         bool IsChannelActive() const { return m_caster->GetUInt32Value(UNIT_CHANNEL_SPELL) != 0; }
-        bool IsAutoActionResetSpell() const { return !m_IsTriggeredSpell && (m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_AUTOATTACK);  }
+        bool IsAutoActionResetSpell() const { return !m_IsTriggeredSpell && (m_spellInfo->GetInterruptFlags() & SPELL_INTERRUPT_FLAG_AUTOATTACK);  }
 
         bool IsDeletable() const { return !m_referencedFromCurrentSpell && !m_executedCurrently; }
         void SetReferencedFromCurrent(bool yes) { m_referencedFromCurrentSpell = yes; }
@@ -537,6 +542,7 @@ class Spell
         Unit* GetCaster() const { return m_caster; }
         Unit* GetOriginalCaster() const { return m_originalCaster; }
         SpellEntry const* GetSpellInfo() const { return m_spellInfo; }
+        SpellAuraRestrictionsEntry const* GetSpellAura() { return m_spellRestrictions; }
         int32 GetPowerCost() const { return m_powerCost; }
 
         void UpdatePointers();                              // must be used at call Spell code after time delay (non triggered spell cast/update spell call/etc)

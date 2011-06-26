@@ -172,7 +172,7 @@ class spell_rog_preparation : public SpellScriptLoader
                 const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
                 for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                 {
-                    SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                    SpellClassOptionsEntry const *spellInfo = sSpellClassOptionsStore.LookupEntry(itr->first);
 
                     if (spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE)
                     {
@@ -358,12 +358,12 @@ class spell_rog_deadly_poison : public SpellScriptLoader
                         }
 
                         // Proc only rogue poisons
-                        if (spellInfo->SpellFamilyName != SPELLFAMILY_ROGUE || spellInfo->Dispel != DISPEL_POISON)
+                        if (spellInfo->GetSpellFamilyName() != SPELLFAMILY_ROGUE || spellInfo->GetDispel() != DISPEL_POISON)
                             continue;
 
-                        // Do not reproc deadly
-                        if (spellInfo->SpellFamilyFlags.IsEqual(0x10000, 0x80000, 0))
-                            continue;
+                        //// Do not reproc deadly
+                        //if (spellInfo->SpellFamilyFlags.IsEqual(0x10000, 0x80000, 0))
+                        //    continue;
 
                         if (IsPositiveSpell(enchant->spellid[s]))
                             player->CastSpell(player, enchant->spellid[s], true, item);

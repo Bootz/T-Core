@@ -30,6 +30,7 @@
 #define CAST_AI(a, b)   (dynamic_cast<a*>(b))
 
 #define GET_SPELL(a)    (const_cast<SpellEntry*>(GetSpellStore()->LookupEntry(a)))
+#define GET_SPELL_EFFECT(a) (const_cast<SpellEffectEntry*>(GetSpellEffectStore()->LookupEntry(a)))
 
 class InstanceScript;
 

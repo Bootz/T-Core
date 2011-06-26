@@ -473,9 +473,9 @@ public:
             pInstance = c->GetInstanceScript();
             DoCast(me, SPELL_DUAL_WIELD, true);
 
-            SpellEntry *TempSpell = GET_SPELL(SPELL_SHADOWFIEND_PASSIVE);
+            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_SHADOWFIEND_PASSIVE);
             if (TempSpell)
-                TempSpell->EffectApplyAuraName[0] = 4; // proc debuff, and summon infinite fiends
+                TempSpell->EffectApplyAuraName = 4; // proc debuff, and summon infinite fiends
         }
 
         InstanceScript* pInstance;

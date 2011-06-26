@@ -864,22 +864,22 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
             bool targetfound = false;
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             {
-                if (spellProto->EffectImplicitTargetA[i] == TARGET_UNIT_AREA_ENTRY_SRC ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_UNIT_AREA_ENTRY_SRC ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_UNIT_AREA_ENTRY_DST ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_UNIT_AREA_ENTRY_DST ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_UNIT_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_UNIT_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_GAMEOBJECT_AREA_SRC ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_GAMEOBJECT_AREA_SRC ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_GAMEOBJECT_AREA_DST ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_GAMEOBJECT_AREA_DST ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_DST_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_DST_NEARBY_ENTRY ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_UNIT_CONE_ENTRY ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_UNIT_CONE_ENTRY)
+                if (spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_SRC ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_AREA_ENTRY_SRC ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_DST ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_AREA_ENTRY_DST ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_SRC ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_AREA_SRC ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_DST ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_AREA_DST ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_DST_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_DST_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_CONE_ENTRY ||
+                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_CONE_ENTRY)
                 {
                     targetfound = true;
                     //break;
@@ -954,10 +954,10 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
 
                         for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
                         {
-                            if (pSpellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_TARGET_ENEMY ||
-                                pSpellInfo->EffectImplicitTargetB[j] == TARGET_UNIT_TARGET_ENEMY ||
-                                pSpellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_TARGET_ANY ||
-                                pSpellInfo->EffectImplicitTargetB[j] == TARGET_UNIT_TARGET_ANY)
+                            if (pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
+                                pSpellInfo->GetEffectImplicitTargetBByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
+                                pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ANY ||
+                                pSpellInfo->GetEffectImplicitTargetBByIndex(j) == TARGET_UNIT_TARGET_ANY)
                             {
                                 bIsItemSpellValid = true;
                                 break;

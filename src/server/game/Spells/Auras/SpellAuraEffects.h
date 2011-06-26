@@ -45,14 +45,18 @@ class AuraEffect
         void GetApplicationList(std::list<AuraApplication*> & applicationList) const;
 
         SpellEntry const* GetSpellProto() const { return m_spellProto; }
+        SpellEffectEntry const* GetSpellEffect() const { return m_spellEffect; }
+        SpellClassOptionsEntry const* GetSpellClass() const { return m_spellClass; }
+        SpellEquippedItemsEntry const* GetSpellEquipped() const { return m_spellEquipped; }
+
         uint32 GetId() const { return m_spellProto->Id; }
         uint32 GetEffIndex() const { return m_effIndex; }
         int32 GetBaseAmount() const { return m_baseAmount; }
         int32 GetAmplitude() const { return m_amplitude; }
 
-        int32 GetMiscValueB() const { return m_spellProto->EffectMiscValueB[m_effIndex]; }
-        int32 GetMiscValue() const { return m_spellProto->EffectMiscValue[m_effIndex]; }
-        AuraType GetAuraType() const { return (AuraType)m_spellProto->EffectApplyAuraName[m_effIndex]; }
+        int32 GetMiscValueB() const { return m_spellProto->GetEffectMiscValueB(m_effIndex); }
+        int32 GetMiscValue() const { return m_spellProto->GetEffectMiscValue(m_effIndex); }
+        AuraType GetAuraType() const { return (AuraType)m_spellProto->GetEffectApplyAuraName(m_effIndex); }
         int32 GetAmount() const { return m_amount; }
         void SetAmount(int32 amount) { m_amount = amount; m_canBeRecalculated = false;}
 
@@ -80,7 +84,7 @@ class AuraEffect
 
         bool IsPeriodic() const { return m_isPeriodic; }
         void SetPeriodic(bool isPeriodic) { m_isPeriodic = isPeriodic; }
-        bool IsAffectedOnSpell(SpellEntry const *spell) const;
+        bool IsAffectedOnSpell(SpellClassOptionsEntry const *spell) const;
 
         void SendTickImmune(Unit* target, Unit *caster) const;
         void PeriodicTick(AuraApplication * aurApp, Unit* caster) const;
@@ -93,6 +97,9 @@ class AuraEffect
         Aura * const m_base;
 
         SpellEntry const* const m_spellProto;
+        SpellEffectEntry const* const m_spellEffect;
+        SpellClassOptionsEntry const* const m_spellClass;
+        SpellEquippedItemsEntry const* const m_spellEquipped;
         uint8 const m_effIndex;
         int32 const m_baseAmount;
 
@@ -304,13 +311,13 @@ namespace Trillium
                 SpellEntry const* spellProtoB = aurEffB->GetSpellProto();
 
                 // Wards
-                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_MAGE) ||
-                    (spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK))
-                    if (spellProtoA->Category == 56)
+                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
+                    (spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
+                    if (spellProtoA->GetCategory() == 56)
                         return true;
-                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_MAGE) ||
-                    (spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK))
-                    if (spellProtoB->Category == 56)
+                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
+                    (spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
+                    if (spellProtoB->GetCategory() == 56)
                         return false;
 
                 // Sacred Shield
@@ -332,16 +339,16 @@ namespace Trillium
                     return false;
 
                 // Ice Barrier
-                if (spellProtoA->Category == 471)
+                if (spellProtoA->GetCategory() == 471)
                     return true;
-                if (spellProtoB->Category == 471)
+                if (spellProtoB->GetCategory() == 471)
                     return false;
 
                 // Sacrifice
-                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
                     (spellProtoA->SpellIconID == 693))
                     return true;
-                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
                     (spellProtoB->SpellIconID == 693))
                     return false;
 

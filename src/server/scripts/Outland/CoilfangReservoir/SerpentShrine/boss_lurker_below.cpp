@@ -82,12 +82,12 @@ public:
         boss_the_lurker_belowAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
-            SpellEntry *TempSpell = GET_SPELL(SPELL_SPOUT_ANIM);
+            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_SPOUT_ANIM);
             if (TempSpell)
             {
-                TempSpell->Effect[0] = 0;//remove all spell effect, only anim is needed
-                TempSpell->Effect[1] = 0;
-                TempSpell->Effect[2] = 0;
+                TempSpell->Effect = 0;//remove all spell effect, only anim is needed
+                TempSpell->Effect = 0;
+                TempSpell->Effect = 0;
             }
         }
 
@@ -411,9 +411,9 @@ public:
     {
         mob_coilfang_ambusherAI(Creature *c) : Scripted_NoMovementAI(c)
         {
-            SpellEntry *TempSpell = GET_SPELL(SPELL_SHOOT);
+            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_SHOOT);
             if (TempSpell)
-                TempSpell->Effect[0] = 2;//change spell effect from weapon % dmg to simple phisical dmg
+                TempSpell->Effect = 2;//change spell effect from weapon % dmg to simple phisical dmg
         }
 
         uint32 MultiShotTimer;

@@ -101,7 +101,7 @@ public:
 
         void SpellHit(Unit* /*source*/, const SpellEntry *spell)
         {
-            if (spell->Mechanic == MECHANIC_DISARM)
+            if (spell->GetMechanic() == MECHANIC_DISARM)
                 DoScriptText(SAY_DISARMED, me);
         }
     };

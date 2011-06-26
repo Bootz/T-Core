@@ -246,18 +246,18 @@ SpellEntry const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 me
             continue;
 
         //Check for spell mechanic if specified
-        if (mechanic && tempSpell->Mechanic != mechanic)
+        if (mechanic && tempSpell->GetMechanic() != mechanic)
             continue;
 
         //Make sure that the spell uses the requested amount of power
-        if (powerCostMin && tempSpell->manaCost < powerCostMin)
+        if (powerCostMin && tempSpell->GetManaCost() < powerCostMin)
             continue;
 
-        if (powerCostMax && tempSpell->manaCost > powerCostMax)
+        if (powerCostMax && tempSpell->GetManaCost() > powerCostMax)
             continue;
 
         //Continue if we don't have the mana to actually cast this spell
-        if (tempSpell->manaCost > me->GetPower(Powers(tempSpell->powerType)))
+        if (tempSpell->GetManaCost() > me->GetPower(Powers(tempSpell->powerType)))
             continue;
 
         //Get the Range
@@ -300,7 +300,7 @@ bool ScriptedAI::CanCast(Unit* target, SpellEntry const* spell, bool triggered /
         return false;
 
     //Check for power
-    if (!triggered && me->GetPower(Powers(spell->powerType)) < spell->manaCost)
+    if (!triggered && me->GetPower(Powers(spell->powerType)) < spell->GetManaCost())
         return false;
 
     SpellRangeEntry const* tempRange = GetSpellRangeStore()->LookupEntry(spell->rangeIndex);

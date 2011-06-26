@@ -834,7 +834,7 @@ InventoryResult Item::CanBeMergedPartlyWith(ItemTemplate const* proto) const
     return EQUIP_ERR_OK;
 }
 
-bool Item::IsFitToSpellRequirements(SpellEntry const* spellInfo) const
+bool Item::IsFitToSpellRequirements(SpellEquippedItemsEntry const* spellInfo) const
 {
     ItemTemplate const* proto = GetTemplate();
 

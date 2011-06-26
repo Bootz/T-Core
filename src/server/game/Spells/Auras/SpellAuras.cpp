@@ -228,14 +228,14 @@ uint8 Aura::BuildEffectMaskForOwner(SpellEntry const* spellProto, uint8 avalible
         case TYPEID_PLAYER:
             for (uint8 i = 0; i< MAX_SPELL_EFFECTS; ++i)
             {
-                if (IsUnitOwnedAuraEffect(spellProto->Effect[i]))
+                if (IsUnitOwnedAuraEffect(spellProto->GetSpellEffectIdByIndex(i)))
                     effMask |= 1 << i;
             }
             break;
         case TYPEID_DYNAMICOBJECT:
             for (uint8 i = 0; i< MAX_SPELL_EFFECTS; ++i)
             {
-                if (spellProto->Effect[i] == SPELL_EFFECT_PERSISTENT_AREA_AURA)
+                if (spellProto->GetSpellEffectIdByIndex(i) == SPELL_EFFECT_PERSISTENT_AREA_AURA)
                     effMask |= 1 << i;
             }
             break;
@@ -329,13 +329,13 @@ Aura* Aura::Create(SpellEntry const* spellproto, uint8 effMask, WorldObject* own
 }
 
 Aura::Aura(SpellEntry const* spellproto, WorldObject * owner, Unit* caster, Item* castItem, uint64 casterGUID) :
-m_spellProto(spellproto), m_casterGuid(casterGUID ? casterGUID : caster->GetGUID()),
+m_spellProto(spellproto), m_spellClass(), m_spellEquipped(), m_spellPower(), m_casterGuid(casterGUID ? casterGUID : caster->GetGUID()),
 m_castItemGuid(castItem ? castItem->GetGUID() : 0), m_applyTime(time(NULL)),
 m_owner(owner), m_timeCla(0), m_updateTargetMapInterval(0),
-m_casterLevel(caster ? caster->getLevel() : m_spellProto->spellLevel), m_procCharges(0), m_stackAmount(1),
+m_casterLevel(caster ? caster->getLevel() : m_spellProto->GetSpellLevel()), m_procCharges(0), m_stackAmount(1),
 m_isRemoved(false), m_isSingleTarget(false)
 {
-    if (m_spellProto->manaPerSecond || m_spellProto->manaPerSecondPerLevel)
+    if (m_spellProto->GetManaPerSecond())
         m_timeCla = 1 * IN_MILLISECONDS;
 
     m_maxDuration = CalcMaxDuration(caster);
@@ -655,7 +655,7 @@ void Aura::Update(uint32 diff, Unit* caster)
                 m_timeCla -= diff;
             else if (caster)
             {
-                if (int32 manaPerSecond = m_spellProto->manaPerSecond + m_spellProto->manaPerSecondPerLevel * caster->getLevel())
+                if (int32 manaPerSecond = m_spellPower->manaPerSecond + m_spellPower->manaPerSecondPerLevel * caster->getLevel())
                 {
                     m_timeCla += 1000 - diff;
 
@@ -723,7 +723,7 @@ void Aura::RefreshDuration()
 {
     SetDuration(GetMaxDuration());
 
-    if (m_spellProto->manaPerSecond || m_spellProto->manaPerSecondPerLevel)
+    if (m_spellPower->manaPerSecond || m_spellPower->manaPerSecondPerLevel)
         m_timeCla = 1 * IN_MILLISECONDS;
 }
 
@@ -747,7 +747,7 @@ void Aura::SetCharges(uint8 charges)
 
 uint8 Aura::CalcMaxCharges(Unit* caster) const
 {
-    uint8 maxProcCharges = m_spellProto->procCharges;
+    uint8 maxProcCharges = m_spellProto->GetProcCharges();
 
     if (caster)
         if (Player* modOwner = caster->GetSpellModOwner())
@@ -805,13 +805,13 @@ bool Aura::ModStackAmount(int32 num, AuraRemoveMode removeMode)
     int32 stackAmount = m_stackAmount + num;
 
     // limit the stack amount (only on stack increase, stack amount may be changed manually)
-    if ((num > 0) && (stackAmount > int32(m_spellProto->StackAmount)))
+    if ((num > 0) && (stackAmount > int32(m_spellProto->GetStackAmount())))
     {
         // not stackable aura - set stack amount to 1
-        if (!m_spellProto->StackAmount)
+        if (!m_spellProto->GetStackAmount())
             stackAmount = 1;
         else
-            stackAmount = m_spellProto->StackAmount;
+            stackAmount = m_spellProto->GetStackAmount();
     }
     // we're out of stacks, remove
     else if (stackAmount <= 0)
@@ -988,7 +988,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         caster->AddAura(*itr, target);
                 }
         }
-        switch (GetSpellProto()->SpellFamilyName)
+        switch (GetSpellProto()->GetSpellFamilyName())
         {
             case SPELLFAMILY_GENERIC:
                 switch(GetId())
@@ -1015,7 +1015,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Rejuvenation
-                if (GetSpellProto()->SpellFamilyFlags[0] & 0x10 && GetEffect(EFFECT_0))
+                if (GetSpellClass()->SpellFamilyFlags[0] & 0x10 && GetEffect(EFFECT_0))
                 {
                     // Druid T8 Restoration 4P Bonus
                     if (caster->HasAura(64760))
@@ -1028,20 +1028,20 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             case SPELLFAMILY_MAGE:
                 if (!caster)
                     break;
-                if (GetSpellProto()->SpellFamilyFlags[0] & 0x00000001 && GetSpellProto()->SpellFamilyFlags[2] & 0x00000008)
+                if (GetSpellClass()->SpellFamilyFlags[0] & 0x00000001 && GetSpellClass()->SpellFamilyFlags[2] & 0x00000008)
                 {
                     // Glyph of Fireball
                     if (caster->HasAura(56368))
                         SetDuration(0);
                 }
-                else if (GetSpellProto()->SpellFamilyFlags[0] & 0x00000020 && GetSpellProto()->SpellVisual[0] == 13)
+                else if (GetSpellClass()->SpellFamilyFlags[0] & 0x00000020 && GetSpellProto()->SpellVisual[0] == 13)
                 {
                     // Glyph of Frostbolt
                     if (caster->HasAura(56370))
                         SetDuration(0);
                 }
                 // Todo: This should be moved to similar function in spell::hit
-                else if (GetSpellProto()->SpellFamilyFlags[0] & 0x01000000)
+                else if (GetSpellClass()->SpellFamilyFlags[0] & 0x01000000)
                 {
                     // Polymorph Sound - Sheep && Penguin
                     if (GetSpellProto()->SpellIconID == 82 && GetSpellProto()->SpellVisual[0] == 12978)
@@ -1106,7 +1106,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Devouring Plague
-                if (GetSpellProto()->SpellFamilyFlags[0] & 0x02000000 && GetEffect(0))
+                if (GetSpellClass()->SpellFamilyFlags[0] & 0x02000000 && GetEffect(0))
                 {
                     // Improved Devouring Plague
                     if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3790, 1))
@@ -1118,7 +1118,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 // Renew
-                else if (GetSpellProto()->SpellFamilyFlags[0] & 0x00000040 && GetEffect(0))
+                else if (GetSpellClass()->SpellFamilyFlags[0] & 0x00000040 && GetEffect(0))
                 {
                     // Empowered Renew
                     if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3021, 1))
@@ -1128,7 +1128,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 // Power Word: Shield
-                else if (m_spellProto->SpellFamilyFlags[0] & 0x1 && m_spellProto->SpellFamilyFlags[2] & 0x400 && GetEffect(0))
+                else if (m_spellClass->SpellFamilyFlags[0] & 0x1 && m_spellClass->SpellFamilyFlags[2] & 0x400 && GetEffect(0))
                 {
                     // Glyph of Power Word: Shield
                     if (AuraEffect* glyph = caster->GetAuraEffect(55672, 0))
@@ -1141,7 +1141,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 break;
             case SPELLFAMILY_ROGUE:
                 // Sprint (skip non player casted spells by category)
-                if (GetSpellProto()->SpellFamilyFlags[0] & 0x40 && GetSpellProto()->Category == 44)
+                if (GetSpellClass()->SpellFamilyFlags[0] & 0x40 && GetSpellProto()->GetCategory() == 44)
                     // in official maybe there is only one icon?
                     if (target->HasAura(58039)) // Glyph of Blurred Speed
                         target->CastSpell(target, 61922, true); // Sprint (waterwalk)
@@ -1150,7 +1150,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Frost Fever and Blood Plague
-                if (GetSpellProto()->SpellFamilyFlags[2] & 0x2)
+                if (GetSpellClass()->SpellFamilyFlags[2] & 0x2)
                 {
                     // Can't proc on self
                     if (GetCasterGUID() == target->GetGUID())
@@ -1223,7 +1223,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 }
             }
         }
-        switch(GetSpellProto()->SpellFamilyName)
+        switch(GetSpellProto()->GetSpellFamilyName())
         {
             case SPELLFAMILY_GENERIC:
                 switch(GetId())
@@ -1273,7 +1273,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Ice barrier - dispel/absorb remove
-                if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && GetSpellProto()->SpellFamilyFlags[1] & 0x1)
+                if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && GetSpellClass()->SpellFamilyFlags[1] & 0x1)
                 {
                     // Shattered Barrier
                     if (caster->GetDummyAuraEffect(SPELLFAMILY_MAGE, 2945, 0))
@@ -1284,7 +1284,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Spell Reflection
-                if (GetSpellProto()->SpellFamilyFlags[1] & 0x2)
+                if (GetSpellClass()->SpellFamilyFlags[1] & 0x2)
                 {
                     if (removeMode != AURA_REMOVE_BY_DEFAULT)
                     {
@@ -1307,7 +1307,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Curse of Doom
-                if (GetSpellProto()->SpellFamilyFlags[1] & 0x02)
+                if (GetSpellClass()->SpellFamilyFlags[1] & 0x02)
                 {
                     if (removeMode == AURA_REMOVE_BY_DEATH)
                     {
@@ -1316,7 +1316,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 // Improved Fear
-                else if (GetSpellProto()->SpellFamilyFlags[1] & 0x00000400)
+                else if (GetSpellClass()->SpellFamilyFlags[1] & 0x00000400)
                 {
                     if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 98, 0))
                     {
@@ -1348,7 +1348,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
                 // Shadow word: Pain // Vampiric Touch
-                if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && (GetSpellProto()->SpellFamilyFlags[0] & 0x00008000 || GetSpellProto()->SpellFamilyFlags[1] & 0x00000400))
+                if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && (GetSpellClass()->SpellFamilyFlags[0] & 0x00008000 || GetSpellClass()->SpellFamilyFlags[1] & 0x00000400))
                 {
                     // Shadow Affinity
                     if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 178, 1))
@@ -1358,7 +1358,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 // Power word: shield
-                else if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && GetSpellProto()->SpellFamilyFlags[0] & 0x00000001)
+                else if (removeMode == AURA_REMOVE_BY_ENEMY_SPELL && GetSpellClass()->SpellFamilyFlags[0] & 0x00000001)
                 {
                     // Rapture
                     if (Aura const* aura = caster->GetAuraOfRankedSpell(47535))
@@ -1466,7 +1466,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 break;
             case SPELLFAMILY_HUNTER:
                 // Glyph of Freezing Trap
-                if (GetSpellProto()->SpellFamilyFlags[0] & 0x00000008)
+                if (GetSpellClass()->SpellFamilyFlags[0] & 0x00000008)
                     if (caster && caster->HasAura(56845))
                         target->CastSpell(target, 61394, true);
                 break;
@@ -1474,7 +1474,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     }
 
     // mods at aura apply or remove
-    switch (GetSpellProto()->SpellFamilyName)
+    switch (GetSpellClass()->SpellFamilyName)
     {
         case SPELLFAMILY_GENERIC:
             switch (GetId())
@@ -1489,7 +1489,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             break;
         case SPELLFAMILY_ROGUE:
             // Stealth
-            if (GetSpellProto()->SpellFamilyFlags[0] & 0x00400000)
+            if (GetSpellClass()->SpellFamilyFlags[0] & 0x00400000)
             {
                 // Master of subtlety
                 if (AuraEffect const* aurEff = target->GetAuraEffectOfRankedSpell(31221, 0))
@@ -1565,7 +1565,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
         case SPELLFAMILY_DEATHKNIGHT:
-            if (GetSpellSpecific(GetSpellProto()) == SPELL_SPECIFIC_PRESENCE)
+            if (GetSpellSpecific(GetSpellProto(), 0) == SPELL_SPECIFIC_PRESENCE)
             {
                 AuraEffect *bloodPresenceAura=0;  // healing by damage done
                 AuraEffect *frostPresenceAura=0;  // increased health
@@ -1659,7 +1659,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             break;
         case SPELLFAMILY_WARLOCK:
             // Drain Soul - If the target is at or below 25% health, Drain Soul causes four times the normal damage
-            if (GetSpellProto()->SpellFamilyFlags[0] & 0x00004000)
+            if (GetSpellClass()->SpellFamilyFlags[0] & 0x00004000)
             {
                 if (!caster)
                     break;
@@ -1996,24 +1996,24 @@ void UnitAura::FillTargetMap(std::map<Unit *, uint8> & targets, Unit* caster)
             continue;
         UnitList targetList;
         // non-area aura
-        if (GetSpellProto()->Effect[effIndex] == SPELL_EFFECT_APPLY_AURA)
+        if (GetSpellProto()->GetSpellEffectIdByIndex(effIndex) == SPELL_EFFECT_APPLY_AURA)
         {
             targetList.push_back(GetUnitOwner());
         }
         else
         {
             float radius;
-            if (GetSpellProto()->Effect[effIndex] == SPELL_EFFECT_APPLY_AREA_AURA_ENEMY)
-                radius = GetSpellRadiusForHostile(sSpellRadiusStore.LookupEntry(GetSpellProto()->EffectRadiusIndex[effIndex]));
+            if (GetSpellProto()->GetSpellEffectIdByIndex(effIndex) == SPELL_EFFECT_APPLY_AREA_AURA_ENEMY)
+                radius = GetSpellRadiusForHostile(sSpellRadiusStore.LookupEntry(GetSpellProto()->GetEffectRadiusIndex(effIndex)));
             else
-                radius = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(GetSpellProto()->EffectRadiusIndex[effIndex]));
+                radius = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(GetSpellProto()->GetEffectRadiusIndex(effIndex)));
 
             if (modOwner)
                 modOwner->ApplySpellMod(GetId(), SPELLMOD_RADIUS, radius);
 
             if (!GetUnitOwner()->HasUnitState(UNIT_STAT_ISOLATED))
             {
-                switch(GetSpellProto()->Effect[effIndex])
+                switch(GetSpellProto()->GetSpellEffectIdByIndex(effIndex))
                 {
                     case SPELL_EFFECT_APPLY_AREA_AURA_PARTY:
                         targetList.push_back(GetUnitOwner());
@@ -2090,8 +2090,8 @@ void DynObjAura::FillTargetMap(std::map<Unit *, uint8> & targets, Unit* /*caster
         if (!HasEffect(effIndex))
             continue;
         UnitList targetList;
-        if (GetSpellProto()->EffectImplicitTargetB[effIndex] == TARGET_DEST_DYNOBJ_ALLY
-            || GetSpellProto()->EffectImplicitTargetB[effIndex] == TARGET_UNIT_AREA_ALLY_DST)
+        if (GetSpellProto()->GetEffectImplicitTargetBByIndex(effIndex) == TARGET_DEST_DYNOBJ_ALLY
+            || GetSpellProto()->GetEffectImplicitTargetBByIndex(effIndex) == TARGET_UNIT_AREA_ALLY_DST)
         {
             Trillium::AnyFriendlyUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
             Trillium::UnitListSearcher<Trillium::AnyFriendlyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);

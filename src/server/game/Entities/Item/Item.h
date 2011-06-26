@@ -268,7 +268,7 @@ class Item : public Object
         bool HasEnchantRequiredSkill(const Player *pPlayer) const;
         uint32 GetEnchantRequiredLevel() const;
 
-        bool IsFitToSpellRequirements(SpellEntry const* spellInfo) const;
+        bool IsFitToSpellRequirements(SpellEquippedItemsEntry const* spellInfo) const;
         bool IsTargetValidForItemUse(Unit* pUnitTarget);
         bool IsLimitedToAnotherMapOrZone(uint32 cur_mapId, uint32 cur_zoneId) const;
         bool GemsFitSockets() const;

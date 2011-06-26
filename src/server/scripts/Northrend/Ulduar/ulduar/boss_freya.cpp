@@ -1569,7 +1569,7 @@ class spell_freya_iron_roots : public SpellScriptLoader
             void HandleSummon(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                uint32 entry = uint32(GetSpellInfo()->EffectMiscValue[effIndex]);
+                uint32 entry = uint32(GetSpellInfo()->GetEffectMiscValue(effIndex));
 
                 Position pos;
                 GetCaster()->GetPosition(&pos);

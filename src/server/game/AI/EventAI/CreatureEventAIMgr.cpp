@@ -506,11 +506,11 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
                     /* FIXME: temp.raw.param3 not have event tipes with recovery time in it....
                     else
                     {
-                        if (spell->RecoveryTime > 0 && temp.event_flags & EFLAG_REPEATABLE)
+                        if (spell->GetRecoveryTime() > 0 && temp.event_flags & EFLAG_REPEATABLE)
                         {
-                            //output as debug for now, also because there's no general rule all spells have RecoveryTime
-                            if (temp.event_param3 < spell->RecoveryTime)
-                                sLog->outDebug("CreatureEventAI:  Event %u Action %u uses SpellID %u but cooldown is longer(%u) than minumum defined in event param3(%u).", i, j+1, action.cast.spellId, spell->RecoveryTime, temp.event_param3);
+                            //output as debug for now, also because there's no general rule all spells have GetRecoveryTime()
+                            if (temp.event_param3 < spell->GetRecoveryTime())
+                                sLog->outDebug("CreatureEventAI:  Event %u Action %u uses SpellID %u but cooldown is longer(%u) than minumum defined in event param3(%u).", i, j+1, action.cast.spellId, spell->GetRecoveryTime(), temp.event_param3);
                         }
                     }
                     */

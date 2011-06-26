@@ -153,7 +153,7 @@ void UnitAI::DoCast(uint32 spellId)
 
             DefaultTargetSelector targetSelector(me, range, playerOnly, -(int32)spellId);
             if (!(spellInfo->Attributes & SPELL_ATTR0_BREAKABLE_BY_DAMAGE)
-                && !(spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_NOT_VICTIM)
+                && !(spellInfo->GetAuraInterruptFlags() & AURA_INTERRUPT_FLAG_NOT_VICTIM)
                 && targetSelector(me->getVictim()))
                 target = me->getVictim();
             else
@@ -188,8 +188,8 @@ void UnitAI::FillAISpellInfo()
         else
             AIInfo->condition = AICOND_COMBAT;
 
-        if (AIInfo->cooldown < spellInfo->RecoveryTime)
-            AIInfo->cooldown = spellInfo->RecoveryTime;
+        if (AIInfo->cooldown < spellInfo->GetRecoveryTime())
+            AIInfo->cooldown = spellInfo->GetRecoveryTime();
 
         if (!GetSpellMaxRange(spellInfo, false))
             UPDATE_TARGET(AITARGET_SELF)
@@ -197,7 +197,7 @@ void UnitAI::FillAISpellInfo()
         {
             for (uint32 j = 0; j < MAX_SPELL_EFFECTS; ++j)
             {
-                uint32 targetType = spellInfo->EffectImplicitTargetA[j];
+                uint32 targetType = spellInfo->GetEffectImplicitTargetAByIndex(j);
 
                 if (targetType == TARGET_UNIT_TARGET_ENEMY
                     || targetType == TARGET_DST_TARGET_ENEMY)
@@ -205,7 +205,7 @@ void UnitAI::FillAISpellInfo()
                 else if (targetType == TARGET_UNIT_AREA_ENEMY_DST)
                     UPDATE_TARGET(AITARGET_ENEMY)
 
-                if (spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AURA)
+                if (spellInfo->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA)
                 {
                     if (targetType == TARGET_UNIT_TARGET_ENEMY)
                         UPDATE_TARGET(AITARGET_DEBUFF)
@@ -214,7 +214,7 @@ void UnitAI::FillAISpellInfo()
                 }
             }
         }
-        AIInfo->realCooldown = spellInfo->RecoveryTime + spellInfo->StartRecoveryTime;
+        AIInfo->realCooldown = spellInfo->GetRecoveryTime() + spellInfo->GetStartRecoveryTime();
         SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(spellInfo->rangeIndex);
         if (srange)
             AIInfo->maxRange = srange->maxRangeHostile * 3 / 4;

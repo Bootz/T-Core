@@ -107,11 +107,11 @@ std::string _SpellScript::EffectHook::EffIndexToString()
 
 bool _SpellScript::EffectNameCheck::Check(SpellEntry const* spellEntry, uint8 effIndex)
 {
-    if (!spellEntry->Effect[effIndex] && !effName)
+    if (!spellEntry->GetSpellEffectIdByIndex(effIndex) && !effName)
         return true;
-    if (!spellEntry->Effect[effIndex])
+    if (!spellEntry->GetSpellEffectIdByIndex(effIndex))
         return false;
-    return (effName == SPELL_EFFECT_ANY) || (spellEntry->Effect[effIndex] == effName);
+    return (effName == SPELL_EFFECT_ANY) || (spellEntry->GetSpellEffectIdByIndex(effIndex) == effName);
 }
 
 std::string _SpellScript::EffectNameCheck::ToString()
@@ -129,11 +129,11 @@ std::string _SpellScript::EffectNameCheck::ToString()
 
 bool _SpellScript::EffectAuraNameCheck::Check(SpellEntry const* spellEntry, uint8 effIndex)
 {
-    if (!spellEntry->EffectApplyAuraName[effIndex] && !effAurName)
+    if (!spellEntry->GetEffectApplyAuraName(effIndex) && !effAurName)
         return true;
-    if (!spellEntry->EffectApplyAuraName[effIndex])
+    if (!spellEntry->GetEffectApplyAuraName(effIndex))
         return false;
-    return (effAurName == SPELL_EFFECT_ANY) || (spellEntry->EffectApplyAuraName[effIndex] == effAurName);
+    return (effAurName == SPELL_EFFECT_ANY) || (spellEntry->GetEffectApplyAuraName(effIndex) == effAurName);
 }
 
 std::string _SpellScript::EffectAuraNameCheck::ToString()
@@ -207,7 +207,7 @@ bool SpellScript::UnitTargetHandler::CheckEffect(SpellEntry const* spellEntry, u
 {
     if (!targetType)
         return false;
-    return (effIndex == EFFECT_ALL) || (spellEntry->EffectImplicitTargetA[effIndex] == targetType || spellEntry->EffectImplicitTargetB[effIndex] == targetType);
+    return (effIndex == EFFECT_ALL) || (spellEntry->GetEffectImplicitTargetAByIndex(effIndex) == targetType || spellEntry->GetEffectImplicitTargetBByIndex(effIndex) == targetType);
 }
 
 void SpellScript::UnitTargetHandler::Call(SpellScript* spellScript, std::list<Unit*>& unitTargets)
@@ -266,6 +266,11 @@ Unit* SpellScript::GetOriginalCaster()
 SpellEntry const* SpellScript::GetSpellInfo()
 {
     return m_spell->GetSpellInfo();
+}
+
+SpellAuraRestrictionsEntry const* SpellScript::GetSpellAura()
+{
+    return m_spell->GetSpellAura();
 }
 
 WorldLocation* SpellScript::GetTargetDest()

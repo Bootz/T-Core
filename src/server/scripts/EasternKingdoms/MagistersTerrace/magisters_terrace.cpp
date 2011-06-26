@@ -145,8 +145,8 @@ public:
             {
                 if (Player* pPlayer = i->getSource())
                 {
-                    if (pSpell && pSpell->EffectMiscValue[0])
-                        pPlayer->KilledMonsterCredit(pSpell->EffectMiscValue[0], 0);
+                    if (pSpell && pSpell->GetEffectMiscValue(0))
+                        pPlayer->KilledMonsterCredit(pSpell->GetEffectMiscValue(0), 0);
                 }
             }
         }

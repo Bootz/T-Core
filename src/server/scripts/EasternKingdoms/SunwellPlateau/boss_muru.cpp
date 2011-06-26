@@ -480,7 +480,7 @@ public:
         void SpellHit(Unit* /*caster*/, const SpellEntry* Spell)
         {
             for (uint8 i = 0; i < 3; ++i)
-                if (Spell->Effect[i] == 38)
+                if (Spell->GetSpellEffectIdByIndex(i) == 38)
                     me->DisappearAndDie();
         }
 

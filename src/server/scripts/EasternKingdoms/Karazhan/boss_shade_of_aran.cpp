@@ -490,9 +490,9 @@ public:
         void SpellHit(Unit* /*pAttacker*/, const SpellEntry* Spell)
         {
             //We only care about interrupt effects and only if they are durring a spell currently being casted
-            if ((Spell->Effect[0] != SPELL_EFFECT_INTERRUPT_CAST &&
-                Spell->Effect[1] != SPELL_EFFECT_INTERRUPT_CAST &&
-                Spell->Effect[2] != SPELL_EFFECT_INTERRUPT_CAST) || !me->IsNonMeleeSpellCasted(false))
+            if ((Spell->GetSpellEffectIdByIndex(0) != SPELL_EFFECT_INTERRUPT_CAST &&
+                Spell->GetSpellEffectIdByIndex(1) != SPELL_EFFECT_INTERRUPT_CAST &&
+                Spell->GetSpellEffectIdByIndex(2) != SPELL_EFFECT_INTERRUPT_CAST) || !me->IsNonMeleeSpellCasted(false))
                 return;
 
             //Interrupt effect

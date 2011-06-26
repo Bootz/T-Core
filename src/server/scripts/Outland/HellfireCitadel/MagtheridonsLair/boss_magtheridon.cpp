@@ -223,17 +223,17 @@ class boss_magtheridon : public CreatureScript
                 me->SetFloatValue(UNIT_FIELD_COMBATREACH, 10);
 
                 // target 7, random target with certain entry spell, need core fix
-                SpellEntry *TempSpell;
-                TempSpell = GET_SPELL(SPELL_BLAZE_TARGET);
-                if (TempSpell && TempSpell->EffectImplicitTargetA[0] != 6)
+                SpellEffectEntry *TempSpell;
+                TempSpell = GET_SPELL_EFFECT(SPELL_BLAZE_TARGET);
+                if (TempSpell && TempSpell->EffectImplicitTargetA != 6)
                 {
-                    TempSpell->EffectImplicitTargetA[0] = 6;
-                    TempSpell->EffectImplicitTargetB[0] = 0;
+                    TempSpell->EffectImplicitTargetA = 6;
+                    TempSpell->EffectImplicitTargetB = 0;
                 }
-                TempSpell = GET_SPELL(SPELL_QUAKE_TRIGGER);
-                if (TempSpell && TempSpell->EffectTriggerSpell[0] != SPELL_QUAKE_KNOCKBACK)
+                TempSpell = GET_SPELL_EFFECT(SPELL_QUAKE_TRIGGER);
+                if (TempSpell && TempSpell->EffectTriggerSpell != SPELL_QUAKE_KNOCKBACK)
                 {
-                    TempSpell->EffectTriggerSpell[0] = SPELL_QUAKE_KNOCKBACK;
+                    TempSpell->EffectTriggerSpell = SPELL_QUAKE_KNOCKBACK;
                 }
             }
 

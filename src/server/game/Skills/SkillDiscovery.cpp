@@ -96,13 +96,13 @@ void LoadSkillDiscoveryTable()
             }
 
             // mechanic discovery
-            if (reqSpellEntry->Mechanic != MECHANIC_DISCOVERY &&
+            if (reqSpellEntry->GetMechanic() != MECHANIC_DISCOVERY &&
                 // explicit discovery ability
                 !IsExplicitDiscoverySpell(reqSpellEntry))
             {
                 if (reportedReqSpells.find(absReqSkillOrSpell) == reportedReqSpells.end())
                 {
-                    sLog->outErrorDb("Spell (ID: %u) not have MECHANIC_DISCOVERY (28) value in Mechanic field in spell.dbc"
+                    sLog->outErrorDb("Spell (ID: %u) not have MECHANIC_DISCOVERY (28) value in GetMechanic() field in spell.dbc"
                         " and not 100%% chance random discovery ability but listed for spellId %u (and maybe more) in `skill_discovery_template` table",
                         absReqSkillOrSpell, spellId);
                     reportedReqSpells.insert(absReqSkillOrSpell);

@@ -443,7 +443,7 @@ class spell_ulduar_stone_grip_cast_target : public SpellScriptLoader
                 if (!plr)
                     return;
 
-                plr->CastSpell(GetTargetUnit(), GetSpellInfo()->EffectTriggerSpell[i], true);     // Don't send m_originalCasterGUID param here or underlying
+                plr->CastSpell(GetTargetUnit(), GetSpellInfo()->GetEffectTriggerSpell(i), true);     // Don't send m_originalCasterGUID param here or underlying
                 PreventHitEffect(i);                                                                   // AureEffect::HandleAuraControlVehicle will fail on caster == target
             }
 

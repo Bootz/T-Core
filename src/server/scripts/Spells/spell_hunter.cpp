@@ -79,7 +79,7 @@ public:
                     continue;
 
                 // Search only Serpent Sting, Viper Sting, Scorpid Sting auras
-                flag96 familyFlag = aura->GetSpellProto()->SpellFamilyFlags;
+                flag96 familyFlag = aura->GetSpellClass()->SpellFamilyFlags;
                 if (!(familyFlag[1] & 0x00000080 || familyFlag[0] & 0x0000C000))
                     continue;
                 if (AuraEffect const* aurEff = aura->GetEffect(0))
@@ -279,7 +279,7 @@ public:
 
                 ///! If spellId in cooldown map isn't valid, the above will return a null pointer.
                 if (spellInfo &&
-                    spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER &&
+                    spellInfo->GetSpellFamilyName() == SPELLFAMILY_HUNTER &&
                     spellInfo->Id != HUNTER_SPELL_READINESS &&
                     spellInfo->Id != HUNTER_SPELL_BESTIAL_WRATH &&
                     GetSpellRecoveryTime(spellInfo) > 0)

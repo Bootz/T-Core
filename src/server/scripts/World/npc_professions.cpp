@@ -225,7 +225,7 @@ bool EquippedOk(Player* pPlayer, uint32 spellId)
 
     for (uint8 i = 0; i < 3; ++i)
     {
-        uint32 reqSpell = spell->EffectTriggerSpell[i];
+        uint32 reqSpell = spell->GetEffectTriggerSpell(i);
         if (!reqSpell)
             continue;
 
