@@ -1871,7 +1871,7 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
     {
         m_targets.m_dstPos.GetPosition(x, y, z);
 
-        if (m_spellInfo->GetEffectImplicitTargetA(effIndex) == TARGET_DEST_TARGET_BACK)
+        if (m_spellInfo->GetEffectImplicitTargetAByIndex(effIndex) == TARGET_DEST_TARGET_BACK)
         {
             // explicit cast data from client or server-side cast
             // some spell at client send caster
@@ -6899,7 +6899,7 @@ void Spell::GetSummonPosition(uint32 i, Position &pos, float radius, uint32 coun
         else
         {
             //This is a workaround. Do not have time to write much about it
-            switch (m_spellInfo->EffectImplicitTargetA[i])
+            switch (m_spellInfo->GetEffectImplicitTargetAByIndex(i))
             {
                 case TARGET_MINION:
                 case TARGET_DEST_CASTER_RANDOM:
