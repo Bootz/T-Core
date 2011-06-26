@@ -9700,9 +9700,10 @@ bool Unit::HasAuraState(AuraState flag, SpellEntry const *spellProto, Unit const
     {
         if (spellProto)
         {
+            SpellClassOptionsEntry const* spellProto1 = NULL;
             AuraEffectList const& stateAuras = Caster->GetAuraEffectsByType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
             for (AuraEffectList::const_iterator j = stateAuras.begin(); j != stateAuras.end(); ++j)
-                if ((*j)->IsAffectedOnSpell(spellProto))
+                if ((*j)->IsAffectedOnSpell(spellProto1))
                     return true;
         }
         // Check per caster aura state
@@ -15041,7 +15042,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
     // Get EventProcFlag
     uint32 EventProcFlag;
     if (spellProcEvent && spellProcEvent->procFlags) // if exist get custom spellProcEvent->procFlags
-        EventProcFlag = spellProcEvent->procFlags;
+        EventProcFlag = spellProcEvent->ProcFlags;
     else
         EventProcFlag = spellProto->procFlags;       // else get from spell proto
     // Continue if no trigger exist
