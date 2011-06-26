@@ -11193,8 +11193,8 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint
                     Aura const* aura = itr->second->GetBase();
                     if (aura->GetCasterGUID() != GetGUID())
                         continue;
-                    SpellEntry const* m_spell = aura->GetSpellProto();
-                    if (m_spell->GetSpellFamilyName() != SPELLFAMILY_DRUID ||
+                    SpellClassOptionsEntry const* m_spell = aura->GetSpellClass();
+                    if (m_spell->SpellFamilyName != SPELLFAMILY_DRUID ||
                         !(m_spell->SpellFamilyFlags[1] & 0x00000010 || m_spell->SpellFamilyFlags[0] & 0x50))
                         continue;
                     modPercent += stepPercent * aura->GetStackAmount();
@@ -11596,6 +11596,7 @@ bool Unit::IsDamageToThreatSpell(SpellEntry const* spellInfo) const
 
 void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType attType, SpellEntry const *spellProto)
 {
+    SpellClassOptionsEntry const* spellClass = NULL;
     if (!pVictim)
         return;
 
@@ -11783,7 +11784,7 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
         {
             case SPELLFAMILY_DEATHKNIGHT:
                 // Glacier Rot
-                if (spellProto->SpellFamilyFlags[0] & 0x2 || spellProto->SpellFamilyFlags[1] & 0x6)
+                if (spellClass->SpellFamilyFlags[0] & 0x2 || spellClass->SpellFamilyFlags[1] & 0x6)
                     if (AuraEffect* aurEff = GetDummyAuraEffect(SPELLFAMILY_DEATHKNIGHT, 196, 0))
                         if (pVictim->GetDiseasesByCaster(owner->GetGUID()) > 0)
                             AddPctN(DoneTotalMod, aurEff->GetAmount());
@@ -11810,7 +11811,7 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
         uint32 mechanicMask = GetAllSpellMechanicMask(spellProto);
 
         // Shred, Maul - "Effects which increase Bleed damage also increase Shred damage"
-        if (spellProto->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellProto->SpellFamilyFlags[0] & 0x00008800)
+        if (spellProto->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellClass->SpellFamilyFlags[0] & 0x00008800)
             mechanicMask |= (1<<MECHANIC_BLEED);
 
         if (mechanicMask)
