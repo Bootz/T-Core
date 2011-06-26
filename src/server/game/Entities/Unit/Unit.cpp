@@ -6900,7 +6900,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     float  chance;
 
                     // Flash of light/Holy light
-                    if (procSpell->SpellFamilyFlags[0] & 0xC0000000)
+                    if (dummyClass->SpellFamilyFlags[0] & 0xC0000000)
                     {
                         triggered_spell_id = 40471;
                         chance = 15.0f;
@@ -7257,12 +7257,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     if (procSpell->SpellIconID != 2019)
                         return false;
 
+                    SpellClassOptionsEntry const* spell1 = NULL;
                     AuraEffect* aurEffA = NULL;
                     AuraEffectList const& auras = GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_DONE);
                     for (AuraEffectList::const_iterator i = auras.begin(); i != auras.end(); ++i)
                     {
                         SpellEntry const* spell = (*i)->GetSpellProto();
-                        if (spell->GetSpellFamilyName() == uint32(SPELLFAMILY_SHAMAN) && spell->SpellFamilyFlags.HasFlag(0, 0x02000000, 0))
+                        if (spell->GetSpellFamilyName() == uint32(SPELLFAMILY_SHAMAN) && spell1->SpellFamilyFlags.HasFlag(0, 0x02000000, 0))
                         {
                             if ((*i)->GetCasterGUID() != GetGUID())
                                 continue;
@@ -7320,7 +7321,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 break;
             }
             // Earth Shield
-            if (dummySpell->SpellFamilyFlags[1] & 0x00000400)
+            if (dummyClass->SpellFamilyFlags[1] & 0x00000400)
             {
                 // 3.0.8: Now correctly uses the Shaman's own spell critical strike chance to determine the chance of a critical heal.
                 originalCaster = triggeredByAura->GetCasterGUID();
@@ -7334,7 +7335,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 break;
             }
             // Flametongue Weapon (Passive)
-            if (dummySpell->SpellFamilyFlags[0] & 0x200000)
+            if (dummyClass->SpellFamilyFlags[0] & 0x200000)
             {
                 if (GetTypeId() != TYPEID_PLAYER  || !pVictim || !pVictim->isAlive() || !castItem || !castItem->IsEquipped())
                     return false;
@@ -7380,10 +7381,10 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Default chance for Healing Wave and Riptide
                 float chance = (float)triggeredByAura->GetAmount();
 
-                if (procSpell->SpellFamilyFlags[0] & 0x80)
+                if (dummyClass->SpellFamilyFlags[0] & 0x80)
                     // Lesser Healing Wave - 0.6 of default
                     chance *= 0.6f;
-                else if (procSpell->SpellFamilyFlags[0] & 0x100)
+                else if (dummyClass->SpellFamilyFlags[0] & 0x100)
                     // Chain heal - 0.3 of default
                     chance *= 0.3f;
 
@@ -7555,7 +7556,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 break;
             }
             // Vendetta
-            if (dummySpell->SpellFamilyFlags[0] & 0x10000)
+            if (dummyClass->SpellFamilyFlags[0] & 0x10000)
             {
                 basepoints0 = int32(CountPctFromMaxHealth(triggerAmount));
                 triggered_spell_id = 50181;
@@ -7664,7 +7665,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                         continue;
 
                     if (spellProto->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT
-                        && spellProto->SpellFamilyFlags[0] & 0x2000)
+                        && dummyClass->SpellFamilyFlags[0] & 0x2000)
                     {
                         SpellChainNode const* newChain = sSpellMgr->GetSpellChainNode(itr->first);
 
@@ -7788,6 +7789,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 bool Unit::HandleObsModEnergyAuraProc(Unit *pVictim, uint32 /*damage*/, AuraEffect* triggeredByAura, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 cooldown)
 {
     SpellEntry const* dummySpell = triggeredByAura->GetSpellProto();
+    SpellClassOptionsEntry const* dummyClass = NULL;
     //uint32 effIndex = triggeredByAura->GetEffIndex();
     //int32  triggerAmount = triggeredByAura->GetAmount();
 
@@ -7803,7 +7805,7 @@ bool Unit::HandleObsModEnergyAuraProc(Unit *pVictim, uint32 /*damage*/, AuraEffe
         case SPELLFAMILY_HUNTER:
         {
             // Aspect of the Viper
-            if (dummySpell->SpellFamilyFlags[1] & 0x40000)
+            if (dummyClass->SpellFamilyFlags[1] & 0x40000)
             {
                 uint32 maxmana = GetMaxPower(POWER_MANA);
                 basepoints0 = CalculatePctF(maxmana, GetAttackTime(RANGED_ATTACK) / 1000.0f);
@@ -8133,6 +8135,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
 {
     // Get triggered aura spell info
     SpellEntry const* auraSpellInfo = triggeredByAura->GetSpellProto();
+    SpellClassOptionsEntry const* spellClass = triggeredByAura->GetSpellClass();
 
     // Basepoints of trigger aura
     int32 triggerAmount = triggeredByAura->GetAmount();
@@ -8681,7 +8684,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 53232:
         {
             // This effect only from Rapid Fire (ability cast)
-            if (!(procSpell->SpellFamilyFlags[0] & 0x20))
+            if (!(spellClass->SpellFamilyFlags[0] & 0x20))
                 return false;
             break;
         }
@@ -8705,7 +8708,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 15337: // Improved Spirit Tap (Rank 1)
         case 15338: // Improved Spirit Tap (Rank 2)
         {
-            if (procSpell->SpellFamilyFlags[0] & 0x800000)
+            if (spellClass->SpellFamilyFlags[0] & 0x800000)
                 if ((procSpell->Id != 58381) || !roll_chance_i(50))
                     return false;
 
@@ -8923,7 +8926,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 58679:
         {
             // Proc only from healing part of Death Coil. Check is essential as all Death Coil spells have 0x2000 mask in SpellFamilyFlags
-            if (!procSpell || !(procSpell->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && procSpell->SpellFamilyFlags[0] == 0x80002000))
+            if (!procSpell || !(procSpell->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && spellClass->SpellFamilyFlags[0] == 0x80002000))
                 return false;
             break;
         }
@@ -8946,7 +8949,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 65081:
         {
             // Proc only from PW:S cast
-            if (!(procSpell->SpellFamilyFlags[0] & 0x00000001))
+            if (!(spellClass->SpellFamilyFlags[0] & 0x00000001))
                 return false;
             break;
         }
@@ -8954,7 +8957,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         case 70893:
         {
             // check if we're doing a critical hit
-            if (!(procSpell->SpellFamilyFlags[1] & 0x10000000) && (procEx != PROC_EX_CRITICAL_HIT) )
+            if (!(spellClass->SpellFamilyFlags[1] & 0x10000000) && (procEx != PROC_EX_CRITICAL_HIT) )
                 return false;
             // check if we're procced by Claw, Bite or Smack (need to use the spell icon ID to detect it)
             if (!(procSpell->SpellIconID == 262 || procSpell->SpellIconID == 1680 || procSpell->SpellIconID == 473 ))
