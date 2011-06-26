@@ -6123,7 +6123,7 @@ void Spell::EffectSendTaxi(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    unitTarget->ToPlayer()->ActivateTaxiPathTo(m_spellInfo->EffectMiscValue[effIndex], m_spellInfo->Id);
+    unitTarget->ToPlayer()->ActivateTaxiPathTo(m_spellInfo->GetEffectMiscValue(effIndex), m_spellInfo->Id);
 }
 
 void Spell::EffectPullTowards(SpellEffIndex effIndex)
@@ -6132,9 +6132,9 @@ void Spell::EffectPullTowards(SpellEffIndex effIndex)
         return;
 
     float speedZ = (float)(SpellMgr::CalculateSpellEffectAmount(m_spellInfo, effIndex) / 10);
-    float speedXY = (float)(m_spellInfo->EffectMiscValue[effIndex]/10);
+    float speedXY = (float)(m_spellInfo->GetEffectMiscValue(effIndex) / 10);
     Position pos;
-    if (m_spellInfo->Effect[effIndex] == SPELL_EFFECT_PULL_TOWARDS_DEST)
+    if (m_spellInfo->GetSpellEffectIdByIndex(effIndex) == SPELL_EFFECT_PULL_TOWARDS_DEST)
     {
         if (m_targets.HasDst())
             pos.Relocate(m_targets.m_dstPos);
@@ -6216,10 +6216,10 @@ void Spell::EffectDestroyAllTotems(SpellEffIndex /*effIndex*/)
         if (totem && totem->isTotem())
         {
             uint32 spell_id = totem->GetUInt32Value(UNIT_CREATED_BY_SPELL);
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell_id);
+            SpellPowerEntry const* spellInfo = sSpellPowerStore.LookupEntry(spell_id);
             if (spellInfo)
             {
-                mana += spellInfo->GetManaCost();
+                mana += spellInfo->manaCost;
                 mana += int32(CalculatePctU(m_caster->GetCreateMana(), spellInfo->ManaCostPercentage));
             }
             totem->ToTotem()->UnSummon();
