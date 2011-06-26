@@ -7491,7 +7491,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 if (!target || !target->isAlive())
                     return false;
 
-                triggered_spell_id = dummySpell->EffectTriggerSpell[effIndex];
+                triggered_spell_id = dummySpell->GetEffectTriggerSpell(effIndex);
                 break;
             }
             // Improved Blood Presence

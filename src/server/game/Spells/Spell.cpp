@@ -5543,8 +5543,8 @@ SpellCastResult Spell::CheckPetCast(Unit* target)
 
         for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         {
-            if (SpellTargetType[m_spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_UNIT_TARGET
-                || SpellTargetType[m_spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_DEST_TARGET)
+            if (SpellTargetType[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] == TARGET_TYPE_UNIT_TARGET
+                || SpellTargetType[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] == TARGET_TYPE_DEST_TARGET)
             {
                 if (!target)
                     return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
@@ -6743,7 +6743,7 @@ bool Spell::IsValidSingleTargetSpell(Unit const* target) const
     }
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (!IsValidSingleTargetEffect(target, Targets(m_spellInfo->EffectImplicitTargetA[i])))
+        if (!IsValidSingleTargetEffect(target, Targets(m_spellInfo->GetEffectImplicitTargetAByIndex(i))))
             return false;
         // Need to check B?
         //if (!IsValidSingleTargetEffect(m_spellInfo->EffectImplicitTargetB[i], target)
@@ -6855,7 +6855,7 @@ int32 Spell::CalculateDamageDone(Unit *unit, const uint32 effectMask, float * mu
 
             if (m_damage > 0)
             {
-                if (IsAreaEffectTarget[m_spellInfo->EffectImplicitTargetA[i]] || IsAreaEffectTarget[m_spellInfo->EffectImplicitTargetB[i]])
+                if (IsAreaEffectTarget[m_spellInfo->GetEffectImplicitTargetAByIndex(i)] || IsAreaEffectTarget[m_spellInfo->GetEffectImplicitTargetBByIndex(i)])
                 {
                     m_damage = int32(float(m_damage) * unit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_AOE_DAMAGE_AVOIDANCE, m_spellInfo->SchoolMask));
                     if (m_caster->GetTypeId() == TYPEID_UNIT)
