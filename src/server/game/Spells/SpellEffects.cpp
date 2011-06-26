@@ -2973,7 +2973,7 @@ void Spell::EffectProficiency(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectSummonType(SpellEffIndex effIndex)
 {
-    uint32 entry = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 entry = m_spellInfo->GetEffectMiscValue(effIndex);
     if (!entry)
         return;
 
@@ -3151,7 +3151,7 @@ void Spell::EffectDispel(SpellEffIndex effIndex)
     DispelChargesList dispel_list;
 
     // Create dispel mask by dispel type
-    uint32 dispel_type = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 dispel_type = m_spellInfo->GetEffectMiscValue(effIndex);
     uint32 dispelMask  = GetDispellMask(DispelType(dispel_type));
 
     // we should not be able to dispel diseases if the target is affected by unholy blight
@@ -3395,7 +3395,7 @@ void Spell::EffectLearnSkill(SpellEffIndex effIndex)
     if (damage < 0)
         return;
 
-    uint32 skillid =  m_spellInfo->EffectMiscValue[effIndex];
+    uint32 skillid =  m_spellInfo->GetEffectMiscValue(effIndex);
     uint16 skillval = unitTarget->ToPlayer()->GetPureSkillValue(skillid);
     unitTarget->ToPlayer()->SetSkill(skillid, SpellMgr::CalculateSpellEffectAmount(m_spellInfo, effIndex), skillval?skillval:1, damage*75);
 }
@@ -3464,7 +3464,7 @@ void Spell::EffectEnchantItemPerm(SpellEffIndex effIndex)
         if (!(m_CastItem && m_CastItem->GetTemplate()->Flags & ITEM_PROTO_FLAG_TRIGGERED_CAST))
             p_caster->UpdateCraftSkill(m_spellInfo->Id);
 
-        uint32 enchant_id = m_spellInfo->EffectMiscValue[effIndex];
+        uint32 enchant_id = m_spellInfo->GetEffectMiscValue(effIndex);
         if (!enchant_id)
             return;
 
@@ -3506,7 +3506,7 @@ void Spell::EffectEnchantItemPrismatic(SpellEffIndex effIndex)
 
     Player* p_caster = (Player*)m_caster;
 
-    uint32 enchant_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 enchant_id = m_spellInfo->GetEffectMiscValue(effIndex);
     if (!enchant_id)
         return;
 
@@ -3619,7 +3619,7 @@ void Spell::EffectEnchantItemTmp(SpellEffIndex effIndex)
     if (!itemTarget)
         return;
 
-    uint32 enchant_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 enchant_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     if (!enchant_id)
     {
@@ -3749,7 +3749,7 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
             owner = m_originalCaster->GetCharmerOrOwnerPlayerOrPlayerItself();
     }
 
-    uint32 petentry = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 petentry = m_spellInfo->GetEffectMiscValue(effIndex);
 
     if (!owner)
     {
@@ -4239,7 +4239,7 @@ void Spell::EffectInterruptCast(SpellEffIndex effIndex)
 
 void Spell::EffectSummonObjectWild(SpellEffIndex effIndex)
 {
-    uint32 gameobject_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 gameobject_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     GameObject* pGameObj = new GameObject;
 
@@ -5418,7 +5418,7 @@ void Spell::EffectDuel(SpellEffIndex effIndex)
     //CREATE DUEL FLAG OBJECT
     GameObject* pGameObj = new GameObject;
 
-    uint32 gameobject_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 gameobject_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     Map* map = m_caster->GetMap();
     if (!pGameObj->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), gameobject_id,
@@ -5535,7 +5535,7 @@ void Spell::EffectActivateObject(SpellEffIndex effIndex)
 
     static ScriptInfo activateCommand = generateActivateCommand();
 
-    int32 delay_secs = m_spellInfo->EffectMiscValue[effIndex];
+    int32 delay_secs = m_spellInfo->GetEffectMiscValue(effIndex);
 
     gameObjTarget->GetMap()->ScriptCommandStart(activateCommand, delay_secs, m_caster, gameObjTarget);
 }
@@ -5613,7 +5613,7 @@ void Spell::EffectEnchantHeldItem(SpellEffIndex effIndex)
 
     if (m_spellInfo->EffectMiscValue[effIndex])
     {
-        uint32 enchant_id = m_spellInfo->EffectMiscValue[effIndex];
+        uint32 enchant_id = m_spellInfo->GetEffectMiscValue(effIndex);
         int32 duration = GetSpellDuration(m_spellInfo);          //Try duration index first ..
         if (!duration)
             duration = damage;//+1;            //Base points after ..
@@ -6154,7 +6154,7 @@ void Spell::EffectDispelMechanic(SpellEffIndex effIndex)
     if (!unitTarget)
         return;
 
-    uint32 mechanic = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 mechanic = m_spellInfo->GetEffectMiscValue(effIndex);
 
     std::queue < std::pair < uint32, uint64 > > dispel_list;
 
@@ -6235,7 +6235,7 @@ void Spell::EffectDurabilityDamage(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    int32 slot = m_spellInfo->EffectMiscValue[effIndex];
+    int32 slot = m_spellInfo->GetEffectMiscValue(effIndex);
 
     // FIXME: some spells effects have value -1/-2
     // Possibly its mean -1 all player equipped items and -2 all items
@@ -6260,7 +6260,7 @@ void Spell::EffectDurabilityDamagePCT(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    int32 slot = m_spellInfo->EffectMiscValue[effIndex];
+    int32 slot = m_spellInfo->GetEffectMiscValue(effIndex);
 
     // FIXME: some spells effects have value -1/-2
     // Possibly its mean -1 all player equipped items and -2 all items
@@ -6291,7 +6291,7 @@ void Spell::EffectModifyThreatPercent(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectTransmitted(SpellEffIndex effIndex)
 {
-    uint32 name_id = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 name_id = m_spellInfo->GetEffectMiscValue(effIndex);
 
     GameObjectTemplate const* goinfo = sObjectMgr->GetGameObjectTemplate(name_id);
 
@@ -6626,7 +6626,7 @@ void Spell::EffectKillCredit(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    int32 creatureEntry = m_spellInfo->EffectMiscValue[effIndex];
+    int32 creatureEntry = m_spellInfo->GetEffectMiscValue(effIndex);
     if (!creatureEntry)
     {
         if (m_spellInfo->Id == 42793) // Burn Body
@@ -6703,7 +6703,7 @@ void Spell::EffectCreateTamedPet(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER || unitTarget->GetPetGUID() || unitTarget->getClass() != CLASS_HUNTER)
         return;
 
-    uint32 creatureEntry = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 creatureEntry = m_spellInfo->GetEffectMiscValue(effIndex);
     Pet* pet = unitTarget->CreateTamedPetFrom(creatureEntry, m_spellInfo->Id);
     if (!pet)
         return;
@@ -6727,7 +6727,7 @@ void Spell::EffectDiscoverTaxi(SpellEffIndex effIndex)
 {
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
-    uint32 nodeid = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 nodeid = m_spellInfo->GetEffectMiscValue(effIndex);
     if (sTaxiNodesStore.LookupEntry(nodeid))
         unitTarget->ToPlayer()->GetSession()->SendDiscoverNewTaxiNode(nodeid);
 }
@@ -6791,7 +6791,7 @@ void Spell::EffectWMOChange(SpellEffIndex effIndex)
         if (!caster)
             return;
 
-        int ChangeType = m_spellInfo->EffectMiscValue[effIndex];
+        int ChangeType = m_spellInfo->GetEffectMiscValue(effIndex);
         switch (ChangeType)
         {
             case 0: // intact
@@ -6938,7 +6938,7 @@ void Spell::EffectPlayMusic(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    uint32 soundid = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 soundid = m_spellInfo->GetEffectMiscValue(effIndex);
 
     if (!sSoundEntriesStore.LookupEntry(soundid))
     {
@@ -6980,7 +6980,7 @@ void Spell::EffectPlayerNotification(SpellEffIndex effIndex)
             break;
     }
 
-    uint32 soundid = m_spellInfo->EffectMiscValue[effIndex];
+    uint32 soundid = m_spellInfo->GetEffectMiscValue(effIndex);
 
     if (!sSoundEntriesStore.LookupEntry(soundid))
     {
