@@ -3069,7 +3069,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
                         if (!summon)
                             continue;
 
-                        if (properties->GetCategory() == SUMMON_CATEGORY_ALLY)
+                        if (properties->Category == SUMMON_CATEGORY_ALLY)
                         {
                             summon->SetUInt64Value(UNIT_FIELD_SUMMONEDBY, m_originalCaster->GetGUID());
                             summon->setFaction(m_originalCaster->getFaction());
@@ -3979,7 +3979,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                     Unit::AuraApplicationMap const& auras = unitTarget->GetAppliedAuras();
                     for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                     {
-                        if (itr->second->GetBase()->GetSpellProto()->Dispel == DISPEL_POISON)
+                        if (itr->second->GetBase()->GetSpellProto()->GetDispel() == DISPEL_POISON)
                         {
                             found = true;
                             break;
@@ -4029,14 +4029,14 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
         case SPELLFAMILY_HUNTER:
         {
             // Kill Shot - bonus damage from Ranged Attack Power
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x800000)
+            if (m_spellClass->SpellFamilyFlags[1] & 0x800000)
                 spell_bonus += int32(0.4f * m_caster->GetTotalAttackPowerValue(RANGED_ATTACK));
             break;
         }
         case SPELLFAMILY_DEATHKNIGHT:
         {
             // Plague Strike
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_0] & 0x1)
+            if (m_spellClass->SpellFamilyFlags[EFFECT_0] & 0x1)
             {
                 // Glyph of Plague Strike
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(58657, EFFECT_0))
@@ -4044,7 +4044,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                 break;
             }
             // Blood Strike
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_0] & 0x400000)
+            if (m_spellClass->SpellFamilyFlags[EFFECT_0] & 0x400000)
             {
                 AddPctF(totalDamagePercentMod, SpellMgr::CalculateSpellEffectAmount(m_spellInfo, EFFECT_2) * unitTarget->GetDiseasesByCaster(m_caster->GetGUID()) / 2.0f);
 
@@ -4055,7 +4055,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                 break;
             }
             // Death Strike
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_0] & 0x10)
+            if (m_spellClass->SpellFamilyFlags[EFFECT_0] & 0x10)
             {
                 // Glyph of Death Strike
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(59336, EFFECT_0))
@@ -4064,7 +4064,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                 break;
             }
             // Obliterate (12.5% more damage per disease)
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_1] & 0x20000)
+            if (m_spellClass->SpellFamilyFlags[EFFECT_1] & 0x20000)
             {
                 bool consumeDiseases = true;
                 // Annihilation
@@ -4083,7 +4083,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                 break;
             }
             // Heart Strike
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_0] & 0x1000000)
+            if (m_spellClass->SpellFamilyFlags[EFFECT_0] & 0x1000000)
             {
                 AddPctN(totalDamagePercentMod, SpellMgr::CalculateSpellEffectAmount(m_spellInfo, EFFECT_2) * unitTarget->GetDiseasesByCaster(m_caster->GetGUID()));
                 break;
