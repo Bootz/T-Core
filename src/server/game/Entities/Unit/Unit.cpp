@@ -10299,6 +10299,7 @@ void Unit::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers 
 
 uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint32 pdamage, DamageEffectType damagetype, uint32 stack)
 {
+    SpellClassOptionsEntry const* spellClass = NULL;
     if (!spellProto || !pVictim || damagetype == DIRECT_DAMAGE)
         return pdamage;
 
@@ -10495,7 +10496,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
             }
 
             // Torment the weak
-            if (spellProto->SpellFamilyFlags[0] & 0x20600021 || spellProto->SpellFamilyFlags[1] & 0x9000)
+            if (spellClass->SpellFamilyFlags[0] & 0x20600021 || spellClass->SpellFamilyFlags[1] & 0x9000)
                 if (pVictim->HasAuraWithMechanic((1<<MECHANIC_SNARE)|(1<<MECHANIC_SLOW_ATTACK)))
                 {
                     AuraEffectList const& mDumyAuras = GetAuraEffectsByType(SPELL_AURA_DUMMY);
@@ -10509,7 +10510,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
         break;
         case SPELLFAMILY_PRIEST:
             // Mind Flay
-            if (spellProto->SpellFamilyFlags[0] & 0x800000)
+            if (spellClass->SpellFamilyFlags[0] & 0x800000)
             {
                 // Glyph of Shadow Word: Pain
                 if (AuraEffect* aurEff = GetAuraEffect(55687, 0))
@@ -10524,7 +10525,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
             }
             // Smite
-            else if (spellProto->SpellFamilyFlags[0] & 0x80)
+            else if (spellClass->SpellFamilyFlags[0] & 0x80)
             {
                 // Glyph of Smite
                 if (AuraEffect* aurEff = GetAuraEffect(55692, 0))
@@ -10534,7 +10535,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
         break;
         case SPELLFAMILY_PALADIN:
             // Judgement of Vengeance/Judgement of Corruption
-            if ((spellProto->SpellFamilyFlags[1] & 0x400000) && spellProto->SpellIconID == 2292)
+            if ((spellClass->SpellFamilyFlags[1] & 0x400000) && spellProto->SpellIconID == 2292)
             {
                 // Get stack of Holy Vengeance/Blood Corruption on the target added by caster
                 uint32 stacks = 0;
@@ -10552,7 +10553,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
         break;
         case SPELLFAMILY_DRUID:
             // Thorns
-            if (spellProto->SpellFamilyFlags[0] & 0x100)
+            if (spellClass->SpellFamilyFlags[0] & 0x100)
             {
                 // Brambles
                 if (AuraEffect* aurEff = GetAuraEffectOfRankedSpell(16836, 0))
@@ -10561,7 +10562,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
         break;
         case SPELLFAMILY_WARLOCK:
             // Fire and Brimstone
-            if (spellProto->SpellFamilyFlags[1] & 0x00020040)
+            if (spellClass->SpellFamilyFlags[1] & 0x00020040)
                 if (pVictim->HasAuraState(AURA_STATE_CONFLAGRATE))
                 {
                     AuraEffectList const& mDumyAuras = GetAuraEffectsByType(SPELL_AURA_DUMMY);
@@ -10573,34 +10574,34 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                         }
                 }
             // Drain Soul - increased damage for targets under 25 % HP
-            if (spellProto->SpellFamilyFlags[0] & 0x00004000)
+            if (spellClass->SpellFamilyFlags[0] & 0x00004000)
                 if (HasAura(100001))
                     DoneTotalMod *= 4;
             // Shadow Bite (15% increase from each dot)
-            if (spellProto->SpellFamilyFlags[1] & 0x00400000 && isPet())
+            if (spellClass->SpellFamilyFlags[1] & 0x00400000 && isPet())
                 if (uint8 count = pVictim->GetDoTsByCaster(GetOwnerGUID()))
                     AddPctN(DoneTotalMod, 15 * count);
         break;
         case SPELLFAMILY_HUNTER:
             // Steady Shot
-            if (spellProto->SpellFamilyFlags[1] & 0x1)
+            if (spellClass->SpellFamilyFlags[1] & 0x1)
                 if (AuraEffect* aurEff = GetAuraEffect(56826, 0))  // Glyph of Steady Shot
                     if (pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER, 0x00004000, 0, 0, GetGUID()))
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
         break;
         case SPELLFAMILY_DEATHKNIGHT:
             // Improved Icy Touch
-            if (spellProto->SpellFamilyFlags[0] & 0x2)
+            if (spellClass->SpellFamilyFlags[0] & 0x2)
                 if (AuraEffect* aurEff = GetDummyAuraEffect(SPELLFAMILY_DEATHKNIGHT, 2721, 0))
                     AddPctN(DoneTotalMod, aurEff->GetAmount());
 
             // Sigil of the Vengeful Heart
-           if (spellProto->SpellFamilyFlags[0] & 0x2000)
+           if (spellClass->SpellFamilyFlags[0] & 0x2000)
                if (AuraEffect* aurEff = GetAuraEffect(64962, EFFECT_1))
                    AddPctN(DoneTotal, aurEff->GetAmount());
 
             // Glacier Rot
-            if (spellProto->SpellFamilyFlags[0] & 0x2 || spellProto->SpellFamilyFlags[1] & 0x6)
+            if (spellClass->SpellFamilyFlags[0] & 0x2 || spellClass->SpellFamilyFlags[1] & 0x6)
                 if (AuraEffect* aurEff = GetDummyAuraEffect(SPELLFAMILY_DEATHKNIGHT, 196, 0))
                     if (pVictim->GetDiseasesByCaster(owner->GetGUID()) > 0)
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
@@ -10880,6 +10881,7 @@ int32 Unit::SpellBaseDamageBonusForVictim(SpellSchoolMask schoolMask, Unit *pVic
 
 bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolMask schoolMask, WeaponAttackType attackType) const
 {
+    SpellClassOptionsEntry const* spellClass = NULL;
     // Mobs can't crit with spells.
     if (IS_CREATURE_GUID(GetGUID()))
         return false;
@@ -10966,7 +10968,7 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                         // cumulative effect - don't break
 
                         // Starfire
-                        if (spellProto->SpellFamilyFlags[0] & 0x4 && spellProto->SpellIconID == 1485)
+                        if (spellClass->SpellFamilyFlags[0] & 0x4 && spellProto->SpellIconID == 1485)
                         {
                             // Improved Insect Swarm
                             if (AuraEffect const* aurEff = GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
@@ -10982,7 +10984,7 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                         break;
                     case SPELLFAMILY_PALADIN:
                         // Flash of light
-                        if (spellProto->SpellFamilyFlags[0] & 0x40000000)
+                        if (spellClass->SpellFamilyFlags[0] & 0x40000000)
                         {
                             // Sacred Shield
                             AuraEffect const* aura = pVictim->GetAuraEffect(58597, 1);
@@ -11000,7 +11002,7 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                     break;
                     case SPELLFAMILY_SHAMAN:
                         // Lava Burst
-                        if (spellProto->SpellFamilyFlags[1] & 0x00001000)
+                        if (spellClass->SpellFamilyFlags[1] & 0x00001000)
                         {
                             if (pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_SHAMAN, 0x10000000, 0, 0, GetGUID()))
                                 if (pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE) > -100)
@@ -11020,7 +11022,7 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                 {
                     case SPELLFAMILY_DRUID:
                         // Rend and Tear - bonus crit chance for Ferocious Bite on bleeding targets
-                        if (spellProto->SpellFamilyFlags[0] & 0x00800000
+                        if (spellClass->SpellFamilyFlags[0] & 0x00800000
                             && spellProto->SpellIconID == 1680
                             && pVictim->HasAuraState(AURA_STATE_BLEEDING))
                         {
@@ -11031,7 +11033,7 @@ bool Unit::isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                     break;
                     case SPELLFAMILY_WARRIOR:
                        // Victory Rush
-                       if (spellProto->SpellFamilyFlags[1] & 0x100)
+                       if (spellClass->SpellFamilyFlags[1] & 0x100)
                        {
                            // Glyph of Victory Rush
                            if (AuraEffect const* aurEff = GetAuraEffect(58382, 0))
