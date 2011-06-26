@@ -1871,7 +1871,7 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
     {
         m_targets.m_dstPos.GetPosition(x, y, z);
 
-        if (m_spellInfo->EffectImplicitTargetA[effIndex] == TARGET_DEST_TARGET_BACK)
+        if (m_spellInfo->GetEffectImplicitTargetA(effIndex) == TARGET_DEST_TARGET_BACK)
         {
             // explicit cast data from client or server-side cast
             // some spell at client send caster
@@ -3892,7 +3892,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
     // and handle all effects at once
     for (uint32 j = effIndex + 1; j < MAX_SPELL_EFFECTS; ++j)
     {
-        switch (m_spellInfo->Effect[j])
+        switch (m_spellInfo->GetSpellEffectIdByIndex(j))
         {
             case SPELL_EFFECT_WEAPON_DAMAGE:
             case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
@@ -3931,7 +3931,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
         case SPELLFAMILY_WARRIOR:
         {
             // Devastate (player ones)
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x40)
+            if (m_spellClass->SpellFamilyFlags[1] & 0x40)
             {
                 // Player can apply only 58567 Sunder Armor effect.
                 bool needCast = !unitTarget->HasAura(58567, m_caster->GetGUID());
@@ -3951,11 +3951,11 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
         case SPELLFAMILY_ROGUE:
         {
             // Fan of Knives, Hemorrhage, Ghostly Strike
-            if ((m_spellInfo->SpellFamilyFlags[1] & 0x40000)
-                || (m_spellInfo->SpellFamilyFlags[0] & 0x6000000))
+            if ((m_spellClass->SpellFamilyFlags[1] & 0x40000)
+                || (m_spellClass->SpellFamilyFlags[0] & 0x6000000))
             {
                 // Hemorrhage
-                if (m_spellInfo->SpellFamilyFlags[0] & 0x2000000)
+                if (m_spellClass->SpellFamilyFlags[0] & 0x2000000)
                 {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
                         m_caster->ToPlayer()->AddComboPoints(unitTarget, 1, this);
@@ -3967,7 +3967,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
                             totalDamagePercentMod *= 1.5f;
             }
             // Mutilate (for each hand)
-            else if (m_spellInfo->SpellFamilyFlags[1] & 0x6)
+            else if (m_spellClass->SpellFamilyFlags[1] & 0x6)
             {
                 bool found = false;
                 // fast check
@@ -4013,13 +4013,13 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
         case SPELLFAMILY_DRUID:
         {
             // Mangle (Cat): CP
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x400)
+            if (m_spellClass->SpellFamilyFlags[1] & 0x400)
             {
                 if (m_caster->GetTypeId() == TYPEID_PLAYER)
                     m_caster->ToPlayer()->AddComboPoints(unitTarget, 1, this);
             }
             // Shred, Maul - Rend and Tear
-            else if (m_spellInfo->SpellFamilyFlags[0] & 0x00008800 && unitTarget->HasAuraState(AURA_STATE_BLEEDING))
+            else if (m_spellClass->SpellFamilyFlags[0] & 0x00008800 && unitTarget->HasAuraState(AURA_STATE_BLEEDING))
             {
                 if (AuraEffect const* rendAndTear = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 2859, 0))
                     AddPctN(totalDamagePercentMod, rendAndTear->GetAmount());
@@ -4096,7 +4096,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
     float weaponDamagePercentMod = 1.0f;
     for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
     {
-        switch (m_spellInfo->Effect[j])
+        switch (m_spellInfo->GetSpellEffectIdByIndex(j))
         {
             case SPELL_EFFECT_WEAPON_DAMAGE:
             case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
@@ -4143,7 +4143,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
     {
         // We assume that a spell have at most one fixed_bonus
         // and at most one weaponDamagePercentMod
-        switch(m_spellInfo->Effect[j])
+        switch(m_spellInfo->GetSpellEffectIdByIndex(j))
         {
             case SPELL_EFFECT_WEAPON_DAMAGE:
             case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
@@ -4223,7 +4223,7 @@ void Spell::EffectInterruptCast(SpellEffIndex effIndex)
             // check if we can interrupt spell
             if ((spell->getState() == SPELL_STATE_CASTING
                 || (spell->getState() == SPELL_STATE_PREPARING && spell->GetCastTime() > 0.0f))
-                && curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
+                && curSpellInfo->GetInterruptFlags() & SPELL_INTERRUPT_FLAG_INTERRUPT && curSpellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
             {
                 if (m_originalCaster)
                 {

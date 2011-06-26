@@ -1745,7 +1745,7 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask, DamageEff
         int32 manaReduction = currentAbsorb;
 
         // lower absorb amount by talents
-        if (float manaMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(absorbAurEff->GetSpellProto(), absorbAurEff->GetEffIndex(), absorbAurEff->GetCaster()))
+        if (float manaMultiplier = SpellMgr::CalculateSpellEffectValueMultiplier(absorbAurEff->GetSpellEffect(), absorbAurEff->GetEffIndex(), absorbAurEff->GetCaster()))
             manaReduction = int32(float(manaReduction) * manaMultiplier);
 
         int32 manaTaken = -pVictim->ModifyPower(POWER_MANA, -manaReduction);
@@ -5809,9 +5809,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     // remove cooldowns on all ranks of Frost Nova
                     for (SpellCooldowns::const_iterator itr = cooldowns.begin(); itr != cooldowns.end(); ++itr)
                     {
-                        SpellEntry const* cdSpell = sSpellStore.LookupEntry(itr->first);
+                        SpellClassOptionsEntry const* cdSpell = sSpellClassOptionsStore.LookupEntry(itr->first);
                         // Frost Nova
-                        if (cdSpell && cdSpell->GetSpellFamilyName() == SPELLFAMILY_MAGE
+                        if (cdSpell && cdSpell->SpellFamilyName == SPELLFAMILY_MAGE
                             && cdSpell->SpellFamilyFlags[0] & 0x00000040)
                             plr->RemoveSpellCooldown(cdSpell->Id, true);
                     }
@@ -5884,7 +5884,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             }
 
             // Retaliation
-            if (dummySpell->SpellFamilyFlags[1] & 0x8)
+            if (dummyClass->SpellFamilyFlags[1] & 0x8)
             {
                 // check attack comes not from behind
                 if (!HasInArc(M_PI, pVictim))
@@ -5948,9 +5948,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
         case SPELLFAMILY_WARLOCK:
         {
             // Seed of Corruption
-            if (dummySpell->SpellFamilyFlags[1] & 0x00000010)
+            if (dummyClass->SpellFamilyFlags[1] & 0x00000010)
             {
-                if (procSpell && procSpell->SpellFamilyFlags[1] & 0x8000)
+                if (procSpell && dummyClass->SpellFamilyFlags[1] & 0x8000)
                     return false;
                 // if damage is more than need or target die from damage deal finish spell
                 if (triggeredByAura->GetAmount() <= int32(damage) || GetHealth() <= damage)
@@ -5974,7 +5974,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 return true;
             }
             // Seed of Corruption (Mobs cast) - no die req
-            if (dummySpell->SpellFamilyFlags.IsEqual(0, 0, 0) && dummySpell->SpellIconID == 1932)
+            if (dummyClass->SpellFamilyFlags.IsEqual(0, 0, 0) && dummySpell->SpellIconID == 1932)
             {
                 // if damage is more than need deal finish spell
                 if (triggeredByAura->GetAmount() <= int32(damage))
@@ -6103,7 +6103,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
         case SPELLFAMILY_PRIEST:
         {
             // Vampiric Touch
-            if (dummySpell->SpellFamilyFlags[1] & 0x00000400)
+            if (dummyClass->SpellFamilyFlags[1] & 0x00000400)
             {
                 if (!pVictim || !pVictim->isAlive())
                     return false;
@@ -6149,7 +6149,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Vampiric Embrace
                 case 15286:
                 {
-                    if (!pVictim || !pVictim->isAlive() || procSpell->SpellFamilyFlags[1] & 0x80000)
+                    if (!pVictim || !pVictim->isAlive() || dummyClass->SpellFamilyFlags[1] & 0x80000)
                         return false;
 
                     // heal amount
@@ -6318,7 +6318,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Glyph of Rake
                 case 54821:
                 {
-                    if (procSpell->SpellVisual[0] == 750 && procSpell->EffectApplyAuraName[1] == 3)
+                    if (procSpell->SpellVisual[0] == 750 && procSpell->GetEffectApplyAuraName(1) == 3)
                     {
                         if (target->GetTypeId() == TYPEID_UNIT)
                         {
@@ -6384,19 +6384,19 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                     float  chance;
 
                     // Starfire
-                    if (procSpell->SpellFamilyFlags[0] & 0x4)
+                    if (dummyClass->SpellFamilyFlags[0] & 0x4)
                     {
                         triggered_spell_id = 40445;
                         chance = 25.0f;
                     }
                     // Rejuvenation
-                    else if (procSpell->SpellFamilyFlags[0] & 0x10)
+                    else if (dummyClass->SpellFamilyFlags[0] & 0x10)
                     {
                         triggered_spell_id = 40446;
                         chance = 25.0f;
                     }
                     // Mangle (Bear) and Mangle (Cat)
-                    else if (procSpell->SpellFamilyFlags[1] & 0x00000440)
+                    else if (dummyClass->SpellFamilyFlags[1] & 0x00000440)
                     {
                         triggered_spell_id = 40452;
                         chance = 40.0f;
@@ -6421,7 +6421,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 case 70723:
                 {
                     // Wrath & Starfire
-                    if ((procSpell->SpellFamilyFlags[0] & 0x5) && (procEx & PROC_EX_CRITICAL_HIT))
+                    if ((dummyClass->SpellFamilyFlags[0] & 0x5) && (procEx & PROC_EX_CRITICAL_HIT))
                     {
                         triggered_spell_id = 71023;
                         SpellEntry const* triggeredSpell = sSpellStore.LookupEntry(triggered_spell_id);
@@ -6456,7 +6456,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 if (!procSpell || effIndex != 0)
                     return false;
 
-                bool isWrathSpell = (procSpell->SpellFamilyFlags[0] & 1);
+                bool isWrathSpell = (dummyClass->SpellFamilyFlags[0] & 1);
 
                 if (!roll_chance_f(dummySpell->procChance * (isWrathSpell ? 0.6f : 1.0f)))
                     return false;
@@ -6481,7 +6481,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Effect 0 - mod damage while having Enrage
                 if (effIndex == 0)
                 {
-                    if (!(procSpell->SpellFamilyFlags[0] & 0x00080000))
+                    if (!(dummyClass->SpellFamilyFlags[0] & 0x00080000))
                         return false;
                     triggered_spell_id = 51185;
                     basepoints0 = triggerAmount;
@@ -6491,7 +6491,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 // Effect 1 - Tiger's Fury restore energy
                 else if (effIndex == 1)
                 {
-                    if (!(procSpell->SpellFamilyFlags[2] & 0x00000800))
+                    if (!(dummyClass->SpellFamilyFlags[2] & 0x00000800))
                         return false;
                     triggered_spell_id = 51178;
                     basepoints0 = triggerAmount;
@@ -6571,7 +6571,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 ToPlayer()->SetSpellModTakingSpell(spell, false);
 
                 // Explosive Shot
-                if (procSpell->SpellFamilyFlags[2] & 0x200)
+                if (dummyClass->SpellFamilyFlags[2] & 0x200)
                 {
                     if (AuraEffect const* pEff = pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_DUMMY, SPELLFAMILY_HUNTER, 0x0, 0x80000000, 0x0, GetGUID()))
                         basepoints0 = CalculatePowerCost(pEff->GetSpellProto(), this, SpellSchoolMask(pEff->GetSpellProto()->SchoolMask)) * 4/10/3;
@@ -6619,7 +6619,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
             if (dummySpell->SpellIconID == 3560)
             {
                 // This effect only from Rapid Killing (mana regen)
-                if (!(procSpell->SpellFamilyFlags[1] & 0x01000000))
+                if (!(dummyClass->SpellFamilyFlags[1] & 0x01000000))
                     return false;
                 triggered_spell_id = 56654;
 
@@ -6647,7 +6647,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
         case SPELLFAMILY_PALADIN:
         {
             // Seal of Righteousness - melee proc dummy (addition ${$MWS*(0.022*$AP+0.044*$SPH)} damage)
-            if (dummySpell->SpellFamilyFlags[0] & 0x8000000)
+            if (dummyClass->SpellFamilyFlags[0] & 0x8000000)
             {
                 if (effIndex != 0)
                     return false;
@@ -6700,11 +6700,11 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                 return true;
             }
             // Sacred Shield
-            if (dummySpell->SpellFamilyFlags[1] & 0x80000)
+            if (dummyClass->SpellFamilyFlags[1] & 0x80000)
             {
                 if (procFlag & PROC_FLAG_TAKEN_SPELL_MAGIC_DMG_CLASS_POS)
                 {
-                    if ((procSpell->GetSpellFamilyName() == SPELLFAMILY_PALADIN) && (procSpell->SpellFamilyFlags[0] & 0x40000000))
+                    if ((procSpell->GetSpellFamilyName() == SPELLFAMILY_PALADIN) && (dummyClass->SpellFamilyFlags[0] & 0x40000000))
                     {
                         basepoints0 = damage / 12;
 
@@ -6824,7 +6824,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     // At melee attack or Hammer of the Righteous spell damage considered as melee attack
                     bool stacker = !procSpell || procSpell->Id == 53595;
-                    bool damager = procSpell && procSpell->EquippedItemClass == ITEM_CLASS_WEAPON;
+                    bool damager = procSpell && procSpell->GetEquippedItemClass() == ITEM_CLASS_WEAPON;
 
                     if (!stacker && !damager)
                         return false;
@@ -6855,7 +6855,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     // At melee attack or Hammer of the Righteous spell damage considered as melee attack
                     bool stacker = !procSpell || procSpell->Id == 53595;
-                    bool damager = procSpell && procSpell->EquippedItemClass == ITEM_CLASS_WEAPON;
+                    bool damager = procSpell && procSpell->GetEquippedItemClass() == ITEM_CLASS_WEAPON;
 
                     if (!stacker && !damager)
                         return false;
@@ -8882,7 +8882,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
             // Item - Shaman T10 Enhancement 4P Bonus
             if (AuraEffect const* aurEff = GetAuraEffect(70832, 0))
                 if (Aura const* maelstrom = GetAura(53817))
-                    if ((maelstrom->GetStackAmount() == maelstrom->GetSpellProto()->StackAmount) && roll_chance_i(aurEff->GetAmount()))
+                    if ((maelstrom->GetStackAmount() == maelstrom->GetSpellProto()->GetStackAmount()) && roll_chance_i(aurEff->GetAmount()))
                         CastSpell(this, 70831, true, castItem, triggeredByAura);
 
             // have rank dependent proc chance, ignore too often cases

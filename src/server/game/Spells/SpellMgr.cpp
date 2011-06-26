@@ -3875,7 +3875,7 @@ void SpellMgr::LoadSpellCustomAttr()
 //            break;
 //        case 74396: // Fingers of Frost visual buff
 //            spellInfo->procCharges = 2;
-//            spellInfo->StackAmount = 0;
+//            spellInfo->GetStackAmount() = 0;
 //            ++count;
 //            break;
 //        case 28200: // Ascendance (Talisman of Ascendance trinket)

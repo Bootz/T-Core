@@ -5322,7 +5322,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
     for (int i = 0; i < MAX_SPELL_EFFECTS; i++)
     {
-        switch(m_spellInfo->EffectApplyAuraName[i])
+        switch(m_spellInfo->GetEffectApplyAuraName(i))
         {
             case SPELL_AURA_DUMMY:
             {
@@ -5611,9 +5611,9 @@ SpellCastResult Spell::CheckCasterAuras() const
         prevented_reason = SPELL_FAILED_CONFUSED;
     else if (unitflag & UNIT_FLAG_FLEEING && !(m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_FEARED))
         prevented_reason = SPELL_FAILED_FLEEING;
-    else if (unitflag & UNIT_FLAG_SILENCED && m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
+    else if (unitflag & UNIT_FLAG_SILENCED && m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
         prevented_reason = SPELL_FAILED_SILENCED;
-    else if (unitflag & UNIT_FLAG_PACIFIED && m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_PACIFY)
+    else if (unitflag & UNIT_FLAG_PACIFIED && m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_PACIFY)
         prevented_reason = SPELL_FAILED_PACIFIED;
 
     // Attr must make flag drop spell totally immune from all effects
@@ -5630,7 +5630,7 @@ SpellCastResult Spell::CheckCasterAuras() const
                     continue;
                 if (GetSpellSchoolMask(aura->GetSpellProto()) & school_immune)
                     continue;
-                if ((1<<(aura->GetSpellProto()->Dispel)) & dispel_immune)
+                if ((1<<(aura->GetSpellProto()->GetDispel())) & dispel_immune)
                     continue;
 
                 //Make a second check for spell failed so the right SPELL_FAILED message is returned.
@@ -5656,9 +5656,9 @@ SpellCastResult Spell::CheckCasterAuras() const
                             case SPELL_AURA_MOD_SILENCE:
                             case SPELL_AURA_MOD_PACIFY:
                             case SPELL_AURA_MOD_PACIFY_SILENCE:
-                                if (m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_PACIFY)
+                                if (m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_PACIFY)
                                     return SPELL_FAILED_PACIFIED;
-                                else if (m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
+                                else if (m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
                                     return SPELL_FAILED_SILENCED;
                                 break;
                             default: break;
@@ -5682,7 +5682,7 @@ bool Spell::CanAutoCast(Unit* target)
     {
         if (m_spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AURA)
         {
-            if (m_spellInfo->StackAmount <= 1)
+            if (m_spellInfo->GetStackAmount() <= 1)
             {
                 if (target->HasAuraEffect(m_spellInfo->Id, j))
                     return false;
@@ -5690,7 +5690,7 @@ bool Spell::CanAutoCast(Unit* target)
             else
             {
                 if (AuraEffect * aureff = target->GetAuraEffect(m_spellInfo->Id, j))
-                    if (aureff->GetBase()->GetStackAmount() >= m_spellInfo->StackAmount)
+                    if (aureff->GetBase()->GetStackAmount() >= m_spellInfo->GetStackAmount())
                         return false;
             }
         }
