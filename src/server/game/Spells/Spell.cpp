@@ -402,7 +402,7 @@ void SpellCastTargets::write (ByteBuffer & data)
 
 Spell::Spell(Unit* Caster, SpellEntry const *info, bool triggered, uint64 originalCasterGUID, bool skipCheck):
 m_spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(info, Caster)), m_spellEffect(), m_spellRestrictions(), m_spellReagent(),
-m_spellClass(), m_spellTarget(), m_spellEquipped(), m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
+m_spellClass(), m_spellTarget(), m_spellEquipped(), m_spellTotems(), m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
 {
     m_customAttr = sSpellMgr->GetSpellCustomAttr(m_spellInfo->Id);
     m_customError = SPELL_CUSTOM_ERROR_NONE;
