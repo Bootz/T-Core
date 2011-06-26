@@ -1266,8 +1266,8 @@ class SpellMgr
         bool IsSkillTypeSpell(uint32 spellId, SkillType type) const;
         static int32 CalculateSpellEffectAmount(SpellEntry const* spellEntry, uint8 effIndex, Unit const* caster = NULL, int32 const* basePoints = NULL, Unit const* target = NULL);
         static int32 CalculateSpellEffectBaseAmount(int32 value, SpellEffectEntry const* spellEntry, uint8 effIndex);
-        static float CalculateSpellEffectValueMultiplier(SpellEntry const* spellEffectEntry, uint8 effIndex, Unit* caster, Spell* spell = NULL);
-        static float CalculateSpellEffectDamageMultiplier(SpellEntry const* spellEffectEntry, uint8 effIndex, Unit* caster, Spell* spell = NULL);
+        static float CalculateSpellEffectValueMultiplier(SpellEffectEntry const* spellEntry, uint8 effIndex, Unit* caster, Spell* spell = NULL);
+        static float CalculateSpellEffectDamageMultiplier(SpellEffectEntry const* spellEntry, uint8 effIndex, Unit* caster, Spell* spell = NULL);
 
         // Spell correctess for client using
         static bool IsSpellValid(SpellEntry const* spellInfo, Player* pl = NULL, bool msg = true);
