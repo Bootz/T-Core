@@ -5682,7 +5682,7 @@ bool Spell::CanAutoCast(Unit* target)
 
     for (uint32 j = 0; j < MAX_SPELL_EFFECTS; ++j)
     {
-        if (m_spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AURA)
+        if (m_spellInfo->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA)
         {
             if (m_spellInfo->GetStackAmount() <= 1)
             {
@@ -5696,7 +5696,7 @@ bool Spell::CanAutoCast(Unit* target)
                         return false;
             }
         }
-        else if (IsAreaAuraEffect(m_spellInfo->Effect[j]))
+        else if (IsAreaAuraEffect(m_spellInfo->GetSpellEffectIdByIndex(j)))
         {
             if (target->HasAuraEffect(m_spellInfo->Id, j))
                 return false;

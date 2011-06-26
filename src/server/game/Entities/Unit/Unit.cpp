@@ -15100,7 +15100,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
         }
     }
     // Get chance from spell
-    float chance = float(spellProto->procChance);
+    float chance = float(spellProto->GetProcChance());
     // If in spellProcEvent exist custom chance, chance = spellProcEvent->customChance;
     if (spellProcEvent && spellProcEvent->customChance)
         chance = spellProcEvent->customChance;
@@ -16786,7 +16786,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId)
                 bool valid = false;
                 while (i < MAX_SPELL_EFFECTS && !valid)
                 {
-                    if (spellEntry->EffectApplyAuraName[i] == SPELL_AURA_CONTROL_VEHICLE)
+                    if (spellEntry->GetEffectApplyAuraName(i) == SPELL_AURA_CONTROL_VEHICLE)
                     {
                         valid = true;
                         break;
