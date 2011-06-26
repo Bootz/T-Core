@@ -9890,7 +9890,7 @@ void Unit::SetMinion(Minion *minion, bool apply)
         if (SpellEntry const* spInfo = sSpellStore.LookupEntry(minion->ToTotem()->GetSpell()))
             for (int i = 0; i < MAX_SPELL_EFFECTS; ++i)
             {
-                if (spInfo->Effect[i] != SPELL_EFFECT_SUMMON)
+                if (spInfo->GetSpellEffectIdByIndex(i) != SPELL_EFFECT_SUMMON)
                     continue;
 
                 RemoveAllMinionsByEntry(spInfo->GetEffectMiscValue(i));
@@ -10328,9 +10328,9 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                 }
                 else if (!((*i)->GetSpellProto()->AttributesEx5 & SPELL_ATTR5_SPECIAL_ITEM_CLASS_CHECK))
                 {
-                    if ((*i)->GetSpellEquipped()->EquippedItemClass & spellProto->EquippedItemClass)
+                    if ((*i)->GetSpellEquipped()->EquippedItemClass & spellProto->GetEquippedItemClass())
                         if (((*i)->GetSpellEquipped()->EquippedItemSubClassMask == 0) ||
-                            ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
+                            ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->GetEquippedItemSubClassMask()))
                             AddPctN(DoneTotalMod, (*i)->GetAmount());
                 }
                 else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellEquipped()))
@@ -11677,9 +11677,9 @@ void Unit::MeleeDamageBonus(Unit *pVictim, uint32 *pdamage, WeaponAttackType att
                     }
                     else if (!((*i)->GetSpellProto()->AttributesEx5 & SPELL_ATTR5_SPECIAL_ITEM_CLASS_CHECK))
                     {
-                        if ((*i)->GetSpellEquipped()->EquippedItemClass & spellProto->EquippedItemClass)
+                        if ((*i)->GetSpellEquipped()->EquippedItemClass & spellProto->GetEquippedItemClass())
                             if (((*i)->GetSpellEquipped()->EquippedItemSubClassMask == 0) ||
-                                ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->EquippedItemSubClassMask))
+                                ((*i)->GetSpellEquipped()->EquippedItemSubClassMask & spellProto->GetEquippedItemSubClassMask()))
                                 AddPctN(DoneTotalMod, (*i)->GetAmount());
                     }
                     else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellEquipped()))
@@ -13063,7 +13063,7 @@ int32 Unit::ModSpellDuration(SpellEntry const* spellProto, Unit const* target, i
                 sSpellMgr->IsSpellMemberOfSpellGroup(spellProto->Id, SPELL_GROUP_ELIXIR_BATTLE) ||
                 sSpellMgr->IsSpellMemberOfSpellGroup(spellProto->Id, SPELL_GROUP_ELIXIR_GUARDIAN)))
             {
-                if (target->HasAura(53042) && target->HasSpell(spellProto->EffectTriggerSpell[0]))
+                if (target->HasAura(53042) && target->HasSpell(spellProto->GetEffectTriggerSpell(0)))
                     duration *= 2;
             }
         }
@@ -13889,7 +13889,7 @@ void CharmInfo::InitCharmCreateSpells()
                 {
                     bool autocast = false;
                     for (uint32 i = 0; i < MAX_SPELL_EFFECTS && !autocast; ++i)
-                        if (SpellTargetType[spellInfo->EffectImplicitTargetA[i]] == TARGET_TYPE_UNIT_TARGET)
+                        if (SpellTargetType[spellInfo->GetEffectImplicitTargetAByIndex(i)] == TARGET_TYPE_UNIT_TARGET)
                             autocast = true;
 
                     if (autocast)
@@ -14394,7 +14394,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, 
                 case SPELL_AURA_MOD_POWER_COST_SCHOOL:
                     // Skip melee hits and spells ws wrong school or zero cost
                     if (procSpell &&
-                        (procSpell->GetManaCost() != 0 || procSpell->ManaCostPercentage != 0) && // Cost check
+                        (procSpell->GetManaCost() != 0 || procSpell->GetManaCostPercentage() != 0) && // Cost check
                         (triggeredByAura->GetMiscValue() & procSpell->SchoolMask))          // School check
                         takeCharges = true;
                     break;
@@ -14797,7 +14797,7 @@ uint32 Unit::GetCastingTimeForBonus(SpellEntry const *spellProto, DamageEffectTy
 
     for (uint32 i = 0; i < MAX_SPELL_EFFECTS; i++)
     {
-        switch (spellProto->Effect[i])
+        switch (spellProto->GetSpellEffectIdByIndex(i))
         {
             case SPELL_EFFECT_SCHOOL_DAMAGE:
             case SPELL_EFFECT_POWER_DRAIN:
@@ -14808,7 +14808,7 @@ uint32 Unit::GetCastingTimeForBonus(SpellEntry const *spellProto, DamageEffectTy
                 DirectDamage = true;
                 break;
             case SPELL_EFFECT_APPLY_AURA:
-                switch (spellProto->EffectApplyAuraName[i])
+                switch (spellProto->GetEffectApplyAuraName(i))
                 {
                     case SPELL_AURA_PERIODIC_DAMAGE:
                     case SPELL_AURA_PERIODIC_HEAL:
@@ -14825,7 +14825,7 @@ uint32 Unit::GetCastingTimeForBonus(SpellEntry const *spellProto, DamageEffectTy
                 break;
         }
 
-        if (IsAreaEffectTarget[spellProto->EffectImplicitTargetA[i]] || IsAreaEffectTarget[spellProto->EffectImplicitTargetB[i]])
+        if (IsAreaEffectTarget[spellProto->GetEffectImplicitTargetAByIndex(i)] || IsAreaEffectTarget[spellProto->GetEffectImplicitTargetBByIndex(i)])
             AreaEffect = true;
     }
 
@@ -15083,7 +15083,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
     if (!isVictim && GetTypeId() == TYPEID_PLAYER)
     {
         Player* player = ToPlayer();
-        if (spellProto->EquippedItemClass == ITEM_CLASS_WEAPON)
+        if (spellProto->GetEquippedItemClass() == ITEM_CLASS_WEAPON)
         {
             Item* item = NULL;
             if (attType == BASE_ATTACK)
@@ -15096,14 +15096,14 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellEntry co
             if (player->IsInFeralForm())
                 return false;
 
-            if (!item || item->IsBroken() || item->GetTemplate()->Class != ITEM_CLASS_WEAPON || !((1<<item->GetTemplate()->SubClass) & spellProto->EquippedItemSubClassMask))
+            if (!item || item->IsBroken() || item->GetTemplate()->Class != ITEM_CLASS_WEAPON || !((1<<item->GetTemplate()->SubClass) & spellProto->GetEquippedItemSubClassMask()))
                 return false;
         }
-        else if (spellProto->EquippedItemClass == ITEM_CLASS_ARMOR)
+        else if (spellProto->GetEquippedItemClass() == ITEM_CLASS_ARMOR)
         {
             // Check if player is wearing shield
             Item* item = player->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-            if (!item || item->IsBroken() || item->GetTemplate()->Class != ITEM_CLASS_ARMOR || !((1<<item->GetTemplate()->SubClass) & spellProto->EquippedItemSubClassMask))
+            if (!item || item->IsBroken() || item->GetTemplate()->Class != ITEM_CLASS_ARMOR || !((1<<item->GetTemplate()->SubClass) & spellProto->GetEquippedItemSubClassMask()))
                 return false;
         }
     }
