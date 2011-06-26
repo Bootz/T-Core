@@ -2055,7 +2055,7 @@ public:
                         who->CastSpell(who, SPELL_CAGED, true);
                         DespawnTimer = 5000;
                         if (who->HasAura(SPELL_ENRAGE))
-                            who->RemoveAurasDueToSpell(SPELL_ENRAGE); // Dispel his enrage
+                            who->RemoveAurasDueToSpell(SPELL_ENRAGE); // GetDispel() his enrage
                         //if (GameObject* CageTrap = pInstance->instance->GetGameObject(pInstance->GetData64(CageTrapGUID)))
                         //    CageTrap->SetLootState(GO_JUST_DEACTIVATED);
                     }

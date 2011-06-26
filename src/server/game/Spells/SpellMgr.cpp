@@ -299,7 +299,7 @@ uint32 GetDispelChance(Unit* auraCaster, Unit* target, uint32 spellId, bool offe
         if (Player* modOwner = auraCaster->GetSpellModOwner())
             modOwner->ApplySpellMod(spellId, SPELLMOD_RESIST_DISPEL_CHANCE, resist_chance);
 
-    // Dispel resistance from target SPELL_AURA_MOD_DISPEL_RESIST
+    // GetDispel() resistance from target SPELL_AURA_MOD_DISPEL_RESIST
     // Only affects offensive dispels
     if (offensive && target)
         resist_chance += target->GetTotalAuraModifier(SPELL_AURA_MOD_DISPEL_RESIST);
@@ -3284,7 +3284,7 @@ bool CanSpellDispelAura(SpellEntry const* dispelSpell, SpellEntry const* aura)
     if (aura->Attributes & SPELL_ATTR0_NEGATIVE_1)
         return false;
 
-    // These spells (like Mass Dispel) can dispell all auras
+    // These spells (like Mass GetDispel()) can dispell all auras
     if (dispelSpell->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
         return true;
 
