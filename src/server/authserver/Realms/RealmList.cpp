@@ -64,7 +64,7 @@ void RealmList::UpdateIfNeed()
     m_realms.clear();
 
     // Get the content of the realmlist table in the database
-    UpdateRealms(false);
+    UpdateRealms();
 }
 
 void RealmList::UpdateRealms(bool init)
