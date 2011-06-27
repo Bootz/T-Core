@@ -28,6 +28,7 @@ const char AreaTableEntryfmt[]="iiinixxxxxisixxxxxxxxxxxx";
 const char AreaGroupEntryfmt[]="niiiiiii";
 const char AreaPOIEntryfmt[]="niiiiiiiiiiiffixixxixx";
 const char AreaTriggerEntryfmt[]="nifffxxxfffff";
+const char ArmorLocationfmt[]="nfffff";
 const char AuctionHouseEntryfmt[]="niiix";
 const char BankBagSlotPricesEntryfmt[]="ni";
 const char BarberShopStyleEntryfmt[]="nixxxiii";

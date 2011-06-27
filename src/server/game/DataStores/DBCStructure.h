@@ -585,6 +585,12 @@ struct AreaTriggerEntry
     float   box_orientation;                                // 9        m_box_yaw
 };
 
+struct ArmorLocationEntry
+{
+  uint32    InventoryType;                                  // 0
+  float     Value[5];                                       // 1-5 multiplier for armor types (unarmored, cloth, lether, mail, plate)
+};
+
 struct AuctionHouseEntry
 {
     uint32    houseId;                                      // 0 index
