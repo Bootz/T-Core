@@ -1456,7 +1456,7 @@ void World::SetInitialWorldSettings()
     sSpellMgr->LoadSpellTargetPositions();
 
     sLog->outString("Loading enchant custom attributes...");
-    sSpellMgr->LoadEnchantCustomAttr();
+    /*sSpellMgr->LoadEnchantCustomAttr();*/
 
     sLog->outString("Loading linked spells...");
     sSpellMgr->LoadSpellLinked();

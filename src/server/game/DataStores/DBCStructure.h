@@ -1682,9 +1682,9 @@ struct SpellEntry
     uint32    AttributesEx4;                                // 5        m_attributesExD
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
-    uint32    AttributesEx7;                                // 8        m_attributesExG
-    uint32    AttributesEx8;                                // 9        m_attributesEXH
-    // uint32 someFlags;                                    // 10        4.0.0
+    uint32    AttributesEx7;                                // 8        m_attributesExG (0x20 - totems, 0x4 - paladin auras, etc...)
+    // uint32 someFlags;                                    // 9        4.0.0
+    // uint32 unk_400_1;                                    // 10       4.0.0
     uint32    CastingTimeIndex;                             // 11       m_castingTimeIndex
     uint32    DurationIndex;                                // 12       m_durationIndex
     uint32    powerType;                                    // 13       m_powerType
@@ -1700,7 +1700,7 @@ struct SpellEntry
     uint32    SchoolMask;                                   // 24       m_schoolMask
     uint32    runeCostID;                                   // 25       m_runeCostID
     //uint32    spellMissileID;                             // 26       m_spellMissileID not used
-    //uint32  spellDescriptionVariableID;                   // 27       3.2.0
+    //uint32  spellDescriptionVariableID;                   // 27       m_spellDescriptionVariableID, 3.2.0
     uint32  SpellDifficultyId;                              // 28       m_spellDifficultyID - id from SpellDifficulty.dbc
     //float unk_f1;                                         // 29
     uint32 SpellScalingId;                                  // 30       SpellScaling.dbc
@@ -1843,6 +1843,7 @@ struct SpellEntry
     /**************************/
 
     uint32 GetSpellFamilyName() const;
+    virtual uint32 GetStances() const;
 
 private:
     // prevent creating custom entries (copy data from original in fact)
