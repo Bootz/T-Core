@@ -585,6 +585,12 @@ struct AreaTriggerEntry
     float   box_orientation;                                // 9        m_box_yaw
 };
 
+struct ArmorLocationEntry
+{
+  uint32    InventoryType;                                  // 0
+  float     Value[5];                                       // 1-5 multiplier for armor types (unarmored, cloth, lether, mail, plate)
+};
+
 struct AuctionHouseEntry
 {
     uint32    houseId;                                      // 0 index
@@ -1070,18 +1076,6 @@ struct HolidaysEntry
     //uint32 priority;                                      // 52       m_priority
     //uint32 calendarFilterType;                            // 53       m_calendarFilterType (-1 = Fishing Contest, 0 = Unk,1 = Darkmoon Festival, 2 = Yearly holiday)
     //uint32 flags;                                         // 54       m_flags (0 = Darkmoon Faire, Fishing Contest and Wotlk Launch, rest is 1)
-};
-
-struct ItemEntry
-{
-   uint32   ID;                                             // 0
-   uint32   Class;                                          // 1
-   uint32   SubClass;                                       // 2 some items have strnage subclasses
-   int32    Unk0;                                           // 3
-   int32    Material;                                       // 4
-   uint32   DisplayId;                                      // 5
-   uint32   InventoryType;                                  // 6
-   uint32   Sheath;                                         // 7
 };
 
 struct ItemBagFamilyEntry
