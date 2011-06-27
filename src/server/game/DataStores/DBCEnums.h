@@ -23,7 +23,7 @@
 // Client expected level limitation, like as used in DBC item max levels for "until max player level"
 // use as default max player level, must be fit max level for used client
 // also see MAX_LEVEL and STRONG_MAX_LEVEL define
-#define DEFAULT_MAX_LEVEL 80
+#define DEFAULT_MAX_LEVEL 85
 
 // client supported max level for player/pets/etc. Avoid overflow or client stability affected.
 // also see GT_MAX_LEVEL define
@@ -429,6 +429,14 @@ enum SummonPropFlags
     SUMMON_PROP_FLAG_UNK14           = 0x00002000,          // Guides, player follows
     SUMMON_PROP_FLAG_UNK15           = 0x00004000,          // Force of Nature, Shadowfiend, Feral Spirit, Summon Water Elemental
     SUMMON_PROP_FLAG_UNK16           = 0x00008000,          // Light/Dark Bullet, Soul/Fiery Consumption, Twisted Visage, Twilight Whelp. Phase related?
+};
+
+enum CurrencyTypes
+{
+    CURRENCY_TYPE_CONQUEST_POINTS                = 390,
+    CURRENCY_TYPE_HONOR_POINTS                   = 392,
+    CURRENCY_TYPE_JUSTICE_POINTS                 = 395,
+    CURRENCY_TYPE_VALOR_POINTS                   = 396,
 };
 
 #endif
