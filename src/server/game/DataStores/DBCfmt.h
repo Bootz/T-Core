@@ -69,6 +69,7 @@ const char GtOCTRegenHPfmt[]="xf";
 const char GtRegenHPPerSptfmt[]="xf";
 const char GtRegenMPPerSptfmt[]="xf";
 const char Holidaysfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const char Itemfmt[]="niiiiiii";
 const char ItemBagFamilyfmt[]="nxxxxxxxxxxxxxxxxx";
 //const char ItemDisplayTemplateEntryfmt[]="nxxxxxxxxxxixxxxxxxxxxx";
 //const char ItemCondExtCostsEntryfmt[]="xiii";
