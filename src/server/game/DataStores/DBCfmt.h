@@ -85,6 +85,7 @@ const char MapEntryfmt[]="nxixxssssssssssssssssxixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 const char MapDifficultyEntryfmt[]="diisxxxxxxxxxxxxxxxxiix";
 const char MovieEntryfmt[]="nxx";
 const char OverrideSpellDatafmt[]="niiiiiiiiiix";
+const char PhaseEntryfmt[]="nsi";
 const char QuestSortEntryfmt[]="nxxxxxxxxxxxxxxxxx";
 const char QuestXPfmt[]="niiiiiiiiii";
 const char QuestFactionRewardfmt[]="niiiiiiiiii";
