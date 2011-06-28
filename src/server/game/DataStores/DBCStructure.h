@@ -1659,6 +1659,17 @@ struct SpellScalingEntry
     uint32    unk15;                                        // 15
 };
 
+// SpellShapeshift.dbc
+struct SpellShapeshiftEntry
+{
+    uint32    Id;                                           // 0 - m_ID
+    uint32    Stances;                                      // 1 - m_shapeshiftMask
+    // uint32 unk_320_2;                                    // 2 - 3.2.0
+    uint32    StancesNot;                                   // 3 - m_shapeshiftExclude
+    // uint32 unk_320_3;                                    // 4 - 3.2.0
+    // uint32    StanceBarOrder;                            // 5 - m_stanceBarOrder not used
+};
+
 // SpellTargetRestrictions.dbc
 struct SpellTargetRestrictionsEntry
 {
@@ -1741,6 +1752,7 @@ struct SpellEntry
     SpellPowerEntry const* GetSpellPower() const;
     SpellReagentsEntry const* GetSpellReagents() const;
     SpellScalingEntry const* GetSpellScaling() const;
+	SpellShapeshiftEntry const* GetSpellShapeshift() const;
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
     SpellTotemsEntry const* GetSpellTotems() const;
 
@@ -1916,21 +1928,22 @@ struct SpellRuneCostEntry
 
 #define MAX_SHAPESHIFT_SPELLS 8
 
-struct SpellShapeshiftEntry
+struct SpellShapeshiftFormEntry
 {
     uint32 ID;                                              // 0
     //uint32 buttonPosition;                                // 1 unused
-    //char*  Name[16];                                      // 2-17 unused
-    //uint32 NameFlags;                                     // 18 unused
-    uint32 flags1;                                          // 19
-    int32  creatureType;                                    // 20 <= 0 humanoid, other normal creature types
-    //uint32 unk1;                                          // 21 unused
-    uint32 attackSpeed;                                     // 22
-    uint32 modelID_A;                                       // 23 alliance modelid
-    uint32 modelID_H;                                       // 24 horde modelid (only one form)
-    //uint32 unk3;                                          // 25 unused
-    //uint32 unk4;                                          // 26 unused
-    uint32 stanceSpell[MAX_SHAPESHIFT_SPELLS];                                  // 27 - 34 unused
+    //DBCString Name;                                       // 2 unused
+    uint32 flags1;                                          // 3
+    int32  creatureType;                                    // 4 <=0 humanoid, other normal creature types
+    //uint32 unk1;                                          // 5 unused, related to next field
+    uint32 attackSpeed;                                     // 6
+    uint32 modelID_A;                                       // 7 alliance modelid (0 means no model)
+    uint32 modelID_H;                                       // 8 horde modelid (but only for one form)
+    //uint32 unk3;                                          // 9 unused always 0
+    //uint32 unk4;                                          // 10 unused always 0
+    uint32 stanceSpell[MAX_SHAPESHIFT_SPELLS];              // 11-18 spells which appear in the bar after shapeshifting
+    //uint32 unk5;                                          // 19
+    //uint32 unk6;                                          // 20
 };
 
 struct SpellDurationEntry

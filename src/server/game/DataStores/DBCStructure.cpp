@@ -351,6 +351,13 @@ uint32 SpellEntry::GetSpellFamilyName() const
     return classOpt ? classOpt->SpellFamilyName : 0;
 }
 
+//SpellShapeshiftEntry
+uint32 SpellEntry::GetStances() const
+{
+    SpellShapeshiftEntry const* ss = GetSpellShapeshift();
+    return ss ? ss->Stances : 0;
+}
+
 // Return Methods.
 SpellAuraOptionsEntry const* SpellEntry::GetSpellAuraOptions() const
 {
@@ -415,6 +422,11 @@ SpellReagentsEntry const* SpellEntry::GetSpellReagents() const
 SpellScalingEntry const* SpellEntry::GetSpellScaling() const
 {
     return SpellScalingId ? sSpellScalingStore.LookupEntry(SpellScalingId) : NULL;
+}
+
+SpellShapeshiftEntry const* SpellEntry::GetSpellShapeshift() const
+{
+    return SpellShapeshiftId ? sSpellShapeshiftStore.LookupEntry(SpellShapeshiftId) : NULL;
 }
 
 SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() const
