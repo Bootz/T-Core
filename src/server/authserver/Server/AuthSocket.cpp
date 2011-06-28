@@ -832,10 +832,17 @@ bool AuthSocket::_HandleRealmList()
     for (RealmList::RealmMap::const_iterator i = sRealmList->begin(); i != sRealmList->end(); ++i)
     {
         // don't work with realms which not compatible with the client
-        if ((_expversion & POST_BC_EXP_FLAG) && i->second.gamebuild != _build)
-            continue;
-        else if ((_expversion & PRE_BC_EXP_FLAG) && !AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
+        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
+        {
+            if (i->second.gamebuild != _build)
+            {
+                sLog->outStaticDebug("Realm not added because of not correct build : %u != %u", i->second.gamebuild, _build);
                 continue;
+            }
+        }
+        else if (_expversion & PRE_BC_EXP_FLAG) // 1.12.1 and 1.12.2 clients are compatible with eachother
+            if (!AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
+	            continue;
 
         uint8 AmountOfCharacters;
 
