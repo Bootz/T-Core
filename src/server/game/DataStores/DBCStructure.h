@@ -1748,90 +1748,19 @@ struct SpellEntry
     /* SpellEffectEntry */
     /********************/
 
-    int32 GetEffectMiscValue(uint32 index) const
-    {
-        SpellEffectEntry const* effect = GetSpellEffect(index);
-        return effect ? effect->EffectMiscValue : 0;
-    };
-
-    int32 GetEffectMiscValueB(uint32 index) const
-    {
-        SpellEffectEntry const* effect = GetSpellEffect(index);
-        return effect ? effect->EffectMiscValueB : 0;
-    };
-
-    uint32 GetSpellEffectIdByIndex(uint32 index) const
-    {
-        SpellEffectEntry const* effect = GetSpellEffect(index);
-        return effect ? effect->Effect : SPELL_EFFECT_NONE;
-    };
-
-    uint32 GetEffectImplicitTargetAByIndex(uint32 index) const
-    {
-        SpellEffectEntry const* effect = GetSpellEffect(index);
-        return effect ? effect->EffectImplicitTargetA : TARGET_NONE;
-    };
-
-    uint32 GetEffectImplicitTargetBByIndex(uint32 index) const
-    {
-        SpellEffectEntry const* effect = GetSpellEffect(index);
-        return effect ? effect->EffectImplicitTargetB : TARGET_NONE;
-    };
-
-    uint32 GetEffectAmplitude(uint32 index) const
-    {
-       SpellEffectEntry const* effect = GetSpellEffect(index);
-       return effect ? effect->EffectAmplitude : 0;
-    };
-
-    int32 GetEffectBasePoints(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectBasePoints;
-        return 0;
-    };
-
-    uint32 const* GetEffectSpellClassMask(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return &effectEntry->EffectSpellClassMaskA[0];
-        return NULL;
-    };
-
-    uint32 GetEffectRadiusIndex(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectRadiusIndex;
-        return NULL;
-    };
-
-    uint32 GetEffectApplyAuraName(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectApplyAuraName;
-        return NULL;
-    };
-
-    uint32 GetEffectItemType(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectItemType;
-        return NULL;
-    };
-
-    uint32 GetEffectMechanic(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectMechanic;
-        return NULL;
-    };
-
-    uint32 GetEffectTriggerSpell(uint32 eff) const
-    {
-        if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-            return effectEntry->EffectTriggerSpell;
-        return NULL;
-    };
+    int32 GetEffectMiscValueB(uint32 index) const;
+    int32 GetEffectMiscValue(uint32 index) const;
+    uint32 GetSpellEffectIdByIndex(uint32 index) const;
+    uint32 GetEffectImplicitTargetAByIndex(uint32 index) const;
+    uint32 GetEffectImplicitTargetBByIndex(uint32 index) const;
+    int32 GetEffectBasePoints(uint32 eff) const;
+    uint32 const* GetEffectSpellClassMask(uint32 eff) const;
+    uint32 GetEffectRadiusIndex(uint32 eff) const;
+    uint32 GetEffectApplyAuraName(uint32 eff) const;
+    uint32 GetEffectItemType(uint32 eff) const;
+    uint32 GetEffectMechanic(uint32 eff) const;
+    uint32 GetEffectTriggerSpell(uint32 eff) const;
+    uint32 GetEffectAmplitude(uint32 index) const;
 
     /********************/
     /* SpellPowerEntry  */
