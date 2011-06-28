@@ -306,7 +306,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     socket().recv((char *)&buf[0], 4);
 
-#if ENDIAN == BIGENDIAN
+#if TRILLIUM_ENDIAN == TRILLIUM_BIGENDIAN
     EndianConvert(*((uint16*)(buf[0])));
 #endif
 
@@ -328,7 +328,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     // BigEndian code, nop in little endian case
     // size already converted
-#if ENDIAN == BIGENDIAN
+#if TRILLIUM_ENDIAN == TRILLIUM_BIGENDIAN
     EndianConvert(*((uint32*)(&ch->gamename[0])));
     EndianConvert(ch->build);
     EndianConvert(*((uint32*)(&ch->platform[0])));
