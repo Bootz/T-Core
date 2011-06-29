@@ -1,7 +1,7 @@
   ______________________________________________
  /   1.) Cleanup game folder. and cpp files.    |
 |    2.) Cleanup scripts.                       |
-|    3.) Write new Spell System.                |
+|    3.) Drop get Methods & implement in tc way |
  \_____________________________________________/
  /                                            /
  |   4.) Fix world Login                     |
