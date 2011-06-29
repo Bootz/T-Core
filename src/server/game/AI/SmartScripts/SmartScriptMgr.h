@@ -27,9 +27,7 @@
 #include "ConditionMgr.h"
 #include "CreatureTextMgr.h"
 #include "Spell.h"
-
-//#include "SmartScript.h"
-//#include "SmartAI.h"
+#include "DB2Stores.h"
 
 struct WayPoint
 {

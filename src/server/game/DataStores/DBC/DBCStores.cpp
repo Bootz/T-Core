@@ -23,7 +23,7 @@
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 
-#include "DBCfmt.h"
+#include "DBCformat.h"
 
 #include <map>
 
@@ -108,7 +108,6 @@ DBCStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSptf
 
 DBCStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
-DBCStorage <ItemEntry>                    sItemStore(Itemfmt);
 DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore(ItemBagFamilyfmt);
 //DBCStorage <ItemCondExtCostsEntry> sItemCondExtCostsStore(ItemCondExtCostsEntryfmt);
 //DBCStorage <ItemDisplayInfoEntry> sItemDisplayInfoStore(ItemDisplayTemplateEntryfmt); -- not used currently
@@ -360,7 +359,6 @@ void LoadDBCStores(const std::string& dataPath)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sHolidaysStore,               dbcPath, "Holidays.dbc");
 
-    LoadDBC(availableDbcLocales, bad_dbc_files, sItemStore,                   dbcPath, "Item.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemBagFamilyStore,          dbcPath, "ItemBagFamily.dbc");
     //LoadDBC(dbcCount, availableDbcLocales, bad_dbc_files, sItemDisplayInfoStore,        dbcPath, "ItemDisplayInfo.dbc");     -- not used currently
     //LoadDBC(dbcCount, availableDbcLocales, bad_dbc_files, sItemCondExtCostsStore,       dbcPath, "ItemCondExtCosts.dbc");
@@ -916,7 +914,6 @@ uint32 const* GetTalentTabPages(uint8 cls)
  DBCStorage <SpellEffectEntry>   const* GetSpellEffectStore()    { return &sSpellEffectStore;    }
  DBCStorage <SpellRangeEntry>    const* GetSpellRangeStore()     { return &sSpellRangeStore;     }
  DBCStorage <FactionEntry>       const* GetFactionStore()        { return &sFactionStore;        }
- DBCStorage <ItemEntry>          const* GetItemDisplayStore()    { return &sItemStore;           }
  DBCStorage <CreatureDisplayInfoEntry> const* GetCreatureDisplayStore() { return &sCreatureDisplayInfoStore; }
  DBCStorage <EmotesEntry>        const* GetEmotesStore()         { return &sEmotesStore;         }
  DBCStorage <EmotesTextEntry>    const* GetEmotesTextStore()     { return &sEmotesTextStore;     }

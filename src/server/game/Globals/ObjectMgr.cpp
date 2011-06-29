@@ -46,6 +46,7 @@
 #include "ScriptMgr.h"
 #include "SpellScript.h"
 #include "PoolMgr.h"
+#include "DB2Stores.h"
 
 ScriptMapMap sQuestEndScripts;
 ScriptMapMap sQuestStartScripts;
@@ -1043,7 +1044,7 @@ void ObjectMgr::LoadEquipmentTemplates()
             if (!equipmentInfo.ItemEntry[i])
                 continue;
 
-           ItemEntry const *dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
+            ItemEntry const *dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
 
             if (!dbcItem)
             {

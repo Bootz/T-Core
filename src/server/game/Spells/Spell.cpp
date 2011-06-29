@@ -53,6 +53,7 @@
 #include "DisableMgr.h"
 #include "SpellScript.h"
 #include "InstanceScript.h"
+#include "DB2Stores.h"
 
 #define SPELL_CHANNEL_UPDATE_INTERVAL (1 * IN_MILLISECONDS)
 

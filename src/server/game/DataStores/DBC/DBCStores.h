@@ -113,7 +113,6 @@ extern DBCStorage <GtOCTClassCombatRatingScalarEntry> sGtOCTClassCombatRatingSca
 extern DBCStorage <GtRegenHPPerSptEntry>         sGtRegenHPPerSptStore;
 extern DBCStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore;
 extern DBCStorage <HolidaysEntry>                sHolidaysStore;
-extern DBCStorage <ItemEntry>                    sItemStore;
 extern DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore;
 //extern DBCStorage <ItemDisplayInfoEntry>      sItemDisplayInfoStore; -- not used currently
 extern DBCStorage <ItemExtendedCostEntry>        sItemExtendedCostStore;
@@ -197,7 +196,6 @@ void LoadDBCStores(const std::string& dataPath);
  DBCStorage <SpellEffectEntry>           const* GetSpellEffectStore();
  DBCStorage <SpellRangeEntry>            const* GetSpellRangeStore();
  DBCStorage <FactionEntry>               const* GetFactionStore();
- DBCStorage <ItemEntry>                  const* GetItemDisplayStore();
  DBCStorage <CreatureDisplayInfoEntry>   const* GetCreatureDisplayStore();
  DBCStorage <EmotesEntry>                const* GetEmotesStore();
  DBCStorage <EmotesTextEntry>            const* GetEmotesTextStore();
