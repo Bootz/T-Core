@@ -1164,17 +1164,16 @@ struct ItemDamageEntry
 
 struct ItemExtendedCostEntry
 {
-    uint32      ID;                                         // 0 extended-cost entry id
-    //uint32      reqhonorpoints;                             // 1 required honor points
-    //uint32      reqarenapoints;                             // 2 required arena points
-    uint32      RequiredArenaSlot;                          // 4 arena slot restrictions (min slot value)
-    uint32      RequiredItem[MAX_EXTENDED_COST_ITEMS];      // 5-8 required item id
-    uint32      RequiredItemCount[MAX_EXTENDED_COST_ITEMS]; // 9-13 required count of 1st item
-    uint32      RequiredPersonalArenaRating;                // 14 required personal arena rating
-    //uint32                                                // 15
-    uint32      RequiredCurrency[MAX_EXTENDED_COST_CURRENCIES];      // 16-20
-    uint32      RequiredCurrencyCount[MAX_EXTENDED_COST_CURRENCIES]; // 21-25
-    //uint32    something[5];                               // 26-30required personal arena rating};
+    uint32      ID;                                                 // 0 extended-cost entry id
+    uint32      reqhonorpoints;                                     // 1 required honor points
+    uint32      reqarenapoints;                                     // 2 required arena points
+    uint32      reqarenaslot;                                       // 3 arena slot restrctions (min slot value)
+    uint32      reqitem[MAX_ITEM_EXTENDED_COST_REQUIREMENTS];       // 4-8 required item id
+    uint32      reqitemcount[MAX_ITEM_EXTENDED_COST_REQUIREMENTS];  // 9-14 required count of 1st item
+    uint32      reqpersonalarenarating;                             // 15 required personal arena rating};
+    //uint32    someId[5];                                  // 16-20, may be currency id's
+    //uint32    someCount[5];                               // 21-25
+    //uint32    something[5];                               // 26-30
 };
 
 struct ItemLimitCategoryEntry
@@ -1647,7 +1646,7 @@ struct SpellEffectEntry
     uint32    EffectRadiusIndex;                            // 15       m_effectRadiusIndex - spellradius.dbc
     //uint32   EffectRadiusMaxIndex;                        // 16       4.0.0
     float     EffectRealPointsPerLevel;                     // 17       m_effectRealPointsPerLevel
-    flag96    EffectSpellClassMaskA;                         // 18       m_effectSpellClassMask, effect 0
+    flag96    EffectSpellClassMaskA;                        // 18       m_effectSpellClassMask, effect 0
     uint32    EffectTriggerSpell;                           // 19       m_effectTriggerSpell
     uint32    EffectImplicitTargetA;                        // 20       m_implicitTargetA
     uint32    EffectImplicitTargetB;                        // 21       m_implicitTargetB
