@@ -1197,6 +1197,7 @@ struct ItemRandomPropertiesEntry
 
 struct ItemRandomSuffixEntry
 {
+    uint32    ID;                                           // 0        m_ID
     DBCString nameSuffix;                                   // 1        m_name_lang
                                                             // 2        m_internalName
     uint32    enchant_id[5];                                // 3-7      m_enchantment

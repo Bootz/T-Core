@@ -655,7 +655,7 @@ void Aura::Update(uint32 diff, Unit* caster)
                 m_timeCla -= diff;
             else if (caster)
             {
-                if (int32 manaPerSecond = m_spellPower->manaPerSecond + m_spellPower->manaPerSecondPerLevel * caster->getLevel())
+                if (int32 manaPerSecond = m_spellPower->manaPerSecond * caster->getLevel())
                 {
                     m_timeCla += 1000 - diff;
 
@@ -723,7 +723,7 @@ void Aura::RefreshDuration()
 {
     SetDuration(GetMaxDuration());
 
-    if (m_spellPower->manaPerSecond || m_spellPower->manaPerSecondPerLevel)
+    if (m_spellPower->manaPerSecond)
         m_timeCla = 1 * IN_MILLISECONDS;
 }
 

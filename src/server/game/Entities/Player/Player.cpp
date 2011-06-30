@@ -2605,7 +2605,7 @@ void Player::RegenerateHealth()
     // normal regen case (maybe partly in combat case)
     else if (!isInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT))
     {
-        addvalue = OCTRegenHPPerSpirit() * HealthIncreaseRate;
+        addvalue = HealthIncreaseRate;
         if (!isInCombat())
         {
             AuraEffectList const& mModHealthRegenPct = GetAuraEffectsByType(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
@@ -5814,11 +5814,10 @@ float Player::GetRatingMultiplier(CombatRating cr) const
 
     GtCombatRatingsEntry const *Rating = sGtCombatRatingsStore.LookupEntry(cr*GT_MAX_LEVEL+level-1);
     // gtOCTClassCombatRatingScalarStore.dbc starts with 1, CombatRating with zero, so cr+1
-    GtOCTClassCombatRatingScalarEntry const *classRating = sGtOCTClassCombatRatingScalarStore.LookupEntry((getClass()-1)*GT_MAX_RATING+cr+1);
-    if (!Rating || !classRating)
+    if (!Rating)
         return 1.0f;                                        // By default use minimum coefficient (not must be called)
 
-    return classRating->ratio / Rating->ratio;
+    return Rating->ratio;
 }
 
 float Player::GetRatingBonusValue(CombatRating cr) const
@@ -5838,28 +5837,6 @@ float Player::GetExpertiseDodgeOrParryReduction(WeaponAttackType attType) const
             break;
     }
     return 0.0f;
-}
-
-float Player::OCTRegenHPPerSpirit()
-{
-    uint8 level = getLevel();
-    uint32 pclass = getClass();
-
-    if (level > GT_MAX_LEVEL)
-        level = GT_MAX_LEVEL;
-
-    GtRegenHPPerSptEntry  const *moreRatio = sGtRegenHPPerSptStore.LookupEntry((pclass-1)*GT_MAX_LEVEL + level-1);
-    if (moreRatio == NULL)
-        return 0.0f;
-
-    // Formula from PaperDollFrame script
-    float spirit = GetStat(STAT_SPIRIT);
-    float baseSpirit = spirit;
-    if (baseSpirit > 50)
-        baseSpirit = 50;
-    float moreSpirit = spirit - baseSpirit;
-    float regen = baseSpirit + moreSpirit * moreRatio->ratio;
-    return regen;
 }
 
 float Player::OCTRegenMPPerSpirit()
@@ -20215,16 +20192,16 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
     if (crItem->ExtendedCost)                            // case for new honor system
     {
         ItemExtendedCostEntry const* iece = sItemExtendedCostStore.LookupEntry(crItem->ExtendedCost);
-        if (iece->reqhonorpoints)
-            ModifyHonorPoints(- int32(iece->reqhonorpoints * count));
+        //if (iece->reqhonorpoints)
+        //    ModifyHonorPoints(- int32(iece->reqhonorpoints * count));
 
-        if (iece->reqarenapoints)
-            ModifyArenaPoints(- int32(iece->reqarenapoints * count));
+        //if (iece->reqarenapoints)
+        //    ModifyArenaPoints(- int32(iece->reqarenapoints * count));
 
         for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
         {
-            if (iece->reqitem[i])
-                DestroyItemCount(iece->reqitem[i], (iece->reqitemcount[i] * count), true);
+            //if (iece->reqitem[i])
+            //    DestroyItemCount(iece->reqitem[i], (iece->reqitemcount[i] * count), true);
         }
     }
 
@@ -20333,37 +20310,37 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
             return false;
         }
 
-        // honor points price
-        if (GetHonorPoints() < (iece->reqhonorpoints * count))
-        {
-            SendEquipError(EQUIP_ERR_NOT_ENOUGH_HONOR_POINTS, NULL, NULL);
-            return false;
-        }
+        //// honor points price
+        //if (GetHonorPoints() < (iece->reqhonorpoints * count))
+        //{
+        //    SendEquipError(EQUIP_ERR_NOT_ENOUGH_HONOR_POINTS, NULL, NULL);
+        //    return false;
+        //}
 
-        // arena points price
-        if (GetArenaPoints() < (iece->reqarenapoints * count))
-        {
-            SendEquipError(EQUIP_ERR_NOT_ENOUGH_ARENA_POINTS, NULL, NULL);
-            return false;
-        }
+        //// arena points price
+        //if (GetArenaPoints() < (iece->reqarenapoints * count))
+        //{
+        //    SendEquipError(EQUIP_ERR_NOT_ENOUGH_ARENA_POINTS, NULL, NULL);
+        //    return false;
+        //}
 
-        // item base price
-        for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
-        {
-            if (iece->reqitem[i] && !HasItemCount(iece->reqitem[i], (iece->reqitemcount[i] * count)))
-            {
-                SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
-                return false;
-            }
-        }
+        //// item base price
+        //for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
+        //{
+        //    if (iece->reqitem[i] && !HasItemCount(iece->reqitem[i], (iece->reqitemcount[i] * count)))
+        //    {
+        //        SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
+        //        return false;
+        //    }
+        //}
 
-        // check for personal arena rating requirement
-        if (GetMaxPersonalArenaRatingRequirement(iece->reqarenaslot) < iece->reqpersonalarenarating)
-        {
-            // probably not the proper equip err
-            SendEquipError(EQUIP_ERR_CANT_EQUIP_RANK, NULL, NULL);
-            return false;
-        }
+        //// check for personal arena rating requirement
+        //if (GetMaxPersonalArenaRatingRequirement(iece->reqarenaslot) < iece->reqpersonalarenarating)
+        //{
+        //    // probably not the proper equip err
+        //    SendEquipError(EQUIP_ERR_CANT_EQUIP_RANK, NULL, NULL);
+        //    return false;
+        //}
     }
 
     uint32 price  = crItem->IsGoldRequired(pProto) ? pProto->BuyPrice * count : 0;
@@ -24436,12 +24413,12 @@ void Player::SendRefundInfo(Item *item)
     WorldPacket data(SMSG_ITEM_REFUND_INFO_RESPONSE, 8+4+4+4+4*4+4*4+4+4);
     data << uint64(item->GetGUID());                    // item guid
     data << uint32(item->GetPaidMoney());               // money cost
-    data << uint32(iece->reqhonorpoints);               // honor point cost
-    data << uint32(iece->reqarenapoints);               // arena point cost
+    //data << uint32(iece->reqhonorpoints);               // honor point cost
+    //data << uint32(iece->reqarenapoints);               // arena point cost
     for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)                       // item cost data
     {
-        data << uint32(iece->reqitem[i]);
-        data << uint32(iece->reqitemcount[i]);
+        //data << uint32(iece->reqitem[i]);
+        //data << uint32(iece->reqitemcount[i]);
     }
     data << uint32(0);
     data << uint32(GetTotalPlayedTime() - item->GetPlayedTime());
@@ -24504,22 +24481,22 @@ void Player::RefundItem(Item *item)
     }
 
     bool store_error = false;
-    for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
-    {
-        uint32 count = iece->reqitemcount[i];
-        uint32 itemid = iece->reqitem[i];
+    //for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
+    //{
+    //    uint32 count = iece->reqitemcount[i];
+    //    uint32 itemid = iece->reqitem[i];
 
-        if (count && itemid)
-        {
-            ItemPosCountVec dest;
-            InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
-            if (msg != EQUIP_ERR_OK)
-            {
-                store_error = true;
-                break;
-            }
-         }
-    }
+    //    if (count && itemid)
+    //    {
+    //        ItemPosCountVec dest;
+    //        InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
+    //        if (msg != EQUIP_ERR_OK)
+    //        {
+    //            store_error = true;
+    //            break;
+    //        }
+    //     }
+    //}
 
     if (store_error)
     {
@@ -24534,12 +24511,12 @@ void Player::RefundItem(Item *item)
     data << uint64(item->GetGUID());                    // item guid
     data << uint32(0);                                  // 0, or error code
     data << uint32(item->GetPaidMoney());               // money cost
-    data << uint32(iece->reqhonorpoints);               // honor point cost
-    data << uint32(iece->reqarenapoints);               // arena point cost
+    //data << uint32(iece->reqhonorpoints);               // honor point cost
+    //data << uint32(iece->reqarenapoints);               // arena point cost
     for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i) // item cost data
     {
-        data << uint32(iece->reqitem[i]);
-        data << uint32(iece->reqitemcount[i]);
+        //data << uint32(iece->reqitem[i]);
+        //data << uint32(iece->reqitemcount[i]);
     }
     GetSession()->SendPacket(&data);
 
@@ -24551,32 +24528,32 @@ void Player::RefundItem(Item *item)
     // Destroy item
     DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
 
-    // Grant back extendedcost items
-    for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
-    {
-        uint32 count = iece->reqitemcount[i];
-        uint32 itemid = iece->reqitem[i];
-        if (count && itemid)
-        {
-            ItemPosCountVec dest;
-            InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
-            ASSERT(msg == EQUIP_ERR_OK) /// Already checked before
-            Item* it = StoreNewItem(dest, itemid, true);
-            SendNewItem(it, count, true, false, true);
-        }
-    }
+    //// Grant back extendedcost items
+    //for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)
+    //{
+    //    uint32 count = iece->reqitemcount[i];
+    //    uint32 itemid = iece->reqitem[i];
+    //    if (count && itemid)
+    //    {
+    //        ItemPosCountVec dest;
+    //        InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
+    //        ASSERT(msg == EQUIP_ERR_OK) /// Already checked before
+    //        Item* it = StoreNewItem(dest, itemid, true);
+    //        SendNewItem(it, count, true, false, true);
+    //    }
+    //}
 
     // Grant back money
     if (moneyRefund)
         ModifyMoney(moneyRefund);
 
-    // Grant back Honor points
-    if (uint32 honorRefund = iece->reqhonorpoints)
-        ModifyHonorPoints(honorRefund);
+    //// Grant back Honor points
+    //if (uint32 honorRefund = iece->reqhonorpoints)
+    //    ModifyHonorPoints(honorRefund);
 
-    // Grant back Arena points
-    if (uint32 arenaRefund = iece->reqarenapoints)
-        ModifyArenaPoints(arenaRefund);
+    //// Grant back Arena points
+    //if (uint32 arenaRefund = iece->reqarenapoints)
+    //    ModifyArenaPoints(arenaRefund);
 
 }
 
