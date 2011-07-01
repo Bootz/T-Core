@@ -72,15 +72,18 @@ float CONF_flat_liquid_delta_limit = 0.001f; // If max - min less this value - l
 
 // List MPQ for extract from
 char *CONF_mpq_list[]={
-    "common.MPQ",
-    "common-2.MPQ",
-    "lichking.MPQ",
-    "expansion.MPQ",
-    "patch.MPQ",
-    "patch-2.MPQ",
-    "patch-3.MPQ",
-    "patch-4.MPQ",
-    "patch-5.MPQ",
+    "art.MPQ",
+    "expansion1.MPQ",
+    "expansion2.MPQ",
+    "expansion3.MPQ",
+    "sound.MPQ",
+    "world.MPQ",
+    "wow-update-13164.MPQ",
+    "wow-update-13205.MPQ",
+    "wow-update-13287.MPQ",
+    "wow-update-13329.MPQ",
+    "wow-update-13596.MPQ",
+    "wow-update-13623.MPQ",
 };
 
 static char* const langs[] = {"enGB", "enUS", "deDE", "esES", "frFR", "koKR", "zhCN", "zhTW", "enCN", "enTW", "esMX", "ruRU" };
