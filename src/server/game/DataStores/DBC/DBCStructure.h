@@ -56,7 +56,7 @@ struct AchievementEntry
     uint32    flags;                                        // 9     m_flags
     //uint32    icon;                                       // 10    m_iconID
     //DBCString titleReward;                                // 11    m_reward_lang
-    uint32 count;                                           // 12    m_minimum_criteria - need this count of completed criterias (own or referenced achievement criterias)
+    uint32 count;                                           // 12 - need this count of completed criterias (own or referenced achievement criterias)
     uint32 refAchievement;                                  // 13    m_shares_criteria - referenced achievement (counting of all completed criterias)
 };
 
@@ -535,7 +535,7 @@ struct AreaTableEntry
     //uint32 unk21;                                         // 21 4.0.0
     //uint32 unk22;                                         // 22 4.0.0
     //uint32 unk23;                                         // 23 4.0.0
-    //uint32 unk24;                                         // 24 4.0.1, worldstateid?                                          // 28
+    //uint32 unk24;                                         // 24 4.0.1, worldstateid?
 
     // helpers
     bool IsSanctuary() const
@@ -1058,6 +1058,12 @@ struct GtRegenMPPerSptEntry
     float    ratio;
 };
 
+/*struct GtRegenMPPerSptEntry
+{
+    //uint32 level;
+    float    ratio;
+};*/
+
 /* no used
 struct HolidayDescriptionsEntry
 {
@@ -1164,16 +1170,17 @@ struct ItemDamageEntry
 
 struct ItemExtendedCostEntry
 {
-    uint32      ID;                                                 // 0 extended-cost entry id
-    uint32      reqhonorpoints;                                     // 1 required honor points
-    uint32      reqarenapoints;                                     // 2 required arena points
-    uint32      reqarenaslot;                                       // 3 arena slot restrctions (min slot value)
-    uint32      reqitem[MAX_ITEM_EXTENDED_COST_REQUIREMENTS];       // 4-8 required item id
-    uint32      reqitemcount[MAX_ITEM_EXTENDED_COST_REQUIREMENTS];  // 9-14 required count of 1st item
-    uint32      reqpersonalarenarating;                             // 15 required personal arena rating};
-    //uint32    someId[5];                                  // 16-20, may be currency id's
-    //uint32    someCount[5];                               // 21-25
-    //uint32    something[5];                               // 26-30
+    uint32      ID;                                                  // 0 extended-cost entry id
+    //uint32      reqhonorpoints;                                    // 1 required honor points
+    //uint32      reqarenapoints;                                    // 2 required arena points
+    uint32      RequiredArenaSlot;                                   // 4 arena slot restrictions (min slot value)
+    uint32      RequiredItem[MAX_EXTENDED_COST_ITEMS];               // 5-8 required item id
+    uint32      RequiredItemCount[MAX_EXTENDED_COST_ITEMS];          // 9-13 required count of 1st item
+    uint32      RequiredPersonalArenaRating;                         // 14 required personal arena rating
+    //uint32                                                         // 15
+    uint32      RequiredCurrency[MAX_EXTENDED_COST_CURRENCIES];      // 16-20
+    uint32      RequiredCurrencyCount[MAX_EXTENDED_COST_CURRENCIES]; // 21-25
+    //uint32    something[5];                                        // 26-30
 };
 
 struct ItemLimitCategoryEntry
@@ -2010,10 +2017,10 @@ struct SpellItemEnchantmentEntry
 {
     uint32      ID;                                         // 0        m_ID
     //uint32      charges;                                  // 1        m_charges
-    uint32      type[MAX_ITEM_ENCHANTMENT_EFFECTS];                                    // 2-4      m_effect[MAX_ITEM_ENCHANTMENT_EFFECTS]
-    uint32      amount[MAX_ITEM_ENCHANTMENT_EFFECTS];                                  // 5-7      m_effectPointsMin[MAX_ITEM_ENCHANTMENT_EFFECTS]
-    //uint32      amount2[MAX_ITEM_ENCHANTMENT_EFFECTS]                                // 8-10     m_effectPointsMax[MAX_ITEM_ENCHANTMENT_EFFECTS]
-    uint32      spellid[MAX_ITEM_ENCHANTMENT_EFFECTS];                                 // 11-13    m_effectArg[MAX_ITEM_ENCHANTMENT_EFFECTS]
+    uint32      type[MAX_ITEM_ENCHANTMENT_EFFECTS];         // 2-4      m_effect[MAX_ITEM_ENCHANTMENT_EFFECTS]
+    uint32      amount[MAX_ITEM_ENCHANTMENT_EFFECTS];       // 5-7      m_effectPointsMin[MAX_ITEM_ENCHANTMENT_EFFECTS]
+    //uint32      amount2[MAX_ITEM_ENCHANTMENT_EFFECTS]     // 8-10     m_effectPointsMax[MAX_ITEM_ENCHANTMENT_EFFECTS]
+    uint32      spellid[MAX_ITEM_ENCHANTMENT_EFFECTS];      // 11-13    m_effectArg[MAX_ITEM_ENCHANTMENT_EFFECTS]
     DBCString description;                                  // 14       m_name_lang
     uint32      aura_id;                                    // 15       m_itemVisual
     uint32      slot;                                       // 16       m_flags
@@ -2098,6 +2105,7 @@ struct TalentTreePrimarySpellsEntry
     uint32 Id;                                              // 0
     uint32 TalentTabID;                                     // 1
     uint32 SpellID;                                         // 2
+    //UNK1                                                    // 3
 };
 
 struct TaxiNodesEntry
@@ -2141,7 +2149,6 @@ struct TotemCategoryEntry
     uint32    categoryType;                                 // 2 (one for specialization)
     uint32    categoryMask;                                 // 3 (compatibility mask for same type: different for totems, compatible from high to low for rods)
 };
-
 
 #define MAX_VEHICLE_SEATS 8
 
