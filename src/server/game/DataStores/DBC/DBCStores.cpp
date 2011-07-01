@@ -228,7 +228,8 @@ template<class T>
 inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCStorage<T>& storage, std::string const& dbcPath, std::string const& filename, std::string const* customFormat = NULL, std::string const* customIndexName = NULL)
 {
     // compatibility format and C++ structure sizes
-    ASSERT(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDBC_assert_print(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
+    if(!(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDBC_assert_print(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()),sizeof(T),filename)))
+        return;
 
     ++DBCFileCount;
     std::string dbcFilename = dbcPath + filename;
@@ -238,7 +239,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
 
     if (storage.Load(dbcFilename.c_str(), sql))
     {
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+       /* for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
         {
             if (!(availableDbcLocales & (1 << i)))
                 continue;
@@ -246,20 +247,25 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
             std::string localizedName = dbcPath + localeNames[i] + "/" + filename;
             if (!storage.LoadStringsFrom(localizedName.c_str()))
                 availableDbcLocales &= ~(1<<i);             // mark as not available for speedup next checks
-        }
+        }*/
     }
     else
     {
         // sort problematic dbc to (1) non compatible and (2) non-existed
-        if (FILE* f = fopen(dbcFilename.c_str(), "rb"))
+        FILE * f=fopen(dbcFilename.c_str(),"rb");
+        if (f)
         {
+            printf("Can't LOAD dbc %s !\n", dbcFilename.c_str());
             char buf[100];
-            snprintf(buf, 100, " (exists, but has %d fields instead of " SIZEFMTD ") Possible wrong client version.", storage.GetFieldCount(), strlen(storage.GetFormat()));
+            snprintf(buf, 100, " (exists, but has %d fields instead of " SIZEFMTD ") Wrong DBC client version?.", storage.GetFieldCount(), strlen(storage.GetFormat()));
             errors.push_back(dbcFilename + buf);
             fclose(f);
         }
         else
+        {
+            printf("Can't OPEN dbc %s !\n", dbcFilename.c_str());
             errors.push_back(dbcFilename);
+        }
     }
 
     delete sql;
