@@ -203,11 +203,11 @@ FILE* Log::openLogFile(char const* configFileName, char const* configTimeStampFl
 
 FILE* Log::openGmlogPerAccount(uint32 account)
 {
-    if(m_gmlog_filename_format.empty())
+    if (m_gmlog_filename_format.empty())
         return NULL;
 
-    char namebuf[PATH_MAX];
-    snprintf(namebuf, PATH_MAX, m_gmlog_filename_format.c_str(), account);
+    char namebuf[TRILLIUM_PATH_MAX];
+    snprintf(namebuf, TRILLIUM_PATH_MAX, m_gmlog_filename_format.c_str(), account);
     return fopen(namebuf, "a");
 }
 

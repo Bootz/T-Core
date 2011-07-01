@@ -45,7 +45,7 @@ namespace ByteConverter
     }
 }
 
-#if ENDIAN == BIGENDIAN
+#if TRILLIUM_ENDIAN == TRILLIUM_BIGENDIAN
 template<typename T> inline void EndianConvert(T& val) { ByteConverter::apply<T>(&val); }
 template<typename T> inline void EndianConvertReverse(T&) { }
 #else

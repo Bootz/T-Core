@@ -42,7 +42,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetUInt8() on non-numeric field.");
@@ -59,7 +59,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GeInt8() on non-numeric field.");
@@ -76,7 +76,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetUInt16() on non-numeric field.");
@@ -93,7 +93,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetInt16() on non-numeric field.");
@@ -110,7 +110,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetUInt32() on non-numeric field.");
@@ -127,7 +127,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetInt32() on non-numeric field.");
@@ -144,7 +144,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetUInt64() on non-numeric field.");
@@ -161,7 +161,7 @@ class Field
             if (!data.value)
                 return 0;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetInt64() on non-numeric field.");
@@ -178,7 +178,7 @@ class Field
             if (!data.value)
                 return 0.0f;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetFloat() on non-numeric field.");
@@ -195,7 +195,7 @@ class Field
             if (!data.value)
                 return 0.0f;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (!IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetDouble() on non-numeric field.");
@@ -212,7 +212,7 @@ class Field
             if (!data.value)
                 return NULL;
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
             if (IsNumeric())
             {
                 sLog->outSQLDriver("Error: GetCString() on numeric field.");

@@ -703,7 +703,7 @@ bool AuthSocket::_HandleReconnectChallenge()
 
     socket().recv((char *)&buf[0], 4);
 
-#if ENDIAN == BIGENDIAN
+#if TRILLIUM_ENDIAN == TRILLIUM_BIGENDIAN
     EndianConvert(*((uint16*)(buf[0])));
 #endif
 

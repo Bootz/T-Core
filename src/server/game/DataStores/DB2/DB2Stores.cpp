@@ -63,6 +63,8 @@ inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& error, DB2St
 
 void LoadDB2Stores(const std::string& dataPath)
 {
+    uint32 oldMSTime = getMSTime();
+
     std::string db2Path = dataPath + "db2/";
 
     StoreProblemList1 bad_db2_files;
@@ -74,7 +76,7 @@ void LoadDB2Stores(const std::string& dataPath)
     // error checks
     if (bad_db2_files.size() >= DB2FileCount)
     {
-        sLog->outError("Incorrect DataDir value in mangosd.conf or ALL required *.db2 files (%d) not found by path: %sdb2", DB2FileCount, dataPath.c_str());
+        sLog->outError("\nIncorrect DataDir value in worldserver.conf or ALL required *.db2 files (%d) not found by path: %sdb2", DB2FileCount, dataPath.c_str());
         exit(1);
     }
     else if (!bad_db2_files.empty())
@@ -83,18 +85,18 @@ void LoadDB2Stores(const std::string& dataPath)
         for (std::list<std::string>::iterator i = bad_db2_files.begin(); i != bad_db2_files.end(); ++i)
             str += *i + "\n";
 
-        sLog->outError("Some required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FileCount,str.c_str());
+        sLog->outError("\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FileCount,str.c_str());
         exit(1);
     }
 
     // Check loaded DBC files proper version
     if (!sItemStore.LookupEntry(68815))                     // last client known item added in 4.0.6a
     {
-        sLog->outString("");
+        sLog->outString();
         sLog->outError("Please extract correct db2 files from client 4.0.6a 13623.");
         exit(1);
     }
 
-    sLog->outString(">> Initialized %d db2 stores.", DB2FileCount);
+    sLog->outString(">> Initialized %d Db2 data stores in %u ms", DB2FileCount, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }

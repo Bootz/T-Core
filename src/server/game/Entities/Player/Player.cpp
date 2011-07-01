@@ -21025,7 +21025,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
             target->DestroyForPlayer(this);
             m_clientGUIDs.erase(target->GetGUID());
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Object %u (Type: %u) out of range for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), GetGUIDLow(), GetDistance(target));
             #endif
         }
@@ -21040,7 +21040,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
             target->SendUpdateToPlayer(this);
             m_clientGUIDs.insert(target->GetGUID());
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Object %u (Type: %u) is visible now for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), GetGUIDLow(), GetDistance(target));
             #endif
 
@@ -21098,7 +21098,7 @@ void Player::UpdateVisibilityOf(T* target, UpdateData& data, std::set<Unit*>& vi
             target->BuildOutOfRangeUpdateBlock(&data);
             m_clientGUIDs.erase(target->GetGUID());
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Object %u (Type: %u, Entry: %u) is out of range for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), target->GetEntry(), GetGUIDLow(), GetDistance(target));
             #endif
         }
@@ -21113,7 +21113,7 @@ void Player::UpdateVisibilityOf(T* target, UpdateData& data, std::set<Unit*>& vi
             target->BuildCreateUpdateBlockForPlayer(&data, this);
             UpdateVisibilityOf_helper(m_clientGUIDs, target, visibleNow);
 
-            #ifdef DEBUG
+            #ifdef TRILLIUM_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Object %u (Type: %u, Entry: %u) is visible now for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), target->GetEntry(), GetGUIDLow(), GetDistance(target));
             #endif
         }

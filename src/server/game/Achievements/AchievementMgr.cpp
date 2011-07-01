@@ -641,7 +641,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     if (achievement->flags & ACHIEVEMENT_FLAG_HIDDEN)
         return;
 
-    #ifdef DEBUG
+    #ifdef TRILLIUM_DEBUG
         sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgr::SendAchievementEarned(%u)", achievement->ID);
     #endif
 

@@ -27,7 +27,7 @@
 
 #define _PACKAGENAME "TrilliumEMU "
 
-#if ENDIAN == BIGENDIAN
+#if TRILLIUM_ENDIAN == TRILLIUM_BIGENDIAN
 # define _ENDIAN_STRING "big-endian"
 #else
 # define _ENDIAN_STRING "little-endian"

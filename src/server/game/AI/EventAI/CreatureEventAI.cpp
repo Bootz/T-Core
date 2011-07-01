@@ -67,7 +67,7 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
         {
 
             //Debug check
-            #ifndef DEBUG
+            #ifndef TRILLIUM_DEBUG
             if ((*i).event_flags & EFLAG_DEBUG_ONLY)
                 continue;
             #endif
