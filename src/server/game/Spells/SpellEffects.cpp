@@ -1249,7 +1249,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     m_caster->CastSpell(m_caster, 65156, true);
                 return;
             }
-            //Slam
+            // Slam
             if (m_spellClass->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_SLAM && m_spellInfo->SpellIconID == 559)
             {
                 int32 bp0 = damage;
