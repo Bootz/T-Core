@@ -512,6 +512,7 @@ class Spell
         Unit* GetCaster() const { return m_caster; }
         Unit* GetOriginalCaster() const { return m_originalCaster; }
         SpellEntry const* GetSpellInfo() const { return m_spellInfo; }
+        SpellEffectEntry const* GetSpellEffect() const { return m_spellEffect; }
         SpellAuraRestrictionsEntry const* GetSpellAura() { return m_spellRestrictions; }
         int32 GetPowerCost() const { return m_powerCost; }
 

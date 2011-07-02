@@ -273,6 +273,11 @@ SpellAuraRestrictionsEntry const* SpellScript::GetSpellAura()
     return m_spell->GetSpellAura();
 }
 
+SpellEffectEntry const* SpellScript::GetSpellEffect()
+{
+    return m_spell->GetSpellEffect();
+}
+
 WorldLocation const* SpellScript::GetTargetDest()
 {
     if (m_spell->m_targets.HasDst())

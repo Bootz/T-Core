@@ -259,6 +259,7 @@ class SpellScript : public _SpellScript
         Unit* GetOriginalCaster();
         SpellEntry const* GetSpellInfo();
         SpellAuraRestrictionsEntry const* GetSpellAura();
+        SpellEffectEntry const* GetSpellEffect();
 
         // methods useable after spell targets are set
         // accessors to the "focus" targets of the spell
