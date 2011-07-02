@@ -1464,8 +1464,8 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading enchant custom attributes...");
     /*sSpellMgr->LoadEnchantCustomAttr();*/
 
-    sLog->outString("Loading linked spells...");
-    sSpellMgr->LoadSpellLinked();
+    //sLog->outString("Loading linked spells...");
+    //sSpellMgr->LoadSpellLinked();
 
     sLog->outString("Loading Player Create Data...");
     sObjectMgr->LoadPlayerInfo();
