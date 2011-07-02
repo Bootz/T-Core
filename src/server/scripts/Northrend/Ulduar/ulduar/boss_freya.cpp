@@ -103,6 +103,9 @@ enum FreyaSpells
     SPELL_REMOVE_10STACK                         = 62525,
     SPELL_REMOVE_2STACK                          = 62524,
 
+    // Achievement spells
+    SPELL_DEFORESTATION_CREDIT                   = 65015,
+
     // Wave summoning spells
     SPELL_SUMMON_LASHERS                         = 62687,
     SPELL_SUMMON_TRIO                            = 62686,
@@ -292,7 +295,6 @@ class boss_freya : public CreatureScript
             bool checkElementalAlive[2];
             bool trioDefeated[2];
             bool waveInProgress;
-            bool deforestationCheck;
             bool random[3];
 
             void Reset()
@@ -317,7 +319,6 @@ class boss_freya : public CreatureScript
                     trioDefeated[n] = false;
                 }
                 waveInProgress = false;
-                deforestationCheck = false;
                 for (uint8 n = 0; n < 3; ++n)
                     random[n] = false;
             }
@@ -517,7 +518,9 @@ class boss_freya : public CreatureScript
                         else
                         {
                             if (!trioDefeated[i])
+                            {
                                 if (Elemental[0][i] && Elemental[1][i] && Elemental[2][i])
+                                {
                                     if (Elemental[0][i]->isDead() && Elemental[1][i]->isDead() && Elemental[2][i]->isDead())
                                     {
                                         for (uint8 n = 0; n < 3; ++n)
@@ -529,6 +532,8 @@ class boss_freya : public CreatureScript
                                         }
                                         TimeCheck();
                                     }
+                                }
+                            }
                         }
                     }
                 }
@@ -561,7 +566,7 @@ class boss_freya : public CreatureScript
                     {
                         if (n == 14 && instance)                                 // Binary mask check - verification of lasher types
                         {
-                            deforestationCheck = true;
+                            instance->DoCastSpellOnPlayers(SPELL_DEFORESTATION_CREDIT);
                         }
                     }
                 }
