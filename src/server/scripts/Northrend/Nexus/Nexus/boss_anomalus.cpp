@@ -61,8 +61,7 @@ Position const RiftLocation[6] =
     { 651.72f, -297.44f, -9.37f, 0.0f }
 };
 
-#define ACTION_RIFT_DEAD                          1
-#define DATA_CHAOS_THEORY                         2
+#define DATA_CHAOS_THEORY                         1
 
 class boss_anomalus : public CreatureScript
 {
@@ -111,12 +110,6 @@ class boss_anomalus : public CreatureScript
                     instance->SetData(DATA_ANOMALUS_EVENT, DONE);
             }
 
-            void DoAction(int32 const action)
-            {
-                if (action == ACTION_RIFT_DEAD)
-                    chaosTheory = false;
-            }
-
             uint32 GetData(uint32 type)
             {
                 if (type == DATA_CHAOS_THEORY)
@@ -125,10 +118,10 @@ class boss_anomalus : public CreatureScript
                 return 0;
             }
 
-            void SetData(uint32 id, uint32 data)
+            void SummonedCreatureDies(Creature* summoned, Unit* who)
             {
-                if (id == DATA_CHAOS_THEORY)
-                    chaosTheory = data ? true : false;
+                if (summoned->GetEntry() == MOB_CHAOTIC_RIFT)
+                    chaosTheory = false;
             }
 
             void UpdateAI(uint32 const diff)
@@ -218,12 +211,6 @@ class mob_chaotic_rift : public CreatureScript
                                                  //Model for ally (1126) does not show auras. Horde model works perfect.
                                                  //Set model to horde number
                 DoCast(me, SPELL_ARCANEFORM, false);
-            }
-
-            void JustDied(Unit* /*who*/)
-            {
-                if (Creature* Anomalus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ANOMALUS)))
-                    Anomalus->AI()->DoAction(ACTION_RIFT_DEAD);
             }
 
             void UpdateAI(uint32 const diff)
