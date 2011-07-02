@@ -339,6 +339,8 @@ class Totem;
 class Transport;
 class Vehicle;
 
+typedef std::list<Unit*> UnitList;
+
 struct SpellImmune
 {
     uint32 type;

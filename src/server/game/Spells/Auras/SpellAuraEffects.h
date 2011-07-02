@@ -21,7 +21,6 @@
 #define SPELLAURAEFFECTS_H
 
 class Unit;
-class DynamicObject;
 class AuraEffect;
 class Aura;
 
