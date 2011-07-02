@@ -1044,7 +1044,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     // mods at aura apply
     if (apply)
     {
-        switch (GetSpellProto()->GetSpellFamilyName())
+        switch (GetSpellClass()->SpellFamilyName)
         {
             case SPELLFAMILY_GENERIC:
                 switch(GetId())
@@ -1250,7 +1250,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     // mods at aura remove
     else
     {
-        switch(GetSpellProto()->GetSpellFamilyName())
+        switch(GetSpellClass()->SpellFamilyName)
         {
             case SPELLFAMILY_GENERIC:
                 switch(GetId())
