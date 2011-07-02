@@ -1622,6 +1622,9 @@ class achievement_knock_on_wood : public AchievementCriteriaScript
 
         bool OnCheck(Player* /*player*/, Unit* target)
         {
+            if (!target)
+                return false;
+
             if (Creature* Freya = target->ToCreature())
                 if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) >= 1)
                     return true;
@@ -1639,6 +1642,9 @@ class achievement_knock_knock_on_wood : public AchievementCriteriaScript
 
         bool OnCheck(Player* /*player*/, Unit* target)
         {
+            if (!target)
+                return false;
+
             if (Creature* Freya = target->ToCreature())
                 if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) >= 2)
                     return true;
@@ -1656,6 +1662,9 @@ class achievement_knock_knock_knock_on_wood : public AchievementCriteriaScript
 
         bool OnCheck(Player* /*player*/, Unit* target)
         {
+            if (!target)
+                return false;
+
             if (Creature* Freya = target->ToCreature())
                 if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) == 3)
                     return true;
@@ -1673,6 +1682,9 @@ class achievement_getting_back_to_nature : public AchievementCriteriaScript
 
         bool OnCheck(Player* /*player*/, Unit* target)
         {
+            if (!target)
+                return false;
+
             if (Creature* Freya = target->ToCreature())
                 if (Freya->AI()->GetData(DATA_GETTING_BACK_TO_NATURE) >= 25)
                     return true;

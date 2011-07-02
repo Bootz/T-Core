@@ -4624,9 +4624,6 @@ SpellCastResult Spell::CheckCast(bool strict)
     if (m_spellInfo->AttributesEx7 & SPELL_ATTR7_IS_CHEAT_SPELL && !m_caster->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_ALLOW_CHEAT_SPELLS))
         return SPELL_FAILED_SPELL_UNAVAILABLE;
 
-    if (m_castedClientside && m_spellInfo->Attributes & SPELL_ATTR0_HIDDEN_CLIENTSIDE && m_caster->GetTypeId() == TYPEID_PLAYER && !m_CastItem)
-        return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
-
     // Check global cooldown
     if (strict && !m_IsTriggeredSpell && HasGlobalCooldown())
         return SPELL_FAILED_NOT_READY;
@@ -7285,7 +7282,7 @@ bool Spell::CanExecuteTriggersOnHit(uint8 effMask) const
     // prevents triggering/procing effects twice from spells like Eviscerate
     for (uint8 i = 0;effMask && i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (m_spellInfo->Effect[i] == SPELL_EFFECT_DUMMY)
+        if (m_spellEffect->Effect == SPELL_EFFECT_DUMMY)
             effMask &= ~(1<<i);
     }
     return effMask;
@@ -7294,27 +7291,27 @@ bool Spell::CanExecuteTriggersOnHit(uint8 effMask) const
 void Spell::PrepareTriggersExecutedOnHit()
 {
     // todo: move this to scripts
-    if (m_spellInfo->SpellFamilyName)
+    if (m_spellClass->SpellFamilyName)
     {
-        if (m_spellInfo->excludeCasterAuraSpell && !IsPositiveSpell(m_spellInfo->excludeCasterAuraSpell))
-            m_preCastSpell = m_spellInfo->excludeCasterAuraSpell;
-        else if (m_spellInfo->excludeTargetAuraSpell && !IsPositiveSpell(m_spellInfo->excludeTargetAuraSpell))
-            m_preCastSpell = m_spellInfo->excludeTargetAuraSpell;
+        if (m_spellRestrictions->excludeCasterAuraSpell && !IsPositiveSpell(m_spellRestrictions->excludeCasterAuraSpell))
+            m_preCastSpell = m_spellRestrictions->excludeCasterAuraSpell;
+        else if (m_spellRestrictions->excludeTargetAuraSpell && !IsPositiveSpell(m_spellRestrictions->excludeTargetAuraSpell))
+            m_preCastSpell = m_spellRestrictions->excludeTargetAuraSpell;
     }
 
     // todo: move this to scripts
-    switch (m_spellInfo->SpellFamilyName)
+    switch (m_spellClass->SpellFamilyName)
     {
         case SPELLFAMILY_GENERIC:
         {
-            if (m_spellInfo->Mechanic == MECHANIC_BANDAGE) // Bandages
+            if (m_spellInfo->GetMechanic() == MECHANIC_BANDAGE) // Bandages
                 m_preCastSpell = 11196;  // Recently Bandaged
             break;
         }
         case SPELLFAMILY_MAGE:
         {
              // Permafrost
-             if (m_spellInfo->SpellFamilyFlags[1] & 0x00001000 ||  m_spellInfo->SpellFamilyFlags[0] & 0x00100220)
+             if (m_spellClass->SpellFamilyFlags[1] & 0x00001000 ||  m_spellClass->SpellFamilyFlags[0] & 0x00100220)
                  m_preCastSpell = 68391;
              break;
         }
@@ -7326,11 +7323,11 @@ void Spell::PrepareTriggersExecutedOnHit()
     Unit::AuraEffectList const& targetTriggers = m_caster->GetAuraEffectsByType(SPELL_AURA_ADD_TARGET_TRIGGER);
     for (Unit::AuraEffectList::const_iterator i = targetTriggers.begin(); i != targetTriggers.end(); ++i)
     {
-        if (!(*i)->IsAffectedOnSpell(m_spellInfo))
+        if (!(*i)->IsAffectedOnSpell(m_spellClass))
             continue;
-        SpellEntry const *auraSpellInfo = (*i)->GetSpellProto();
+        SpellEffectEntry const *auraSpellInfo = (*i)->GetSpellEffect();
         uint32 auraSpellIdx = (*i)->GetEffIndex();
-        if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(auraSpellInfo->EffectTriggerSpell[auraSpellIdx]))
+        if (SpellEffectEntry const *spellInfo = sSpellEffectStore.LookupEntry(auraSpellInfo->EffectTriggerSpell))
         {
             // calculate the chance using spell base amount, because aura amount is not updated on combo-points change
             // this possibly needs fixing

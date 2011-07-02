@@ -62,11 +62,7 @@ enum SjonnirCreatures
     CREATURE_IRON_SLUDGE                                   = 28165
 };
 
-enum Misc
-{
-    DATA_TIME_BEFORE_OOZE                                  = 150000, //2min 30 secs
-    ACHIEV_ABUSE_THE_OOZE                                  = 2155
-};
+#define DATA_TIME_BEFORE_OOZE                              150000 //2min 30 secs
 
 struct Locations
 {
@@ -75,9 +71,12 @@ struct Locations
 
 static Locations PipeLocations[] =
 {
-  {1295.44f, 734.07f, 200.3f}, //left
-  {1297.7f,  595.6f,  199.9f} //right
+    {1295.44f, 734.07f, 200.3f}, //left
+    {1297.7f,  595.6f,  199.9f} //right
 };
+
+#define ACTION_OOZE_DEAD                                   1
+#define DATA_ABUSE_THE_OOZE                                2
 
 static Locations CenterPoint = {1295.21f, 667.157f, 189.691f};
 
@@ -107,7 +106,7 @@ public:
         uint32 uiSummonTimer;
         uint32 uiFrenzyTimer;
         uint32 uiEncounterTimer;
-        uint32 uiKilledIronSludges;
+        uint8 abuseTheOoze;
 
         SummonList lSummons;
 
@@ -124,7 +123,7 @@ public:
             uiLightningRingTimer = 30000 + rand()%5000;
             uiSummonTimer = 5000;
             uiFrenzyTimer = 300000; //5 minutes
-            uiKilledIronSludges = 0;
+            abuseTheOoze = 0;
 
             lSummons.DespawnAll();
 
@@ -223,11 +222,7 @@ public:
             lSummons.DespawnAll();
 
             if (pInstance)
-            {
                 pInstance->SetData(DATA_SJONNIR_EVENT, DONE);
-                if (IsHeroic() && uiKilledIronSludges > 4)
-                    pInstance->DoCompleteAchievement(ACHIEV_ABUSE_THE_OOZE);
-            }
         }
         void KilledUnit(Unit* victim)
         {
@@ -236,9 +231,18 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
 
-        void KilledIronSludge()
+        void DoAction(int32 const action)
         {
-            ++uiKilledIronSludges;
+            if (action == ACTION_OOZE_DEAD)
+                ++abuseTheOoze;
+        }
+
+        uint32 GetData(uint32 type)
+        {
+            if (type == DATA_ABUSE_THE_OOZE)
+                return abuseTheOoze;
+
+            return 0;
         }
     };
 
@@ -309,11 +313,31 @@ public:
         void JustDied(Unit* /*pKiller*/)
         {
             if (pInstance)
-                if (Creature* pSjonnir = Unit::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
-                    CAST_AI(boss_sjonnir::boss_sjonnirAI, pSjonnir->AI())->KilledIronSludge();
+                if (Creature* Sjonnir = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
+                    Sjonnir->AI()->DoAction(ACTION_OOZE_DEAD);
         }
     };
 
+};
+
+class achievement_abuse_the_ooze : public AchievementCriteriaScript
+{
+    public:
+        achievement_abuse_the_ooze() : AchievementCriteriaScript("achievement_abuse_the_ooze")
+        {
+        }
+
+        bool OnCheck(Player* /*player*/, Unit* target)
+        {
+            if (!target)
+                return false;
+
+            if (Creature* Sjonnir = target->ToCreature())
+                if (Sjonnir->AI()->GetData(DATA_ABUSE_THE_OOZE) >= 5)
+                    return true;
+
+            return false;
+        }
 };
 
 void AddSC_boss_sjonnir()
@@ -321,4 +345,5 @@ void AddSC_boss_sjonnir()
     new boss_sjonnir();
     new mob_malformed_ooze();
     new mob_iron_sludge();
+    new achievement_abuse_the_ooze();
 }
