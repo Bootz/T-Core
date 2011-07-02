@@ -401,7 +401,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     }
 
     delete _charCreateCallback.GetParam();  // Delete existing if any, to make the callback chain reset to stage 0
-    _charCreateCallback.SetParam(new CharacterCreateInfo(name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId, data));
+    _charCreateCallback.SetParam(new CharacterCreateInfo(name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId, recv_data));
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_CHECK_NAME);
     stmt->setString(0, name);
     _charCreateCallback.SetFutureResult(CharacterDatabase.AsyncQuery(stmt));
@@ -412,7 +412,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
     /** This is a series of callbacks executed consecutively as a result from the database becomes available.
         This is much more efficient than synchronous requests on packet handler, and much less DoS prone.
         It also prevents data syncrhonisation errors.
-    */    
+    */
     switch (createInfo->Stage)
     {
         case 0:
@@ -428,7 +428,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                 return;
             }
 
-            ASSERT(_charCreateCallback.GetParam() == createInfo);            
+            ASSERT(_charCreateCallback.GetParam() == createInfo);
 
             PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_SUM_REALMCHARS);
             stmt->setUInt32(0, GetAccountId());
@@ -463,7 +463,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             }
 
 
-            ASSERT(_charCreateCallback.GetParam() == createInfo);            
+            ASSERT(_charCreateCallback.GetParam() == createInfo);
 
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_SUM_CHARS);
             stmt->setUInt32(0, GetAccountId());
@@ -495,20 +495,6 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
             bool allowTwoSideAccounts = !sWorld->IsPvPRealm() || sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_ACCOUNTS) || GetSecurity() > SEC_PLAYER;
             uint32 skipCinematics = sWorld->getIntConfig(CONFIG_SKIP_CINEMATICS);
-            uint32 heroicReqLevel = sWorld->getIntConfig(CONFIG_CHARACTER_CREATING_MIN_LEVEL_FOR_HEROIC_CHARACTER);
-
-            // if 0 then allowed creating without any characters
-            bool hasHeroicReqLevel = (heroicReqLevel == 0);
-            if (GetSecurity() == SEC_PLAYER && createInfo->Class == CLASS_DEATH_KNIGHT && !hasHeroicReqLevel)
-            {
-                WorldPacket data(SMSG_CHAR_CREATE, 1);
-                data << uint8(CHAR_CREATE_LEVEL_REQUIREMENT);
-                SendPacket(&data);
-                delete createInfo;
-                _charCreateCallback.SetParam(NULL);
-                _charCreateCallback.FreeResult();
-                return;
-            }
 
             _charCreateCallback.FreeResult();
 
@@ -631,6 +617,17 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                         }
                     }
                 }
+            }
+
+            if (GetSecurity() == SEC_PLAYER && createInfo->Class == CLASS_DEATH_KNIGHT && !hasHeroicReqLevel)
+            {
+                WorldPacket data(SMSG_CHAR_CREATE, 1);
+                data << uint8(CHAR_CREATE_LEVEL_REQUIREMENT);
+                SendPacket(&data);
+                delete createInfo;
+                _charCreateCallback.SetParam(NULL);
+                _charCreateCallback.FreeResult();
+                return;
             }
 
             if (createInfo->Data.rpos() < createInfo->Data.wpos())
