@@ -96,6 +96,7 @@ class Aura
         SpellEntry const* GetSpellProto() const { return m_spellProto; }
         SpellClassOptionsEntry const* GetSpellClass() const { return m_spellClass; }
         SpellEquippedItemsEntry const* GetSpellEquipped() const { return m_spellEquipped; }
+        SpellEffectEntry const* GetSpellEffect() const { return m_spellEffect; }
         uint32 GetId() const { return GetSpellProto()->Id; }
         uint32 GetClassId() const { return GetSpellClass()->Id; }
 
@@ -207,6 +208,7 @@ class Aura
         SpellClassOptionsEntry const* const m_spellClass;
         SpellEquippedItemsEntry const* const m_spellEquipped;
         SpellPowerEntry const* const m_spellPower;
+        SpellEffectEntry const* m_spellEffect;
         uint64 const m_casterGuid;
         uint64 const m_castItemGuid;                        // it is NOT safe to keep a pointer to the item because it may get deleted
         time_t const m_applyTime;

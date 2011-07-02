@@ -806,10 +806,10 @@ namespace Trillium
             float i_range;
     };
 
-    class AnyUnfriendlyVisibleUnitInObjectRangeCheck
+    class AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck
     {
         public:
-            AnyUnfriendlyVisibleUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range)
+            AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range)
                 : i_obj(obj), i_funit(funit), i_range(range) {}
 
             bool operator()(Unit* u)
@@ -817,6 +817,8 @@ namespace Trillium
                 return u->isAlive()
                     && i_obj->IsWithinDistInMap(u, i_range)
                     && !i_funit->IsFriendlyTo(u)
+                    && i_funit->canAttack(u)
+                    && u->GetCreatureType() != CREATURE_TYPE_CRITTER
                     && i_funit->canSeeOrDetect(u);
             }
         private:

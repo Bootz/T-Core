@@ -474,7 +474,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                 // Shockwave
                 else if (m_spellInfo->Id == 46968)
                 {
-                    int32 pct = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, 2);
+                    int32 pct = m_caster->CalculateSpellDamage(unitTarget, m_spellEffect, 2);
                     if (pct > 0)
                         damage += int32(CalculatePctN(m_caster->GetTotalAttackPowerValue(BASE_ATTACK), pct));
                     break;
@@ -524,11 +524,11 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                     {
                         uint32 pdamage = uint32(std::max(aura->GetAmount(), 0));
                         pdamage = m_caster->SpellDamageBonus(unitTarget, aura->GetSpellProto(), pdamage, DOT, aura->GetBase()->GetStackAmount());
-                        uint32 pct_dir = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, (effIndex + 1));
+                        uint32 pct_dir = m_caster->CalculateSpellDamage(unitTarget, m_spellEffect, (effIndex + 1));
                         uint8 baseTotalTicks = uint8(m_caster->CalcSpellDuration(aura->GetSpellProto()) / aura->GetSpellProto()->GetEffectAmplitude(0));
                         damage += int32(CalculatePctU(pdamage * baseTotalTicks, pct_dir));
 
-                        uint32 pct_dot = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, (effIndex + 2)) / 3;
+                        uint32 pct_dot = m_caster->CalculateSpellDamage(unitTarget, m_spellEffect, (effIndex + 2)) / 3;
                         m_spellValue->EffectBasePoints[1] = SpellMgr::CalculateSpellEffectBaseAmount(int32(CalculatePctU(pdamage * baseTotalTicks, pct_dot)), m_spellEffect, 1);
 
                         apply_direct_bonus = false;
@@ -720,7 +720,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                 {
                     // Add main hand dps * effect[2] amount
                     float average = (m_caster->GetFloatValue(UNIT_FIELD_MINDAMAGE) + m_caster->GetFloatValue(UNIT_FIELD_MAXDAMAGE)) / 2;
-                    int32 count = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, EFFECT_2);
+                    int32 count = m_caster->CalculateSpellDamage(unitTarget, m_spellEffect, EFFECT_2);
                     damage += count * int32(average * IN_MILLISECONDS) / m_caster->GetAttackTime(BASE_ATTACK);
                     break;
                 }
@@ -1458,7 +1458,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 int32 bp = int32(count * m_caster->CountPctFromMaxHealth(int32(m_spellEffect->EffectDamageMultiplier)));
                 // Improved Death Strike
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 2751, 0))
-                    AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellProto(), 2));
+                    AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellEffect(), 2));
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }

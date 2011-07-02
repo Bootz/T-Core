@@ -922,7 +922,7 @@ void AuraEffect::CalculateSpellMod()
                         m_spellmod->spellId = GetId();
                         m_spellmod->mask[1] = 0x0004000;
                     }
-                    m_spellmod->value = GetBase()->GetUnitOwner()->CalculateSpellDamage(GetBase()->GetUnitOwner(), GetSpellProto(), 1);
+                    m_spellmod->value = GetBase()->GetUnitOwner()->CalculateSpellDamage(GetBase()->GetUnitOwner(), GetSpellEffect(), 1);
                     break;
                 default:
                     break;
@@ -938,7 +938,7 @@ void AuraEffect::CalculateSpellMod()
 
                 m_spellmod->type = SpellModType(GetAuraType());    // SpellModType value == spell aura types
                 m_spellmod->spellId = GetId();
-                /*m_spellmod->mask = GetSpellEffect()->EffectSpellClassMaskA);*/
+                //m_spellmod->mask = GetSpellEffect()->EffectSpellClassMaskA[0]);
                 m_spellmod->charges = GetBase()->GetCharges();
             }
             m_spellmod->value = GetAmount();
@@ -2070,8 +2070,9 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
                     {
                         if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled) continue;
                         SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                        SpellEffectEntry const* spellInfo1 = sSpellEffectStore.LookupEntry(itr->first);
                         if (spellInfo && spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARRIOR && spellInfo->SpellIconID == 139)
-                            Rage_val += target->CalculateSpellDamage(target, spellInfo, 0) * 10;
+                            Rage_val += target->CalculateSpellDamage(target, spellInfo1, 0) * 10;
                     }
                 }
                 if (target->GetPower(POWER_RAGE) > Rage_val)
@@ -5625,7 +5626,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                     if (rage == 0)
                         break;
                     int32 mod = (rage < 100) ? rage : 100;
-                    int32 points = target->CalculateSpellDamage(target, GetSpellProto(), 1);
+                    int32 points = target->CalculateSpellDamage(target, GetSpellEffect(), 1);
                     int32 regen = target->GetMaxHealth() * (mod * points / 10) / 1000;
                     target->CastCustomSpell(target, 22845, &regen, 0, 0, true, 0, this);
                     target->SetPower(POWER_RAGE, rage-mod);
@@ -5656,11 +5657,11 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                         Cell cell(p);
                         cell.data.Part.reserved = ALL_DISTRICT;
 
-                        Trillium::AnyUnfriendlyVisibleUnitInObjectRangeCheck u_check(target, target, radius);
-                        Trillium::UnitListSearcher<Trillium::AnyUnfriendlyVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
+                        Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck u_check(target, target, radius);
+                        Trillium::UnitListSearcher<Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
 
-                        TypeContainerVisitor<Trillium::UnitListSearcher<Trillium::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
-                        TypeContainerVisitor<Trillium::UnitListSearcher<Trillium::AnyUnfriendlyVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
+                        TypeContainerVisitor<Trillium::UnitListSearcher<Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
+                        TypeContainerVisitor<Trillium::UnitListSearcher<Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
 
                         cell.Visit(p, grid_object_checker,  *GetBase()->GetOwner()->GetMap(), *target, radius);
                         cell.Visit(p, world_object_checker, *GetBase()->GetOwner()->GetMap(), *target, radius);

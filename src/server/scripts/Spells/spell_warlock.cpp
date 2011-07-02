@@ -77,7 +77,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
                             break;
                         case CREATURE_FAMILY_VOIDWALKER:
                         {
-                            SpellEntry const* spellInfo = sSpellStore.LookupEntry(WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER);
+                            SpellEffectEntry const* spellInfo = sSpellEffectStore.LookupEntry(WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER);
                             int32 hp = int32(targetCreature->CountPctFromMaxHealth(GetCaster()->CalculateSpellDamage(targetCreature, spellInfo, 0)));
                             targetCreature->CastCustomSpell(targetCreature, WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER, &hp, NULL, NULL, true);
                             //unitTarget->CastSpell(unitTarget, 54441, true);

@@ -7327,7 +7327,7 @@ void Spell::PrepareTriggersExecutedOnHit()
             continue;
         SpellEffectEntry const *auraSpellInfo = (*i)->GetSpellEffect();
         uint32 auraSpellIdx = (*i)->GetEffIndex();
-        if (SpellEffectEntry const *spellInfo = sSpellEffectStore.LookupEntry(auraSpellInfo->EffectTriggerSpell))
+        if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(auraSpellInfo->EffectTriggerSpell))
         {
             // calculate the chance using spell base amount, because aura amount is not updated on combo-points change
             // this possibly needs fixing

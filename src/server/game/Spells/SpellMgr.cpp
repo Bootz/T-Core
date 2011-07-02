@@ -1344,46 +1344,6 @@ void SpellMgr::LoadSpellProcEvents()
     sLog->outString();
 }
 
-void SpellMgr::LoadSpellBonusess()
-{
-    uint32 oldMSTime = getMSTime();
-
-    mSpellBonusMap.clear();                             // need for reload case
-    uint32 count = 0;
-    //                                                0      1             2          3         4
-    QueryResult result = WorldDatabase.Query("SELECT entry, direct_bonus, dot_bonus, ap_bonus, ap_dot_bonus FROM spell_bonus_data");
-    if (!result)
-    {
-        sLog->outString(">> Loaded %u spell bonus data", count);
-        sLog->outString();
-        return;
-    }
-
-    do
-    {
-        Field *fields = result->Fetch();
-        uint32 entry = fields[0].GetUInt32();
-
-        const SpellEntry *spell = sSpellStore.LookupEntry(entry);
-        if (!spell)
-        {
-            sLog->outErrorDb("Spell %u listed in `spell_bonus_data` does not exist", entry);
-            continue;
-        }
-
-        SpellBonusEntry& sbe = mSpellBonusMap[entry];
-        sbe.direct_damage = fields[1].GetFloat();
-        sbe.dot_damage    = fields[2].GetFloat();
-        sbe.ap_bonus      = fields[3].GetFloat();
-        sbe.ap_dot_bonus   = fields[4].GetFloat();
-
-        ++count;
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u extra spell bonus data in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}
-
 bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellProcEvent, uint32 EventProcFlag, SpellClassOptionsEntry const* procSpell, uint32 procFlags, uint32 procExtra, bool active)
 {
     // No extra req need
@@ -1543,7 +1503,7 @@ void SpellMgr::LoadSpellProcs()
             spellId = -spellId;
         }
 
-        SpellEntry const* spellEntry = sSpellStore.LookupEntry(spellId);
+        SpellAuraOptionsEntry const* spellEntry = sSpellAuraOptionsStore.LookupEntry(spellId);
         if (!spellEntry)
         {
             sLog->outErrorDb("Spell %u listed in `spell_proc` does not exist", spellId);
@@ -1642,7 +1602,7 @@ void SpellMgr::LoadSpellProcs()
             if (allRanks)
             {
                 spellId = sSpellMgr->GetNextSpellInChain(spellId);
-                spellEntry = sSpellStore.LookupEntry(spellId);
+                spellEntry = sSpellAuraOptionsStore.LookupEntry(spellId);
             }
             else
                 break;

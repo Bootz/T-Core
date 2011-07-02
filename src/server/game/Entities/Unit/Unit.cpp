@@ -4884,6 +4884,16 @@ void Unit::SendSpellMiss(Unit* target, uint32 spellID, SpellMissInfo missInfo)
     SendMessageToSet(&data, true);
 }
 
+void Unit::SendSpellDamageResist(Unit* target, uint32 spellId)
+{
+    WorldPacket data(SMSG_PROCRESIST, 8+8+4+1);
+    data << uint64(GetGUID());
+    data << uint64(target->GetGUID());
+    data << uint32(spellId);
+    data << uint8(0); // bool - log format: 0-default, 1-debug
+    SendMessageToSet(&data, true);
+}
+
 void Unit::SendSpellDamageImmune(Unit* target, uint32 spellId)
 {
     WorldPacket data(SMSG_SPELLORDAMAGE_IMMUNE, 8+8+4+1);
@@ -5101,6 +5111,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 {
     SpellEntry const* dummySpell = triggeredByAura->GetSpellProto();
     SpellClassOptionsEntry const* dummyClass = triggeredByAura->GetSpellClass();
+    SpellEffectEntry const* procEffect = triggeredByAura->GetSpellEffect();
     uint32 effIndex = triggeredByAura->GetEffIndex();
     int32  triggerAmount = triggeredByAura->GetAmount();
 
@@ -7127,7 +7138,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                         }
                     }
 
-                    SpellEntry const* windfurySpellEntry = sSpellStore.LookupEntry(spellId);
+                    SpellEffectEntry const* windfurySpellEntry = sSpellEffectStore.LookupEntry(spellId);
                     if (!windfurySpellEntry)
                     {
                         sLog->outError("Unit::HandleDummyAuraProc: non existed spell id: %u (Windfury)", spellId);
@@ -7749,7 +7760,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
                         else
                             continue;
 
-                        basepoints0 = int32(CalculateSpellDamage(this, procSpell, i) * 0.4f);
+                        basepoints0 = int32(CalculateSpellDamage(this, procEffect, i) * 0.4f);
                         CastCustomSpell(this, triggered_spell_id, &basepoints0, NULL, NULL, true, NULL, triggeredByAura);
                     }
                     return true;
@@ -8293,7 +8304,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                     {
                         if ((*i)->GetMiscValue() == SPELLMOD_CHANCE_OF_SUCCESS && (*i)->GetSpellProto()->SpellIconID == 113)
                         {
-                            int32 value2 = CalculateSpellDamage(this, (*i)->GetSpellProto(), 2);
+                            int32 value2 = CalculateSpellDamage(this, (*i)->GetSpellEffect(), 2);
                             basepoints0 = int32(CalculatePctN(GetMaxPower(POWER_MANA), value2));
                             // Drain Soul
                             CastCustomSpell(this, 18371, &basepoints0, NULL, NULL, true, castItem, triggeredByAura);
@@ -10425,7 +10436,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                 // effect 1 m_amount
                 int32 maxPercent = (*i)->GetAmount();
                 // effect 0 m_amount
-                int32 stepPercent = CalculateSpellDamage(this, (*i)->GetSpellProto(), 0);
+                int32 stepPercent = CalculateSpellDamage(this, (*i)->GetSpellEffect(), 0);
                 // count affliction effects and calc additional damage in percentage
                 int32 modPercent = 0;
                 AuraApplicationMap const& victimAuras = pVictim->GetAppliedAuras();
@@ -13026,9 +13037,10 @@ float Unit::ApplyEffectModifiers(SpellEntry const* spellProto, uint8 effect_inde
 }
 
 // function uses real base points (typically value - 1)
-int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, uint8 effect_index, int32 const* basePoints) const
+int32 Unit::CalculateSpellDamage(Unit const* target, SpellEffectEntry const* spellProto, uint8 effect_index, int32 const* basePoints) const
 {
-    return SpellMgr::CalculateSpellEffectAmount(spellProto, effect_index, this, basePoints, target);
+    SpellEntry const* spellProto1 = NULL;
+    return SpellMgr::CalculateSpellEffectAmount(spellProto1, effect_index, this, basePoints, target);
 }
 
 int32 Unit::CalcSpellDuration(SpellEntry const* spellProto)

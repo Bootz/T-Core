@@ -715,6 +715,11 @@ SpellEntry const* AuraScript::GetSpellProto() const
     return m_aura->GetSpellProto();
 }
 
+SpellEffectEntry const* AuraScript::GetSpellEffect() const
+{
+    return m_aura->GetSpellEffect();
+}
+
 uint32 AuraScript::GetId() const
 {
     return m_aura->GetId();

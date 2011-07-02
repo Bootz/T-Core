@@ -584,6 +584,7 @@ class AuraScript : public _SpellScript
 
         // returns proto of the spell
         SpellEntry const* GetSpellProto() const;
+        SpellEffectEntry const* GetSpellEffect() const;
         // returns spellid of the spell
         uint32 GetId() const;
 
