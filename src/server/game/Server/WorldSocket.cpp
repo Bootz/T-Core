@@ -259,13 +259,14 @@ int WorldSocket::open (void *a)
     m_Address = remote_addr.get_host_addr();
 
     // Send startup packet.
-    WorldPacket packet (SMSG_AUTH_CHALLENGE, 24);
-    packet << uint32(1);                                    // 1...31
-    packet << m_Seed;
+    WorldPacket packet (SMSG_AUTH_CHALLENGE, 37);
 
     BigNumber seed1;
     seed1.SetRand(16 * 8);
     packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
+
+    packet << uint8(1);
+    packet << uint32(m_Seed);
 
     BigNumber seed2;
     seed2.SetRand(16 * 8);
@@ -493,10 +494,10 @@ int WorldSocket::handle_input_header (void)
     EndianConvertReverse(header.size);
     EndianConvert(header.cmd);
 
-    if ((header.size < 4) || (header.size > 10240) || (header.cmd  > 10240))
+    if ((header.size < 4) || (header.size > 10240))
     {
         Player *_player = m_Session ? m_Session->GetPlayer() : NULL;
-        sLog->outError ("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
+        sLog->outError("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
             m_Session ? m_Session->GetAccountId() : 0,
             _player ? _player->GetGUIDLow() : 0,
             _player ? _player->GetName() : "<none>",
@@ -776,7 +777,8 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 {
     uint8 digest[20];
-    uint16 clientBuild, id, security;
+    uint16 clientBuild, security;
+    uint32 id;
     uint32 m_addonSize;
     uint32 clientSeed;
     std::string account;
