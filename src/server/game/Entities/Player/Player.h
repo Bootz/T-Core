@@ -1642,8 +1642,8 @@ class Player : public Unit, public GridObject<Player>
         }
         uint32 GetGlyph(uint8 slot) { return m_Glyphs[m_activeSpec][slot]; }
 
-        uint32 GetFreePrimaryProfessionPoints() const { return profPoints; }
-        void SetFreePrimaryProfessions(uint16 profs) { profPoints, profs; }
+        uint32 GetFreePrimaryProfessionPoints() const { return 0; }
+        void SetFreePrimaryProfessions(uint16 profs) { /*SetUInt32Value(0, profs);*/ }
         void InitPrimaryProfessions();
 
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
@@ -1768,11 +1768,26 @@ class Player : public Unit, public GridObject<Player>
         void RemoveFromGroup(RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT) { RemoveFromGroup(GetGroup(), GetGUID(), method); }
         void SendUpdateToOutOfRangeGroupMembers();
 
-        void SetInGuild(uint32 GuildId) { guild, GuildId; }
+        void SetInGuild(uint32 GuildId)
+        {
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_GUILD_ID);
+            stmt->setUInt32(0, GuildId);
+            stmt->setUInt64(1, GetGUID());
+            CharacterDatabase.Execute(stmt);
+        }
+
+        uint32 GetGuildId() 
+        {
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
+            stmt->setUInt64(0, GetGUIDLow());
+            PreparedQueryResult result = CharacterDatabase.Query(stmt);
+            return result ? (*result)[0].GetUInt32() : 0;
+        }
+
         void SetRank(uint8 rankId) { SetUInt32Value(PLAYER_GUILDRANK, rankId); }
         uint8 GetRank() { return uint8(GetUInt32Value(PLAYER_GUILDRANK)); }
         void SetGuildIdInvited(uint32 GuildId) { m_GuildIdInvited = GuildId; }
-        uint32 GetGuildId() { return guild;  }
+
         static uint32 GetGuildIdFromDB(uint64 guid);
         static uint8 GetRankFromDB(uint64 guid);
         int GetGuildIdInvited() { return m_GuildIdInvited; }
