@@ -396,7 +396,6 @@ class Spell
         void cast(bool skipCheck = false);
         void finish(bool ok = true);
         void TakePower();
-        void TakeAmmo();
 
         void TakeRunePower(bool didHit);
         void TakeReagents();
@@ -428,7 +427,6 @@ class Spell
 
         void DoCreateItem(uint32 i, uint32 itemtype);
         void WriteSpellGoTargets(WorldPacket * data);
-        void WriteAmmoToPacket(WorldPacket * data);
 
         void SelectSpellTargets();
         void SelectEffectTargets(uint32 i, uint32 cur);

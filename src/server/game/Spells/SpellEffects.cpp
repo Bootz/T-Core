@@ -694,22 +694,6 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                     // TODO: should this be put on taken but not done?
                     if (found)
                         damage += SpellMgr::CalculateSpellEffectAmount(m_spellInfo, 1);
-
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        // Add Ammo and Weapon damage plus RAP * 0.1
-                        Item *item = m_caster->ToPlayer()->GetWeaponForAttack(RANGED_ATTACK);
-                        if (item)
-                        {
-                            float dmg_min = item->GetTemplate()->Damage->DamageMin;
-                            float dmg_max = item->GetTemplate()->Damage->DamageMax;
-                            if (dmg_max == 0.0f && dmg_min > dmg_max)
-                                damage += int32(dmg_min);
-                            else
-                                damage += irand(int32(dmg_min), int32(dmg_max));
-                            damage += int32(m_caster->ToPlayer()->GetAmmoDPS()*item->GetTemplate()->Delay*0.001f);
-                        }
-                    }
                 }
                 break;
             }
