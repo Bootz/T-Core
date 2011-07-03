@@ -1766,7 +1766,7 @@ struct SpellEntry
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
     uint32    AttributesEx7;                                // 8        m_attributesExG (0x20 - totems, 0x4 - paladin auras, etc...)
-    // uint32 someFlags;                                    // 9        4.0.0
+    uint32    AttributesEX8;                                // 9        m_attributesEXH
     // uint32 unk_400_1;                                    // 10       4.0.0
     uint32    CastingTimeIndex;                             // 11       m_castingTimeIndex
     uint32    DurationIndex;                                // 12       m_durationIndex
