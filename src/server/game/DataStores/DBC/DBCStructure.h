@@ -1766,7 +1766,7 @@ struct SpellEntry
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
     uint32    AttributesEx7;                                // 8        m_attributesExG (0x20 - totems, 0x4 - paladin auras, etc...)
-    uint32    AttributesEx8;                                // 9        m_attributesExH
+    // uint32 someFlags;                                    // 9        4.0.0
     // uint32 unk_400_1;                                    // 10       4.0.0
     uint32    CastingTimeIndex;                             // 11       m_castingTimeIndex
     uint32    DurationIndex;                                // 12       m_durationIndex
@@ -1777,7 +1777,7 @@ struct SpellEntry
     uint32    SpellIconID;                                  // 18       m_spellIconID
     uint32    activeIconID;                                 // 19       m_activeIconID
     DBCString SpellName;                                    // 20       m_name_lang
-    uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
+    DBCString Rank;                                         // 21       m_nameSubtext_lang
     //DBCString Description;                                // 22       m_description_lang not used
     //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
     uint32    SchoolMask;                                   // 24       m_schoolMask
@@ -1799,9 +1799,10 @@ struct SpellEntry
     uint32 SpellLevelsId;                                   // 40       SpellLevels.dbc
     uint32 SpellPowerId;                                    // 41       SpellPower.dbc
     uint32 SpellReagentsId;                                 // 42       SpellReagents.dbc
+    uint32 SpellShapeshiftId;                               // 43       SpellShapeshift.dbc
     uint32 SpellTargetRestrictionsId;                       // 44       SpellTargetRestrictions.dbc
     uint32 SpellTotemsId;                                   // 45       SpellTotems.dbc
-    //uint32 unk2;                                          // 46
+    //uint32 ResearchProject;                               // 46       ResearchProject.dbc
 
     // struct access functions
     SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
