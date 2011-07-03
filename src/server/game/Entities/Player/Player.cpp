@@ -24247,9 +24247,8 @@ void Player::ActivateSpec(uint8 spec)
                 continue;
             removeSpell(talentInfo->RankID[rank], true); // removes the talent, and all dependant, learned, and chained spells..
             if (const SpellEffectEntry *_spellEntry = sSpellEffectStore.LookupEntry(talentInfo->RankID[rank]))
-                for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)                  // search through the SpellEntry for valid trigger spells
-                    if (_spellEntry->EffectTriggerSpell > 0 && _spellEntry->Effect == SPELL_EFFECT_LEARN_SPELL)
-                        removeSpell(_spellEntry->EffectTriggerSpell, true); // and remove any spells that the talent teaches
+                if (_spellEntry->EffectTriggerSpell > 0 && _spellEntry->Effect == SPELL_EFFECT_LEARN_SPELL)
+                    removeSpell(_spellEntry->EffectTriggerSpell, true); // and remove any spells that the talent teaches
             // if this talent rank can be found in the PlayerTalentMap, mark the talent as removed so it gets deleted
             //PlayerTalentMap::iterator plrTalent = m_talents[m_activeSpec]->find(talentInfo->RankID[rank]);
             //if (plrTalent != m_talents[m_activeSpec]->end())
