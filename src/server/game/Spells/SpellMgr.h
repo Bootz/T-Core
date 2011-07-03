@@ -285,6 +285,8 @@ inline bool IsExplicitDiscoverySpell(SpellEntry const *spellInfo)
 inline bool IsLootCraftingSpell(SpellEntry const *spellInfo)
 {
     SpellTotemsEntry const* totem = spellInfo->GetSpellTotems();
+    if (!totem)
+        return false;
     return (spellInfo->GetSpellEffectIdByIndex(0) == SPELL_EFFECT_CREATE_RANDOM_ITEM ||
         // different random cards from Inscription (121==Virtuoso Inking Set category) r without explicit item
         (spellInfo->GetSpellEffectIdByIndex(0) == SPELL_EFFECT_CREATE_ITEM_2 &&

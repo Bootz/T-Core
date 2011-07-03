@@ -1777,9 +1777,9 @@ struct SpellEntry
     uint32    SpellIconID;                                  // 18       m_spellIconID
     uint32    activeIconID;                                 // 19       m_activeIconID
     DBCString SpellName;                                    // 20       m_name_lang
-    DBCString Rank;                                         // 21       m_nameSubtext_lang
+    DBCString SpellSubName;                                 // 21       m_nameSubtext_lang
     //DBCString Description;                                // 22       m_description_lang not used
-    //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
+    //DBCString AuraDescription;                            // 23       m_auraDescription_lang not used
     uint32    SchoolMask;                                   // 24       m_schoolMask
     uint32    runeCostID;                                   // 25       m_runeCostID
     //uint32    spellMissileID;                             // 26       m_spellMissileID not used
