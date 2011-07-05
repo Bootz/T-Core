@@ -17,17 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DBC_FILE_LOADER_H
-#define DBC_FILE_LOADER_H
+#ifndef STORAGE_LOADER_H
+#define STORAGE_LOADER_H
+
 #include "Define.h"
 #include "Utilities/ByteConverter.h"
 #include <cassert>
 
-class DBCFileLoader
+class StorageLoader
 {
     public:
-        DBCFileLoader();
-        ~DBCFileLoader();
+        StorageLoader();
+        ~StorageLoader();
 
         bool Load(const char *filename, const char *fmt);
 
@@ -63,11 +64,11 @@ class DBCFileLoader
                 }
 
             private:
-                Record(DBCFileLoader &file_, unsigned char *offset_): offset(offset_), file(file_) {}
+                Record(StorageLoader &file_, unsigned char *offset_): offset(offset_), file(file_) {}
                 unsigned char *offset;
-                DBCFileLoader &file;
+                StorageLoader &file;
 
-                friend class DBCFileLoader;
+                friend class StorageLoader;
 
         };
 

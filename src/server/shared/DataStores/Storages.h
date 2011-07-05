@@ -48,7 +48,7 @@ struct SqlDbc
         }
 
         // Get sql index position
-        DBCFileLoader::GetFormatRecordSize(fmt, &indexPos);
+        StorageLoader::GetFormatRecordSize(fmt, &indexPos);
         if (indexPos >= 0)
         {
             uint32 uindexPos = uint32(indexPos);
@@ -81,7 +81,7 @@ class DBCStorage
 
         bool Load(char const* fn, SqlDbc * sql)
         {
-            DBCFileLoader dbc;
+            StorageLoader dbc;
             // Check if load was sucessful, only then continue
             if (!dbc.Load(fn, fmt))
                 return false;
@@ -232,7 +232,7 @@ class DBCStorage
             if(!indexTable)
                 return false;
 
-            DBCFileLoader dbc;
+            StorageLoader dbc;
             // Check if load was successful, only then continue
             if(!dbc.Load(fn, fmt))
                 return false;

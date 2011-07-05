@@ -23,13 +23,13 @@
 #include "StorageLoader.h"
 #include "Errors.h"
 
-DBCFileLoader::DBCFileLoader()
+StorageLoader::StorageLoader()
 {
     data = NULL;
     fieldsOffset = NULL;
 }
 
-bool DBCFileLoader::Load(const char* filename, const char* fmt)
+bool StorageLoader::Load(const char* filename, const char* fmt)
 {
     uint32 header;
     if (data)
@@ -47,7 +47,6 @@ bool DBCFileLoader::Load(const char* filename, const char* fmt)
         fclose(f);
         return false;
     }
-
 
     EndianConvert(header);
 
@@ -114,7 +113,7 @@ bool DBCFileLoader::Load(const char* filename, const char* fmt)
     return true;
 }
 
-DBCFileLoader::~DBCFileLoader()
+StorageLoader::~StorageLoader()
 {
     if (data)
         delete [] data;
@@ -123,13 +122,13 @@ DBCFileLoader::~DBCFileLoader()
         delete [] fieldsOffset;
 }
 
-DBCFileLoader::Record DBCFileLoader::getRecord(size_t id)
+StorageLoader::Record StorageLoader::getRecord(size_t id)
 {
     assert(data);
     return Record(*this, data + id * recordSize);
 }
 
-uint32 DBCFileLoader::GetFormatRecordSize(const char* format, int32* index_pos)
+uint32 StorageLoader::GetFormatRecordSize(const char* format, int32* index_pos)
 {
     uint32 recordsize = 0;
     int32 i = -1;
@@ -174,31 +173,20 @@ uint32 DBCFileLoader::GetFormatRecordSize(const char* format, int32* index_pos)
     return recordsize;
 }
 
-char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char*& sqlDataTable)
+char* StorageLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char*& sqlDataTable)
 {
-    /*
-    format STRING, NA, FLOAT, NA, INT <=>
-    struct{
-    char* field0,
-    float field1,
-    int field2
-    }entry;
-
-    this func will generate  entry[rows] data;
-    */
-
     typedef char* ptr;
     if (strlen(format) != fieldCount)
         return NULL;
 
-    //get struct size and index pos
+    // get struct size and index pos
     int32 i;
     uint32 recordsize = GetFormatRecordSize(format, &i);
 
     if (i >= 0)
     {
         uint32 maxi = 0;
-        //find max index
+        // find max index
         for (uint32 y = 0; y < recordCount; ++y)
         {
             uint32 ind = getRecord(y).getUInt(i);
@@ -272,7 +260,7 @@ char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**
     return dataTable;
 }
 
-char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable)
+char* StorageLoader::AutoProduceStrings(const char* format, char* dataTable)
 {
     if (strlen(format) != fieldCount)
         return NULL;
