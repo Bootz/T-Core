@@ -47,7 +47,7 @@ public:
 
     struct boss_anubshiahAI : public ScriptedAI
     {
-        boss_anubshiahAI(Creature *c) : ScriptedAI(c) {}
+        boss_anubshiahAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 ShadowBolt_Timer;
         uint32 CurseOfTongues_Timer;
@@ -84,7 +84,7 @@ public:
             //CurseOfTongues_Timer
             if (CurseOfTongues_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(pTarget, SPELL_CURSEOFTONGUES);
                 CurseOfTongues_Timer = 18000;
             } else CurseOfTongues_Timer -= diff;
@@ -106,7 +106,7 @@ public:
             //EnvelopingWeb_Timer
             if (EnvelopingWeb_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(pTarget, SPELL_ENVELOPINGWEB);
                 EnvelopingWeb_Timer = 12000;
             } else EnvelopingWeb_Timer -= diff;

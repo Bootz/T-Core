@@ -74,7 +74,7 @@ public:
 
     struct mob_frost_tombAI : public ScriptedAI
     {
-        mob_frost_tombAI(Creature *c) : ScriptedAI(c)
+        mob_frost_tombAI(Creature* c) : ScriptedAI(c)
         {
             FrostTombGUID = 0;
         }
@@ -126,7 +126,7 @@ public:
 
     struct boss_kelesethAI : public ScriptedAI
     {
-        boss_kelesethAI(Creature *c) : ScriptedAI(c)
+        boss_kelesethAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -207,7 +207,7 @@ public:
 
             if (ShadowboltTimer <= diff)
             {
-                Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
+                Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
                 if (pTarget && pTarget->isAlive() && pTarget->GetTypeId() == TYPEID_PLAYER)
                     me->CastSpell(pTarget, DUNGEON_MODE(SPELL_SHADOWBOLT, SPELL_SHADOWBOLT_HEROIC), true);
                 ShadowboltTimer = 10000;
@@ -236,11 +236,11 @@ public:
 
             if (FrostTombTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     if (pTarget->isAlive())
                     {
                         //DoCast(pTarget, SPELL_FROST_TOMB_SUMMON, true);
-                        if (Creature *pChains = me->SummonCreature(CREATURE_FROSTTOMB, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
+                        if (Creature* pChains = me->SummonCreature(CREATURE_FROSTTOMB, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
                         {
                             CAST_AI(mob_frost_tomb::mob_frost_tombAI, pChains->AI())->SetPrisoner(pTarget);
                             pChains->CastSpell(pTarget, SPELL_FROST_TOMB, true);
@@ -269,7 +269,7 @@ public:
 
     struct mob_vrykul_skeletonAI : public ScriptedAI
     {
-        mob_vrykul_skeletonAI(Creature *c) : ScriptedAI(c)
+        mob_vrykul_skeletonAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -289,7 +289,7 @@ public:
         }
 
         void EnterCombat(Unit* /*who*/){}
-        void DamageTaken(Unit *done_by, uint32 &damage)
+        void DamageTaken(Unit* done_by, uint32 &damage)
         {
             if (done_by->GetGUID() == me->GetGUID())
                 return;

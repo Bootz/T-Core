@@ -74,7 +74,7 @@ public:
             casterGuid = 0;
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             if (Phase)
                 return;
@@ -139,7 +139,7 @@ public:
                         break;
                     case 7:
                         DoCast(me, SPELL_EXPLODE_CART, true);
-                        if (Player *caster = Unit::GetPlayer(*me, casterGuid))
+                        if (Player* caster = Unit::GetPlayer(*me, casterGuid))
                             caster->KilledMonster(me->GetCreatureInfo(), me->GetGUID());
                         uiPhaseTimer = 5000;
                         Phase = 8;
@@ -154,7 +154,7 @@ public:
 
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_sinkhole_kill_creditAI(creature);
     }
@@ -171,9 +171,9 @@ public:
 
     struct npc_khunok_the_behemothAI : public ScriptedAI
     {
-        npc_khunok_the_behemothAI(Creature *c) : ScriptedAI(c) {}
+        npc_khunok_the_behemothAI(Creature* c) : ScriptedAI(c) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             ScriptedAI::MoveInLineOfSight(who);
 
@@ -182,7 +182,7 @@ public:
 
             if (who->GetEntry() == 25861 && me->IsWithinDistInMap(who, 10.0f))
             {
-                if (Unit *owner = who->GetOwner())
+                if (Unit* owner = who->GetOwner())
                 {
                     if (owner->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -194,7 +194,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_khunok_the_behemothAI(creature);
     }
@@ -351,7 +351,7 @@ public:
 
     struct mob_nerubar_victimAI : public ScriptedAI
     {
-        mob_nerubar_victimAI(Creature *c) : ScriptedAI(c) {}
+        mob_nerubar_victimAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset() {}
         void EnterCombat(Unit* /*who*/) {}
@@ -376,7 +376,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new mob_nerubar_victimAI(creature);
     }
@@ -411,7 +411,7 @@ public:
 
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_scourge_prisonerAI(creature);
     }
@@ -484,7 +484,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_jennyAI (creature);
     }
@@ -528,7 +528,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_fezzix_geartwistAI(creature);
     }
@@ -576,7 +576,7 @@ public:
 
     struct npc_nesingwary_trapperAI : public ScriptedAI
     {
-        npc_nesingwary_trapperAI(Creature *c) : ScriptedAI(c) { c->SetVisible(false); }
+        npc_nesingwary_trapperAI(Creature* c) : ScriptedAI(c) { c->SetVisible(false); }
 
         uint64 go_caribouGUID;
         uint8  Phase;
@@ -594,16 +594,16 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (GameObject *go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
+            if (GameObject* go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
                 go_caribou->SetLootState(GO_JUST_DEACTIVATED);
 
             if (TempSummon *summon = me->ToTempSummon())
                 if (summon->isSummon())
-                    if (Unit *pTemp = summon->GetSummoner())
+                    if (Unit* pTemp = summon->GetSummoner())
                         if (pTemp->GetTypeId() == TYPEID_PLAYER)
                             CAST_PLR(pTemp)->KilledMonsterCredit(me->GetEntry(), 0);
 
-            if (GameObject *go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
+            if (GameObject* go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
                 go_caribou->SetGoState(GO_STATE_READY);
         }
 
@@ -620,7 +620,7 @@ public:
                         break;
 
                     case 2:
-                        if (GameObject *go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
+                        if (GameObject* go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
                             me->GetMotionMaster()->MovePoint(0, go_fur->GetPositionX(), go_fur->GetPositionY(), go_fur->GetPositionZ());
                         uiPhaseTimer = 1500;
                         Phase = 3;
@@ -641,7 +641,7 @@ public:
                         Phase = 6;
                         break;
                     case 6:
-                        if (GameObject *go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
+                        if (GameObject* go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
                             go_fur->Delete();
                         uiPhaseTimer = 500;
                         Phase = 7;
@@ -649,7 +649,7 @@ public:
 
                     case 7:
                     {
-                        GameObject *go_caribou = NULL;
+                        GameObject* go_caribou = NULL;
                         for (uint8 i = 0; i < CaribouTrapsNum; ++i)
                         {
                             go_caribou = me->FindNearestGameObject(CaribouTraps[i], 5.0f);
@@ -673,7 +673,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_nesingwary_trapperAI(creature);
     }
@@ -790,7 +790,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_lurgglbrAI(creature);
     }
@@ -850,7 +850,7 @@ public:
 
     struct npc_nexus_drake_hatchlingAI : public FollowerAI //The spell who makes the npc follow the player is missing, also we can use FollowerAI!
     {
-        npc_nexus_drake_hatchlingAI(Creature *c) : FollowerAI(c) {}
+        npc_nexus_drake_hatchlingAI(Creature* c) : FollowerAI(c) {}
 
         uint64 HarpoonerGUID;
         bool WithRedDragonBlood;
@@ -867,7 +867,7 @@ public:
                 AttackStart(pWho);
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_DRAKE_HARPOON && caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -877,7 +877,7 @@ public:
             WithRedDragonBlood = true;
         }
 
-        void MoveInLineOfSight(Unit *pWho)
+        void MoveInLineOfSight(Unit* pWho)
         {
             FollowerAI::MoveInLineOfSight(pWho);
 
@@ -888,7 +888,7 @@ public:
             {
                 if (me->IsWithinDistInMap(pWho, INTERACTION_DISTANCE))
                 {
-                    if (Player *pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                    if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
                     {
                         pHarpooner->KilledMonsterCredit(26175, 0);
                         pHarpooner->RemoveAura(SPELL_DRAKE_HATCHLING_SUBDUED);
@@ -904,7 +904,7 @@ public:
         {
             if (WithRedDragonBlood && HarpoonerGUID && !me->HasAura(SPELL_RED_DRAGONBLOOD))
             {
-                if (Player *pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
                 {
                     EnterEvadeMode();
                     StartFollow(pHarpooner, 35, NULL);
@@ -924,7 +924,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_nexus_drake_hatchlingAI(creature);
     }
@@ -1026,7 +1026,7 @@ public:
             {
                 case 3:
                     SetEscortPaused(true);
-                    if (Creature *pArthas = me->SummonCreature(NPC_IMAGE_LICH_KING, 3730.313f, 3518.689f, 473.324f, 1.562f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                    if (Creature* pArthas = me->SummonCreature(NPC_IMAGE_LICH_KING, 3730.313f, 3518.689f, 473.324f, 1.562f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                     {
                         uiArthas = pArthas->GetGUID();
                         pArthas->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -1034,7 +1034,7 @@ public:
                         pArthas->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                         pArthas->GetMotionMaster()->MovePoint(0, 3737.374756f, 3564.841309f, 477.433014f);
                     }
-                    if (Creature *pTalbot = me->SummonCreature(NPC_COUNSELOR_TALBOT, 3747.23f, 3614.936f, 473.321f, 4.462012f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                    if (Creature* pTalbot = me->SummonCreature(NPC_COUNSELOR_TALBOT, 3747.23f, 3614.936f, 473.321f, 4.462012f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                     {
                         uiTalbot = pTalbot->GetGUID();
                         pTalbot->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -1122,7 +1122,7 @@ public:
                             pArlos->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                             pArlos->GetMotionMaster()->MovePoint(0, 3735.570068f, 3572.419922f, 477.441010f);
                         }
-                        if (Creature *pLeryssa = me->SummonCreature(NPC_LERYSSA, 3749.654541f, 3614.959717f, 473.323486f, 4.524959f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                        if (Creature* pLeryssa = me->SummonCreature(NPC_LERYSSA, 3749.654541f, 3614.959717f, 473.323486f, 4.524959f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                         {
                             uiLeryssa = pLeryssa->GetGUID();
                             pLeryssa->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -1270,7 +1270,7 @@ public:
         return true;
     }
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_thassarianAI(creature);
     }
@@ -1305,7 +1305,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_image_lich_kingAI(creature);
     }
@@ -1337,7 +1337,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_general_arlosAI(creature);
     }
@@ -1397,9 +1397,9 @@ public:
         {
             if (bCheck)
             {
-                if (Creature *pLeryssa = me->FindNearestCreature(NPC_LERYSSA, 50.0f, true))
+                if (Creature* pLeryssa = me->FindNearestCreature(NPC_LERYSSA, 50.0f, true))
                     LeryssaGUID = pLeryssa->GetGUID();
-                if (Creature *pArlos = me->FindNearestCreature(NPC_GENERAL_ARLOS, 50.0f, true))
+                if (Creature* pArlos = me->FindNearestCreature(NPC_GENERAL_ARLOS, 50.0f, true))
                     ArlosGUID = pArlos->GetGUID();
                 bCheck = false;
             }
@@ -1436,8 +1436,8 @@ public:
             if (!LeryssaGUID || !ArlosGUID)
                 return;
 
-            Creature *pLeryssa = Unit::GetCreature(*me, LeryssaGUID);
-            Creature *pArlos = Unit::GetCreature(*me, ArlosGUID);
+            Creature* pLeryssa = Unit::GetCreature(*me, LeryssaGUID);
+            Creature* pArlos = Unit::GetCreature(*me, ArlosGUID);
             if (!pLeryssa || !pArlos)
                 return;
 
@@ -1455,7 +1455,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_counselor_talbotAI(creature);
     }
@@ -1580,7 +1580,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_leryssaAI(creature);
     }
@@ -1657,7 +1657,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_beryl_sorcererAI(creature);
     }
@@ -1763,7 +1763,7 @@ public:
                 case 5:
                     if (uiStep == 5)
                     {
-                        if (Player *pCaster = Unit::GetPlayer(*me, CasterGUID))
+                        if (Player* pCaster = Unit::GetPlayer(*me, CasterGUID))
                         {
                             DoScriptText(SAY_IMPRISIONED_BERYL_5, me);
                             pCaster->KilledMonsterCredit(25478, 0);
@@ -1792,7 +1792,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_imprisoned_beryl_sorcererAI(creature);
     }
@@ -1841,7 +1841,7 @@ public:
 
     struct npc_mootoo_the_youngerAI : public npc_escortAI
     {
-        npc_mootoo_the_youngerAI(Creature *c) : npc_escortAI(c) {}
+        npc_mootoo_the_youngerAI(Creature* c) : npc_escortAI(c) {}
 
         void Reset()
         {
@@ -1887,7 +1887,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_mootoo_the_youngerAI(creature);
     }
@@ -1934,7 +1934,7 @@ public:
 
     struct npc_bonker_togglevoltAI : public npc_escortAI
     {
-        npc_bonker_togglevoltAI(Creature *c) : npc_escortAI(c) {}
+        npc_bonker_togglevoltAI(Creature* c) : npc_escortAI(c) {}
         uint32 Bonker_agro;
 
         void Reset()
@@ -1980,7 +1980,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_bonker_togglevoltAI(creature);
     }
@@ -2096,7 +2096,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_trapped_mammoth_calfAI(creature);
     }
@@ -2124,7 +2124,7 @@ public:
     {
         npc_magmoth_crusherAI(Creature* c) : ScriptedAI(c) {}
 
-        void JustDied(Unit *pKiller)
+        void JustDied(Unit* pKiller)
         {
             if (pKiller->GetTypeId() == TYPEID_PLAYER &&
                 CAST_PLR(pKiller)->GetQuestStatus(QUEST_YOU_RE_NOT_SO_BIG_NOW) == QUEST_STATUS_INCOMPLETE &&
@@ -2138,7 +2138,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_magmoth_crusherAI(creature);
     }
@@ -2158,7 +2158,7 @@ public:
 
     struct npc_seaforium_depth_chargeAI : public ScriptedAI
     {
-        npc_seaforium_depth_chargeAI(Creature *c) : ScriptedAI(c) {}
+        npc_seaforium_depth_chargeAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiExplosionTimer;
         void Reset()
@@ -2188,7 +2188,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_seaforium_depth_chargeAI(creature);
     }
@@ -2240,7 +2240,7 @@ public:
 
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_valiance_keep_cannoneerAI(creature);
     }
@@ -2345,7 +2345,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_warmage_coldarraAI(creature);
     }

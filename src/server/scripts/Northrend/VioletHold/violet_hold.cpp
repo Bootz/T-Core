@@ -428,7 +428,7 @@ public:
 
     struct mob_azure_saboteurAI : public npc_escortAI
     {
-        mob_azure_saboteurAI(Creature *c):npc_escortAI(c)
+        mob_azure_saboteurAI(Creature* c):npc_escortAI(c)
         {
             pInstance           = c->GetInstanceScript();
             bHasGotMovingPoints = false;
@@ -545,14 +545,14 @@ class npc_teleportation_portal_vh : public CreatureScript
 public:
     npc_teleportation_portal_vh() : CreatureScript("npc_teleportation_portal_vh") { }
 
-    CreatureAI* GetAI(Creature *pCreature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
         return new npc_teleportation_portalAI(pCreature);
     }
 
     struct npc_teleportation_portalAI : public ScriptedAI
     {
-        npc_teleportation_portalAI(Creature *c) : ScriptedAI(c), listOfMobs(me)
+        npc_teleportation_portalAI(Creature* c) : ScriptedAI(c), listOfMobs(me)
         {
             pInstance = c->GetInstanceScript();
             uiTypeOfMobsPortal = urand(0, 1);    // 0 - elite mobs   1 - portal guardian or portal keeper with regular mobs
@@ -637,7 +637,7 @@ public:
                         {
                             bPortalGuardianOrKeeperOrEliteSpawn = true;
                             uint32 entry = RAND(CREATURE_PORTAL_GUARDIAN, CREATURE_PORTAL_KEEPER);
-                            if (Creature *pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
+                            if (Creature* pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
                                 me->CastSpell(pPortalKeeper, SPELL_PORTAL_CHANNEL, false);
                         }
                         uiSpawnTimer = SPAWN_TIME;
@@ -658,14 +658,14 @@ public:
                 pInstance->SetData(DATA_WAVE_COUNT, pInstance->GetData(DATA_WAVE_COUNT)+1);
         }
 
-        void JustSummoned(Creature *pSummoned)
+        void JustSummoned(Creature* pSummoned)
         {
             listOfMobs.Summon(pSummoned);
             if (pSummoned)
                 pInstance->SetData64(DATA_ADD_TRASH_MOB, pSummoned->GetGUID());
         }
 
-        void SummonedMobDied(Creature *pSummoned)
+        void SummonedMobDied(Creature* pSummoned)
         {
             listOfMobs.Despawn(pSummoned);
             if (pSummoned)
@@ -677,7 +677,7 @@ public:
 
 struct violet_hold_trashAI : public npc_escortAI
 {
-    violet_hold_trashAI(Creature *c):npc_escortAI(c)
+    violet_hold_trashAI(Creature* c):npc_escortAI(c)
     {
         pInstance = c->GetInstanceScript();
         bHasGotMovingPoints = false;
@@ -810,7 +810,7 @@ public:
 
     struct mob_azure_invaderAI : public violet_hold_trashAI
     {
-        mob_azure_invaderAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_invaderAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -888,7 +888,7 @@ public:
 
     struct mob_azure_binderAI : public violet_hold_trashAI
     {
-        mob_azure_binderAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_binderAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -966,7 +966,7 @@ public:
 
     struct mob_azure_mage_slayerAI : public violet_hold_trashAI
     {
-        mob_azure_mage_slayerAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_mage_slayerAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1026,7 +1026,7 @@ public:
 
     struct mob_azure_raiderAI : public violet_hold_trashAI
     {
-        mob_azure_raiderAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_raiderAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1078,7 +1078,7 @@ public:
 
     struct mob_azure_stalkerAI : public violet_hold_trashAI
     {
-        mob_azure_stalkerAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_stalkerAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1221,7 +1221,7 @@ public:
 
     struct  mob_azure_captainAI : public violet_hold_trashAI
     {
-        mob_azure_captainAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_captainAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1273,7 +1273,7 @@ public:
 
     struct  mob_azure_sorcerorAI : public violet_hold_trashAI
     {
-        mob_azure_sorcerorAI(Creature *c) : violet_hold_trashAI(c)
+        mob_azure_sorcerorAI(Creature* c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }

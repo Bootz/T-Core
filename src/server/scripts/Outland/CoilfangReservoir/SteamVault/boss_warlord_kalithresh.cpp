@@ -55,7 +55,7 @@ public:
 
     struct mob_naga_distillerAI : public ScriptedAI
     {
-        mob_naga_distillerAI(Creature *c) : ScriptedAI(c)
+        mob_naga_distillerAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -113,7 +113,7 @@ public:
 
     struct boss_warlord_kalithreshAI : public ScriptedAI
     {
-        boss_warlord_kalithreshAI(Creature *c) : ScriptedAI(c)
+        boss_warlord_kalithreshAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -192,7 +192,7 @@ public:
             //Impale_Timer
             if (Impale_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_IMPALE);
 
                 Impale_Timer = 7500+rand()%5000;

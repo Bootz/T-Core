@@ -94,7 +94,7 @@ public:
 
     struct boss_bjarngrimAI : public ScriptedAI
     {
-        boss_bjarngrimAI(Creature *pCreature) : ScriptedAI(pCreature)
+        boss_bjarngrimAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             m_pInstance = pCreature->GetInstanceScript();
             m_uiStance = STANCE_DEFENSIVE;
@@ -370,7 +370,7 @@ public:
 
     struct mob_stormforged_lieutenantAI : public ScriptedAI
     {
-        mob_stormforged_lieutenantAI(Creature *pCreature) : ScriptedAI(pCreature)
+        mob_stormforged_lieutenantAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             m_pInstance = pCreature->GetInstanceScript();
         }

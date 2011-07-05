@@ -87,11 +87,6 @@ enum Yells
     SAY_BERSERK                                 = -1603238,
 };
 
-enum Achievemments
-{
-    ACHIEV_DISARMED_START_EVENT                   = 21687,
-};
-
 class boss_kologarn : public CreatureScript
 {
     public:
@@ -202,7 +197,7 @@ class boss_kologarn : public CreatureScript
                     if (!right && !left)
                         events.ScheduleEvent(EVENT_STONE_SHOUT, 5000);
 
-                    instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_DISARMED_START_EVENT);
+                    instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, CRITERIA_DISARMED);
                 }
                 else
                 {
@@ -211,7 +206,7 @@ class boss_kologarn : public CreatureScript
                 }
             }
 
-            void JustSummoned(Creature *summon)
+            void JustSummoned(Creature* summon)
             {
                 switch (summon->GetEntry())
                 {
@@ -371,7 +366,7 @@ class spell_ulduar_rubble_summon : public SpellScriptLoader
 };
 
 // predicate function to select non main tank target
-class StoneGripTargetSelector : public std::unary_function<Unit *, bool>
+class StoneGripTargetSelector : public std::unary_function<Unit* , bool>
 {
     public:
         StoneGripTargetSelector(Creature* me, Unit const* victim) : _me(me), _victim(victim) {}

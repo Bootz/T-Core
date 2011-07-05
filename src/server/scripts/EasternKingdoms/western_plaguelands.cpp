@@ -169,7 +169,7 @@ public:
 
     struct npc_the_scourge_cauldronAI : public ScriptedAI
     {
-        npc_the_scourge_cauldronAI(Creature *c) : ScriptedAI(c) {}
+        npc_the_scourge_cauldronAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset() {}
 
@@ -185,7 +185,7 @@ public:
                 me->SetRespawnDelay(600);
         }
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (!who || who->GetTypeId() != TYPEID_PLAYER)
                 return;
@@ -254,7 +254,7 @@ public:
 
     struct npc_andorhal_towerAI : public Scripted_NoMovementAI
     {
-        npc_andorhal_towerAI(Creature *c) : Scripted_NoMovementAI(c) {}
+        npc_andorhal_towerAI(Creature* c) : Scripted_NoMovementAI(c) {}
 
         void MoveInLineOfSight(Unit* pWho)
         {

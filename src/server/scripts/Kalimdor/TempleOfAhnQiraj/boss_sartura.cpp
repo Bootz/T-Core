@@ -50,7 +50,7 @@ public:
 
     struct boss_sarturaAI : public ScriptedAI
     {
-        boss_sarturaAI(Creature *c) : ScriptedAI(c) {}
+        boss_sarturaAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;
@@ -193,7 +193,7 @@ public:
 
     struct mob_sartura_royal_guardAI : public ScriptedAI
     {
-        mob_sartura_royal_guardAI(Creature *c) : ScriptedAI(c) {}
+        mob_sartura_royal_guardAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;

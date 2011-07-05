@@ -98,7 +98,7 @@ public:
         {
             if (urand(0, 99) < 35)
             {
-                Creature *Murloc = pPlayer->SummonCreature(17102, pPlayer->GetPositionX(), pPlayer->GetPositionY()+20, pPlayer->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                Creature* Murloc = pPlayer->SummonCreature(17102, pPlayer->GetPositionX(), pPlayer->GetPositionY()+20, pPlayer->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
                 if (Murloc)
                     Murloc->AI()->AttackStart(pPlayer);
             }
@@ -133,9 +133,9 @@ public:
     {
         if (player->GetQuestStatus(10832) == QUEST_STATUS_INCOMPLETE)
         {
-            if (Creature *nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()+20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
+            if (Creature* nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()+20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
                 nether->AI()->AttackStart(player);
-            if (Creature *nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()-20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
+            if (Creature* nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()-20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
                 nether->AI()->AttackStart(player);
         }
         return false;
@@ -151,7 +151,7 @@ class item_gor_dreks_ointment : public ItemScript
 public:
     item_gor_dreks_ointment() : ItemScript("item_gor_dreks_ointment") { }
 
-    bool OnUse(Player *pPlayer, Item *pItem, SpellCastTargets const& targets)
+    bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
     {
         if (targets.GetUnitTarget() && targets.GetUnitTarget()->GetTypeId() == TYPEID_UNIT &&
             targets.GetUnitTarget()->GetEntry() == 20748 && !targets.GetUnitTarget()->HasAura(32578))
@@ -171,7 +171,7 @@ class item_incendiary_explosives : public ItemScript
 public:
     item_incendiary_explosives() : ItemScript("item_incendiary_explosives") { }
 
-    bool OnUse(Player *pPlayer, Item *pItem, SpellCastTargets const & /*targets*/)
+    bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const & /*targets*/)
     {
         if (pPlayer->FindNearestCreature(26248, 15) || pPlayer->FindNearestCreature(26249, 15))
             return false;
@@ -191,7 +191,7 @@ class item_mysterious_egg : public ItemScript
 {
 public:
     item_mysterious_egg() : ItemScript("item_mysterious_egg") { }
-    bool OnExpire(Player *pPlayer, ItemTemplate const* /*pItemProto*/)
+    bool OnExpire(Player* pPlayer, ItemTemplate const* /*pItemProto*/)
     {
         ItemPosCountVec dest;
         uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 39883, 1); // Cracked Egg
@@ -211,7 +211,7 @@ class item_disgusting_jar : public ItemScript
 public:
     item_disgusting_jar() : ItemScript("item_disgusting_jar") {}
 
-    bool OnExpire(Player *pPlayer, ItemTemplate const* /*pItemProto*/)
+    bool OnExpire(Player* pPlayer, ItemTemplate const* /*pItemProto*/)
     {
         ItemPosCountVec dest;
         uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 44718, 1); // Ripe Disgusting Jar
@@ -260,9 +260,9 @@ class item_pile_fake_furs : public ItemScript
 public:
     item_pile_fake_furs() : ItemScript("item_pile_fake_furs") { }
 
-    bool OnUse(Player *pPlayer, Item* /*pItem*/, SpellCastTargets const & /*targets*/)
+    bool OnUse(Player* pPlayer, Item* /*pItem*/, SpellCastTargets const & /*targets*/)
     {
-        GameObject *pGo = NULL;
+        GameObject* pGo = NULL;
         for (uint8 i = 0; i < CaribouTrapsNum; ++i)
         {
             pGo = pPlayer->FindNearestGameObject(CaribouTraps[i], 5.0f);

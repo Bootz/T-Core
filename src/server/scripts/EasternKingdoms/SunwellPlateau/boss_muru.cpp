@@ -115,7 +115,7 @@ public:
 
     struct boss_entropiusAI : public ScriptedAI
     {
-        boss_entropiusAI(Creature *c) : ScriptedAI(c), Summons(me)
+        boss_entropiusAI(Creature* c) : ScriptedAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -215,7 +215,7 @@ public:
 
     struct boss_muruAI : public Scripted_NoMovementAI
     {
-        boss_muruAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
+        boss_muruAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -380,7 +380,7 @@ public:
 
     struct npc_muru_portalAI : public Scripted_NoMovementAI
     {
-        npc_muru_portalAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
+        npc_muru_portalAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -464,7 +464,7 @@ public:
 
     struct npc_dark_fiendAI : public ScriptedAI
     {
-        npc_dark_fiendAI(Creature *c) : ScriptedAI(c) {}
+        npc_dark_fiendAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WaitTimer;
         bool InAction;
@@ -527,7 +527,7 @@ public:
 
     struct npc_void_sentinelAI : public ScriptedAI
     {
-        npc_void_sentinelAI(Creature *c) : ScriptedAI(c){}
+        npc_void_sentinelAI(Creature* c) : ScriptedAI(c){}
 
         uint32 PulseTimer;
         uint32 VoidBlastTimer;
@@ -583,7 +583,7 @@ public:
 
     struct npc_blackholeAI : public ScriptedAI
     {
-        npc_blackholeAI(Creature *c) : ScriptedAI(c)
+        npc_blackholeAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }

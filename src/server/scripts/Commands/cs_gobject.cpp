@@ -141,7 +141,7 @@ public:
             return false;
         }
 
-        Player *chr = handler->GetSession()->GetPlayer();
+        Player* chr = handler->GetSession()->GetPlayer();
         float x = float(chr->GetPositionX());
         float y = float(chr->GetPositionY());
         float z = float(chr->GetPositionZ());
@@ -192,7 +192,7 @@ public:
         if (!charID)
             return false;
 
-        Player *chr = handler->GetSession()->GetPlayer();
+        Player* chr = handler->GetSession()->GetPlayer();
 
         char* spawntime = strtok(NULL, " ");
         uint32 spawntm = 300;
@@ -235,7 +235,7 @@ public:
             else
             {
                 std::string name = cId;
-                WorldDatabase.escape_string(name);
+                WorldDatabase.EscapeString(name);
                 result = WorldDatabase.PQuery(
                     "SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ "
                     "FROM gameobject, gameobject_template WHERE gameobject_template.entry = gameobject.id AND map = %i AND name "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")" ORDER BY order_ ASC LIMIT 1",
@@ -413,7 +413,7 @@ public:
         }
         else
         {
-            Player *chr = handler->GetSession()->GetPlayer();
+            Player* chr = handler->GetSession()->GetPlayer();
             o = chr->GetOrientation();
         }
 
@@ -461,7 +461,7 @@ public:
 
         if (!px)
         {
-            Player *chr = handler->GetSession()->GetPlayer();
+            Player* chr = handler->GetSession()->GetPlayer();
             obj->Relocate(chr->GetPositionX(), chr->GetPositionY(), chr->GetPositionZ(), obj->GetOrientation());
             obj->DestroyForNearbyPlayers();
             obj->UpdateObjectVisibility();

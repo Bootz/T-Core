@@ -56,7 +56,7 @@ class boss_hakkar : public CreatureScript
 
         struct boss_hakkarAI : public ScriptedAI
         {
-            boss_hakkarAI(Creature *c) : ScriptedAI(c)
+            boss_hakkarAI(Creature* c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -133,7 +133,7 @@ class boss_hakkar : public CreatureScript
                 //CauseInsanity_Timer
                 /*if (CauseInsanity_Timer <= diff)
                 {
-                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                 DoCast(pTarget, SPELL_CAUSEINSANITY);
 
                 CauseInsanity_Timer = 35000 + rand()%8000;
@@ -142,7 +142,7 @@ class boss_hakkar : public CreatureScript
                 //WillOfHakkar_Timer
                 if (WillOfHakkar_Timer <= diff)
                 {
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_WILLOFHAKKAR);
 
                     WillOfHakkar_Timer = 25000 + rand()%10000;
@@ -159,7 +159,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(TYPE_JEKLIK) != DONE)
+                        if (m_pInstance->GetData(DATA_JEKLIK) != DONE)
                         {
                             if (AspectOfJeklik_Timer <= diff)
                             {
@@ -176,7 +176,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(TYPE_VENOXIS) != DONE)
+                        if (m_pInstance->GetData(DATA_VENOXIS) != DONE)
                         {
                             if (AspectOfVenoxis_Timer <= diff)
                             {
@@ -193,7 +193,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(TYPE_MARLI) != DONE)
+                        if (m_pInstance->GetData(DATA_MARLI) != DONE)
                         {
                             if (AspectOfMarli_Timer <= diff)
                             {
@@ -211,7 +211,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(TYPE_THEKAL) != DONE)
+                        if (m_pInstance->GetData(DATA_THEKAL) != DONE)
                         {
                             if (AspectOfThekal_Timer <= diff)
                             {
@@ -228,7 +228,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(TYPE_ARLOKK) != DONE)
+                        if (m_pInstance->GetData(DATA_ARLOKK) != DONE)
                         {
                             if (AspectOfArlokk_Timer <= diff)
                             {

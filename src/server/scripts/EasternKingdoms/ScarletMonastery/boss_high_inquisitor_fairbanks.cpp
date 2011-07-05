@@ -48,7 +48,7 @@ public:
 
     struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
     {
-        boss_high_inquisitor_fairbanksAI(Creature *c) : ScriptedAI(c) {}
+        boss_high_inquisitor_fairbanksAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 CurseOfBlood_Timer;
         uint32 DispelMagic_Timer;
@@ -88,7 +88,7 @@ public:
             //Fear_Timer
             if (Fear_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     DoCast(pTarget, SPELL_FEAR);
 
                 Fear_Timer = 40000;
@@ -97,7 +97,7 @@ public:
             //Sleep_Timer
             if (Sleep_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
                     DoCast(pTarget, SPELL_SLEEP);
 
                 Sleep_Timer = 30000;
@@ -113,7 +113,7 @@ public:
             //Dispel_Timer
             if (Dispel_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_DISPELMAGIC);
 
                 DispelMagic_Timer = 30000;

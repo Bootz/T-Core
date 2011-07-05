@@ -66,7 +66,7 @@ public:
 
     struct boss_darkweaver_sythAI : public ScriptedAI
     {
-        boss_darkweaver_sythAI(Creature *c) : ScriptedAI(c)
+        boss_darkweaver_sythAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -111,9 +111,9 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
         }
 
-        void JustSummoned(Creature *summoned)
+        void JustSummoned(Creature* summoned)
         {
-            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 summoned->AI()->AttackStart(pTarget);
         }
 
@@ -155,7 +155,7 @@ public:
 
             if (flameshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FLAME_SHOCK);
 
                 flameshock_timer = 10000 + rand()%5000;
@@ -163,7 +163,7 @@ public:
 
             if (arcaneshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_ARCANE_SHOCK);
 
                 arcaneshock_timer = 10000 + rand()%5000;
@@ -171,7 +171,7 @@ public:
 
             if (frostshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FROST_SHOCK);
 
                 frostshock_timer = 10000 + rand()%5000;
@@ -179,7 +179,7 @@ public:
 
             if (shadowshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_SHADOW_SHOCK);
 
                 shadowshock_timer = 10000 + rand()%5000;
@@ -187,7 +187,7 @@ public:
 
             if (chainlightning_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_CHAIN_LIGHTNING);
 
                 chainlightning_timer = 25000;
@@ -207,7 +207,7 @@ public:
 
     struct mob_syth_fireAI : public ScriptedAI
     {
-        mob_syth_fireAI(Creature *c) : ScriptedAI(c)
+        mob_syth_fireAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -230,7 +230,7 @@ public:
 
             if (flameshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FLAME_SHOCK);
 
                 flameshock_timer = 5000;
@@ -238,7 +238,7 @@ public:
 
             if (flamebuffet_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FLAME_BUFFET);
 
                 flamebuffet_timer = 5000;
@@ -266,7 +266,7 @@ public:
 
     struct mob_syth_arcaneAI : public ScriptedAI
     {
-        mob_syth_arcaneAI(Creature *c) : ScriptedAI(c)
+        mob_syth_arcaneAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -289,7 +289,7 @@ public:
 
             if (arcaneshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_ARCANE_SHOCK);
 
                 arcaneshock_timer = 5000;
@@ -297,7 +297,7 @@ public:
 
             if (arcanebuffet_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_ARCANE_BUFFET);
 
                 arcanebuffet_timer = 5000;
@@ -320,7 +320,7 @@ public:
 
     struct mob_syth_frostAI : public ScriptedAI
     {
-        mob_syth_frostAI(Creature *c) : ScriptedAI(c)
+        mob_syth_frostAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -343,7 +343,7 @@ public:
 
             if (frostshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FROST_SHOCK);
 
                 frostshock_timer = 5000;
@@ -351,7 +351,7 @@ public:
 
             if (frostbuffet_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_FROST_BUFFET);
 
                 frostbuffet_timer = 5000;
@@ -375,7 +375,7 @@ public:
 
     struct mob_syth_shadowAI : public ScriptedAI
     {
-        mob_syth_shadowAI(Creature *c) : ScriptedAI(c)
+        mob_syth_shadowAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -398,7 +398,7 @@ public:
 
             if (shadowshock_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_SHADOW_SHOCK);
 
                 shadowshock_timer = 5000;
@@ -406,7 +406,7 @@ public:
 
             if (shadowbuffet_timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_SHADOW_BUFFET);
 
                 shadowbuffet_timer = 5000;

@@ -225,7 +225,7 @@ public:
 
         void JustSummoned(Creature* pSummoned)
         {
-            Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true);
+            Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true);
             switch (pSummoned->GetEntry())
             {
                 case NPC_BURROW:
@@ -265,7 +265,7 @@ public:
                 me->SummonCreature(NPC_BURROW, AnubarakLoc[i+2]);
             //Spawn Frost Spheres
             for (int i=0; i < 6; i++)
-                if (Unit *pSummoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
+                if (Unit* pSummoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                     m_aSphereGUID[i] = pSummoned->GetGUID();
         }
 
@@ -333,7 +333,7 @@ public:
                         uint32 at = urand(0, m_vBurrowGUID.size()-1);
                         for (uint32 k = 0; k < at; k++)
                             ++i;
-                        if (Creature *pBurrow = Unit::GetCreature(*me, *i))
+                        if (Creature* pBurrow = Unit::GetCreature(*me, *i))
                             pBurrow->CastSpell(pBurrow, 66340, false);
                         m_uiScarabSummoned++;
                         m_uiSummonScarabTimer = 4*IN_MILLISECONDS;
@@ -374,11 +374,11 @@ public:
                     uint8 i = startAt;
                     do
                     {
-                        if (Unit *pSphere = Unit::GetCreature(*me, m_aSphereGUID[i]))
+                        if (Unit* pSphere = Unit::GetCreature(*me, m_aSphereGUID[i]))
                         {
                             if (!pSphere->HasAura(SPELL_FROST_SPHERE))
                             {
-                                if (Creature *pSummon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
+                                if (Creature* pSummon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                                     m_aSphereGUID[i] = pSummon->GetGUID();
                                 break;
                             }
@@ -435,7 +435,7 @@ public:
             m_uiDeterminationTimer = urand(5*IN_MILLISECONDS, 60*IN_MILLISECONDS);
             DoCast(me, SPELL_ACID_MANDIBLE);
             me->SetInCombatWithZone();
-            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
                 me->AddThreat(pTarget, 20000.0f);
             if (!me->isInCombat())
                 me->DisappearAndDie();
@@ -514,7 +514,7 @@ public:
             switch (actionId)
             {
                 case ACTION_SHADOW_STRIKE:
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_SHADOW_STRIKE);
                     break;
             }
@@ -661,7 +661,7 @@ public:
             m_uiTargetGUID = 0;
         }
 
-        void EnterCombat(Unit *pWho)
+        void EnterCombat(Unit* pWho)
         {
             m_uiTargetGUID = pWho->GetGUID();
             DoCast(pWho, SPELL_MARK);

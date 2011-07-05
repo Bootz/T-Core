@@ -311,7 +311,7 @@ float HordeFirePos[65][8]=//spawn points for the fire visuals (GO) in the horde 
     {5545.43f,    -2647.82f,    1483.05f,    5.38848f,    0,    0,    0.432578f,    -0.901596f}
 };
 
-hyjalAI::hyjalAI(Creature *c) : npc_escortAI(c), Summons(me)
+hyjalAI::hyjalAI(Creature* c) : npc_escortAI(c), Summons(me)
 {
     pInstance = c->GetInstanceScript();
     VeinsSpawned[0] = false;
@@ -333,7 +333,7 @@ hyjalAI::hyjalAI(Creature *c) : npc_escortAI(c), Summons(me)
     DoMassTeleport = false;
 }
 
-void hyjalAI::JustSummoned(Creature *summoned)
+void hyjalAI::JustSummoned(Creature* summoned)
 {
     Summons.Summon(summoned);
 }
@@ -433,7 +433,7 @@ void hyjalAI::EnterCombat(Unit* /*who*/)
     Talk(ATTACKED);
 }
 
-void hyjalAI::MoveInLineOfSight(Unit *who)
+void hyjalAI::MoveInLineOfSight(Unit* who)
 {
     if (IsDummy)
         return;
@@ -891,7 +891,7 @@ void hyjalAI::UpdateAI(const uint32 diff)
                 if (me->IsNonMeleeSpellCasted(false))
                     me->InterruptNonMeleeSpells(false);
 
-                Unit *pTarget = NULL;
+                Unit* pTarget = NULL;
 
                 switch(Spells[i].TargetType)
                 {

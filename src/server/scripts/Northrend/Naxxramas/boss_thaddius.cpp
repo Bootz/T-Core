@@ -108,7 +108,7 @@ public:
 
     struct boss_thaddiusAI : public BossAI
     {
-        boss_thaddiusAI(Creature *c) : BossAI(c, BOSS_THADDIUS)
+        boss_thaddiusAI(Creature* c) : BossAI(c, BOSS_THADDIUS)
         {
             // init is a bit tricky because thaddius shall track the life of both adds, but not if there was a wipe
             // and, in particular, if there was a crash after both adds were killed (should not respawn)
@@ -116,11 +116,11 @@ public:
             // Moreover, the adds may not yet be spawn. So just track down the status if mob is spawn
             // and each mob will send its status at reset (meaning that it is alive)
             checkFeugenAlive = false;
-            if (Creature *pFeugen = me->GetCreature(*me, instance->GetData64(DATA_FEUGEN)))
+            if (Creature* pFeugen = me->GetCreature(*me, instance->GetData64(DATA_FEUGEN)))
                 checkFeugenAlive = pFeugen->isAlive();
 
             checkStalaggAlive = false;
-            if (Creature *pStalagg = me->GetCreature(*me, instance->GetData64(DATA_STALAGG)))
+            if (Creature* pStalagg = me->GetCreature(*me, instance->GetData64(DATA_STALAGG)))
                 checkStalaggAlive = pStalagg->isAlive();
 
             if (!checkFeugenAlive && !checkStalaggAlive)
@@ -209,13 +209,13 @@ public:
                     if (!checkStalaggAlive)
                     {
                         if (instance)
-                            if (Creature *pStalagg = me->GetCreature(*me, instance->GetData64(DATA_STALAGG)))
+                            if (Creature* pStalagg = me->GetCreature(*me, instance->GetData64(DATA_STALAGG)))
                                 pStalagg->Respawn();
                     }
                     else
                     {
                         if (instance)
-                            if (Creature *pFeugen = me->GetCreature(*me, instance->GetData64(DATA_FEUGEN)))
+                            if (Creature* pFeugen = me->GetCreature(*me, instance->GetData64(DATA_FEUGEN)))
                                 pFeugen->Respawn();
                     }
                 }
@@ -268,7 +268,7 @@ public:
 
     struct mob_stalaggAI : public ScriptedAI
     {
-        mob_stalaggAI(Creature *c) : ScriptedAI(c)
+        mob_stalaggAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -281,7 +281,7 @@ public:
         void Reset()
         {
             if (pInstance)
-                if (Creature *pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
+                if (Creature* pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_STALAGG_RESET);
             powerSurgeTimer = urand(20000, 25000);
@@ -296,7 +296,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (pInstance)
-                if (Creature *pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
+                if (Creature* pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_STALAGG_DIED);
         }
@@ -308,7 +308,7 @@ public:
 
             if (magneticPullTimer <= uiDiff)
             {
-                if (Creature *pFeugen = me->GetCreature(*me, pInstance->GetData64(DATA_FEUGEN)))
+                if (Creature* pFeugen = me->GetCreature(*me, pInstance->GetData64(DATA_FEUGEN)))
                 {
                     Unit* pStalaggVictim = me->getVictim();
                     Unit* pFeugenVictim = pFeugen->getVictim();
@@ -354,7 +354,7 @@ public:
 
     struct mob_feugenAI : public ScriptedAI
     {
-        mob_feugenAI(Creature *c) : ScriptedAI(c)
+        mob_feugenAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -366,7 +366,7 @@ public:
         void Reset()
         {
             if (pInstance)
-                if (Creature *pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
+                if (Creature* pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_FEUGEN_RESET);
             staticFieldTimer = 5000;
@@ -380,7 +380,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (pInstance)
-                if (Creature *pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
+                if (Creature* pThaddius = me->GetCreature(*me, pInstance->GetData64(DATA_THADDIUS)))
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_FEUGEN_DIED);
         }

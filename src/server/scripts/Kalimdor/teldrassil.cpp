@@ -71,7 +71,7 @@ public:
 
         void Reset() { }
 
-        void MoveInLineOfSight(Unit *pWho)
+        void MoveInLineOfSight(Unit* pWho)
         {
             FollowerAI::MoveInLineOfSight(pWho);
 

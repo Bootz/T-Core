@@ -42,7 +42,7 @@ public:
 
     struct celebras_the_cursedAI : public ScriptedAI
     {
-        celebras_the_cursedAI(Creature *c) : ScriptedAI(c) {}
+        celebras_the_cursedAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 Wrath_Timer;
         uint32 EntanglingRoots_Timer;
@@ -70,7 +70,7 @@ public:
             //Wrath
             if (Wrath_Timer <= diff)
             {
-                Unit *pTarget = NULL;
+                Unit* pTarget = NULL;
                 pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 if (pTarget)
                     DoCast(pTarget, SPELL_WRATH);

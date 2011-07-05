@@ -39,7 +39,7 @@ public:
 
     struct npc_dragonflayer_forge_masterAI : public ScriptedAI
     {
-        npc_dragonflayer_forge_masterAI(Creature *c) : ScriptedAI(c)
+        npc_dragonflayer_forge_masterAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             fm_Type = 0;

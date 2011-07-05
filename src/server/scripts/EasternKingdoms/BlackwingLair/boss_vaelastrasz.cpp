@@ -82,7 +82,7 @@ public:
 
     struct boss_vaelAI : public ScriptedAI
     {
-        boss_vaelAI(Creature *c) : ScriptedAI(c)
+        boss_vaelAI(Creature* c) : ScriptedAI(c)
         {
             c->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             c->setFaction(35);
@@ -116,7 +116,7 @@ public:
             DoingSpeech = false;
         }
 
-        void BeginSpeech(Unit *pTarget)
+        void BeginSpeech(Unit* pTarget)
         {
             //Stand up and begin speach
             PlayerGUID = pTarget->GetGUID();
@@ -209,7 +209,7 @@ public:
             //BurningAdrenalineCaster_Timer
             if (BurningAdrenalineCaster_Timer <= diff)
             {
-                Unit *pTarget = NULL;
+                Unit* pTarget = NULL;
 
                 uint8 i = 0;
                 while (i < 3)                                   // max 3 tries to get a random target with power_mana

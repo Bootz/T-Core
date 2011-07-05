@@ -67,7 +67,7 @@ public:
 
     struct boss_gruulAI : public ScriptedAI
     {
-        boss_gruulAI(Creature *c) : ScriptedAI(c)
+        boss_gruulAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -198,7 +198,7 @@ public:
                 // Hurtful Strike
                 if (m_uiHurtfulStrike_Timer <= uiDiff)
                 {
-                    Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
 
                     if (pTarget && me->IsWithinMeleeRange(me->getVictim()))
                         DoCast(pTarget, SPELL_HURTFUL_STRIKE);
@@ -222,7 +222,7 @@ public:
                 // Cave In
                 if (m_uiCaveIn_Timer <= uiDiff)
                 {
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_CAVE_IN);
 
                     if (m_uiCaveIn_StaticTimer >= 4000)

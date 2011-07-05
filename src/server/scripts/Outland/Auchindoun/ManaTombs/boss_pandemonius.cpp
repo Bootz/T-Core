@@ -54,7 +54,7 @@ public:
 
     struct boss_pandemoniusAI : public ScriptedAI
     {
-        boss_pandemoniusAI(Creature *c) : ScriptedAI(c)
+        boss_pandemoniusAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -91,7 +91,7 @@ public:
 
             if (VoidBlast_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(pTarget, SPELL_VOID_BLAST);
                     VoidBlast_Timer = 500;

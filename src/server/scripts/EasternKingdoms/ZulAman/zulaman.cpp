@@ -92,7 +92,7 @@ class npc_forest_frog : public CreatureScript
                 }
             }
 
-            void SpellHit(Unit *caster, const SpellEntry *spell)
+            void SpellHit(Unit* caster, const SpellEntry *spell)
             {
                 if (spell->Id == SPELL_REMOVE_AMANI_CURSE && caster->GetTypeId() == TYPEID_PLAYER && me->GetEntry() == ENTRY_FOREST_FROG)
                 {
@@ -129,7 +129,7 @@ class npc_zulaman_hostage : public CreatureScript
 
         struct npc_zulaman_hostageAI : public ScriptedAI
         {
-            npc_zulaman_hostageAI(Creature *c) : ScriptedAI(c) {IsLoot = false;}
+            npc_zulaman_hostageAI(Creature* c) : ScriptedAI(c) {IsLoot = false;}
             bool IsLoot;
             uint64 PlayerGUID;
             void Reset() {}

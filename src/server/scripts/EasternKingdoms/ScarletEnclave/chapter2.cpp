@@ -58,7 +58,7 @@ public:
 
     struct npc_crusade_persuadedAI : public ScriptedAI
     {
-        npc_crusade_persuadedAI(Creature *pCreature) : ScriptedAI(pCreature) {}
+        npc_crusade_persuadedAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
         uint32 uiSpeech_timer;
         uint32 uiSpeech_counter;
@@ -73,7 +73,7 @@ public:
             me->RestoreFaction();
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_PERSUASIVE_STRIKE && caster->GetTypeId() == TYPEID_PLAYER && me->isAlive() && !uiSpeech_counter)
             {
@@ -198,7 +198,7 @@ public:
 
     struct npc_koltira_deathweaverAI : public npc_escortAI
     {
-        npc_koltira_deathweaverAI(Creature *pCreature) : npc_escortAI(pCreature)
+        npc_koltira_deathweaverAI(Creature* pCreature) : npc_escortAI(pCreature)
         {
             me->SetReactState(REACT_DEFENSIVE);
         }
@@ -365,7 +365,7 @@ public:
 
     struct mob_scarlet_courierAI : public ScriptedAI
     {
-        mob_scarlet_courierAI(Creature *pCreature) : ScriptedAI(pCreature) {}
+        mob_scarlet_courierAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
         uint32 uiStage;
         uint32 uiStage_timer;
@@ -413,7 +413,7 @@ public:
                         break;
                     case 2:
                         if (GameObject* tree = me->FindNearestGameObject(GO_INCONSPICUOUS_TREE, 40.0f))
-                            if (Unit *unit = tree->GetOwner())
+                            if (Unit* unit = tree->GetOwner())
                                 AttackStart(unit);
                         break;
                     }
@@ -459,7 +459,7 @@ public:
 
     struct mob_high_inquisitor_valrothAI : public ScriptedAI
     {
-        mob_high_inquisitor_valrothAI(Creature *pCreature) : ScriptedAI(pCreature) {}
+        mob_high_inquisitor_valrothAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
         uint32 uiRenew_timer;
         uint32 uiInquisitor_Penance_timer;
@@ -595,7 +595,7 @@ public:
 
     struct npc_a_special_surpriseAI : public ScriptedAI
     {
-        npc_a_special_surpriseAI(Creature *pCreature) : ScriptedAI(pCreature) {}
+        npc_a_special_surpriseAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
         uint32 ExecuteSpeech_Timer;
         uint32 ExecuteSpeech_Counter;

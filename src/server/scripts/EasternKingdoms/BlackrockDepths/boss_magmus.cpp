@@ -49,7 +49,7 @@ public:
 
     struct boss_magmusAI : public ScriptedAI
     {
-        boss_magmusAI(Creature *c) : ScriptedAI(c) {}
+        boss_magmusAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 FieryBurst_Timer;
         uint32 WarStomp_Timer;
@@ -90,7 +90,7 @@ public:
             DoMeleeAttackIfReady();
         }
         // When he die open door to last chamber
-        void JustDied(Unit *who)
+        void JustDied(Unit* who)
         {
             if (InstanceScript* pInstance = who->GetInstanceScript())
                 pInstance->HandleGameObject(pInstance->GetData64(DATA_THRONE_DOOR), true);

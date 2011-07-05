@@ -117,7 +117,7 @@ public:
 
     struct boss_felmystAI : public ScriptedAI
     {
-        boss_felmystAI(Creature *c) : ScriptedAI(c)
+        boss_felmystAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
 
@@ -175,13 +175,13 @@ public:
                 pInstance->SetData(DATA_FELMYST_EVENT, IN_PROGRESS);
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* who)
         {
             if (phase != PHASE_FLIGHT)
                 ScriptedAI::AttackStart(who);
         }
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (phase != PHASE_FLIGHT)
                 ScriptedAI::MoveInLineOfSight(who);
@@ -205,7 +205,7 @@ public:
                 pInstance->SetData(DATA_FELMYST_EVENT, DONE);
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             // workaround for linked aura
             /*if (spell->Id == SPELL_VAPOR_FORCE)
@@ -228,7 +228,7 @@ public:
             }
         }
 
-        void JustSummoned(Creature *summon)
+        void JustSummoned(Creature* summon)
         {
             if (summon->GetEntry() == MOB_DEAD)
             {
@@ -295,7 +295,7 @@ public:
                 break;
             case 2:
             {
-                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!pTarget)
                     pTarget = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
 
@@ -322,7 +322,7 @@ public:
                 DespawnSummons(MOB_VAPOR_TRAIL);
                 //DoCast(me, SPELL_VAPOR_SELECT); need core support
 
-                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!pTarget)
                     pTarget = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
 
@@ -352,7 +352,7 @@ public:
                 break;
             case 5:
             {
-                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!pTarget)
                     pTarget = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
 
@@ -395,7 +395,7 @@ public:
                     uiFlightCount = 4;
                 break;
             case 9:
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO))
                     DoStartMovement(pTarget);
                 else
                 {
@@ -449,7 +449,7 @@ public:
                         events.ScheduleEvent(EVENT_GAS_NOVA, urand(20000, 25000));
                         break;
                     case EVENT_ENCAPSULATE:
-                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true))
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true))
                             DoCast(pTarget, SPELL_ENCAPSULATE_CHANNEL, false);
                         events.ScheduleEvent(EVENT_ENCAPSULATE, urand(25000, 30000));
                         break;
@@ -478,7 +478,7 @@ public:
                             float x, y, z;
                             me->GetPosition(x, y, z);
                             me->UpdateGroundPositionZ(x, y, z);
-                            if (Creature *Fog = me->SummonCreature(MOB_VAPOR_TRAIL, x, y, z, 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                            if (Creature* Fog = me->SummonCreature(MOB_VAPOR_TRAIL, x, y, z, 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
                             {
                                 Fog->RemoveAurasDueToSpell(SPELL_TRAIL_TRIGGER);
                                 Fog->CastSpell(Fog, SPELL_FOG_TRIGGER, true);
@@ -536,7 +536,7 @@ public:
 
     struct mob_felmyst_vaporAI : public ScriptedAI
     {
-        mob_felmyst_vaporAI(Creature *c) : ScriptedAI(c)
+        mob_felmyst_vaporAI(Creature* c) : ScriptedAI(c)
         {
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->SetSpeed(MOVE_RUN, 0.8f);
@@ -550,7 +550,7 @@ public:
         void UpdateAI(const uint32 /*diff*/)
         {
             if (!me->getVictim())
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     AttackStart(pTarget);
         }
     };
@@ -569,7 +569,7 @@ public:
 
     struct mob_felmyst_trailAI : public ScriptedAI
     {
-        mob_felmyst_trailAI(Creature *c) : ScriptedAI(c)
+        mob_felmyst_trailAI(Creature* c) : ScriptedAI(c)
         {
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoCast(me, SPELL_TRAIL_TRIGGER, true);

@@ -50,7 +50,7 @@ public:
 
     struct boss_interrogator_vishasAI : public ScriptedAI
     {
-        boss_interrogator_vishasAI(Creature *c) : ScriptedAI(c)
+        boss_interrogator_vishasAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -82,7 +82,7 @@ public:
                 return;
 
             //Any other actions to do with vorrel? setStandState?
-            if (Unit *vorrel = Unit::GetUnit(*me, pInstance->GetData64(DATA_VORREL)))
+            if (Unit* vorrel = Unit::GetUnit(*me, pInstance->GetData64(DATA_VORREL)))
                 DoScriptText(SAY_TRIGGER_VORREL, vorrel);
         }
 

@@ -48,7 +48,7 @@ public:
 
     struct boss_the_black_stalkerAI : public ScriptedAI
     {
-        boss_the_black_stalkerAI(Creature *c) : ScriptedAI(c)
+        boss_the_black_stalkerAI(Creature* c) : ScriptedAI(c)
         {
         }
 
@@ -76,12 +76,12 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void JustSummoned(Creature *summon)
+        void JustSummoned(Creature* summon)
         {
             if (summon && summon->GetEntry() == ENTRY_SPORE_STRIDER)
             {
                 Striders.push_back(summon->GetGUID());
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     summon->AI()->AttackStart(pTarget);
                 else
                     if (me->getVictim())
@@ -92,7 +92,7 @@ public:
         void JustDied(Unit* /*who*/)
         {
             for (std::list<uint64>::const_iterator i = Striders.begin(); i != Striders.end(); ++i)
-                if (Creature *strider = Unit::GetCreature(*me, *i))
+                if (Creature* strider = Unit::GetCreature(*me, *i))
                     strider->DisappearAndDie();
         }
 
@@ -126,7 +126,7 @@ public:
             {
                 if (LevitatedTarget_Timer <= diff)
                 {
-                    if (Unit *pTarget = Unit::GetUnit(*me, LevitatedTarget))
+                    if (Unit* pTarget = Unit::GetUnit(*me, LevitatedTarget))
                     {
                         if (!pTarget->HasAura(SPELL_LEVITATE))
                         {
@@ -151,7 +151,7 @@ public:
             }
             if (Levitate_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
                 {
                     DoCast(pTarget, SPELL_LEVITATE);
                     LevitatedTarget = pTarget->GetGUID();
@@ -164,7 +164,7 @@ public:
             // Chain Lightning
             if (ChainLightning_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_CHAIN_LIGHTNING);
                 ChainLightning_Timer = 7000;
             } else ChainLightning_Timer -= diff;
@@ -172,7 +172,7 @@ public:
             // Static Charge
             if (StaticCharge_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                     DoCast(pTarget, SPELL_STATIC_CHARGE);
                 StaticCharge_Timer = 10000;
             } else StaticCharge_Timer -= diff;

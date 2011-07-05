@@ -61,7 +61,7 @@ public:
 
     struct mobs_bladespire_ogreAI : public ScriptedAI
     {
-        mobs_bladespire_ogreAI(Creature *c) : ScriptedAI(c) {}
+        mobs_bladespire_ogreAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset() { }
 
@@ -113,7 +113,7 @@ public:
 
     struct mobs_nether_drakeAI : public ScriptedAI
     {
-        mobs_nether_drakeAI(Creature *c) : ScriptedAI(c) {}
+        mobs_nether_drakeAI(Creature* c) : ScriptedAI(c) {}
 
         bool IsNihil;
         uint32 NihilSpeech_Timer;
@@ -136,7 +136,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                 return;
@@ -158,7 +158,7 @@ public:
             }
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_T_PHASE_MODULATOR && caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -238,7 +238,7 @@ public:
 
             if (ManaBurn_Timer <= diff)
             {
-                Unit *pTarget = me->getVictim();
+                Unit* pTarget = me->getVictim();
                 if (pTarget && pTarget->getPowerType() == POWER_MANA)
                     DoCast(pTarget, SPELL_MANA_BURN);
                 ManaBurn_Timer = 8000+rand()%8000;
@@ -278,13 +278,13 @@ public:
 
     struct npc_daranelleAI : public ScriptedAI
     {
-        npc_daranelleAI(Creature *c) : ScriptedAI(c) {}
+        npc_daranelleAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset() { }
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {

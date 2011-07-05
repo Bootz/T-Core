@@ -45,7 +45,7 @@ public:
 
     struct boss_rasfrostAI : public ScriptedAI
     {
-        boss_rasfrostAI(Creature *c) : ScriptedAI(c) {}
+        boss_rasfrostAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 IceArmor_Timer;
         uint32 Frostbolt_Timer;
@@ -83,7 +83,7 @@ public:
             //Frostbolt_Timer
             if (Frostbolt_Timer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(pTarget, SPELL_FROSTBOLT);
 
                 Frostbolt_Timer = 8000;

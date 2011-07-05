@@ -230,7 +230,7 @@ public:
 
         for (GroupReference *itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            Player *pl = itr->getSource();
+            Player* pl = itr->getSource();
 
             if (!pl || !pl->GetSession())
                 continue;

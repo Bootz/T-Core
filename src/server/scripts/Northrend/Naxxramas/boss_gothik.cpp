@@ -227,7 +227,7 @@ class boss_gothik : public CreatureScript
                 summons.Summon(summon);
             }
 
-            void SummonedCreatureDespawn(Creature *summon)
+            void SummonedCreatureDespawn(Creature* summon)
             {
                 summons.Despawn(summon);
             }
@@ -359,7 +359,7 @@ class boss_gothik : public CreatureScript
                 if (spellId && me->isInCombat())
                 {
                     me->HandleEmoteCommand(EMOTE_ONESHOT_SPELLCAST);
-                    if (Creature *pRandomDeadTrigger = Unit::GetCreature(*me, DeadTriggerGUID[rand() % POS_DEAD]))
+                    if (Creature* pRandomDeadTrigger = Unit::GetCreature(*me, DeadTriggerGUID[rand() % POS_DEAD]))
                         me->CastSpell(pRandomDeadTrigger, spellId, true);
                 }
             }
@@ -471,7 +471,7 @@ class boss_gothik : public CreatureScript
                                     DoTeleportTo(PosGroundLiveSide);
 
                                 me->getThreatManager().resetAggro(NotOnSameSide(me));
-                                if (Unit *pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0))
+                                if (Unit* pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0))
                                 {
                                     me->getThreatManager().addThreat(pTarget, 100.0f);
                                     AttackStart(pTarget);

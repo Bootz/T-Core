@@ -57,7 +57,7 @@ public:
     {
         bool Spawn;
 
-        mob_shattered_rumblerAI(Creature *c) : ScriptedAI(c) {}
+        mob_shattered_rumblerAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset()
         {
@@ -66,7 +66,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void SpellHit(Unit *Hitter, const SpellEntry *Spellkind)
+        void SpellHit(Unit* Hitter, const SpellEntry *Spellkind)
         {
             if (Spellkind->Id == 32001 && !Spawn)
             {
@@ -150,7 +150,7 @@ public:
 
     struct mob_lumpAI : public ScriptedAI
     {
-        mob_lumpAI(Creature *c) : ScriptedAI(c)
+        mob_lumpAI(Creature* c) : ScriptedAI(c)
         {
             bReset = false;
         }
@@ -178,7 +178,7 @@ public:
             AttackStart(pAttacker);
         }
 
-        void DamageTaken(Unit *done_by, uint32 & damage)
+        void DamageTaken(Unit* done_by, uint32 & damage)
         {
             if (done_by->GetTypeId() == TYPEID_PLAYER && me->HealthBelowPctDamaged(30, damage))
             {
@@ -260,7 +260,7 @@ public:
 
     struct mob_sunspring_villagerAI : public ScriptedAI
     {
-        mob_sunspring_villagerAI(Creature *c) : ScriptedAI(c) {}
+        mob_sunspring_villagerAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset()
         {
@@ -763,7 +763,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (!who)
                 return;
@@ -806,7 +806,7 @@ public:
     struct mob_sparrowhawkAI : public ScriptedAI
     {
 
-        mob_sparrowhawkAI(Creature *c) : ScriptedAI(c) {}
+        mob_sparrowhawkAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 Check_Timer;
         uint64 PlayerGUID;
@@ -819,7 +819,7 @@ public:
             PlayerGUID = 0;
             fleeing = false;
         }
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* who)
         {
             if (PlayerGUID)
                 return;
@@ -829,7 +829,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (!who || PlayerGUID)
                 return;
@@ -878,7 +878,7 @@ public:
             ScriptedAI::UpdateAI(diff);
         }
 
-        void SpellHit(Unit *caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellEntry *spell)
         {
             if (caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -965,7 +965,7 @@ class npc_corki : public CreatureScript
 public:
   npc_corki() : CreatureScript("npc_corki") { }
 
-  CreatureAI *GetAI(Creature *creature) const
+  CreatureAI *GetAI(Creature* creature) const
   {
       return new npc_corkiAI(creature);
   }

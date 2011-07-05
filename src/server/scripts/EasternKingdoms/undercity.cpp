@@ -89,7 +89,7 @@ public:
 
     struct npc_lady_sylvanas_windrunnerAI : public ScriptedAI
     {
-        npc_lady_sylvanas_windrunnerAI(Creature *c) : ScriptedAI(c) {}
+        npc_lady_sylvanas_windrunnerAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 LamentEvent_Timer;
         bool LamentEvent;
@@ -104,11 +104,11 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void JustSummoned(Creature *summoned)
+        void JustSummoned(Creature* summoned)
         {
             if (summoned->GetEntry() == ENTRY_HIGHBORNE_BUNNY)
             {
-                if (Unit *pTarget = Unit::GetUnit(*summoned, targetGUID))
+                if (Unit* pTarget = Unit::GetUnit(*summoned, targetGUID))
                 {
                     pTarget->SendMonsterMove(pTarget->GetPositionX(), pTarget->GetPositionY(), me->GetPositionZ()+15.0f, 0);
                     pTarget->GetMap()->CreatureRelocation(me, pTarget->GetPositionX(), pTarget->GetPositionY(), me->GetPositionZ()+15.0f, 0.0f);
@@ -163,7 +163,7 @@ public:
 
     struct npc_highborne_lamenterAI : public ScriptedAI
     {
-        npc_highborne_lamenterAI(Creature *c) : ScriptedAI(c) {}
+        npc_highborne_lamenterAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 EventMove_Timer;
         uint32 EventCast_Timer;

@@ -90,7 +90,7 @@ public:
 
     struct boss_morogrim_tidewalkerAI : public ScriptedAI
     {
-        boss_morogrim_tidewalkerAI(Creature *c) : ScriptedAI(c)
+        boss_morogrim_tidewalkerAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -188,7 +188,7 @@ public:
 
                     for (uint8 i = 0; i < 10; ++i)
                     {
-                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                         Creature* Murloc = me->SummonCreature(NPC_TIDEWALKER_LURKER, MurlocCords[i][0], MurlocCords[i][1], MurlocCords[i][2], MurlocCords[i][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
                         if (pTarget && Murloc)
                             Murloc->AI()->AttackStart(pTarget);
@@ -212,7 +212,7 @@ public:
                 if (WateryGrave_Timer <= diff)
                 {
                     //Teleport 4 players under the waterfalls
-                    Unit *pTarget;
+                    Unit* pTarget;
                     std::set<uint64> list;
                     std::set<uint64>::const_iterator itr;
                     for (uint8 i = 0; i < 4; ++i)
@@ -297,7 +297,7 @@ public:
 
     struct mob_water_globuleAI : public ScriptedAI
     {
-        mob_water_globuleAI(Creature *c) : ScriptedAI(c) {}
+        mob_water_globuleAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 Check_Timer;
 
@@ -312,7 +312,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit *who)
+        void MoveInLineOfSight(Unit* who)
         {
             if (!who || me->getVictim())
                 return;

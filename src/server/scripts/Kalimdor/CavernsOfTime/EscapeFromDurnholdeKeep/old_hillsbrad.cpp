@@ -283,7 +283,7 @@ public:
 
     struct npc_thrall_old_hillsbradAI : public npc_escortAI
     {
-        npc_thrall_old_hillsbradAI(Creature *c) : npc_escortAI(c)
+        npc_thrall_old_hillsbradAI(Creature* c) : npc_escortAI(c)
         {
             pInstance = c->GetInstanceScript();
             HadMount = false;
@@ -533,7 +533,7 @@ public:
         {
             DoScriptText(RAND(SAY_TH_RANDOM_KILL1, SAY_TH_RANDOM_KILL2, SAY_TH_RANDOM_KILL3), me);
         }
-        void JustDied(Unit *slayer)
+        void JustDied(Unit* slayer)
         {
             if (pInstance)
                 pInstance->SetData(TYPE_THRALL_EVENT, FAIL);
@@ -625,7 +625,7 @@ public:
 
     struct npc_tarethaAI : public npc_escortAI
     {
-        npc_tarethaAI(Creature *c) : npc_escortAI(c)
+        npc_tarethaAI(Creature* c) : npc_escortAI(c)
         {
             pInstance = c->GetInstanceScript();
         }

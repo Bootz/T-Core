@@ -50,7 +50,7 @@ public:
 
     struct boss_amanitarAI : public ScriptedAI
     {
-        boss_amanitarAI(Creature *c) : ScriptedAI(c)
+        boss_amanitarAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             bFirstTime = true;
@@ -134,7 +134,7 @@ public:
 
             if (uiRootTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(pTarget, SPELL_ENTANGLING_ROOTS);
                 uiRootTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             } else uiRootTimer -= diff;
@@ -147,7 +147,7 @@ public:
 
             if (uiBoltTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(pTarget, SPELL_VENOM_BOLT_VOLLEY);
                 uiBoltTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             } else uiBoltTimer -= diff;
@@ -156,7 +156,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new boss_amanitarAI(creature);
     }
@@ -217,7 +217,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new mob_amanitar_mushroomsAI(creature);
     }

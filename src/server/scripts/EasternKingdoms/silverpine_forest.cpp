@@ -81,7 +81,7 @@ public:
 
     struct npc_astor_hadrenAI : public ScriptedAI
     {
-        npc_astor_hadrenAI(Creature *c) : ScriptedAI(c) {}
+        npc_astor_hadrenAI(Creature* c) : ScriptedAI(c) {}
 
         void Reset()
         {
@@ -133,7 +133,7 @@ public:
 
     struct npc_deathstalker_erlandAI : public npc_escortAI
     {
-        npc_deathstalker_erlandAI(Creature *c) : npc_escortAI(c) {}
+        npc_deathstalker_erlandAI(Creature* c) : npc_escortAI(c) {}
 
         void WaypointReached(uint32 i)
         {
@@ -226,7 +226,7 @@ class pyrewood_ambush : public CreatureScript
 public:
     pyrewood_ambush() : CreatureScript("pyrewood_ambush") { }
 
-    bool OnQuestAccept(Player *pPlayer, Creature *pCreature, const Quest *pQuest)
+    bool OnQuestAccept(Player* pPlayer, Creature* pCreature, const Quest *pQuest)
     {
         if (pQuest->GetQuestId() == QUEST_PYREWOOD_AMBUSH && !CAST_AI(pyrewood_ambush::pyrewood_ambushAI, pCreature->AI())->QuestInProgress)
         {
@@ -239,14 +239,14 @@ public:
         return true;
     }
 
-    CreatureAI* GetAI(Creature *pCreature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
         return new pyrewood_ambushAI (pCreature);
     }
 
     struct pyrewood_ambushAI : public ScriptedAI
     {
-        pyrewood_ambushAI(Creature *c) : ScriptedAI(c), Summons(me)
+        pyrewood_ambushAI(Creature* c) : ScriptedAI(c), Summons(me)
         {
            QuestInProgress = false;
         }
@@ -274,13 +274,13 @@ public:
 
         void EnterCombat(Unit* /*who*/){}
 
-        void JustSummoned(Creature *pSummoned)
+        void JustSummoned(Creature* pSummoned)
         {
             Summons.Summon(pSummoned);
             ++KillCount;
         }
 
-        void SummonedCreatureDespawn(Creature *pSummoned)
+        void SummonedCreatureDespawn(Creature* pSummoned)
         {
             Summons.Despawn(pSummoned);
             --KillCount;
@@ -288,10 +288,10 @@ public:
 
         void SummonCreatureWithRandomTarget(uint32 creatureId, int position)
         {
-            if (Creature *pSummoned = me->SummonCreature(creatureId, PyrewoodSpawnPoints[position][0], PyrewoodSpawnPoints[position][1], PyrewoodSpawnPoints[position][2], PyrewoodSpawnPoints[position][3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 15000))
+            if (Creature* pSummoned = me->SummonCreature(creatureId, PyrewoodSpawnPoints[position][0], PyrewoodSpawnPoints[position][1], PyrewoodSpawnPoints[position][2], PyrewoodSpawnPoints[position][3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 15000))
             {
-                Player *pPlayer = NULL;
-                Unit *pTarget = NULL;
+                Player* pPlayer = NULL;
+                Unit* pTarget = NULL;
                 if (PlayerGUID)
                 {
                     pPlayer = Unit::GetPlayer(*me, PlayerGUID);
@@ -312,7 +312,7 @@ public:
         void JustDied(Unit* /*pKiller*/)
         {
             if (PlayerGUID)
-                if (Player *pPlayer = Unit::GetPlayer(*me, PlayerGUID))
+                if (Player* pPlayer = Unit::GetPlayer(*me, PlayerGUID))
                     if (pPlayer->GetQuestStatus(QUEST_PYREWOOD_AMBUSH) == QUEST_STATUS_INCOMPLETE)
                         pPlayer->FailQuest(QUEST_PYREWOOD_AMBUSH);
         }
@@ -365,7 +365,7 @@ public:
                 case 5: //end
                     if (PlayerGUID)
                     {
-                        if (Player *pPlayer = Unit::GetPlayer(*me, PlayerGUID))
+                        if (Player* pPlayer = Unit::GetPlayer(*me, PlayerGUID))
                         {
                             me->MonsterSay(NPCSAY_END, LANG_UNIVERSAL, 0); //not blizzlike
                             pPlayer->GroupEventHappens(QUEST_PYREWOOD_AMBUSH, me);

@@ -114,7 +114,7 @@ public:
 
     struct npc_enslaved_soulAI : public ScriptedAI
     {
-        npc_enslaved_soulAI(Creature *c) : ScriptedAI(c) {}
+        npc_enslaved_soulAI(Creature* c) : ScriptedAI(c) {}
 
         uint64 ReliquaryGUID;
 
@@ -143,7 +143,7 @@ public:
 
     struct boss_reliquary_of_soulsAI : public ScriptedAI
     {
-        boss_reliquary_of_soulsAI(Creature *c) : ScriptedAI(c)
+        boss_reliquary_of_soulsAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             EssenceGUID = 0;
@@ -200,7 +200,7 @@ public:
             float y = Coords[random].y;
             Creature* Soul = me->SummonCreature(CREATURE_ENSLAVED_SOUL, x, y, me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN, 0);
             if (!Soul) return false;
-            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
             {
                 CAST_AI(npc_enslaved_soul::npc_enslaved_soulAI, Soul->AI())->ReliquaryGUID = me->GetGUID();
                 Soul->AI()->AttackStart(pTarget);
@@ -208,7 +208,7 @@ public:
             return true;
         }
 
-        void MergeThreatList(Creature *pTarget)
+        void MergeThreatList(Creature* pTarget)
         {
             if (!pTarget)
                 return;
@@ -362,7 +362,7 @@ public:
 void npc_enslaved_soul::npc_enslaved_soulAI::JustDied(Unit* /*killer*/)
 {
     if (ReliquaryGUID)
-        if (Creature *Reliquary = (Unit::GetCreature((*me), ReliquaryGUID)))
+        if (Creature* Reliquary = (Unit::GetCreature((*me), ReliquaryGUID)))
             ++(CAST_AI(boss_reliquary_of_souls::boss_reliquary_of_soulsAI, Reliquary->AI())->SoulDeathCount);
 
     DoCast(me, SPELL_SOUL_RELEASE, true);
@@ -380,7 +380,7 @@ public:
 
     struct boss_essence_of_sufferingAI : public ScriptedAI
     {
-        boss_essence_of_sufferingAI(Creature *c) : ScriptedAI(c) {}
+        boss_essence_of_sufferingAI(Creature* c) : ScriptedAI(c) {}
 
         uint64 StatAuraGUID;
 
@@ -447,7 +447,7 @@ public:
                 return; // No targets added for some reason. No point continuing.
             targets.sort(Trillium::ObjectDistanceOrderPred(me)); // Sort players by distance.
             targets.resize(1); // Only need closest target.
-            Unit *pTarget = targets.front(); // Get the first target.
+            Unit* pTarget = targets.front(); // Get the first target.
             if (pTarget)
                 pTarget->CastSpell(me, SPELL_FIXATE_TAUNT, true);
             DoResetThreat();
@@ -505,7 +505,7 @@ public:
 
     struct boss_essence_of_desireAI : public ScriptedAI
     {
-        boss_essence_of_desireAI(Creature *c) : ScriptedAI(c) {}
+        boss_essence_of_desireAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 RuneShieldTimer;
         uint32 DeadenTimer;
@@ -519,7 +519,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_CONFUSE, true);
         }
 
-        void DamageTaken(Unit *done_by, uint32 &damage)
+        void DamageTaken(Unit* done_by, uint32 &damage)
         {
             if (done_by == me)
                 return;
@@ -608,7 +608,7 @@ public:
 
     struct boss_essence_of_angerAI : public ScriptedAI
     {
-        boss_essence_of_angerAI(Creature *c) : ScriptedAI(c) {}
+        boss_essence_of_angerAI(Creature* c) : ScriptedAI(c) {}
 
         uint64 AggroTargetGUID;
 

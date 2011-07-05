@@ -62,7 +62,7 @@ public:
 
     struct boss_ormorokAI : public ScriptedAI
     {
-        boss_ormorokAI(Creature *c) : ScriptedAI(c)
+        boss_ormorokAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -182,7 +182,7 @@ public:
                 Creature* Crystalline_Tangler = me->SummonCreature(MOB_CRYSTALLINE_TANGLER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
                 if (Crystalline_Tangler)
                 {
-                    Unit *pTarget = NULL;
+                    Unit* pTarget = NULL;
                     uint8 Healer = 0;
                     for (uint8 j = 1; j <= 4; j++)
                     {
@@ -235,7 +235,7 @@ public:
 
     struct mob_crystal_spikeAI : public Scripted_NoMovementAI
     {
-        mob_crystal_spikeAI(Creature *c) : Scripted_NoMovementAI(c)
+        mob_crystal_spikeAI(Creature* c) : Scripted_NoMovementAI(c)
         {
         }
 
@@ -278,7 +278,7 @@ public:
 
     struct mob_crystalline_tanglerAI : public ScriptedAI
     {
-        mob_crystalline_tanglerAI(Creature *c) : ScriptedAI(c) {}
+        mob_crystalline_tanglerAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiRootsTimer;
 

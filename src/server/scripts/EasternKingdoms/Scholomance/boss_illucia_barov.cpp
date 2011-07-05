@@ -44,7 +44,7 @@ public:
 
     struct boss_illuciabarovAI : public ScriptedAI
     {
-        boss_illuciabarovAI(Creature *c) : ScriptedAI(c) {}
+        boss_illuciabarovAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 CurseOfAgony_Timer;
         uint32 ShadowShock_Timer;
@@ -90,7 +90,7 @@ public:
             //ShadowShock_Timer
             if (ShadowShock_Timer <= diff)
             {
-                Unit *pTarget = NULL;
+                Unit* pTarget = NULL;
                 pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 if (pTarget) DoCast(pTarget, SPELL_SHADOWSHOCK);
 

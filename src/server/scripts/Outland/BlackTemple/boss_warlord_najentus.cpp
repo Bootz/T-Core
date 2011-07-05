@@ -73,7 +73,7 @@ public:
 
     struct boss_najentusAI : public ScriptedAI
     {
-        boss_najentusAI(Creature *c) : ScriptedAI(c)
+        boss_najentusAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -132,7 +132,7 @@ public:
         bool RemoveImpalingSpine()
         {
             if (!SpineTargetGUID) return false;
-            Unit *pTarget = Unit::GetUnit(*me, SpineTargetGUID);
+            Unit* pTarget = Unit::GetUnit(*me, SpineTargetGUID);
             if (pTarget && pTarget->HasAura(SPELL_IMPALING_SPINE))
                 pTarget->RemoveAurasDueToSpell(SPELL_IMPALING_SPINE);
             SpineTargetGUID=0;
@@ -168,7 +168,7 @@ public:
                         break;
                     case EVENT_SPINE:
                     {
-                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
                         if (!pTarget) pTarget = me->getVictim();
                         if (pTarget)
                         {

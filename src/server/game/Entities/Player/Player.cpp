@@ -8530,10 +8530,6 @@ void Player::RemovedInsignia(Player* looterPlr)
         RepopAtGraveyard();
     }
 
-    Corpse *corpse = GetCorpse();
-    if (!corpse)
-        return;
-
     // We have to convert player corpse to bones, not to be able to resurrect there
     // SpawnCorpseBones isn't handy, 'cos it saves player while he in BG
     Corpse *bones = sObjectAccessor->ConvertCorpseForPlayer(GetGUID(), true);
@@ -14244,37 +14240,37 @@ void Player::SendPreparedQuest(uint64 guid)
     if (questMenu.GetMenuItemCount() == 1)
     {
         // Auto open -- maybe also should verify there is no greeting
-        uint32 quest_id = qmi0.QuestId;
-        Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
+        uint32 questId = qmi0.QuestId;
+        Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
 
-        if (pQuest)
+        if (quest)
         {
-            if (icon == 4 && !GetQuestRewardStatus(quest_id))
-                PlayerTalkClass->SendQuestGiverRequestItems(pQuest, guid, CanRewardQuest(pQuest, false), true);
+            if (icon == 4 && !GetQuestRewardStatus(questId))
+                PlayerTalkClass->SendQuestGiverRequestItems(quest, guid, CanRewardQuest(quest, false), true);
             else if (icon == 4)
-                PlayerTalkClass->SendQuestGiverRequestItems(pQuest, guid, CanRewardQuest(pQuest, false), true);
+                PlayerTalkClass->SendQuestGiverRequestItems(quest, guid, CanRewardQuest(quest, false), true);
             // Send completable on repeatable and autoCompletable quest if player don't have quest
             // TODO: verify if check for !pQuest->IsDaily() is really correct (possibly not)
             else
             {
-                Object* pObject = ObjectAccessor::GetObjectByTypeMask(*this, guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT|TYPEMASK_ITEM);
-                if (!pObject || (!pObject->hasQuest(quest_id) && !pObject->hasInvolvedQuest(quest_id)))
+                Object* object = ObjectAccessor::GetObjectByTypeMask(*this, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT | TYPEMASK_ITEM);
+                if (!object || (!object->hasQuest(questId) && !object->hasInvolvedQuest(questId)))
                 {
                     PlayerTalkClass->SendCloseGossip();
                     return;
                 }
 
-                if (pQuest->IsAutoAccept() && CanAddQuest(pQuest, true))
+                if (quest->IsAutoAccept() && CanAddQuest(quest, true) && CanTakeQuest(quest, true))
                 {
-                    AddQuest(pQuest, pObject);
-                    if (CanCompleteQuest(quest_id))
-                        CompleteQuest(quest_id);
+                    AddQuest(quest, object);
+                    if (CanCompleteQuest(questId))
+                        CompleteQuest(questId);
                 }
 
-                if ((pQuest->IsAutoComplete() && pQuest->IsRepeatable() && !pQuest->IsDailyOrWeekly()) || pQuest->HasFlag(QUEST_FLAGS_AUTOCOMPLETE))
-                    PlayerTalkClass->SendQuestGiverRequestItems(pQuest, guid, CanCompleteRepeatableQuest(pQuest), true);
+                if ((quest->IsAutoComplete() && quest->IsRepeatable() && !quest->IsDailyOrWeekly()) || quest->HasFlag(QUEST_FLAGS_AUTOCOMPLETE))
+                    PlayerTalkClass->SendQuestGiverRequestItems(quest, guid, CanCompleteRepeatableQuest(quest), true);
                 else
-                    PlayerTalkClass->SendQuestGiverQuestDetails(pQuest, guid, true);
+                    PlayerTalkClass->SendQuestGiverQuestDetails(quest, guid, true);
             }
         }
     }
@@ -14813,17 +14809,24 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, quest_id);
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST_DAILY, quest_id);
         }
-    } else if (pQuest->IsWeekly())
+    }
+    else if (pQuest->IsWeekly())
         SetWeeklyQuestStatus(quest_id);
 
     RemoveActiveQuest(quest_id);
     m_RewardedQuests.insert(quest_id);
     m_RewardedQuestsSave[quest_id] = true;
 
+    // StoreNewItem, mail reward, etc. save data directly to the database
+    // to prevent exploitable data desynchronisation we save the quest status to the database too
+    // (to prevent rewarding this quest another time while rewards were already given out)
+    SQLTransaction trans = SQLTransaction(NULL);
+    _SaveQuestStatus(trans);
+
     if (announce)
         SendQuestReward(pQuest, XP, questGiver);
 
-    // cast spells after mark quest complete (some spells have quest completed state reqyurements in spell_area data)
+    // cast spells after mark quest complete (some spells have quest completed state requirements in spell_area data)
     if (pQuest->GetRewSpellCast() > 0)
         CastSpell(this, pQuest->GetRewSpellCast(), true);
     else if (pQuest->GetRewSpell() > 0)
@@ -18034,7 +18037,7 @@ void Player::SaveToDB()
     outDebugValues();
 
     std::string sql_name = m_name;
-    CharacterDatabase.escape_string(sql_name);
+    CharacterDatabase.EscapeString(sql_name);
 
     std::ostringstream ss;
     ss << "REPLACE INTO characters (guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
@@ -18442,7 +18445,7 @@ void Player::_SaveMail(SQLTransaction& trans)
         {
             trans->PAppend("UPDATE mail SET has_items = '%u', expire_time = '" UI64FMTD "', deliver_time = '" UI64FMTD "', money = '%u', cod = '%u', checked = '%u' WHERE id = '%u'",
                 m->HasItems() ? 1 : 0, (uint64)m->expire_time, (uint64)m->deliver_time, m->money, m->COD, m->checked, m->messageID);
-            if (m->removedItems.size())
+            if (!m->removedItems.empty())
             {
                 for (std::vector<uint32>::iterator itr2 = m->removedItems.begin(); itr2 != m->removedItems.end(); ++itr2)
                     trans->PAppend("DELETE FROM mail_items WHERE item_guid = '%u'", *itr2);
@@ -18486,6 +18489,10 @@ void Player::_SaveMail(SQLTransaction& trans)
 
 void Player::_SaveQuestStatus(SQLTransaction& trans)
 {
+    bool isTransaction = !trans.null();
+    if (!isTransaction)
+        trans = CharacterDatabase.BeginTransaction();
+
     QuestStatusSaveMap::iterator saveItr;
     QuestStatusMap::iterator statusItr;
 
@@ -18518,6 +18525,9 @@ void Player::_SaveQuestStatus(SQLTransaction& trans)
     }
 
     m_RewardedQuestsSave.clear();
+
+    if (!isTransaction)
+        CharacterDatabase.CommitTransaction(trans);
 }
 
 void Player::_SaveDailyQuestStatus(SQLTransaction& trans)
@@ -22779,7 +22789,7 @@ void Player::AddGlobalCooldown(SpellEntry const *spellInfo, Spell* spell)
 
     float cdTime = float(spellInfo->GetStartRecoveryTime());
 
-    if (!(spellInfo->Attributes & (SPELL_ATTR0_UNK4|SPELL_ATTR0_PASSIVE)))
+    if (!(spellInfo->Attributes & (SPELL_ATTR0_ABILITY|SPELL_ATTR0_PASSIVE)))
         cdTime *= GetFloatValue(UNIT_MOD_CAST_SPEED);
     else if (IsRangedWeaponSpell(spellInfo) && spell && !spell->IsAutoRepeat())
         cdTime *= m_modAttackSpeedPct[RANGED_ATTACK];
@@ -23286,9 +23296,9 @@ void Player::UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 mis
     GetAchievementMgr().UpdateAchievementCriteria(type, miscValue1, miscValue2, unit);
 }
 
-void Player::CompletedAchievement(AchievementEntry const* entry, bool ignoreGMAllowAchievementConfig)
+void Player::CompletedAchievement(AchievementEntry const* entry)
 {
-    GetAchievementMgr().CompletedAchievement(entry, ignoreGMAllowAchievementConfig);
+    GetAchievementMgr().CompletedAchievement(entry);
 }
 
 void Player::LearnTalent(uint32 talentId, uint32 talentRank)

@@ -79,7 +79,7 @@ public:
 
     struct boss_ionarAI : public ScriptedAI
     {
-        boss_ionarAI(Creature *pCreature) : ScriptedAI(pCreature), lSparkList(pCreature)
+        boss_ionarAI(Creature* pCreature) : ScriptedAI(pCreature), lSparkList(pCreature)
         {
             pInstance = pCreature->GetInstanceScript();
         }
@@ -210,7 +210,7 @@ public:
             }
         }
 
-        void SummonedCreatureDespawn(Creature *pSummoned)
+        void SummonedCreatureDespawn(Creature* pSummoned)
         {
             if (pSummoned->GetEntry() == NPC_SPARK_OF_IONAR)
                 lSparkList.Despawn(pSummoned);
@@ -309,7 +309,7 @@ public:
 
     struct mob_spark_of_ionarAI : public ScriptedAI
     {
-        mob_spark_of_ionarAI(Creature *pCreature) : ScriptedAI(pCreature)
+        mob_spark_of_ionarAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = pCreature->GetInstanceScript();
         }

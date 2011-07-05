@@ -51,7 +51,7 @@ public:
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
             ItemPosCountVec dest;
-            uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 24226, 1, false);
+            uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 24226, 1, NULL);
             if (msg == EQUIP_ERR_OK)
             {
                 pPlayer->StoreNewItem(dest, 24226, 1, true);
@@ -170,7 +170,7 @@ public:
 
     struct npc_ranger_lilathaAI : public npc_escortAI
     {
-        npc_ranger_lilathaAI(Creature *c) : npc_escortAI(c) {}
+        npc_ranger_lilathaAI(Creature* c) : npc_escortAI(c) {}
 
         void WaypointReached(uint32 i)
         {

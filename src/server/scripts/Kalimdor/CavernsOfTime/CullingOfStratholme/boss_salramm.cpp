@@ -68,7 +68,7 @@ public:
 
     struct boss_salrammAI : public ScriptedAI
     {
-        boss_salrammAI(Creature *c) : ScriptedAI(c)
+        boss_salrammAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             if (pInstance)

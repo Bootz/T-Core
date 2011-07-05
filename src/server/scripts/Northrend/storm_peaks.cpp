@@ -48,7 +48,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_agnetta_tyrsdottarAI(creature);
     }
@@ -224,7 +224,7 @@ public:
 
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_goblin_prisonerAI(creature);
     }
@@ -321,7 +321,7 @@ public:
         return true;
     }
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_victorious_challengerAI(creature);
     }
@@ -447,7 +447,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_injured_goblinAI(creature);
     }
@@ -592,7 +592,7 @@ public:
                 enter_timer -= diff;
         }
 
-        void MoveInLineOfSight(Unit *unit)
+        void MoveInLineOfSight(Unit* unit)
         {
             if (!unit || !drake)
                 return;
@@ -661,7 +661,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new npc_brunnhildar_prisonerAI(creature);
     }

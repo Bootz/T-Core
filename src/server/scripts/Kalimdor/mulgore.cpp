@@ -97,7 +97,7 @@ public:
 
     struct npc_kyle_frenziedAI : public ScriptedAI
     {
-        npc_kyle_frenziedAI(Creature *c) : ScriptedAI(c) {}
+        npc_kyle_frenziedAI(Creature* c) : ScriptedAI(c) {}
 
         bool bEvent;
         bool m_bIsMovingToLunch;
@@ -270,7 +270,7 @@ public:
 
     struct npc_plains_visionAI  : public ScriptedAI
     {
-        npc_plains_visionAI(Creature *c) : ScriptedAI(c) {}
+        npc_plains_visionAI(Creature* c) : ScriptedAI(c) {}
 
         bool newWaypoint;
         uint8 WayPointId;
