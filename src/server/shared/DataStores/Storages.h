@@ -79,7 +79,7 @@ class DBCStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool Load(char const* fn, SqlDbc * sql)
+        bool Load(char const* fn, SqlDbc* sql)
         {
             StorageLoader dbc;
             // Check if load was sucessful, only then continue
@@ -88,7 +88,7 @@ class DBCStorage
 
             uint32 sqlRecordCount = 0;
             uint32 sqlHighestIndex = 0;
-            Field *fields = NULL;
+            Field* fields = NULL;
             QueryResult result = QueryResult(NULL);
             // Load data from sql
             if (sql)
@@ -97,7 +97,6 @@ class DBCStorage
                 if (sql->indexPos >= 0)
                     query +=" ORDER BY " + *sql->indexName + " DESC";
                 query += ";";
-
 
                 result = WorldDatabase.Query(query.c_str());
                 if (result)
@@ -116,11 +115,17 @@ class DBCStorage
                     }
                 }
             }
-            char * sqlDataTable;
+            char* sqlDataTable;
             fieldCount = dbc.GetCols();
+
+            // load raw non-string data
             m_dataTable = (T*)dbc.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
-            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
+            // create string holders for loaded string fields
+            m_stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+
+            // load strings from dbc data
+            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt,(char*)m_dataTable));
 
             // Insert sql data into arrays
             if (result)
@@ -259,6 +264,8 @@ class DBCStorage
             }
             nCount = 0;
         }
+        
+        void EraseEntry(uint32 id) { indexTable[id] = NULL; }
 
     private:
         char const* fmt;
