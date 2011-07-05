@@ -288,13 +288,13 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     UnitMods unitMod = ranged ? UNIT_MOD_ATTACK_POWER_RANGED : UNIT_MOD_ATTACK_POWER;
 
     uint16 index = UNIT_FIELD_ATTACK_POWER;
-    uint16 index_mod = UNIT_FIELD_ATTACK_POWER_MOD_POS | -UNIT_FIELD_ATTACK_POWER_MOD_NEG;
+    uint16 index_mod = UNIT_FIELD_ATTACK_POWER_MOD_POS & -UNIT_FIELD_ATTACK_POWER_MOD_NEG;
     uint16 index_mult = UNIT_FIELD_ATTACK_POWER_MULTIPLIER;
 
     if (ranged)
     {
         index = UNIT_FIELD_RANGED_ATTACK_POWER;
-        index_mod = UNIT_FIELD_ATTACK_POWER_MOD_POS | -UNIT_FIELD_ATTACK_POWER_MOD_NEG;
+        index_mod = UNIT_FIELD_ATTACK_POWER_MOD_POS & -UNIT_FIELD_ATTACK_POWER_MOD_NEG;
         index_mult = UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER;
 
         switch (getClass())
