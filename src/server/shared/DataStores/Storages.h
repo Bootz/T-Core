@@ -20,7 +20,7 @@
 #ifndef DBCSTORE_H
 #define DBCSTORE_H
 
-#include "DBCFileLoader.h"
+#include "StorageLoader.h"
 #include "Logging/Log.h"
 #include "Field.h"
 #include "DatabaseWorkerPool.h"

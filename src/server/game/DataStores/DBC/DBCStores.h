@@ -21,7 +21,7 @@
 #define DBCSTORES_H
 
 #include "Common.h"
-#include "DBCStore.h"
+#include "Storages.h"
 #include "DBCStructure.h"
 
 #include <list>

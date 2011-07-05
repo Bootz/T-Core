@@ -1265,10 +1265,9 @@ void World::SetInitialWorldSettings()
     LoadDBCStores(m_dataPath);
     /*DetectDBCLang();*/
 
-    // Need fix the extractor for db2.
     //sLog->outString("Initialize data Stores2...");
     //LoadDB2Stores(m_dataPath);
-    //DetectDBCLang();
+    ////DetectDBCLang();
 
     sLog->outString("Loading Script Names...");
     sObjectMgr->LoadScriptNames();
