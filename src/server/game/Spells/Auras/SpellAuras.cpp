@@ -1041,6 +1041,8 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
         }
     }
 
+    if (!GetSpellClass())
+        return;
     // mods at aura apply
     if (apply)
     {
