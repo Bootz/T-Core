@@ -1864,8 +1864,10 @@ struct SpellEntry
     /* SpellAuraRestrictionsEntry  */
     /*******************************/
 
+    uint32 GetTargetAuraSpell() const;
     uint32 GetCasterAuraState() const;
     uint32 GetTargetAuraState() const;
+    uint32 GetExcludeTargetAuraSpell() const;
 
     /*******************************/
     /*    SpellAuraOptionsEntry    */
@@ -1888,6 +1890,7 @@ struct SpellEntry
     /* SpellTargetRestrictionsEntry */
     /********************************/
 
+    uint32 GetTargets() const;
     uint32 GetMaxAffectedTargets() const;
     uint32 GetTargetCreatureType() const;
 

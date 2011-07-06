@@ -193,6 +193,18 @@ uint32 SpellEntry::GetTargetAuraState() const
     return aura ? aura->TargetAuraState : 0;
 }
 
+uint32 SpellEntry::GetTargetAuraSpell() const
+{
+    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
+    return aura ? aura->targetAuraSpell : 0;
+}
+
+uint32 SpellEntry::GetExcludeTargetAuraSpell() const
+{
+    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
+    return aura ? aura->excludeTargetAuraSpell : 0;
+}
+
 /*******************************/
 /*    SpellAuraOptionsEntry    */
 /*******************************/
@@ -246,6 +258,11 @@ uint32 SpellEntry::GetCategoryRecoveryTime() const
 /********************************/
 /* SpellTargetRestrictionsEntry */
 /********************************/
+uint32 SpellEntry::GetTargets() const
+{
+    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
+    return target ? target->Targets : 0;
+}
 
 uint32 SpellEntry::GetMaxAffectedTargets() const
 {
