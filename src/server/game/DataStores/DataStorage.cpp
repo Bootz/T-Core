@@ -116,6 +116,8 @@ DataStorage <ItemLimitCategoryEntry> sItemLimitCategoryStore(ItemLimitCategoryEn
 DataStorage <ItemRandomPropertiesEntry> sItemRandomPropertiesStore(ItemRandomPropertiesfmt);
 DataStorage <ItemRandomSuffixEntry> sItemRandomSuffixStore(ItemRandomSuffixfmt);
 DataStorage <ItemSetEntry> sItemSetStore(ItemSetEntryfmt);
+DataStorage <ItemEntry> sItemStore(Itemfmt);
+//DataStorage <ItemSparseEntry> sItemSparseStore(ItemSparsefmt);
 
 DataStorage <LFGDungeonEntry> sLFGDungeonStore(LFGDungeonEntryfmt);
 
@@ -269,10 +271,14 @@ void LoadDBCStores(const std::string& dataPath)
 {
     uint32 oldMSTime = getMSTime();
 
-    std::string dbcPath = dataPath+"dbc/";
+    std::string dbcPath = dataPath + "dbc/";
+    std::string db2Path = dataPath + "db2/";
 
     StoreProblemList bad_dbc_files;
     uint32 availableDbcLocales = 0xFFFFFFFF;
+
+    LoadDBC(availableDbcLocales, bad_dbc_files, sItemStore, db2Path, "Item.db2");
+    //LoadDBC(availableDb2Locales, bad_db2_files, sItemSparseStore, db2Path, "Item-sparse.db2");
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sAreaStore,                   dbcPath, "AreaTable.dbc");
 
@@ -660,6 +666,7 @@ void LoadDBCStores(const std::string& dataPath)
     if (!sAreaStore.LookupEntry(4445)              ||       // last area (areaflag) added in 4.0.6a
         !sCharTitlesStore.LookupEntry(229)         ||       // last char title added in 4.0.6a
         !sGemPropertiesStore.LookupEntry(1858)     ||       // last gem property added in 4.0.6a
+        !sItemStore.LookupEntry(68815)             ||       // last client known item added in 4.0.6a
         !sItemExtendedCostStore.LookupEntry(3400)  ||       // last item extended cost added in 4.0.6a
         !sMapStore.LookupEntry(767)                ||       // last map added in 4.0.6a
         !sSpellStore.LookupEntry(96539)            )        // last added spell in 4.0.6a

@@ -264,12 +264,6 @@ uint32 SpellEntry::GetTargets() const
     return target ? target->Targets : 0;
 }
 
-uint32 SpellEntry::GetTargets() const
-{
-    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
-    return target ? target->Targets : 0;
-}
-
 uint32 SpellEntry::GetMaxAffectedTargets() const
 {
     SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();

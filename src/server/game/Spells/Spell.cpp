@@ -54,7 +54,6 @@
 #include "SpellScript.h"
 #include "InstanceScript.h"
 #include "BattlefieldMgr.h"
-#include "DB2Stores.h"
 
 extern pEffect SpellEffects[TOTAL_SPELL_EFFECTS];
 

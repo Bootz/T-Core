@@ -29,7 +29,7 @@ StorageLoader::StorageLoader()
     fieldsOffset = NULL;
 }
 
-bool StorageLoader::LoadDataStorage(const char* filename, const char* fmt)
+bool StorageLoader::LoadDBCStorage(const char* filename, const char* fmt)
 {
     uint32 header;
     if (data)
