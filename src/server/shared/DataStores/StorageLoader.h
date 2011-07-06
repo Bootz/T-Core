@@ -30,7 +30,8 @@ class StorageLoader
         StorageLoader();
         ~StorageLoader();
 
-        bool Load(const char *filename, const char *fmt);
+        bool LoadDBCStorage(const char* filename, const char* fmt);
+        bool LoadDB2Storage(const char* filename, const char* fmt);
 
         class Record
         {

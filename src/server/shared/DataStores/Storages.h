@@ -79,11 +79,37 @@ class DBCStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool Load(char const* fn, SqlDbc* sql)
+        bool LoadDB2Storage(char const* fn, SqlDbc* sql)
+        {
+            StorageLoader db2;
+            // Check if load was sucessful, only then continue
+            if (!db2.LoadDB2Storage(fn, fmt))
+                return false;
+
+            uint32 sqlRecordCount = 0;
+            uint32 sqlHighestIndex = 0;
+            char* sqlDataTable = 0;
+
+            fieldCount = db2.GetCols();
+
+            // load raw non-string data
+            m_dataTable = (T*)db2.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
+
+            // create string holders for loaded string fields
+            m_stringPoolList.push_back(db2.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+
+            // load strings from db2 data
+            m_stringPoolList.push_back(db2.AutoProduceStrings(fmt,(char*)m_dataTable));
+
+            // error in db2 file at loading if NULL
+            return indexTable!=NULL;
+        }
+
+        bool LoadDBCStorage(char const* fn, SqlDbc* sql)
         {
             StorageLoader dbc;
             // Check if load was sucessful, only then continue
-            if (!dbc.Load(fn, fmt))
+            if (!dbc.LoadDBCStorage(fn, fmt))
                 return false;
 
             uint32 sqlRecordCount = 0;
@@ -239,7 +265,7 @@ class DBCStorage
 
             StorageLoader dbc;
             // Check if load was successful, only then continue
-            if(!dbc.Load(fn, fmt))
+            if(!dbc.LoadDBCStorage(fn, fmt))
                 return false;
 
             m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
