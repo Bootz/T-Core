@@ -879,8 +879,8 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
             }
             break;
         default:
-            if (m_spellEquipped->EquippedItemClass == ITEM_CLASS_WEAPON &&
-                m_spellEquipped->EquippedItemSubClassMask & (1<<ITEM_SUBCLASS_WEAPON_WAND)
+            if (m_spellInfo->GetEquippedItemClass() == ITEM_CLASS_WEAPON &&
+                m_spellInfo->GetEquippedItemSubClassMask() & (1<<ITEM_SUBCLASS_WEAPON_WAND)
                 && m_spellInfo->AttributesEx2 & SPELL_ATTR2_AUTOREPEAT_FLAG) // Wands auto attack
             {
                 m_procAttacker = PROC_FLAG_DONE_RANGED_AUTO_ATTACK;
@@ -2789,7 +2789,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
     }
 }
 
-void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggeredByAura)
+void Spell::prepare(SpellCastTargets const* targets, AuraEffect const * triggeredByAura)
 {
     if (m_CastItem)
         m_castItemGUID = m_CastItem->GetGUID();
@@ -2798,9 +2798,9 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
 
     m_targets = *targets;
 
-    if (!m_targets.GetUnitTargetGUID() && m_spellTarget->Targets & TARGET_FLAG_UNIT)
+    if (!m_targets.GetUnitTargetGUID() && m_spellInfo->GetTargets() & TARGET_FLAG_UNIT)
     {
-        Unit* target = NULL;
+        Unit *target = NULL;
         if (m_caster->GetTypeId() == TYPEID_UNIT)
             target = m_caster->getVictim();
         else
@@ -2820,6 +2820,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
         //check for special spell conditions
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL, m_spellInfo->Id);
         if (!conditions.empty())
+        {
             if (!sConditionMgr->IsPlayerMeetToConditions(plrCaster, conditions))
             {
                 //SendCastResult(SPELL_FAILED_DONT_REPORT);
@@ -2827,13 +2828,14 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
                 finish(false);
                 return;
             }
+        }
     }
-    if (!m_targets.HasSrc() && m_spellTarget->Targets & TARGET_FLAG_SOURCE_LOCATION)
+    if (!m_targets.HasSrc() && m_spellInfo->GetTargets() & TARGET_FLAG_SOURCE_LOCATION)
         m_targets.SetSrc(*m_caster);
 
-    if (!m_targets.HasDst() && m_spellTarget->Targets & TARGET_FLAG_DEST_LOCATION)
+    if (!m_targets.HasDst() && m_spellInfo->GetTargets() & TARGET_FLAG_DEST_LOCATION)
     {
-        Unit* target = m_targets.GetUnitTarget();
+        Unit *target = m_targets.GetUnitTarget();
         if (!target)
         {
             if (m_caster->GetTypeId() == TYPEID_UNIT)
@@ -2862,7 +2864,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
                 // Change aura with ranks only if basepoints are taken from spellInfo and aura is positive
                 if (IsPositiveEffect(m_spellInfo->Id, i))
                 {
-                    m_auraScaleMask |= (1 << i);
+                    m_auraScaleMask |= (1<<i);
                     if (m_spellValue->EffectBasePoints[i] != m_spellInfo->GetEffectBasePoints(i))
                     {
                         m_auraScaleMask = 0;
@@ -2926,16 +2928,15 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
     // Prepare data for triggers
     prepareDataForTriggerSystem(triggeredByAura);
 
-    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-        m_caster->ToPlayer()->SetSpellModTakingSpell(this, true);
     // calculate cast time (calculated after first CheckCast check to prevent charge counting for first CheckCast fail)
     m_casttime = GetSpellCastTime(m_spellInfo, this);
-    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-        m_caster->ToPlayer()->SetSpellModTakingSpell(this, false);
+    //m_caster->ModSpellCastTime(m_spellInfo, m_casttime, this);
 
     // don't allow channeled spells / spells with cast time to be casted while moving
     // (even if they are interrupted on moving, spells with almost immediate effect get to have their effect processed before movement interrupter kicks in)
-    if ((IsChanneledSpell(m_spellInfo) || m_casttime) && m_caster->GetTypeId() == TYPEID_PLAYER && m_caster->isMoving() && m_spellInfo->GetInterruptFlags() & SPELL_INTERRUPT_FLAG_MOVEMENT)
+    if ((IsChanneledSpell(m_spellInfo) || m_casttime)
+        && m_caster->GetTypeId() == TYPEID_PLAYER && m_caster->isMoving()
+        && m_spellInfo->GetInterruptFlags() & SPELL_INTERRUPT_FLAG_MOVEMENT)
     {
         SendCastResult(SPELL_FAILED_MOVING);
         finish(false);
@@ -2946,6 +2947,10 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
     ReSetTimer();
 
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell::prepare: spell id %u source %u caster %d triggered %u mask %u", m_spellInfo->Id, m_caster->GetEntry(), m_originalCaster ? m_originalCaster->GetEntry() : -1, m_IsTriggeredSpell ? 1 : 0, m_targets.GetTargetMask());
+    //if (m_targets.getUnitTarget())
+    //    sLog->outError("Spell::prepare: unit target %u", m_targets.getUnitTarget()->GetEntry());
+    //if (m_targets.HasDst())
+    //    sLog->outError("Spell::prepare: pos target %f %f %f", m_targets.m_dstPos.m_positionX, m_targets.m_dstPos.m_positionY, m_targets.m_dstPos.m_positionZ);
 
     //Containers for channeled spells have to be set
     //TODO:Apply this to all casted spells if needed
@@ -2960,11 +2965,13 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
         {
             m_caster->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CAST);
             for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+            {
                 if (EffectTargetType[m_spellInfo->GetSpellEffectIdByIndex(i)] == SPELL_REQUIRE_UNIT)
                 {
                     m_caster->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_SPELL_ATTACK);
                     break;
                 }
+            }
         }
 
         m_caster->SetCurrentCastedSpell(this);
@@ -2972,8 +2979,9 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
 
         TriggerGlobalCooldown();
 
-        //item: first cast may destroy item and second cast causes crash
-        if (!m_casttime && !m_spellInfo->GetStartRecoveryTime() && !m_castItemGUID && GetCurrentContainer() == CURRENT_GENERIC_SPELL)
+        if (!m_casttime && !m_spellInfo->GetStartRecoveryTime()
+            && !m_castItemGUID     //item: first cast may destroy item and second cast causes crash
+            && GetCurrentContainer() == CURRENT_GENERIC_SPELL)
             cast(true);
     }
 }
@@ -6357,9 +6365,9 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
     }
 
     // Check Aura spell req (need for AoE spells)
-    if (m_spellRestrictions->targetAuraSpell && !target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellRestrictions->targetAuraSpell, m_caster)))
+    if (m_spellInfo->GetTargetAuraSpell() && !target->HasAura(m_spellInfo->GetTargetAuraSpell()))
         return false;
-    if (m_spellRestrictions->excludeTargetAuraSpell && target->HasAura(sSpellMgr->GetSpellIdForDifficulty(m_spellRestrictions->excludeTargetAuraSpell, m_caster)))
+    if (m_spellInfo->GetExcludeTargetAuraSpell() && target->HasAura(m_spellInfo->GetExcludeTargetAuraSpell()))
         return false;
 
     // Check targets for not_selectable unit flag and remove
@@ -6373,8 +6381,8 @@ bool Spell::CheckTarget(Unit* target, uint32 eff)
         // unselectable targets skipped in all cases except TARGET_UNIT_NEARBY_ENTRY targeting
         // in case TARGET_UNIT_NEARBY_ENTRY target selected by server always and can't be cheated
         /*if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE) &&
-            m_spellInfo->EffectImplicitTargetA[eff] != TARGET_UNIT_NEARBY_ENTRY &&
-            m_spellInfo->EffectImplicitTargetB[eff] != TARGET_UNIT_NEARBY_ENTRY)
+            m_spellInfo->GetEffectImplicitTargetAByIndex(eff) != TARGET_UNIT_NEARBY_ENTRY &&
+            m_spellInfo->GetEffectImplicitTargetAByIndex(eff) != TARGET_UNIT_NEARBY_ENTRY)
             return false;*/
     }
 

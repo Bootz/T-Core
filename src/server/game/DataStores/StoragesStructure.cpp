@@ -258,6 +258,11 @@ uint32 SpellEntry::GetCategoryRecoveryTime() const
 /********************************/
 /* SpellTargetRestrictionsEntry */
 /********************************/
+uint32 SpellEntry::GetTargets() const
+{
+    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
+    return target ? target->Targets : 0;
+}
 
 uint32 SpellEntry::GetTargets() const
 {
