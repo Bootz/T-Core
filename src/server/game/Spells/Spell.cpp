@@ -7133,6 +7133,8 @@ void Spell::CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTarget
 
 bool Spell::CanExecuteTriggersOnHit(uint8 effMask) const
 {
+    if (!m_spellEffect)
+        return false;
     // check which effects can trigger proc
     // don't allow to proc for dummy-only spell target hits
     // prevents triggering/procing effects twice from spells like Eviscerate
@@ -7146,6 +7148,8 @@ bool Spell::CanExecuteTriggersOnHit(uint8 effMask) const
 
 void Spell::PrepareTriggersExecutedOnHit()
 {
+    if (!m_spellClass && !m_spellRestrictions)
+        return;
     // todo: move this to scripts
     if (m_spellClass->SpellFamilyName)
     {

@@ -454,6 +454,8 @@ Unit* GetTriggeredSpellCaster(SpellEntry const* spellInfo, Unit* caster, Unit* t
 AuraState GetSpellAuraState(SpellEntry const* spellInfo)
 {
     SpellClassOptionsEntry const* spellInfo1 = NULL;
+    if (!spellInfo1)
+        return AURA_STATE_NONE;
     // Seals
     if (IsSealSpell(spellInfo1))
         return AURA_STATE_JUDGEMENT;
