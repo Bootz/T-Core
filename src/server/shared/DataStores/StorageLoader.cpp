@@ -29,7 +29,7 @@ StorageLoader::StorageLoader()
     fieldsOffset = NULL;
 }
 
-bool StorageLoader::Load(const char* filename, const char* fmt)
+bool StorageLoader::LoadDBCStorage(const char* filename, const char* fmt)
 {
     uint32 header;
     if (data)
@@ -110,6 +110,146 @@ bool StorageLoader::Load(const char* filename, const char* fmt)
 
     fclose(f);
 
+    return true;
+}
+
+bool StorageLoader::LoadDB2Storage(const char* filename, const char* fmt)
+{
+    uint32 header = 48;
+    if (data)
+    {
+        delete [] data;
+        data = NULL;
+    }
+
+    FILE * f = fopen(filename, "rb");
+    if (!f)
+        return false;
+
+    if (fread(&header, 4, 1, f) != 1)                        // Signature
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(header);
+
+    if (header != 0x32424457)
+    {
+        fclose(f);
+        return false;                                       //'WDB2'
+    }
+
+    if (fread(&recordCount, 4, 1, f) != 1)                       // Number of records
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(recordCount);
+
+    if (fread(&fieldCount, 4, 1, f) != 1)                         // Number of fields
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(fieldCount);
+
+    if (fread(&recordSize, 4, 1, f) != 1)                         // Size of a record
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(recordSize);
+
+    if (fread(&stringSize, 4, 1, f) != 1)                         // String size
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(stringSize);
+
+    /* NEW WDB2 FIELDS*/
+    if (fread(&tableHash, 4, 1, f) != 1)                          // Table hash
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(tableHash);
+
+    if (fread(&build, 4, 1, f) != 1)                              // Build
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(build);
+
+    if (fread(&unk1, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk1);
+
+    if (fread(&unk2, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk2);
+
+    if (fread(&unk3, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk3);
+
+    if (fread(&locale, 4, 1, f) != 1)                             // Locales
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(locale);
+
+    if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk5);
+
+    fieldsOffset = new uint32[fieldCount];
+    fieldsOffset[0] = 0;
+    for (uint32 i = 1; i < fieldCount; i++)
+    {
+        fieldsOffset[i] = fieldsOffset[i - 1];
+        if (fmt[i - 1] == 'b' || fmt[i - 1] == 'X')         // byte fields
+            fieldsOffset[i] += 1;
+        else                                                // 4 byte fields (int32/float/strings)
+            fieldsOffset[i] += 4;
+    }
+
+    data = new unsigned char[recordSize*recordCount+stringSize];
+    stringTable = data + recordSize*recordCount;
+
+    if (fread(data, recordSize * recordCount + stringSize, 1, f) != 1)
+    {
+        fclose(f);
+        return false;
+    }
+
+    fclose(f);
     return true;
 }
 

@@ -236,7 +236,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
     if (customFormat)
         sql = new SqlDbc(&filename, customFormat, customIndexName, storage.GetFormat());
 
-    if (storage.Load(dbcFilename.c_str(), sql))
+    if (storage.LoadDBCStorage(dbcFilename.c_str(), sql) || storage.LoadDB2Storage(dbcFilename.c_str(), sql))
     {
         for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
         {
