@@ -5,13 +5,12 @@
  \_____________________________________________/
  /                                            /
  |   4.) Fix world Login                     |
- |   5.) Implemented Spell Stats System      |
- |   6.) Drop Old Spells from Core           |
- |   7.) Fixed the Style in Forum            |
- |   8.) Install a Bot in Mirc Channel!      |
+ |   5.) Drop Old Spells from Core           |
+ |   6.) Fixed the Style in Forum            |
+ |   7.) Install a Bot in Mirc Channel!      |
  \__________________________________________/
  /                                           \
-|    9.) Start with updating the DB           \
+|    8.) Start with updating the DB           \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|
