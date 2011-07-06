@@ -22,7 +22,7 @@
 
 #include "Common.h"
 #include "SharedDefines.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 
 class Creature;
 class GameObject;

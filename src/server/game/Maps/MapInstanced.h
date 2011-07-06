@@ -22,7 +22,7 @@
 
 #include "Map.h"
 #include "InstanceSaveMgr.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 
 class MapInstanced : public Map
 {

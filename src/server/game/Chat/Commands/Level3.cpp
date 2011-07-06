@@ -54,7 +54,7 @@
 #include "InstanceScript.h"
 #include "CreatureEventAIMgr.h"
 #include "SpellAuraEffects.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "ConditionMgr.h"
 #include "DisableMgr.h"
 #include "Transport.h"

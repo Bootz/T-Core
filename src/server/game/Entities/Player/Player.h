@@ -25,7 +25,7 @@
 #include "Bag.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "GroupReference.h"
 #include "ItemPrototype.h"
 #include "Item.h"

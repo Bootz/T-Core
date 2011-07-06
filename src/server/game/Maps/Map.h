@@ -24,7 +24,7 @@
 #include <ace/RW_Thread_Mutex.h>
 #include <ace/Thread_Mutex.h>
 
-#include "DBCStructure.h"
+#include "StoragesStructure.h"
 #include "GridDefines.h"
 #include "Cell.h"
 #include "Timer.h"

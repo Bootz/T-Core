@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "DB2Stores.h"
+#include "Storages.h"
 #include "Log.h"
 
 #include "DB2format.h"
 
 #include <map>
 
-DB2Storage <ItemEntry> sItemStore(Itemfmt);
-//DB2Storage <ItemSparseEntry> sItemSparseStore(ItemSparsefmt);
+DataStorage <ItemEntry> sItemStore(Itemfmt);
+//DataStorage <ItemSparseEntry> sItemSparseStore(ItemSparsefmt);
 typedef std::list<std::string> StoreProblemList1;
 
 uint32 DB2FileCount = 0;
@@ -38,7 +38,7 @@ static bool LoadDB2_assert_print(uint32 fsize,uint32 rsize, const std::string& f
 }
 
 template<class T>
-inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& error, DB2Storage<T>& storage, const std::string& db2Path, const std::string& filename)
+inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& error, DataStorage<T>& storage, const std::string& db2Path, const std::string& filename)
 {
     // compatibility format and C++ structure sizes
     ASSERT(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDB2_assert_print(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));

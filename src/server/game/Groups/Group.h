@@ -21,7 +21,7 @@
 #define TRINITYCORE_GROUP_H
 
 #include "Battleground.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "GroupRefManager.h"
 #include "LootMgr.h"
 #include "QueryResult.h"

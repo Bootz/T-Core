@@ -20,13 +20,13 @@
 #define DB2STORES_H
 
 #include "Common.h"
-#include "DB2Store.h"
+#include "Storages.h"
 #include "DB2Structure.h"
 
 #include <list>
 
-extern DB2Storage <ItemEntry> sItemStore;
-//extern DB2Storage <ItemSparseEntry> sItemSparseStore;
+extern DataStorage <ItemEntry> sItemStore;
+//extern DataStorage <ItemSparseEntry> sItemSparseStore;
 
 void LoadDB2Stores(const std::string& dataPath);
 

@@ -24,7 +24,7 @@
 
 #include "Common.h"
 #include "DatabaseEnv.h"
-#include "DBCStructure.h"
+#include "StoragesStructure.h"
 
 class Item;
 class Player;

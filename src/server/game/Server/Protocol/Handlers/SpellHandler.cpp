@@ -18,7 +18,7 @@
  */
 
 #include "Common.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "ObjectMgr.h"

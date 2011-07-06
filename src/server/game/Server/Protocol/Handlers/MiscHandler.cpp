@@ -46,7 +46,7 @@
 #include "AccountMgr.h"
 #include "Vehicle.h"
 #include "CreatureAI.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "ScriptMgr.h"
 #include "MapManager.h"
 #include "InstanceScript.h"

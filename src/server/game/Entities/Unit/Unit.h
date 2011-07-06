@@ -32,7 +32,7 @@
 #include "FollowerRefManager.h"
 #include "EventProcessor.h"
 #include "MotionMaster.h"
-#include "DBCStructure.h"
+#include "StoragesStructure.h"
 #include "Path.h"
 #include "WorldPacket.h"
 #include "Timer.h"

@@ -45,7 +45,7 @@
 #include "SpellMgr.h"
 #include "GroupMgr.h"
 #include "Chat.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "DB2Stores.h"
 #include "LootMgr.h"
 #include "ItemEnchantmentMgr.h"
@@ -1265,8 +1265,8 @@ void World::SetInitialWorldSettings()
     LoadDBCStores(m_dataPath);
     /*DetectDBCLang();*/
 
-    //sLog->outString("Initialize data Stores2...");
-    //LoadDB2Stores(m_dataPath);
+    sLog->outString("Initialize data Stores2...");
+    LoadDB2Stores(m_dataPath);
     ////DetectDBCLang();
 
     sLog->outString("Loading Script Names...");

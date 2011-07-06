@@ -18,7 +18,7 @@
  */
 
 #include "Common.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "ObjectMgr.h"
 #include "ArenaTeamMgr.h"
 #include "GuildMgr.h"

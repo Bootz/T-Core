@@ -24,7 +24,7 @@
 #include <ace/Singleton.h>
 #include <ace/Atomic_Op.h>
 
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "Player.h"
 #include "SharedDefines.h"
 #include "World.h"

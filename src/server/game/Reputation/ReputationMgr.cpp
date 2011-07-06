@@ -19,7 +19,7 @@
 
 #include "DatabaseEnv.h"
 #include "ReputationMgr.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "Player.h"
 #include "WorldPacket.h"
 #include "World.h"

@@ -19,7 +19,7 @@
 
 #include "Common.h"
 #include "SharedDefines.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 
 #include "DisableMgr.h"
 #include "ObjectMgr.h"

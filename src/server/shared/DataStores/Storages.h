@@ -67,12 +67,12 @@ struct SqlDbc
 };
 
 template<class T>
-class DBCStorage
+class DataStorage
 {
     typedef std::list<char*> StringPoolList;
     public:
-        explicit DBCStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
-        ~DBCStorage() { Clear(); }
+        explicit DataStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
+        ~DataStorage() { Clear(); }
 
         T const* LookupEntry(uint32 id) const { return (id>=nCount)?NULL:indexTable[id]; }
         uint32  GetNumRows() const { return nCount; }

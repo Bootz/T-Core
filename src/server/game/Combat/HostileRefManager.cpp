@@ -20,7 +20,7 @@
 #include "HostileRefManager.h"
 #include "ThreatManager.h"
 #include "Unit.h"
-#include "DBCStructure.h"
+#include "StoragesStructure.h"
 #include "SpellMgr.h"
 
 HostileRefManager::~HostileRefManager()

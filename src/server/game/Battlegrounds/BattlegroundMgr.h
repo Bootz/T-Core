@@ -21,7 +21,7 @@
 #define __BATTLEGROUNDMGR_H
 
 #include "Common.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "Battleground.h"
 #include "BattlegroundQueue.h"
 #include <ace/Singleton.h>

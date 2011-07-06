@@ -21,7 +21,7 @@
 #define __BATTLEGROUNDQUEUE_H
 
 #include "Common.h"
-#include "DBCEnums.h"
+#include "StoragesEnums.h"
 #include "Battleground.h"
 #include "EventProcessor.h"
 
