@@ -5216,7 +5216,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 for (Unit::AuraApplicationMap::iterator iter = sealAuras.begin(); iter != sealAuras.end();)
                 {
                     Aura * aura = iter->second->GetBase();
-                    if (IsSealSpell(aura->GetSpellClass()))
+                    if (IsSealSpell(aura->GetSpellProto()))
                     {
                         if (AuraEffect * aureff = aura->GetEffect(2))
                             if (aureff->GetAuraType() == SPELL_AURA_DUMMY)

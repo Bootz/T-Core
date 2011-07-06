@@ -453,23 +453,20 @@ Unit* GetTriggeredSpellCaster(SpellEntry const* spellInfo, Unit* caster, Unit* t
 
 AuraState GetSpellAuraState(SpellEntry const* spellInfo)
 {
-    SpellClassOptionsEntry const* spellInfo1 = NULL;
-    if (!spellInfo1)
-        return AURA_STATE_NONE;
     // Seals
-    if (IsSealSpell(spellInfo1))
+    if (IsSealSpell(spellInfo))
         return AURA_STATE_JUDGEMENT;
 
     // Conflagrate aura state on Immolate and Shadowflame
     if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARLOCK &&
         // Immolate
-        ((spellInfo1->SpellFamilyFlags[0] & 4) ||
+        ((spellInfo->GetSpellClassOptions()->SpellFamilyFlags[0] & 4) ||
         // Shadowflame
-        (spellInfo1->SpellFamilyFlags[2] & 2)))
+        (spellInfo->GetSpellClassOptions()->SpellFamilyFlags[2] & 2)))
         return AURA_STATE_CONFLAGRATE;
 
     // Faerie Fire (druid versions)
-    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellInfo1->SpellFamilyFlags[0] & 0x400)
+    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellInfo->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x400)
         return AURA_STATE_FAERIE_FIRE;
 
     // Sting (hunter's pet ability)
@@ -477,15 +474,15 @@ AuraState GetSpellAuraState(SpellEntry const* spellInfo)
         return AURA_STATE_FAERIE_FIRE;
 
     // Victorious
-    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARRIOR &&  spellInfo1->SpellFamilyFlags[1] & 0x00040000)
+    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARRIOR &&  spellInfo->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x00040000)
         return AURA_STATE_WARRIOR_VICTORY_RUSH;
 
     // Swiftmend state on Regrowth & Rejuvenation
-    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellInfo1->SpellFamilyFlags[0] & 0x50)
+    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && spellInfo->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x50)
         return AURA_STATE_SWIFTMEND;
 
     // Deadly poison aura state
-    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_ROGUE && spellInfo1->SpellFamilyFlags[0] & 0x10000)
+    if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_ROGUE && spellInfo->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x10000)
         return AURA_STATE_DEADLY_POISON;
 
     // Enrage aura state
@@ -497,7 +494,7 @@ AuraState GetSpellAuraState(SpellEntry const* spellInfo)
         return AURA_STATE_BLEEDING;
 
     if (GetSpellSchoolMask(spellInfo) & SPELL_SCHOOL_MASK_FROST)
-        for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        for (uint8 i = 0; i<MAX_SPELL_EFFECTS; ++i)
             if (spellInfo->GetEffectApplyAuraName(i) == SPELL_AURA_MOD_STUN
                 || spellInfo->GetEffectApplyAuraName(i) == SPELL_AURA_MOD_ROOT)
                 return AURA_STATE_FROZEN;
@@ -629,10 +626,10 @@ SpellSpecific GetSpellSpecific(SpellEntry const* spellInfo, SpellClassOptionsEnt
         }
         case SPELLFAMILY_PALADIN:
         {
-            if (IsSealSpell(spellClass))
+            if (IsSealSpell(spellInfo))
                 return SPELL_SPECIFIC_SEAL;
 
-            if (spellClass->SpellFamilyFlags[0] & 0x00002190)
+            if (spellInfo->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x00002190)
                 return SPELL_SPECIFIC_HAND;
 
             // Judgement of Wisdom, Judgement of Light, Judgement of Justice
@@ -640,19 +637,18 @@ SpellSpecific GetSpellSpecific(SpellEntry const* spellInfo, SpellClassOptionsEnt
                 return SPELL_SPECIFIC_JUDGEMENT;
 
             // only paladin auras have this (for palaldin class family)
-            if (spellClass->SpellFamilyFlags[2] & 0x00000020)
+            if (spellInfo->GetSpellClassOptions()->SpellFamilyFlags[2] & 0x00000020)
                 return SPELL_SPECIFIC_AURA;
 
             break;
         }
         case SPELLFAMILY_SHAMAN:
         {
-            if (IsElementalShield(spellClass))
+            if (IsElementalShield(spellInfo))
                 return SPELL_SPECIFIC_ELEMENTAL_SHIELD;
 
             break;
         }
-
         case SPELLFAMILY_DEATHKNIGHT:
             if (spellInfo->Id == 48266 || spellInfo->Id == 48263 || spellInfo->Id == 48265)
             //if (spellInfo->GetCategory() == 47)
