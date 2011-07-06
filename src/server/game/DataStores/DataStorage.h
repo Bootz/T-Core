@@ -190,7 +190,7 @@ extern DataStorage <WMOAreaTableEntry>            sWMOAreaTableStore;
 extern DataStorage <WorldMapOverlayEntry>         sWorldMapOverlayStore;
 extern DataStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
-void LoadDBCStores(const std::string& dataPath);
+void LoadDataStores(const std::string& dataPath);
 
 // script support functions
  DataStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
