@@ -346,6 +346,12 @@ uint32 SpellEntry::GetMaxLevel() const
 /* SpellEquippedItemsEntry */
 /***************************/
 
+int32 SpellEntry::GetEquippedItemInventoryTypeMask() const
+{
+    SpellEquippedItemsEntry const* items = GetSpellEquippedItems();
+    return items ? items->EquippedItemInventoryTypeMask : -1;
+}
+
 int32 SpellEntry::GetEquippedItemClass() const
 {
     SpellEquippedItemsEntry const* items = GetSpellEquippedItems();

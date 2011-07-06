@@ -4393,7 +4393,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
     if ((GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL) != 0)
     {
         // apply generic physical damage bonuses including wand case
-        if (GetSpellEquipped()->EquippedItemClass == -1 || target->GetTypeId() != TYPEID_PLAYER)
+        if (GetSpellProto()->GetEquippedItemClass() == -1 || target->GetTypeId() != TYPEID_PLAYER)
         {
             target->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_VALUE, float(GetAmount()), apply);
             target->HandleStatModifier(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_VALUE, float(GetAmount()), apply);
@@ -4417,7 +4417,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
     if ((GetMiscValue() & SPELL_SCHOOL_MASK_MAGIC) == 0)
         return;
 
-    if (GetSpellEquipped()->EquippedItemClass != -1 || GetSpellEquipped()->EquippedItemInventoryTypeMask != 0)
+    if (GetSpellProto()->GetEquippedItemClass() != -1 || GetSpellProto()->GetEquippedItemInventoryTypeMask() != 0)
     {
         // wand magic case (skip generic to all item spell bonuses)
         // done in Player::_ApplyWeaponDependentAuraMods

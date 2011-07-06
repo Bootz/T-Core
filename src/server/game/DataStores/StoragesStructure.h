@@ -1938,6 +1938,7 @@ struct SpellEntry
     /* SpellEquippedItemsEntry */
     /***************************/
 
+    int32 GetEquippedItemInventoryTypeMask() const;
     int32 GetEquippedItemClass() const;
     int32 GetEquippedItemSubClassMask() const;
 
