@@ -4084,7 +4084,7 @@ void AuraEffect::HandleAuraModWeaponCritPercent(AuraApplication const* aurApp, u
     // with spell->EquippedItemClass and  EquippedItemSubClassMask and EquippedItemInventoryTypeMask
     // GetMiscValue() comparison with item generated damage types
 
-    if (GetSpellEquipped()->EquippedItemClass == -1)
+    if (GetSpellProto()->GetEquippedItemClass() == -1)
     {
         target->ToPlayer()->HandleBaseModValue(CRIT_PERCENTAGE,         FLAT_MOD, float (GetAmount()), apply);
         target->ToPlayer()->HandleBaseModValue(OFFHAND_CRIT_PERCENTAGE, FLAT_MOD, float (GetAmount()), apply);
