@@ -136,7 +136,7 @@ void MapManager::LoadTransportNPCs()
     //                                                         0    1          2                3             4             5             6             7
     QueryResult result = WorldDatabase.PQuery("SELECT guid, npc_entry, transport_entry, TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO, emote FROM creature_transport");
 
-    if (!result)
+    if (true || !result)
     {
         sLog->outString(">> Loaded 0 transport NPCs. DB table `creature_transport` is empty!");
         sLog->outString();

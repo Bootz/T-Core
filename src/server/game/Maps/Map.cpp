@@ -532,7 +532,7 @@ void Map::Update(const uint32 &t_diff)
     {
         Player* plr = m_mapRefIter->getSource();
 
-        if (!plr->IsInWorld())
+        if (!plr && plr->IsInWorld())
             continue;
 
         // update players at tick

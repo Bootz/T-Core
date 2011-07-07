@@ -259,8 +259,8 @@ std::string PlayerTaxi::SaveTaxiDestinationsToString()
 
     std::ostringstream ss;
 
-    for (size_t i=0; i < m_TaxiDestinations.size(); ++i)
-        ss << m_TaxiDestinations[i] << " ";
+    for (size_t i = 0; i < m_TaxiDestinations.size(); ++i)
+        ss << m_TaxiDestinations[0] << " ";
 
     return ss.str();
 }
