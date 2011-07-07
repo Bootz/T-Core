@@ -14542,7 +14542,7 @@ Player* Unit::GetSpellModOwner() const
 {
     if (GetTypeId() == TYPEID_PLAYER)
         return (Player*)this;
-    if (ToCreature()->isPet() || ToCreature()->isTotem())
+    if (this->ToCreature()->isPet() || this->ToCreature()->isTotem())
     {
         Unit* owner = GetOwner();
         if (owner && owner->GetTypeId() == TYPEID_PLAYER)
