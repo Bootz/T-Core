@@ -260,7 +260,7 @@ std::string PlayerTaxi::SaveTaxiDestinationsToString()
     std::ostringstream ss;
 
     for (size_t i = 0; i < m_TaxiDestinations.size(); ++i)
-        ss << m_TaxiDestinations[0] << " ";
+        ss << m_TaxiDestinations[i] << " ";
 
     return ss.str();
 }
@@ -18128,7 +18128,7 @@ void Player::SaveToDB()
 
     ss << uint32(0) << ", ";
 
-    ss << uint32(0) << ", ";
+    ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ", ";
 
     ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ", ";
 
@@ -18137,7 +18137,7 @@ void Player::SaveToDB()
     ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ", ";
 
     //currencies
-    ss << uint64(0) << ", ";
+    ss << uint32(0) << ", ";
 
     ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ", ";
 
@@ -18177,7 +18177,7 @@ void Player::SaveToDB()
 
     ss << "', ";
 
-    ss << GetUInt32Value(0) << ", '";
+    ss << uint32(0) << ", '";
 
     for (uint32 i = 0; i < KNOWN_TITLES_SIZE*2; ++i)
         ss << GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i) << " ";
