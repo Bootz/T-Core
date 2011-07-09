@@ -707,7 +707,7 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
             pVictim->ToPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_TOTAL_DAMAGE_RECEIVED, health);
 
             // call before auras are removed
-            if (Player* killer = ToPlayer())
+            if (Player* killer = GetCharmerOrOwnerPlayerOrPlayerItself())
                 killer->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_SPECIAL_PVP_KILL, 1, 0, pVictim);
         }
 
@@ -11992,7 +11992,7 @@ void Unit::ApplySpellDispelImmunity(const SpellEntry * spellProto, DispelType ty
     if (apply && spellProto->AttributesEx & SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY)
     {
         // Create dispel mask by dispel type
-        uint32 dispelMask = GetDispellMask(type);
+        uint32 dispelMask = GetDispelMask(type);
         // GetDispel() all existing auras vs current dispel type
         AuraApplicationMap& auras = GetAppliedAuras();
         for (AuraApplicationMap::iterator itr = auras.begin(); itr != auras.end();)
@@ -16322,6 +16322,22 @@ void Unit::SetAuraStack(uint32 spellId, Unit* target, uint32 stack)
         aura->SetStackAmount(stack);
 }
 
+void Unit::SendPlaySpellVisual(uint32 id)
+{
+    WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 8 + 4);
+    data << uint64(GetGUID());
+    data << uint32(id); // SpellVisualKit.dbc index
+    SendMessageToSet(&data, false);
+}
+
+void Unit::SendPlaySpellImpact(uint64 guid, uint32 id)
+{
+    WorldPacket data(SMSG_PLAY_SPELL_IMPACT, 8 + 4);
+    data << uint64(guid); // target
+    data << uint32(id); // SpellVisualKit.dbc index
+    SendMessageToSet(&data, false);
+}
+
 void Unit::ApplyResilience(Unit const* victim, float* crit, int32* damage, bool isCrit, CombatRating type) const
 {
     // player mounted on multi-passenger mount is also classified as vehicle
@@ -16830,19 +16846,6 @@ void Unit::JumpTo(WorldObject *obj, float speedZ)
     obj->GetContactPoint(this, x, y, z);
     float speedXY = GetExactDist2d(x, y) * 10.0f / speedZ;
     GetMotionMaster()->MoveJump(x, y, z, speedXY, speedZ);
-}
-
-bool Unit::CheckPlayerCondition(Player* pPlayer)
-{
-    switch(GetEntry())
-    {
-            case 35644: // Argent Warhorse
-            case 36558: // Argent Battleworg
-                if (!pPlayer->HasItemOrGemWithIdEquipped(46106, 1)) // Check item Argent Lance
-                    return false;
-            default:
-                return true;
-    }
 }
 
 bool Unit::HandleSpellClick(Unit* clicker, int8 seatId)
