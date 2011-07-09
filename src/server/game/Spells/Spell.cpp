@@ -894,7 +894,7 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
     if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_HUNTER &&
         (m_spellClass->SpellFamilyFlags[0] & 0x18 ||     // Freezing and Frost Trap, Freezing Arrow
         m_spellInfo->Id == 57879 ||                     // Snake Trap - done this way to avoid double proc
-        m_spellClass->SpellFamilyFlags[2] & 0x00024000)) // Explosive and Immolation Trap
+        GetSpellClass()->SpellFamilyFlags[2] & 0x00024000)) // Explosive and Immolation Trap
 
         m_procAttacker |= PROC_FLAG_DONE_TRAP_ACTIVATION;
 
@@ -902,7 +902,7 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
         to prevent chain proc of these spells */
 
     // Hellfire Effect - trigger as DOT
-    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARLOCK && m_spellClass->SpellFamilyFlags[0] & 0x00000040)
+    if (m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_WARLOCK && GetSpellClass()->SpellFamilyFlags[0] & 0x00000040)
     {
         m_procAttacker = PROC_FLAG_DONE_PERIODIC;
         m_procVictim   = PROC_FLAG_TAKEN_PERIODIC;

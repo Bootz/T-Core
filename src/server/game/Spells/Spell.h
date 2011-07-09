@@ -510,8 +510,9 @@ class Spell
         Unit* GetCaster() const { return m_caster; }
         Unit* GetOriginalCaster() const { return m_originalCaster; }
         SpellEntry const* GetSpellInfo() const { return m_spellInfo; }
-        SpellEffectEntry const* GetSpellEffect() const { return m_spellEffect; }
-        SpellAuraRestrictionsEntry const* GetSpellAura() { return m_spellRestrictions; }
+        SpellEffectEntry const* GetSpellEffect() const { return !m_spellEffect ? m_spellEffect : 0; }
+        SpellAuraRestrictionsEntry const* GetSpellAura() { return !m_spellRestrictions ? m_spellRestrictions : 0; }
+        SpellClassOptionsEntry const* GetSpellClass() { return !m_spellClass ? m_spellClass : 0; }
         int32 GetPowerCost() const { return m_powerCost; }
 
         void UpdatePointers();                              // must be used at call Spell code after time delay (non triggered spell cast/update spell call/etc)
