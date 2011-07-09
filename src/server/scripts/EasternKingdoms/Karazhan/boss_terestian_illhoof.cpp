@@ -62,9 +62,9 @@ class mob_kilrek : public CreatureScript
 public:
     mob_kilrek() : CreatureScript("mob_kilrek") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_kilrekAI (pCreature);
+        return new mob_kilrekAI (creature);
     }
 
     struct mob_kilrekAI : public ScriptedAI
@@ -134,9 +134,9 @@ class mob_demon_chain : public CreatureScript
 public:
     mob_demon_chain() : CreatureScript("mob_demon_chain") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_demon_chainAI(pCreature);
+        return new mob_demon_chainAI(creature);
     }
 
     struct mob_demon_chainAI : public ScriptedAI
@@ -172,9 +172,9 @@ class mob_fiendish_portal : public CreatureScript
 public:
     mob_fiendish_portal() : CreatureScript("mob_fiendish_portal") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_fiendish_portalAI (pCreature);
+        return new mob_fiendish_portalAI (creature);
     }
 
     struct mob_fiendish_portalAI : public PassiveAI
@@ -209,9 +209,9 @@ class mob_fiendish_imp : public CreatureScript
 public:
     mob_fiendish_imp() : CreatureScript("mob_fiendish_imp") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_fiendish_impAI (pCreature);
+        return new mob_fiendish_impAI (creature);
     }
 
     struct mob_fiendish_impAI : public ScriptedAI
@@ -252,9 +252,9 @@ class boss_terestian_illhoof : public CreatureScript
 public:
     boss_terestian_illhoof() : CreatureScript("boss_terestian_illhoof") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_terestianAI (pCreature);
+        return new boss_terestianAI (creature);
     }
 
     struct boss_terestianAI : public ScriptedAI
@@ -371,15 +371,15 @@ public:
 
             if (SacrificeTimer <= diff)
             {
-                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
-                if (pTarget && pTarget->isAlive())
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
+                if (target && target->isAlive())
                 {
-                    DoCast(pTarget, SPELL_SACRIFICE, true);
-                    DoCast(pTarget, SPELL_SUMMON_DEMONCHAINS, true);
+                    DoCast(target, SPELL_SACRIFICE, true);
+                    DoCast(target, SPELL_SUMMON_DEMONCHAINS, true);
 
                     if (Creature* Chains = me->FindNearestCreature(CREATURE_DEMONCHAINS, 5000))
                     {
-                        CAST_AI(mob_demon_chain::mob_demon_chainAI, Chains->AI())->SacrificeGUID = pTarget->GetGUID();
+                        CAST_AI(mob_demon_chain::mob_demon_chainAI, Chains->AI())->SacrificeGUID = target->GetGUID();
                         Chains->CastSpell(Chains, SPELL_DEMON_CHAINS, true);
                         DoScriptText(RAND(SAY_SACRIFICE1, SAY_SACRIFICE2), me);
                         SacrificeTimer = 30000;

@@ -43,9 +43,9 @@ class boss_razorgore : public CreatureScript
 public:
     boss_razorgore() : CreatureScript("boss_razorgore") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_razorgoreAI (pCreature);
+        return new boss_razorgoreAI (creature);
     }
 
     struct boss_razorgoreAI : public ScriptedAI
@@ -115,8 +115,8 @@ public:
 
             // Aura Check. If the gamer is affected by confliguration we attack a random gamer.
             if (me->getVictim() && me->getVictim()->HasAura(SPELL_CONFLAGRATION))
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
-                    me->TauntApply(pTarget);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                    me->TauntApply(target);
 
             DoMeleeAttackIfReady();
         }

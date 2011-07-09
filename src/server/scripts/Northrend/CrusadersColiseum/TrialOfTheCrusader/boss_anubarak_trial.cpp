@@ -128,16 +128,16 @@ class boss_anubarak_trial : public CreatureScript
 public:
     boss_anubarak_trial() : CreatureScript("boss_anubarak_trial") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_anubarak_trialAI(pCreature);
+        return new boss_anubarak_trialAI(creature);
     };
 
     struct boss_anubarak_trialAI : public ScriptedAI
     {
-        boss_anubarak_trialAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
+        boss_anubarak_trialAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -186,9 +186,9 @@ public:
             m_vBurrowGUID.clear();
         }
 
-        void KilledUnit(Unit* pWho)
+        void KilledUnit(Unit* who)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 DoScriptText(urand(0, 1) ? SAY_KILL1 : SAY_KILL2, me);
                 if (m_pInstance)
@@ -196,7 +196,7 @@ public:
             }
         }
 
-        void MoveInLineOfSight(Unit* /*pWho*/)
+        void MoveInLineOfSight(Unit* /*who*/)
         {
             if (!m_bIntro)
             {
@@ -215,7 +215,7 @@ public:
                     pTemp->setFaction(31);
         }
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             Summons.DespawnAll();
             DoScriptText(SAY_DEATH, me);
@@ -225,7 +225,7 @@ public:
 
         void JustSummoned(Creature* pSummoned)
         {
-            Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true);
+            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true);
             switch (pSummoned->GetEntry())
             {
                 case NPC_BURROW:
@@ -234,8 +234,8 @@ public:
                     pSummoned->CastSpell(pSummoned, SPELL_CHURNING_GROUND, false);
                     break;
                 case NPC_SPIKE:
-                    pSummoned->CombatStart(pTarget);
-                    DoScriptText(EMOTE_SPIKE, me, pTarget);
+                    pSummoned->CombatStart(target);
+                    DoScriptText(EMOTE_SPIKE, me, target);
                     break;
             }
             Summons.Summon(pSummoned);
@@ -251,7 +251,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -378,8 +378,8 @@ public:
                         {
                             if (!pSphere->HasAura(SPELL_FROST_SPHERE))
                             {
-                                if (Creature* pSummon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
-                                    m_aSphereGUID[i] = pSummon->GetGUID();
+                                if (Creature* summon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
+                                    m_aSphereGUID[i] = summon->GetGUID();
                                 break;
                             }
                         }
@@ -413,16 +413,16 @@ class mob_swarm_scarab : public CreatureScript
 public:
     mob_swarm_scarab() : CreatureScript("mob_swarm_scarab") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_swarm_scarabAI(pCreature);
+        return new mob_swarm_scarabAI(creature);
     };
 
     struct mob_swarm_scarabAI : public ScriptedAI
     {
-        mob_swarm_scarabAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_swarm_scarabAI(Creature* creature) : ScriptedAI(creature)
         {
-            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -435,8 +435,8 @@ public:
             m_uiDeterminationTimer = urand(5*IN_MILLISECONDS, 60*IN_MILLISECONDS);
             DoCast(me, SPELL_ACID_MANDIBLE);
             me->SetInCombatWithZone();
-            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
-                me->AddThreat(pTarget, 20000.0f);
+            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                me->AddThreat(target, 20000.0f);
             if (!me->isInCombat())
                 me->DisappearAndDie();
         }
@@ -452,9 +452,9 @@ public:
             }
         }
 
-        void JustDied(Unit* pKiller)
+        void JustDied(Unit* killer)
         {
-            DoCast(pKiller, RAID_MODE(SPELL_TRAITOR_KING_10, SPELL_TRAITOR_KING_25));
+            DoCast(killer, RAID_MODE(SPELL_TRAITOR_KING_10, SPELL_TRAITOR_KING_25));
         }
 
         void UpdateAI(const uint32 uiDiff)
@@ -480,16 +480,16 @@ class mob_nerubian_burrower : public CreatureScript
 public:
     mob_nerubian_burrower() : CreatureScript("mob_nerubian_burrower") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_nerubian_burrowerAI(pCreature);
+        return new mob_nerubian_burrowerAI(creature);
     };
 
     struct mob_nerubian_burrowerAI : public ScriptedAI
     {
-        mob_nerubian_burrowerAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_nerubian_burrowerAI(Creature* creature) : ScriptedAI(creature)
         {
-            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -514,8 +514,8 @@ public:
             switch (actionId)
             {
                 case ACTION_SHADOW_STRIKE:
-                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pTarget, SPELL_SHADOW_STRIKE);
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(target, SPELL_SHADOW_STRIKE);
                     break;
             }
         }
@@ -557,14 +557,14 @@ class mob_frost_sphere : public CreatureScript
 public:
     mob_frost_sphere() : CreatureScript("mob_frost_sphere") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_frost_sphereAI(pCreature);
+        return new mob_frost_sphereAI(creature);
     };
 
     struct mob_frost_sphereAI : public ScriptedAI
     {
-        mob_frost_sphereAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_frost_sphereAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -583,7 +583,7 @@ public:
             DoCast(SPELL_FROST_SPHERE);
         }
 
-        void DamageTaken(Unit* /*pWho*/, uint32& uiDamage)
+        void DamageTaken(Unit* /*who*/, uint32& uiDamage)
         {
             if (me->GetHealth() < uiDamage)
             {
@@ -637,16 +637,16 @@ class mob_anubarak_spike : public CreatureScript
 public:
     mob_anubarak_spike() : CreatureScript("mob_anubarak_spike") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_anubarak_spikeAI(pCreature);
+        return new mob_anubarak_spikeAI(creature);
     };
 
     struct mob_anubarak_spikeAI : public ScriptedAI
     {
-        mob_anubarak_spikeAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_anubarak_spikeAI(Creature* creature) : ScriptedAI(creature)
         {
-            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -661,25 +661,25 @@ public:
             m_uiTargetGUID = 0;
         }
 
-        void EnterCombat(Unit* pWho)
+        void EnterCombat(Unit* who)
         {
-            m_uiTargetGUID = pWho->GetGUID();
-            DoCast(pWho, SPELL_MARK);
+            m_uiTargetGUID = who->GetGUID();
+            DoCast(who, SPELL_MARK);
             me->SetSpeed(MOVE_RUN, 0.5f);
             m_uiSpeed = 0;
             m_uiIncreaseSpeedTimer = 1*IN_MILLISECONDS;
-            me->TauntApply(pWho);
+            me->TauntApply(who);
         }
 
-        void DamageTaken(Unit* /*pWho*/, uint32& uiDamage)
+        void DamageTaken(Unit* /*who*/, uint32& uiDamage)
         {
             uiDamage = 0;
         }
 
         void UpdateAI(const uint32 uiDiff)
         {
-            Unit* pTarget = Unit::GetPlayer(*me, m_uiTargetGUID);
-            if (!pTarget || !pTarget->isAlive() || !pTarget->HasAura(SPELL_MARK))
+            Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID);
+            if (!target || !target->isAlive() || !target->HasAura(SPELL_MARK))
             {
                 if (Creature* pAnubarak = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_ANUBARAK)))
                     pAnubarak->CastSpell(pAnubarak, SPELL_SPIKE_TELE, false);

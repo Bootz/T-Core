@@ -43,9 +43,9 @@ class boss_interrogator_vishas : public CreatureScript
 public:
     boss_interrogator_vishas() : CreatureScript("boss_interrogator_vishas") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_interrogator_vishasAI (pCreature);
+        return new boss_interrogator_vishasAI (creature);
     }
 
     struct boss_interrogator_vishasAI : public ScriptedAI

@@ -218,16 +218,16 @@ class boss_sartharion : public CreatureScript
 public:
     boss_sartharion() : CreatureScript("boss_sartharion") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_sartharionAI(pCreature);
+        return new boss_sartharionAI(creature);
     }
 
     struct boss_sartharionAI : public ScriptedAI
     {
-        boss_sartharionAI(Creature* pCreature) : ScriptedAI(pCreature)
+        boss_sartharionAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -352,7 +352,7 @@ public:
                 pInstance->SetData(TYPE_SARTHARION_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_SARTHARION_AGGRO, me);
             DoZoneInCombat();
@@ -364,7 +364,7 @@ public:
             }
         }
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             DoScriptText(SAY_SARTHARION_DEATH, me);
 
@@ -384,7 +384,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*pVictim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(RAND(SAY_SARTHARION_SLAY_1, SAY_SARTHARION_SLAY_2, SAY_SARTHARION_SLAY_3), me);
         }
@@ -646,9 +646,9 @@ public:
             // Lavas Strike
             if (m_uiLavaStrikeTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
-                    CastLavaStrikeOnTarget(pTarget);
+                    CastLavaStrikeOnTarget(target);
 
                     if(urand(0, 5) == 0)
                         DoScriptText(RAND(SAY_SARTHARION_SPECIAL_1, SAY_SARTHARION_SPECIAL_2, SAY_SARTHARION_SPECIAL_3), me);
@@ -732,9 +732,9 @@ enum VespText
 //to control each dragons common abilities
 struct dummy_dragonAI : public ScriptedAI
 {
-    dummy_dragonAI(Creature* pCreature) : ScriptedAI(pCreature)
+    dummy_dragonAI(Creature* creature) : ScriptedAI(creature)
     {
-        pInstance = pCreature->GetInstanceScript();
+        pInstance = creature->GetInstanceScript();
     }
 
     InstanceScript* pInstance;
@@ -903,7 +903,7 @@ struct dummy_dragonAI : public ScriptedAI
         //Refresh respawnTime so time again are set to 30secs?
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*killer*/)
     {
         if (!m_bCanLoot)
             me->SetLootRecipient(NULL);
@@ -991,14 +991,14 @@ class mob_tenebron : public CreatureScript
 public:
     mob_tenebron() : CreatureScript("mob_tenebron") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_tenebronAI(pCreature);
+        return new mob_tenebronAI(creature);
     }
 
     struct mob_tenebronAI : public dummy_dragonAI
     {
-        mob_tenebronAI(Creature* pCreature) : dummy_dragonAI(pCreature) {}
+        mob_tenebronAI(Creature* creature) : dummy_dragonAI(creature) {}
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1015,14 +1015,14 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_TENEBRON_AGGRO, me);
             DoZoneInCombat();
             DoCast(me, SPELL_POWER_OF_TENEBRON);
         }
 
-        void KilledUnit(Unit* /*pVictim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(RAND(SAY_TENEBRON_SLAY_1, SAY_TENEBRON_SLAY_2), me);
         }
@@ -1039,8 +1039,8 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE));
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
             }
@@ -1081,14 +1081,14 @@ class mob_shadron : public CreatureScript
 public:
     mob_shadron() : CreatureScript("mob_shadron") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_shadronAI(pCreature);
+        return new mob_shadronAI(creature);
     }
 
     struct mob_shadronAI : public dummy_dragonAI
     {
-        mob_shadronAI(Creature* pCreature) : dummy_dragonAI(pCreature) {}
+        mob_shadronAI(Creature* creature) : dummy_dragonAI(creature) {}
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1111,14 +1111,14 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_SHADRON_AGGRO, me);
             DoZoneInCombat();
             DoCast(me, SPELL_POWER_OF_SHADRON);
         }
 
-        void KilledUnit(Unit* /*pVictim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(RAND(SAY_SHADRON_SLAY_1, SAY_SHADRON_SLAY_2), me);
         }
@@ -1135,8 +1135,8 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
             }
@@ -1186,14 +1186,14 @@ class mob_vesperon : public CreatureScript
 public:
     mob_vesperon() : CreatureScript("mob_vesperon") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_vesperonAI(pCreature);
+        return new mob_vesperonAI(creature);
     }
 
     struct mob_vesperonAI : public dummy_dragonAI
     {
-        mob_vesperonAI(Creature* pCreature) : dummy_dragonAI(pCreature) {}
+        mob_vesperonAI(Creature* creature) : dummy_dragonAI(creature) {}
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1210,14 +1210,14 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_VESPERON_AGGRO, me);
             DoZoneInCombat();
             DoCast(me, SPELL_POWER_OF_VESPERON);
         }
 
-        void KilledUnit(Unit* /*pVictim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(RAND(SAY_VESPERON_SLAY_1, SAY_VESPERON_SLAY_2), me);
         }
@@ -1234,8 +1234,8 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
             }
@@ -1282,16 +1282,16 @@ class mob_acolyte_of_shadron : public CreatureScript
 public:
     mob_acolyte_of_shadron() : CreatureScript("mob_acolyte_of_shadron") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_acolyte_of_shadronAI(pCreature);
+        return new mob_acolyte_of_shadronAI(creature);
     }
 
     struct mob_acolyte_of_shadronAI : public ScriptedAI
     {
-        mob_acolyte_of_shadronAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -1302,19 +1302,19 @@ public:
             uiDespawnTimer = 28000;
             if (pInstance)
             {
-                Creature* pTarget = NULL;
+                Creature* target = NULL;
                 //if not solo figth, buff main boss, else place debuff on mini-boss. both spells TARGET_SCRIPT
                 if (pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
                 {
-                    pTarget = Unit::GetCreature((*me), pInstance->GetData64(DATA_SARTHARION));
-                    if (pTarget)
-                        pTarget->AddAura(SPELL_GIFT_OF_TWILIGTH_SAR, pTarget);
+                    target = Unit::GetCreature((*me), pInstance->GetData64(DATA_SARTHARION));
+                    if (target)
+                        target->AddAura(SPELL_GIFT_OF_TWILIGTH_SAR, target);
                 }
                 else
                 {
-                    pTarget = Unit::GetCreature((*me), pInstance->GetData64(DATA_SHADRON));
-                    if (pTarget)
-                        pTarget->AddAura(SPELL_GIFT_OF_TWILIGTH_SHA, pTarget);
+                    target = Unit::GetCreature((*me), pInstance->GetData64(DATA_SHADRON));
+                    if (target)
+                        target->AddAura(SPELL_GIFT_OF_TWILIGTH_SHA, target);
                 }
             }
 
@@ -1392,16 +1392,16 @@ class mob_acolyte_of_vesperon : public CreatureScript
 public:
     mob_acolyte_of_vesperon() : CreatureScript("mob_acolyte_of_vesperon") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_acolyte_of_vesperonAI(pCreature);
+        return new mob_acolyte_of_vesperonAI(creature);
     }
 
     struct mob_acolyte_of_vesperonAI : public ScriptedAI
     {
-        mob_acolyte_of_vesperonAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -1417,7 +1417,7 @@ public:
             DoCast(me, SPELL_TWILIGHT_TORMENT_VESP_ACO);
         }
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             me->RemoveAurasDueToSpell(SPELL_TWILIGHT_TORMENT_VESP_ACO);
 
@@ -1487,16 +1487,16 @@ class mob_twilight_eggs : public CreatureScript
 public:
     mob_twilight_eggs() : CreatureScript("mob_twilight_eggs") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_twilight_eggsAI(pCreature);
+        return new mob_twilight_eggsAI(creature);
     }
 
     struct mob_twilight_eggsAI : public Scripted_NoMovementAI
     {
-        mob_twilight_eggsAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+        mob_twilight_eggsAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         uint32 m_uiFadeArmorTimer;
@@ -1525,9 +1525,9 @@ public:
             me->DealDamage(me, me->GetHealth());
         }
 
-        void JustSummoned(Creature* pWho)
+        void JustSummoned(Creature* who)
         {
-            pWho->SetInCombatWithZone();
+            who->SetInCombatWithZone();
         }
 
         void UpdateAI(const uint32 uiDiff)
@@ -1543,8 +1543,8 @@ public:
                 m_uiHatchEggTimer -= uiDiff;
         }
 
-        void AttackStart(Unit* /*pWho*/) {}
-        void MoveInLineOfSight(Unit* /*pWho*/) {}
+        void AttackStart(Unit* /*who*/) {}
+        void MoveInLineOfSight(Unit* /*who*/) {}
     };
 
 };
@@ -1557,14 +1557,14 @@ class npc_flame_tsunami : public CreatureScript
 public:
     npc_flame_tsunami() : CreatureScript("npc_flame_tsunami") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_flame_tsunamiAI(pCreature);
+        return new npc_flame_tsunamiAI(creature);
     }
 
     struct npc_flame_tsunamiAI : public ScriptedAI
     {
-        npc_flame_tsunamiAI(Creature* pCreature) : ScriptedAI(pCreature)
+        npc_flame_tsunamiAI(Creature* creature) : ScriptedAI(creature)
         {
             me->SetDisplayId(11686);
             me->AddAura(SPELL_FLAME_TSUNAMI, me);
@@ -1609,14 +1609,14 @@ class npc_twilight_fissure : public CreatureScript
 public:
     npc_twilight_fissure() : CreatureScript("npc_twilight_fissure") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_twilight_fissureAI(pCreature);
+        return new npc_twilight_fissureAI(creature);
     }
 
     struct npc_twilight_fissureAI : public Scripted_NoMovementAI
     {
-        npc_twilight_fissureAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+        npc_twilight_fissureAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
             Reset();
         }
@@ -1658,14 +1658,14 @@ class mob_twilight_whelp : public CreatureScript
 public:
     mob_twilight_whelp() : CreatureScript("mob_twilight_whelp") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_twilight_whelpAI(pCreature);
+        return new mob_twilight_whelpAI(creature);
     }
 
     struct mob_twilight_whelpAI : public ScriptedAI
     {
-        mob_twilight_whelpAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_twilight_whelpAI(Creature* creature) : ScriptedAI(creature)
         {
             Reset();
         }

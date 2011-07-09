@@ -62,9 +62,9 @@ class boss_nethermancer_sepethrea : public CreatureScript
         }
         struct boss_nethermancer_sepethreaAI : public ScriptedAI
         {
-            boss_nethermancer_sepethreaAI(Creature* pCreature) : ScriptedAI(pCreature)
+            boss_nethermancer_sepethreaAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = pCreature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
 
             InstanceScript *pInstance;
@@ -184,9 +184,9 @@ class mob_ragin_flames : public CreatureScript
 
             struct mob_ragin_flamesAI : public ScriptedAI
             {
-                mob_ragin_flamesAI(Creature* pCreature) : ScriptedAI(pCreature)
+                mob_ragin_flamesAI(Creature* creature) : ScriptedAI(creature)
                 {
-                    pInstance = pCreature->GetInstanceScript();
+                    pInstance = creature->GetInstanceScript();
                 }
 
                 InstanceScript *pInstance;
@@ -234,8 +234,8 @@ class mob_ragin_flames : public CreatureScript
 
                     if (!onlyonce)
                     {
-                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->GetMotionMaster()->MoveChase(pTarget);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->GetMotionMaster()->MoveChase(target);
                         onlyonce = true;
                     }
 

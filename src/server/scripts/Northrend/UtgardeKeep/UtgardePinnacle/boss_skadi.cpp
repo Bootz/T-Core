@@ -163,9 +163,9 @@ class boss_skadi : public CreatureScript
 public:
     boss_skadi() : CreatureScript("boss_skadi") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_skadiAI (pCreature);
+        return new boss_skadiAI (creature);
     }
 
     struct boss_skadiAI : public ScriptedAI
@@ -260,8 +260,8 @@ public:
                 case CREATURE_YMIRJAR_HARPOONER:
                     pSummoned->setActive(true);
                     pSummoned->SetInCombatWithZone();
-                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        pSummoned->AI()->AttackStart(pTarget);
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        pSummoned->AI()->AttackStart(target);
                     break;
                 case CREATURE_TRIGGER:
                     pSummoned->CastSpell((Unit*)NULL, SPELL_FREEZING_CLOUD, true);
@@ -393,8 +393,8 @@ public:
 
                     if (m_uiPoisonedSpearTimer <= diff)
                     {
-                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(pTarget, SPELL_POISONED_SPEAR);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(target, SPELL_POISONED_SPEAR);
                         m_uiPoisonedSpearTimer = 10000;
                     } else m_uiPoisonedSpearTimer -= diff;
 
@@ -463,14 +463,14 @@ class go_harpoon_launcher : public GameObjectScript
 public:
     go_harpoon_launcher() : GameObjectScript("go_harpoon_launcher") { }
 
-    bool OnGossipHello(Player* pPlayer, GameObject* pGO)
+    bool OnGossipHello(Player* player, GameObject* pGO)
     {
         InstanceScript* m_pInstance = pGO->GetInstanceScript();
         if (!m_pInstance) return false;
 
         if (Creature* pSkadi = Unit::GetCreature((*pGO), m_pInstance->GetData64(DATA_SKADI_THE_RUTHLESS)))
         {
-            pPlayer->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
+            player->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
         }
         return false;
     }

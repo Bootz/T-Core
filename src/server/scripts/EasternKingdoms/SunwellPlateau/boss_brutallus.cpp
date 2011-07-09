@@ -72,9 +72,9 @@ class boss_brutallus : public CreatureScript
 public:
     boss_brutallus() : CreatureScript("boss_brutallus") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_brutallusAI (pCreature);
+        return new boss_brutallusAI (creature);
     }
 
     struct boss_brutallusAI : public ScriptedAI
@@ -183,11 +183,11 @@ public:
             IsIntro = false;
         }
 
-        void AttackStart(Unit* pWho)
+        void AttackStart(Unit* who)
         {
-            if (!pWho || Intro || IsIntro)
+            if (!who || Intro || IsIntro)
                 return;
-            ScriptedAI::AttackStart(pWho);
+            ScriptedAI::AttackStart(who);
         }
 
         void DoIntro()

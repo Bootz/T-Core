@@ -89,9 +89,9 @@ class boss_palehoof : public CreatureScript
 public:
     boss_palehoof() : CreatureScript("boss_palehoof") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_palehoofAI (pCreature);
+        return new boss_palehoofAI (creature);
     }
 
     struct boss_palehoofAI : public ScriptedAI
@@ -197,8 +197,8 @@ public:
 
             if (uiImpaleTimer <= diff)
             {
-              if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                  DoCast(pTarget, SPELL_IMPALE);
+              if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                  DoCast(target, SPELL_IMPALE);
               uiImpaleTimer = urand(8000, 12000);
             } else uiImpaleTimer -= diff;
 
@@ -292,9 +292,9 @@ class mob_ravenous_furbolg : public CreatureScript
 public:
     mob_ravenous_furbolg() : CreatureScript("mob_ravenous_furbolg") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_ravenous_furbolgAI (pCreature);
+        return new mob_ravenous_furbolgAI (creature);
     }
 
     struct mob_ravenous_furbolgAI : public ScriptedAI
@@ -405,9 +405,9 @@ class mob_frenzied_worgen : public CreatureScript
 public:
     mob_frenzied_worgen() : CreatureScript("mob_frenzied_worgen") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_frenzied_worgenAI (pCreature);
+        return new mob_frenzied_worgenAI (creature);
     }
 
     struct mob_frenzied_worgenAI : public ScriptedAI
@@ -521,9 +521,9 @@ class mob_ferocious_rhino : public CreatureScript
 public:
     mob_ferocious_rhino() : CreatureScript("mob_ferocious_rhino") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_ferocious_rhinoAI (pCreature);
+        return new mob_ferocious_rhinoAI (creature);
     }
 
     struct mob_ferocious_rhinoAI : public ScriptedAI
@@ -576,8 +576,8 @@ public:
 
             if (uiGrievousWoundTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_GRIEVOUS_WOUND);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_GRIEVOUS_WOUND);
                 uiGrievousWoundTimer = 18000 + rand() % 4000;
             } else uiGrievousWoundTimer -= diff;
 
@@ -641,9 +641,9 @@ class mob_massive_jormungar : public CreatureScript
 public:
     mob_massive_jormungar() : CreatureScript("mob_massive_jormungar") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_massive_jormungarAI (pCreature);
+        return new mob_massive_jormungarAI (creature);
     }
 
     struct mob_massive_jormungarAI : public ScriptedAI
@@ -684,8 +684,8 @@ public:
 
             if (uiAcidSpitTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_ACID_SPIT);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_ACID_SPIT);
                 uiAcidSpitTimer = 2000 + rand() % 2000;
             } else uiAcidSpitTimer -= diff;
 
@@ -697,8 +697,8 @@ public:
 
             if (uiPoisonBreathTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_POISON_BREATH);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_POISON_BREATH);
                 uiPoisonBreathTimer = 8000 + rand() % 4000;
             } else uiPoisonBreathTimer -= diff;
 
@@ -747,9 +747,9 @@ class mob_palehoof_orb : public CreatureScript
 public:
     mob_palehoof_orb() : CreatureScript("mob_palehoof_orb") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_palehoof_orbAI (pCreature);
+        return new mob_palehoof_orbAI (creature);
     }
 
     struct mob_palehoof_orbAI : public ScriptedAI
@@ -836,7 +836,7 @@ class go_palehoof_sphere : public GameObjectScript
 public:
     go_palehoof_sphere() : GameObjectScript("go_palehoof_sphere") { }
 
-    bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGO)
+    bool OnGossipHello(Player* /*player*/, GameObject* pGO)
     {
         InstanceScript *pInstance = pGO->GetInstanceScript();
 

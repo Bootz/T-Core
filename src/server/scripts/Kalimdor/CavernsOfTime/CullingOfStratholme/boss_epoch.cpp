@@ -55,9 +55,9 @@ class boss_epoch : public CreatureScript
 public:
     boss_epoch() : CreatureScript("boss_epoch") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_epochAI (pCreature);
+        return new boss_epochAI (creature);
     }
 
     struct boss_epochAI : public ScriptedAI
@@ -106,8 +106,8 @@ public:
 
             if (uiCurseOfExertionTimer < diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_CURSE_OF_EXERTION);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_CURSE_OF_EXERTION);
                 uiCurseOfExertionTimer = 9300;
             } else uiCurseOfExertionTimer -= diff;
 

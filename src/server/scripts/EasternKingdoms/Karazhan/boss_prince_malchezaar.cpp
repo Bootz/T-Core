@@ -102,9 +102,9 @@ class netherspite_infernal : public CreatureScript
 public:
     netherspite_infernal() : CreatureScript("netherspite_infernal") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new netherspite_infernalAI (pCreature);
+        return new netherspite_infernalAI (creature);
     }
 
     struct netherspite_infernalAI : public ScriptedAI
@@ -177,9 +177,9 @@ class boss_malchezaar : public CreatureScript
 public:
     boss_malchezaar() : CreatureScript("boss_malchezaar") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_malchezaarAI (pCreature);
+        return new boss_malchezaarAI (creature);
     }
 
     struct boss_malchezaarAI : public ScriptedAI
@@ -320,9 +320,9 @@ public:
             std::list<HostileReference *>::const_iterator itr = t_list.begin();
             std::advance(itr, 1);
             for (; itr != t_list.end(); ++itr) //store the threat list in a different container
-                if (Unit* pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
-                    if (pTarget->isAlive() && pTarget->GetTypeId() == TYPEID_PLAYER)
-                        targets.push_back(pTarget);
+                if (Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (target->isAlive() && target->GetTypeId() == TYPEID_PLAYER)
+                        targets.push_back(target);
 
             //cut down to size if we have more than 5 targets
             while (targets.size() > 5)
@@ -330,13 +330,13 @@ public:
 
             uint32 i = 0;
             for (std::vector<Unit* >::const_iterator iter = targets.begin(); iter != targets.end(); ++iter, ++i)
-                if (Unit* pTarget = *iter)
+                if (Unit* target = *iter)
                 {
-                    enfeeble_targets[i] = pTarget->GetGUID();
-                    enfeeble_health[i] = pTarget->GetHealth();
+                    enfeeble_targets[i] = target->GetGUID();
+                    enfeeble_health[i] = target->GetHealth();
 
-                    pTarget->CastSpell(pTarget, SPELL_ENFEEBLE, true, 0, 0, me->GetGUID());
-                    pTarget->SetHealth(1);
+                    target->CastSpell(target, SPELL_ENFEEBLE, true, 0, 0, me->GetGUID());
+                    target->SetHealth(1);
                 }
         }
 
@@ -344,9 +344,9 @@ public:
         {
             for (uint8 i = 0; i < 5; ++i)
             {
-                Unit* pTarget = Unit::GetUnit(*me, enfeeble_targets[i]);
-                if (pTarget && pTarget->isAlive())
-                    pTarget->SetHealth(enfeeble_health[i]);
+                Unit* target = Unit::GetUnit(*me, enfeeble_targets[i]);
+                if (target && target->isAlive())
+                    target->SetHealth(enfeeble_health[i]);
                 enfeeble_targets[i] = 0;
                 enfeeble_health[i] = 0;
             }
@@ -450,7 +450,7 @@ public:
 
                     DoScriptText(SAY_AXE_TOSS2, me);
 
-                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
                     for (uint8 i = 0; i < 2; ++i)
                     {
                         Creature* axe = me->SummonCreature(MALCHEZARS_AXE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
@@ -459,12 +459,12 @@ public:
                             axe->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             axe->setFaction(me->getFaction());
                             axes[i] = axe->GetGUID();
-                            if (pTarget)
+                            if (target)
                             {
-                                axe->AI()->AttackStart(pTarget);
-                                //axe->getThreatManager().tauntApply(pTarget); //Taunt Apply and fade out does not work properly
+                                axe->AI()->AttackStart(target);
+                                //axe->getThreatManager().tauntApply(target); //Taunt Apply and fade out does not work properly
                                                                 // So we'll use a hack to add a lot of threat to our target
-                                axe->AddThreat(pTarget, 10000000.0f);
+                                axe->AddThreat(target, 10000000.0f);
                             }
                         }
                     }
@@ -495,7 +495,7 @@ public:
                 {
                     AxesTargetSwitchTimer = urand(7500, 20000);
 
-                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     {
                         for (uint8 i = 0; i < 2; ++i)
                         {
@@ -503,10 +503,10 @@ public:
                             {
                                 if (axe->getVictim())
                                     DoModifyThreatPercent(axe->getVictim(), -100);
-                                if (pTarget)
-                                    axe->AddThreat(pTarget, 1000000.0f);
+                                if (target)
+                                    axe->AddThreat(target, 1000000.0f);
                                 //axe->getThreatManager().tauntFadeOut(axe->getVictim());
-                                //axe->getThreatManager().tauntApply(pTarget);
+                                //axe->getThreatManager().tauntApply(target);
                             }
                         }
                     }
@@ -514,8 +514,8 @@ public:
 
                 if (AmplifyDamageTimer <= diff)
                 {
-                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        DoCast(pTarget, SPELL_AMPLIFY_DAMAGE);
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        DoCast(target, SPELL_AMPLIFY_DAMAGE);
                     AmplifyDamageTimer = urand(20000, 30000);
                 } else AmplifyDamageTimer -= diff;
             }
@@ -537,14 +537,14 @@ public:
             {
                 if (SWPainTimer <= diff)
                 {
-                    Unit* pTarget = NULL;
+                    Unit* target = NULL;
                     if (phase == 1)
-                        pTarget = me->getVictim();        // the tank
+                        target = me->getVictim();        // the tank
                     else                                          // anyone but the tank
-                        pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
+                        target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
 
-                    if (pTarget)
-                        DoCast(pTarget, SPELL_SW_PAIN);
+                    if (target)
+                        DoCast(target, SPELL_SW_PAIN);
 
                     SWPainTimer = 20000;
                 } else SWPainTimer -= diff;

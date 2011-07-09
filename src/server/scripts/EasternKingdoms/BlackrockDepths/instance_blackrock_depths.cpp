@@ -379,8 +379,8 @@ public:
                 {
                     boss->setFaction(FACTION_HOSTILE);
                     boss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                    if (Unit* pTarget = boss->SelectNearestTarget(500))
-                        boss->AI()->AttackStart(pTarget);
+                    if (Unit* target = boss->SelectNearestTarget(500))
+                        boss->AI()->AttackStart(target);
                 }
             }
         }

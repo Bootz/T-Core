@@ -66,9 +66,9 @@ class boss_najentus : public CreatureScript
 public:
     boss_najentus() : CreatureScript("boss_najentus") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_najentusAI (pCreature);
+        return new boss_najentusAI (creature);
     }
 
     struct boss_najentusAI : public ScriptedAI
@@ -132,9 +132,9 @@ public:
         bool RemoveImpalingSpine()
         {
             if (!SpineTargetGUID) return false;
-            Unit* pTarget = Unit::GetUnit(*me, SpineTargetGUID);
-            if (pTarget && pTarget->HasAura(SPELL_IMPALING_SPINE))
-                pTarget->RemoveAurasDueToSpell(SPELL_IMPALING_SPINE);
+            Unit* target = Unit::GetUnit(*me, SpineTargetGUID);
+            if (target && target->HasAura(SPELL_IMPALING_SPINE))
+                target->RemoveAurasDueToSpell(SPELL_IMPALING_SPINE);
             SpineTargetGUID=0;
             return true;
         }
@@ -168,14 +168,14 @@ public:
                         break;
                     case EVENT_SPINE:
                     {
-                        Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                        if (!pTarget) pTarget = me->getVictim();
-                        if (pTarget)
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        if (!target) target = me->getVictim();
+                        if (target)
                         {
-                            DoCast(pTarget, SPELL_IMPALING_SPINE, true);
-                            SpineTargetGUID = pTarget->GetGUID();
+                            DoCast(target, SPELL_IMPALING_SPINE, true);
+                            SpineTargetGUID = target->GetGUID();
                             //must let target summon, otherwise you cannot click the spine
-                            pTarget->SummonGameObject(GOBJECT_SPINE, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), me->GetOrientation(), 0, 0, 0, 0, 30);
+                            target->SummonGameObject(GOBJECT_SPINE, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), me->GetOrientation(), 0, 0, 0, 0, 30);
                             DoScriptText(rand()%2 ? SAY_NEEDLE1 : SAY_NEEDLE2, me);
                             events.DelayEvents(1500, GCD_CAST);
                             events.DelayEvents(15000, GCD_YELL);
@@ -213,13 +213,13 @@ class go_najentus_spine : public GameObjectScript
 public:
     go_najentus_spine() : GameObjectScript("go_najentus_spine") { }
 
-    bool OnGossipHello(Player* pPlayer, GameObject* pGo)
+    bool OnGossipHello(Player* player, GameObject* pGo)
     {
         if (InstanceScript* pInstance = pGo->GetInstanceScript())
             if (Creature* Najentus = Unit::GetCreature(*pGo, pInstance->GetData64(DATA_HIGHWARLORDNAJENTUS)))
                 if (CAST_AI(boss_najentus::boss_najentusAI, Najentus->AI())->RemoveImpalingSpine())
                 {
-                    pPlayer->CastSpell(pPlayer, SPELL_CREATE_NAJENTUS_SPINE, true);
+                    player->CastSpell(player, SPELL_CREATE_NAJENTUS_SPINE, true);
                     pGo->Delete();
                 }
         return true;

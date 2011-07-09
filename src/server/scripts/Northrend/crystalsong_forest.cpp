@@ -51,7 +51,7 @@ public:
 
     struct npc_warmage_violetstandAI : public Scripted_NoMovementAI
     {
-        npc_warmage_violetstandAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature){}
+        npc_warmage_violetstandAI(Creature* creature) : Scripted_NoMovementAI(creature){}
 
         uint64 uiTargetGUID;
 
