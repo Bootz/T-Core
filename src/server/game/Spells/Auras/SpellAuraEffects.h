@@ -48,6 +48,7 @@ class AuraEffect
         SpellEffectEntry const* GetSpellEffect() const { return !m_spellEffect ? m_spellEffect : 0; }
         SpellClassOptionsEntry const* GetSpellClass() const { return !m_spellClass ? m_spellClass : 0; }
         SpellEquippedItemsEntry const* GetSpellEquipped() const { return !m_spellEquipped ? m_spellEquipped : 0; }
+
         uint32 GetId() const { return m_spellProto->Id; }
         uint32 GetEffIndex() const { return m_effIndex; }
         int32 GetBaseAmount() const { return m_baseAmount; }
