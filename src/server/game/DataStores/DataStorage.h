@@ -107,6 +107,7 @@ extern DataStorage <GtChanceToMeleeCritBaseEntry> sGtChanceToMeleeCritBaseStore;
 extern DataStorage <GtChanceToMeleeCritEntry>     sGtChanceToMeleeCritStore;
 extern DataStorage <GtChanceToSpellCritBaseEntry> sGtChanceToSpellCritBaseStore;
 extern DataStorage <GtChanceToSpellCritEntry>     sGtChanceToSpellCritStore;
+extern DataStorage <GtOCTClassCombatRatingScalarEntry> sGtOCTClassCombatRatingScalarStore;
 //extern DataStorage <GtOCTRegenHPEntry>            sGtOCTRegenHPStore;
 //extern DataStorage <GtOCTRegenMPEntry>            sGtOCTRegenMPStore; -- not used currently
 //extern DataStorage <GtRegenHPPerSptEntry>         sGtRegenHPPerSptStore;
@@ -201,7 +202,7 @@ extern DataStorage <WMOAreaTableEntry>            sWMOAreaTableStore;
 extern DataStorage <WorldMapOverlayEntry>         sWorldMapOverlayStore;
 extern DataStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
-void LoadDBCStores(const std::string& dataPath);
+void LoadDataStorages(const std::string& dataPath);
 
 // script support functions
  DataStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();

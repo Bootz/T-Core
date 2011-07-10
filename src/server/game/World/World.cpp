@@ -1250,7 +1250,7 @@ void World::SetInitialWorldSettings()
 
     ///- Load the DBC files
     sLog->outString("Initialize data stores...");
-    LoadDataStorage(m_dataPath);
+    LoadDataStorages(m_dataPath);
     //DetectDBCLang();
 
     sLog->outString("Loading Script Names...");
