@@ -1138,7 +1138,7 @@ enum Opcodes
     SMSG_DYNAMIC_DROP_ROLL_RESULT                    = 0x101D7, //
     SMSG_CRITERIA_UPDATE                             = 0x0AFC8, // 4.0.6a 13623 
     CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x028EC, // 4.0.6a 13623 
-    SMSG_RESPOND_INSPECT_ACHIEVEMENTS                = 0x101DA, //
+    SMSG_RESPOND_INSPECT_ACHIEVEMENTS                = 0x0041C, // 4.0.6a 13623
     CMSG_DISMISS_CONTROLLED_VEHICLE                  = 0x0E3C0, // 4.0.6a 13623
     CMSG_COMPLETE_ACHIEVEMENT_CHEAT                  = 0x101DC, //
     SMSG_COMPRESSED_RESPOND_INSPECT_ACHIEVEMENTS     = 0x0445E, // 4.0.6a 13623
@@ -1158,7 +1158,7 @@ enum Opcodes
     CMSG_PET_LEARN_TALENT                            = 0x0A7A0, // 4.0.6a 13623
     CMSG_PET_UNLEARN_TALENTS                         = 0x08F5D, //
     SMSG_SET_PHASE_SHIFT                             = 0x0044C, // 4.0.6a 13623
-    SMSG_ALL_ACHIEVEMENT_DATA                        = 0x0400E, // 4.0.6a 13623
+    SMSG_ALL_ACHIEVEMENT_DATA                        = 0x0445E, // 4.0.6a 13623
     CMSG_FORCE_SAY_CHEAT                             = 0x101E7, //
     SMSG_HEALTH_UPDATE                               = 0x02AA8, // 4.0.6a 13623
     SMSG_POWER_UPDATE                                = 0x065E8, // 4.0.6a 13623
