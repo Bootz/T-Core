@@ -274,7 +274,6 @@ class AchievementMgr
         bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement);
         bool IsCompletedAchievement(AchievementEntry const* entry);
         bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement);
-        void BuildAllDataPacket(WorldPacket *data) const;
 
         Player* m_player;
         CriteriaProgressMap m_criteriaProgress;
