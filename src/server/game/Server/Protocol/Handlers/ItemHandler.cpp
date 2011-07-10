@@ -354,8 +354,8 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
         data << pProto->ShadowRes;
         data << pProto->ArcaneRes;
 
-        data << pProto->Delay;
-        data << pProto->AmmoType;
+        data << pProto->AmmoType;                           // swapped with Delay
+        data << pProto->Delay;                              // swapped with AmmoType
         data << pProto->RangedModRange;
 
         for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
@@ -424,6 +424,9 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
         data << uint32(abs(pProto->Duration));              // added in 2.4.2.8209, duration (seconds)
         data << pProto->ItemLimitCategory;                  // WotLK, ItemLimitCategory
         data << pProto->HolidayId;                          // Holiday.dbc?
+        data << float(0);                                   // damage/armor scaling factor
+        data << uint32(0);                                  // 4.0.0
+        data << uint32(0);                                  // 4.0.0
         SendPacket(&data);
     }
     else
