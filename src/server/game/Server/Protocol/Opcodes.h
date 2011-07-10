@@ -1342,7 +1342,7 @@ inline const char* LookupOpcodeName(Opcodes id)
 {
     if (id < NUM_OPCODE_HANDLERS)
     {
-        OpcodeHandler* handler = opcodeTable[uint32(id)];
+        OpcodeHandler* handler = opcodeTable[id];
         return handler ? handler->name : "UNKNOWN OPCODE";
     }
     else
