@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,16 +19,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "DBCFileLoader.h"
+#include "StorageLoader.h"
 #include "Errors.h"
 
-DBCFileLoader::DBCFileLoader()
+StorageLoader::StorageLoader()
 {
     data = NULL;
     fieldsOffset = NULL;
 }
 
-bool DBCFileLoader::Load(const char* filename, const char* fmt)
+bool StorageLoader::LoadDBCStorage(const char* filename, const char* fmt)
 {
     uint32 header;
     if (data)
@@ -46,7 +46,6 @@ bool DBCFileLoader::Load(const char* filename, const char* fmt)
         fclose(f);
         return false;
     }
-
 
     EndianConvert(header);
 
@@ -113,7 +112,147 @@ bool DBCFileLoader::Load(const char* filename, const char* fmt)
     return true;
 }
 
-DBCFileLoader::~DBCFileLoader()
+bool StorageLoader::LoadDB2Storage(const char* filename, const char* fmt)
+{
+    uint32 header = 48;
+    if (data)
+    {
+        delete [] data;
+        data = NULL;
+    }
+
+    FILE * f = fopen(filename, "rb");
+    if (!f)
+        return false;
+
+    if (fread(&header, 4, 1, f) != 1)                        // Signature
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(header);
+
+    if (header != 0x32424457)
+    {
+        fclose(f);
+        return false;                                       //'WDB2'
+    }
+
+    if (fread(&recordCount, 4, 1, f) != 1)                       // Number of records
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(recordCount);
+
+    if (fread(&fieldCount, 4, 1, f) != 1)                         // Number of fields
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(fieldCount);
+
+    if (fread(&recordSize, 4, 1, f) != 1)                         // Size of a record
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(recordSize);
+
+    if (fread(&stringSize, 4, 1, f) != 1)                         // String size
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(stringSize);
+
+    /* NEW WDB2 FIELDS*/
+    if (fread(&tableHash, 4, 1, f) != 1)                          // Table hash
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(tableHash);
+
+    if (fread(&build, 4, 1, f) != 1)                              // Build
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(build);
+
+    if (fread(&unk1, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk1);
+
+    if (fread(&unk2, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk2);
+
+    if (fread(&unk3, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk3);
+
+    if (fread(&locale, 4, 1, f) != 1)                             // Locales
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(locale);
+
+    if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
+    {
+        fclose(f);
+        return false;
+    }
+
+    EndianConvert(unk5);
+
+    fieldsOffset = new uint32[fieldCount];
+    fieldsOffset[0] = 0;
+    for (uint32 i = 1; i < fieldCount; i++)
+    {
+        fieldsOffset[i] = fieldsOffset[i - 1];
+        if (fmt[i - 1] == 'b' || fmt[i - 1] == 'X')         // byte fields
+            fieldsOffset[i] += 1;
+        else                                                // 4 byte fields (int32/float/strings)
+            fieldsOffset[i] += 4;
+    }
+
+    data = new unsigned char[recordSize*recordCount+stringSize];
+    stringTable = data + recordSize*recordCount;
+
+    if (fread(data, recordSize * recordCount + stringSize, 1, f) != 1)
+    {
+        fclose(f);
+        return false;
+    }
+
+    fclose(f);
+    return true;
+}
+
+StorageLoader::~StorageLoader()
 {
     if (data)
         delete [] data;
@@ -122,13 +261,13 @@ DBCFileLoader::~DBCFileLoader()
         delete [] fieldsOffset;
 }
 
-DBCFileLoader::Record DBCFileLoader::getRecord(size_t id)
+StorageLoader::Record StorageLoader::getRecord(size_t id)
 {
     assert(data);
     return Record(*this, data + id * recordSize);
 }
 
-uint32 DBCFileLoader::GetFormatRecordSize(const char* format, int32* index_pos)
+uint32 StorageLoader::GetFormatRecordSize(const char* format, int32* index_pos)
 {
     uint32 recordsize = 0;
     int32 i = -1;
@@ -173,31 +312,30 @@ uint32 DBCFileLoader::GetFormatRecordSize(const char* format, int32* index_pos)
     return recordsize;
 }
 
-char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char*& sqlDataTable)
+uint32 StorageLoader::GetFormatStringsFields(const char * format)
 {
-    /*
-    format STRING, NA, FLOAT, NA, INT <=>
-    struct{
-    char* field0,
-    float field1,
-    int field2
-    }entry;
+    uint32 stringfields = 0;
+    for (uint32 x=0; format[x]; ++x)
+        if (format[x] == FT_STRING)
+            ++stringfields;
 
-    this func will generate  entry[rows] data;
-    */
+    return stringfields;
+}
 
+char* StorageLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char*& sqlDataTable)
+{
     typedef char* ptr;
     if (strlen(format) != fieldCount)
         return NULL;
 
-    //get struct size and index pos
+    // get struct size and index pos
     int32 i;
     uint32 recordsize = GetFormatRecordSize(format, &i);
 
     if (i >= 0)
     {
         uint32 maxi = 0;
-        //find max index
+        // find max index
         for (uint32 y = 0; y < recordCount; ++y)
         {
             uint32 ind = getRecord(y).getUInt(i);
@@ -271,7 +409,67 @@ char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**
     return dataTable;
 }
 
-char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable)
+static char const* const nullStr = "";
+
+char* StorageLoader::AutoProduceStringsArrayHolders(const char* format, char* dataTable)
+{
+    if (strlen(format) != fieldCount)
+        return NULL;
+
+    // we store flat holders pool as single memory block
+    size_t stringFields = GetFormatStringsFields(format);
+    // each string field at load have array of string for each locale
+    size_t stringHolderSize = sizeof(char*) * TOTAL_LOCALES;
+    size_t stringHoldersRecordPoolSize = stringFields * stringHolderSize;
+    size_t stringHoldersPoolSize = stringHoldersRecordPoolSize * recordCount;
+
+    char* stringHoldersPool = new char[stringHoldersPoolSize];
+
+    // DB2 strings expected to have at least empty string
+    for (size_t i = 0; i < stringHoldersPoolSize / sizeof(char*); ++i)
+        ((char const**)stringHoldersPool)[i] = nullStr;
+
+    uint32 offset=0;
+
+    // assign string holders to string field slots
+    for (uint32 y = 0; y < recordCount; y++)
+    {
+        uint32 stringFieldNum = 0;
+
+        for(uint32 x = 0; x < fieldCount; x++)
+            switch(format[x])
+            {
+                case FT_FLOAT:
+                case FT_IND:
+                case FT_INT:
+                    offset += 4;
+                    break;
+                case FT_BYTE:
+                    offset += 1;
+                    break;
+                case FT_STRING:
+                {
+                    // init db2 string field slots by pointers to string holders
+                    char const*** slot = (char const***)(&dataTable[offset]);
+                    *slot = (char const**)(&stringHoldersPool[stringHoldersRecordPoolSize * y + stringHolderSize*stringFieldNum]);
+                    ++stringFieldNum;
+                    offset += sizeof(char*);
+                    break;
+                }
+                case FT_NA:
+                case FT_NA_BYTE:
+                case FT_SORT:
+                    break;
+                default:
+                    assert(false && "unknown format character");
+        }
+    }
+
+    //send as char* for store in char* pool list for free at unload
+    return stringHoldersPool;
+}
+
+char* StorageLoader::AutoProduceStrings(const char* format, char* dataTable)
 {
     if (strlen(format) != fieldCount)
         return NULL;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,10 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DBCSTORE_H
-#define DBCSTORE_H
+#ifndef STORAGES_H
+#define STORAGES_H
 
-#include "DBCFileLoader.h"
+#include "StorageLoader.h"
 #include "Logging/Log.h"
 #include "Field.h"
 #include "DatabaseWorkerPool.h"
@@ -46,7 +46,7 @@ struct SqlDbc
         }
 
         // Get sql index position
-        DBCFileLoader::GetFormatRecordSize(fmt, &indexPos);
+        StorageLoader::GetFormatRecordSize(fmt, &indexPos);
         if (indexPos >= 0)
         {
             uint32 uindexPos = uint32(indexPos);
@@ -65,28 +65,54 @@ struct SqlDbc
 };
 
 template<class T>
-class DBCStorage
+class DataStorage
 {
     typedef std::list<char*> StringPoolList;
     public:
-        explicit DBCStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
-        ~DBCStorage() { Clear(); }
+        explicit DataStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
+        ~DataStorage() { Clear(); }
 
         T const* LookupEntry(uint32 id) const { return (id>=nCount)?NULL:indexTable[id]; }
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool Load(char const* fn, SqlDbc * sql)
+        bool LoadDB2Storage(char const* fn, SqlDbc* sql)
         {
-            DBCFileLoader dbc;
+            StorageLoader db2;
             // Check if load was sucessful, only then continue
-            if (!dbc.Load(fn, fmt))
+            if (!db2.LoadDB2Storage(fn, fmt))
                 return false;
 
             uint32 sqlRecordCount = 0;
             uint32 sqlHighestIndex = 0;
-            Field *fields = NULL;
+            char* sqlDataTable = 0;
+
+            fieldCount = db2.GetCols();
+
+            // load raw non-string data
+            m_dataTable = (T*)db2.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
+
+            // create string holders for loaded string fields
+            m_stringPoolList.push_back(db2.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+
+            // load strings from db2 data
+            m_stringPoolList.push_back(db2.AutoProduceStrings(fmt,(char*)m_dataTable));
+
+            // error in db2 file at loading if NULL
+            return indexTable!=NULL;
+        }
+
+        bool LoadDBCStorage(char const* fn, SqlDbc* sql)
+        {
+            StorageLoader dbc;
+            // Check if load was sucessful, only then continue
+            if (!dbc.LoadDBCStorage(fn, fmt))
+                return false;
+
+            uint32 sqlRecordCount = 0;
+            uint32 sqlHighestIndex = 0;
+            Field* fields = NULL;
             QueryResult result = QueryResult(NULL);
             // Load data from sql
             if (sql)
@@ -95,7 +121,6 @@ class DBCStorage
                 if (sql->indexPos >= 0)
                     query +=" ORDER BY " + *sql->indexName + " DESC";
                 query += ";";
-
 
                 result = WorldDatabase.Query(query.c_str());
                 if (result)
@@ -114,11 +139,17 @@ class DBCStorage
                     }
                 }
             }
-            char * sqlDataTable;
+            char* sqlDataTable;
             fieldCount = dbc.GetCols();
+
+            // load raw non-string data
             m_dataTable = (T*)dbc.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
-            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
+            // create string holders for loaded string fields
+            m_stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+
+            // load strings from dbc data
+            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt,(char*)m_dataTable));
 
             // Insert sql data into arrays
             if (result)
@@ -230,9 +261,9 @@ class DBCStorage
             if(!indexTable)
                 return false;
 
-            DBCFileLoader dbc;
+            StorageLoader dbc;
             // Check if load was successful, only then continue
-            if(!dbc.Load(fn, fmt))
+            if(!dbc.LoadDBCStorage(fn, fmt))
                 return false;
 
             m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
@@ -257,6 +288,8 @@ class DBCStorage
             }
             nCount = 0;
         }
+        
+        void EraseEntry(uint32 id) { indexTable[id] = NULL; }
 
     private:
         char const* fmt;

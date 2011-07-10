@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+ * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,8 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DBC_FILE_LOADER_H
-#define DBC_FILE_LOADER_H
+#ifndef STORAGE_LOADER_H
+#define STORAGE_LOADER_H
+
 #include "Define.h"
 #include "Utilities/ByteConverter.h"
 #include <cassert>
@@ -36,13 +37,14 @@ enum
     FT_SQL_ABSENT='a'                                       //Used in sql format to mark column absent in sql dbc
 };
 
-class DBCFileLoader
+class StorageLoader
 {
     public:
-        DBCFileLoader();
-        ~DBCFileLoader();
+        StorageLoader();
+        ~StorageLoader();
 
-        bool Load(const char *filename, const char *fmt);
+        bool LoadDBCStorage(const char* filename, const char* fmt);
+        bool LoadDB2Storage(const char* filename, const char* fmt);
 
         class Record
         {
@@ -76,11 +78,11 @@ class DBCFileLoader
                 }
 
             private:
-                Record(DBCFileLoader &file_, unsigned char *offset_): offset(offset_), file(file_) {}
+                Record(StorageLoader &file_, unsigned char *offset_): offset(offset_), file(file_) {}
                 unsigned char *offset;
-                DBCFileLoader &file;
+                StorageLoader &file;
 
-                friend class DBCFileLoader;
+                friend class StorageLoader;
 
         };
 
@@ -94,8 +96,10 @@ class DBCFileLoader
         uint32 GetOffset(size_t id) const { return (fieldsOffset != NULL && id < fieldCount) ? fieldsOffset[id] : 0; }
         bool IsLoaded() const { return data != NULL; }
         char* AutoProduceData(const char* fmt, uint32& count, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char *& sqlDataTable);
+        char* AutoProduceStringsArrayHolders(const char* fmt, char* dataTable);
         char* AutoProduceStrings(const char* fmt, char* dataTable);
         static uint32 GetFormatRecordSize(const char * format, int32 * index_pos = NULL);
+        static uint32 GetFormatStringsFields(const char * format);
     private:
 
         uint32 recordSize;
@@ -105,5 +109,15 @@ class DBCFileLoader
         uint32 *fieldsOffset;
         unsigned char *data;
         unsigned char *stringTable;
+
+        // WDB2 / WCH2 fields
+        uint32 tableHash;    // WDB2
+        uint32 build;        // WDB2
+
+        int unk1;            // WDB2 (Unix time in WCH2)
+        int unk2;            // WDB2
+        int unk3;            // WDB2 (index table)
+        int locale;          // WDB2
+        int unk5;            // WDB2
 };
 #endif
