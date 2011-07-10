@@ -4,13 +4,13 @@
 |    3.) Drop get Methods & implement in tc way |
  \_____________________________________________/
  /                                            /
- |   4.) Fix world Login                     |
- |   5.) Drop Old Spells from Core           |
- |   6.) Fixed the Style in Forum            |
- |   7.) Install a Bot in Mirc Channel!      |
+ |   4.) Drop Old Spells from Core           |
+ |   5.) Fixed the Style in Forum            |
+ |   6.) Install a Bot in Mirc Channel!      |
+ |   7.) Rewrite the extractor               |
  \__________________________________________/
  /                                           \
-|    8.) Start with updating the DB           \
+|    7.) Start with updating the DB           \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|
