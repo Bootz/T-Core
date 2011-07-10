@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -76,14 +74,14 @@ class boss_algalon : public CreatureScript
 public:
     boss_algalon() : CreatureScript("boss_algalon") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return GetUlduarAI<boss_algalonAI>(creature);
+        return new boss_algalonAI(pCreature);
     }
 
     struct boss_algalonAI : public ScriptedAI
     {
-        boss_algalonAI(Creature* c) : ScriptedAI(c)
+        boss_algalonAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             Summon = false; // not in reset. intro speech done only once.
@@ -125,10 +123,10 @@ public:
             }
 
             if (pInstance)
-                pInstance->SetData(BOSS_ALGALON, IN_PROGRESS);
+                pInstance->SetData(TYPE_ALGALON, IN_PROGRESS);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
         }
@@ -139,7 +137,7 @@ public:
 
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             if (pInstance)
-                pInstance->SetData(BOSS_ALGALON, NOT_STARTED);
+                pInstance->SetData(TYPE_ALGALON, NOT_STARTED);
 
             BlackHoleGUID = 0;
 
@@ -180,9 +178,9 @@ public:
         {
             if (pSummoned->GetEntry() == CREATURE_COLLAPSING_STAR)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 if (me->getVictim())
-                    pSummoned->AI()->AttackStart(target ? target : me->getVictim());
+                    pSummoned->AI()->AttackStart(pTarget ? pTarget : me->getVictim());
                 m_lCollapsingStarGUIDList.push_back(pSummoned->GetGUID());
             }
         }
@@ -220,7 +218,7 @@ public:
                 me->DisappearAndDie();
 
                 if (pInstance)
-                    pInstance->SetData(BOSS_ALGALON, DONE);
+                    pInstance->SetData(TYPE_ALGALON, DONE);
 
                 return;
             }
@@ -335,16 +333,16 @@ class mob_collapsing_star : public CreatureScript
 public:
     mob_collapsing_star() : CreatureScript("mob_collapsing_star") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_collapsing_starAI(creature);
+        return new mob_collapsing_starAI(pCreature);
     }
 
     struct mob_collapsing_starAI : public ScriptedAI
     {
-        mob_collapsing_starAI(Creature* creature) : ScriptedAI(creature)
+        mob_collapsing_starAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;

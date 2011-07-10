@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Steam_Vault
-SD%Complete: 80
-SDComment:  Instance script and access panel GO
-SDCategory: Coilfang Resevoir, The Steamvault
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "steam_vault.h"
@@ -44,7 +35,7 @@ class go_main_chambers_access_panel : public GameObjectScript
 public:
     go_main_chambers_access_panel() : GameObjectScript("go_main_chambers_access_panel") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* go)
+    bool OnGossipHello(Player* /*pPlayer*/, GameObject* go)
     {
         InstanceScript* pInstance = go->GetInstanceScript();
 

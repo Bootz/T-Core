@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,17 +15,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GROUP_H
-#define TRINITYCORE_GROUP_H
+#ifndef TRILLIUMCORE_GROUP_H
+#define TRILLIUMCORE_GROUP_H
 
 #include "Battleground.h"
-#include "StoragesEnums.h"
+#include "DBCEnums.h"
 #include "GroupRefManager.h"
 #include "LootMgr.h"
 #include "QueryResult.h"
 #include "SharedDefines.h"
 #include "Player.h"
-#include "../../Battlefield/BattlefieldMgr.h"  //FIXME
 
 class Creature;
 class GroupReference;
@@ -188,11 +185,11 @@ class Group
         bool   Create(Player *leader);
         void   LoadGroupFromDB(Field *field);
         void   LoadMemberFromDB(uint32 guidLow, uint8 memberFlags, uint8 subgroup, uint8 roles);
-        bool   AddInvite(Player* player);
-        void   RemoveInvite(Player* player);
+        bool   AddInvite(Player *player);
+        void   RemoveInvite(Player *player);
         void   RemoveAllInvites();
-        bool   AddLeaderInvite(Player* player);
-        bool   AddMember(Player* player);
+        bool   AddLeaderInvite(Player *player);
+        bool   AddMember(Player *player);
         bool   RemoveMember(const uint64 &guid, const RemoveMethod &method = GROUP_REMOVEMETHOD_DEFAULT, uint64 kicker = 0, const char* reason = NULL);
         void   ChangeLeader(const uint64 &guid);
         void   SetLootMethod(LootMethod method);
@@ -206,7 +203,6 @@ class Group
         bool IsFull() const;
         bool isLFGGroup()  const;
         bool isRaidGroup() const;
-        bool isBFGroup()   const;
         bool isBGGroup()   const;
         bool IsCreated()   const;
         const uint64& GetLeaderGUID() const;
@@ -242,11 +238,10 @@ class Group
         void ConvertToRaid();
 
         void SetBattlegroundGroup(Battleground *bg);
-        void SetBattlefieldGroup(Battlefield *bf);
         GroupJoinBattlegroundResult CanJoinBattlegroundQueue(Battleground const* bgOrTemplate, BattlegroundQueueTypeId bgQueueTypeId, uint32 MinPlayerCount, uint32 MaxPlayerCount, bool isRated, uint32 arenaSlot);
 
         void ChangeMembersGroup(const uint64 &guid, const uint8 &group);
-        void ChangeMembersGroup(Player* player, const uint8 &group);
+        void ChangeMembersGroup(Player *player, const uint8 &group);
         void SetTargetIcon(uint8 id, uint64 whoGuid, uint64 targetGuid);
         void SetGroupMemberFlag(uint64 guid, const bool &apply, GroupMemberFlags flag);
         void RemoveUniqueGroupMemberFlag(GroupMemberFlags flag);
@@ -266,8 +261,8 @@ class Group
         void SendUpdate();
         void UpdatePlayerOutOfRange(Player* pPlayer);
                                                             // ignore: GUID of player that will be ignored
-        void BroadcastPacket(WorldPacket* packet, bool ignorePlayersInBGRaid, int group=-1, uint64 ignore=0);
-        void BroadcastReadyCheck(WorldPacket* packet);
+        void BroadcastPacket(WorldPacket *packet, bool ignorePlayersInBGRaid, int group=-1, uint64 ignore=0);
+        void BroadcastReadyCheck(WorldPacket *packet);
         void OfflineReadyCheck();
 
         /*********************************************************/
@@ -306,7 +301,7 @@ class Group
 
     protected:
         bool _setMembersGroup(const uint64 &guid, const uint8 &group);
-        void _homebindIfInstance(Player* player);
+        void _homebindIfInstance(Player *player);
 
         void _initRaidSubGroupsCounter();
         member_citerator _getMemberCSlot(uint64 Guid) const;
@@ -323,7 +318,6 @@ class Group
         GroupType           m_groupType;
         Difficulty          m_dungeonDifficulty;
         Difficulty          m_raidDifficulty;
-        Battlefield*        m_bfGroup;
         Battleground*       m_bgGroup;
         uint64              m_targetIcons[TARGETICONCOUNT];
         LootMethod          m_lootMethod;

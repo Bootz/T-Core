@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Example_Gossip_Codebox
-SD%Complete: 100
-SDComment: Show a codebox in gossip option
-SDCategory: Script Examples
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include <cstring>
@@ -49,47 +40,47 @@ class example_gossip_codebox : public CreatureScript
         {
         }
 
-        bool OnGossipHello(Player* player, Creature* creature)
+        bool OnGossipHello(Player* pPlayer, Creature* pCreature)
         {
-            player->ADD_GOSSIP_ITEM_EXTENDED(0, GOSSIP_ITEM_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1, "", 0, true);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            pPlayer->ADD_GOSSIP_ITEM_EXTENDED(0, GOSSIP_ITEM_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1, "", 0, true);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
-            player->PlayerTalkClass->SendGossipMenu(907, creature->GetGUID());
+            pPlayer->PlayerTalkClass->SendGossipMenu(907, pCreature->GetGUID());
 
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+        bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
         {
-            player->PlayerTalkClass->ClearMenus();
+            pPlayer->PlayerTalkClass->ClearMenus();
             if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
             {
-                DoScriptText(SAY_NOT_INTERESTED, creature);
-                player->CLOSE_GOSSIP_MENU();
+                DoScriptText(SAY_NOT_INTERESTED, pCreature);
+                pPlayer->CLOSE_GOSSIP_MENU();
             }
 
             return true;
         }
 
-        bool OnGossipSelectCode(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction, const char* code)
+        bool OnGossipSelectCode(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction, const char* code)
         {
-            player->PlayerTalkClass->ClearMenus();
+            pPlayer->PlayerTalkClass->ClearMenus();
             if (uiSender == GOSSIP_SENDER_MAIN)
             {
                 switch (uiAction)
                 {
                 case GOSSIP_ACTION_INFO_DEF+1:
-                    if (std::strcmp(code, player->GetName()) != 0)
+                    if (std::strcmp(code, pPlayer->GetName()) != 0)
                     {
-                        DoScriptText(SAY_WRONG, creature);
-                        creature->CastSpell(player, SPELL_POLYMORPH, true);
+                        DoScriptText(SAY_WRONG, pCreature);
+                        pCreature->CastSpell(pPlayer, SPELL_POLYMORPH, true);
                     }
                     else
                     {
-                        DoScriptText(SAY_CORRECT, creature);
-                        creature->CastSpell(player, SPELL_MARK_OF_THE_WILD, true);
+                        DoScriptText(SAY_CORRECT, pCreature);
+                        pCreature->CastSpell(pPlayer, SPELL_MARK_OF_THE_WILD, true);
                     }
-                    player->CLOSE_GOSSIP_MENU();
+                    pPlayer->CLOSE_GOSSIP_MENU();
 
                     return true;
                 }

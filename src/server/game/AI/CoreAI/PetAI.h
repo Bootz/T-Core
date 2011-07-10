@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PETAI_H
-#define PETAI_H
+#ifndef TRILLIUM_PETAI_H
+#define TRILLIUM_PETAI_H
 
 #include "CreatureAI.h"
 #include "Timer.h"
@@ -33,13 +31,13 @@ class PetAI : public CreatureAI
         explicit PetAI(Creature *c);
 
         void EnterEvadeMode();
-        void JustDied(Unit* /*who*/) { _stopAttack(); }
+        void JustDied(Unit * /*who*/) { _stopAttack(); }
 
         void UpdateAI(const uint32);
         static int Permissible(const Creature *);
 
-        void KilledUnit(Unit* /*victim*/);
-        void AttackStart(Unit* target);
+        void KilledUnit(Unit * /*victim*/);
+        void AttackStart(Unit *target);
         void MovementInform(uint32 moveType, uint32 data);
 
     private:
@@ -57,9 +55,9 @@ class PetAI : public CreatureAI
 
         Unit *SelectNextTarget();
         void HandleReturnMovement();
-        void DoAttack(Unit* target, bool chase);
-        bool _CanAttack(Unit* target);
-        bool _CheckTargetCC(Unit* target);
+        void DoAttack(Unit *target, bool chase);
+        bool _CanAttack(Unit *target);
+        bool _CheckTargetCC(Unit *target);
 };
 #endif
 

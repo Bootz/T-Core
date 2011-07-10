@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -372,9 +370,6 @@ class DatabaseWorkerPool
                 }
             }
 
-            // Clean up now.
-            transaction->Cleanup();
-
             con->Unlock();
         }
 
@@ -410,13 +405,13 @@ class DatabaseWorkerPool
         }
 
         //! Apply escape string'ing for current collation. (utf8)
-        void EscapeString(std::string& str)
+        void escape_string(std::string& str)
         {
             if (str.empty())
                 return;
 
             char* buf = new char[str.size()*2+1];
-            EscapeString(buf, str.c_str(), str.size());
+            escape_string(buf, str.c_str(), str.size());
             str = buf;
             delete[] buf;
         }
@@ -443,12 +438,15 @@ class DatabaseWorkerPool
         }
 
     private:
-        unsigned long EscapeString(char *to, const char *from, unsigned long length)
+        unsigned long escape_string(char *to, const char *from, unsigned long length)
         {
             if (!to || !from || !length)
                 return 0;
 
-            return mysql_real_escape_string(m_connections[IDX_SYNCH][0]->GetHandle(), to, from, length);
+            T* t = GetFreeConnection();
+            unsigned long ret = mysql_real_escape_string(t->GetHandle(), to, from, length);
+            t->Unlock();
+            return ret;
         }
 
         void Enqueue(SQLOperation* op)

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -159,24 +157,24 @@ public:
 
             if (uiAcidTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_ACID_CLOUD);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_ACID_CLOUD);
 
                 uiAcidTimer = urand(20*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             } else uiAcidTimer -= diff;
 
             if (uiLeechTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_LEECH_POISON);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_LEECH_POISON);
 
                 uiLeechTimer = urand(11*IN_MILLISECONDS, 14*IN_MILLISECONDS);
             } else uiLeechTimer -= diff;
 
             if (uiGrabTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0)) // Draws all players (and attacking Mobs) to itself.
-                    DoCast(target, SPELL_WEB_GRAB);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0)) // Draws all players (and attacking Mobs) to itself.
+                    DoCast(pTarget, SPELL_WEB_GRAB);
 
                 uiGrabTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             } else uiGrabTimer -= diff;
@@ -190,7 +188,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new boss_hadronoxAI(creature);
     }

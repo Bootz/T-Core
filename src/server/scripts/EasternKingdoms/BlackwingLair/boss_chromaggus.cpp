@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Chromaggus
-SD%Complete: 95
-SDComment: Chromatic Mutation disabled due to lack of core support
-SDCategory: Blackwing Lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -65,14 +56,14 @@ class boss_chromaggus : public CreatureScript
 public:
     boss_chromaggus() : CreatureScript("boss_chromaggus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_chromaggusAI (creature);
+        return new boss_chromaggusAI (pCreature);
     }
 
     struct boss_chromaggusAI : public ScriptedAI
     {
-        boss_chromaggusAI(Creature* c) : ScriptedAI(c)
+        boss_chromaggusAI(Creature *c) : ScriptedAI(c)
         {
             //Select the 2 breaths that we are going to use until despawned
             //5 possiblities for the first breath, 4 for the second, 20 total possiblites
@@ -198,7 +189,7 @@ public:
             Enraged = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -262,8 +253,8 @@ public:
                                 && pUnit->HasAura(SPELL_BROODAF_BRONZE)
                                 && pUnit->HasAura(SPELL_BROODAF_GREEN))
                             {
-                                //target->RemoveAllAuras();
-                                //DoCast(target, SPELL_CHROMATIC_MUT_1);
+                                //pTarget->RemoveAllAuras();
+                                //DoCast(pTarget, SPELL_CHROMATIC_MUT_1);
 
                                 //Chromatic mutation is causing issues
                                 //Assuming it is caused by a lack of core support for Charm

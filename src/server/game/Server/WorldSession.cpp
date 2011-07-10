@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,7 +42,7 @@
 #include "ScriptMgr.h"
 #include "Transport.h"
 
-bool MapSessionFilter::Process(WorldPacket* packet)
+bool MapSessionFilter::Process(WorldPacket *packet)
 {
     const OpcodeHandler* opHandle = opcodeTable[packet->GetOpcode()];
 
@@ -66,14 +64,14 @@ bool MapSessionFilter::Process(WorldPacket* packet)
 
 //we should process ALL packets when player is not in world/logged in
 //OR packet handler is not thread-safe!
-bool WorldSessionFilter::Process(WorldPacket* packet)
+bool WorldSessionFilter::Process(WorldPacket *packet)
 {
     const OpcodeHandler* opHandle = opcodeTable[packet->GetOpcode()];
     //check if packet handler is supposed to be safe
     if (opHandle->packetProcessing == PROCESS_INPLACE)
         return true;
 
-    //thread-unsafe packets should be processed in Trillium::UpdateSessions()
+    //thread-unsafe packets should be processed in World::UpdateSessions()
     if (opHandle->packetProcessing == PROCESS_THREADUNSAFE)
         return true;
 
@@ -121,7 +119,7 @@ WorldSession::~WorldSession()
     }
 
     ///- empty incoming packet queue
-    WorldPacket* packet = NULL;
+    WorldPacket *packet = NULL;
     while (_recvQueue.next(packet))
         delete packet;
 
@@ -199,7 +197,7 @@ void WorldSession::QueuePacket(WorldPacket *new_packet)
 }
 
 /// Logging helper for unexpected opcodes
-void WorldSession::LogUnexpectedOpcode(WorldPacket* packet, const char* status, const char *reason)
+void WorldSession::LogUnexpectedOpcode(WorldPacket *packet, const char* status, const char *reason)
 {
     sLog->outError("SESSION (account: %u, guidlow: %u, char: %s): received unexpected opcode %s (0x%.4X, status: %s) %s",
         GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
@@ -207,7 +205,7 @@ void WorldSession::LogUnexpectedOpcode(WorldPacket* packet, const char* status, 
 }
 
 /// Logging helper for unexpected opcodes
-void WorldSession::LogUnprocessedTail(WorldPacket* packet)
+void WorldSession::LogUnprocessedTail(WorldPacket *packet)
 {
     sLog->outError("SESSION: opcode %s (0x%.4X) have unprocessed tail data (read stop at %u from %u)",
         LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode(), uint32(packet->rpos()), uint32(packet->wpos()));
@@ -538,7 +536,7 @@ void WorldSession::SendNotification(const char *format, ...)
 
 void WorldSession::SendNotification(uint32 string_id, ...)
 {
-    char const *format = GetTrinityString(string_id);
+    char const *format = GetTrilliumString(string_id);
     if (format)
     {
         va_list ap;
@@ -554,9 +552,9 @@ void WorldSession::SendNotification(uint32 string_id, ...)
     }
 }
 
-const char *WorldSession::GetTrinityString(int32 entry) const
+const char *WorldSession::GetTrilliumString(int32 entry) const
 {
-    return sObjectMgr->GetTrinityString(entry, GetSessionDbLocaleIndex());
+    return sObjectMgr->GetTrilliumString(entry, GetSessionDbLocaleIndex());
 }
 
 void WorldSession::Handle_NULL(WorldPacket& recvPacket)
@@ -754,36 +752,6 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
 
     if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
         data >> mi->splineElevation;
-
-    // This must be a packet spoofing attempt. MOVEMENTFLAG_ROOT sent from the client is not valid,
-    // and when used in conjunction with any of the moving movement flags such as MOVEMENTFLAG_FORWARD
-    // it will freeze clients that receive this player's movement info.
-    if (mi->HasMovementFlag(MOVEMENTFLAG_ROOT))
-        mi->flags &= ~MOVEMENTFLAG_ROOT;
-
-    // Cannot hover and jump at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_HOVER) && mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
-        mi->flags &= ~MOVEMENTFLAG_JUMPING;
-
-    // Cannot ascend and descend at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_ASCENDING) && mi->HasMovementFlag(MOVEMENTFLAG_DESCENDING))
-        mi->flags &= ~(MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING);
-
-    // Cannot move left and right at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_RIGHT))
-        mi->flags &= ~(MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT);
-
-    // Cannot strafe left and right at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_RIGHT))
-        mi->flags &= ~(MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT);
-
-    // Cannot pitch up and down at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_PITCH_UP) && mi->HasMovementFlag(MOVEMENTFLAG_PITCH_DOWN))
-        mi->flags &= ~(MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN);
-
-    // Cannot move forwards and backwards at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_FORWARD) && mi->HasMovementFlag(MOVEMENTFLAG_BACKWARD))
-        mi->flags &= ~(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD);
 }
 
 void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
@@ -977,11 +945,11 @@ void WorldSession::ProcessQueryCallbacks()
     QueryResult result;
 
     //! HandleNameQueryOpcode
-    while (!_nameQueryCallbacks.is_empty())
+    while (!m_nameQueryCallbacks.is_empty())
     {
         QueryResultFuture lResult;
         ACE_Time_Value timeout = ACE_Time_Value::zero;
-        if (_nameQueryCallbacks.next_readable(lResult, &timeout) != 1)
+        if (m_nameQueryCallbacks.next_readable(lResult, &timeout) != 1)
            break;
 
         if (lResult.ready())
@@ -993,80 +961,80 @@ void WorldSession::ProcessQueryCallbacks()
     }
 
     //! HandleCharEnumOpcode
-    if (_charEnumCallback.ready())
+    if (m_charEnumCallback.ready())
     {
-        _charEnumCallback.get(result);
+        m_charEnumCallback.get(result);
         HandleCharEnum(result);
-        _charEnumCallback.cancel();
+        m_charEnumCallback.cancel();
     }
 
     //! HandlePlayerLoginOpcode
-    if (_charLoginCallback.ready())
+    if (m_charLoginCallback.ready())
     {
         SQLQueryHolder* param;
-        _charLoginCallback.get(param);
+        m_charLoginCallback.get(param);
         HandlePlayerLogin((LoginQueryHolder*)param);
-        _charLoginCallback.cancel();
+        m_charLoginCallback.cancel();
     }
 
     //! HandleAddFriendOpcode
-    if (_addFriendCallback.IsReady())
+    if (m_addFriendCallback.IsReady())
     {
-        std::string param = _addFriendCallback.GetParam();
-        _addFriendCallback.GetResult(result);
+        std::string param = m_addFriendCallback.GetParam();
+        m_addFriendCallback.GetResult(result);
         HandleAddFriendOpcodeCallBack(result, param);
-        _addFriendCallback.FreeResult();
+        m_addFriendCallback.FreeResult();
     }
 
     //- HandleCharRenameOpcode
-    if (_charRenameCallback.IsReady())
+    if (m_charRenameCallback.IsReady())
     {
-        std::string param = _charRenameCallback.GetParam();
-        _charRenameCallback.GetResult(result);
+        std::string param = m_charRenameCallback.GetParam();
+        m_charRenameCallback.GetResult(result);
         HandleChangePlayerNameOpcodeCallBack(result, param);
-        _charRenameCallback.FreeResult();
+        m_charRenameCallback.FreeResult();
     }
 
     //- HandleCharAddIgnoreOpcode
-    if (_addIgnoreCallback.ready())
+    if (m_addIgnoreCallback.ready())
     {
-        _addIgnoreCallback.get(result);
+        m_addIgnoreCallback.get(result);
         HandleAddIgnoreOpcodeCallBack(result);
-        _addIgnoreCallback.cancel();
+        m_addIgnoreCallback.cancel();
     }
 
     //- SendStabledPet
-    if (_sendStabledPetCallback.IsReady())
+    if (m_sendStabledPetCallback.IsReady())
     {
-        uint64 param = _sendStabledPetCallback.GetParam();
-        _sendStabledPetCallback.GetResult(result);
+        uint64 param = m_sendStabledPetCallback.GetParam();
+        m_sendStabledPetCallback.GetResult(result);
         SendStablePetCallback(result, param);
-        _sendStabledPetCallback.FreeResult();
+        m_sendStabledPetCallback.FreeResult();
     }
 
     //- HandleStablePet
-    if (_stablePetCallback.ready())
+    if (m_stablePetCallback.ready())
     {
-        _stablePetCallback.get(result);
+        m_stablePetCallback.get(result);
         HandleStablePetCallback(result);
-        _stablePetCallback.cancel();
+        m_stablePetCallback.cancel();
     }
 
     //- HandleUnstablePet
-    if (_unstablePetCallback.IsReady())
+    if (m_unstablePetCallback.IsReady())
     {
-        uint32 param = _unstablePetCallback.GetParam();
-        _unstablePetCallback.GetResult(result);
+        uint32 param = m_unstablePetCallback.GetParam();
+        m_unstablePetCallback.GetResult(result);
         HandleUnstablePetCallback(result, param);
-        _unstablePetCallback.FreeResult();
+        m_unstablePetCallback.FreeResult();
     }
 
     //- HandleStableSwapPet
-    if (_stableSwapCallback.IsReady())
+    if (m_stableSwapCallback.IsReady())
     {
-        uint32 param = _stableSwapCallback.GetParam();
-        _stableSwapCallback.GetResult(result);
+        uint32 param = m_stableSwapCallback.GetParam();
+        m_stableSwapCallback.GetResult(result);
         HandleStableSwapPetCallback(result, param);
-        _stableSwapCallback.FreeResult();
+        m_stableSwapCallback.FreeResult();
     }
 }

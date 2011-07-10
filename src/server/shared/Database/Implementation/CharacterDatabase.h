@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -96,7 +94,7 @@ enum CharacterDatabaseStatements
     CHAR_ADD_MAIL_ITEM,
     CHAR_DEL_EMPTY_EXPIRED_MAIL,
     CHAR_GET_EXPIRED_MAIL,
-    CHAR_GET_EXPIRED_MAIL_ITEMS,
+    CHAR_GET_MAIL_ITEM_LITE,
     CHAR_SET_MAIL_RETURNED,
     CHAR_SET_MAIL_ITEM_RECEIVER,
     CHAR_SET_ITEM_OWNER,

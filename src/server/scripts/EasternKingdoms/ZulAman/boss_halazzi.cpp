@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: boss_Halazzi
-SD%Complete: 80
-SDComment:
-SDCategory: Zul'Aman
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulaman.h"
@@ -85,7 +76,7 @@ class boss_halazzi : public CreatureScript
 
         struct boss_halazziAI : public ScriptedAI
         {
-            boss_halazziAI(Creature* c) : ScriptedAI(c)
+            boss_halazziAI(Creature *c) : ScriptedAI(c)
             {
                 pInstance = c->GetInstanceScript();
                 // need to find out what controls totem's spell cooldown
@@ -124,7 +115,7 @@ class boss_halazzi : public CreatureScript
                 EnterPhase(PHASE_LYNX);
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_HALAZZIEVENT, IN_PROGRESS);
@@ -142,7 +133,7 @@ class boss_halazzi : public CreatureScript
                     LynxGUID = summon->GetGUID();
             }
 
-            void DamageTaken(Unit* /*done_by*/, uint32 &damage)
+            void DamageTaken(Unit * /*done_by*/, uint32 &damage)
             {
                 if (damage >= me->GetHealth() && Phase != PHASE_ENRAGE)
                     damage = 0;
@@ -154,7 +145,7 @@ class boss_halazzi : public CreatureScript
                     EnterPhase(PHASE_HUMAN);
             }
 
-            void AttackStart(Unit* who)
+            void AttackStart(Unit *who)
             {
                 if (Phase != PHASE_MERGE) ScriptedAI::AttackStart(who);
             }
@@ -171,7 +162,7 @@ class boss_halazzi : public CreatureScript
                         me->Attack(me->getVictim(), true);
                         me->GetMotionMaster()->MoveChase(me->getVictim());
                     }
-                    if (Creature* Lynx = Unit::GetCreature(*me, LynxGUID))
+                    if (Creature *Lynx = Unit::GetCreature(*me, LynxGUID))
                         Lynx->DisappearAndDie();
                     me->SetMaxHealth(600000);
                     me->SetHealth(600000 - 150000 * TransformCount);
@@ -194,7 +185,7 @@ class boss_halazzi : public CreatureScript
                     TotemTimer = 12000;
                     break;
                 case PHASE_MERGE:
-                    if (Unit* pLynx = Unit::GetUnit(*me, LynxGUID))
+                    if (Unit *pLynx = Unit::GetUnit(*me, LynxGUID))
                     {
                         me->MonsterYell(YELL_MERGE, LANG_UNIVERSAL, 0);
                         DoPlaySoundToSet(me, SOUND_MERGE);
@@ -263,12 +254,12 @@ class boss_halazzi : public CreatureScript
 
                     if (ShockTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
-                            if (target->IsNonMeleeSpellCasted(false))
-                                DoCast(target, SPELL_EARTHSHOCK);
+                            if (pTarget->IsNonMeleeSpellCasted(false))
+                                DoCast(pTarget, SPELL_EARTHSHOCK);
                             else
-                                DoCast(target, SPELL_FLAMESHOCK);
+                                DoCast(pTarget, SPELL_FLAMESHOCK);
                             ShockTimer = 10000 + rand()%5000;
                         }
                     } else ShockTimer -= diff;
@@ -281,7 +272,7 @@ class boss_halazzi : public CreatureScript
                                 EnterPhase(PHASE_MERGE);
                             else
                             {
-                                Unit* Lynx = Unit::GetUnit(*me, LynxGUID);
+                                Unit *Lynx = Unit::GetUnit(*me, LynxGUID);
                                 if (Lynx && !Lynx->HealthAbovePct(20) /*Lynx->HealthBelowPct(10)*/)
                                     EnterPhase(PHASE_MERGE);
                             }
@@ -294,7 +285,7 @@ class boss_halazzi : public CreatureScript
                 {
                     if (CheckTimer <= diff)
                     {
-                        Unit* Lynx = Unit::GetUnit(*me, LynxGUID);
+                        Unit *Lynx = Unit::GetUnit(*me, LynxGUID);
                         if (Lynx)
                         {
                             Lynx->GetMotionMaster()->MoveFollow(me, 0, 0);
@@ -358,7 +349,7 @@ class mob_halazzi_lynx : public CreatureScript
 
         struct mob_halazzi_lynxAI : public ScriptedAI
         {
-            mob_halazzi_lynxAI(Creature* c) : ScriptedAI(c) {}
+            mob_halazzi_lynxAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 FrenzyTimer;
             uint32 shredder_timer;
@@ -369,19 +360,19 @@ class mob_halazzi_lynx : public CreatureScript
                 shredder_timer = 4000;
             }
 
-            void DamageTaken(Unit* /*done_by*/, uint32 &damage)
+            void DamageTaken(Unit * /*done_by*/, uint32 &damage)
             {
                 if (damage >= me->GetHealth())
                     damage = 0;
             }
 
-            void AttackStart(Unit* who)
+            void AttackStart(Unit *who)
             {
                 if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                     ScriptedAI::AttackStart(who);
             }
 
-            void EnterCombat(Unit* /*who*/) {/*DoZoneInCombat();*/}
+            void EnterCombat(Unit * /*who*/) {/*DoZoneInCombat();*/}
 
             void UpdateAI(const uint32 diff)
             {

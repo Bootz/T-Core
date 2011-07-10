@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -143,20 +141,20 @@ void BattlegroundWS::Update(uint32 diff)
           m_FlagSpellForceTimer += diff;
           if (m_FlagDebuffState == 0 && m_FlagSpellForceTimer >= 600000)  //10 minutes
           {
-            if (Player* plr = sObjectMgr->GetPlayer(m_FlagKeepers[0]))
+            if (Player * plr = sObjectMgr->GetPlayer(m_FlagKeepers[0]))
               plr->CastSpell(plr, WS_SPELL_FOCUSED_ASSAULT, true);
-            if (Player* plr = sObjectMgr->GetPlayer(m_FlagKeepers[1]))
+            if (Player * plr = sObjectMgr->GetPlayer(m_FlagKeepers[1]))
               plr->CastSpell(plr, WS_SPELL_FOCUSED_ASSAULT, true);
             m_FlagDebuffState = 1;
           }
           else if (m_FlagDebuffState == 1 && m_FlagSpellForceTimer >= 900000) //15 minutes
           {
-            if (Player* plr = sObjectMgr->GetPlayer(m_FlagKeepers[0]))
+            if (Player * plr = sObjectMgr->GetPlayer(m_FlagKeepers[0]))
             {
               plr->RemoveAurasDueToSpell(WS_SPELL_FOCUSED_ASSAULT);
               plr->CastSpell(plr, WS_SPELL_BRUTAL_ASSAULT, true);
             }
-            if (Player* plr = sObjectMgr->GetPlayer(m_FlagKeepers[1]))
+            if (Player * plr = sObjectMgr->GetPlayer(m_FlagKeepers[1]))
             {
               plr->RemoveAurasDueToSpell(WS_SPELL_FOCUSED_ASSAULT);
               plr->CastSpell(plr, WS_SPELL_BRUTAL_ASSAULT, true);
@@ -560,7 +558,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player *Source, GameObject* target
     Source->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ENTER_PVP_COMBAT);
 }
 
-void BattlegroundWS::RemovePlayer(Player *plr, uint64 guid, uint32 /*team*/)
+void BattlegroundWS::RemovePlayer(Player *plr, uint64 guid)
 {
     // sometimes flag aura not removed :(
     if (IsAllianceFlagPickedup() && m_FlagKeepers[BG_TEAM_ALLIANCE] == guid)
@@ -748,7 +746,7 @@ void BattlegroundWS::EndBattleground(uint32 winner)
     Battleground::EndBattleground(winner);
 }
 
-void BattlegroundWS::HandleKillPlayer(Player* player, Player* killer)
+void BattlegroundWS::HandleKillPlayer(Player *player, Player *killer)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;

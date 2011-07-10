@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GUILD_H
-#define TRINITYCORE_GUILD_H
+#ifndef TRILLIUMCORE_GUILD_H
+#define TRILLIUMCORE_GUILD_H
 
 #include "World.h"
 #include "Item.h"
@@ -643,14 +641,14 @@ public:
 
     // Broadcasts
     void BroadcastToGuild(WorldSession *session, bool officerOnly, const std::string& msg, uint32 language = LANG_UNIVERSAL) const;
-    void BroadcastPacketToRank(WorldPacket* packet, uint8 rankId) const;
-    void BroadcastPacket(WorldPacket* packet) const;
+    void BroadcastPacketToRank(WorldPacket *packet, uint8 rankId) const;
+    void BroadcastPacket(WorldPacket *packet) const;
 
     template<class Do>
     void BroadcastWorker(Do& _do, Player* except = NULL)
     {
         for (Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-            if (Player* player = itr->second->FindPlayer())
+            if (Player *player = itr->second->FindPlayer())
                 if (player != except)
                     _do(player);
     }

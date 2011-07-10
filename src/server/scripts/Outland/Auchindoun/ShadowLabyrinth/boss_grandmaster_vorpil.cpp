@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Grandmaster_Vorpil
-SD%Complete: 100
-SDComment:
-SDCategory: Auchindoun, Shadow Labyrinth
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "shadow_labyrinth.h"
@@ -68,14 +59,14 @@ class mob_voidtraveler : public CreatureScript
 public:
     mob_voidtraveler() : CreatureScript("mob_voidtraveler") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_voidtravelerAI (creature);
+        return new mob_voidtravelerAI (pCreature);
     }
 
     struct mob_voidtravelerAI : public ScriptedAI
     {
-        mob_voidtravelerAI(Creature* c) : ScriptedAI(c)
+        mob_voidtravelerAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -90,7 +81,7 @@ public:
             sacrificed = false;
         }
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit * /*who*/){}
 
         void UpdateAI(const uint32 diff)
         {
@@ -101,7 +92,7 @@ public:
             }
             if (move <= diff)
             {
-                Creature* Vorpil = Unit::GetCreature(*me, VorpilGUID);
+                Creature *Vorpil = Unit::GetCreature(*me, VorpilGUID);
                 if (!Vorpil)
                 {
                     VorpilGUID = 0;
@@ -141,14 +132,14 @@ class boss_grandmaster_vorpil : public CreatureScript
 public:
     boss_grandmaster_vorpil() : CreatureScript("boss_grandmaster_vorpil") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_grandmaster_vorpilAI (creature);
+        return new boss_grandmaster_vorpilAI (pCreature);
     }
 
     struct boss_grandmaster_vorpilAI : public ScriptedAI
     {
-        boss_grandmaster_vorpilAI(Creature* c) : ScriptedAI(c)
+        boss_grandmaster_vorpilAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             Intro = false;
@@ -183,7 +174,7 @@ public:
             {
                 for (uint8 i = 0; i < 5; ++i)
                 {
-                    Creature* Portal = NULL;
+                    Creature *Portal = NULL;
                     Portal = me->SummonCreature(MOB_VOID_PORTAL, VoidPortalCoords[i][0], VoidPortalCoords[i][1], VoidPortalCoords[i][2], 0, TEMPSUMMON_CORPSE_DESPAWN, 3000000);
                     if (Portal)
                     {
@@ -202,7 +193,7 @@ public:
             {
                 for (uint8 i = 0; i < 5; ++i)
                 {
-                    Unit* Portal = Unit::GetUnit((*me), PortalsGuid[i]);
+                    Unit *Portal = Unit::GetUnit((*me), PortalsGuid[i]);
                     if (Portal && Portal->isAlive())
                         Portal->DealDamage(Portal, Portal->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                     PortalsGuid[i] = 0;
@@ -222,18 +213,18 @@ public:
             }
         }
 
-        void JustSummoned(Creature* summoned)
+        void JustSummoned(Creature *summoned)
         {
             if (summoned && summoned->GetEntry() == MOB_VOID_TRAVELER)
                 CAST_AI(mob_voidtraveler::mob_voidtravelerAI, summoned->AI())->VorpilGUID = me->GetGUID();
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
             destroyPortals();
@@ -242,7 +233,7 @@ public:
                 pInstance->SetData(DATA_GRANDMASTERVORPILEVENT, DONE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
             summonPortals();
@@ -251,7 +242,7 @@ public:
                 pInstance->SetData(DATA_GRANDMASTERVORPILEVENT, IN_PROGRESS);
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             ScriptedAI::MoveInLineOfSight(who);
 
@@ -275,10 +266,10 @@ public:
 
             if (IsHeroic() && banish_Timer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, false);
-                if (target)
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, false);
+                if (pTarget)
                 {
-                    DoCast(target, SPELL_BANISH);
+                    DoCast(pTarget, SPELL_BANISH);
                     banish_Timer = 16000;
                 }
             } else banish_Timer -= diff;

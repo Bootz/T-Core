@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -482,7 +480,7 @@ class BattlegroundSA : public Battleground
         void EndBattleground(uint32 winner);
 
         /// CAlled when a player leave battleground
-        void RemovePlayer(Player *plr, uint64 guid, uint32 team);
+        void RemovePlayer(Player *plr, uint64 guid);
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
 
         /* Scorekeeping */
@@ -537,9 +535,9 @@ class BattlegroundSA : public Battleground
         void UpdateDemolisherSpawns();
 
         /// Send packet to player for create boats (client part)
-        void SendTransportInit(Player* player);
+        void SendTransportInit(Player *player);
         /// Send packet to player for destroy boats (client part)
-        void SendTransportsRemove(Player* player);
+        void SendTransportsRemove(Player * player);
 
         /// Id of attacker team
         TeamId Attackers;

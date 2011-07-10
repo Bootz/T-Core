@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: npc_commandscript
-%Complete: 100
-Comment: All npc related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -65,6 +56,7 @@ public:
         static ChatCommand npcSetCommandTable[] =
         {
             { "allowmove",      SEC_ADMINISTRATOR,  false, &HandleNpcSetAllowMovementCommand,  "", NULL },
+            { "deathstate",     SEC_GAMEMASTER,     false, &HandleNpcSetDeathStateCommand,     "", NULL },
             { "entry",          SEC_ADMINISTRATOR,  false, &HandleNpcSetEntryCommand,          "", NULL },
             { "factionid",      SEC_GAMEMASTER,     false, &HandleNpcSetFactionIdCommand,      "", NULL },
             { "flag",           SEC_GAMEMASTER,     false, &HandleNpcSetFlagCommand,           "", NULL },
@@ -121,7 +113,7 @@ public:
 
         uint32 id  = atoi(charID);
 
-        Player* chr = handler->GetSession()->GetPlayer();
+        Player *chr = handler->GetSession()->GetPlayer();
         float x = chr->GetPositionX();
         float y = chr->GetPositionY();
         float z = chr->GetPositionZ();
@@ -137,21 +129,21 @@ public:
             return true;
         }
 
-        Creature* creature = new Creature;
-        if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, (uint32)teamval, x, y, z, o))
+        Creature* pCreature = new Creature;
+        if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, (uint32)teamval, x, y, z, o))
         {
-            delete creature;
+            delete pCreature;
             return false;
         }
 
-        creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
+        pCreature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
 
-        uint32 db_guid = creature->GetDBTableGUIDLow();
+        uint32 db_guid = pCreature->GetDBTableGUIDLow();
 
         // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
-        creature->LoadFromDB(db_guid, map);
+        pCreature->LoadFromDB(db_guid, map);
 
-        map->Add(creature);
+        map->Add(pCreature);
         sObjectMgr->AddCreatureToGrid(db_guid, sObjectMgr->GetCreatureData(db_guid));
         return true;
     }
@@ -219,15 +211,15 @@ public:
 
         uint32 lowguid = atoi((char*)guid_str);
 
-        Creature* creature = NULL;
+        Creature* pCreature = NULL;
 
         /* FIXME: impossible without entry
         if (lowguid)
-            creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
+            pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
         */
 
         // attempt check creature existence by DB data
-        if (!creature)
+        if (!pCreature)
         {
             CreatureData const* data = sObjectMgr->GetCreatureData(lowguid);
             if (!data)
@@ -240,7 +232,7 @@ public:
         else
         {
             // obtain real GUID for DB operations
-            lowguid = creature->GetDBTableGUIDLow();
+            lowguid = pCreature->GetDBTableGUIDLow();
         }
 
         int wait = wait_str ? atoi(wait_str) : 0;
@@ -254,16 +246,16 @@ public:
 
         // update movement type
         WorldDatabase.PExecute("UPDATE creature SET MovementType = '%u' WHERE guid = '%u'", WAYPOINT_MOTION_TYPE, lowguid);
-        if (creature && creature->GetWaypointPath())
+        if (pCreature && pCreature->GetWaypointPath())
         {
-            creature->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
-            creature->GetMotionMaster()->Initialize();
-            if (creature->isAlive())                            // dead creature will reset movement generator at respawn
+            pCreature->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
+            pCreature->GetMotionMaster()->Initialize();
+            if (pCreature->isAlive())                            // dead creature will reset movement generator at respawn
             {
-                creature->setDeathState(JUST_DIED);
-                creature->Respawn(true);
+                pCreature->setDeathState(JUST_DIED);
+                pCreature->Respawn(true);
             }
-            creature->SaveToDB();
+            pCreature->SaveToDB();
         }
 
         handler->SendSysMessage(LANG_WAYPOINT_ADDED);
@@ -324,29 +316,29 @@ public:
             return false;
         }
 
-        Creature* creature = handler->getSelectedCreature();
-        if (!creature)
+        Creature* pCreature = handler->getSelectedCreature();
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        if (creature->isPet())
+        if (pCreature->isPet())
         {
-            if (((Pet*)creature)->getPetType() == HUNTER_PET)
+            if (((Pet*)pCreature)->getPetType() == HUNTER_PET)
             {
-                creature->SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr->GetXPForLevel(lvl)/4);
-                creature->SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, 0);
+                pCreature->SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr->GetXPForLevel(lvl)/4);
+                pCreature->SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, 0);
             }
-            ((Pet*)creature)->GivePetLevel(lvl);
+            ((Pet*)pCreature)->GivePetLevel(lvl);
         }
         else
         {
-            creature->SetMaxHealth(100 + 30*lvl);
-            creature->SetHealth(100 + 30*lvl);
-            creature->SetLevel(lvl);
-            creature->SaveToDB();
+            pCreature->SetMaxHealth(100 + 30*lvl);
+            pCreature->SetHealth(100 + 30*lvl);
+            pCreature->SetLevel(lvl);
+            pCreature->SaveToDB();
         }
 
         return true;
@@ -441,28 +433,28 @@ public:
             return false;
         }
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature* pCreature = handler->getSelectedCreature();
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->setFaction(factionId);
+        pCreature->setFaction(factionId);
 
         // faction is set in creature_template - not inside creature
 
         // update in memory
-        if (CreatureTemplate const *cinfo = creature->GetCreatureInfo())
+        if (CreatureTemplate const *cinfo = pCreature->GetCreatureInfo())
         {
             const_cast<CreatureTemplate*>(cinfo)->faction_A = factionId;
             const_cast<CreatureTemplate*>(cinfo)->faction_H = factionId;
         }
 
         // and DB
-        WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", factionId, factionId, creature->GetEntry());
+        WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", factionId, factionId, pCreature->GetEntry());
 
         return true;
     }
@@ -475,18 +467,18 @@ public:
 
         uint32 npcFlags = (uint32) atoi((char*)args);
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature* pCreature = handler->getSelectedCreature();
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->SetUInt32Value(UNIT_NPC_FLAGS, npcFlags);
+        pCreature->SetUInt32Value(UNIT_NPC_FLAGS, npcFlags);
 
-        WorldDatabase.PExecute("UPDATE creature_template SET npcflag = '%u' WHERE entry = '%u'", npcFlags, creature->GetEntry());
+        WorldDatabase.PExecute("UPDATE creature_template SET npcflag = '%u' WHERE entry = '%u'", npcFlags, pCreature->GetEntry());
 
         handler->SendSysMessage(LANG_VALUE_SAVED_REJOIN);
 
@@ -496,8 +488,8 @@ public:
     //npc follow handling
     static bool HandleNpcFollowCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player* player = handler->GetSession()->GetPlayer();
-        Creature* creature = handler->getSelectedCreature();
+        Player *player = handler->GetSession()->GetPlayer();
+        Creature *creature = handler->getSelectedCreature();
 
         if (!creature)
         {
@@ -565,9 +557,9 @@ public:
     {
         uint32 lowguid = 0;
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature* pCreature = handler->getSelectedCreature();
 
-        if (!creature)
+        if (!pCreature)
         {
             // number or [name] Shift-click form |color|Hcreature:creature_guid|h[name]|h|r
             char* cId = handler->extractKeyFromLink((char*)args, "Hcreature");
@@ -578,11 +570,11 @@ public:
 
             /* FIXME: impossible without entry
             if (lowguid)
-                creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
+                pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
             */
 
             // Attempting creature load from DB data
-            if (!creature)
+            if (!pCreature)
             {
                 CreatureData const* data = sObjectMgr->GetCreatureData(lowguid);
                 if (!data)
@@ -603,12 +595,12 @@ public:
             }
             else
             {
-                lowguid = creature->GetDBTableGUIDLow();
+                lowguid = pCreature->GetDBTableGUIDLow();
             }
         }
         else
         {
-            lowguid = creature->GetDBTableGUIDLow();
+            lowguid = pCreature->GetDBTableGUIDLow();
         }
 
         float x = handler->GetSession()->GetPlayer()->GetPositionX();
@@ -616,21 +608,21 @@ public:
         float z = handler->GetSession()->GetPlayer()->GetPositionZ();
         float o = handler->GetSession()->GetPlayer()->GetOrientation();
 
-        if (creature)
+        if (pCreature)
         {
-            if (CreatureData const* data = sObjectMgr->GetCreatureData(creature->GetDBTableGUIDLow()))
+            if (CreatureData const* data = sObjectMgr->GetCreatureData(pCreature->GetDBTableGUIDLow()))
             {
                 const_cast<CreatureData*>(data)->posX = x;
                 const_cast<CreatureData*>(data)->posY = y;
                 const_cast<CreatureData*>(data)->posZ = z;
                 const_cast<CreatureData*>(data)->orientation = o;
             }
-            creature->GetMap()->CreatureRelocation(creature, x, y, z, o);
-            creature->GetMotionMaster()->Initialize();
-            if (creature->isAlive())                            // dead creature will reset movement generator at respawn
+            pCreature->GetMap()->CreatureRelocation(pCreature, x, y, z, o);
+            pCreature->GetMotionMaster()->Initialize();
+            if (pCreature->isAlive())                            // dead creature will reset movement generator at respawn
             {
-                creature->setDeathState(JUST_DIED);
-                creature->Respawn();
+                pCreature->setDeathState(JUST_DIED);
+                pCreature->Respawn();
             }
         }
 
@@ -669,19 +661,19 @@ public:
 
         uint32 displayId = (uint32) atoi((char*)args);
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature *pCreature = handler->getSelectedCreature();
 
-        if (!creature || creature->isPet())
+        if (!pCreature || pCreature->isPet())
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->SetDisplayId(displayId);
-        creature->SetNativeDisplayId(displayId);
+        pCreature->SetDisplayId(displayId);
+        pCreature->SetNativeDisplayId(displayId);
 
-        creature->SaveToDB();
+        pCreature->SaveToDB();
 
         return true;
     }
@@ -720,7 +712,7 @@ public:
             return false;
 
         uint32 lowguid = 0;
-        Creature* creature = NULL;
+        Creature* pCreature = NULL;
 
         if (dontdel_str)
         {
@@ -754,10 +746,10 @@ public:
         if (!type_str)                                           // case .setmovetype $move_type (with selected creature)
         {
             type_str = guid_str;
-            creature = handler->getSelectedCreature();
-            if (!creature || creature->isPet())
+            pCreature = handler->getSelectedCreature();
+            if (!pCreature || pCreature->isPet())
                 return false;
-            lowguid = creature->GetDBTableGUIDLow();
+            lowguid = pCreature->GetDBTableGUIDLow();
         }
         else                                                    // case .setmovetype #creature_guid $move_type (with selected creature)
         {
@@ -765,11 +757,11 @@ public:
 
             /* impossible without entry
             if (lowguid)
-                creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
+                pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
             */
 
             // attempt check creature existence by DB data
-            if (!creature)
+            if (!pCreature)
             {
                 CreatureData const* data = sObjectMgr->GetCreatureData(lowguid);
                 if (!data)
@@ -781,12 +773,12 @@ public:
             }
             else
             {
-                lowguid = creature->GetDBTableGUIDLow();
+                lowguid = pCreature->GetDBTableGUIDLow();
             }
         }
 
         // now lowguid is low guid really existed creature
-        // and creature point (maybe) to this creature or NULL
+        // and pCreature point (maybe) to this creature or NULL
 
         MovementGeneratorType move_type;
 
@@ -805,20 +797,20 @@ public:
         //if (doNotDelete == false)
         //    WaypointMgr.DeletePath(lowguid);
 
-        if (creature)
+        if (pCreature)
         {
             // update movement type
             if (doNotDelete == false)
-                creature->LoadPath(0);
+                pCreature->LoadPath(0);
 
-            creature->SetDefaultMovementType(move_type);
-            creature->GetMotionMaster()->Initialize();
-            if (creature->isAlive())                            // dead creature will reset movement generator at respawn
+            pCreature->SetDefaultMovementType(move_type);
+            pCreature->GetMotionMaster()->Initialize();
+            if (pCreature->isAlive())                            // dead creature will reset movement generator at respawn
             {
-                creature->setDeathState(JUST_DIED);
-                creature->Respawn();
+                pCreature->setDeathState(JUST_DIED);
+                pCreature->Respawn();
             }
-            creature->SaveToDB();
+            pCreature->SaveToDB();
         }
         if (doNotDelete == false)
         {
@@ -847,18 +839,18 @@ public:
             return false;
         }
 
-        Creature* creature = handler->getSelectedCreature();
-        if (!creature)
+        Creature* pCreature = handler->getSelectedCreature();
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->SetPhaseMask(phasemask, true);
+        pCreature->SetPhaseMask(phasemask, true);
 
-        if (!creature->isPet())
-            creature->SaveToDB();
+        if (!pCreature->isPet())
+            pCreature->SaveToDB();
 
         return true;
     }
@@ -880,21 +872,21 @@ public:
         if (option >0.0f)
             mtype = RANDOM_MOTION_TYPE;
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature *pCreature = handler->getSelectedCreature();
         uint32 u_guidlow = 0;
 
-        if (creature)
-            u_guidlow = creature->GetDBTableGUIDLow();
+        if (pCreature)
+            u_guidlow = pCreature->GetDBTableGUIDLow();
         else
             return false;
 
-        creature->SetRespawnRadius((float)option);
-        creature->SetDefaultMovementType(mtype);
-        creature->GetMotionMaster()->Initialize();
-        if (creature->isAlive())                                // dead creature will reset movement generator at respawn
+        pCreature->SetRespawnRadius((float)option);
+        pCreature->SetDefaultMovementType(mtype);
+        pCreature->GetMotionMaster()->Initialize();
+        if (pCreature->isAlive())                                // dead creature will reset movement generator at respawn
         {
-            creature->setDeathState(JUST_DIED);
-            creature->Respawn();
+            pCreature->setDeathState(JUST_DIED);
+            pCreature->Respawn();
         }
 
         WorldDatabase.PExecute("UPDATE creature SET spawndist=%f, MovementType=%i WHERE guid=%u", option, mtype, u_guidlow);
@@ -922,16 +914,16 @@ public:
             return false;
         }
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature *pCreature = handler->getSelectedCreature();
         uint32 u_guidlow = 0;
 
-        if (creature)
-            u_guidlow = creature->GetDBTableGUIDLow();
+        if (pCreature)
+            u_guidlow = pCreature->GetDBTableGUIDLow();
         else
             return false;
 
         WorldDatabase.PExecute("UPDATE creature SET spawntimesecs=%i WHERE guid=%u", i_stime, u_guidlow);
-        creature->SetRespawnDelay((uint32)i_stime);
+        pCreature->SetRespawnDelay((uint32)i_stime);
         handler->PSendSysMessage(LANG_COMMAND_SPAWNTIME, i_stime);
 
         return true;
@@ -942,23 +934,23 @@ public:
         if (!*args)
             return false;
 
-        Creature* creature = handler->getSelectedCreature();
-        if (!creature)
+        Creature* pCreature = handler->getSelectedCreature();
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->MonsterSay(args, LANG_UNIVERSAL, 0);
+        pCreature->MonsterSay(args, LANG_UNIVERSAL, 0);
 
         // make some emotes
         char lastchar = args[strlen(args) - 1];
         switch(lastchar)
         {
-        case '?':   creature->HandleEmoteCommand(EMOTE_ONESHOT_QUESTION);      break;
-        case '!':   creature->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);   break;
-        default:    creature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);          break;
+        case '?':   pCreature->HandleEmoteCommand(EMOTE_ONESHOT_QUESTION);      break;
+        case '!':   pCreature->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);   break;
+        default:    pCreature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);          break;
         }
 
         return true;
@@ -970,16 +962,16 @@ public:
         if (!*args)
             return false;
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature* pCreature = handler->getSelectedCreature();
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->MonsterTextEmote(args, 0);
+        pCreature->MonsterTextEmote(args, 0);
 
         return true;
     }
@@ -987,8 +979,8 @@ public:
     //npc unfollow handling
     static bool HandleNpcUnFollowCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player* player = handler->GetSession()->GetPlayer();
-        Creature* creature = handler->getSelectedCreature();
+        Player *player = handler->GetSession()->GetPlayer();
+        Creature *creature = handler->getSelectedCreature();
 
         if (!creature)
         {
@@ -1032,9 +1024,9 @@ public:
         char* text = strtok(NULL, "");
 
         uint64 guid = handler->GetSession()->GetPlayer()->GetSelection();
-        Creature* creature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(guid);
+        Creature* pCreature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(guid);
 
-        if (!creature || !receiver_str || !text)
+        if (!pCreature || !receiver_str || !text)
         {
             return false;
         }
@@ -1045,7 +1037,7 @@ public:
         if (handler->HasLowerSecurity(sObjectMgr->GetPlayer(receiver_guid), 0))
             return false;
 
-        creature->MonsterWhisper(text, receiver_guid);
+        pCreature->MonsterWhisper(text, receiver_guid);
 
         return true;
     }
@@ -1055,18 +1047,18 @@ public:
         if (!*args)
             return false;
 
-        Creature* creature = handler->getSelectedCreature();
-        if (!creature)
+        Creature* pCreature = handler->getSelectedCreature();
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->MonsterYell(args, LANG_UNIVERSAL, 0);
+        pCreature->MonsterYell(args, LANG_UNIVERSAL, 0);
 
         // make an emote
-        creature->HandleEmoteCommand(EMOTE_ONESHOT_SHOUT);
+        pCreature->HandleEmoteCommand(EMOTE_ONESHOT_SHOUT);
 
         return true;
     }
@@ -1080,7 +1072,7 @@ public:
         if (!charID)
             return false;
 
-        Player* chr = handler->GetSession()->GetPlayer();
+        Player *chr = handler->GetSession()->GetPlayer();
 
         uint32 id = atoi(charID);
         if (!id)
@@ -1094,7 +1086,7 @@ public:
     //npc tame handling
     static bool HandleNpcTameCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Creature* creatureTarget = handler->getSelectedCreature ();
+        Creature *creatureTarget = handler->getSelectedCreature ();
         if (!creatureTarget || creatureTarget->isPet ())
         {
             handler->PSendSysMessage (LANG_SELECT_CREATURE);
@@ -1102,7 +1094,7 @@ public:
             return false;
         }
 
-        Player* player = handler->GetSession()->GetPlayer ();
+        Player *player = handler->GetSession()->GetPlayer ();
 
         if (player->GetPetGUID ())
         {
@@ -1158,42 +1150,73 @@ public:
         return true;
     }
 
-    static bool HandleNpcAddFormationCommand(ChatHandler* handler, const char* args)
+    //npc deathstate handling
+    static bool HandleNpcSetDeathStateCommand(ChatHandler* handler, const char* args)
     {
         if (!*args)
             return false;
 
-        uint32 leaderGUID = (uint32) atoi((char*)args);
-        Creature* creature = handler->getSelectedCreature();
-
-        if (!creature || !creature->GetDBTableGUIDLow())
+        Creature* pCreature = handler->getSelectedCreature();
+        if (!pCreature || pCreature->isPet())
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        uint32 lowguid = creature->GetDBTableGUIDLow();
-        if (creature->GetFormation())
+        if (strncmp(args, "on", 3) == 0)
+            pCreature->SetDeadByDefault(true);
+        else if (strncmp(args, "off", 4) == 0)
+            pCreature->SetDeadByDefault(false);
+        else
         {
-            handler->PSendSysMessage("Selected creature is already member of group %u", creature->GetFormation()->GetId());
+            handler->SendSysMessage(LANG_USE_BOL);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        pCreature->SaveToDB();
+        pCreature->Respawn();
+
+        return true;
+    }
+
+    static bool HandleNpcAddFormationCommand(ChatHandler* handler, const char* args)
+    {
+        if (!*args)
+            return false;
+
+        uint32 leaderGUID = (uint32) atoi((char*)args);
+        Creature *pCreature = handler->getSelectedCreature();
+
+        if (!pCreature || !pCreature->GetDBTableGUIDLow())
+        {
+            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint32 lowguid = pCreature->GetDBTableGUIDLow();
+        if (pCreature->GetFormation())
+        {
+            handler->PSendSysMessage("Selected creature is already member of group %u", pCreature->GetFormation()->GetId());
             return false;
         }
 
         if (!lowguid)
             return false;
 
-        Player* chr = handler->GetSession()->GetPlayer();
+        Player *chr = handler->GetSession()->GetPlayer();
         FormationInfo *group_member;
 
         group_member                 = new FormationInfo;
-        group_member->follow_angle   = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
-        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY()-creature->GetPositionY(), int(2)));
+        group_member->follow_angle   = (pCreature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
+        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - pCreature->GetPositionX(), int(2))+pow(chr->GetPositionY()-pCreature->GetPositionY(), int(2)));
         group_member->leaderGUID     = leaderGUID;
         group_member->groupAI        = 0;
 
         CreatureGroupMap[lowguid] = group_member;
-        creature->SearchFormation();
+        pCreature->SearchFormation();
 
         WorldDatabase.PExecute("INSERT INTO creature_formations (leaderGUID, memberGUID, dist, angle, groupAI) VALUES ('%u', '%u', '%f', '%f', '%u')",
             leaderGUID, lowguid, group_member->follow_dist, group_member->follow_angle, group_member->groupAI);
@@ -1210,30 +1233,30 @@ public:
 
         uint32 linkguid = (uint32) atoi((char*)args);
 
-        Creature* creature = handler->getSelectedCreature();
+        Creature* pCreature = handler->getSelectedCreature();
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        if (!creature->GetDBTableGUIDLow())
+        if (!pCreature->GetDBTableGUIDLow())
         {
-            handler->PSendSysMessage("Selected creature %u isn't in creature table", creature->GetGUIDLow());
+            handler->PSendSysMessage("Selected creature %u isn't in creature table", pCreature->GetGUIDLow());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        if (!sObjectMgr->SetCreatureLinkedRespawn(creature->GetDBTableGUIDLow(), linkguid))
+        if (!sObjectMgr->SetCreatureLinkedRespawn(pCreature->GetDBTableGUIDLow(), linkguid))
         {
             handler->PSendSysMessage("Selected creature can't link with guid '%u'", linkguid);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage("LinkGUID '%u' added to creature with DBTableGUID: '%u'", linkguid, creature->GetDBTableGUIDLow());
+        handler->PSendSysMessage("LinkGUID '%u' added to creature with DBTableGUID: '%u'", linkguid, pCreature->GetDBTableGUIDLow());
         return true;
     }
 
@@ -1250,9 +1273,9 @@ public:
             return true;
         }
 
-        Creature* creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
+        Creature *pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             return true;
@@ -1277,15 +1300,15 @@ public:
             switch(SlotID)
             {
                 case 1:
-                    creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY, ItemID);
+                    pCreature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY, ItemID);
                     added = true;
                     break;
                 case 2:
-                    creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_01, ItemID);
+                    pCreature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_01, ItemID);
                     added = true;
                     break;
                 case 3:
-                    creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_02, ItemID);
+                    pCreature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_02, ItemID);
                     added = true;
                     break;
                 default:
@@ -1335,19 +1358,19 @@ public:
             return true;
         }
 
-        Creature* creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
+        Creature* pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             return true;
         }
 
-        creature->SetName(args);
-        uint32 idname = sObjectMgr->AddCreatureTemplate(creature->GetName());
-        creature->SetUInt32Value(OBJECT_FIELD_ENTRY, idname);
+        pCreature->SetName(args);
+        uint32 idname = sObjectMgr->AddCreatureTemplate(pCreature->GetName());
+        pCreature->SetUInt32Value(OBJECT_FIELD_ENTRY, idname);
 
-        creature->SaveToDB();
+        pCreature->SaveToDB();
         */
 
         return true;
@@ -1382,18 +1405,18 @@ public:
             return true;
         }
 
-        Creature* creature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
+        Creature* pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), guid);
 
-        if (!creature)
+        if (!pCreature)
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             return true;
         }
 
-        uint32 idname = sObjectMgr->AddCreatureSubName(creature->GetName(), args, creature->GetUInt32Value(UNIT_FIELD_DISPLAYID));
-        creature->SetUInt32Value(OBJECT_FIELD_ENTRY, idname);
+        uint32 idname = sObjectMgr->AddCreatureSubName(pCreature->GetName(), args, pCreature->GetUInt32Value(UNIT_FIELD_DISPLAYID));
+        pCreature->SetUInt32Value(OBJECT_FIELD_ENTRY, idname);
 
-        creature->SaveToDB();
+        pCreature->SaveToDB();
         */
         return true;
     }

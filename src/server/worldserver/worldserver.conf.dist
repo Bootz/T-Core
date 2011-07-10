@@ -1,6 +1,6 @@
-###############################################
-# TrilliumEMU World Server configuration file #
-###############################################
+####################################################
+# Trillium ENCORE World Server configuration file #
+####################################################
 [worldserver]
 
 ###################################################################################################
@@ -81,13 +81,13 @@ LogsDir = ""
 #                                                                 section my.ini)
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
-#        Default:     "127.0.0.1;3306;trillium;password;auth"       - (LoginDatabaseInfo)
-#                     "127.0.0.1;3306;trillium;password;world"      - (WorldDatabaseInfo)
-#                     "127.0.0.1;3306;trillium;password;characters" - (CharacterDatabaseInfo)
+#        Default:     "127.0.0.1;3306;singularity;singularity;auth"       - (LoginDatabaseInfo)
+#                     "127.0.0.1;3306;singularity;singularity;world"      - (WorldDatabaseInfo)
+#                     "127.0.0.1;3306;singularity;singularity;characters" - (CharacterDatabaseInfo)
 
-LoginDatabaseInfo     = "127.0.0.1;3306;trillium;password;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;trillium;password;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;trillium;password;characters"
+LoginDatabaseInfo     = "127.0.0.1;3306;singularity;singularity;auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;singularity;singularity;world"
+CharacterDatabaseInfo = "127.0.0.1;3306;singularity;singularity;characters"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -447,7 +447,7 @@ LogFileLevel = 0
 #                   1 - Anything related to units that doesn't fit in other
 #                          categories.
 #                   2 - Anything related to pets.
-#                   4 - Anything related to vehicles.
+#                   4 - Anything related to vehicles. 
 #                   8 - Anything related to C++ AI, instance scripts, etc.
 #                  16 - Anything related to DB AI, such as SAI, EAI, CreatureAI
 #                  32 - Anything related to DB map scripts
@@ -467,7 +467,7 @@ LogFileLevel = 0
 #              131072 - Anything related to player loading from DB
 #                      (Player::_LoadXXX functions)
 #              262144 - Anything related to items
-#              524288 - Anything related to player skills
+#              524288 - Anything related to player skills 
 #                      (do not confuse with spells)
 #             1048576 - Anything related to loot
 #             2097152 - Anything related to guilds
@@ -591,14 +591,6 @@ ArenaLogFile = ""
 #                     1 - (Enabled)
 
 ArenaLog.ExtendedInfo = 0
-
-#
-#    SQLDeveloperLogFile
-#        Description: Log file for core-generated SQL queries/dumps
-#        Example:     "SQLDev.log"    - (Enabled)
-#        Default:      ""             - (Disabled)
-
-SQLDeveloperLogFile = ""
 
 #
 #    SQLDriverLogFile
@@ -1117,9 +1109,9 @@ RecruitAFriend.MaxLevel = 60
 #    RecruitAFriend.MaxDifference
 #        Description: Highest level difference between linked Recruiter and Friend benefit from
 #                     the Recruit-A-Friend experience multiplier.
-#        Default:     4
+#        Default:     3
 
-RecruitAFriend.MaxDifference = 4
+RecruitAFriend.MaxDifference = 3
 
 #
 #    InstantLogout
@@ -1360,10 +1352,10 @@ BeepAtStart = 1
 #    Motd
 #        Description: Message of the Day, displayed at login.
 #                     Use '@' for a newline and be sure to escape special characters.
-#        Example:     "Welcome to John\'s Server@This server runs on Trinity Core."
-#        Default:     "Welcome to a Trinity Core server."
+#        Example:     "Welcome to John\'s Server@This server runs on Trillium ENCORE."
+#        Default:     "Welcome to a Trillium ENCORE server."
 
-Motd = "Welcome to a Trinity Core server."
+Motd = "Welcome to a Trillium ENCORE server."
 
 #
 #    Server.LoginInfo
@@ -1395,57 +1387,6 @@ AllowTickets = 1
 #                     1 - (Enabled, Experimental as of still being in development)
 
 DungeonFinder.Enable = 0
-
-#
-#     Wintergrasp.Enable
-#         Description: Enable the Wintergrasp battlefield.
-#         Default:     0 - (Disabled)
-#                      1 - (Enabled, Experimental as of still being in development)
-
-Wintergrasp.Enable = 0
-
-#
-#     Wintergrasp.PlayerMax
-#         Description: Maximum number of players allowed in Wintergrasp.
-#         Default:     100
-
-Wintergrasp.PlayerMax = 100
-
-#
-#     Wintergrasp.PlayerMin
-#         Description: Minimum number of players required for Wintergrasp.
-#         Default:     0
-
-Wintergrasp.PlayerMin = 0
-
-#
-#     Wintergrasp.PlayerMinLvl
-#         Description: Required character level for the Wintergrasp battle.
-#         Default:     77
-
-Wintergrasp.PlayerMinLvl = 77
-
-#
-#     Wintergrasp.BattleTimer
-#         Description: Time (in minutes) for the Wintergrasp battle to last.
-#         Default:     30
-
-Wintergrasp.BattleTimer = 30
-
-#
-#     Wintergrasp.NoBattleTimer
-#         Description: Time (in minutes) between Wintergrasp battles.
-#         Default:     150
-
-Wintergrasp.NoBattleTimer = 150
-
-#
-#     Wintergrasp.CrashRestartTimer
-#         Description: Time (in minutes) to delay the restart of Wintergrasp if the world server
-#                      crashed during a running battle.
-#         Default:     10
-
-Wintergrasp.CrashRestartTimer = 10
 
 #
 #   DBC.EnforceItemAttributes
@@ -1952,6 +1893,16 @@ GM.AllowFriend = 0
 #                     1 - (Enabled)
 
 GM.LowerSecurity = 0
+
+#
+#    GM.AllowAchievementGain.Level
+#        Description: Max GM level that can obtain achievements.
+#        Default:     3 - (Anyone)
+#                     0 - (Only players)
+#                     1 - (Only moderators)
+#                     2 - (Only gamemasters)
+
+GM.AllowAchievementGain.Level = 3
 
 #
 #    GM.TicketSystem.ChanceOfGMSurvey

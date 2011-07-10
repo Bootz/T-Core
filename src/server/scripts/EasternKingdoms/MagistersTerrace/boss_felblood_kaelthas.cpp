@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Felblood_Kaelthas
-SD%Complete: 80
-SDComment: Normal and Heroic Support. Issues: Arcane Spheres do not initially follow targets.
-SDCategory: Magisters' Terrace
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "magisters_terrace.h"
@@ -148,7 +139,7 @@ public:
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit * /*killer*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -165,7 +156,7 @@ public:
                 RemoveGravityLapse();                           // Remove Gravity Lapse so that players fall to ground if they kill him when in air.
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (!pInstance)
                 return;
@@ -174,7 +165,7 @@ public:
            //Close the encounter door, open it in JustDied/Reset
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!HasTaunted && me->IsWithinDistInMap(who, 40.0f))
             {
@@ -261,7 +252,7 @@ public:
                     pUnit->RemoveAurasDueToSpell(SPELL_GRAVITY_LAPSE_FLY);
                     pUnit->RemoveAurasDueToSpell(SPELL_GRAVITY_LAPSE_DOT);
 
-                    WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 12);
+                    WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 12);
                     data.append(pUnit->GetPackGUID());
                     data << uint32(0);
                     pUnit->SendMessageToSet(&data, true);
@@ -301,7 +292,7 @@ public:
                     if (PhoenixTimer <= diff)
                     {
 
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
 
                         uint8 random = urand(1, 2);
                         float x = KaelLocations[random][0];
@@ -312,7 +303,7 @@ public:
                         {
                             Phoenix->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE + UNIT_FLAG_NON_ATTACKABLE);
                             SetThreatList(Phoenix);
-                            Phoenix->AI()->AttackStart(target);
+                            Phoenix->AI()->AttackStart(pTarget);
                         }
 
                         DoScriptText(SAY_PHOENIX, me);
@@ -322,11 +313,11 @@ public:
 
                     if (FlameStrikeTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         {
                             me->InterruptSpell(CURRENT_CHANNELED_SPELL);
                             me->InterruptSpell(CURRENT_GENERIC_SPELL);
-                            DoCast(target, SPELL_FLAMESTRIKE3, true);
+                            DoCast(pTarget, SPELL_FLAMESTRIKE3, true);
                             DoScriptText(SAY_FLAMESTRIKE, me);
                         }
                         FlameStrikeTimer = urand(15000, 25000);
@@ -394,15 +385,15 @@ public:
 
                                 for (uint8 i = 0; i < 3; ++i)
                                 {
-                                    Unit* target = NULL;
-                                    target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                                    Unit *pTarget = NULL;
+                                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
                                     Creature* Orb = DoSpawnCreature(CREATURE_ARCANE_SPHERE, 5, 5, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
-                                    if (Orb && target)
+                                    if (Orb && pTarget)
                                     {
                                         Orb->SetSpeed(MOVE_RUN, 0.5f);
-                                        Orb->AddThreat(target, 1000000.0f);
-                                        Orb->AI()->AttackStart(target);
+                                        Orb->AddThreat(pTarget, 1000000.0f);
+                                        Orb->AI()->AttackStart(pTarget);
                                     }
 
                                 }
@@ -440,7 +431,7 @@ public:
 
     struct mob_felkael_flamestrikeAI : public ScriptedAI
     {
-        mob_felkael_flamestrikeAI(Creature* c) : ScriptedAI(c)
+        mob_felkael_flamestrikeAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -456,8 +447,8 @@ public:
             DoCast(me, SPELL_FLAMESTRIKE2, true);
         }
 
-        void EnterCombat(Unit* /*who*/) {}
-        void MoveInLineOfSight(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
+        void MoveInLineOfSight(Unit * /*who*/) {}
         void UpdateAI(const uint32 diff)
         {
             if (FlameStrikeTimer <= diff)
@@ -506,7 +497,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void DamageTaken(Unit* /*killer*/, uint32 &damage)
+        void DamageTaken(Unit* /*pKiller*/, uint32 &damage)
         {
             if (damage < me->GetHealth())
                 return;
@@ -602,7 +593,7 @@ public:
 
     struct mob_felkael_phoenix_eggAI : public ScriptedAI
     {
-        mob_felkael_phoenix_eggAI(Creature* c) : ScriptedAI(c) {}
+        mob_felkael_phoenix_eggAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 HatchTimer;
 
@@ -639,7 +630,7 @@ public:
 
     struct mob_arcane_sphereAI : public ScriptedAI
     {
-        mob_arcane_sphereAI(Creature* c) : ScriptedAI(c) { Reset(); }
+        mob_arcane_sphereAI(Creature *c) : ScriptedAI(c) { Reset(); }
 
         uint32 DespawnTimer;
         uint32 ChangeTargetTimer;
@@ -670,11 +661,11 @@ public:
 
             if (ChangeTargetTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                 {
-                    me->AddThreat(target, 1.0f);
-                    me->TauntApply(target);
-                    AttackStart(target);
+                    me->AddThreat(pTarget, 1.0f);
+                    me->TauntApply(pTarget);
+                    AttackStart(pTarget);
                 }
 
                 ChangeTargetTimer = urand(5000, 15000);

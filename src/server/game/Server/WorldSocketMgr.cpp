@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,7 +42,6 @@
 #include "Config.h"
 #include "DatabaseEnv.h"
 #include "WorldSocket.h"
-#include "WorldSocketAcceptor.h"
 #include "ScriptMgr.h"
 
 /**
@@ -218,7 +215,9 @@ WorldSocketMgr::WorldSocketMgr() :
     m_SockOutKBuff(-1),
     m_SockOutUBuff(65536),
     m_UseNoDelay(true),
-    m_Acceptor (0) { }
+    m_Acceptor (0)
+{
+}
 
 WorldSocketMgr::~WorldSocketMgr()
 {
@@ -256,11 +255,12 @@ WorldSocketMgr::StartReactiveIO (ACE_UINT16 port, const char* address)
         return -1;
     }
 
-    m_Acceptor = new WorldSocketAcceptor;
+    WorldSocket::Acceptor *acc = new WorldSocket::Acceptor;
+    m_Acceptor = acc;
 
     ACE_INET_Addr listen_addr (port, address);
 
-    if (m_Acceptor->open(listen_addr, m_NetThreads[0].GetReactor(), ACE_NONBLOCK) == -1)
+    if (acc->open(listen_addr, m_NetThreads[0].GetReactor(), ACE_NONBLOCK) == -1)
     {
         sLog->outError ("Failed to open acceptor , check if the port is free");
         return -1;
@@ -291,7 +291,10 @@ WorldSocketMgr::StopNetwork()
 {
     if (m_Acceptor)
     {
-        m_Acceptor->close();
+        WorldSocket::Acceptor* acc = dynamic_cast<WorldSocket::Acceptor*> (m_Acceptor);
+
+        if (acc)
+            acc->close();
     }
 
     if (m_NetThreadsCount != 0)

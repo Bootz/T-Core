@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_TOTEM_H
-#define TRINITYCORE_TOTEM_H
+#ifndef TRILLIUMCORE_TOTEM_H
+#define TRILLIUMCORE_TOTEM_H
 
 #include "TemporarySummon.h"
 
@@ -34,15 +32,14 @@ enum TotemType
 class Totem : public Minion
 {
     public:
-        Totem(SummonPropertiesEntry const* properties, Unit* owner);
-        virtual ~Totem() {}
+        explicit Totem(SummonPropertiesEntry const *properties, Unit *owner);
+        virtual ~Totem(){};
         void Update(uint32 time);
         void InitStats(uint32 duration);
         void InitSummon();
         void UnSummon();
-        uint32 GetSpell(uint8 slot = 0) const { return m_spells[slot]; }
+        uint32 GetSpell(uint8 slot=0) const { return m_spells[slot]; }
         uint32 GetTotemDuration() const { return m_duration; }
-        void SetTotemDuration(uint32 duration) { m_duration = duration; }
         TotemType GetTotemType() const { return m_type; }
 
         bool UpdateStats(Stats /*stat*/) { return true; }

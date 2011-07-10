@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,12 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss Mr.Smite
-SD%Complete:
-SDComment: Timers and say taken from acid script
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "deadmines.h"
@@ -44,16 +36,16 @@ class boss_mr_smite : public CreatureScript
 public:
     boss_mr_smite() : CreatureScript("boss_mr_smite") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_mr_smiteAI (creature);
+        return new boss_mr_smiteAI (pCreature);
     }
 
     struct boss_mr_smiteAI : public ScriptedAI
     {
-        boss_mr_smiteAI(Creature* creature) : ScriptedAI(creature)
+        boss_mr_smiteAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -81,7 +73,7 @@ public:
             SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
            DoScriptText(SAY_AGGRO, me);
         }

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Terestian_Illhoof
-SD%Complete: 95
-SDComment: Complete! Needs adjustments to use spell though.
-SDCategory: Karazhan
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "karazhan.h"
@@ -62,14 +53,14 @@ class mob_kilrek : public CreatureScript
 public:
     mob_kilrek() : CreatureScript("mob_kilrek") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_kilrekAI (creature);
+        return new mob_kilrekAI (pCreature);
     }
 
     struct mob_kilrekAI : public ScriptedAI
     {
-        mob_kilrekAI(Creature* c) : ScriptedAI(c)
+        mob_kilrekAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -86,7 +77,7 @@ public:
             AmplifyTimer = 2000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (!pInstance)
             {
@@ -134,14 +125,14 @@ class mob_demon_chain : public CreatureScript
 public:
     mob_demon_chain() : CreatureScript("mob_demon_chain") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_demon_chainAI(creature);
+        return new mob_demon_chainAI(pCreature);
     }
 
     struct mob_demon_chainAI : public ScriptedAI
     {
-        mob_demon_chainAI(Creature* c) : ScriptedAI(c) {}
+        mob_demon_chainAI(Creature *c) : ScriptedAI(c) {}
 
         uint64 SacrificeGUID;
 
@@ -154,7 +145,7 @@ public:
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit * /*killer*/)
         {
             if (SacrificeGUID)
             {
@@ -172,14 +163,14 @@ class mob_fiendish_portal : public CreatureScript
 public:
     mob_fiendish_portal() : CreatureScript("mob_fiendish_portal") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_fiendish_portalAI (creature);
+        return new mob_fiendish_portalAI (pCreature);
     }
 
     struct mob_fiendish_portalAI : public PassiveAI
     {
-        mob_fiendish_portalAI(Creature* c) : PassiveAI(c), summons(me){}
+        mob_fiendish_portalAI(Creature *c) : PassiveAI(c), summons(me){}
 
         SummonList summons;
 
@@ -209,14 +200,14 @@ class mob_fiendish_imp : public CreatureScript
 public:
     mob_fiendish_imp() : CreatureScript("mob_fiendish_imp") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_fiendish_impAI (creature);
+        return new mob_fiendish_impAI (pCreature);
     }
 
     struct mob_fiendish_impAI : public ScriptedAI
     {
-        mob_fiendish_impAI(Creature* c) : ScriptedAI(c) {}
+        mob_fiendish_impAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 FireboltTimer;
 
@@ -227,7 +218,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FIRE, true);
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
 
         void UpdateAI(const uint32 diff)
         {
@@ -252,14 +243,14 @@ class boss_terestian_illhoof : public CreatureScript
 public:
     boss_terestian_illhoof() : CreatureScript("boss_terestian_illhoof") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_terestianAI (creature);
+        return new boss_terestianAI (pCreature);
     }
 
     struct boss_terestianAI : public ScriptedAI
     {
-        boss_terestianAI(Creature* c) : ScriptedAI(c)
+        boss_terestianAI(Creature *c) : ScriptedAI(c)
         {
             for (uint8 i = 0; i < 2; ++i)
                 PortalGUID[i] = 0;
@@ -340,12 +331,12 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit * /*killer*/)
         {
             for (uint8 i = 0; i < 2; ++i)
             {
@@ -371,15 +362,15 @@ public:
 
             if (SacrificeTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
-                if (target && target->isAlive())
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
+                if (pTarget && pTarget->isAlive())
                 {
-                    DoCast(target, SPELL_SACRIFICE, true);
-                    DoCast(target, SPELL_SUMMON_DEMONCHAINS, true);
+                    DoCast(pTarget, SPELL_SACRIFICE, true);
+                    DoCast(pTarget, SPELL_SUMMON_DEMONCHAINS, true);
 
                     if (Creature* Chains = me->FindNearestCreature(CREATURE_DEMONCHAINS, 5000))
                     {
-                        CAST_AI(mob_demon_chain::mob_demon_chainAI, Chains->AI())->SacrificeGUID = target->GetGUID();
+                        CAST_AI(mob_demon_chain::mob_demon_chainAI, Chains->AI())->SacrificeGUID = pTarget->GetGUID();
                         Chains->CastSpell(Chains, SPELL_DEMON_CHAINS, true);
                         DoScriptText(RAND(SAY_SACRIFICE1, SAY_SACRIFICE2), me);
                         SacrificeTimer = 30000;

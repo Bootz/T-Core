@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,14 +53,14 @@ class boss_ormorok : public CreatureScript
 public:
     boss_ormorok() : CreatureScript("boss_ormorok") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ormorokAI (creature);
+        return new boss_ormorokAI (pCreature);
     }
 
     struct boss_ormorokAI : public ScriptedAI
     {
-        boss_ormorokAI(Creature* c) : ScriptedAI(c)
+        boss_ormorokAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -114,7 +112,7 @@ public:
                 pInstance->SetData(DATA_ORMOROK_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(SAY_KILL, me);
         }
@@ -182,7 +180,7 @@ public:
                 Creature* Crystalline_Tangler = me->SummonCreature(MOB_CRYSTALLINE_TANGLER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
                 if (Crystalline_Tangler)
                 {
-                    Unit* target = NULL;
+                    Unit *pTarget = NULL;
                     uint8 Healer = 0;
                     for (uint8 j = 1; j <= 4; j++)
                     {
@@ -199,19 +197,19 @@ public:
                             Unit* pTemp = Unit::GetUnit((*me), (*i)->getUnitGuid());
                             if (pTemp && pTemp->GetTypeId() == TYPEID_PLAYER && pTemp->getClass() == Healer)
                             {
-                                target = pTemp;
+                                pTarget = pTemp;
                                 break;
                             }
                         }
-                        if (target)
+                        if (pTarget)
                             break;
                     }
-                    if (!target)
-                        target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                    if (target)
+                    if (!pTarget)
+                        pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    if (pTarget)
                     {
-                        Crystalline_Tangler->AI()->AttackStart(target);
-                        Crystalline_Tangler->getThreatManager().addThreat(target, 1000000000.0f);
+                        Crystalline_Tangler->AI()->AttackStart(pTarget);
+                        Crystalline_Tangler->getThreatManager().addThreat(pTarget, 1000000000.0f);
                     }
                 }
                 uiSummonCrystallineTanglerTimer = 17*IN_MILLISECONDS;
@@ -228,14 +226,14 @@ class mob_crystal_spike : public CreatureScript
 public:
     mob_crystal_spike() : CreatureScript("mob_crystal_spike") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_crystal_spikeAI (creature);
+        return new mob_crystal_spikeAI (pCreature);
     }
 
     struct mob_crystal_spikeAI : public Scripted_NoMovementAI
     {
-        mob_crystal_spikeAI(Creature* c) : Scripted_NoMovementAI(c)
+        mob_crystal_spikeAI(Creature *c) : Scripted_NoMovementAI(c)
         {
         }
 
@@ -271,14 +269,14 @@ class mob_crystalline_tangler : public CreatureScript
 public:
     mob_crystalline_tangler() : CreatureScript("mob_crystalline_tangler") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_crystalline_tanglerAI (creature);
+        return new mob_crystalline_tanglerAI (pCreature);
     }
 
     struct mob_crystalline_tanglerAI : public ScriptedAI
     {
-        mob_crystalline_tanglerAI(Creature* c) : ScriptedAI(c) {}
+        mob_crystalline_tanglerAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiRootsTimer;
 

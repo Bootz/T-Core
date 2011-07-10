@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,7 +53,7 @@ ObjectGridRespawnMover::Visit(CreatureMapType &m)
     // move to respawn point to prevent this case. For player view in respawn grid this will be normal respawn.
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end();)
     {
-        Creature* c = iter->getSource();
+        Creature * c = iter->getSource();
         ++iter;
 
         ASSERT(!c->isPet() && "ObjectGridRespawnMover don't must be called for pets");

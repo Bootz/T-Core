@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Serpent_Shrine
-SD%Complete: 100
-SDComment: Instance Data Scripts and functions to acquire mobs and set encounter status for use in various Serpent Shrine Scripts
-SDCategory: Coilfang Resevoir, Serpent Shrine Cavern
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "serpent_shrine.h"
@@ -53,7 +44,7 @@ class go_bridge_console : public GameObjectScript
     public:
         go_bridge_console() : GameObjectScript("go_bridge_console") { }
 
-        bool OnGossipHello(Player* /*player*/, GameObject* go)
+        bool OnGossipHello(Player* /*pPlayer*/, GameObject* go)
         {
             InstanceScript* pInstance = go->GetInstanceScript();
 
@@ -135,33 +126,33 @@ class instance_serpent_shrine : public InstanceMapScript
                         return;
                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                     {
-                        if (Player* player = i->getSource())
+                        if (Player* pPlayer = i->getSource())
                         {
-                            if (player->isAlive() && /*i->getSource()->GetPositionZ() <= -21.434931f*/player->IsInWater())
+                            if (pPlayer->isAlive() && /*i->getSource()->GetPositionZ() <= -21.434931f*/pPlayer->IsInWater())
                             {
                                 if (Water == WATERSTATE_SCALDING)
                                 {
 
-                                    if (!player->HasAura(SPELL_SCALDINGWATER))
+                                    if (!pPlayer->HasAura(SPELL_SCALDINGWATER))
                                     {
-                                        player->CastSpell(player, SPELL_SCALDINGWATER, true);
+                                        pPlayer->CastSpell(pPlayer, SPELL_SCALDINGWATER, true);
                                     }
                                 } else if (Water == WATERSTATE_FRENZY)
                                 {
                                     //spawn frenzy
                                     if (DoSpawnFrenzy)
                                     {
-                                        if (Creature* frenzy = player->SummonCreature(MOB_COILFANG_FRENZY, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
+                                        if (Creature* frenzy = pPlayer->SummonCreature(MOB_COILFANG_FRENZY, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
                                         {
-                                            frenzy->Attack(player, false);
+                                            frenzy->Attack(pPlayer, false);
                                             frenzy->AddUnitMovementFlag(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_LEVITATING);
                                         }
                                         DoSpawnFrenzy = false;
                                     }
                                 }
                             }
-                            if (!player->IsInWater())
-                                player->RemoveAurasDueToSpell(SPELL_SCALDINGWATER);
+                            if (!pPlayer->IsInWater())
+                                pPlayer->RemoveAurasDueToSpell(SPELL_SCALDINGWATER);
                         }
 
                     }

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Nerubenkan
-SD%Complete: 70
-SDComment:
-SDCategory: Stratholme
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "stratholme.h"
 
@@ -37,14 +28,14 @@ class boss_nerubenkan : public CreatureScript
 public:
     boss_nerubenkan() : CreatureScript("boss_nerubenkan") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_nerubenkanAI (creature);
+        return new boss_nerubenkanAI (pCreature);
     }
 
     struct boss_nerubenkanAI : public ScriptedAI
     {
-        boss_nerubenkanAI(Creature* c) : ScriptedAI(c)
+        boss_nerubenkanAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -64,7 +55,7 @@ public:
             RaiseUndeadScarab_Timer = 3000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -74,11 +65,11 @@ public:
                 pInstance->SetData(TYPE_NERUB, IN_PROGRESS);
         }
 
-        void RaiseUndeadScarab(Unit* victim)
+        void RaiseUndeadScarab(Unit* pVictim)
         {
             if (Creature* pUndeadScarab = DoSpawnCreature(10876, float(irand(-9, 9)), float(irand(-9, 9)), 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 180000))
                 if (pUndeadScarab->AI())
-                    pUndeadScarab->AI()->AttackStart(victim);
+                    pUndeadScarab->AI()->AttackStart(pVictim);
         }
 
         void UpdateAI(const uint32 diff)

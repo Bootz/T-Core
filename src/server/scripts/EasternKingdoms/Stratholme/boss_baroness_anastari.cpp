@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Baroness_Anastari
-SD%Complete: 90
-SDComment: MC disabled
-SDCategory: Stratholme
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "stratholme.h"
 
@@ -37,14 +28,14 @@ class boss_baroness_anastari : public CreatureScript
 public:
     boss_baroness_anastari() : CreatureScript("boss_baroness_anastari") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_baroness_anastariAI (creature);
+        return new boss_baroness_anastariAI (pCreature);
     }
 
     struct boss_baroness_anastariAI : public ScriptedAI
     {
-        boss_baroness_anastariAI(Creature* c) : ScriptedAI(c)
+        boss_baroness_anastariAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -64,7 +55,7 @@ public:
             //Possess_Timer = 35000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -112,9 +103,9 @@ public:
             //Cast
               if (rand()%100 < 65)
             {
-            Unit* target = NULL;
-            target = SelectUnit(SELECT_TARGET_RANDOM, 0);
-            if (target)DoCast(target, SPELL_POSSESS);
+            Unit *pTarget = NULL;
+            pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+            if (pTarget)DoCast(pTarget, SPELL_POSSESS);
             }
             //50 seconds until we should cast this again
             Possess_Timer = 50000;

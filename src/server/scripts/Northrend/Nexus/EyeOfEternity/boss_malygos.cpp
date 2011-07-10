@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,10 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss malygos
-Script Data End */
 
 // TO-DOs:
 // Implement a better pathing for Malygos.
@@ -152,51 +146,51 @@ enum MalygosSays
 
 #define MAX_HOVER_DISK_WAYPOINTS 18
 
-// Sniffed data (x,y,z)
+// Sniffed data
 const Position HoverDiskWaypoints[MAX_HOVER_DISK_WAYPOINTS] =
 {
-   {782.9821f, 1296.652f, 282.1114f, 0.0f},
-   {779.5459f, 1287.228f, 282.1393f, 0.0f},
-   {773.0028f, 1279.52f, 282.4164f, 0.0f},
-   {764.3626f, 1274.476f, 282.4731f, 0.0f},
-   {754.3961f, 1272.639f, 282.4171f, 0.0f},
-   {744.4422f, 1274.412f, 282.222f, 0.0f},
-   {735.575f, 1279.742f, 281.9674f, 0.0f},
-   {729.2788f, 1287.187f, 281.9943f, 0.0f},
-   {726.1191f, 1296.688f, 282.2997f, 0.0f},
-   {725.9396f, 1306.531f, 282.2448f, 0.0f},
-   {729.3045f, 1316.122f, 281.9108f, 0.0f},
-   {735.8322f, 1323.633f, 282.1887f, 0.0f},
-   {744.4616f, 1328.999f, 281.9948f, 0.0f},
-   {754.4739f, 1330.666f, 282.049f, 0.0f},
-   {764.074f, 1329.053f, 281.9949f, 0.0f},
-   {772.8409f, 1323.951f, 282.077f, 0.0f},
-   {779.5085f, 1316.412f, 281.9145f, 0.0f},
-   {782.8365f, 1306.778f, 282.3035f, 0.0f},
+   {782.9821f, 1296.652f, 282.1114f},
+   {779.5459f, 1287.228f, 282.1393f},
+   {773.0028f, 1279.52f, 282.4164f},
+   {764.3626f, 1274.476f, 282.4731f},
+   {754.3961f, 1272.639f, 282.4171f},
+   {744.4422f, 1274.412f, 282.222f},
+   {735.575f, 1279.742f, 281.9674f},
+   {729.2788f, 1287.187f, 281.9943f},
+   {726.1191f, 1296.688f, 282.2997f},
+   {725.9396f, 1306.531f, 282.2448f},
+   {729.3045f, 1316.122f, 281.9108f},
+   {735.8322f, 1323.633f, 282.1887f},
+   {744.4616f, 1328.999f, 281.9948f},
+   {754.4739f, 1330.666f, 282.049f},
+   {764.074f, 1329.053f, 281.9949f},
+   {772.8409f, 1323.951f, 282.077f},
+   {779.5085f, 1316.412f, 281.9145f},
+   {782.8365f, 1306.778f, 282.3035f},
 };
 
 #define GROUND_Z 268
 
-// Source: Sniffs (x,y,z)
+// Source: Sniffs
 #define MALYGOS_MAX_WAYPOINTS 16
 const Position MalygosPhaseTwoWaypoints[MALYGOS_MAX_WAYPOINTS] =
 {
-    {812.7299f, 1391.672f, 283.2763f, 0.0f},
-    {848.2912f, 1358.61f, 283.2763f, 0.0f},
-    {853.9227f, 1307.911f, 283.2763f, 0.0f},
-    {847.1437f, 1265.538f, 283.2763f, 0.0f},
-    {839.9229f, 1245.245f, 283.2763f, 0.0f},
-    {827.3463f, 1221.818f, 283.2763f, 0.0f},
-    {803.2727f, 1203.851f, 283.2763f, 0.0f},
-    {772.9372f, 1197.981f, 283.2763f, 0.0f},
-    {732.1138f, 1200.647f, 283.2763f, 0.0f},
-    {693.8761f, 1217.995f, 283.2763f, 0.0f},
-    {664.5038f, 1256.539f, 283.2763f, 0.0f},
-    {650.1497f, 1303.485f, 283.2763f, 0.0f},
-    {662.9109f, 1350.291f, 283.2763f, 0.0f},
-    {677.6391f, 1377.607f, 283.2763f, 0.0f},
-    {704.8198f, 1401.162f, 283.2763f, 0.0f},
-    {755.2642f, 1417.1f, 283.2763f, 0.0f},
+    {812.7299f, 1391.672f, 283.2763f},
+    {848.2912f, 1358.61f, 283.2763f},
+    {853.9227f, 1307.911f, 283.2763f},
+    {847.1437f, 1265.538f, 283.2763f},
+    {839.9229f, 1245.245f, 283.2763f},
+    {827.3463f, 1221.818f, 283.2763f},
+    {803.2727f, 1203.851f, 283.2763f},
+    {772.9372f, 1197.981f, 283.2763f},
+    {732.1138f, 1200.647f, 283.2763f},
+    {693.8761f, 1217.995f, 283.2763f},
+    {664.5038f, 1256.539f, 283.2763f},
+    {650.1497f, 1303.485f, 283.2763f},
+    {662.9109f, 1350.291f, 283.2763f},
+    {677.6391f, 1377.607f, 283.2763f},
+    {704.8198f, 1401.162f, 283.2763f},
+    {755.2642f, 1417.1f, 283.2763f},
 };
 
 #define MAX_SUMMONS_PHASE_TWO 4
@@ -204,8 +198,8 @@ const Position MalygosPhaseTwoWaypoints[MALYGOS_MAX_WAYPOINTS] =
 #define MAX_MALYGOS_POS 2
 const Position MalygosPositions[MAX_MALYGOS_POS] =
 {
-    {754.544f, 1301.71f, 320.0f, 0.0f},
-    {754.39f, 1301.27f, 292.91f, 0.0f},
+    {754.544f, 1301.71f, 320.0f},
+    {754.39f, 1301.27f, 292.91f}
 };
 
 class boss_malygos : public CreatureScript
@@ -673,45 +667,42 @@ class spell_malygos_vortex_visual : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                std::list<HostileReference*> &m_threatlist = GetCaster()->getThreatManager().getThreatList();
+                for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
                 {
-                    std::list<HostileReference*> &m_threatlist = caster->getThreatManager().getThreatList();
-                    for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
+                    if (Unit* target = (*itr)->getTarget())
                     {
-                        if (Unit* target = (*itr)->getTarget())
+                        Player* targetPlayer = target->ToPlayer();
+
+                        if (!targetPlayer || targetPlayer->isGameMaster())
+                            continue;
+
+                        if (InstanceScript* instance = GetCaster()->GetInstanceScript())
                         {
-                            Player* targetPlayer = target->ToPlayer();
-
-                            if (!targetPlayer || targetPlayer->isGameMaster())
-                                continue;
-
-                            if (InstanceScript* instance = caster->GetInstanceScript())
-                            {
-                                // teleport spell - i am not sure but might be it must be casted by each vehicle when its passenger leaves it
-                                if (Creature* trigger = caster->GetMap()->GetCreature(instance->GetData64(DATA_TRIGGER)))
-                                    trigger->CastSpell(targetPlayer, SPELL_VORTEX_6, true);
-                            }
+                            // teleport spell - i am not sure but might be it must be casted by each vehicle when its passenger leaves it
+                            if (Creature* trigger = GetCaster()->GetMap()->GetCreature(instance->GetData64(DATA_TRIGGER)))
+                                trigger->CastSpell(targetPlayer, SPELL_VORTEX_6, true);
                         }
                     }
+                }
 
-                    if (Creature* malygos = caster->ToCreature())
-                    {
-                        // This is a hack, we have to re add players to the threat list because when they enter to the vehicles they are removed.
-                        // Anyway even with this issue, the boss does not enter in evade mode - this prevents iterate an empty list in the next vortex execution.
-                        malygos->SetInCombatWithZone();
+                if (Creature* malygos = GetCaster()->ToCreature())
+                {
+                    // This is a hack, we have to re add players to the threat list because when they enter to the vehicles they are removed.
+                    // Anyway even with this issue, the boss does not enter in evade mode - this prevents iterate an empty list in the next vortex execution.
+                    malygos->SetInCombatWithZone();
 
-                        malygos->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                    malygos->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
 
-                        malygos->GetMotionMaster()->MoveChase(caster->getVictim());
-                        malygos->RemoveAura(SPELL_VORTEX_1);
-                    }
+                    malygos->GetMotionMaster()->MoveChase(GetCaster()->getVictim());
+                    malygos->RemoveAura(SPELL_VORTEX_1);
                 }
 
             }
 
             void Register()
             {
-                AfterEffectRemove += AuraEffectRemoveFn(spell_malygos_vortex_visual_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_malygos_vortex_visual_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
             }
         };
 
@@ -726,9 +717,9 @@ class npc_portal_eoe: public CreatureScript
 public:
     npc_portal_eoe() : CreatureScript("npc_portal_eoe") {}
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_portal_eoeAI(creature);
+        return new npc_portal_eoeAI(pCreature);
     }
 
     struct npc_portal_eoeAI : public ScriptedAI
@@ -1117,20 +1108,6 @@ public:
     };
 };
 
-class achievement_denyin_the_scion : public AchievementCriteriaScript
-{
-    public:
-        achievement_denyin_the_scion() : AchievementCriteriaScript("achievement_denyin_the_scion") { }
-
-        bool OnCheck(Player* source, Unit* /*target*/)
-        {
-            if (Unit* disk = source->GetVehicleBase())
-                if (disk->GetEntry() == NPC_HOVER_DISK_CASTER || disk->GetEntry() == NPC_HOVER_DISK_MELEE)
-                    return true;
-            return false;
-        }
-};
-
 void AddSC_boss_malygos()
 {
     new boss_malygos();
@@ -1142,5 +1119,4 @@ void AddSC_boss_malygos()
     new spell_malygos_vortex_dummy();
     new spell_malygos_vortex_visual();
     new npc_alexstrasza_eoe();
-    new achievement_denyin_the_scion();
 }

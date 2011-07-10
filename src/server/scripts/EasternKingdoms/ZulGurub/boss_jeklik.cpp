@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Jeklik
-SD%Complete: 85
-SDComment: Problem in finding the right flying batriders for spawning and making them fly.
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -55,7 +46,7 @@ class boss_jeklik : public CreatureScript
 
         struct boss_jeklikAI : public ScriptedAI
         {
-            boss_jeklikAI(Creature* c) : ScriptedAI(c)
+            boss_jeklikAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -89,7 +80,7 @@ class boss_jeklik : public CreatureScript
                 PhaseTwo = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(SAY_AGGRO, me);
                 DoCast(me, SPELL_BAT_FORM);
@@ -100,7 +91,7 @@ class boss_jeklik : public CreatureScript
                 DoScriptText(SAY_DEATH, me);
 
                 if (m_pInstance)
-                    m_pInstance->SetData(DATA_JEKLIK, DONE);
+                    m_pInstance->SetData(TYPE_JEKLIK, DONE);
             }
 
             void UpdateAI(const uint32 diff)
@@ -114,10 +105,10 @@ class boss_jeklik : public CreatureScript
                     {
                         if (Charge_Timer <= diff)
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             {
-                                DoCast(target, SPELL_CHARGE);
-                                AttackStart(target);
+                                DoCast(pTarget, SPELL_CHARGE);
+                                AttackStart(pTarget);
                             }
 
                             Charge_Timer = 15000 + rand()%15000;
@@ -137,25 +128,25 @@ class boss_jeklik : public CreatureScript
 
                         if (SpawnBats_Timer <= diff)
                         {
-                            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                            Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
                             Creature* Bat = NULL;
                             Bat = me->SummonCreature(11368, -12291.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
 
                             Bat = me->SummonCreature(11368, -12289.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
 
                             Bat = me->SummonCreature(11368, -12293.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
 
                             Bat = me->SummonCreature(11368, -12291.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
 
                             Bat = me->SummonCreature(11368, -12289.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
                             Bat = me->SummonCreature(11368, -12293.6220f, -1380.2640f, 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                            if (target && Bat) Bat ->AI()->AttackStart(target);
+                            if (pTarget && Bat) Bat ->AI()->AttackStart(pTarget);
 
                             SpawnBats_Timer = 60000;
                         } else SpawnBats_Timer -= diff;
@@ -166,9 +157,9 @@ class boss_jeklik : public CreatureScript
                         {
                             if (PhaseTwo && ShadowWordPain_Timer <= diff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 {
-                                    DoCast(target, SPELL_SHADOW_WORD_PAIN);
+                                    DoCast(pTarget, SPELL_SHADOW_WORD_PAIN);
                                     ShadowWordPain_Timer = 12000 + rand()%6000;
                                 }
                             }ShadowWordPain_Timer -=diff;
@@ -195,13 +186,13 @@ class boss_jeklik : public CreatureScript
 
                             if (SpawnFlyingBats_Timer <= diff)
                             {
-                                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                                if (!target)
+                                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                                if (!pTarget)
                                     return;
 
-                                Creature* FlyingBat = me->SummonCreature(14965, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ()+15, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                                Creature* FlyingBat = me->SummonCreature(14965, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ()+15, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                                 if (FlyingBat)
-                                    FlyingBat->AI()->AttackStart(target);
+                                    FlyingBat->AI()->AttackStart(pTarget);
 
                                 SpawnFlyingBats_Timer = 10000 + rand()%5000;
                             } else SpawnFlyingBats_Timer -=diff;
@@ -237,7 +228,7 @@ class mob_batrider : public CreatureScript
 
         struct mob_batriderAI : public ScriptedAI
         {
-            mob_batriderAI(Creature* c) : ScriptedAI(c)
+            mob_batriderAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -255,7 +246,7 @@ class mob_batrider : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void EnterCombat(Unit* /*who*/) {}
+            void EnterCombat(Unit * /*who*/) {}
 
             void UpdateAI (const uint32 diff)
             {
@@ -265,9 +256,9 @@ class mob_batrider : public CreatureScript
                 //Bomb_Timer
                 if (Bomb_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
-                        DoCast(target, SPELL_BOMB);
+                        DoCast(pTarget, SPELL_BOMB);
                         Bomb_Timer = 5000;
                     }
                 } else Bomb_Timer -= diff;
@@ -277,7 +268,7 @@ class mob_batrider : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_JEKLIK) == DONE)
+                        if (m_pInstance->GetData(TYPE_JEKLIK) == DONE)
                         {
                             me->setDeathState(JUST_DIED);
                             me->RemoveCorpse();

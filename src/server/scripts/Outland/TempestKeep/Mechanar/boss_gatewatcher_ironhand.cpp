@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Gatewatcher_Ironhand
-SD%Complete: 75
-SDComment:
-SDCategory: Tempest Keep, The Mechanar
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -59,7 +50,7 @@ class boss_gatewatcher_iron_hand : public CreatureScript
             // Gatewatcher Iron-Hand AI
             struct boss_gatewatcher_iron_handAI : public ScriptedAI
             {
-                boss_gatewatcher_iron_handAI(Creature* creature) : ScriptedAI(creature)
+                boss_gatewatcher_iron_handAI(Creature* pCreature) : ScriptedAI(pCreature)
                 {
                 }
 
@@ -74,7 +65,7 @@ class boss_gatewatcher_iron_hand : public CreatureScript
                     Stream_of_Machine_Fluid_Timer = 55000;
 
                 }
-                void EnterCombat(Unit* /*who*/)
+                void EnterCombat(Unit * /*who*/)
                 {
                     DoScriptText(SAY_AGGRO_1, me);
                 }

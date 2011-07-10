@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -59,14 +57,14 @@ class boss_razuvious : public CreatureScript
 public:
     boss_razuvious() : CreatureScript("boss_razuvious") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_razuviousAI (creature);
+        return new boss_razuviousAI (pCreature);
     }
 
     struct boss_razuviousAI : public BossAI
     {
-        boss_razuviousAI(Creature* c) : BossAI(c, BOSS_RAZUVIOUS) {}
+        boss_razuviousAI(Creature *c) : BossAI(c, BOSS_RAZUVIOUS) {}
 
         void KilledUnit(Unit* /*victim*/)
         {
@@ -90,7 +88,7 @@ public:
             me->CastSpell(me, SPELL_HOPELESS, true); // TODO: this may affect other creatures
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             _EnterCombat();
             DoPlaySoundToSet(me, SOUND_AGGRO);
@@ -120,8 +118,8 @@ public:
                         events.ScheduleEvent(EVENT_SHOUT, 25000);
                         return;
                     case EVENT_KNIFE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
-                            DoCast(target, SPELL_JAGGED_KNIFE);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
+                            DoCast(pTarget, SPELL_JAGGED_KNIFE);
                         events.ScheduleEvent(EVENT_KNIFE, 10000);
                         return;
                     case EVENT_COMMAND:

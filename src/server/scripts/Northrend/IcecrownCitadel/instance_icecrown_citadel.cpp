@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,32 +25,27 @@
 
 DoorData const doorData[] =
 {
-    {GO_LORD_MARROWGAR_S_ENTRANCE,           DATA_LORD_MARROWGAR,        DOOR_TYPE_ROOM,       BOUNDARY_N   },
-    {GO_ICEWALL,                             DATA_LORD_MARROWGAR,        DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
-    {GO_DOODAD_ICECROWN_ICEWALL02,           DATA_LORD_MARROWGAR,        DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
-    {GO_ORATORY_OF_THE_DAMNED_ENTRANCE,      DATA_LADY_DEATHWHISPER,     DOOR_TYPE_ROOM,       BOUNDARY_N   },
-    {GO_SAURFANG_S_DOOR,                     DATA_DEATHBRINGER_SAURFANG, DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
-    {GO_ORANGE_PLAGUE_MONSTER_ENTRANCE,      DATA_FESTERGUT,             DOOR_TYPE_ROOM,       BOUNDARY_E   },
-    {GO_GREEN_PLAGUE_MONSTER_ENTRANCE,       DATA_ROTFACE,               DOOR_TYPE_ROOM,       BOUNDARY_E   },
-    {GO_SCIENTIST_ENTRANCE,                  DATA_PROFESSOR_PUTRICIDE,   DOOR_TYPE_ROOM,       BOUNDARY_E   },
-    {GO_CRIMSON_HALL_DOOR,                   DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_ROOM,       BOUNDARY_S   },
-    {GO_BLOOD_ELF_COUNCIL_DOOR,              DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_PASSAGE,    BOUNDARY_W   },
-    {GO_BLOOD_ELF_COUNCIL_DOOR_RIGHT,        DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_PASSAGE,    BOUNDARY_E   },
-    {GO_DOODAD_ICECROWN_BLOODPRINCE_DOOR_01, DATA_BLOOD_QUEEN_LANA_THEL, DOOR_TYPE_ROOM,       BOUNDARY_S   },
-    {GO_DOODAD_ICECROWN_GRATE_01,            DATA_BLOOD_QUEEN_LANA_THEL, DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
-    {GO_GREEN_DRAGON_BOSS_ENTRANCE,          DATA_SISTER_SVALNA,         DOOR_TYPE_PASSAGE,    BOUNDARY_S   },
-    {GO_GREEN_DRAGON_BOSS_ENTRANCE,          DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_ROOM,       BOUNDARY_N   },
-    {GO_GREEN_DRAGON_BOSS_EXIT,              DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_PASSAGE,    BOUNDARY_S   },
-    {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_01,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_N   },
-    {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
-    {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_N   },
-    {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
-    {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_S   },
-    {GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR,   DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_E   },
-    {GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR,       DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
-    {GO_ICE_WALL,                            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_SE  },
-    {GO_ICE_WALL,                            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_SW  },
-    {0,                                      0,                          DOOR_TYPE_ROOM,       BOUNDARY_NONE},// END
+    {GO_LORD_MARROWGAR_S_ENTRANCE,           DATA_LORD_MARROWGAR,        DOOR_TYPE_ROOM,    BOUNDARY_N   },
+    {GO_ICEWALL,                             DATA_LORD_MARROWGAR,        DOOR_TYPE_PASSAGE, BOUNDARY_NONE},
+    {GO_DOODAD_ICECROWN_ICEWALL02,           DATA_LORD_MARROWGAR,        DOOR_TYPE_PASSAGE, BOUNDARY_NONE},
+    {GO_ORATORY_OF_THE_DAMNED_ENTRANCE,      DATA_LADY_DEATHWHISPER,     DOOR_TYPE_ROOM,    BOUNDARY_N   },
+    {GO_SAURFANG_S_DOOR,                     DATA_DEATHBRINGER_SAURFANG, DOOR_TYPE_PASSAGE, BOUNDARY_NONE},
+    {GO_ORANGE_PLAGUE_MONSTER_ENTRANCE,      DATA_FESTERGUT,             DOOR_TYPE_ROOM,    BOUNDARY_E   },
+    {GO_GREEN_PLAGUE_MONSTER_ENTRANCE,       DATA_ROTFACE,               DOOR_TYPE_ROOM,    BOUNDARY_E   },
+    {GO_SCIENTIST_ENTRANCE,                  DATA_PROFESSOR_PUTRICIDE,   DOOR_TYPE_ROOM,    BOUNDARY_E   },
+    {GO_CRIMSON_HALL_DOOR,                   DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_ROOM,    BOUNDARY_S   },
+    {GO_BLOOD_ELF_COUNCIL_DOOR,              DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_PASSAGE, BOUNDARY_W   },
+    {GO_BLOOD_ELF_COUNCIL_DOOR_RIGHT,        DATA_BLOOD_PRINCE_COUNCIL,  DOOR_TYPE_PASSAGE, BOUNDARY_E   },
+    {GO_DOODAD_ICECROWN_BLOODPRINCE_DOOR_01, DATA_BLOOD_QUEEN_LANA_THEL, DOOR_TYPE_ROOM,    BOUNDARY_S   },
+    {GO_DOODAD_ICECROWN_GRATE_01,            DATA_BLOOD_QUEEN_LANA_THEL, DOOR_TYPE_PASSAGE, BOUNDARY_NONE},
+    {GO_GREEN_DRAGON_BOSS_ENTRANCE,          DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_ROOM,    BOUNDARY_N   },
+    {GO_GREEN_DRAGON_BOSS_EXIT,              DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_PASSAGE, BOUNDARY_S   },
+    {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,    BOUNDARY_S   },
+    {GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR,   DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE, BOUNDARY_E   },
+    {GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR,       DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE, BOUNDARY_NONE},
+    {GO_ICE_WALL,                            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,    BOUNDARY_SE  },
+    {GO_ICE_WALL,                            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,    BOUNDARY_SW  },
+    {0,                                      0,                          DOOR_TYPE_ROOM,    BOUNDARY_NONE} // END
 };
 
 // this doesnt have to only store questgivers, also can be used for related quest spawns
@@ -98,26 +91,19 @@ class instance_icecrown_citadel : public InstanceMapScript
                 PlagueSigilGUID = 0;
                 BloodwingSigilGUID = 0;
                 FrostwingSigilGUID = 0;
-                memset(PutricidePipeGUIDs, 0, 2 * sizeof(uint64));
-                memset(PutricideGateGUIDs, 0, 2 * sizeof(uint64));
+                memset(PutricidePipeGUIDs, 0, 2*sizeof(uint64));
+                memset(PutricideGateGUIDs, 0, 2*sizeof(uint64));
                 PutricideCollisionGUID = 0;
                 FestergutGUID = 0;
                 RotfaceGUID = 0;
                 ProfessorPutricideGUID = 0;
                 PutricideTableGUID = 0;
-                memset(BloodCouncilGUIDs, 0, 3 * sizeof(uint64));
+                memset(BloodCouncilGUIDs, 0, 3*sizeof(uint64));
                 BloodCouncilControllerGUID = 0;
                 BloodQueenLanaThelGUID = 0;
-                CrokScourgebaneGUID = 0;
-                memset(CrokCaptainGUIDs, 0, 4 * sizeof(uint64));
-                SisterSvalnaGUID = 0;
-                ValithriaDreamwalkerGUID = 0;
-                ValithriaLichKingGUID = 0;
-                ValithriaTriggerGUID = 0;
                 SindragosaGUID = 0;
                 SpinestalkerGUID = 0;
                 RimefangGUID = 0;
-                TheLichKingGUID = 0;
                 FrostwyrmCount = 0;
                 SpinestalkerTrashCount = 0;
                 RimefangTrashCount = 0;
@@ -200,7 +186,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case NPC_SE_HIGH_OVERLORD_SAURFANG:
                         if (TeamInInstance == ALLIANCE)
                             creature->UpdateEntry(NPC_SE_MURADIN_BRONZEBEARD, ALLIANCE, creature->GetCreatureData());
-                        // no break;
                     case NPC_SE_MURADIN_BRONZEBEARD:
                         DeathbringerSaurfangEventGUID = creature->GetGUID();
                         creature->LastUsedScriptID = creature->GetScriptId();
@@ -236,28 +221,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case NPC_BLOOD_QUEEN_LANA_THEL:
                         BloodQueenLanaThelGUID = creature->GetGUID();
                         break;
-                    case NPC_CROK_SCOURGEBANE:
-                        CrokScourgebaneGUID = creature->GetGUID();
-                        break;
-                    // we can only do this because there are no gaps in their entries
-                    case NPC_CAPTAIN_ARNATH:
-                    case NPC_CAPTAIN_BRANDON:
-                    case NPC_CAPTAIN_GRONDEL:
-                    case NPC_CAPTAIN_RUPERT:
-                        CrokCaptainGUIDs[creature->GetEntry()-NPC_CAPTAIN_ARNATH] = creature->GetGUID();
-                        break;
-                    case NPC_SISTER_SVALNA:
-                        SisterSvalnaGUID = creature->GetGUID();
-                        break;
-                    case NPC_VALITHRIA_DREAMWALKER:
-                        ValithriaDreamwalkerGUID = creature->GetGUID();
-                        break;
-                    case NPC_THE_LICH_KING_VALITHRIA:
-                        ValithriaLichKingGUID = creature->GetGUID();
-                        break;
-                    case NPC_GREEN_DRAGON_COMBAT_TRIGGER:
-                        ValithriaTriggerGUID = creature->GetGUID();
-                        break;
                     case NPC_SINDRAGOSA:
                         SindragosaGUID = creature->GetGUID();
                         break;
@@ -270,9 +233,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                         RimefangGUID = creature->GetGUID();
                         if (!creature->isDead())
                             ++FrostwyrmCount;
-                        break;
-                    case NPC_THE_LICH_KING:
-                        TheLichKingGUID = creature->GetGUID();
                         break;
                     default:
                         break;
@@ -318,23 +278,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                     ColdflameJetGUIDs.erase(creature->GetGUID());
             }
 
-            void OnCreatureDeath(Creature* creature)
-            {
-                switch (creature->GetEntry())
-                {
-                    case NPC_YMIRJAR_BATTLE_MAIDEN:
-                    case NPC_YMIRJAR_DEATHBRINGER:
-                    case NPC_YMIRJAR_FROSTBINDER:
-                    case NPC_YMIRJAR_HUNTRESS:
-                    case NPC_YMIRJAR_WARLORD:
-                        if (Creature* crok = instance->GetCreature(CrokScourgebaneGUID))
-                            crok->AI()->SetGUID(creature->GetGUID(), ACTION_VRYKUL_DEATH);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             void OnGameObjectCreate(GameObject* go)
             {
                 switch (go->GetEntry())
@@ -353,19 +296,11 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_DOODAD_ICECROWN_GRATE_01:
                     case GO_GREEN_DRAGON_BOSS_ENTRANCE:
                     case GO_GREEN_DRAGON_BOSS_EXIT:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03:
                     case GO_SINDRAGOSA_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR:
                     case GO_ICE_WALL:
                         AddDoor(go, true);
-                        break;
-                    // these 2 gates are functional only on 25man modes
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_01:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04:
-                        if (instance->GetSpawnMode() & 1)
-                            AddDoor(go, true);
                         break;
                     case GO_LADY_DEATHWHISPER_ELEVATOR:
                         LadyDeathwisperElevatorGUID = go->GetGUID();
@@ -459,10 +394,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_DOODAD_ICECROWN_GRATE_01:
                     case GO_GREEN_DRAGON_BOSS_ENTRANCE:
                     case GO_GREEN_DRAGON_BOSS_EXIT:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_01:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03:
-                    case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04:
                     case GO_SINDRAGOSA_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR:
@@ -529,29 +460,12 @@ class instance_icecrown_citadel : public InstanceMapScript
                         return BloodCouncilControllerGUID;
                     case DATA_BLOOD_QUEEN_LANA_THEL:
                         return BloodQueenLanaThelGUID;
-                    case DATA_CROK_SCOURGEBANE:
-                        return CrokScourgebaneGUID;
-                    case DATA_CAPTAIN_ARNATH:
-                    case DATA_CAPTAIN_BRANDON:
-                    case DATA_CAPTAIN_GRONDEL:
-                    case DATA_CAPTAIN_RUPERT:
-                        return CrokCaptainGUIDs[type - DATA_CAPTAIN_ARNATH];
-                    case DATA_SISTER_SVALNA:
-                        return SisterSvalnaGUID;
-                    case DATA_VALITHRIA_DREAMWALKER:
-                        return ValithriaDreamwalkerGUID;
-                    case DATA_VALITHRIA_LICH_KING:
-                        return ValithriaLichKingGUID;
-                    case DATA_VALITHRIA_TRIGGER:
-                        return ValithriaTriggerGUID;
                     case DATA_SINDRAGOSA:
                         return SindragosaGUID;
                     case DATA_SPINESTALKER:
                         return SpinestalkerGUID;
                     case DATA_RIMEFANG:
                         return RimefangGUID;
-                    case DATA_THE_LICH_KING:
-                        return TheLichKingGUID;
                     default:
                         break;
                 }
@@ -654,8 +568,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                         }
                         break;
                     case DATA_VALITHRIA_DREAMWALKER:
-                        if (state == DONE && sPoolMgr->IsSpawnedObject<Quest>(WeeklyQuestData[8].questId[instance->GetSpawnMode() & 1]))
-                            instance->SummonCreature(NPC_VALITHRIA_DREAMWALKER_QUEST, ValithriaSpawnPos);
                         break;
                     case DATA_SINDRAGOSA:
                         HandleGameObject(FrostwingSigilGUID, state != DONE);
@@ -672,17 +584,6 @@ class instance_icecrown_citadel : public InstanceMapScript
                         }
                         break;
                     case DATA_THE_LICH_KING:
-                        if (instance->IsHeroic())
-                        {
-                            if (state == FAIL && HeroicAttempts)
-                            {
-                                --HeroicAttempts;
-                                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
-                                if (!HeroicAttempts)
-                                    if (Creature* theLichKing = instance->GetCreature(TheLichKingGUID))
-                                        theLichKing->DespawnOrUnsummon();
-                            }
-                        }
                         break;
                     default:
                         break;
@@ -715,7 +616,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (instance->IsHeroic() && !HeroicAttempts)
                             return;
 
-                        if (GetBossState(DATA_SINDRAGOSA) == DONE)
+                        if (GetBossState(DATA_SINDRAGOSA) != DONE)
                             return;
 
                         switch (data)
@@ -865,11 +766,11 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case CRITERIA_KILL_LANA_THEL_10M:
                     case CRITERIA_ONCE_BITTEN_TWICE_SHY_10N:
                     case CRITERIA_ONCE_BITTEN_TWICE_SHY_10V:
-                        return instance->ToInstanceMap()->GetMaxPlayers() == 10;
+                        return CAST_INST(InstanceMap, instance)->GetMaxPlayers() == 10;
                     case CRITERIA_KILL_LANA_THEL_25M:
                     case CRITERIA_ONCE_BITTEN_TWICE_SHY_25N:
                     case CRITERIA_ONCE_BITTEN_TWICE_SHY_25V:
-                        return instance->ToInstanceMap()->GetMaxPlayers() == 25;
+                        return CAST_INST(InstanceMap, instance)->GetMaxPlayers() == 25;
                     default:
                         break;
                 }
@@ -965,8 +866,8 @@ class instance_icecrown_citadel : public InstanceMapScript
                             return false;
                         // no break
                     case DATA_SINDRAGOSA:
-                        if (GetBossState(DATA_VALITHRIA_DREAMWALKER) != DONE)
-                            return false;
+                        //if (GetBossState(DATA_VALITHRIA_DREAMWALKER) != DONE)
+                        //    return false;
                         break;
                     default:
                         break;
@@ -1015,8 +916,8 @@ class instance_icecrown_citadel : public InstanceMapScript
                 OUT_SAVE_INST_DATA;
 
                 std::ostringstream saveStream;
-                saveStream << "I C " << GetBossSaveData() << HeroicAttempts << " "
-                    << ColdflameJetsState << " " << BloodQuickeningState << " " << BloodQuickeningMinutes;
+                saveStream << "I C " << GetBossSaveData() << ColdflameJetsState
+                    << " " << BloodQuickeningState << " " << BloodQuickeningMinutes;
 
                 OUT_SAVE_INST_DATA_COMPLETE;
                 return saveStream.str();
@@ -1048,12 +949,10 @@ class instance_icecrown_citadel : public InstanceMapScript
                         SetBossState(i, EncounterState(tmpState));
                     }
 
-                    loadStream >> HeroicAttempts;
-
                     uint32 temp = 0;
                     loadStream >> temp;
                     ColdflameJetsState = temp ? DONE : NOT_STARTED;
-
+                    temp = 0;
                     loadStream >> temp;
                     BloodQuickeningState = temp ? DONE : NOT_STARTED;   // DONE means finished (not success/fail)
                     loadStream >> BloodQuickeningMinutes;
@@ -1112,16 +1011,9 @@ class instance_icecrown_citadel : public InstanceMapScript
             uint64 BloodCouncilGUIDs[3];
             uint64 BloodCouncilControllerGUID;
             uint64 BloodQueenLanaThelGUID;
-            uint64 CrokScourgebaneGUID;
-            uint64 CrokCaptainGUIDs[4];
-            uint64 SisterSvalnaGUID;
-            uint64 ValithriaDreamwalkerGUID;
-            uint64 ValithriaLichKingGUID;
-            uint64 ValithriaTriggerGUID;
             uint64 SindragosaGUID;
             uint64 SpinestalkerGUID;
             uint64 RimefangGUID;
-            uint64 TheLichKingGUID;
             uint32 TeamInInstance;
             uint32 BloodQuickeningTimer;
             uint32 ColdflameJetsState;
@@ -1129,7 +1021,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             uint32 SpinestalkerTrashCount;
             uint32 RimefangTrashCount;
             uint32 BloodQuickeningState;
-            uint32 HeroicAttempts;
+            uint16 HeroicAttempts;
             uint16 BloodQuickeningMinutes;
             bool IsBonedEligible;
             bool IsOozeDanceEligible;

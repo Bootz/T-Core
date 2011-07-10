@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Hakkar
-SD%Complete: 95
-SDComment: Blood siphon spell buggy cause of Core Issue.
-SDCategory: Zul'Gurub
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "zulgurub.h"
 
@@ -56,7 +46,7 @@ class boss_hakkar : public CreatureScript
 
         struct boss_hakkarAI : public ScriptedAI
         {
-            boss_hakkarAI(Creature* c) : ScriptedAI(c)
+            boss_hakkarAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -106,7 +96,7 @@ class boss_hakkar : public CreatureScript
                 Enraged = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(SAY_AGGRO, me);
             }
@@ -133,8 +123,8 @@ class boss_hakkar : public CreatureScript
                 //CauseInsanity_Timer
                 /*if (CauseInsanity_Timer <= diff)
                 {
-                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(target, SPELL_CAUSEINSANITY);
+                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, SPELL_CAUSEINSANITY);
 
                 CauseInsanity_Timer = 35000 + rand()%8000;
                 } else CauseInsanity_Timer -= diff;*/
@@ -142,8 +132,8 @@ class boss_hakkar : public CreatureScript
                 //WillOfHakkar_Timer
                 if (WillOfHakkar_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_WILLOFHAKKAR);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, SPELL_WILLOFHAKKAR);
 
                     WillOfHakkar_Timer = 25000 + rand()%10000;
                 } else WillOfHakkar_Timer -= diff;
@@ -159,7 +149,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_JEKLIK) != DONE)
+                        if (m_pInstance->GetData(TYPE_JEKLIK) != DONE)
                         {
                             if (AspectOfJeklik_Timer <= diff)
                             {
@@ -176,7 +166,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_VENOXIS) != DONE)
+                        if (m_pInstance->GetData(TYPE_VENOXIS) != DONE)
                         {
                             if (AspectOfVenoxis_Timer <= diff)
                             {
@@ -193,7 +183,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_MARLI) != DONE)
+                        if (m_pInstance->GetData(TYPE_MARLI) != DONE)
                         {
                             if (AspectOfMarli_Timer <= diff)
                             {
@@ -211,7 +201,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_THEKAL) != DONE)
+                        if (m_pInstance->GetData(TYPE_THEKAL) != DONE)
                         {
                             if (AspectOfThekal_Timer <= diff)
                             {
@@ -228,7 +218,7 @@ class boss_hakkar : public CreatureScript
                 {
                     if (m_pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_ARLOKK) != DONE)
+                        if (m_pInstance->GetData(TYPE_ARLOKK) != DONE)
                         {
                             if (AspectOfArlokk_Timer <= diff)
                             {

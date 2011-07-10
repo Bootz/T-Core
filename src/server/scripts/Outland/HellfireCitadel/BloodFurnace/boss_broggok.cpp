@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Broggok
-SD%Complete: 70
-SDComment: pre-event not made
-SDCategory: Hellfire Citadel, Blood Furnace
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "blood_furnace.h"
@@ -49,9 +40,9 @@ class boss_broggok : public CreatureScript
 
         struct boss_broggokAI : public ScriptedAI
         {
-            boss_broggokAI(Creature* creature) : ScriptedAI(creature)
+            boss_broggokAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -72,7 +63,7 @@ class boss_broggok : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(SAY_AGGRO, me);
                 if (pInstance)
@@ -82,7 +73,7 @@ class boss_broggok : public CreatureScript
                 }
             }
 
-            void JustSummoned(Creature* summoned)
+            void JustSummoned(Creature *summoned)
             {
                 summoned->setFaction(16);
                 summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);

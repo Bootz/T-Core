@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +19,7 @@
 #define __BATTLEGROUNDQUEUE_H
 
 #include "Common.h"
-#include "StoragesEnums.h"
+#include "DBCEnums.h"
 #include "Battleground.h"
 #include "EventProcessor.h"
 
@@ -119,7 +117,7 @@ class BattlegroundQueue
 
     private:
 
-        bool InviteGroupToBG(GroupQueueInfo * ginfo, Battleground* bg, uint32 side);
+        bool InviteGroupToBG(GroupQueueInfo * ginfo, Battleground * bg, uint32 side);
         uint32 m_WaitTimes[BG_TEAMS_COUNT][MAX_BATTLEGROUND_BRACKETS][COUNT_OF_PLAYERS_TO_AVERAGE_WAIT_TIME];
         uint32 m_WaitTimeLastPlayer[BG_TEAMS_COUNT][MAX_BATTLEGROUND_BRACKETS];
         uint32 m_SumOfWaitTimes[BG_TEAMS_COUNT][MAX_BATTLEGROUND_BRACKETS];

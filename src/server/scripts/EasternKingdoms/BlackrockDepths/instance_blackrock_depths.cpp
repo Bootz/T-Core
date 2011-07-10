@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Blackrock_Depths
-SD%Complete: 100
-SDComment:
-SDCategory: Blackrock Depths
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "blackrock_depths.h"
@@ -379,8 +370,8 @@ public:
                 {
                     boss->setFaction(FACTION_HOSTILE);
                     boss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                    if (Unit* target = boss->SelectNearestTarget(500))
-                        boss->AI()->AttackStart(target);
+                    if (Unit *pTarget = boss->SelectNearestTarget(500))
+                        boss->AI()->AttackStart(pTarget);
                 }
             }
         }

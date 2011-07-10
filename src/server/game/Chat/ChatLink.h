@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_CHATLINK_H
-#define TRINITYCORE_CHATLINK_H
+#ifndef TRILLIUMCORE_CHATLINK_H
+#define TRILLIUMCORE_CHATLINK_H
 
 #include "SharedDefines.h"
+#include "DBCStructure.h"
 #include <sstream>
 #include <list>
 
@@ -169,4 +168,4 @@ private:
 };
 
 
-#endif // TRINITYCORE_CHATLINK_H
+#endif // TRILLIUMCORE_CHATLINK_H

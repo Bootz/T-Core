@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Maiden_of_Virtue
-SD%Complete: 100
-SDComment:
-SDCategory: Karazhan
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -45,14 +36,14 @@ class boss_maiden_of_virtue : public CreatureScript
 public:
     boss_maiden_of_virtue() : CreatureScript("boss_maiden_of_virtue") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_maiden_of_virtueAI (creature);
+        return new boss_maiden_of_virtueAI (pCreature);
     }
 
     struct boss_maiden_of_virtueAI : public ScriptedAI
     {
-        boss_maiden_of_virtueAI(Creature* c) : ScriptedAI(c) {}
+        boss_maiden_of_virtueAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 Repentance_Timer;
         uint32 Holyfire_Timer;
@@ -84,7 +75,7 @@ public:
             DoScriptText(SAY_DEATH, me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
         }
@@ -116,16 +107,16 @@ public:
 
             if (Holyfire_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_HOLYFIRE);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_HOLYFIRE);
 
                     Holyfire_Timer = urand(8000, 23000);      //Anywhere from 8 to 23 seconds, good luck having several of those in a row!
             } else Holyfire_Timer -= diff;
 
             if (Holywrath_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_HOLYWRATH);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_HOLYWRATH);
 
                 Holywrath_Timer = urand(20000, 25000);        //20-30 secs sounds nice
             } else Holywrath_Timer -= diff;

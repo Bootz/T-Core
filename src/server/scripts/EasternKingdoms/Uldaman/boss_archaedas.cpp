@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,16 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: boss_archaedas
-SD%Complete: 100
-SDComment: Archaedas is activated when 1 person (was 3, changed in 3.0.8) clicks on his altar.
-Every 10 seconds he will awaken one of his minions along the wall.
-At 66%, he will awaken the 6 Guardians.
-At 33%, he will awaken the Vault Walkers
-On his death the vault door opens.
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "uldaman.h"
@@ -64,7 +52,7 @@ class boss_archaedas : public CreatureScript
 
         struct boss_archaedasAI : public ScriptedAI
         {
-            boss_archaedasAI(Creature* creature) : ScriptedAI(creature)
+            boss_archaedasAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
                 pInstance = me->GetInstanceScript();
             }
@@ -106,7 +94,7 @@ class boss_archaedas : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 me->setFaction(14);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -125,7 +113,7 @@ class boss_archaedas : public CreatureScript
                 }
             }
 
-            void KilledUnit(Unit* /*victim*/)
+            void KilledUnit(Unit * /*victim*/)
             {
                 me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
                 DoPlaySoundToSet(me, SOUND_KILL);
@@ -197,7 +185,7 @@ class boss_archaedas : public CreatureScript
                 DoMeleeAttackIfReady();
             }
 
-            void JustDied (Unit* /*killer*/)
+            void JustDied (Unit * /*pKiller*/)
             {
                 if (pInstance)
                 {
@@ -233,7 +221,7 @@ class mob_archaedas_minions : public CreatureScript
 
         struct mob_archaedas_minionsAI : public ScriptedAI
         {
-            mob_archaedas_minionsAI(Creature* c) : ScriptedAI(c)
+            mob_archaedas_minionsAI(Creature *c) : ScriptedAI(c)
             {
                 pInstance = me->GetInstanceScript();
             }
@@ -259,7 +247,7 @@ class mob_archaedas_minions : public CreatureScript
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 me->setFaction (14);
                 me->RemoveAllAuras();
@@ -277,7 +265,7 @@ class mob_archaedas_minions : public CreatureScript
                 }
             }
 
-            void MoveInLineOfSight(Unit* who)
+            void MoveInLineOfSight(Unit *who)
             {
                 if (bAmIAwake)
                     ScriptedAI::MoveInLineOfSight(who);
@@ -332,7 +320,7 @@ class mob_stonekeepers : public CreatureScript
 
         struct mob_stonekeepersAI : public ScriptedAI
         {
-            mob_stonekeepersAI(Creature* creature) : ScriptedAI(creature)
+            mob_stonekeepersAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
                 pInstance = me->GetInstanceScript();
             }
@@ -347,7 +335,7 @@ class mob_stonekeepers : public CreatureScript
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 me->setFaction(14);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -363,7 +351,7 @@ class mob_stonekeepers : public CreatureScript
                 DoMeleeAttackIfReady();
             }
 
-            void JustDied(Unit* /*attacker*/)
+            void JustDied(Unit * /*attacker*/)
             {
                 DoCast (me, SPELL_SELF_DESTRUCT, true);
                 if (pInstance)
@@ -395,15 +383,15 @@ class go_altar_of_archaedas : public GameObjectScript
         {
         }
 
-        bool OnGossipHello(Player* player, GameObject* /*pGO*/)
+        bool OnGossipHello(Player* pPlayer, GameObject* /*pGO*/)
         {
-            InstanceScript* pInstance = player->GetInstanceScript();
+            InstanceScript* pInstance = pPlayer->GetInstanceScript();
             if (!pInstance)
                 return false;
 
-            player->CastSpell (player, SPELL_BOSS_OBJECT_VISUAL, false);
+            pPlayer->CastSpell (pPlayer, SPELL_BOSS_OBJECT_VISUAL, false);
 
-            pInstance->SetData64(0, player->GetGUID());     // activate archaedas
+            pInstance->SetData64(0, pPlayer->GetGUID());     // activate archaedas
             return false;
         }
 };
@@ -426,13 +414,13 @@ class go_altar_of_the_keepers : public GameObjectScript
         {
         }
 
-        bool OnGossipHello(Player* player, GameObject* /*pGo*/)
+        bool OnGossipHello(Player* pPlayer, GameObject* /*pGo*/)
         {
-            InstanceScript* pInstance = player->GetInstanceScript();
+            InstanceScript* pInstance = pPlayer->GetInstanceScript();
             if (!pInstance)
                 return false;
 
-            player->CastSpell (player, SPELL_BOSS_OBJECT_VISUAL, false);
+            pPlayer->CastSpell (pPlayer, SPELL_BOSS_OBJECT_VISUAL, false);
 
             pInstance->SetData(DATA_STONE_KEEPERS, IN_PROGRESS); // activate the Stone Keepers
             return false;

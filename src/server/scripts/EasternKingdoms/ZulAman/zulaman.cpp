@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Zulaman
-SD%Complete: 90
-SDComment: Forest Frog will turn into different NPC's. Workaround to prevent new entry from running this script
-SDCategory: Zul'Aman
-EndScriptData */
 
 /* ContentData
 npc_forest_frog
@@ -59,7 +50,7 @@ class npc_forest_frog : public CreatureScript
 
             void Reset() {}
 
-            void EnterCombat(Unit* /*who*/) {}
+            void EnterCombat(Unit * /*who*/) {}
 
             void DoSpawnRandom()
             {
@@ -92,7 +83,7 @@ class npc_forest_frog : public CreatureScript
                 }
             }
 
-            void SpellHit(Unit* caster, const SpellEntry *spell)
+            void SpellHit(Unit *caster, const SpellEntry *spell)
             {
                 if (spell->Id == SPELL_REMOVE_AMANI_CURSE && caster->GetTypeId() == TYPEID_PLAYER && me->GetEntry() == ENTRY_FOREST_FROG)
                 {
@@ -129,15 +120,15 @@ class npc_zulaman_hostage : public CreatureScript
 
         struct npc_zulaman_hostageAI : public ScriptedAI
         {
-            npc_zulaman_hostageAI(Creature* c) : ScriptedAI(c) {IsLoot = false;}
+            npc_zulaman_hostageAI(Creature *c) : ScriptedAI(c) {IsLoot = false;}
             bool IsLoot;
             uint64 PlayerGUID;
             void Reset() {}
-            void EnterCombat(Unit* /*who*/) {}
+            void EnterCombat(Unit * /*who*/) {}
             void JustDied(Unit* /*who*/)
             {
-                Player* player = Unit::GetPlayer(*me, PlayerGUID);
-                if (player) player->SendLoot(me->GetGUID(), LOOT_CORPSE);
+                Player* pPlayer = Unit::GetPlayer(*me, PlayerGUID);
+                if (pPlayer) pPlayer->SendLoot(me->GetGUID(), LOOT_CORPSE);
             }
             void UpdateAI(const uint32 /*diff*/)
             {
@@ -151,36 +142,36 @@ class npc_zulaman_hostage : public CreatureScript
             return new npc_zulaman_hostageAI(creature);
         }
 
-        bool OnGossipHello(Player* player, Creature* creature)
+        bool OnGossipHello(Player* pPlayer, Creature* pCreature)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HOSTAGE1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HOSTAGE1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+        bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
         {
-            player->PlayerTalkClass->ClearMenus();
+            pPlayer->PlayerTalkClass->ClearMenus();
             if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-                player->CLOSE_GOSSIP_MENU();
+                pPlayer->CLOSE_GOSSIP_MENU();
 
-            if (!creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+            if (!pCreature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
                 return true;
-            creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-            InstanceScript* pInstance = creature->GetInstanceScript();
+            InstanceScript* pInstance = pCreature->GetInstanceScript();
             if (pInstance)
             {
                 //uint8 progress = pInstance->GetData(DATA_CHESTLOOTED);
                 pInstance->SetData(DATA_CHESTLOOTED, 0);
                 float x, y, z;
-                creature->GetPosition(x, y, z);
-                uint32 entry = creature->GetEntry();
+                pCreature->GetPosition(x, y, z);
+                uint32 entry = pCreature->GetEntry();
                 for (uint8 i = 0; i < 4; ++i)
                 {
                     if (HostageEntry[i] == entry)
                     {
-                        creature->SummonGameObject(ChestEntry[i], x-2, y, z, 0, 0, 0, 0, 0, 0);
+                        pCreature->SummonGameObject(ChestEntry[i], x-2, y, z, 0, 0, 0, 0, 0, 0);
                         break;
                     }
                 }

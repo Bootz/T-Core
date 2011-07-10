@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Shadowfang_Keep
-SD%Complete: 90
-SDComment:
-SDCategory: Shadowfang Keep
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "shadowfang_keep.h"
@@ -240,7 +231,7 @@ public:
                 return;
 
             Creature* pArchmage = instance->GetCreature(uiArchmageArugalGUID);
-            Creature* summon = NULL;
+            Creature* pSummon = NULL;
 
             if (!pArchmage || !pArchmage->isAlive())
                 return;
@@ -252,11 +243,11 @@ public:
                     switch(uiPhase)
                     {
                         case 1:
-                            summon = pArchmage->SummonCreature(pArchmage->GetEntry(), SpawnLocation[4], TEMPSUMMON_TIMED_DESPAWN, 10000);
-                            summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                            summon->SetReactState(REACT_DEFENSIVE);
-                            summon->CastSpell(summon, SPELL_ASHCROMBE_TELEPORT, true);
-                            DoScriptText(SAY_ARCHMAGE, summon);
+                            pSummon = pArchmage->SummonCreature(pArchmage->GetEntry(), SpawnLocation[4], TEMPSUMMON_TIMED_DESPAWN, 10000);
+                            pSummon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                            pSummon->SetReactState(REACT_DEFENSIVE);
+                            pSummon->CastSpell(pSummon, SPELL_ASHCROMBE_TELEPORT, true);
+                            DoScriptText(SAY_ARCHMAGE, pSummon);
                             uiTimer = 2000;
                             uiPhase = 2;
                             break;

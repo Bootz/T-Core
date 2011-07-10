@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -172,13 +170,13 @@ const Yells ThrallQuotes[]=
 
 struct hyjalAI : public npc_escortAI
 {
-    hyjalAI(Creature* c);
+    hyjalAI(Creature *c);
 
     void Reset();                                           // Generically used to reset our variables. Do *not* call in EnterEvadeMode as this may make problems if the raid is still in combat
 
     void EnterEvadeMode();                                  // Send creature back to spawn location and evade.
 
-    void EnterCombat(Unit* /*who*/);                                  // Used to reset cooldowns for our spells and to inform the raid that we're under attack
+    void EnterCombat(Unit * /*who*/);                                  // Used to reset cooldowns for our spells and to inform the raid that we're under attack
 
     void UpdateAI(const uint32 diff);                       // Called to summon waves, check for boss deaths and to cast our spells.
 
@@ -193,13 +191,13 @@ struct hyjalAI : public npc_escortAI
 
     void SpawnVeins();
     void DeSpawnVeins();
-    void JustSummoned(Creature* summoned);
+    void JustSummoned(Creature *summoned);
     void SummonedCreatureDespawn(Creature* summoned);
     void HideNearPos(float x, float y);
     void RespawnNearPos(float x, float y);
     void WaypointReached(uint32 i);
     void DoOverrun(uint32 faction, const uint32 diff);
-    void MoveInLineOfSight(Unit* who);
+    void MoveInLineOfSight(Unit *who);
 
     void SummonCreature(uint32 entry, float Base[4][3]);    // Summons a creature for that wave in that base
 

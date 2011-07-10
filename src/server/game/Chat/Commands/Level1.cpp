@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -76,7 +74,7 @@ bool ChatHandler::HandleAnnounceCommand(const char* args)
         return false;
 
     char buff[2048];
-    sprintf(buff, GetTrinityString(LANG_SYSTEMMESSAGE), args);
+    sprintf(buff, GetTrilliumString(LANG_SYSTEMMESSAGE), args);
     sWorld->SendServerMessage(SERVER_MSG_STRING, buff);
     return true;
 }
@@ -97,7 +95,7 @@ bool ChatHandler::HandleNotifyCommand(const char* args)
     if (!*args)
         return false;
 
-    std::string str = GetTrinityString(LANG_GLOBAL_NOTIFY);
+    std::string str = GetTrilliumString(LANG_GLOBAL_NOTIFY);
     str += args;
 
     WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
@@ -113,13 +111,95 @@ bool ChatHandler::HandleGMNotifyCommand(const char* args)
     if (!*args)
         return false;
 
-    std::string str = GetTrinityString(LANG_GM_NOTIFY);
+    std::string str = GetTrilliumString(LANG_GM_NOTIFY);
     str += args;
 
     WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
     data << str;
     sWorld->SendGlobalGMMessage(&data);
 
+    return true;
+}
+
+bool ChatHandler::HandleGPSCommand(const char* args)
+{
+    WorldObject *obj = NULL;
+    if (*args)
+    {
+        uint64 guid = extractGuidFromLink((char*)args);
+        if (guid)
+            obj = (WorldObject*)ObjectAccessor::GetObjectByTypeMask(*m_session->GetPlayer(), guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT);
+
+        if (!obj)
+        {
+            SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+    else
+    {
+        obj = getSelectedUnit();
+
+        if (!obj)
+        {
+            SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+    CellPair cell_val = Trillium::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
+    Cell cell(cell_val);
+
+    uint32 zone_id, area_id;
+    obj->GetZoneAndAreaId(zone_id, area_id);
+
+    MapEntry const* mapEntry = sMapStore.LookupEntry(obj->GetMapId());
+    AreaTableEntry const* zoneEntry = GetAreaEntryByAreaID(zone_id);
+    AreaTableEntry const* areaEntry = GetAreaEntryByAreaID(area_id);
+
+    float zone_x = obj->GetPositionX();
+    float zone_y = obj->GetPositionY();
+
+    Map2ZoneCoordinates(zone_x, zone_y, zone_id);
+
+    Map const *map = obj->GetMap();
+    float ground_z = map->GetHeight(obj->GetPositionX(), obj->GetPositionY(), MAX_HEIGHT);
+    float floor_z = map->GetHeight(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ());
+
+    GridPair p = Trillium::ComputeGridPair(obj->GetPositionX(), obj->GetPositionY());
+
+    // 63? WHY?
+    int gx = 63 - p.x_coord;
+    int gy = 63 - p.y_coord;
+
+    uint32 have_map = Map::ExistMap(obj->GetMapId(), gx, gy) ? 1 : 0;
+    uint32 have_vmap = Map::ExistVMap(obj->GetMapId(), gx, gy) ? 1 : 0;
+
+    if(have_vmap)
+    {
+        if(map->IsOutdoors(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ()))
+            PSendSysMessage("You are outdoors");
+        else
+            PSendSysMessage("You are indoors");
+    }
+    else PSendSysMessage("no VMAP available for area info");
+
+    PSendSysMessage(LANG_MAP_POSITION,
+        obj->GetMapId(), (mapEntry ? mapEntry->name[GetSessionDbcLocale()] : "<unknown>"),
+        zone_id, (zoneEntry ? zoneEntry->area_name[GetSessionDbcLocale()] : "<unknown>"),
+        area_id, (areaEntry ? areaEntry->area_name[GetSessionDbcLocale()] : "<unknown>"),
+        obj->GetPhaseMask(),
+        obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), obj->GetOrientation(),
+        cell.GridX(), cell.GridY(), cell.CellX(), cell.CellY(), obj->GetInstanceId(),
+        zone_x, zone_y, ground_z, floor_z, have_map, have_vmap);
+
+    LiquidData liquid_status;
+    ZLiquidStatus res = map->getLiquidStatus(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), MAP_ALL_LIQUIDS, &liquid_status);
+    if (res)
+    {
+        PSendSysMessage(LANG_LIQUID_STATUS, liquid_status.level, liquid_status.depth_level, liquid_status.type, res);
+    }
     return true;
 }
 
@@ -223,7 +303,7 @@ bool ChatHandler::HandleSummonCommand(const char* args)
 
         std::string nameLink = playerLink(target_name);
 
-        PSendSysMessage(LANG_SUMMONING, nameLink.c_str(), GetTrinityString(LANG_OFFLINE));
+        PSendSysMessage(LANG_SUMMONING, nameLink.c_str(), GetTrilliumString(LANG_OFFLINE));
 
         // in point where GM stay
         Player::SavePositionInDB(m_session->GetPlayer()->GetMapId(),
@@ -315,7 +395,7 @@ bool ChatHandler::HandleAppearCommand(const char* args)
             InstancePlayerBind *pBind = _player->GetBoundInstance(target->GetMapId(), target->GetDifficulty(cMap->IsRaid()));
             if (!pBind)
             {
-                Group* group = _player->GetGroup();
+                Group *group = _player->GetGroup();
                 // if no bind exists, create a solo bind
                 InstanceGroupBind *gBind = group ? group->GetBoundInstance(target) : NULL;                // if no bind exists, create a solo bind
                 if (!gBind)
@@ -595,7 +675,7 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
 {
     if (!*args)
     {
-        PSendSysMessage(LANG_COMMAND_WHISPERACCEPTING, m_session->GetPlayer()->isAcceptWhispers() ?  GetTrinityString(LANG_ON) : GetTrinityString(LANG_OFF));
+        PSendSysMessage(LANG_COMMAND_WHISPERACCEPTING, m_session->GetPlayer()->isAcceptWhispers() ?  GetTrilliumString(LANG_ON) : GetTrilliumString(LANG_OFF));
         return true;
     }
 

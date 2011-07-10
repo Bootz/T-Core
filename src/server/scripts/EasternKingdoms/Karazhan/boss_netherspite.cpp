@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+
+ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -64,9 +64,9 @@ class boss_netherspite : public CreatureScript
 public:
     boss_netherspite() : CreatureScript("boss_netherspite") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature *pCreature) const
     {
-        return new boss_netherspiteAI(creature);
+        return new boss_netherspiteAI(pCreature);
     }
 
     struct boss_netherspiteAI : public ScriptedAI
@@ -97,9 +97,9 @@ public:
         uint64 BeamerGUID[3]; // guid's of auxiliary beaming portals
         uint64 BeamTarget[3]; // guid's of portals' current targets
 
-        bool IsBetween(WorldObject* u1, WorldObject *target, WorldObject* u2) // the in-line checker
+        bool IsBetween(WorldObject* u1, WorldObject *pTarget, WorldObject* u2) // the in-line checker
         {
-            if (!u1 || !u2 || !target)
+            if (!u1 || !u2 || !pTarget)
                 return false;
 
             float xn, yn, xp, yp, xh, yh;
@@ -107,8 +107,8 @@ public:
             yn = u1->GetPositionY();
             xp = u2->GetPositionX();
             yp = u2->GetPositionY();
-            xh = target->GetPositionX();
-            yh = target->GetPositionY();
+            xh = pTarget->GetPositionX();
+            yh = pTarget->GetPositionY();
 
             // check if target is between (not checking distance from the beam yet)
             if (dist(xn, yn, xh, yh) >= dist(xn, yn, xp, yp) || dist(xp, yp, xh, yh) >= dist(xn, yn, xp, yp))
@@ -142,7 +142,7 @@ public:
             pos[BLUE_PORTAL] = (r>1 ? 1: 2); // Blue Portal not on the left side (0)
 
             for (int i=0; i<3; ++i)
-                if (Creature* portal = me->SummonCreature(PortalID[i], PortalCoord[pos[i]][0], PortalCoord[pos[i]][1], PortalCoord[pos[i]][2], 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
+                if (Creature *portal = me->SummonCreature(PortalID[i], PortalCoord[pos[i]][0], PortalCoord[pos[i]][1], PortalCoord[pos[i]][2], 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
                 {
                     PortalGUID[i] = portal->GetGUID();
                     portal->AddAura(PortalVisual[i], portal);
@@ -153,9 +153,9 @@ public:
         {
             for (int i=0; i<3; ++i)
             {
-                if (Creature* portal = Unit::GetCreature(*me, PortalGUID[i]))
+                if (Creature *portal = Unit::GetCreature(*me, PortalGUID[i]))
                     portal->DisappearAndDie();
-                if (Creature* portal = Unit::GetCreature(*me, BeamerGUID[i]))
+                if (Creature *portal = Unit::GetCreature(*me, BeamerGUID[i]))
                     portal->DisappearAndDie();
                 PortalGUID[i] = 0;
                 BeamTarget[i] = 0;
@@ -165,12 +165,12 @@ public:
         void UpdatePortals() // Here we handle the beams' behavior
         {
             for (int j=0; j<3; ++j) // j = color
-                if (Creature* portal = Unit::GetCreature(*me, PortalGUID[j]))
+                if (Creature *portal = Unit::GetCreature(*me, PortalGUID[j]))
                 {
                     // the one who's been casted upon before
-                    Unit* current = Unit::GetUnit(*portal, BeamTarget[j]);
+                    Unit *current = Unit::GetUnit(*portal, BeamTarget[j]);
                     // temporary store for the best suitable beam reciever
-                    Unit* target = me;
+                    Unit *pTarget = me;
 
                     if (Map* map = me->GetMap())
                     {
@@ -181,41 +181,41 @@ public:
                         {
                             Player* p = i->getSource();
                             if (p && p->isAlive() // alive
-                                && (!target || target->GetDistance2d(portal)>p->GetDistance2d(portal)) // closer than current best
+                                && (!pTarget || pTarget->GetDistance2d(portal)>p->GetDistance2d(portal)) // closer than current best
                                 && !p->HasAura(PlayerDebuff[j], 0) // not exhausted
                                 && !p->HasAura(PlayerBuff[(j+1)%3], 0) // not on another beam
                                 && !p->HasAura(PlayerBuff[(j+2)%3], 0)
                                 && IsBetween(me, p, portal)) // on the beam
-                                target = p;
+                                pTarget = p;
                         }
                     }
                     // buff the target
-                    if (target->GetTypeId() == TYPEID_PLAYER)
-                        target->AddAura(PlayerBuff[j], target);
+                    if (pTarget->GetTypeId() == TYPEID_PLAYER)
+                        pTarget->AddAura(PlayerBuff[j], pTarget);
                     else
-                        target->AddAura(NetherBuff[j], target);
+                        pTarget->AddAura(NetherBuff[j], pTarget);
                     // cast visual beam on the chosen target if switched
                     // simple target switching isn't working -> using BeamerGUID to cast (workaround)
-                    if (!current || target != current)
+                    if (!current || pTarget != current)
                     {
-                        BeamTarget[j] = target->GetGUID();
+                        BeamTarget[j] = pTarget->GetGUID();
                         // remove currently beaming portal
-                        if (Creature* beamer = Unit::GetCreature(*portal, BeamerGUID[j]))
+                        if (Creature *beamer = Unit::GetCreature(*portal, BeamerGUID[j]))
                         {
-                            beamer->CastSpell(target, PortalBeam[j], false);
+                            beamer->CastSpell(pTarget, PortalBeam[j], false);
                             beamer->DisappearAndDie();
                             BeamerGUID[j] = 0;
                         }
                         // create new one and start beaming on the target
-                        if (Creature* beamer = portal->SummonCreature(PortalID[j], portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), portal->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60000))
+                        if (Creature *beamer = portal->SummonCreature(PortalID[j], portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), portal->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60000))
                         {
-                            beamer->CastSpell(target, PortalBeam[j], false);
+                            beamer->CastSpell(pTarget, PortalBeam[j], false);
                             BeamerGUID[j] = beamer->GetGUID();
                         }
                     }
                     // aggro target if Red Beam
-                    if (j == RED_PORTAL && me->getVictim() != target && target->GetTypeId() == TYPEID_PLAYER)
-                        me->getThreatManager().addThreat(target, 100000.0f+DoGetThreat(me->getVictim()));
+                    if (j == RED_PORTAL && me->getVictim() != pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
+                        me->getThreatManager().addThreat(pTarget, 100000.0f+DoGetThreat(me->getVictim()));
                 }
         }
 
@@ -248,11 +248,11 @@ public:
 
         void HandleDoors(bool open) // Massive Door switcher
         {
-            if (GameObject* Door = GameObject::GetGameObject(*me, pInstance ? pInstance->GetData64(DATA_GO_MASSIVE_DOOR) : 0))
+            if (GameObject *Door = GameObject::GetGameObject(*me, pInstance ? pInstance->GetData64(DATA_GO_MASSIVE_DOOR) : 0))
                 Door->SetGoState(open ? GO_STATE_ACTIVE : GO_STATE_READY);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             HandleDoors(false);
             SwitchToPortalPhase();
@@ -315,8 +315,8 @@ public:
                 // Netherbreath
                 if (NetherbreathTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
-                        DoCast(target, SPELL_NETHERBREATH);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
+                        DoCast(pTarget, SPELL_NETHERBREATH);
                     NetherbreathTimer = urand(5000, 7000);
                 } else NetherbreathTimer -= diff;
 

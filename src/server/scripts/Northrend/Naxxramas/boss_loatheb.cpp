@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,16 +41,16 @@ class boss_loatheb : public CreatureScript
 public:
     boss_loatheb() : CreatureScript("boss_loatheb") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_loathebAI (creature);
+        return new boss_loathebAI (pCreature);
     }
 
     struct boss_loathebAI : public BossAI
     {
-        boss_loathebAI(Creature* c) : BossAI(c, BOSS_LOATHEB) {}
+        boss_loathebAI(Creature *c) : BossAI(c, BOSS_LOATHEB) {}
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             _EnterCombat();
             events.ScheduleEvent(EVENT_AURA, 10000);
@@ -94,7 +92,35 @@ public:
 
 };
 
+enum SporeSpells
+{
+    SPELL_FUNGAL_CREEP                                     = 29232
+};
+
+class mob_loatheb_spore : public CreatureScript
+{
+public:
+    mob_loatheb_spore() : CreatureScript("mob_loatheb_spore") { }
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new mob_loatheb_sporeAI (pCreature);
+    }
+
+    struct mob_loatheb_sporeAI : public ScriptedAI
+    {
+        mob_loatheb_sporeAI(Creature *c) : ScriptedAI(c) {}
+
+        void JustDied(Unit* killer)
+        {
+            DoCast(killer, SPELL_FUNGAL_CREEP);
+        }
+    };
+
+};
+
 void AddSC_boss_loatheb()
 {
     new boss_loatheb();
+    new mob_loatheb_spore();
 }

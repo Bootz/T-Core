@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Scorn
-SD%Complete: 100
-SDComment:
-SDCategory: Scarlet Monastery
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define SPELL_LICHSLAP                  28873
@@ -36,14 +27,14 @@ class boss_scorn : public CreatureScript
 public:
     boss_scorn() : CreatureScript("boss_scorn") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_scornAI (creature);
+        return new boss_scornAI (pCreature);
     }
 
     struct boss_scornAI : public ScriptedAI
     {
-        boss_scornAI(Creature* c) : ScriptedAI(c) {}
+        boss_scornAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 LichSlap_Timer;
         uint32 FrostboltVolley_Timer;
@@ -58,7 +49,7 @@ public:
             FrostNova_Timer = 30000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 

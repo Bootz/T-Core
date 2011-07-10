@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -142,7 +140,7 @@ Quest::Quest(Field * questRecord)
     QuestCompleteScript = questRecord[143].GetUInt32();
 
     QuestFlags |= SpecialFlags << 20;
-    if (QuestFlags & QUEST_FLAGS_AUTO_ACCEPT)
+    if (QuestFlags & QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT)
         QuestFlags |= QUEST_FLAGS_AUTO_ACCEPT;
 
     m_reqitemscount = 0;

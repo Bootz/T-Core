@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -220,7 +218,7 @@ static void setAcceptTradeMode(TradeData* myTrade, TradeData* hisTrade, Item **m
     hisTrade->SetInAcceptProcess(true);
 
     // store items in local list and set 'in-trade' flag
-    for (uint8 i = 0; i < TRADE_SLOT_TRADED_COUNT; ++i)
+    for(uint8 i = 0; i < TRADE_SLOT_TRADED_COUNT; ++i)
     {
         if (Item* item = myTrade->GetItem(TradeSlots(i)))
         {
@@ -354,7 +352,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
 
             my_spell = new Spell(_player, spellEntry, true);
             my_spell->m_CastItem = castItem;
-            my_targets.SetTradeItemTarget(_player);
+            my_targets.setTradeItemTarget(_player);
             my_spell->m_targets = my_targets;
 
             SpellCastResult res = my_spell->CheckCast(true);
@@ -389,7 +387,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
 
             his_spell = new Spell(trader, spellEntry, true);
             his_spell->m_CastItem = castItem;
-            his_targets.SetTradeItemTarget(trader);
+            his_targets.setTradeItemTarget(trader);
             his_spell->m_targets = his_targets;
 
             SpellCastResult res = his_spell->CheckCast(true);
@@ -577,7 +575,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
     if (GetPlayer()->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
     {
-        SendNotification(GetTrinityString(LANG_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetTrilliumString(LANG_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
         return;
     }
 
@@ -641,7 +639,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
     if (pOther->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
     {
-        SendNotification(GetTrinityString(LANG_TRADE_OTHER_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetTrilliumString(LANG_TRADE_OTHER_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
         return;
     }
 

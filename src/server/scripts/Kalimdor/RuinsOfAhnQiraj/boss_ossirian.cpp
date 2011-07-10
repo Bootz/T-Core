@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Ossirian
-SD%Complete: 0
-SDComment: Place holder
-SDCategory: Ruins of Ahn'Qiraj
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
@@ -42,20 +33,42 @@ enum Yells
 
 class boss_ossirian : public CreatureScript
 {
-    public:
-        boss_ossirian() : CreatureScript("boss_ossirian") { }
+public:
+    boss_ossirian() : CreatureScript("boss_ossirian") { }
 
-        struct boss_ossirianAI : public ScriptedAI
-        {
-            boss_ossirianAI(Creature* creature) : ScriptedAI(creature)
-            {
-            }
-        };
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_ossirianAI (pCreature);
+    }
 
-        CreatureAI* GetAI(Creature* creature) const
+    struct boss_ossirianAI : public ScriptedAI
+    {
+        boss_ossirianAI(Creature *c) : ScriptedAI(c)
         {
-            return new boss_ossirianAI (creature);
+            pInstance = c->GetInstanceScript();
         }
+
+        InstanceScript *pInstance;
+
+        void Reset()
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_OSSIRIAN_EVENT, NOT_STARTED);
+        }
+
+        void EnterCombat(Unit * /*who*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_OSSIRIAN_EVENT, IN_PROGRESS);
+        }
+
+        void JustDied(Unit * /*killer*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_OSSIRIAN_EVENT, DONE);
+        }
+    };
+
 };
 
 void AddSC_boss_ossirian()

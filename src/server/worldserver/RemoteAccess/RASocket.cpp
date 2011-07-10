@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,7 +16,7 @@
  */
 
 /** \file
-    \ingroup Trinityd
+    \ingroup Trilliumd
 */
 
 #include "Common.h"
@@ -178,7 +176,7 @@ int RASocket::check_access_level(const std::string& user)
     std::string safe_user = user;
 
     AccountMgr::normalizeString(safe_user);
-    LoginDatabase.EscapeString(safe_user);
+    LoginDatabase.escape_string(safe_user);
 
     QueryResult result = LoginDatabase.PQuery("SELECT a.id, aa.gmlevel, aa.RealmID FROM account a LEFT JOIN account_access aa ON (a.id = aa.id) WHERE a.username = '%s'", safe_user.c_str());
 
@@ -208,11 +206,11 @@ int RASocket::check_password(const std::string& user, const std::string& pass)
 {
     std::string safe_user = user;
     AccountMgr::normalizeString(safe_user);
-    LoginDatabase.EscapeString(safe_user);
+    LoginDatabase.escape_string(safe_user);
 
     std::string safe_pass = pass;
     AccountMgr::normalizeString(safe_pass);
-    LoginDatabase.EscapeString(safe_pass);
+    LoginDatabase.escape_string(safe_pass);
 
     std::string hash = sAccountMgr->CalculateShaPassHash(safe_user, safe_pass);
 

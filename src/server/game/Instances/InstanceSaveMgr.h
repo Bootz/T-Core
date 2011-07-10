@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,7 +25,7 @@
 #include <map>
 #include "UnorderedMap.h"
 #include "DatabaseEnv.h"
-#include "StoragesEnums.h"
+#include "DBCEnums.h"
 #include "ObjectDefines.h"
 
 struct InstanceTemplate;
@@ -81,11 +79,11 @@ class InstanceSave
 
         /* online players bound to the instance (perm/solo)
            does not include the members of the group unless they have permanent saves */
-        void AddPlayer(Player* player) { m_playerList.push_back(player); }
-        bool RemovePlayer(Player* player) { m_playerList.remove(player); return UnloadIfEmpty(); }
+        void AddPlayer(Player *player) { m_playerList.push_back(player); }
+        bool RemovePlayer(Player *player) { m_playerList.remove(player); return UnloadIfEmpty(); }
         /* all groups bound to the instance */
-        void AddGroup(Group* group) { m_groupList.push_back(group); }
-        bool RemoveGroup(Group* group) { m_groupList.remove(group); return UnloadIfEmpty(); }
+        void AddGroup(Group *group) { m_groupList.push_back(group); }
+        bool RemoveGroup(Group *group) { m_groupList.remove(group); return UnloadIfEmpty(); }
 
         /* instances cannot be reset (except at the global reset time)
            if there are players permanently bound to it

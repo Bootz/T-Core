@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,10 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/// \addtogroup Trinityd
-/// @{
-/// \file
 
 #include "Common.h"
 #include "ObjectMgr.h"
@@ -448,7 +442,7 @@ bool ChatHandler::HandleCharacterEraseCommand(const char* args){
     uint64 character_guid;
     uint32 account_id;
 
-    Player* player = sObjectMgr->GetPlayer(character_name.c_str());
+    Player *player = sObjectMgr->GetPlayer(character_name.c_str());
     if (player)
     {
         character_guid = player->GetGUID();
@@ -576,7 +570,7 @@ void CliRunnable::run()
     // later it will be printed after command queue updates
     printf("TrilliumEMU>");
 
-    ///- As long as the World is running (no Trillium::m_stopEvent), get the command line and handle it
+    ///- As long as the World is running (no World::m_stopEvent), get the command line and handle it
     while (!World::IsStopped())
     {
         fflush(stdout);

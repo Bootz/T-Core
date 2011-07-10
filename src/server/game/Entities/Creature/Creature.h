@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_CREATURE_H
-#define TRINITYCORE_CREATURE_H
+#ifndef TRILLIUMCORE_CREATURE_H
+#define TRILLIUMCORE_CREATURE_H
 
 #include "Common.h"
 #include "Unit.h"
@@ -255,6 +253,7 @@ struct CreatureData
     uint32 currentwaypoint;
     uint32 curhealth;
     uint32 curmana;
+    bool  is_dead;
     uint8 movementType;
     uint8 spawnMask;
     uint32 npcflag;
@@ -432,7 +431,6 @@ class Creature : public Unit, public GridObject<Creature>
         uint32 GetEquipmentId() const { return GetCreatureInfo()->equipmentId; }
 
         void SetCorpseDelay(uint32 delay) { m_corpseDelay = delay; }
-        uint32 GetCorpseDelay() const { return m_corpseDelay; }
         bool isRacialLeader() const { return GetCreatureInfo()->RacialLeader; }
         bool isCivilian() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_CIVILIAN; }
         bool isTrigger() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_TRIGGER; }
@@ -559,7 +557,7 @@ class Creature : public Unit, public GridObject<Creature>
         Player *GetLootRecipient() const;
         Group *GetLootRecipientGroup() const;
         bool hasLootRecipient() const { return m_lootRecipient || m_lootRecipientGroup; }
-        bool isTappedBy(Player* player) const;                          // return true if the creature is tapped by the player or a member of his party.
+        bool isTappedBy(Player *player) const;                          // return true if the creature is tapped by the player or a member of his party.
 
         void SetLootRecipient (Unit* unit);
         void AllLootRemovedFromCorpse();
@@ -603,6 +601,7 @@ class Creature : public Unit, public GridObject<Creature>
         void SetCurrentCell(Cell const& cell) { m_currentCell = cell; }
 
         void RemoveCorpse(bool setSpawnTime = true);
+        bool isDeadByDefault() const { return m_isDeadByDefault; };
 
         void ForcedDespawn(uint32 timeMSToDespawn = 0);
         void DespawnOrUnsummon(uint32 msTimeToDespawn = 0);
@@ -655,6 +654,7 @@ class Creature : public Unit, public GridObject<Creature>
         void SetFormation(CreatureGroup *formation) {m_formation = formation;}
 
         Unit *SelectVictim();
+        void SetDeadByDefault (bool death_state) {m_isDeadByDefault = death_state;}
 
         void SetDisableReputationGain(bool disable) { DisableReputationGain = disable; }
         bool IsReputationGainDisabled() { return DisableReputationGain; }
@@ -711,6 +711,7 @@ class Creature : public Unit, public GridObject<Creature>
         bool m_AlreadySearchedAssistance;
         bool m_regenHealth;
         bool m_AI_locked;
+        bool m_isDeadByDefault;
 
         SpellSchoolMask m_meleeDamageSchoolMask;
         uint32 m_originalEntry;

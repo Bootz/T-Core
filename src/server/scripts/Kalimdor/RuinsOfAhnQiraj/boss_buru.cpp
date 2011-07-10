@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Buru
-SD%Complete: 0
-SDComment: Place Holder
-SDCategory: Ruins of Ahn'Qiraj
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
 
@@ -34,20 +25,42 @@ enum Yells
 
 class boss_buru : public CreatureScript
 {
-    public:
-        boss_buru() : CreatureScript("boss_buru") { }
+public:
+    boss_buru() : CreatureScript("boss_buru") { }
 
-        struct boss_buruAI : public ScriptedAI
-        {
-            boss_buruAI(Creature* creature) : ScriptedAI(creature)
-            {
-            }
-        };
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_buruAI (pCreature);
+    }
 
-        CreatureAI* GetAI(Creature* creature) const
+    struct boss_buruAI : public ScriptedAI
+    {
+        boss_buruAI(Creature *c) : ScriptedAI(c)
         {
-            return new boss_buruAI(creature);
+            pInstance = c->GetInstanceScript();
         }
+
+        InstanceScript *pInstance;
+
+        void Reset()
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, NOT_STARTED);
+        }
+
+        void EnterCombat(Unit * /*who*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, IN_PROGRESS);
+        }
+
+        void JustDied(Unit * /*killer*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, DONE);
+        }
+    };
+
 };
 
 void AddSC_boss_buru()

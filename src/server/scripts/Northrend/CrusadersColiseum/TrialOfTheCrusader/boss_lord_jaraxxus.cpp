@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: trial_of_the_crusader
-SD%Complete: ??%
-SDComment: based on /dev/rsa
-SDCategory: Crusader Coliseum
-EndScriptData */
 
 // Known bugs:
 // Some visuals aren't appearing right sometimes
@@ -91,16 +82,16 @@ class boss_jaraxxus : public CreatureScript
 public:
     boss_jaraxxus() : CreatureScript("boss_jaraxxus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_jaraxxusAI(creature);
+        return new boss_jaraxxusAI(pCreature);
     }
 
     struct boss_jaraxxusAI : public ScriptedAI
     {
-        boss_jaraxxusAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+        boss_jaraxxusAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
             Reset();
         }
 
@@ -142,16 +133,16 @@ public:
             me->SetReactState(REACT_PASSIVE);
         }
 
-        void KilledUnit(Unit* who)
+        void KilledUnit(Unit *pWho)
         {
-            if (who->GetTypeId() == TYPEID_PLAYER)
+            if (pWho->GetTypeId() == TYPEID_PLAYER)
             {
                 if (m_pInstance)
                     m_pInstance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             Summons.DespawnAll();
             DoScriptText(SAY_DEATH, me);
@@ -164,7 +155,7 @@ public:
             Summons.Summon(pSummoned);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             me->SetInCombatWithZone();
             if (m_pInstance)
@@ -203,18 +194,18 @@ public:
 
             if (m_uiFelLightningTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                    DoCast(target, SPELL_FEL_LIGHTING);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                    DoCast(pTarget, SPELL_FEL_LIGHTING);
                 m_uiFelLightningTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
             } else m_uiFelLightningTimer -= uiDiff;
 
             if (m_uiIncinerateFleshTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true))
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true))
                 {
-                    DoScriptText(EMOTE_INCINERATE, me, target);
+                    DoScriptText(EMOTE_INCINERATE, me, pTarget);
                     DoScriptText(SAY_INCINERATE, me);
-                    DoCast(target, SPELL_INCINERATE_FLESH);
+                    DoCast(pTarget, SPELL_INCINERATE_FLESH);
                 }
                 m_uiIncinerateFleshTimer = urand(20*IN_MILLISECONDS, 25*IN_MILLISECONDS);
             } else m_uiIncinerateFleshTimer -= uiDiff;
@@ -227,18 +218,18 @@ public:
 
             if (m_uiLegionFlameTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true))
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true))
                 {
-                    DoScriptText(EMOTE_LEGION_FLAME, me, target);
-                    DoCast(target, SPELL_LEGION_FLAME);
+                    DoScriptText(EMOTE_LEGION_FLAME, me, pTarget);
+                    DoCast(pTarget, SPELL_LEGION_FLAME);
                 }
                 m_uiLegionFlameTimer = 30*IN_MILLISECONDS;
             } else m_uiLegionFlameTimer -= uiDiff;
 
             if (GetDifficulty() == RAID_DIFFICULTY_25MAN_HEROIC && m_uiTouchOfJaraxxusTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_TOUCH_OF_JARAXXUS);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_TOUCH_OF_JARAXXUS);
                 m_uiTouchOfJaraxxusTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
             } else m_uiTouchOfJaraxxusTimer -= uiDiff;
 
@@ -253,14 +244,14 @@ class mob_legion_flame : public CreatureScript
 public:
     mob_legion_flame() : CreatureScript("mob_legion_flame") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_legion_flameAI(creature);
+        return new mob_legion_flameAI(pCreature);
     }
 
     struct mob_legion_flameAI : public Scripted_NoMovementAI
     {
-        mob_legion_flameAI(Creature* creature) : Scripted_NoMovementAI(creature)
+        mob_legion_flameAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
         {
             Reset();
         }
@@ -285,16 +276,16 @@ class mob_infernal_volcano : public CreatureScript
 public:
     mob_infernal_volcano() : CreatureScript("mob_infernal_volcano") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_infernal_volcanoAI(creature);
+        return new mob_infernal_volcanoAI(pCreature);
     }
 
     struct mob_infernal_volcanoAI : public Scripted_NoMovementAI
     {
-        mob_infernal_volcanoAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
+        mob_infernal_volcanoAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature), Summons(me)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
             Reset();
         }
 
@@ -331,7 +322,7 @@ public:
             pSummoned->SetCorpseDelay(0);
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             me->DespawnOrUnsummon();
         }
@@ -361,16 +352,16 @@ class mob_fel_infernal : public CreatureScript
 public:
     mob_fel_infernal() : CreatureScript("mob_fel_infernal") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_fel_infernalAI(creature);
+        return new mob_fel_infernalAI(pCreature);
     }
 
     struct mob_fel_infernalAI : public ScriptedAI
     {
-        mob_fel_infernalAI(Creature* creature) : ScriptedAI(creature)
+        mob_fel_infernalAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
             Reset();
         }
 
@@ -383,7 +374,7 @@ public:
             me->SetInCombatWithZone();
         }
 
-        /*void SpellHitTarget(Unit* target, const SpellEntry *pSpell)
+        /*void SpellHitTarget(Unit *pTarget, const SpellEntry *pSpell)
         {
             if (pSpell->Id == SPELL_FEL_STREAK)
                 DoCastAOE(SPELL_FEL_INFERNO); //66517
@@ -399,8 +390,8 @@ public:
 
             if (m_uiFelStreakTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_FEL_STREAK);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_FEL_STREAK);
                 m_uiFelStreakTimer = 30*IN_MILLISECONDS;
             } else m_uiFelStreakTimer -= uiDiff;
 
@@ -415,16 +406,16 @@ class mob_nether_portal : public CreatureScript
 public:
     mob_nether_portal() : CreatureScript("mob_nether_portal") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_nether_portalAI(creature);
+        return new mob_nether_portalAI(pCreature);
     }
 
     struct mob_nether_portalAI : public ScriptedAI
     {
-        mob_nether_portalAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+        mob_nether_portalAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
             Reset();
         }
 
@@ -485,16 +476,16 @@ class mob_mistress_of_pain : public CreatureScript
 public:
     mob_mistress_of_pain() : CreatureScript("mob_mistress_of_pain") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_mistress_of_painAI(creature);
+        return new mob_mistress_of_painAI(pCreature);
     }
 
     struct mob_mistress_of_painAI : public ScriptedAI
     {
-        mob_mistress_of_painAI(Creature* creature) : ScriptedAI(creature)
+        mob_mistress_of_painAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
             if (m_pInstance)
                 m_pInstance->SetData(DATA_MISTRESS_OF_PAIN_COUNT, INCREASE);
             Reset();
@@ -513,7 +504,7 @@ public:
             me->SetInCombatWithZone();
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(DATA_MISTRESS_OF_PAIN_COUNT, DECREASE);
@@ -535,15 +526,15 @@ public:
 
             if (m_uiSpinningStrikeTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
-                    DoCast(target, SPELL_SPINNING_STRIKE);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                    DoCast(pTarget, SPELL_SPINNING_STRIKE);
                 m_uiSpinningStrikeTimer = 30*IN_MILLISECONDS;
             } else m_uiSpinningStrikeTimer -= uiDiff;
 
             if (IsHeroic() && m_uiMistressKissTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
-                    DoCast(target, SPELL_MISTRESS_KISS);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                    DoCast(pTarget, SPELL_MISTRESS_KISS);
                 m_uiMistressKissTimer = 30*IN_MILLISECONDS;
             } else m_uiMistressKissTimer -= uiDiff;
 

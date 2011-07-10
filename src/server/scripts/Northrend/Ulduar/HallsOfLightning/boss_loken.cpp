@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss Loken
-SD%Complete: 60%
-SDComment: Missing intro. Remove hack of Pulsing Shockwave when core supports. Aura is not working (59414)
-SDCategory: Halls of Lightning
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "halls_of_lightning.h"
@@ -64,16 +55,16 @@ class boss_loken : public CreatureScript
 public:
     boss_loken() : CreatureScript("boss_loken") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_lokenAI(creature);
+        return new boss_lokenAI(pCreature);
     }
 
     struct boss_lokenAI : public ScriptedAI
     {
-        boss_lokenAI(Creature* creature) : ScriptedAI(creature)
+        boss_lokenAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -105,7 +96,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             DoScriptText(SAY_AGGRO, me);
 
@@ -116,7 +107,7 @@ public:
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -124,7 +115,7 @@ public:
                 m_pInstance->SetData(TYPE_LOKEN, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit* /*pVictim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
@@ -181,8 +172,8 @@ public:
 
             if (m_uiArcLightning_Timer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_ARC_LIGHTNING);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_ARC_LIGHTNING);
 
                 m_uiArcLightning_Timer = 15000 + rand()%1000;
             }

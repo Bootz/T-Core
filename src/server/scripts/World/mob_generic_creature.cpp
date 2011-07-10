@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Generic_Creature
-SD%Complete: 80
-SDComment: Should be replaced with core based AI
-SDCategory: Creatures
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define GENERIC_CREATURE_COOLDOWN   5000
@@ -35,7 +26,7 @@ public:
 
     struct generic_creatureAI : public ScriptedAI
     {
-        generic_creatureAI(Creature* c) : ScriptedAI(c) {}
+        generic_creatureAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 GlobalCooldown;      //This variable acts like the global cooldown that players have (1.5 seconds)
         uint32 BuffTimer;           //This variable keeps track of buffs
@@ -48,7 +39,7 @@ public:
             IsSelfRooted = false;
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit *who)
         {
             if (!me->IsWithinMeleeRange(who))
                 IsSelfRooted = true;
@@ -162,7 +153,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new generic_creatureAI(creature);
     }
@@ -198,7 +189,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new trigger_periodicAI(creature);
     }
@@ -212,14 +203,14 @@ public:
     struct trigger_deathAI : public NullCreatureAI
     {
         trigger_deathAI(Creature* c) : NullCreatureAI(c) {}
-        void JustDied(Unit* killer)
+        void JustDied(Unit *killer)
         {
             if (me->m_spells[0])
                 me->CastSpell(killer, me->m_spells[0], true);
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new trigger_deathAI(creature);
     }

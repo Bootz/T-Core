@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -85,7 +83,7 @@ void BattlegroundRL::AddPlayer(Player *plr)
     UpdateArenaWorldState();
 }
 
-void BattlegroundRL::RemovePlayer(Player* /*plr*/, uint64 /*guid*/, uint32 /*team*/)
+void BattlegroundRL::RemovePlayer(Player* /*plr*/, uint64 /*guid*/)
 {
     if (GetStatus() == STATUS_WAIT_LEAVE)
         return;
@@ -94,7 +92,7 @@ void BattlegroundRL::RemovePlayer(Player* /*plr*/, uint64 /*guid*/, uint32 /*tea
     CheckArenaWinConditions();
 }
 
-void BattlegroundRL::HandleKillPlayer(Player* player, Player* killer)
+void BattlegroundRL::HandleKillPlayer(Player *player, Player *killer)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -111,7 +109,7 @@ void BattlegroundRL::HandleKillPlayer(Player* player, Player* killer)
     CheckArenaWinConditions();
 }
 
-bool BattlegroundRL::HandlePlayerUnderMap(Player* player)
+bool BattlegroundRL::HandlePlayerUnderMap(Player *player)
 {
     player->TeleportTo(GetMapId(), 1285.810547f, 1667.896851f, 39.957642f, player->GetOrientation(), false);
     return true;

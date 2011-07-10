@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,16 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss_Skadi
-SDAuthor: LordVanMartin, JohnHoliver
-SD%Complete: 90%
-SDComment: <Known Bugs>
-               After Unmount() he appears to still be flying even with SetFlying(false)
-           </Known Bugs>
-SDCategory: Utgarde Pinnacle
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "utgarde_pinnacle.h"
@@ -163,14 +151,14 @@ class boss_skadi : public CreatureScript
 public:
     boss_skadi() : CreatureScript("boss_skadi") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_skadiAI (creature);
+        return new boss_skadiAI (pCreature);
     }
 
     struct boss_skadiAI : public ScriptedAI
     {
-        boss_skadiAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_skadiAI(Creature *c) : ScriptedAI(c), Summons(me)
         {
             m_pInstance = c->GetInstanceScript();
         }
@@ -260,8 +248,8 @@ public:
                 case CREATURE_YMIRJAR_HARPOONER:
                     pSummoned->setActive(true);
                     pSummoned->SetInCombatWithZone();
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        pSummoned->AI()->AttackStart(target);
+                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        pSummoned->AI()->AttackStart(pTarget);
                     break;
                 case CREATURE_TRIGGER:
                     pSummoned->CastSpell((Unit*)NULL, SPELL_FREEZING_CLOUD, true);
@@ -278,7 +266,7 @@ public:
             Summons.Despawn(pSummoned);
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *spell)
+        void SpellHit(Unit * /*caster*/, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_HARPOON_DAMAGE)
             {
@@ -393,8 +381,8 @@ public:
 
                     if (m_uiPoisonedSpearTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_POISONED_SPEAR);
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_POISONED_SPEAR);
                         m_uiPoisonedSpearTimer = 10000;
                     } else m_uiPoisonedSpearTimer -= diff;
 
@@ -417,7 +405,7 @@ public:
                 m_pInstance->SetData(DATA_SKADI_THE_RUTHLESS_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
         }
@@ -463,14 +451,14 @@ class go_harpoon_launcher : public GameObjectScript
 public:
     go_harpoon_launcher() : GameObjectScript("go_harpoon_launcher") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGO)
+    bool OnGossipHello(Player *pPlayer, GameObject *pGO)
     {
         InstanceScript* m_pInstance = pGO->GetInstanceScript();
         if (!m_pInstance) return false;
 
         if (Creature* pSkadi = Unit::GetCreature((*pGO), m_pInstance->GetData64(DATA_SKADI_THE_RUTHLESS)))
         {
-            player->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
+            pPlayer->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
         }
         return false;
     }

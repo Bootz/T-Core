@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Pandemonius
-SD%Complete: 75
-SDComment: Not known how void blast is done (amount of rapid cast seems to be related to players in party). All mobs remaining in surrounding area should aggro when engaged.
-SDCategory: Auchindoun, Mana Tombs
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -47,14 +38,14 @@ class boss_pandemonius : public CreatureScript
 public:
     boss_pandemonius() : CreatureScript("boss_pandemonius") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_pandemoniusAI (creature);
+        return new boss_pandemoniusAI (pCreature);
     }
 
     struct boss_pandemoniusAI : public ScriptedAI
     {
-        boss_pandemoniusAI(Creature* c) : ScriptedAI(c)
+        boss_pandemoniusAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -79,7 +70,7 @@ public:
             DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
         }
@@ -91,9 +82,9 @@ public:
 
             if (VoidBlast_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
-                    DoCast(target, SPELL_VOID_BLAST);
+                    DoCast(pTarget, SPELL_VOID_BLAST);
                     VoidBlast_Timer = 500;
                     ++VoidBlast_Counter;
                 }

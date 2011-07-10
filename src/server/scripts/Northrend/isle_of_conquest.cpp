@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +28,7 @@ class npc_four_car_garage : public CreatureScript
 
         struct npc_four_car_garageAI : public NullCreatureAI
         {
-            npc_four_car_garageAI(Creature* creature) : NullCreatureAI(creature) { }
+            npc_four_car_garageAI(Creature* pCreature) : NullCreatureAI(pCreature) { }
 
             void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
             {

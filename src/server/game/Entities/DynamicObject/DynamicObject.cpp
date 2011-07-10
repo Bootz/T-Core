@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,7 +27,7 @@
 #include "ScriptMgr.h"
 
 DynamicObject::DynamicObject() : WorldObject(),
-    _aura(NULL), _removedAura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
+    _aura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
 {
     m_objectType |= TYPEMASK_DYNAMICOBJECT;
     m_objectTypeId = TYPEID_DYNAMICOBJECT;
@@ -45,7 +43,6 @@ DynamicObject::~DynamicObject()
     ASSERT(!_aura);
     ASSERT(!_caster);
     ASSERT(!_isViewpoint);
-    delete _removedAura;
 }
 
 void DynamicObject::AddToWorld()
@@ -180,11 +177,11 @@ void DynamicObject::SetAura(Aura* aura)
 
 void DynamicObject::RemoveAura()
 {
-    ASSERT(_aura && !_removedAura);
-    _removedAura = _aura;
+    ASSERT(_aura);
+    if (!_aura->IsRemoved())
+        _aura->_Remove(AURA_REMOVE_BY_DEFAULT);
+    delete _aura;
     _aura = NULL;
-    if (!_removedAura->IsRemoved())
-        _removedAura->_Remove(AURA_REMOVE_BY_DEFAULT);
 }
 
 void DynamicObject::SetCasterViewpoint()
@@ -198,7 +195,7 @@ void DynamicObject::SetCasterViewpoint()
 
 void DynamicObject::RemoveCasterViewpoint()
 {
-    if (Player* caster = _caster->ToPlayer())
+    if (Player * caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, false);
         _isViewpoint = false;

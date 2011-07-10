@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,7 +30,7 @@ class Transaction
     friend class MySQLConnection;
 
     public:
-        Transaction() : _cleanedUp(false) {}
+        Transaction() {}
         ~Transaction() { Cleanup(); }
 
         void Append(PreparedStatement* statement);
@@ -43,10 +41,7 @@ class Transaction
 
     protected:
         void Cleanup();
-        std::list<SQLElementData> m_queries;
-
-    private:
-        bool _cleanedUp;
+        std::queue<SQLElementData> m_queries;
 
 };
 typedef ACE_Refcounted_Auto_Ptr<Transaction, ACE_Null_Mutex> SQLTransaction;

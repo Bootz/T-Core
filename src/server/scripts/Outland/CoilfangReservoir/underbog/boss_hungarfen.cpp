@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Hungarfen
-SD%Complete: 95
-SDComment: Need confirmation if spell data are same in both modes. Summons should have faster rate in heroic
-SDCategory: Coilfang Resevoir, Underbog
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define SPELL_FOUL_SPORES   31673
@@ -34,14 +25,14 @@ class boss_hungarfen : public CreatureScript
 public:
     boss_hungarfen() : CreatureScript("boss_hungarfen") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_hungarfenAI (creature);
+        return new boss_hungarfenAI (pCreature);
     }
 
     struct boss_hungarfenAI : public ScriptedAI
     {
-        boss_hungarfenAI(Creature* c) : ScriptedAI(c)
+        boss_hungarfenAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -56,7 +47,7 @@ public:
             AcidGeyser_Timer = 10000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -76,8 +67,8 @@ public:
 
             if (Mushroom_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    me->SummonCreature(17990, target->GetPositionX()+(rand()%8), target->GetPositionY()+(rand()%8), target->GetPositionZ(), float(rand()%5), TEMPSUMMON_TIMED_DESPAWN, 22000);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    me->SummonCreature(17990, pTarget->GetPositionX()+(rand()%8), pTarget->GetPositionY()+(rand()%8), pTarget->GetPositionZ(), float(rand()%5), TEMPSUMMON_TIMED_DESPAWN, 22000);
                 else
                     me->SummonCreature(17990, me->GetPositionX()+(rand()%8), me->GetPositionY()+(rand()%8), me->GetPositionZ(), float(rand()%5), TEMPSUMMON_TIMED_DESPAWN, 22000);
 
@@ -86,8 +77,8 @@ public:
 
             if (AcidGeyser_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_ACID_GEYSER);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_ACID_GEYSER);
                 AcidGeyser_Timer = 10000+rand()%7500;
             } else AcidGeyser_Timer -= diff;
 
@@ -106,14 +97,14 @@ class mob_underbog_mushroom : public CreatureScript
 public:
     mob_underbog_mushroom() : CreatureScript("mob_underbog_mushroom") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_underbog_mushroomAI (creature);
+        return new mob_underbog_mushroomAI (pCreature);
     }
 
     struct mob_underbog_mushroomAI : public ScriptedAI
     {
-        mob_underbog_mushroomAI(Creature* c) : ScriptedAI(c) {}
+        mob_underbog_mushroomAI(Creature *c) : ScriptedAI(c) {}
 
         bool Stop;
         uint32 Grow_Timer;
@@ -129,7 +120,7 @@ public:
             DoCast(me, SPELL_SPORE_CLOUD, true);
         }
 
-        void MoveInLineOfSight(Unit* /*who*/) {}
+        void MoveInLineOfSight(Unit * /*who*/) {}
 
         void AttackStart(Unit* /*who*/) {}
 

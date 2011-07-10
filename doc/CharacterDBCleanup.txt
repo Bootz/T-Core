@@ -1,4 +1,4 @@
-The purpose of the CharacterDB cleanup routines is to remove old, non- 
+ The purpose of the CharacterDB cleanup routines is to remove old, non- 
 existent and erranous/defunct skills, talents, spells, and achievements 
 from characters in the database.
 
@@ -31,4 +31,4 @@ from this, and that you are (as the owner of the database), responsible
 for doing proper backups prior to doing the above in case of anything 
 going wrong.
 
--- The TrilliumEMU developer team
+-- The TrilliumENCORE developer team

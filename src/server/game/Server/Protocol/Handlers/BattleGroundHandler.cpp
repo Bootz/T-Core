@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,7 +41,7 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recv_data)
     recv_data >> guid;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEMASTER_HELLO Message from (GUID: %u TypeId:%u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
 
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
         return;
 
@@ -317,12 +315,8 @@ void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recv_data*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd MSG_PVP_LOG_DATA Message");
 
-    Battleground* bg = _player->GetBattleground();
+    Battleground *bg = _player->GetBattleground();
     if (!bg)
-        return;
-
-    // Prevent players from sending BuildPvpLogDataPacket in an arena except for when sent in BattleGround::EndBattleGround.
-    if (bg->isArena())
         return;
 
     WorldPacket data;
@@ -587,6 +581,46 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
     }
 }
 
+void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AREA_SPIRIT_HEALER_QUERY");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        sBattlegroundMgr->SendAreaSpiritHealerQueryOpcode(_player, bg, guid);
+}
+
+void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AREA_SPIRIT_HEALER_QUEUE");
+
+    Battleground *bg = _player->GetBattleground();
+
+    uint64 guid;
+    recv_data >> guid;
+
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
+    if (!unit)
+        return;
+
+    if (!unit->isSpiritService())                            // it's not spirit service
+        return;
+
+    if (bg)
+        bg->AddPlayerToResurrectQueue(guid, _player->GetGUID());
+}
+
 void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_BATTLEMASTER_JOIN_ARENA");
@@ -604,7 +638,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recv_data)
     if (_player->InBattleground())
         return;
 
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
         return;
 

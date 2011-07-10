@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -134,7 +132,6 @@ public:
         uint64 uiSir;
 
         uint64 uiThaddius;
-        uint64 uiHeigan;
         uint64 uiFeugen;
         uint64 uiStalagg;
 
@@ -158,7 +155,6 @@ public:
                 case 30549: uiBaron = creature->GetGUID(); return;
                 case 16063: uiSir = creature->GetGUID(); return;
                 case 15928: uiThaddius = creature->GetGUID(); return;
-                case 15936: uiHeigan = creature->GetGUID(); return;
                 case 15930: uiFeugen = creature->GetGUID(); return;
                 case 15929: uiStalagg = creature->GetGUID(); return;
                 case 15990: uiKelthuzad = creature->GetGUID(); return;
@@ -294,8 +290,6 @@ public:
                 return uiSir;
             case DATA_THADDIUS:
                 return uiThaddius;
-            case DATA_HEIGAN:
-                return uiHeigan;
             case DATA_FEUGEN:
                 return uiFeugen;
             case DATA_STALAGG:

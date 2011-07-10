@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -346,34 +344,34 @@ std::string MySQLPreparedStatement::getQueryString(const char *query)
 
         switch (m_stmt->statement_data[i].type)
         {
-            case TYPE_BOOL:
-                replace << (m_stmt->statement_data[i].data.boolean ? "1" : "0");
-                break;
-            case TYPE_UI8:
-            case TYPE_UI16:
-            case TYPE_UI32:
-                replace << m_stmt->statement_data[i].data.ui32;
-                break;
-            case TYPE_I8:
-            case TYPE_I16:
-            case TYPE_I32:
-                replace << m_stmt->statement_data[i].data.i32;
-                break;
-            case TYPE_UI64:
-                replace << m_stmt->statement_data[i].data.ui64;
-                break;
-            case TYPE_I64:
-                replace << m_stmt->statement_data[i].data.i64;
-                break;
-            case TYPE_FLOAT:
-                replace << m_stmt->statement_data[i].data.f;
-                break;
-            case TYPE_DOUBLE:
-                replace << m_stmt->statement_data[i].data.d;
-                break;
-            case TYPE_STRING:
-                replace << m_stmt->statement_data[i].str;
-                break;
+        case TYPE_BOOL:
+            replace << m_stmt->statement_data[i].data.boolean ? "1" : "0";
+            break;
+        case TYPE_UI8:
+        case TYPE_UI16:
+        case TYPE_UI32:
+            replace << m_stmt->statement_data[i].data.ui32;
+            break;
+        case TYPE_I8:
+        case TYPE_I16:
+        case TYPE_I32:
+            replace << m_stmt->statement_data[i].data.i32;
+            break;
+        case TYPE_UI64:
+            replace << m_stmt->statement_data[i].data.ui64;
+            break;
+        case TYPE_I64:
+            replace << m_stmt->statement_data[i].data.i64;
+            break;
+        case TYPE_FLOAT:
+            replace << m_stmt->statement_data[i].data.f;
+            break;
+        case TYPE_DOUBLE:
+            replace << m_stmt->statement_data[i].data.d;
+            break;
+        case TYPE_STRING:
+            replace << m_stmt->statement_data[i].str;
+            break;
         }
         replace << "'";
         queryString.replace(pos, 1, replace.str());

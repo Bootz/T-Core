@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: go_commandscript
-%Complete: 100
-Comment: All go related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -115,7 +106,7 @@ public:
             if (!guid)
             {
                 std::string name = pParam1;
-                WorldDatabase.EscapeString(name);
+                WorldDatabase.escape_string(name);
                 whereClause << ", creature_template WHERE creature.id = creature_template.entry AND creature_template.name "_LIKE_" '" << name << "'";
             }
             else
@@ -125,7 +116,7 @@ public:
         }
         //sLog->outError("DEBUG: %s", whereClause.c_str());
 
-        QueryResult result = WorldDatabase.PQuery("SELECT position_x, position_y, position_z, orientation, map, guid, id FROM creature %s", whereClause.str().c_str());
+        QueryResult result = WorldDatabase.PQuery("SELECT position_x, position_y, position_z, orientation, map FROM creature %s", whereClause.str().c_str());
         if (!result)
         {
             handler->SendSysMessage(LANG_COMMAND_GOCREATNOTFOUND);
@@ -141,17 +132,6 @@ public:
         float z = fields[2].GetFloat();
         float ort = fields[3].GetFloat();
         int mapid = fields[4].GetUInt16();
-        uint32 guid = fields[5].GetUInt32();
-        uint32 id = fields[6].GetUInt32();
-
-        // if creature is in same map with caster go at its current location
-        if (Creature* creature = sObjectAccessor->GetCreature(*_player, MAKE_NEW_GUID(guid, id, HIGHGUID_UNIT)))
-        {
-            x = creature->GetPositionX();
-            y = creature->GetPositionY();
-            z = creature->GetPositionZ();
-            ort = creature->GetOrientation();
-        }
 
         if (!MapManager::IsValidMapCoord(mapid, x, y, z, ort))
         {

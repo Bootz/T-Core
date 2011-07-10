@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_PET_H
-#define TRINITYCORE_PET_H
+#ifndef TRILLIUMCORE_PET_H
+#define TRILLIUMCORE_PET_H
 
 #include "ObjectDefines.h"
 #include "Unit.h"
@@ -30,6 +28,8 @@ enum PetType
     HUNTER_PET              = 1,
     MAX_PET_TYPE            = 4,
 };
+
+extern char const* petTypeSuffix[MAX_PET_TYPE];
 
 #define MAX_PET_STABLES         4
 
@@ -137,8 +137,8 @@ class Pet : public Guardian
 
         bool Create (uint32 guidlow, Map *map, uint32 phaseMask, uint32 Entry, uint32 pet_number);
         bool CreateBaseAtCreature(Creature* creature);
-        bool CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit* owner);
-        bool CreateBaseAtTamed(CreatureTemplate const* cinfo, Map * map, uint32 phaseMask);
+        bool CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit * owner);
+        bool CreateBaseAtTamed(CreatureTemplate const * cinfo, Map * map, uint32 phaseMask);
         bool LoadPetFromDB(Player* owner, uint32 petentry = 0, uint32 petnumber = 0, bool current = false);
         bool isBeingLoaded() const { return m_loading;}
         void SavePetToDB(PetSaveMode mode);
@@ -207,14 +207,17 @@ class Pet : public Guardian
 
         void InitPetCreateSpells();
 
-        bool resetTalents();
+        bool resetTalents(bool no_cost = false);
         static void resetTalentsForAllPetsOf(Player* owner, Pet* online_pet = NULL);
+        uint32 resetTalentsCost() const;
         void InitTalentForLevel();
 
         uint8 GetMaxTalentPointsForLevel(uint8 level);
         uint8 GetFreeTalentPoints() { return GetByteValue(UNIT_FIELD_BYTES_1, 1); }
         void SetFreeTalentPoints(uint8 points) { SetByteValue(UNIT_FIELD_BYTES_1, 1, points); }
 
+        uint32  m_resetTalentsCost;
+        time_t  m_resetTalentsTime;
         uint32  m_usedTalentCount;
 
         const uint64& GetAuraUpdateMaskForRaid() const { return m_auraRaidUpdateMask; }

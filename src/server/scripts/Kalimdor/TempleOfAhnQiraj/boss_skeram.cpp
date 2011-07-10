@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Skeram
-SD%Complete: 75
-SDComment: Mind Control buggy.
-SDCategory: Temple of Ahn'Qiraj
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "temple_of_ahnqiraj.h"
@@ -57,14 +48,14 @@ class boss_skeram : public CreatureScript
 public:
     boss_skeram() : CreatureScript("boss_skeram") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_skeramAI (creature);
+        return new boss_skeramAI (pCreature);
     }
 
     struct boss_skeramAI : public ScriptedAI
     {
-        boss_skeramAI(Creature* c) : ScriptedAI(c)
+        boss_skeramAI(Creature *c) : ScriptedAI(c)
         {
             IsImage = false;
         }
@@ -112,7 +103,7 @@ public:
                 DoScriptText(SAY_DEATH, me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (IsImage || Images75)
                 return;
@@ -237,9 +228,9 @@ public:
 
             for (uint16 i = 0; i < 41; ++i)
             {
-                if (Player* target = CAST_PLR(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)))
+                if (Player *pTarget = CAST_PLR(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)))
                 {
-                    if (Group *pGrp = target->GetGroup())
+                    if (Group *pGrp = pTarget->GetGroup())
                         for (uint8 ico = 0; ico < TARGETICONCOUNT; ++ico)
                         {
                             //if (grp->m_targetIcons[ico] == me->GetGUID()) -- private member :(
@@ -265,25 +256,25 @@ public:
                 case 25: Images25 = true; break;
             }
 
-            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+            Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
-            Creature* Image1 = me->SummonCreature(15263, i1->x, i1->y, i1->z, i1->r, TEMPSUMMON_CORPSE_DESPAWN, 30000);
+            Creature *Image1 = me->SummonCreature(15263, i1->x, i1->y, i1->z, i1->r, TEMPSUMMON_CORPSE_DESPAWN, 30000);
             if (Image1)
             {
                 Image1->SetMaxHealth(me->GetMaxHealth() / 5);
                 Image1->SetHealth(me->GetHealth() / 5);
-                if (target)
-                    Image1->AI()->AttackStart(target);
+                if (pTarget)
+                    Image1->AI()->AttackStart(pTarget);
                 CAST_AI(boss_skeram::boss_skeramAI, Image1->AI())->IsImage = true;
             }
 
-            Creature* Image2 = me->SummonCreature(15263, i2->x, i2->y, i2->z, i2->r, TEMPSUMMON_CORPSE_DESPAWN, 30000);
+            Creature *Image2 = me->SummonCreature(15263, i2->x, i2->y, i2->z, i2->r, TEMPSUMMON_CORPSE_DESPAWN, 30000);
             if (Image2)
             {
                 Image2->SetMaxHealth(me->GetMaxHealth() / 5);
                 Image2->SetHealth(me->GetHealth() / 5);
-                if (target)
-                    Image2->AI()->AttackStart(target);
+                if (pTarget)
+                    Image2->AI()->AttackStart(pTarget);
                 CAST_AI(boss_skeram::boss_skeramAI, Image2->AI())->IsImage = true;
             }
             Invisible = true;

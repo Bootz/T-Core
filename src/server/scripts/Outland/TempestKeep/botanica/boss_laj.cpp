@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Laj
-SD%Complete: 90
-SDComment: Immunities are wrong, must be adjusted to use resistance from creature_templates. Most spells require database support.
-SDCategory: Tempest Keep, The Botanica
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -61,7 +52,7 @@ class boss_laj : public CreatureScript
 
         struct boss_lajAI : public ScriptedAI
         {
-            boss_lajAI(Creature* creature) : ScriptedAI(creature) {}
+            boss_lajAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
             bool CanSummon;
             uint32 Teleport_Timer;
@@ -156,11 +147,11 @@ class boss_laj : public CreatureScript
                 CanSummon = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 
-            void JustSummoned(Creature* summon)
+            void JustSummoned(Creature *summon)
             {
                 if (summon && me->getVictim())
                     summon->AI()->AttackStart(SelectTarget(SELECT_TARGET_RANDOM, 0));

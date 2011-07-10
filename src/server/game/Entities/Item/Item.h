@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ITEM_H
-#define TRINITYCORE_ITEM_H
+#ifndef TRILLIUMCORE_ITEM_H
+#define TRILLIUMCORE_ITEM_H
 
 #include "Common.h"
 #include "Object.h"
@@ -268,7 +266,7 @@ class Item : public Object
         bool HasEnchantRequiredSkill(const Player *pPlayer) const;
         uint32 GetEnchantRequiredLevel() const;
 
-        bool IsFitToSpellRequirements(SpellEquippedItemsEntry const* spellInfo) const;
+        bool IsFitToSpellRequirements(SpellEntry const* spellInfo) const;
         bool IsTargetValidForItemUse(Unit* pUnitTarget);
         bool IsLimitedToAnotherMapOrZone(uint32 cur_mapId, uint32 cur_zoneId) const;
         bool GemsFitSockets() const;
@@ -323,8 +321,8 @@ class Item : public Object
         // Update States
         ItemUpdateState GetState() const { return uState; }
         void SetState(ItemUpdateState state, Player *forplayer = NULL);
-        void AddToUpdateQueueOf(Player* player);
-        void RemoveFromUpdateQueueOf(Player* player);
+        void AddToUpdateQueueOf(Player *player);
+        void RemoveFromUpdateQueueOf(Player *player);
         bool IsInUpdateQueue() const { return uQueuePos != -1; }
         uint16 GetQueuePos() const { return uQueuePos; }
         void FSetState(ItemUpdateState state)               // forced

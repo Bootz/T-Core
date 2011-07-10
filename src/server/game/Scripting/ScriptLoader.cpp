@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,7 +45,6 @@ void AddSC_SmartSCripts();
 //Commands
 void AddSC_account_commandscript();
 void AddSC_achievement_commandscript();
-void AddSC_bf_commandscript();
 void AddSC_debug_commandscript();
 void AddSC_event_commandscript();
 void AddSC_gm_commandscript();
@@ -62,12 +59,13 @@ void AddSC_reload_commandscript();
 void AddSC_tele_commandscript();
 void AddSC_titles_commandscript();
 void AddSC_wp_commandscript();
-void AddSC_gps_commandscript();
 
 #ifdef SCRIPTS
 //world
 void AddSC_areatrigger_scripts();
-void AddSC_emerald_dragons();
+void AddSC_boss_emeriss();
+void AddSC_boss_taerar();
+void AddSC_boss_ysondre();
 void AddSC_generic_creature();
 void AddSC_go_scripts();
 void AddSC_guards();
@@ -233,31 +231,11 @@ void AddSC_boss_renataki();
 void AddSC_boss_wushoolay();
 void AddSC_instance_zulgurub();
 
-//void AddSC_alterac_mountains();
-void AddSC_arathi_highlands();
-void AddSC_blasted_lands();
-void AddSC_boss_kruul();
-void AddSC_burning_steppes();
-void AddSC_duskwood();
-void AddSC_eastern_plaguelands();
+
 void AddSC_eversong_woods();
 void AddSC_ghostlands();
-void AddSC_hinterlands();
-void AddSC_ironforge();
 void AddSC_isle_of_queldanas();
-void AddSC_loch_modan();
-void AddSC_redridge_mountains();
-void AddSC_searing_gorge();
-void AddSC_silvermoon_city();
-void AddSC_silverpine_forest();
-void AddSC_stormwind_city();
-void AddSC_stranglethorn_vale();
-void AddSC_swamp_of_sorrows();
-void AddSC_tirisfal_glades();
-void AddSC_undercity();
-void AddSC_western_plaguelands();
-void AddSC_westfall();
-void AddSC_wetlands();
+
 
 //kalimdor
 void AddSC_blackfathom_deeps();              //Blackfathom Depths
@@ -300,7 +278,6 @@ void AddSC_boss_amnennar_the_coldbringer();  //Razorfen Downs
 void AddSC_razorfen_downs();
 void AddSC_instance_razorfen_downs();
 void AddSC_razorfen_kraul();                 //Razorfen Kraul
-void AddSC_instance_razorfen_kraul();
 void AddSC_boss_kurinnaxx();                 //Ruins of ahn'qiraj
 void AddSC_boss_rajaxx();
 void AddSC_boss_moam();
@@ -322,29 +299,10 @@ void AddSC_instance_wailing_caverns();
 void AddSC_zulfarrak();                     //Zul'Farrak generic
 void AddSC_instance_zulfarrak();            //Zul'Farrak instance script
 
-void AddSC_ashenvale();
-void AddSC_azshara();
+
 void AddSC_azuremyst_isle();
 void AddSC_bloodmyst_isle();
-void AddSC_boss_azuregos();
-void AddSC_darkshore();
-void AddSC_desolace();
-void AddSC_durotar();
-void AddSC_dustwallow_marsh();
-void AddSC_felwood();
-void AddSC_feralas();
-void AddSC_moonglade();
-void AddSC_mulgore();
-void AddSC_orgrimmar();
-void AddSC_silithus();
-void AddSC_stonetalon_mountains();
-void AddSC_tanaris();
-void AddSC_teldrassil();
-void AddSC_the_barrens();
-void AddSC_thousand_needles();
-void AddSC_thunder_bluff();
-void AddSC_ungoro_crater();
-void AddSC_winterspring();
+
 
 //northrend
 void AddSC_boss_slad_ran();
@@ -426,8 +384,6 @@ void AddSC_boss_assembly_of_iron();
 void AddSC_boss_general_vezax();
 void AddSC_ulduar_teleporter();
 void AddSC_boss_mimiron();
-void AddSC_boss_hodir();
-void AddSC_boss_freya();
 void AddSC_instance_ulduar();
 void AddSC_boss_keleseth();              //Utgarde Keep
 void AddSC_boss_skarvald_dalronn();
@@ -479,16 +435,10 @@ void AddSC_boss_rotface();
 void AddSC_boss_professor_putricide();
 void AddSC_boss_blood_prince_council();
 void AddSC_boss_blood_queen_lana_thel();
-void AddSC_boss_valithria_dreamwalker();
 void AddSC_boss_sindragosa();
 void AddSC_icecrown_citadel_teleport();
 void AddSC_instance_icecrown_citadel();
 void AddSC_icecrown_citadel();
-void AddSC_instance_ruby_sanctum();      // Ruby Sanctum
-void AddSC_ruby_sanctum();
-void AddSC_boss_baltharus_the_warborn();
-void AddSC_boss_saviana_ragefire();
-void AddSC_boss_general_zarithrian();
 
 void AddSC_dalaran();
 void AddSC_borean_tundra();
@@ -648,7 +598,6 @@ void AddCommandScripts()
 {
     AddSC_account_commandscript();
     AddSC_achievement_commandscript();
-    AddSC_bf_commandscript();
     AddSC_debug_commandscript();
     AddSC_event_commandscript();
     AddSC_gm_commandscript();
@@ -663,14 +612,15 @@ void AddCommandScripts()
     AddSC_tele_commandscript();
     AddSC_titles_commandscript();
     AddSC_wp_commandscript();
-    AddSC_gps_commandscript();
 }
 
 void AddWorldScripts()
 {
 #ifdef SCRIPTS
     AddSC_areatrigger_scripts();
-    AddSC_emerald_dragons();
+    AddSC_boss_emeriss();
+    AddSC_boss_taerar();
+    AddSC_boss_ysondre();
     AddSC_generic_creature();
     AddSC_go_scripts();
     AddSC_guards();
@@ -841,31 +791,10 @@ void AddEasternKingdomsScripts()
     AddSC_boss_wushoolay();
     AddSC_instance_zulgurub();
 
-    //AddSC_alterac_mountains();
-    AddSC_arathi_highlands();
-    AddSC_blasted_lands();
-    AddSC_boss_kruul();
-    AddSC_burning_steppes();
-    AddSC_duskwood();
-    AddSC_eastern_plaguelands();
     AddSC_eversong_woods();
     AddSC_ghostlands();
-    AddSC_hinterlands();
-    AddSC_ironforge();
     AddSC_isle_of_queldanas();
-    AddSC_loch_modan();
-    AddSC_redridge_mountains();
-    AddSC_searing_gorge();
-    AddSC_silvermoon_city();
-    AddSC_silverpine_forest();
-    AddSC_stormwind_city();
-    AddSC_stranglethorn_vale();
-    AddSC_swamp_of_sorrows();
-    AddSC_tirisfal_glades();
-    AddSC_undercity();
-    AddSC_western_plaguelands();
-    AddSC_westfall();
-    AddSC_wetlands();
+
 #endif
 }
 
@@ -912,7 +841,6 @@ void AddKalimdorScripts()
     AddSC_razorfen_downs();
     AddSC_instance_razorfen_downs();
     AddSC_razorfen_kraul();                 //Razorfen Kraul
-    AddSC_instance_razorfen_kraul();
     AddSC_boss_kurinnaxx();                 //Ruins of ahn'qiraj
     AddSC_boss_rajaxx();
     AddSC_boss_moam();
@@ -934,29 +862,10 @@ void AddKalimdorScripts()
     AddSC_zulfarrak();                      //Zul'Farrak generic
     AddSC_instance_zulfarrak();             //Zul'Farrak instance script
 
-    AddSC_ashenvale();
-    AddSC_azshara();
+   
     AddSC_azuremyst_isle();
     AddSC_bloodmyst_isle();
-    AddSC_boss_azuregos();
-    AddSC_darkshore();
-    AddSC_desolace();
-    AddSC_durotar();
-    AddSC_dustwallow_marsh();
-    AddSC_felwood();
-    AddSC_feralas();
-    AddSC_moonglade();
-    AddSC_mulgore();
-    AddSC_orgrimmar();
-    AddSC_silithus();
-    AddSC_stonetalon_mountains();
-    AddSC_tanaris();
-    AddSC_teldrassil();
-    AddSC_the_barrens();
-    AddSC_thousand_needles();
-    AddSC_thunder_bluff();
-    AddSC_ungoro_crater();
-    AddSC_winterspring();
+  
 #endif
 }
 
@@ -1128,8 +1037,6 @@ void AddNorthrendScripts()
     AddSC_boss_kologarn();
     AddSC_ulduar_teleporter();
     AddSC_boss_mimiron();
-    AddSC_boss_hodir();
-    AddSC_boss_freya();
     AddSC_instance_ulduar();
     AddSC_boss_keleseth();              //Utgarde Keep
     AddSC_boss_skarvald_dalronn();
@@ -1181,16 +1088,10 @@ void AddNorthrendScripts()
     AddSC_boss_professor_putricide();
     AddSC_boss_blood_prince_council();
     AddSC_boss_blood_queen_lana_thel();
-    AddSC_boss_valithria_dreamwalker();
     AddSC_boss_sindragosa();
     AddSC_icecrown_citadel_teleport();
     AddSC_instance_icecrown_citadel();
     AddSC_icecrown_citadel();
-    AddSC_instance_ruby_sanctum();      // Ruby Sanctum
-    AddSC_ruby_sanctum();
-    AddSC_boss_baltharus_the_warborn();
-    AddSC_boss_saviana_ragefire();
-    AddSC_boss_general_zarithrian();
 
     AddSC_dalaran();
     AddSC_borean_tundra();

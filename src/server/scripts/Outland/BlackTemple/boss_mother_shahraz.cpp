@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+
+ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -84,14 +84,14 @@ class boss_mother_shahraz : public CreatureScript
 public:
     boss_mother_shahraz() : CreatureScript("boss_mother_shahraz") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_shahrazAI (creature);
+        return new boss_shahrazAI (pCreature);
     }
 
     struct boss_shahrazAI : public ScriptedAI
     {
-        boss_shahrazAI(Creature* c) : ScriptedAI(c)
+        boss_shahrazAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -136,7 +136,7 @@ public:
             Enraged = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_MOTHERSHAHRAZEVENT, IN_PROGRESS);
@@ -145,12 +145,12 @@ public:
             DoScriptText(SAY_AGGRO, me);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_MOTHERSHAHRAZEVENT, DONE);
@@ -191,8 +191,8 @@ public:
             //Randomly cast one beam.
             if (BeamTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (!target || !target->isAlive())
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (!pTarget || !pTarget->isAlive())
                     return;
 
                 BeamTimer = 9000;
@@ -200,16 +200,16 @@ public:
                 switch(CurrentBeam)
                 {
                     case 0:
-                        DoCast(target, SPELL_BEAM_SINISTER);
+                        DoCast(pTarget, SPELL_BEAM_SINISTER);
                         break;
                     case 1:
-                        DoCast(target, SPELL_BEAM_VILE);
+                        DoCast(pTarget, SPELL_BEAM_VILE);
                         break;
                     case 2:
-                        DoCast(target, SPELL_BEAM_WICKED);
+                        DoCast(pTarget, SPELL_BEAM_WICKED);
                         break;
                     case 3:
-                        DoCast(target, SPELL_BEAM_SINFUL);
+                        DoCast(pTarget, SPELL_BEAM_SINFUL);
                         break;
                 }
                 ++BeamCount;

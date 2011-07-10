@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Ouro
-SD%Complete: 85
-SDComment: No model for submerging. Currently just invisible.
-SDCategory: Temple of Ahn'Qiraj
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "temple_of_ahnqiraj.h"
@@ -39,14 +30,14 @@ class boss_ouro : public CreatureScript
 public:
     boss_ouro() : CreatureScript("boss_ouro") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ouroAI (creature);
+        return new boss_ouroAI (pCreature);
     }
 
     struct boss_ouroAI : public ScriptedAI
     {
-        boss_ouroAI(Creature* c) : ScriptedAI(c) {}
+        boss_ouroAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 Sweep_Timer;
         uint32 SandBlast_Timer;
@@ -71,7 +62,7 @@ public:
             Submerged = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoCast(me->getVictim(), SPELL_BIRTH);
         }
@@ -112,11 +103,11 @@ public:
             //ChangeTarget_Timer
             if (Submerged && ChangeTarget_Timer <= diff)
             {
-                Unit* target = NULL;
-                target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                Unit *pTarget = NULL;
+                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
-                if (target)
-                    DoTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
+                if (pTarget)
+                    DoTeleportTo(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
 
                 ChangeTarget_Timer = 10000 + rand()%10000;
             } else ChangeTarget_Timer -= diff;

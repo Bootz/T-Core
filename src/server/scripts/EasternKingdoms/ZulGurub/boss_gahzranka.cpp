@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Gahz'ranka
-SD%Complete: 85
-SDComment: Massive Geyser with knockback not working. Spell buggy.
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -41,7 +32,7 @@ class boss_gahzranka : public CreatureScript
 
         struct boss_gahzrankaAI : public ScriptedAI
         {
-            boss_gahzrankaAI(Creature* c) : ScriptedAI(c) {}
+            boss_gahzrankaAI(Creature *c) : ScriptedAI(c) {}
             uint32 Frostbreath_Timer;
             uint32 MassiveGeyser_Timer;
             uint32 Slam_Timer;
@@ -53,7 +44,7 @@ class boss_gahzranka : public CreatureScript
                 Slam_Timer = 17000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 

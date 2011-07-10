@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,14 +55,14 @@ public:
         }
     }
 
-    void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Player* receiver)
+    void OnChat(Player *player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Player *receiver)
     {
         if (sWorld->getBoolConfig(CONFIG_CHATLOG_WHISPER))
             sLog->outChat("[WHISPER] Player %s tells %s: %s",
                 player->GetName(), receiver ? receiver->GetName() : "<unknown>", msg.c_str());
     }
 
-    void OnChat(Player* player, uint32 type, uint32 /*lang*/, std::string& msg, Group* group)
+    void OnChat(Player *player, uint32 type, uint32 /*lang*/, std::string& msg, Group *group)
     {
         switch (type)
         {
@@ -112,7 +110,7 @@ public:
         }
     }
 
-    void OnChat(Player* player, uint32 type, uint32 lang, std::string& msg, Guild* guild)
+    void OnChat(Player *player, uint32 type, uint32 lang, std::string& msg, Guild *guild)
     {
         switch(type)
         {
@@ -133,7 +131,7 @@ public:
         }
     }
 
-    void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Channel* channel)
+    void OnChat(Player *player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Channel *channel)
     {
         bool isSystem = channel &&
                         (channel->HasFlag(CHANNEL_FLAG_TRADE) ||

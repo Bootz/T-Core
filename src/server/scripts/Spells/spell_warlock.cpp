@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -48,7 +46,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warl_demonic_empowerment_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellEntry const * /*spellEntry*/)
             {
                 if (!sSpellStore.LookupEntry(WARLOCK_DEMONIC_EMPOWERMENT_SUCCUBUS))
                     return false;
@@ -69,7 +67,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
                 {
                     if (targetCreature->isPet())
                     {
-                        CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(targetCreature->GetEntry());
+                        CreatureTemplate const * ci = sObjectMgr->GetCreatureTemplate(targetCreature->GetEntry());
                         switch (ci->family)
                         {
                         case CREATURE_FAMILY_SUCCUBUS:
@@ -77,7 +75,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
                             break;
                         case CREATURE_FAMILY_VOIDWALKER:
                         {
-                            SpellEffectEntry const* spellInfo = sSpellEffectStore.LookupEntry(WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER);
+                            SpellEntry const* spellInfo = sSpellStore.LookupEntry(WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER);
                             int32 hp = int32(targetCreature->CountPctFromMaxHealth(GetCaster()->CalculateSpellDamage(targetCreature, spellInfo, 0)));
                             targetCreature->CastCustomSpell(targetCreature, WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER, &hp, NULL, NULL, true);
                             //unitTarget->CastSpell(unitTarget, 54441, true);
@@ -121,7 +119,7 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 
             static uint32 const iTypes[8][3];
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellEntry const * /*spellEntry*/)
             {
                 if (!sSpellStore.LookupEntry(WARLOCK_IMPROVED_HEALTHSTONE_R1))
                     return false;
@@ -136,7 +134,7 @@ class spell_warl_create_healthstone : public SpellScriptLoader
                 {
                     uint32 rank = 0;
                     // Improved Healthstone
-                    if (AuraEffect const* aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 284, 0))
+                    if (AuraEffect const * aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 284, 0))
                     {
                         switch (aurEff->GetId())
                         {
@@ -232,62 +230,10 @@ class spell_warl_seed_of_corruption : public SpellScriptLoader
         }
 };
 
-class spell_warl_banish : public SpellScriptLoader
-{
-    public:
-        spell_warl_banish() : SpellScriptLoader("spell_warl_banish") { }
-
-        class spell_warl_banish_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_warl_banish_SpellScript);
-
-            bool Load()
-            {
-                _removed = false;
-                return true;
-            }
-
-            void HandleBanish()
-            {
-                if (Unit* target = GetHitUnit())
-                {
-                    if (target->GetAuraEffect(SPELL_AURA_SCHOOL_IMMUNITY, SPELLFAMILY_WARLOCK, 0, 0x08000000, 0))
-                    {
-                        //No need to remove old aura since its removed due to not stack by current Banish aura
-                        PreventHitDefaultEffect(EFFECT_0);
-                        PreventHitDefaultEffect(EFFECT_1);
-                        PreventHitDefaultEffect(EFFECT_2);
-                        _removed = true;
-                    }
-                }
-            }
-
-            void RemoveAura()
-            {
-                if (_removed)
-                    PreventHitAura();
-            }
-
-            void Register()
-            {
-                BeforeHit += SpellHitFn(spell_warl_banish_SpellScript::HandleBanish);
-                AfterHit += SpellHitFn(spell_warl_banish_SpellScript::RemoveAura);
-            }
-
-            bool _removed;
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_warl_banish_SpellScript();
-        }
-};
-
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_demonic_empowerment();
     new spell_warl_create_healthstone();
     new spell_warl_everlasting_affliction();
     new spell_warl_seed_of_corruption();
-    new spell_warl_banish();
 }

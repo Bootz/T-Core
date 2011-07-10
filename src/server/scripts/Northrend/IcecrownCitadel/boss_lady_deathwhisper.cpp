@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -115,44 +113,45 @@ enum EventTypes
     EVENT_INTRO_5                       = 4,
     EVENT_INTRO_6                       = 5,
     EVENT_INTRO_7                       = 6,
-    EVENT_BERSERK                       = 7,
-    EVENT_DEATH_AND_DECAY               = 8,
-    EVENT_DOMINATE_MIND_H               = 9,
+    EVENT_INTRO_FINISH                  = 7,
+    EVENT_BERSERK                       = 8,
+    EVENT_DEATH_AND_DECAY               = 9,
+    EVENT_DOMINATE_MIND_H               = 10,
 
     // Phase 1 only
-    EVENT_P1_SUMMON_WAVE                = 10,
-    EVENT_P1_SHADOW_BOLT                = 11,
-    EVENT_P1_EMPOWER_CULTIST            = 12,
-    EVENT_P1_REANIMATE_CULTIST          = 13,
+    EVENT_P1_SUMMON_WAVE                = 11,
+    EVENT_P1_SHADOW_BOLT                = 12,
+    EVENT_P1_EMPOWER_CULTIST            = 13,
+    EVENT_P1_REANIMATE_CULTIST          = 14,
 
     // Phase 2 only
-    EVENT_P2_SUMMON_WAVE                = 14,
-    EVENT_P2_FROSTBOLT                  = 15,
-    EVENT_P2_FROSTBOLT_VOLLEY           = 16,
-    EVENT_P2_TOUCH_OF_INSIGNIFICANCE    = 17,
-    EVENT_P2_SUMMON_SHADE               = 18,
+    EVENT_P2_SUMMON_WAVE                = 15,
+    EVENT_P2_FROSTBOLT                  = 16,
+    EVENT_P2_FROSTBOLT_VOLLEY           = 17,
+    EVENT_P2_TOUCH_OF_INSIGNIFICANCE    = 18,
+    EVENT_P2_SUMMON_SHADE               = 19,
 
     // Shared adds events
-    EVENT_CULTIST_DARK_MARTYRDOM        = 19,
+    EVENT_CULTIST_DARK_MARTYRDOM        = 20,
 
     // Cult Fanatic
-    EVENT_FANATIC_NECROTIC_STRIKE       = 20,
-    EVENT_FANATIC_SHADOW_CLEAVE         = 21,
-    EVENT_FANATIC_VAMPIRIC_MIGHT        = 22,
+    EVENT_FANATIC_NECROTIC_STRIKE       = 21,
+    EVENT_FANATIC_SHADOW_CLEAVE         = 22,
+    EVENT_FANATIC_VAMPIRIC_MIGHT        = 23,
 
     // Cult Adherent
-    EVENT_ADHERENT_FROST_FEVER          = 23,
-    EVENT_ADHERENT_DEATHCHILL           = 24,
-    EVENT_ADHERENT_CURSE_OF_TORPOR      = 25,
-    EVENT_ADHERENT_SHORUD_OF_THE_OCCULT = 26,
+    EVENT_ADHERENT_FROST_FEVER          = 24,
+    EVENT_ADHERENT_DEATHCHILL           = 25,
+    EVENT_ADHERENT_CURSE_OF_TORPOR      = 26,
+    EVENT_ADHERENT_SHORUD_OF_THE_OCCULT = 27,
 
     // Darnavan
-    EVENT_DARNAVAN_BLADESTORM           = 27,
-    EVENT_DARNAVAN_CHARGE               = 28,
-    EVENT_DARNAVAN_INTIMIDATING_SHOUT   = 29,
-    EVENT_DARNAVAN_MORTAL_STRIKE        = 30,
-    EVENT_DARNAVAN_SHATTERING_THROW     = 31,
-    EVENT_DARNAVAN_SUNDER_ARMOR         = 32,
+    EVENT_DARNAVAN_BLADESTORM           = 28,
+    EVENT_DARNAVAN_CHARGE               = 29,
+    EVENT_DARNAVAN_INTIMIDATING_SHOUT   = 30,
+    EVENT_DARNAVAN_MORTAL_STRIKE        = 31,
+    EVENT_DARNAVAN_SHATTERING_THROW     = 32,
+    EVENT_DARNAVAN_SUNDER_ARMOR         = 33,
 };
 
 enum Phases
@@ -182,7 +181,6 @@ enum DeprogrammingData
 #define QUEST_DEPROGRAMMING RAID_MODE<uint32>(QUEST_DEPROGRAMMING_10, QUEST_DEPROGRAMMING_25, QUEST_DEPROGRAMMING_10, QUEST_DEPROGRAMMING_25)
 
 uint32 const SummonEntries[2] = {NPC_CULT_FANATIC, NPC_CULT_ADHERENT};
-
 #define GUID_CULTIST    1
 
 Position const SummonPositions[7] =
@@ -227,6 +225,7 @@ class boss_lady_deathwhisper : public CreatureScript
             {
                 _Reset();
                 me->SetPower(POWER_MANA, me->GetMaxPower(POWER_MANA));
+                me->SetLastManaUse(0xFFFFFFFF); // hacky, but no other way atm to prevent mana regen
                 events.SetPhase(PHASE_ONE);
                 _waveCounter = 0;
                 _nextVengefulShadeTargetGUID = 0;
@@ -240,8 +239,9 @@ class boss_lady_deathwhisper : public CreatureScript
 
             void MoveInLineOfSight(Unit* who)
             {
-                if (!_introDone && me->IsWithinDistInMap(who, 110.0f))
+                if (!_introDone && me->IsWithinDistInMap(who, 100.0f))
                 {
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     _introDone = true;
                     Talk(SAY_INTRO_1);
                     events.SetPhase(PHASE_INTRO);
@@ -251,6 +251,7 @@ class boss_lady_deathwhisper : public CreatureScript
                     events.ScheduleEvent(EVENT_INTRO_5, 39500, 0, PHASE_INTRO);
                     events.ScheduleEvent(EVENT_INTRO_6, 48500, 0, PHASE_INTRO);
                     events.ScheduleEvent(EVENT_INTRO_7, 58000, 0, PHASE_INTRO);
+                    events.ScheduleEvent(EVENT_INTRO_FINISH, 76000, 0, PHASE_INTRO);
                 }
             }
 
@@ -435,6 +436,9 @@ class boss_lady_deathwhisper : public CreatureScript
                             break;
                         case EVENT_INTRO_7:
                             Talk(SAY_INTRO_7);
+                            break;
+                        case EVENT_INTRO_FINISH:
+                            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             break;
                         case EVENT_DEATH_AND_DECAY:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -967,12 +971,10 @@ class spell_deathwhisper_mana_barrier : public SpellScriptLoader
             void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
-                if (Unit* caster = GetCaster())
-                {
-                    int32 missingHealth = int32(caster->GetMaxHealth() - caster->GetHealth());
-                    caster->ModifyHealth(missingHealth);
-                    caster->ModifyPower(POWER_MANA, -missingHealth);
-                }
+                Unit* caster = GetCaster();
+                int32 missingHealth = int32(caster->GetMaxHealth() - caster->GetHealth());
+                caster->ModifyHealth(missingHealth);
+                caster->ModifyPower(POWER_MANA, -missingHealth);
             }
 
             void Register()

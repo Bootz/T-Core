@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,7 +22,7 @@
 #include <ace/Singleton.h>
 #include <ace/Atomic_Op.h>
 
-#include "DataStorage.h"
+#include "DBCStores.h"
 #include "Player.h"
 #include "SharedDefines.h"
 #include "World.h"
@@ -38,7 +36,6 @@ class Channel;
 class ChatCommand;
 class Creature;
 class CreatureAI;
-class GameObjectAI;
 class DynamicObject;
 class GameObject;
 class Guild;
@@ -382,7 +379,7 @@ class ItemScript : public ScriptObject
         bool IsDatabaseBound() const { return true; }
 
         // Called when a dummy spell effect is triggered on the item.
-        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffIndex /*effIndex*/, Item* /*target*/) { return false; }
+        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffectEntry const* effect, Item* /*target*/) { return false; }
 
         // Called when a player accepts a quest from the item.
         virtual bool OnQuestAccept(Player* /*player*/, Item* /*item*/, Quest const* /*quest*/) { return false; }
@@ -405,7 +402,7 @@ class CreatureScript : public ScriptObject, public UpdatableScript<Creature>
         bool IsDatabaseBound() const { return true; }
 
         // Called when a dummy spell effect is triggered on the creature.
-        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffIndex /*effIndex*/, Creature* /*target*/) { return false; }
+        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffectEntry const* effect, Creature* /*target*/) { return false; }
 
         // Called when a player opens a gossip dialog with the creature.
         virtual bool OnGossipHello(Player* /*player*/, Creature* /*creature*/) { return false; }
@@ -446,7 +443,7 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         bool IsDatabaseBound() const { return true; }
 
         // Called when a dummy spell effect is triggered on the gameobject.
-        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffIndex /*effIndex*/, GameObject* /*target*/) { return false; }
+        virtual bool OnDummyEffect(Unit* /*caster*/, uint32 /*spellId*/, SpellEffectEntry const* effect, GameObject* /*target*/) { return false; }
 
         // Called when a player opens a gossip dialog with the gameobject.
         virtual bool OnGossipHello(Player* /*player*/, GameObject* /*go*/) { return false; }
@@ -470,9 +467,6 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         virtual void OnDestroyed(GameObject* /*go*/, Player* /*player*/, uint32 /*eventId*/) { }
         // Called when the gameobject is damaged (destructible buildings only).
         virtual void OnDamaged(GameObject* /*go*/, Player* /*player*/,  uint32 /*eventId*/) { }
-
-        // Called when a CreatureAI object is needed for the creature.
-        virtual GameObjectAI* GetAI(GameObject* /*gameobject*/) const { return NULL; }
 };
 
 class AreaTriggerScript : public ScriptObject
@@ -705,7 +699,7 @@ class PlayerScript : public ScriptObject
         virtual void OnTextEmote(Player* /*player*/, uint32 /*text_emote*/, uint32 /*emoteNum*/, uint64 /*guid*/) { }
 
         // Called in Spell::cast
-        virtual void OnSpellCast(Player* /*player*/, Spell* /*spell*/, bool /*skipCheck*/) { }
+        virtual void OnSpellCast(Player* /*player*/, Spell * /*spell*/, bool /*skipCheck*/) { }
 
         // Called when a player logs in or out
         virtual void OnLogin(Player* /*player*/) { }
@@ -781,7 +775,7 @@ class ScriptMgr
         void LoadDatabase();
         void FillSpellSummary();
 
-        const char* ScriptsVersion() const { return "Integrated Trinity Scripts"; }
+        const char* ScriptsVersion() const { return "Integrated Trillium Scripts"; }
 
         void IncrementScriptCount() { ++_scriptCount; }
         uint32 GetScriptCount() const { return _scriptCount; }
@@ -842,14 +836,14 @@ class ScriptMgr
 
     public: /* ItemScript */
 
-        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, Item* target);
+        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, Item* target);
         bool OnQuestAccept(Player* player, Item* item, Quest const* quest);
         bool OnItemUse(Player* player, Item* item, SpellCastTargets const& targets);
         bool OnItemExpire(Player* player, ItemTemplate const* proto);
 
     public: /* CreatureScript */
 
-        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, Creature* target);
+        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, Creature* target);
         bool OnGossipHello(Player* player, Creature* creature);
         bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 action);
         bool OnGossipSelectCode(Player* player, Creature* creature, uint32 sender, uint32 action, const char* code);
@@ -863,7 +857,7 @@ class ScriptMgr
 
     public: /* GameObjectScript */
 
-        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, GameObject* target);
+        bool OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, GameObject* target);
         bool OnGossipHello(Player* player, GameObject* go);
         bool OnGossipSelect(Player* player, GameObject* go, uint32 sender, uint32 action);
         bool OnGossipSelectCode(Player* player, GameObject* go, uint32 sender, uint32 action, const char* code);
@@ -872,7 +866,6 @@ class ScriptMgr
         uint32 GetDialogStatus(Player* player, GameObject* go);
         void OnGameObjectDestroyed(GameObject* go, Player* player, uint32 eventId);
         void OnGameObjectDamaged(GameObject* go, Player* player, uint32 eventId);
-        GameObjectAI* GetGameObjectAI(GameObject* gameobject);
         void OnGameObjectUpdate(GameObject* go, uint32 diff);
 
     public: /* AreaTriggerScript */
@@ -934,15 +927,15 @@ class ScriptMgr
 
     public: /* PlayerScript */
 
-        void OnPVPKill(Player* killer, Player* killed);
-        void OnCreatureKill(Player* killer, Creature* killed);
-        void OnPlayerKilledByCreature(Creature* killer, Player* killed);
-        void OnPlayerLevelChanged(Player* player, uint8 oldLevel);
-        void OnPlayerFreeTalentPointsChanged(Player* player, uint32 newPoints);
-        void OnPlayerTalentsReset(Player* player, bool no_cost);
-        void OnPlayerMoneyChanged(Player* player, int32& amount);
-        void OnGivePlayerXP(Player* player, uint32& amount, Unit* victim);
-        void OnPlayerReputationChange(Player* player, uint32 factionID, int32& standing, bool incremental);
+        void OnPVPKill(Player *killer, Player *killed);
+        void OnCreatureKill(Player *killer, Creature *killed);
+        void OnPlayerKilledByCreature(Creature *killer, Player *killed);
+        void OnPlayerLevelChanged(Player *player, uint8 newLevel);
+        void OnPlayerFreeTalentPointsChanged(Player *player, uint32 newPoints);
+        void OnPlayerTalentsReset(Player *player, bool no_cost);
+        void OnPlayerMoneyChanged(Player *player, int32& amount);
+        void OnGivePlayerXP(Player *player, uint32& amount, Unit *victim);
+        void OnPlayerReputationChange(Player *player, uint32 factionID, int32& standing, bool incremental);
         void OnPlayerDuelRequest(Player* target, Player* challenger);
         void OnPlayerDuelStart(Player* player1, Player* player2);
         void OnPlayerDuelEnd(Player* winner, Player* loser, DuelCompleteType type);
@@ -953,7 +946,7 @@ class ScriptMgr
         void OnPlayerChat(Player* player, uint32 type, uint32 lang, std::string& msg, Channel* channel);
         void OnPlayerEmote(Player* player, uint32 emote);
         void OnPlayerTextEmote(Player* player, uint32 text_emote, uint32 emoteNum, uint64 guid);
-        void OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck);
+        void OnPlayerSpellCast(Player* player, Spell *spell, bool skipCheck);
         void OnPlayerLogin(Player* player);
         void OnPlayerLogout(Player* player);
         void OnPlayerCreate(Player* player);
@@ -961,12 +954,12 @@ class ScriptMgr
         void OnPlayerBindToInstance(Player* player, Difficulty difficulty, uint32 mapid, bool permanent);
 
     public: /* GuildScript */
-        void OnGuildAddMember(Guild* guild, Player* player, uint8& plRank);
-        void OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked);
-        void OnGuildMOTDChanged(Guild* guild, const std::string& newMotd);
-        void OnGuildInfoChanged(Guild* guild, const std::string& newInfo);
-        void OnGuildCreate(Guild* guild, Player* leader, const std::string& name);
-        void OnGuildDisband(Guild* guild);
+        void OnGuildAddMember(Guild *guild, Player *player, uint8& plRank);
+        void OnGuildRemoveMember(Guild *guild, Player *player, bool isDisbanding, bool isKicked);
+        void OnGuildMOTDChanged(Guild *guild, const std::string& newMotd);
+        void OnGuildInfoChanged(Guild *guild, const std::string& newInfo);
+        void OnGuildCreate(Guild *guild, Player* leader, const std::string& name);
+        void OnGuildDisband(Guild *guild);
         void OnGuildMemberWitdrawMoney(Guild* guild, Player* player, uint32 &amount, bool isRepair);
         void OnGuildMemberDepositMoney(Guild* guild, Player* player, uint32 &amount);
         void OnGuildItemMove(Guild* guild, Player* player, Item* pItem, bool isSrcBank, uint8 srcContainer, uint8 srcSlotId,

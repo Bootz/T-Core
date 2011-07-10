@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: boss_timmy_the_cruel
-SD%Complete: 100
-SDComment:
-SDCategory: Stratholme
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define SAY_SPAWN   "TIMMY!"
@@ -35,14 +26,14 @@ class boss_timmy_the_cruel : public CreatureScript
 public:
     boss_timmy_the_cruel() : CreatureScript("boss_timmy_the_cruel") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_timmy_the_cruelAI (creature);
+        return new boss_timmy_the_cruelAI (pCreature);
     }
 
     struct boss_timmy_the_cruelAI : public ScriptedAI
     {
-        boss_timmy_the_cruelAI(Creature* c) : ScriptedAI(c) {}
+        boss_timmy_the_cruelAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 RavenousClaw_Timer;
         bool HasYelled;
@@ -53,7 +44,7 @@ public:
             HasYelled = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (!HasYelled)
             {

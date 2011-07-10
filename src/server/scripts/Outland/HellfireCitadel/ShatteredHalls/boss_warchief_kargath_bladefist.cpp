@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Warchief_Kargath_Bladefist
-SD%Complete: 90
-SDComment:
-SDCategory: Hellfire Citadel, Shattered Halls
-EndScriptData */
 
 /* ContentData
 boss_warchief_kargath_bladefist
@@ -71,7 +62,7 @@ class boss_warchief_kargath_bladefist : public CreatureScript
 
         struct boss_warchief_kargath_bladefistAI : public ScriptedAI
         {
-            boss_warchief_kargath_bladefistAI(Creature* creature) : ScriptedAI(creature)
+            boss_warchief_kargath_bladefistAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
             }
 
@@ -109,12 +100,12 @@ class boss_warchief_kargath_bladefist : public CreatureScript
                 resetcheck_timer = 5000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
             }
 
-            void JustSummoned(Creature* summoned)
+            void JustSummoned(Creature *summoned)
             {
                 switch(summoned->GetEntry())
                 {

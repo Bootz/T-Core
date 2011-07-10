@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Isle_of_Queldanas
-SD%Complete: 100
-SDComment: Quest support: 11524, 11525, 11532, 11533, 11542, 11543, 11541
-SDCategory: Isle Of Quel'Danas
-EndScriptData */
 
 /* ContentData
 npc_converted_sentry
@@ -45,14 +36,14 @@ class npc_converted_sentry : public CreatureScript
 public:
     npc_converted_sentry() : CreatureScript("npc_converted_sentry") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_converted_sentryAI (creature);
+        return new npc_converted_sentryAI (pCreature);
     }
 
     struct npc_converted_sentryAI : public ScriptedAI
     {
-        npc_converted_sentryAI(Creature* c) : ScriptedAI(c) {}
+        npc_converted_sentryAI(Creature *c) : ScriptedAI(c) {}
 
         bool Credit;
         uint32 Timer;
@@ -63,7 +54,7 @@ public:
             Timer = 2500;
         }
 
-        void MoveInLineOfSight(Unit* /*who*/) {}
+        void MoveInLineOfSight(Unit * /*who*/) {}
         void EnterCombat(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 diff)
@@ -80,7 +71,7 @@ public:
 
                     DoCast(me, SPELL_CONVERT_CREDIT);
                     if (me->isPet())
-                        me->ToPet()->SetDuration(7500);
+                        CAST_PET(me)->SetDuration(7500);
                     Credit = true;
                 } else Timer -= diff;
             }
@@ -103,9 +94,9 @@ class npc_greengill_slave : public CreatureScript
 public:
     npc_greengill_slave() : CreatureScript("npc_greengill_slave") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_greengill_slaveAI(creature);
+        return new npc_greengill_slaveAI(pCreature);
     }
 
     struct npc_greengill_slaveAI : public ScriptedAI
@@ -131,9 +122,9 @@ public:
                 PlayerGUID = caster->GetGUID();
                 if (PlayerGUID)
                 {
-                    Unit* player = Unit::GetUnit((*me), PlayerGUID);
-                    if (player && CAST_PLR(player)->GetQuestStatus(QUESTG) == QUEST_STATUS_INCOMPLETE)
-                        DoCast(player, 45110, true);
+                    Unit* plr = Unit::GetUnit((*me), PlayerGUID);
+                    if (plr && CAST_PLR(plr)->GetQuestStatus(QUESTG) == QUEST_STATUS_INCOMPLETE)
+                        DoCast(plr, 45110, true);
                 }
                 DoCast(me, ENRAGE);
                 Unit* Myrmidon = me->FindNearestCreature(DM, 70);

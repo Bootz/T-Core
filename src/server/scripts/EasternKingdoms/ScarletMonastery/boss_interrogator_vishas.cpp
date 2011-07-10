@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Interrogator_Vishas
-SD%Complete: 100
-SDComment:
-SDCategory: Scarlet Monastery
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "scarlet_monastery.h"
@@ -43,14 +34,14 @@ class boss_interrogator_vishas : public CreatureScript
 public:
     boss_interrogator_vishas() : CreatureScript("boss_interrogator_vishas") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_interrogator_vishasAI (creature);
+        return new boss_interrogator_vishasAI (pCreature);
     }
 
     struct boss_interrogator_vishasAI : public ScriptedAI
     {
-        boss_interrogator_vishasAI(Creature* c) : ScriptedAI(c)
+        boss_interrogator_vishasAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -66,7 +57,7 @@ public:
             ShadowWordPain_Timer = 5000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
         }
@@ -82,7 +73,7 @@ public:
                 return;
 
             //Any other actions to do with vorrel? setStandState?
-            if (Unit* vorrel = Unit::GetUnit(*me, pInstance->GetData64(DATA_VORREL)))
+            if (Unit *vorrel = Unit::GetUnit(*me, pInstance->GetData64(DATA_VORREL)))
                 DoScriptText(SAY_TRIGGER_VORREL, vorrel);
         }
 

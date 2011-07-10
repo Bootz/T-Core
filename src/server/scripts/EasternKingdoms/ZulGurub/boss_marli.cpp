@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Marli
-SD%Complete: 80
-SDComment: Charging healers and casters not working. Perhaps wrong Spell Timers.
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -52,7 +43,7 @@ class boss_marli : public CreatureScript
 
         struct boss_marliAI : public ScriptedAI
         {
-            boss_marliAI(Creature* c) : ScriptedAI(c)
+            boss_marliAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -84,7 +75,7 @@ class boss_marli : public CreatureScript
                 PhaseTwo = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(SAY_AGGRO, me);
             }
@@ -93,7 +84,7 @@ class boss_marli : public CreatureScript
             {
                 DoScriptText(SAY_DEATH, me);
                 if (m_pInstance)
-                    m_pInstance->SetData(DATA_MARLI, DONE);
+                    m_pInstance->SetData(TYPE_MARLI, DONE);
             }
 
             void UpdateAI(const uint32 diff)
@@ -119,37 +110,37 @@ class boss_marli : public CreatureScript
                     {
                         DoScriptText(SAY_SPIDER_SPAWN, me);
 
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                        if (!target)
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        if (!pTarget)
                             return;
 
-                        Creature* Spider = NULL;
+                        Creature *Spider = NULL;
 
-                        Spider = me->SummonCreature(15041, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                        Spider = me->SummonCreature(15041, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         if (Spider)
-                            Spider->AI()->AttackStart(target);
-                        Spider = me->SummonCreature(15041, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                            Spider->AI()->AttackStart(pTarget);
+                        Spider = me->SummonCreature(15041, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         if (Spider)
-                            Spider->AI()->AttackStart(target);
-                        Spider = me->SummonCreature(15041, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                            Spider->AI()->AttackStart(pTarget);
+                        Spider = me->SummonCreature(15041, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         if (Spider)
-                            Spider->AI()->AttackStart(target);
-                        Spider = me->SummonCreature(15041, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                            Spider->AI()->AttackStart(pTarget);
+                        Spider = me->SummonCreature(15041, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         if (Spider)
-                            Spider->AI()->AttackStart(target);
+                            Spider->AI()->AttackStart(pTarget);
 
                         Spawned = true;
                     } else SpawnStartSpiders_Timer -= diff;
 
                     if (SpawnSpider_Timer <= diff)
                     {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                        if (!target)
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        if (!pTarget)
                             return;
 
-                        Creature* Spider = me->SummonCreature(15041, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                        Creature *Spider = me->SummonCreature(15041, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         if (Spider)
-                            Spider->AI()->AttackStart(target);
+                            Spider->AI()->AttackStart(pTarget);
                         SpawnSpider_Timer = 12000 + rand()%5000;
                     } else SpawnSpider_Timer -= diff;
 
@@ -174,21 +165,21 @@ class boss_marli : public CreatureScript
                     {
                         if (Charge_Timer <= diff)
                         {
-                            Unit* target = NULL;
+                            Unit *pTarget = NULL;
                             int i = 0;
                             while (i < 3)                           // max 3 tries to get a random target with power_mana
                             {
                                 ++i;
-                                target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);  // not aggro leader
-                                if (target && target->getPowerType() == POWER_MANA)
+                                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);  // not aggro leader
+                                if (pTarget && pTarget->getPowerType() == POWER_MANA)
                                         i = 3;
                             }
-                            if (target)
+                            if (pTarget)
                             {
-                                DoCast(target, SPELL_CHARGE);
-                                //me->GetMap()->CreatureRelocation(me, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
-                                //me->SendMonsterMove(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, true, 1);
-                                AttackStart(target);
+                                DoCast(pTarget, SPELL_CHARGE);
+                                //me->GetMap()->CreatureRelocation(me, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0);
+                                //me->SendMonsterMove(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, true, 1);
+                                AttackStart(pTarget);
                             }
 
                             Charge_Timer = 8000;
@@ -231,7 +222,7 @@ class mob_spawn_of_marli : public CreatureScript
 
         struct mob_spawn_of_marliAI : public ScriptedAI
         {
-            mob_spawn_of_marliAI(Creature* c) : ScriptedAI(c) {}
+            mob_spawn_of_marliAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 LevelUp_Timer;
 
@@ -240,7 +231,7 @@ class mob_spawn_of_marli : public CreatureScript
                 LevelUp_Timer = 3000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 

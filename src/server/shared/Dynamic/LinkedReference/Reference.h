@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -73,14 +71,14 @@ template <class TO, class FROM> class Reference : public LinkedListElement
         }
 
         Reference<TO, FROM>       * next()       { return((Reference<TO, FROM>       *) LinkedListElement::next()); }
-        Reference<TO, FROM> const* next() const { return((Reference<TO, FROM> const *) LinkedListElement::next()); }
+        Reference<TO, FROM> const * next() const { return((Reference<TO, FROM> const *) LinkedListElement::next()); }
         Reference<TO, FROM>       * prev()       { return((Reference<TO, FROM>       *) LinkedListElement::prev()); }
-        Reference<TO, FROM> const* prev() const { return((Reference<TO, FROM> const *) LinkedListElement::prev()); }
+        Reference<TO, FROM> const * prev() const { return((Reference<TO, FROM> const *) LinkedListElement::prev()); }
 
         Reference<TO, FROM>       * nocheck_next()       { return((Reference<TO, FROM>       *) LinkedListElement::nocheck_next()); }
-        Reference<TO, FROM> const* nocheck_next() const { return((Reference<TO, FROM> const *) LinkedListElement::nocheck_next()); }
+        Reference<TO, FROM> const * nocheck_next() const { return((Reference<TO, FROM> const *) LinkedListElement::nocheck_next()); }
         Reference<TO, FROM>       * nocheck_prev()       { return((Reference<TO, FROM>       *) LinkedListElement::nocheck_prev()); }
-        Reference<TO, FROM> const* nocheck_prev() const { return((Reference<TO, FROM> const *) LinkedListElement::nocheck_prev()); }
+        Reference<TO, FROM> const * nocheck_prev() const { return((Reference<TO, FROM> const *) LinkedListElement::nocheck_prev()); }
 
         TO* operator ->() const { return iRefTo; }
         TO* getTarget() const { return iRefTo; }

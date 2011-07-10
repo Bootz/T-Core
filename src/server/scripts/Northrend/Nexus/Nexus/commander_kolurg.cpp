@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss Commander Kolurg
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:  Only Alliance Heroic
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 
@@ -44,14 +34,14 @@ class boss_commander_kolurg : public CreatureScript
 public:
     boss_commander_kolurg() : CreatureScript("boss_commander_kolurg") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_commander_kolurgAI (creature);
+        return new boss_commander_kolurgAI (pCreature);
     }
 
     struct boss_commander_kolurgAI : public ScriptedAI
     {
-        boss_commander_kolurgAI(Creature* c) : ScriptedAI(c) {}
+        boss_commander_kolurgAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset() {}
         void EnterCombat(Unit* /*who*/) {}

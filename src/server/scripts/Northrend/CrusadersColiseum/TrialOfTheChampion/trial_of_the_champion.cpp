@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Trial Of the Champion
-SD%Complete:
-SDComment:
-SDCategory: trial_of_the_champion
-EndScriptData */
 
 /* ContentData
 npc_announcer_toc5
@@ -50,9 +41,9 @@ public:
 
     struct npc_announcer_toc5AI : public ScriptedAI
     {
-        npc_announcer_toc5AI(Creature* creature) : ScriptedAI(creature)
+        npc_announcer_toc5AI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
 
             uiSummonTimes = 0;
             uiPosition = 0;
@@ -148,8 +139,8 @@ public:
                         }
 
                         for (std::list<uint64>::const_iterator itr = TempList.begin(); itr != TempList.end(); ++itr)
-                            if (Creature* summon = Unit::GetCreature(*me, *itr))
-                                AggroAllPlayers(summon);
+                            if (Creature* pSummon = Unit::GetCreature(*me, *itr))
+                                AggroAllPlayers(pSummon);
                     }else if (uiLesserChampions == 9)
                         StartGrandChampionsAttack();
 
@@ -384,19 +375,19 @@ public:
 
             for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (Player* pPlayer = i->getSource())
                 {
-                    if (player->isGameMaster())
+                    if (pPlayer->isGameMaster())
                         continue;
 
-                    if (player->isAlive())
+                    if (pPlayer->isAlive())
                     {
                         pTemp->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
                         pTemp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         pTemp->SetReactState(REACT_AGGRESSIVE);
-                        pTemp->SetInCombatWith(player);
-                        player->SetInCombatWith(pTemp);
-                        pTemp->AddThreat(player, 0.0f);
+                        pTemp->SetInCombatWith(pPlayer);
+                        pPlayer->SetInCombatWith(pTemp);
+                        pTemp->AddThreat(pPlayer, 0.0f);
                     }
                 }
             }
@@ -422,8 +413,8 @@ public:
                         if (!Champion1List.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = Champion1List.begin(); itr != Champion1List.end(); ++itr)
-                                if (Creature* summon = Unit::GetCreature(*me, *itr))
-                                    AggroAllPlayers(summon);
+                                if (Creature* pSummon = Unit::GetCreature(*me, *itr))
+                                    AggroAllPlayers(pSummon);
                             NextStep(0, false);
                         }
                         break;
@@ -434,18 +425,18 @@ public:
                 return;
         }
 
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature* pSummon)
         {
             if (pInstance && pInstance->GetData(BOSS_GRAND_CHAMPIONS) == NOT_STARTED)
             {
-                summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                summon->SetReactState(REACT_PASSIVE);
+                pSummon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                pSummon->SetReactState(REACT_PASSIVE);
             }
         }
 
-        void SummonedCreatureDespawn(Creature* summon)
+        void SummonedCreatureDespawn(Creature* pSummon)
         {
-            switch(summon->GetEntry())
+            switch(pSummon->GetEntry())
             {
                 case VEHICLE_DARNASSIA_NIGHTSABER:
                 case VEHICLE_EXODAR_ELEKK:
@@ -463,14 +454,14 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_announcer_toc5AI(creature);
+        return new npc_announcer_toc5AI(pCreature);
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        InstanceScript* pInstance = creature->GetInstanceScript();
+        InstanceScript* pInstance = pCreature->GetInstanceScript();
 
         if (pInstance &&
             ((pInstance->GetData(BOSS_GRAND_CHAMPIONS) == DONE &&
@@ -484,22 +475,22 @@ public:
             pInstance->GetData(BOSS_ARGENT_CHALLENGE_E) == NOT_STARTED &&
             pInstance->GetData(BOSS_ARGENT_CHALLENGE_P) == NOT_STARTED &&
             pInstance->GetData(BOSS_BLACK_KNIGHT) == NOT_STARTED)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
         else if (pInstance)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-        player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            player->CLOSE_GOSSIP_MENU();
-            CAST_AI(npc_announcer_toc5::npc_announcer_toc5AI, creature->AI())->StartEncounter();
+            pPlayer->CLOSE_GOSSIP_MENU();
+            CAST_AI(npc_announcer_toc5::npc_announcer_toc5AI, pCreature->AI())->StartEncounter();
         }
 
         return true;

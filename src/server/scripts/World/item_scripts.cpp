@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Item_Scripts
-SD%Complete: 100
-SDComment: Items for a range of different items. See content below (in script)
-SDCategory: Items
-EndScriptData */
 
 /* ContentData
 item_draenei_fishing_net(i23654)    Hacklike implements chance to spawn item or creature
@@ -49,7 +40,7 @@ class item_only_for_flight : public ItemScript
 public:
     item_only_for_flight() : ItemScript("item_only_for_flight") { }
 
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const& /*targets*/)
+    bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const& /*targets*/)
     {
         uint32 itemId = pItem->GetEntry();
         bool disabled = false;
@@ -58,25 +49,25 @@ public:
         switch(itemId)
         {
            case 24538:
-                if (player->GetAreaId() != 3628)
+                if (pPlayer->GetAreaId() != 3628)
                     disabled = true;
                     break;
            case 34489:
-                if (player->GetZoneId() != 4080)
+                if (pPlayer->GetZoneId() != 4080)
                     disabled = true;
                     break;
            case 34475:
                 if (const SpellEntry* pSpellInfo = GetSpellStore()->LookupEntry(SPELL_ARCANE_CHARGES))
-                    Spell::SendCastResult(player, pSpellInfo, 1, SPELL_FAILED_NOT_ON_GROUND);
+                    Spell::SendCastResult(pPlayer, pSpellInfo, 1, SPELL_FAILED_NOT_ON_GROUND);
                     break;
         }
 
         // allow use in flight only
-        if (player->isInFlight() && !disabled)
+        if (pPlayer->isInFlight() && !disabled)
             return false;
 
         // error
-        player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
+        pPlayer->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
         return true;
     }
 };
@@ -92,28 +83,28 @@ public:
 
     //This is just a hack and should be removed from here.
     //Creature/Item are in fact created before spell are sucessfully casted, without any checks at all to ensure proper/expected behavior.
-    bool OnUse(Player* player, Item* /*pItem*/, SpellCastTargets const& /*targets*/)
+    bool OnUse(Player* pPlayer, Item* /*pItem*/, SpellCastTargets const& /*targets*/)
     {
-        if (player->GetQuestStatus(9452) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(9452) == QUEST_STATUS_INCOMPLETE)
         {
             if (urand(0, 99) < 35)
             {
-                Creature* Murloc = player->SummonCreature(17102, player->GetPositionX(), player->GetPositionY()+20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                Creature *Murloc = pPlayer->SummonCreature(17102, pPlayer->GetPositionX(), pPlayer->GetPositionY()+20, pPlayer->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
                 if (Murloc)
-                    Murloc->AI()->AttackStart(player);
+                    Murloc->AI()->AttackStart(pPlayer);
             }
             else
             {
                 ItemPosCountVec dest;
                 uint32 itemId = 23614;
-                InventoryResult msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, 1);
+                InventoryResult msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, 1);
                 if (msg == EQUIP_ERR_OK)
                 {
-                    if (Item* item = player->StoreNewItem(dest, itemId, true))
-                        player->SendNewItem(item, 1, false, true);
+                    if (Item* item = pPlayer->StoreNewItem(dest, itemId, true))
+                        pPlayer->SendNewItem(item, 1, false, true);
                 }
                 else
-                    player->SendEquipError(msg, NULL, NULL, itemId);
+                    pPlayer->SendEquipError(msg, NULL, NULL, itemId);
             }
         }
         return false;
@@ -133,9 +124,9 @@ public:
     {
         if (player->GetQuestStatus(10832) == QUEST_STATUS_INCOMPLETE)
         {
-            if (Creature* nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()+20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
+            if (Creature *nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()+20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
                 nether->AI()->AttackStart(player);
-            if (Creature* nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()-20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
+            if (Creature *nether = player->SummonCreature(22408, player->GetPositionX(), player->GetPositionY()-20, player->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 180000))
                 nether->AI()->AttackStart(player);
         }
         return false;
@@ -151,13 +142,13 @@ class item_gor_dreks_ointment : public ItemScript
 public:
     item_gor_dreks_ointment() : ItemScript("item_gor_dreks_ointment") { }
 
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const& targets)
+    bool OnUse(Player *pPlayer, Item *pItem, SpellCastTargets const& targets)
     {
-        if (targets.GetUnitTarget() && targets.GetUnitTarget()->GetTypeId() == TYPEID_UNIT &&
-            targets.GetUnitTarget()->GetEntry() == 20748 && !targets.GetUnitTarget()->HasAura(32578))
+        if (targets.getUnitTarget() && targets.getUnitTarget()->GetTypeId() == TYPEID_UNIT &&
+            targets.getUnitTarget()->GetEntry() == 20748 && !targets.getUnitTarget()->HasAura(32578))
             return false;
 
-        player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
+        pPlayer->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
         return true;
     }
 };
@@ -171,13 +162,13 @@ class item_incendiary_explosives : public ItemScript
 public:
     item_incendiary_explosives() : ItemScript("item_incendiary_explosives") { }
 
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const & /*targets*/)
+    bool OnUse(Player *pPlayer, Item *pItem, SpellCastTargets const & /*targets*/)
     {
-        if (player->FindNearestCreature(26248, 15) || player->FindNearestCreature(26249, 15))
+        if (pPlayer->FindNearestCreature(26248, 15) || pPlayer->FindNearestCreature(26249, 15))
             return false;
         else
         {
-            player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
+            pPlayer->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
             return true;
         }
     }
@@ -191,12 +182,12 @@ class item_mysterious_egg : public ItemScript
 {
 public:
     item_mysterious_egg() : ItemScript("item_mysterious_egg") { }
-    bool OnExpire(Player* player, ItemTemplate const* /*pItemProto*/)
+    bool OnExpire(Player *pPlayer, ItemTemplate const * /*pItemProto*/)
     {
         ItemPosCountVec dest;
-        uint8 msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 39883, 1); // Cracked Egg
+        uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 39883, 1); // Cracked Egg
         if (msg == EQUIP_ERR_OK)
-            player->StoreNewItem(dest, 39883, true, Item::GenerateItemRandomPropertyId(39883));
+            pPlayer->StoreNewItem(dest, 39883, true, Item::GenerateItemRandomPropertyId(39883));
 
         return true;
     }
@@ -211,12 +202,12 @@ class item_disgusting_jar : public ItemScript
 public:
     item_disgusting_jar() : ItemScript("item_disgusting_jar") {}
 
-    bool OnExpire(Player* player, ItemTemplate const* /*pItemProto*/)
+    bool OnExpire(Player *pPlayer, ItemTemplate const * /*pItemProto*/)
     {
         ItemPosCountVec dest;
-        uint8 msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 44718, 1); // Ripe Disgusting Jar
+        uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 44718, 1); // Ripe Disgusting Jar
         if (msg == EQUIP_ERR_OK)
-            player->StoreNewItem(dest, 44718, true, Item::GenerateItemRandomPropertyId(44718));
+            pPlayer->StoreNewItem(dest, 44718, true, Item::GenerateItemRandomPropertyId(44718));
 
         return true;
     }
@@ -260,12 +251,12 @@ class item_pile_fake_furs : public ItemScript
 public:
     item_pile_fake_furs() : ItemScript("item_pile_fake_furs") { }
 
-    bool OnUse(Player* player, Item* /*pItem*/, SpellCastTargets const & /*targets*/)
+    bool OnUse(Player *pPlayer, Item * /*pItem*/, SpellCastTargets const & /*targets*/)
     {
-        GameObject* pGo = NULL;
+        GameObject *pGo = NULL;
         for (uint8 i = 0; i < CaribouTrapsNum; ++i)
         {
-            pGo = player->FindNearestGameObject(CaribouTraps[i], 5.0f);
+            pGo = pPlayer->FindNearestGameObject(CaribouTraps[i], 5.0f);
             if (pGo)
                 break;
         }
@@ -279,7 +270,7 @@ public:
         float x, y, z;
         pGo->GetClosePoint(x, y, z, pGo->GetObjectSize() / 3, 7.0f);
         pGo->SummonGameObject(GO_HIGH_QUALITY_FUR, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0, 0, 0, 0, 0, 1000);
-        if (TempSummon* summon = player->SummonCreature(NPC_NESINGWARY_TRAPPER, x, y, z, pGo->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 1000))
+        if (TempSummon* summon = pPlayer->SummonCreature(NPC_NESINGWARY_TRAPPER, x, y, z, pGo->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 1000))
         {
             summon->SetVisible(false);
             summon->SetReactState(REACT_PASSIVE);
@@ -305,17 +296,17 @@ class item_petrov_cluster_bombs : public ItemScript
 public:
     item_petrov_cluster_bombs() : ItemScript("item_petrov_cluster_bombs") { }
 
-    bool OnUse(Player* player, Item* pItem, const SpellCastTargets & /*pTargets*/)
+    bool OnUse(Player* pPlayer, Item* pItem, const SpellCastTargets & /*pTargets*/)
     {
-        if (player->GetZoneId() != ZONE_ID_HOWLING)
+        if (pPlayer->GetZoneId() != ZONE_ID_HOWLING)
             return false;
 
-        if (!player->GetTransport() || player->GetAreaId() != AREA_ID_SHATTERED_STRAITS)
+        if (!pPlayer->GetTransport() || pPlayer->GetAreaId() != AREA_ID_SHATTERED_STRAITS)
         {
-            player->SendEquipError(EQUIP_ERR_NONE, pItem, NULL);
+            pPlayer->SendEquipError(EQUIP_ERR_NONE, pItem, NULL);
 
             if (const SpellEntry* pSpellInfo = GetSpellStore()->LookupEntry(SPELL_PETROV_BOMB))
-                Spell::SendCastResult(player, pSpellInfo, 1, SPELL_FAILED_NOT_HERE);
+                Spell::SendCastResult(pPlayer, pSpellInfo, 1, SPELL_FAILED_NOT_HERE);
 
             return true;
         }
@@ -371,25 +362,25 @@ class item_dehta_trap_smasher : public ItemScript
 public:
     item_dehta_trap_smasher() : ItemScript("item_dehta_trap_smasher") { }
 
-    bool OnUse(Player* player, Item* /*pItem*/, const SpellCastTargets & /*pTargets*/)
+    bool OnUse(Player* pPlayer, Item* /*pItem*/, const SpellCastTargets & /*pTargets*/)
     {
-        if (player->GetQuestStatus(QUEST_CANNOT_HELP_THEMSELVES) != QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(QUEST_CANNOT_HELP_THEMSELVES) != QUEST_STATUS_INCOMPLETE)
             return false;
 
         Creature* pMammoth;
-        pMammoth = player->FindNearestCreature(NPC_TRAPPED_MAMMOTH_CALF, 5.0f);
+        pMammoth = pPlayer->FindNearestCreature(NPC_TRAPPED_MAMMOTH_CALF, 5.0f);
         if (!pMammoth)
             return false;
 
         GameObject* pTrap;
         for (uint8 i = 0; i < MammothTrapsNum; ++i)
         {
-            pTrap = player->FindNearestGameObject(MammothTraps[i], 11.0f);
+            pTrap = pPlayer->FindNearestGameObject(MammothTraps[i], 11.0f);
             if (pTrap)
             {
                 pMammoth->AI()->DoAction(1);
                 pTrap->SetGoState(GO_STATE_READY);
-                player->KilledMonsterCredit(NPC_TRAPPED_MAMMOTH_CALF, 0);
+                pPlayer->KilledMonsterCredit(NPC_TRAPPED_MAMMOTH_CALF, 0);
                 return true;
             }
         }
@@ -408,18 +399,18 @@ class item_trident_of_nazjan : public ItemScript
 public:
     item_trident_of_nazjan() : ItemScript("item_Trident_of_Nazjan") { }
 
-    bool OnUse(Player* player, Item* pItem, const SpellCastTargets & /*pTargets*/)
+    bool OnUse(Player* pPlayer, Item* pItem, const SpellCastTargets & /*pTargets*/)
     {
-        if (player->GetQuestStatus(QUEST_THE_EMISSARY) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(QUEST_THE_EMISSARY) == QUEST_STATUS_INCOMPLETE)
         {
-            if (Creature* pLeviroth = player->FindNearestCreature(NPC_LEVIROTH, 10.0f)) // spell range
+            if (Creature* pLeviroth = pPlayer->FindNearestCreature(NPC_LEVIROTH, 10.0f)) // spell range
             {
-                pLeviroth->AI()->AttackStart(player);
+                pLeviroth->AI()->AttackStart(pPlayer);
                 return false;
             } else
-                player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
+                pPlayer->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
         } else
-            player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW , pItem, NULL);
+            pPlayer->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW , pItem, NULL);
         return true;
     }
 };
@@ -435,17 +426,17 @@ class item_captured_frog : public ItemScript
 public:
     item_captured_frog() : ItemScript("item_captured_frog") { }
 
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const& /*targets*/)
+    bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const& /*targets*/)
     {
-        if (player->GetQuestStatus(QUEST_THE_PERFECT_SPIES) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(QUEST_THE_PERFECT_SPIES) == QUEST_STATUS_INCOMPLETE)
         {
-            if (player->FindNearestCreature(NPC_VANIRAS_SENTRY_TOTEM, 10.0f))
+            if (pPlayer->FindNearestCreature(NPC_VANIRAS_SENTRY_TOTEM, 10.0f))
                 return false;
             else
-                player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
+                pPlayer->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
         }
         else
-            player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
+            pPlayer->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
         return true;
     }
 };

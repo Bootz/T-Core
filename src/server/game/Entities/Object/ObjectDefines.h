@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OBJECTDEFINES_H
-#define OBJECTDEFINES_H
+#ifndef TRILLIUM_OBJECTDEFINES_H
+#define TRILLIUM_OBJECTDEFINES_H
 
 #include "Define.h"
 
@@ -66,6 +64,7 @@ enum HighGuid
 #define IS_TRANSPORT(Guid)           (GUID_HIPART(Guid) == HIGHGUID_TRANSPORT)
 #define IS_MO_TRANSPORT(Guid)        (GUID_HIPART(Guid) == HIGHGUID_MO_TRANSPORT)
 #define IS_GROUP(Guid)               (GUID_HIPART(Guid) == HIGHGUID_GROUP)
+#define IS_GUILD(Guid)               (GUID_HIPART(Guid) == HIGHGUID_GUILD)
 
 // l - OBJECT_FIELD_GUID
 // e - OBJECT_FIELD_ENTRY for GO (except GAMEOBJECT_TYPE_MO_TRANSPORT) and creatures or UNIT_FIELD_PETNUMBER for pets
@@ -119,6 +118,7 @@ inline char const* GetLogNameForGuid(uint64 guid)
         case HIGHGUID_CORPSE:       return "corpse";
         case HIGHGUID_MO_TRANSPORT: return "mo_transport";
         case HIGHGUID_GROUP:        return "group";
+        case HIGHGUID_GUILD:        return "guild";
         default:
             return "<unknown>";
     }

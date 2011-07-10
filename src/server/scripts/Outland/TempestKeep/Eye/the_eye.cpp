@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: The_Eye
-SD%Complete: 100
-SDComment:
-SDCategory: Tempest Keep, The Eye
-EndScriptData */
 
 /* ContentData
 mob_crystalcore_devastator
@@ -47,7 +38,7 @@ class mob_crystalcore_devastator : public CreatureScript
         }
         struct mob_crystalcore_devastatorAI : public ScriptedAI
         {
-            mob_crystalcore_devastatorAI(Creature* creature) : ScriptedAI(creature) {}
+            mob_crystalcore_devastatorAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
             uint32 Knockaway_Timer;
             uint32 Countercharge_Timer;
@@ -58,7 +49,7 @@ class mob_crystalcore_devastator : public CreatureScript
                 Knockaway_Timer = 25000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 
@@ -74,13 +65,13 @@ class mob_crystalcore_devastator : public CreatureScript
                     DoCast(me->getVictim(), SPELL_KNOCKAWAY, true);
 
                     // current aggro target is knocked away pick new target
-                    Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
 
-                    if (!target || target == me->getVictim())
-                        target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
+                    if (!pTarget || pTarget == me->getVictim())
+                        pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
 
-                    if (target)
-                        me->TauntApply(target);
+                    if (pTarget)
+                        me->TauntApply(pTarget);
 
                     Knockaway_Timer = 23000;
                 }

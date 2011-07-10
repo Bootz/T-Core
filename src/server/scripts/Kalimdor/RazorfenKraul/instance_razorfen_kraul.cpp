@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Razorfen_Kraul
-SD%Complete:
-SDComment:
-SDCategory: Razorfen Kraul
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "razorfen_kraul.h"
@@ -44,11 +35,13 @@ public:
         instance_razorfen_kraul_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
 
         uint64 DoorWardGUID;
-        int WardKeeperDeath;
+        uint32 WardCheck_Timer;
+        int WardKeeperAlive;
 
         void Initialize()
         {
-            WardKeeperDeath = 0;
+            WardKeeperAlive = 1;
+            WardCheck_Timer = 4000;
             DoorWardGUID = 0;
         }
 
@@ -60,8 +53,8 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
-                        return player;
+                    if (Player* plr = itr->getSource())
+                        return plr;
                 }
             }
             sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Instance Razorfen Kraul: GetPlayerInMap, but PlayerList is empty!");
@@ -72,25 +65,29 @@ public:
         {
             switch(go->GetEntry())
             {
-                case 21099: DoorWardGUID = go->GetGUID(); break;
+            case 21099: DoorWardGUID = go->GetGUID(); break;
             }
         }
 
-        void Update(uint32 /*diff*/)
+        void Update(uint32 diff)
         {
-            if (WardKeeperDeath == WARD_KEEPERS_NR)
-                if(GameObject* pGo = instance->GetGameObject(DoorWardGUID))
-                {
-                    pGo->SetUInt32Value(GAMEOBJECT_FLAGS, 33);
-                    pGo->SetGoState(GO_STATE_ACTIVE);
-                }
+            if (WardCheck_Timer <= diff)
+            {
+                HandleGameObject(DoorWardGUID, WardKeeperAlive);
+                WardKeeperAlive = 0;
+                WardCheck_Timer = 4000;
+            }else
+                WardCheck_Timer -= diff;
         }
 
-        void SetData(uint32 type, uint32 /*data*/)
+        void SetData(uint32 type, uint32 data)
         {
             switch(type)
             {
-                case EVENT_WARD_KEEPER: WardKeeperDeath++; break;
+                case TYPE_WARD_KEEPERS:
+                    if (data == NOT_STARTED)
+                        WardKeeperAlive = 1;
+                    break;
             }
         }
 

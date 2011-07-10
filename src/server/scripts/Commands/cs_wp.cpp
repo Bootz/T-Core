@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: wp_commandscript
-%Complete: 100
-Comment: All wp related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -196,7 +187,7 @@ public:
             return false;
 
         handler->PSendSysMessage("%s%s|r|cff00ffff%u|r", "|cff00ff00", "Loading Path: ", id);
-        sWaypointMgr->ReloadPath(id);
+        sWaypointMgr->UpdatePath(id);
         return true;
     }
     static bool HandleWpUnLoadCommand(ChatHandler* handler, const char* /*args*/)
@@ -436,7 +427,7 @@ public:
                 else
                 {
                     std::string arg_str_3 = arg_3;
-                    WorldDatabase.EscapeString(arg_str_3);
+                    WorldDatabase.escape_string(arg_str_3);
                     WorldDatabase.PExecute("UPDATE waypoint_scripts SET %s='%s' WHERE guid='%u'",
                         arg_2, arg_str_3.c_str(), id);
                 }
@@ -571,7 +562,7 @@ public:
         {
             handler->PSendSysMessage("|cff00ff00DEBUG: wp move, PathID: |r|cff00ffff%u|r", pathid);
 
-            Player* chr = handler->GetSession()->GetPlayer();
+            Player *chr = handler->GetSession()->GetPlayer();
             Map *map = chr->GetMap();
             {
                 // wpCreature
@@ -621,7 +612,7 @@ public:
         {
             // show_str check for present in list of correct values, no sql injection possible
             std::string text2 = text;
-            WorldDatabase.EscapeString(text2);
+            WorldDatabase.escape_string(text2);
             WorldDatabase.PExecute("UPDATE waypoint_data SET %s='%s' WHERE id='%u' AND point='%u'",
                 show_str, text2.c_str(), pathid, point);
         }
@@ -742,9 +733,9 @@ public:
                 {
                     Field *fields = result2->Fetch();
                     uint32 wpguid = fields[0].GetUInt32();
-                    Creature* creature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(MAKE_NEW_GUID(wpguid, VISUAL_WAYPOINT, HIGHGUID_UNIT));
+                    Creature* pCreature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(MAKE_NEW_GUID(wpguid, VISUAL_WAYPOINT, HIGHGUID_UNIT));
 
-                    if (!creature)
+                    if (!pCreature)
                     {
                         handler->PSendSysMessage(LANG_WAYPOINT_NOTREMOVED, wpguid);
                         hasError = true;
@@ -752,9 +743,9 @@ public:
                     }
                     else
                     {
-                        creature->CombatStop();
-                        creature->DeleteFromDB();
-                        creature->AddObjectToRemoveList();
+                        pCreature->CombatStop();
+                        pCreature->DeleteFromDB();
+                        pCreature->AddObjectToRemoveList();
                     }
 
                 }
@@ -778,7 +769,7 @@ public:
 
                 uint32 id = VISUAL_WAYPOINT;
 
-                Player* chr = handler->GetSession()->GetPlayer();
+                Player *chr = handler->GetSession()->GetPlayer();
                 Map *map = chr->GetMap();
                 float o = chr->GetOrientation();
 
@@ -829,26 +820,26 @@ public:
             float z         = fields[2].GetFloat();
             uint32 id = VISUAL_WAYPOINT;
 
-            Player* chr = handler->GetSession()->GetPlayer();
+            Player *chr = handler->GetSession()->GetPlayer();
             float o = chr->GetOrientation();
             Map *map = chr->GetMap();
 
-            Creature* creature = new Creature;
-            if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
+            Creature* pCreature = new Creature;
+            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
                 handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
-                delete creature;
+                delete pCreature;
                 return false;
             }
 
-            creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
-            creature->LoadFromDB(creature->GetDBTableGUIDLow(), map);
-            map->Add(creature);
+            pCreature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
+            pCreature->LoadFromDB(pCreature->GetDBTableGUIDLow(), map);
+            map->Add(pCreature);
 
             if (target)
             {
-                creature->SetDisplayId(target->GetDisplayId());
-                creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+                pCreature->SetDisplayId(target->GetDisplayId());
+                pCreature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
             }
 
             return true;
@@ -877,26 +868,26 @@ public:
             float z         = fields[2].GetFloat();
             uint32 id = VISUAL_WAYPOINT;
 
-            Player* chr = handler->GetSession()->GetPlayer();
+            Player *chr = handler->GetSession()->GetPlayer();
             float o = chr->GetOrientation();
             Map *map = chr->GetMap();
 
-            Creature* creature = new Creature;
-            if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
+            Creature* pCreature = new Creature;
+            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
                 handler->PSendSysMessage(LANG_WAYPOINT_NOTCREATED, id);
-                delete creature;
+                delete pCreature;
                 return false;
             }
 
-            creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
-            creature->LoadFromDB(creature->GetDBTableGUIDLow(), map);
-            map->Add(creature);
+            pCreature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
+            pCreature->LoadFromDB(pCreature->GetDBTableGUIDLow(), map);
+            map->Add(pCreature);
 
             if (target)
             {
-                creature->SetDisplayId(target->GetDisplayId());
-                creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+                pCreature->SetDisplayId(target->GetDisplayId());
+                pCreature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
             }
 
             return true;
@@ -916,8 +907,8 @@ public:
             {
                 Field *fields = result->Fetch();
                 uint32 guid = fields[0].GetUInt32();
-                Creature* creature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(MAKE_NEW_GUID(guid, VISUAL_WAYPOINT, HIGHGUID_UNIT));
-                if (!creature)
+                Creature* pCreature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(MAKE_NEW_GUID(guid, VISUAL_WAYPOINT, HIGHGUID_UNIT));
+                if (!pCreature)
                 {
                     handler->PSendSysMessage(LANG_WAYPOINT_NOTREMOVED, guid);
                     hasError = true;
@@ -925,9 +916,9 @@ public:
                 }
                 else
                 {
-                    creature->CombatStop();
-                    creature->DeleteFromDB();
-                    creature->AddObjectToRemoveList();
+                    pCreature->CombatStop();
+                    pCreature->DeleteFromDB();
+                    pCreature->AddObjectToRemoveList();
                 }
             }
             while (result->NextRow());

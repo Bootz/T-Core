@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: instance_uldaman
-SD%Complete: 99
-SDComment: Need some cosmetics updates when archeadas door are closing (Guardians Waypoints).
-SDCategory: Uldaman
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "uldaman.h"
@@ -176,12 +167,12 @@ class instance_uldaman : public InstanceMapScript
             {
                 for (std::vector<uint64>::const_iterator i = vStoneKeeper.begin(); i != vStoneKeeper.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (!target || !target->isAlive() || target->getFaction() == 14)
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (!pTarget || !pTarget->isAlive() || pTarget->getFaction() == 14)
                         continue;
-                    target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
-                    target->setFaction(14);
-                    target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    pTarget->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+                    pTarget->setFaction(14);
+                    pTarget->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     return;        // only want the first one we find
                 }
                 // if we get this far than all four are dead so open the door
@@ -197,11 +188,11 @@ class instance_uldaman : public InstanceMapScript
 
                 for (std::vector<uint64>::const_iterator i = vArchaedasWallMinions.begin(); i != vArchaedasWallMinions.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (!target || !target->isAlive() || target->getFaction() == 14)
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (!pTarget || !pTarget->isAlive() || pTarget->getFaction() == 14)
                         continue;
-                    archaedas->CastSpell(target, SPELL_AWAKEN_VAULT_WALKER, true);
-                    target->CastSpell(target, SPELL_ARCHAEDAS_AWAKEN, true);
+                    archaedas->CastSpell(pTarget, SPELL_AWAKEN_VAULT_WALKER, true);
+                    pTarget->CastSpell(pTarget, SPELL_ARCHAEDAS_AWAKEN, true);
                     return;        // only want the first one we find
                 }
             }
@@ -212,31 +203,31 @@ class instance_uldaman : public InstanceMapScript
                 // first despawn any aggroed wall minions
                 for (std::vector<uint64>::const_iterator i = vArchaedasWallMinions.begin(); i != vArchaedasWallMinions.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (!target || target->isDead() || target->getFaction() != 14)
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (!pTarget || pTarget->isDead() || pTarget->getFaction() != 14)
                         continue;
-                    target->setDeathState(JUST_DIED);
-                    target->RemoveCorpse();
+                    pTarget->setDeathState(JUST_DIED);
+                    pTarget->RemoveCorpse();
                 }
 
                 // Vault Walkers
                 for (std::vector<uint64>::const_iterator i = vVaultWalker.begin(); i != vVaultWalker.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (!target || target->isDead() || target->getFaction() != 14)
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (!pTarget || pTarget->isDead() || pTarget->getFaction() != 14)
                         continue;
-                    target->setDeathState(JUST_DIED);
-                    target->RemoveCorpse();
+                    pTarget->setDeathState(JUST_DIED);
+                    pTarget->RemoveCorpse();
                 }
 
                 // Earthen Guardians
                 for (std::vector<uint64>::const_iterator i = vEarthenGuardian.begin(); i != vEarthenGuardian.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (!target || target->isDead() || target->getFaction() != 14)
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (!pTarget || pTarget->isDead() || pTarget->getFaction() != 14)
                         continue;
-                    target->setDeathState(JUST_DIED);
-                    target->RemoveCorpse();
+                    pTarget->setDeathState(JUST_DIED);
+                    pTarget->RemoveCorpse();
                 }
             }
 
@@ -269,36 +260,36 @@ class instance_uldaman : public InstanceMapScript
                 // first respawn any aggroed wall minions
                 for (std::vector<uint64>::const_iterator i = vArchaedasWallMinions.begin(); i != vArchaedasWallMinions.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (target && target->isDead())
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (pTarget && pTarget->isDead())
                     {
-                        target->Respawn();
-                        target->GetMotionMaster()->MoveTargetedHome();
-                        SetFrozenState(target);
+                        pTarget->Respawn();
+                        pTarget->GetMotionMaster()->MoveTargetedHome();
+                        SetFrozenState(pTarget);
                     }
                 }
 
                 // Vault Walkers
                 for (std::vector<uint64>::const_iterator i = vVaultWalker.begin(); i != vVaultWalker.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (target && target->isDead())
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (pTarget && pTarget->isDead())
                     {
-                        target->Respawn();
-                        target->GetMotionMaster()->MoveTargetedHome();
-                        SetFrozenState(target);
+                        pTarget->Respawn();
+                        pTarget->GetMotionMaster()->MoveTargetedHome();
+                        SetFrozenState(pTarget);
                     }
                 }
 
                 // Earthen Guardians
                 for (std::vector<uint64>::const_iterator i = vEarthenGuardian.begin(); i != vEarthenGuardian.end(); ++i)
                 {
-                    Creature* target = instance->GetCreature(*i);
-                    if (target && target->isDead())
+                    Creature* pTarget = instance->GetCreature(*i);
+                    if (pTarget && pTarget->isDead())
                     {
-                        target->Respawn();
-                        target->GetMotionMaster()->MoveTargetedHome();
-                        SetFrozenState(target);
+                        pTarget->Respawn();
+                        pTarget->GetMotionMaster()->MoveTargetedHome();
+                        SetFrozenState(pTarget);
                     }
                 }
             }

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -76,7 +74,7 @@ void WorldSession::SendNameQueryOpcodeFromDB(uint64 guid)
             GUID_LOPART(guid)
         );
 
-    _nameQueryCallbacks.insert(lFutureResult);
+    m_nameQueryCallbacks.insert(lFutureResult);
 
 // CharacterDatabase.AsyncPQuery(&WorldSession::SendNameQueryOpcodeFromDBCallBack, GetAccountId(),
 }
@@ -91,7 +89,7 @@ void WorldSession::SendNameQueryOpcodeFromDBCallBack(QueryResult result)
     std::string name = fields[1].GetString();
     uint8 pRace = 0, pGender = 0, pClass = 0;
     if (name == "")
-        name         = GetTrinityString(LANG_NON_EXIST_CHARACTER);
+        name         = GetTrilliumString(LANG_NON_EXIST_CHARACTER);
     else
     {
         pRace        = fields[2].GetUInt8();

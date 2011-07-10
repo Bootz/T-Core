@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -161,6 +159,25 @@ class boss_rotface : public CreatureScript
                 // don't enter combat
             }
 
+            Unit* GetAuraEffectTriggerTarget(uint32 spellId, uint8 /*effIndex*/)
+            {
+                if (spellId == SPELL_SLIME_SPRAY)
+                {
+                    for (std::list<uint64>::iterator itr = summons.begin(); itr != summons.end();)
+                    {
+                        Creature *summon = Unit::GetCreature(*me, *itr);
+                        if (!summon)
+                            summons.erase(itr++);
+                        else if (summon->GetEntry() == NPC_OOZE_SPRAY_STALKER)
+                            return summon;
+                        else
+                            ++itr;
+                    }
+                }
+
+                return NULL;
+            }
+
             void UpdateAI(const uint32 diff)
             {
                 if (!UpdateVictim() || !CheckInRoom())
@@ -178,9 +195,11 @@ class boss_rotface : public CreatureScript
                         case EVENT_SLIME_SPRAY:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                             {
-                                DoSummon(NPC_OOZE_SPRAY_STALKER, *target, 8000, TEMPSUMMON_TIMED_DESPAWN);
+                                Position pos;
+                                target->GetPosition(&pos);
+                                DoSummon(NPC_OOZE_SPRAY_STALKER, pos, 8000, TEMPSUMMON_TIMED_DESPAWN);
                                 Talk(EMOTE_SLIME_SPRAY);
-                                DoCast(me, SPELL_SLIME_SPRAY);
+                                DoCastAOE(SPELL_SLIME_SPRAY);
                             }
                             events.ScheduleEvent(EVENT_SLIME_SPRAY, 20000);
                             break;
@@ -645,7 +664,7 @@ class spell_rotface_unstable_ooze_explosion : public SpellScriptLoader
                 if (!GetTargetUnit())
                     return;
 
-                uint32 triggered_spell_id = GetSpellInfo()->GetEffectTriggerSpell(effIndex);
+                uint32 triggered_spell_id = GetSpellInfo()->GetSpellEffect(effIndex)->EffectTriggerSpell;
 
                 float x, y, z;
                 GetTargetUnit()->GetPosition(x, y, z);

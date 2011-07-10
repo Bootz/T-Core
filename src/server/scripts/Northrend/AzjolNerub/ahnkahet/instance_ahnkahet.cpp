@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,8 +59,9 @@ public:
         uint32 m_auiEncounter[MAX_ENCOUNTER];
         uint32 spheres[2];
 
-        uint8 InitiandCnt;
-        uint8 switchtrigger;
+        uint8 InitiandCnt,
+            switchtrigger,
+            initiandkilled;
 
         std::string str_data;
 
@@ -82,6 +81,7 @@ public:
 
             InitiandCnt = 0;
             switchtrigger = 0;
+            initiandkilled = 0;
             JedogaSacrifices = 0;
             JedogaTarget = 0;
         }
@@ -200,6 +200,8 @@ public:
                                 cr->RemoveCorpse();
                             }
                         }
+                        if (!initiandkilled && instance->IsHeroic())
+                            DoCompleteAchievement(ACHIEV_VOLUNTEER_WORK);
                     }
                     break;
                 case DATA_HERALD_VOLAZJ_EVENT: m_auiEncounter[3] = data; break;
@@ -207,6 +209,7 @@ public:
                 case DATA_SPHERE1_EVENT: spheres[0] = data; break;
                 case DATA_SPHERE2_EVENT: spheres[1] = data; break;
                 case DATA_JEDOGA_TRIGGER_SWITCH: switchtrigger = data; break;
+                case DATA_INITIAND_KILLED: initiandkilled = data; break;
                 case DATA_JEDOGA_RESET_INITIANDS:
                     for (std::set<uint64>::const_iterator itr = InitiandGUIDs.begin(); itr != InitiandGUIDs.end(); ++itr)
                     {
@@ -242,6 +245,7 @@ public:
                     }
                     return 1;
                 case DATA_JEDOGA_TRIGGER_SWITCH: return switchtrigger;
+                case DATA_INITIAND_KILLED: return initiandkilled;
             }
             return 0;
         }

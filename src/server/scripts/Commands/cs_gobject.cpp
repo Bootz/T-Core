@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: gobject_commandscript
-%Complete: 100
-Comment: All gobject related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "GameEventMgr.h"
@@ -141,7 +132,7 @@ public:
             return false;
         }
 
-        Player* chr = handler->GetSession()->GetPlayer();
+        Player *chr = handler->GetSession()->GetPlayer();
         float x = float(chr->GetPositionX());
         float y = float(chr->GetPositionY());
         float z = float(chr->GetPositionZ());
@@ -192,7 +183,7 @@ public:
         if (!charID)
             return false;
 
-        Player* chr = handler->GetSession()->GetPlayer();
+        Player *chr = handler->GetSession()->GetPlayer();
 
         char* spawntime = strtok(NULL, " ");
         uint32 spawntm = 300;
@@ -235,7 +226,7 @@ public:
             else
             {
                 std::string name = cId;
-                WorldDatabase.EscapeString(name);
+                WorldDatabase.escape_string(name);
                 result = WorldDatabase.PQuery(
                     "SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ "
                     "FROM gameobject, gameobject_template WHERE gameobject_template.entry = gameobject.id AND map = %i AND name "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")" ORDER BY order_ ASC LIMIT 1",
@@ -413,7 +404,7 @@ public:
         }
         else
         {
-            Player* chr = handler->GetSession()->GetPlayer();
+            Player *chr = handler->GetSession()->GetPlayer();
             o = chr->GetOrientation();
         }
 
@@ -461,7 +452,7 @@ public:
 
         if (!px)
         {
-            Player* chr = handler->GetSession()->GetPlayer();
+            Player *chr = handler->GetSession()->GetPlayer();
             obj->Relocate(chr->GetPositionX(), chr->GetPositionY(), chr->GetPositionZ(), obj->GetOrientation());
             obj->DestroyForNearbyPlayers();
             obj->UpdateObjectVisibility();
@@ -558,7 +549,7 @@ public:
                 float z = fields[4].GetFloat();
                 uint16 mapid = fields[5].GetUInt16();
 
-                GameObjectTemplate const* gInfo = sObjectMgr->GetGameObjectTemplate(entry);
+                GameObjectTemplate const * gInfo = sObjectMgr->GetGameObjectTemplate(entry);
 
                 if (!gInfo)
                     continue;

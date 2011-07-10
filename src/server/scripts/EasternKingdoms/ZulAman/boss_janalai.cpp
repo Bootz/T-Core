@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Janalai
-SD%Complete: 100
-SDComment:
-SDCategory: Zul'Aman
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulaman.h"
@@ -63,8 +54,7 @@ enum eEnums
     MOB_FIRE_BOMB               = 23920,
 
 // -- Hatcher Spells
-    SPELL_HATCH_EGG             = 42471,   // 43734
-    SPELL_SUMMON_HATCHLING      = 42493,
+    SPELL_HATCH_EGG             = 43734,   // 42471
 
 // -- Hatchling Spells
     SPELL_FLAMEBUFFET           = 43299
@@ -114,9 +104,17 @@ class boss_janalai : public CreatureScript
 
         struct boss_janalaiAI : public ScriptedAI
         {
-            boss_janalaiAI(Creature* c) : ScriptedAI(c)
+            boss_janalaiAI(Creature *c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                pInstance =c->GetInstanceScript();
+
+                //TODO: rewrite
+                /*SpellEntry *TempSpell = GET_SPELL(SPELL_HATCH_EGG);
+                if (TempSpell && TempSpell->EffectImplicitTargetA[0] != 1)
+                {
+                    TempSpell->EffectImplicitTargetA[0] = 1;
+                    TempSpell->EffectImplicitTargetB[0] = 0;
+                }*/
             }
 
             InstanceScript *pInstance;
@@ -173,7 +171,7 @@ class boss_janalai : public CreatureScript
                 DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_JANALAIEVENT, IN_PROGRESS);
@@ -182,11 +180,11 @@ class boss_janalai : public CreatureScript
         //        DoZoneInCombat();
             }
 
-            void DamageDealt(Unit* target, uint32 &damage, DamageEffectType /*damagetype*/)
+            void DamageDealt(Unit *pTarget, uint32 &damage, DamageEffectType /*damagetype*/)
             {
                 if (isFlameBreathing)
                 {
-                    if (!me->HasInArc(M_PI/6, target))
+                    if (!me->HasInArc(M_PI/6, pTarget))
                         damage = 0;
                 }
             }
@@ -248,7 +246,7 @@ class boss_janalai : public CreatureScript
                 }
 
                 //sLog->outError("Eggs %d at middle", templist.size());
-                if (templist.empty())
+                if (!templist.size())
                     return false;
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
@@ -291,7 +289,7 @@ class boss_janalai : public CreatureScript
             {
                 if (BombCount < 40)
                 {
-                    if (Unit* FireBomb = Unit::GetUnit((*me), FireBombGUIDs[BombCount]))
+                    if (Unit *FireBomb = Unit::GetUnit((*me), FireBombGUIDs[BombCount]))
                     {
                         FireBomb->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         DoCast(FireBomb, SPELL_FIRE_BOMB_THROW, true);
@@ -421,11 +419,11 @@ class boss_janalai : public CreatureScript
 
                 if (FireBreathTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         me->AttackStop();
                         me->GetMotionMaster()->Clear();
-                        DoCast(target, SPELL_FLAME_BREATH, false);
+                        DoCast(pTarget, SPELL_FLAME_BREATH, false);
                         me->StopMoving();
                         isFlameBreathing = true;
                     }
@@ -451,11 +449,11 @@ class mob_janalai_firebomb : public CreatureScript
 
         struct mob_janalai_firebombAI : public ScriptedAI
         {
-            mob_janalai_firebombAI(Creature* c) : ScriptedAI(c){}
+            mob_janalai_firebombAI(Creature *c) : ScriptedAI(c){}
 
             void Reset() {}
 
-            void SpellHit(Unit* /*caster*/, const SpellEntry *spell)
+            void SpellHit(Unit * /*caster*/, const SpellEntry *spell)
             {
                 if (spell->Id == SPELL_FIRE_BOMB_THROW)
                     DoCast(me, SPELL_FIRE_BOMB_DUMMY, true);
@@ -487,7 +485,7 @@ class mob_janalai_hatcher : public CreatureScript
 
         struct mob_janalai_hatcherAI : public ScriptedAI
         {
-            mob_janalai_hatcherAI(Creature* c) : ScriptedAI(c)
+            mob_janalai_hatcherAI(Creature *c) : ScriptedAI(c)
             {
                 pInstance =c->GetInstanceScript();
             }
@@ -620,7 +618,7 @@ class mob_janalai_hatchling : public CreatureScript
 
         struct mob_janalai_hatchlingAI : public ScriptedAI
         {
-            mob_janalai_hatchlingAI(Creature* c) : ScriptedAI(c)
+            mob_janalai_hatchlingAI(Creature *c) : ScriptedAI(c)
             {
                 pInstance =c->GetInstanceScript();
             }
@@ -639,7 +637,7 @@ class mob_janalai_hatchling : public CreatureScript
                 me->SetUnitMovementFlags(MOVEMENTFLAG_LEVITATING);
             }
 
-            void EnterCombat(Unit* /*who*/) {/*DoZoneInCombat();*/}
+            void EnterCombat(Unit * /*who*/) {/*DoZoneInCombat();*/}
 
             void UpdateAI(const uint32 diff)
             {
@@ -671,7 +669,11 @@ class mob_janalai_hatchling : public CreatureScript
 class mob_janalai_egg : public CreatureScript
 {
 public:
-    mob_janalai_egg(): CreatureScript("mob_janalai_egg") {}
+
+    mob_janalai_egg()
+        : CreatureScript("mob_janalai_egg")
+    {
+    }
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -680,17 +682,19 @@ public:
 
     struct mob_janalai_eggAI : public ScriptedAI
     {
-        mob_janalai_eggAI(Creature* creature) : ScriptedAI(creature){}
-
+        mob_janalai_eggAI(Creature *c) : ScriptedAI(c){}
         void Reset() {}
+        void EnterCombat(Unit* /*who*/) {}
+        void AttackStart(Unit* /*who*/) {}
+        void MoveInLineOfSight(Unit* /*who*/) {}
+        void UpdateAI(const uint32 /*diff*/) {}
 
-        void UpdateAI(uint32 const /*diff*/) {}
-
-        void SpellHit(Unit* /*caster*/, const SpellEntry* spell)
+        void SpellHit(Unit * /*caster*/, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_HATCH_EGG)
             {
-                DoCast(SPELL_SUMMON_HATCHLING);
+                DoSpawnCreature(MOB_HATCHLING, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
+                me->SetDisplayId(11686);
             }
         }
     };

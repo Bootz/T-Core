@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,7 +31,6 @@ enum Spells
     SPELL_INTENSE_COLD                            = 48094,
     SPELL_INTENSE_COLD_TRIGGERED                  = 48095
 };
-
 enum Yells
 {
     //Yell
@@ -43,11 +40,13 @@ enum Yells
     SAY_DEATH                                     = -1576043,
     SAY_CRYSTAL_NOVA                              = -1576044
 };
-
+enum Achievements
+{
+    ACHIEV_INTENSE_COLD                           = 2036
+};
 enum Misc
 {
-    DATA_INTENSE_COLD                             = 1,
-    DATA_CONTAINMENT_SPHERES                      = 3,
+    DATA_CONTAINMENT_SPHERES                      = 3
 };
 
 class boss_keristrasza : public CreatureScript
@@ -55,27 +54,29 @@ class boss_keristrasza : public CreatureScript
 public:
     boss_keristrasza() : CreatureScript("boss_keristrasza") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_keristraszaAI (creature);
+        return new boss_keristraszaAI (pCreature);
     }
 
     struct boss_keristraszaAI : public ScriptedAI
     {
-        boss_keristraszaAI(Creature* c) : ScriptedAI(c)
+        boss_keristraszaAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        std::list<uint64> intenseColdList;
-        uint64 auiContainmentSphereGUIDs[DATA_CONTAINMENT_SPHERES];
         uint32 uiCrystalfireBreathTimer;
         uint32 uiCrystalChainsCrystalizeTimer;
         uint32 uiTailSweepTimer;
-        bool intenseCold;
         bool bEnrage;
+
+        uint64 auiContainmentSphereGUIDs[DATA_CONTAINMENT_SPHERES];
+
+        uint32 uiCheckIntenseColdTimer;
+        bool bMoreThanTwoIntenseCold; // needed for achievement: Intense Cold(2036)
 
         void Reset()
         {
@@ -84,8 +85,8 @@ public:
             uiTailSweepTimer = 5*IN_MILLISECONDS;
             bEnrage = false;
 
-            intenseCold = true;
-            intenseColdList.clear();
+            uiCheckIntenseColdTimer = 2*IN_MILLISECONDS;
+            bMoreThanTwoIntenseCold = false;
 
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
 
@@ -109,10 +110,14 @@ public:
             DoScriptText(SAY_DEATH, me);
 
             if (pInstance)
+            {
+                if (IsHeroic() && !bMoreThanTwoIntenseCold)
+                    pInstance->DoCompleteAchievement(ACHIEV_INTENSE_COLD);
                 pInstance->SetData(DATA_KERISTRASZA_EVENT, DONE);
+            }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(SAY_SLAY, me);
         }
@@ -126,7 +131,7 @@ public:
             auiContainmentSphereGUIDs[1] = pInstance->GetData64(ORMOROKS_CONTAINMET_SPHERE);
             auiContainmentSphereGUIDs[2] = pInstance->GetData64(TELESTRAS_CONTAINMET_SPHERE);
 
-            GameObject* ContainmentSpheres[DATA_CONTAINMENT_SPHERES];
+            GameObject *ContainmentSpheres[DATA_CONTAINMENT_SPHERES];
 
             for (uint8 i = 0; i < DATA_CONTAINMENT_SPHERES; ++i)
             {
@@ -158,16 +163,29 @@ public:
             }
         }
 
-        void SetGUID(uint64 const& guid, int32 id/* = 0 */)
-        {
-            if (id == DATA_INTENSE_COLD)
-                intenseColdList.push_back(guid);
-        }
-
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
+
+            if (uiCheckIntenseColdTimer < diff && !bMoreThanTwoIntenseCold)
+            {
+                std::list<HostileReference*> ThreatList = me->getThreatManager().getThreatList();
+                for (std::list<HostileReference*>::const_iterator itr = ThreatList.begin(); itr != ThreatList.end(); ++itr)
+                {
+                    Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                    if (!pTarget || pTarget->GetTypeId() != TYPEID_PLAYER)
+                        continue;
+
+                    Aura *AuraIntenseCold = pTarget->GetAura(SPELL_INTENSE_COLD_TRIGGERED);
+                    if (AuraIntenseCold && AuraIntenseCold->GetStackAmount() > 2)
+                    {
+                        bMoreThanTwoIntenseCold = true;
+                        break;
+                    }
+                }
+                uiCheckIntenseColdTimer = 2*IN_MILLISECONDS;
+            } else uiCheckIntenseColdTimer -= diff;
 
             if (!bEnrage && HealthBelowPct(25))
             {
@@ -193,8 +211,8 @@ public:
                 DoScriptText(SAY_CRYSTAL_NOVA, me);
                 if (IsHeroic())
                     DoCast(me, SPELL_CRYSTALIZE);
-                else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_CRYSTAL_CHAINS);
+                else if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_CRYSTAL_CHAINS);
                 uiCrystalChainsCrystalizeTimer = DUNGEON_MODE(30*IN_MILLISECONDS, 11*IN_MILLISECONDS);
             } else uiCrystalChainsCrystalizeTimer -= diff;
 
@@ -209,11 +227,11 @@ class containment_sphere : public GameObjectScript
 public:
     containment_sphere() : GameObjectScript("containment_sphere") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGO)
+    bool OnGossipHello(Player * /*pPlayer*/, GameObject *pGO)
     {
         InstanceScript *pInstance = pGO->GetInstanceScript();
 
-        Creature* pKeristrasza = Unit::GetCreature(*pGO, pInstance ? pInstance->GetData64(DATA_KERISTRASZA) : 0);
+        Creature *pKeristrasza = Unit::GetCreature(*pGO, pInstance ? pInstance->GetData64(DATA_KERISTRASZA) : 0);
         if (pKeristrasza && pKeristrasza->isAlive())
         {
             // maybe these are hacks :(
@@ -227,63 +245,8 @@ public:
 
 };
 
-class spell_intense_cold : public SpellScriptLoader
-{
-    public:
-        spell_intense_cold() : SpellScriptLoader("spell_intense_cold") { }
-
-        class spell_intense_cold_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_intense_cold_AuraScript);
-
-            void HandlePeriodicTick(AuraEffect const* aurEff)
-            {
-                Unit* caster = GetCaster();
-                if (!caster)
-                    return;
-
-                if (aurEff->GetBase()->GetStackAmount() >= 2)
-                    caster->GetAI()->SetGUID(GetTarget()->GetGUID(), DATA_INTENSE_COLD);
-            }
-
-            void Register()
-            {
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_intense_cold_AuraScript::HandlePeriodicTick, EFFECT_1, SPELL_AURA_PERIODIC_DAMAGE);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_intense_cold_AuraScript();
-        }
-};
-
-class achievement_intense_cold : public AchievementCriteriaScript
-{
-    public:
-        achievement_intense_cold() : AchievementCriteriaScript("achievement_intense_cold")
-        {
-        }
-
-        bool OnCheck(Player* player, Unit* target)
-        {
-            if (!target)
-                return false;
-
-            std::list<uint64> intenseColdList = CAST_AI(boss_keristrasza::boss_keristraszaAI, target->ToCreature()->AI())->intenseColdList;
-            if (!intenseColdList.empty())
-                for (std::list<uint64>::iterator itr = intenseColdList.begin(); itr != intenseColdList.end(); ++itr)
-                    if (player->GetGUID() == *itr)
-                        return false;
-
-            return true;
-        }
-};
-
 void AddSC_boss_keristrasza()
 {
     new boss_keristrasza();
     new containment_sphere();
-    new achievement_intense_cold();
-    new spell_intense_cold();
 }

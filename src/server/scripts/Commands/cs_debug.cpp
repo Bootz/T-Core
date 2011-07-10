@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: debug_commandscript
-%Complete: 100
-Comment: All debug related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -58,6 +49,7 @@ public:
             { "equiperror",     SEC_ADMINISTRATOR,  false, &HandleDebugSendEquipErrorCommand,     "", NULL },
             { "largepacket",    SEC_ADMINISTRATOR,  false, &HandleDebugSendLargePacketCommand,    "", NULL },
             { "opcode",         SEC_ADMINISTRATOR,  false, &HandleDebugSendOpcodeCommand,         "", NULL },
+            { "poi",            SEC_ADMINISTRATOR,  false, &HandleDebugSendPoiCommand,            "", NULL },
             { "qpartymsg",      SEC_ADMINISTRATOR,  false, &HandleDebugSendQuestPartyMsgCommand,  "", NULL },
             { "qinvalidmsg",    SEC_ADMINISTRATOR,  false, &HandleDebugSendQuestInvalidMsgCommand, "", NULL },
             { "sellerror",      SEC_ADMINISTRATOR,  false, &HandleDebugSendSellErrorCommand,      "", NULL },
@@ -219,6 +211,32 @@ public:
         return true;
     }
 
+    static bool HandleDebugSendPoiCommand(ChatHandler* handler, const char* args)
+    {
+        if (!*args)
+            return false;
+
+        Player *pPlayer = handler->GetSession()->GetPlayer();
+        Unit* target = handler->getSelectedUnit();
+        if (!target)
+        {
+            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            return true;
+        }
+
+        char* icon_text = strtok((char*)args, " ");
+        char* flags_text = strtok(NULL, " ");
+        if (!icon_text || !flags_text)
+            return false;
+
+        uint32 icon = atol(icon_text);
+        uint32 flags = atol(flags_text);
+
+        sLog->outDetail("Command : POI, NPC = %u, icon = %u flags = %u", target->GetGUIDLow(), icon, flags);
+        pPlayer->PlayerTalkClass->SendPointOfInterest(target->GetPositionX(), target->GetPositionY(), Poi_Icon(icon), flags, 30, "Test POI");
+        return true;
+    }
+
     static bool HandleDebugSendEquipErrorCommand(ChatHandler* handler, const char* args)
     {
         if (!*args)
@@ -251,8 +269,8 @@ public:
 
     static bool HandleDebugSendOpcodeCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Unit* unit = handler->getSelectedUnit();
-        Player* player = NULL;
+        Unit *unit = handler->getSelectedUnit();
+        Player *player = NULL;
         if (!unit || (unit->GetTypeId() != TYPEID_PLAYER))
             player = handler->GetSession()->GetPlayer();
         else
@@ -322,7 +340,7 @@ public:
             }
             else if (type == "appgoguid")
             {
-                GameObject* obj = handler->GetNearbyGameObject();
+                GameObject *obj = handler->GetNearbyGameObject();
                 if (!obj)
                 {
                     handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, 0);
@@ -334,7 +352,7 @@ public:
             }
             else if (type == "goguid")
             {
-                GameObject* obj = handler->GetNearbyGameObject();
+                GameObject *obj = handler->GetNearbyGameObject();
                 if (!obj)
                 {
                     handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, 0);
@@ -394,14 +412,14 @@ public:
 
     static bool HandleDebugAreaTriggersCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player* player = handler->GetSession()->GetPlayer();
-        if (!player->isDebugAreaTriggers)
+        Player* plr = handler->GetSession()->GetPlayer();
+        if (!plr->isDebugAreaTriggers)
         {
             handler->PSendSysMessage(LANG_DEBUG_AREATRIGGER_ON);
-            player->isDebugAreaTriggers = true;
+            plr->isDebugAreaTriggers = true;
         } else {
             handler->PSendSysMessage(LANG_DEBUG_AREATRIGGER_OFF);
-            player->isDebugAreaTriggers = false;
+            plr->isDebugAreaTriggers = false;
         }
         return true;
     }
@@ -491,7 +509,7 @@ public:
                 if (i >= BUYBACK_SLOT_START && i < BUYBACK_SLOT_END)
                     continue;
 
-                if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (Item *item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                 {
                     if (Bag* bag = item->ToBag())
                     {
@@ -511,7 +529,7 @@ public:
             std::vector<Item *> &updateQueue = player->GetItemUpdateQueue();
             for (size_t i = 0; i < updateQueue.size(); ++i)
             {
-                Item* item = updateQueue[i];
+                Item *item = updateQueue[i];
                 if (!item) continue;
 
                 Bag *container = item->GetContainer();
@@ -541,7 +559,7 @@ public:
                 if (i >= BUYBACK_SLOT_START && i < BUYBACK_SLOT_END)
                     continue;
 
-                Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+                Item *item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
                 if (!item) continue;
 
                 if (item->GetSlot() != i)
@@ -653,7 +671,7 @@ public:
 
             for (size_t i = 0; i < updateQueue.size(); ++i)
             {
-                Item* item = updateQueue[i];
+                Item *item = updateQueue[i];
                 if (!item) continue;
 
                 if (item->GetOwnerGUID() != player->GetGUID())
@@ -669,7 +687,7 @@ public:
                 }
 
                 if (item->GetState() == ITEM_REMOVED) continue;
-                Item* test = player->GetItemByPos(item->GetBagSlot(), item->GetSlot());
+                Item *test = player->GetItemByPos(item->GetBagSlot(), item->GetSlot());
 
                 if (test == NULL)
                 {
@@ -734,7 +752,7 @@ public:
         handler->PSendSysMessage("Hostil reference list of %s (guid %u)", target->GetName(), target->GetGUIDLow());
         while (ref)
         {
-            if (Unit* unit = ref->getSource()->getOwner())
+            if (Unit * unit = ref->getSource()->getOwner())
             {
                 ++cnt;
                 handler->PSendSysMessage("   %u.   %s   (guid %u)  - threat %f", cnt, unit->GetName(), unit->GetGUIDLow(), ref->getThreat());
@@ -830,7 +848,7 @@ public:
         if (!ve)
             return false;
 
-        Creature* v = new Creature;
+        Creature *v = new Creature;
 
         Map *map = handler->GetSession()->GetPlayer()->GetMap();
 
@@ -879,7 +897,7 @@ public:
         uint32 guid = (uint32)atoi(e);
         uint32 index = (uint32)atoi(f);
 
-        Item* i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
+        Item *i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
 
         if (!i)
             return false;
@@ -910,7 +928,7 @@ public:
         uint32 index = (uint32)atoi(f);
         uint32 value = (uint32)atoi(g);
 
-        Item* i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
+        Item *i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
 
         if (!i)
             return false;
@@ -934,7 +952,7 @@ public:
 
         uint32 guid = (uint32)atoi(e);
 
-        Item* i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
+        Item *i = handler->GetSession()->GetPlayer()->GetItemByGuid(MAKE_NEW_GUID(guid, 0, HIGHGUID_ITEM));
 
         if (!i)
             return false;

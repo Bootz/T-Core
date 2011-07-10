@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Princess_Theradras
-SD%Complete: 100
-SDComment:
-SDCategory: Maraudon
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define SPELL_DUSTFIELD             21909
@@ -36,14 +27,14 @@ class boss_princess_theradras : public CreatureScript
 public:
     boss_princess_theradras() : CreatureScript("boss_princess_theradras") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ptheradrasAI (creature);
+        return new boss_ptheradrasAI (pCreature);
     }
 
     struct boss_ptheradrasAI : public ScriptedAI
     {
-        boss_ptheradrasAI(Creature* c) : ScriptedAI(c) {}
+        boss_ptheradrasAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 Dustfield_Timer;
         uint32 Boulder_Timer;
@@ -58,7 +49,7 @@ public:
             RepulsiveGaze_Timer = 23000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -82,10 +73,10 @@ public:
             //Boulder_Timer
             if (Boulder_Timer <= diff)
             {
-                Unit* target = NULL;
-                target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (target)
-                    DoCast(target, SPELL_BOULDER);
+                Unit *pTarget = NULL;
+                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (pTarget)
+                    DoCast(pTarget, SPELL_BOULDER);
                 Boulder_Timer = 10000;
             } else Boulder_Timer -= diff;
 

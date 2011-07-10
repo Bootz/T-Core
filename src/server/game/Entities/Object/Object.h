@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -49,14 +47,15 @@
 
 enum TypeMask
 {
-    TYPEMASK_OBJECT         = 0x0001,
-    TYPEMASK_ITEM           = 0x0002,
-    TYPEMASK_CONTAINER      = 0x0006,                       // TYPEMASK_ITEM | 0x0004
-    TYPEMASK_UNIT           = 0x0008,   //creature or player
-    TYPEMASK_PLAYER         = 0x0010,
-    TYPEMASK_GAMEOBJECT     = 0x0020,
-    TYPEMASK_DYNAMICOBJECT  = 0x0040,
-    TYPEMASK_CORPSE         = 0x0080,
+    TYPEMASK_OBJECT         = 0x00000001,
+    TYPEMASK_ITEM           = 0x00000002,
+    TYPEMASK_CONTAINER      = 0x00000006,                       // TYPEMASK_ITEM | 0x0004
+    TYPEMASK_UNIT           = 0x00000008,                       //creature or player
+    TYPEMASK_PLAYER         = 0x00000010,
+    TYPEMASK_GAMEOBJECT     = 0x00000020,
+    TYPEMASK_DYNAMICOBJECT  = 0x00000040,
+    TYPEMASK_CORPSE         = 0x00000080,
+    TYPEMASK_IN_GUILD       = 0x00010000,                       //only player with guild
     TYPEMASK_SEER           = TYPEMASK_UNIT | TYPEMASK_DYNAMICOBJECT
 };
 
@@ -166,7 +165,6 @@ class Object
 
         void BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) const;
         void BuildOutOfRangeUpdateBlock(UpdateData *data) const;
-        void BuildMovementUpdateBlock(UpdateData * data, uint32 flags = 0) const;
 
         virtual void DestroyForPlayer(Player *target, bool anim = false) const;
 
@@ -309,6 +307,8 @@ class Object
         }
 
         void ClearUpdateMask(bool remove);
+
+        bool LoadValues(const char* data);
 
         uint16 GetValuesCount() const { return m_valuesCount; }
 
@@ -469,7 +469,7 @@ struct Position
     bool IsInDist(const Position *pos, float dist) const
         { return GetExactDistSq(pos) < dist * dist; }
     bool HasInArc(float arcangle, const Position *pos) const;
-    bool HasInLine(const Unit* target, float distance, float width) const;
+    bool HasInLine(const Unit *target, float distance, float width) const;
     std::string ToString() const;
 };
 ByteBuffer &operator>>(ByteBuffer& buf, Position::PositionXYZOStreamer const & streamer);

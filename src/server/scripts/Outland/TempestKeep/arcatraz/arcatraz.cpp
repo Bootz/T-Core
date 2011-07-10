@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Arcatraz
-SD%Complete: 60
-SDComment: Warden Mellichar, event controller for Skyriss event. Millhouse Manastorm. TODO: make better combatAI for Millhouse.
-SDCategory: Tempest Keep, The Arcatraz
-EndScriptData */
 
 /* ContentData
 npc_millhouse_manastorm
@@ -77,9 +68,9 @@ class npc_millhouse_manastorm : public CreatureScript
         }
         struct npc_millhouse_manastormAI : public ScriptedAI
         {
-            npc_millhouse_manastormAI(Creature* creature) : ScriptedAI(creature)
+            npc_millhouse_manastormAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -112,25 +103,25 @@ class npc_millhouse_manastorm : public CreatureScript
                 }
             }
 
-            void AttackStart(Unit* who)
+            void AttackStart(Unit* pWho)
             {
-                if (me->Attack(who, true))
+                if (me->Attack(pWho, true))
                 {
-                    me->AddThreat(who, 0.0f);
-                    me->SetInCombatWith(who);
-                    who->SetInCombatWith(me);
-                    me->GetMotionMaster()->MoveChase(who, 25.0f);
+                    me->AddThreat(pWho, 0.0f);
+                    me->SetInCombatWith(pWho);
+                    pWho->SetInCombatWith(me);
+                    me->GetMotionMaster()->MoveChase(pWho, 25.0f);
                 }
             }
 
-            void EnterCombat(Unit* /*who*/){}
+            void EnterCombat(Unit * /*who*/){}
 
-            void KilledUnit(Unit* /*victim*/)
+            void KilledUnit(Unit * /*victim*/)
             {
                 DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
             }
 
-            void JustDied(Unit* /*victim*/)
+            void JustDied(Unit * /*victim*/)
             {
                 DoScriptText(SAY_DEATH, me);
 
@@ -281,9 +272,9 @@ class npc_warden_mellichar : public CreatureScript
         }
         struct npc_warden_mellicharAI : public ScriptedAI
         {
-            npc_warden_mellicharAI(Creature* creature) : ScriptedAI(creature)
+            npc_warden_mellicharAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -311,7 +302,7 @@ class npc_warden_mellichar : public CreatureScript
 
             void AttackStart(Unit* /*who*/) {}
 
-            void MoveInLineOfSight(Unit* who)
+            void MoveInLineOfSight(Unit *who)
             {
                 if (IsRunning)
                     return;
@@ -329,7 +320,7 @@ class npc_warden_mellichar : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(YELL_INTRO1, me);
                 DoCast(me, SPELL_BUBBLE_VISUAL);
@@ -537,7 +528,7 @@ class mob_zerekethvoidzone : public CreatureScript
         }
         struct mob_zerekethvoidzoneAI : public ScriptedAI
         {
-            mob_zerekethvoidzoneAI(Creature* creature) : ScriptedAI(creature) {}
+            mob_zerekethvoidzoneAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
             void Reset()
             {

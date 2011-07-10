@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: achievement_commandscript
-%Complete: 100
-Comment: All achievement related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "Chat.h"
@@ -70,7 +61,7 @@ public:
         }
 
         if (AchievementEntry const* pAE = GetAchievementStore()->LookupEntry(achievementId))
-            target->CompletedAchievement(pAE);
+            target->CompletedAchievement(pAE, true);
 
         return true;
     }

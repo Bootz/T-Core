@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,7 +39,7 @@ public:
 
     struct boss_galvangarAI : public ScriptedAI
     {
-        boss_galvangarAI(Creature* c) : ScriptedAI(c) {}
+        boss_galvangarAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiCleaveTimer;
         uint32 uiFrighteningShoutTimer;
@@ -60,7 +58,7 @@ public:
             uiResetTimer                      = 5*IN_MILLISECONDS;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(YELL_AGGRO, me);
         }
@@ -120,7 +118,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new boss_galvangarAI(creature);
     }

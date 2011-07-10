@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,8 +32,8 @@
 #include "RealmList.h"
 #include "RealmAcceptor.h"
 
-#ifndef _REALM_CONFIG
-# define _REALM_CONFIG  "authserver.conf"
+#ifndef _AUTHSERVER_CONFIG
+# define _AUTHSERVER_CONFIG  "authserver.conf"
 #endif
 
 bool StartDB();
@@ -74,7 +72,7 @@ extern int main(int argc, char **argv)
 {
     sLog->SetLogDB(false);
     // Command line parsing to get the configuration file name
-    char const *cfg_file = _REALM_CONFIG;
+    char const *cfg_file = _AUTHSERVER_CONFIG;
     int c = 1;
     while(c < argc)
     {
@@ -103,13 +101,6 @@ extern int main(int argc, char **argv)
     sLog->outString("%s (authserver)", _FULLVERSION);
     sLog->outString("<Ctrl-C> to stop.\n");
     sLog->outString("Using configuration file %s.", cfg_file);
-    
-    sLog->outString("===========================================================" );
-    sLog->outString(" TrilliumEMU" );
-    sLog->outString(" Welcome to TrilliumEMU" );
-    sLog->outString(" The project is based on TrinityCore" );
-    sLog->outString(" http://www.trilliumemu.com" );
-    sLog->outString("===========================================================\n" );    
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 

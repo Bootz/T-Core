@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: event_commandscript
-%Complete: 100
-Comment: All event related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "GameEventMgr.h"
@@ -58,7 +49,7 @@ public:
         GameEventMgr::GameEventDataMap const& events = sGameEventMgr->GetEventMap();
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
 
-        char const* active = handler->GetTrinityString(LANG_ACTIVE);
+        char const* active = handler->GetTrilliumString(LANG_ACTIVE);
 
         for (GameEventMgr::ActiveEvents::const_iterator itr = activeEvents.begin(); itr != activeEvents.end(); ++itr)
         {
@@ -111,7 +102,7 @@ public:
 
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
         bool active = activeEvents.find(event_id) != activeEvents.end();
-        char const* activeStr = active ? handler->GetTrinityString(LANG_ACTIVE) : "";
+        char const* activeStr = active ? handler->GetTrilliumString(LANG_ACTIVE) : "";
 
         std::string startTimeStr = TimeToTimestampStr(eventData.start);
         std::string endTimeStr = TimeToTimestampStr(eventData.end);

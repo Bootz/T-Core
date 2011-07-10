@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+
+ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,14 +61,14 @@ class boss_gurtogg_bloodboil : public CreatureScript
 public:
     boss_gurtogg_bloodboil() : CreatureScript("boss_gurtogg_bloodboil") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_gurtogg_bloodboilAI (creature);
+        return new boss_gurtogg_bloodboilAI (pCreature);
     }
 
     struct boss_gurtogg_bloodboilAI : public ScriptedAI
     {
-        boss_gurtogg_bloodboilAI(Creature* c) : ScriptedAI(c)
+        boss_gurtogg_bloodboilAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -118,7 +118,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoZoneInCombat();
             DoScriptText(SAY_AGGRO, me);
@@ -126,12 +126,12 @@ public:
                 pInstance->SetData(DATA_GURTOGGBLOODBOILEVENT, IN_PROGRESS);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_GURTOGGBLOODBOILEVENT, DONE);
@@ -145,17 +145,17 @@ public:
             // Get the Threat List
             std::list<HostileReference *> m_threatlist = me->getThreatManager().getThreatList();
 
-            if (m_threatlist.empty()) // He doesn't have anyone in his threatlist, useless to continue
+            if (!m_threatlist.size()) // He doesn't have anyone in his threatlist, useless to continue
                 return;
 
-            std::list<Unit* > targets;
+            std::list<Unit *> targets;
             std::list<HostileReference *>::const_iterator itr = m_threatlist.begin();
             for (; itr!= m_threatlist.end(); ++itr)             //store the threat list in a different container
             {
-                Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                                                                 //only on alive players
-                if (target && target->isAlive() && target->GetTypeId() == TYPEID_PLAYER)
-                    targets.push_back(target);
+                if (pTarget && pTarget->isAlive() && pTarget->GetTypeId() == TYPEID_PLAYER)
+                    targets.push_back(pTarget);
             }
 
             //Sort the list of players
@@ -167,18 +167,18 @@ public:
             /*SpellEntry const *spellInfo = GetSpellStore()->LookupEntry(SPELL_BLOODBOIL);
             if (spellInfo)
             {
-                for (std::list<Unit* >::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
+                for (std::list<Unit *>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
                 {
-                    Unit* target = *itr;
-                    if (!target) return;
+                    Unit *pTarget = *itr;
+                    if (!pTarget) return;
                     for (uint32 i = 0; i<3; ++i)
                     {
-                        uint8 eff = spellInfo->Effect[i];
+                        uint8 eff = spellInfo->GetSpellEffect(i);
                         if (eff >= TOTAL_SPELL_EFFECTS)
                             continue;
 
-                        Aura *Aur = new Aura(spellInfo, i, target, target, target);
-                        target->AddAura(Aur);
+                        Aura *Aur = new Aura(spellInfo, i, pTarget, pTarget, pTarget);
+                        pTarget->AddAura(Aur);
                     }
                 }
             }*/
@@ -229,8 +229,8 @@ public:
                 {
                     DoCast(me->getVictim(), SPELL_BEWILDERING_STRIKE);
                     float mt_threat = DoGetThreat(me->getVictim());
-                    if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
-                        me->AddThreat(target, mt_threat);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
+                        me->AddThreat(pTarget, mt_threat);
                     BewilderingStrikeTimer = 20000;
                 } else BewilderingStrikeTimer -= diff;
 
@@ -278,26 +278,26 @@ public:
             {
                 if (Phase1)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                    if (target && target->isAlive())
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    if (pTarget && pTarget->isAlive())
                     {
                         Phase1 = false;
 
-                        TargetThreat = DoGetThreat(target);
-                        TargetGUID = target->GetGUID();
-                        target->CastSpell(me, SPELL_TAUNT_GURTOGG, true);
-                        if (DoGetThreat(target))
-                            DoModifyThreatPercent(target, -100);
-                        me->AddThreat(target, 50000000.0f);
+                        TargetThreat = DoGetThreat(pTarget);
+                        TargetGUID = pTarget->GetGUID();
+                        pTarget->CastSpell(me, SPELL_TAUNT_GURTOGG, true);
+                        if (DoGetThreat(pTarget))
+                            DoModifyThreatPercent(pTarget, -100);
+                        me->AddThreat(pTarget, 50000000.0f);
                         me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
                         me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
                                                                 // If VMaps are disabled, this spell can call the whole instance
                         DoCast(me, SPELL_INSIGNIFIGANCE, true);
-                        DoCast(target, SPELL_FEL_RAGE_TARGET, true);
-                        DoCast(target, SPELL_FEL_RAGE_2, true);
+                        DoCast(pTarget, SPELL_FEL_RAGE_TARGET, true);
+                        DoCast(pTarget, SPELL_FEL_RAGE_2, true);
                         /* These spells do not work, comment them out for now.
-                        DoCast(target, SPELL_FEL_RAGE_2, true);
-                        DoCast(target, SPELL_FEL_RAGE_3, true);*/
+                        DoCast(pTarget, SPELL_FEL_RAGE_2, true);
+                        DoCast(pTarget, SPELL_FEL_RAGE_3, true);*/
 
                         //Cast this without triggered so that it appears in combat logs and shows visual.
                         DoCast(me, SPELL_FEL_RAGE_SELF);

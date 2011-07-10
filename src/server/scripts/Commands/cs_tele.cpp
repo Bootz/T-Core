@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: tele_commandscript
-%Complete: 100
-Comment: All tele related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -59,7 +50,7 @@ public:
         if (!*args)
             return false;
 
-        Player* player = handler->GetSession()->GetPlayer();
+        Player *player = handler->GetSession()->GetPlayer();
         if (!player)
             return false;
 
@@ -175,7 +166,7 @@ public:
 
             std::string nameLink = handler->playerLink(target_name);
 
-            handler->PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), handler->GetTrinityString(LANG_OFFLINE), tele->name.c_str());
+            handler->PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), handler->GetTrilliumString(LANG_OFFLINE), tele->name.c_str());
             Player::SavePositionInDB(tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation,
                 sMapMgr->GetZoneId(tele->mapId, tele->position_x, tele->position_y, tele->position_z), target_guid);
         }
@@ -189,7 +180,7 @@ public:
         if (!*args)
             return false;
 
-        Player* player = handler->getSelectedPlayer();
+        Player *player = handler->getSelectedPlayer();
         if (!player)
         {
             handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
@@ -210,7 +201,7 @@ public:
             return false;
         }
 
-        MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
+        MapEntry const * map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
             handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);
@@ -230,7 +221,7 @@ public:
 
         for (GroupReference *itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            Player* pl = itr->getSource();
+            Player *pl = itr->getSource();
 
             if (!pl || !pl->GetSession())
                 continue;
@@ -291,7 +282,7 @@ public:
             return false;
         }
 
-        MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
+        MapEntry const * map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
             handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);

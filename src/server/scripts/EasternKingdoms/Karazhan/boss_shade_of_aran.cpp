@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Shade_of_Aran
-SD%Complete: 95
-SDComment: Flame wreath missing cast animation, mods won't triggere.
-SDCategory: Karazhan
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ScriptedSimpleAI.h"
@@ -87,14 +78,14 @@ class boss_shade_of_aran : public CreatureScript
 public:
     boss_shade_of_aran() : CreatureScript("boss_shade_of_aran") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_aranAI (creature);
+        return new boss_aranAI (pCreature);
     }
 
     struct boss_aranAI : public ScriptedAI
     {
-        boss_aranAI(Creature* c) : ScriptedAI(c)
+        boss_aranAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -158,12 +149,12 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_KILL1, SAY_KILL2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -174,7 +165,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
 
@@ -196,10 +187,10 @@ public:
             //store the threat list in a different container
             for (std::list<HostileReference *>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
             {
-                Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                 //only on alive players
-                if (target && target->isAlive() && target->GetTypeId() == TYPEID_PLAYER)
-                    targets.push_back(target);
+                if (pTarget && pTarget->isAlive() && pTarget->GetTypeId() == TYPEID_PLAYER)
+                    targets.push_back(pTarget);
             }
 
             //cut down to size if we have more than 3 targets
@@ -310,8 +301,8 @@ public:
             {
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (!target)
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (!pTarget)
                         return;
 
                     uint32 Spells[3];
@@ -338,7 +329,7 @@ public:
                     if (AvailableSpells)
                     {
                         CurrentNormalSpell = Spells[rand() % AvailableSpells];
-                        DoCast(target, CurrentNormalSpell);
+                        DoCast(pTarget, CurrentNormalSpell);
                     }
                 }
                 NormalCastTimer = 1000;
@@ -352,8 +343,8 @@ public:
                         DoCast(me, SPELL_AOE_CS);
                         break;
                     case 1:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            DoCast(target, SPELL_CHAINSOFICE);
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(pTarget, SPELL_CHAINSOFICE);
                         break;
                 }
                 SecondarySpellTimer = urand(5000, 20000);
@@ -517,14 +508,14 @@ class mob_aran_elemental : public CreatureScript
 public:
     mob_aran_elemental() : CreatureScript("mob_aran_elemental") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new water_elementalAI (creature);
+        return new water_elementalAI (pCreature);
     }
 
     struct water_elementalAI : public ScriptedAI
     {
-        water_elementalAI(Creature* c) : ScriptedAI(c) {}
+        water_elementalAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 CastTimer;
 
@@ -556,10 +547,10 @@ class mob_shadow_of_aran : public CreatureScript
 public:
     mob_shadow_of_aran() : CreatureScript("mob_shadow_of_aran") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        sLog->outString("TSCR: Convert simpleAI script for Creature Entry %u to ACID", creature->GetEntry());
-        SimpleAI* ai = new SimpleAI (creature);
+        sLog->outString("TSCR: Convert simpleAI script for Creature Entry %u to ACID", pCreature->GetEntry());
+        SimpleAI* ai = new SimpleAI (pCreature);
 
         ai->Spell[0].Enabled = true;
         ai->Spell[0].Spell_Id = SPELL_SHADOW_PYRO;

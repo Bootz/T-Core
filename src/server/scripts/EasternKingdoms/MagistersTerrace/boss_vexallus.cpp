@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Vexallus
-SD%Complete: 90
-SDComment: Heroic and Normal support. Needs further testing.
-SDCategory: Magister's Terrace
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "magisters_terrace.h"
@@ -65,14 +56,14 @@ class boss_vexallus : public CreatureScript
 public:
     boss_vexallus() : CreatureScript("boss_vexallus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_vexallusAI (creature);
+        return new boss_vexallusAI (pCreature);
     };
 
     struct boss_vexallusAI : public ScriptedAI
     {
-        boss_vexallusAI(Creature* c) : ScriptedAI(c)
+        boss_vexallusAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -97,18 +88,18 @@ public:
                 pInstance->SetData(DATA_VEXALLUS_EVENT, NOT_STARTED);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(SAY_KILL, me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_VEXALLUS_EVENT, DONE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
 
@@ -116,9 +107,9 @@ public:
                 pInstance->SetData(DATA_VEXALLUS_EVENT, IN_PROGRESS);
         }
 
-        void JustSummoned(Creature* summoned)
+        void JustSummoned(Creature *summoned)
         {
-            if (Unit* temp = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (Unit *temp = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 summoned->GetMotionMaster()->MoveFollow(temp, 0, 0);
 
             //spells are SUMMON_TYPE_GUARDIAN, so using setOwner should be ok
@@ -164,17 +155,17 @@ public:
 
                 if (ChainLightningTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_CHAIN_LIGHTNING);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, SPELL_CHAIN_LIGHTNING);
 
                     ChainLightningTimer = 8000;
                 } else ChainLightningTimer -= diff;
 
                 if (ArcaneShockTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    if (target)
-                        DoCast(target, SPELL_ARCANE_SHOCK);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_ARCANE_SHOCK);
 
                     ArcaneShockTimer = 8000;
                 } else ArcaneShockTimer -= diff;
@@ -200,29 +191,29 @@ class mob_pure_energy : public CreatureScript
 public:
     mob_pure_energy() : CreatureScript("mob_pure_energy") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_pure_energyAI (creature);
+        return new mob_pure_energyAI (pCreature);
     };
 
     struct mob_pure_energyAI : public ScriptedAI
     {
-        mob_pure_energyAI(Creature* c) : ScriptedAI(c) {}
+        mob_pure_energyAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset() {}
 
         void JustDied(Unit* slayer)
         {
-            if (Unit* temp = me->GetOwner())
+            if (Unit *temp = me->GetOwner())
             {
                 if (temp && temp->isAlive())
                     slayer->CastSpell(slayer, SPELL_ENERGY_FEEDBACK, true, 0, 0, temp->GetGUID());
             }
         }
 
-        void EnterCombat(Unit* /*who*/) {}
-        void MoveInLineOfSight(Unit* /*who*/) {}
-        void AttackStart(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
+        void MoveInLineOfSight(Unit * /*who*/) {}
+        void AttackStart(Unit * /*who*/) {}
     };
 
 };

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Baron_Geddon
-SD%Complete: 100
-SDComment:
-SDCategory: Molten Core
-EndScriptData */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -53,7 +44,7 @@ class boss_baron_geddon : public CreatureScript
 
         struct boss_baron_geddonAI : public BossAI
         {
-            boss_baron_geddonAI(Creature* creature) : BossAI(creature, BOSS_BARON_GEDDON)
+            boss_baron_geddonAI(Creature *pCreature) : BossAI(pCreature, BOSS_BARON_GEDDON)
             {
             }
 
@@ -111,9 +102,9 @@ class boss_baron_geddon : public CreatureScript
             }
         };
 
-        CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* pCreature) const
         {
-            return new boss_baron_geddonAI (creature);
+            return new boss_baron_geddonAI (pCreature);
         }
 };
 

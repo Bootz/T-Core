@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_QUEST_H
-#define TRINITYCORE_QUEST_H
+#ifndef TRILLIUM_QUEST_H
+#define TRILLIUM_QUEST_H
 
 #include "Define.h"
 #include "DatabaseEnv.h"
@@ -145,7 +143,7 @@ enum __QuestFlags
     QUEST_FLAGS_OBJ_TEXT       = 0x00040000,                // use Objective text as Complete text
     QUEST_FLAGS_AUTO_ACCEPT    = 0x00080000,                // The client recognizes this flag as auto-accept. However, NONE of the current quests (3.3.5a) have this flag. Maybe blizz used to use it, or will use it in the future.
 
-    // Trinity flags for set SpecialFlags in DB if required but used only at server
+    // Trillium flags for set SpecialFlags in DB if required but used only at server
     QUEST_TRILLIUM_FLAGS_REPEATABLE           = 0x00100000,   // Set by 1 in SpecialFlags from DB
     QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT = 0x00200000,   // Set by 2 in SpecialFlags from DB (if reequired area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script)
     QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT          = 0x00400000,  // Set by 4 in SpecialFlags in DB if the quest is to be auto-accepted.
@@ -153,7 +151,7 @@ enum __QuestFlags
 
     QUEST_TRILLIUM_FLAGS_DB_ALLOWED = 0xFFFFF | QUEST_TRILLIUM_FLAGS_REPEATABLE | QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT | QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT | QUEST_TRILLIUM_FLAGS_DF_QUEST,
 
-    // Trinity flags for internal use only
+    // Trillium flags for internal use only
     QUEST_TRILLIUM_FLAGS_DELIVER              = 0x04000000,   // Internal flag computed only
     QUEST_TRILLIUM_FLAGS_SPEAKTO              = 0x08000000,   // Internal flag computed only
     QUEST_TRILLIUM_FLAGS_KILL_OR_CAST         = 0x10000000,   // Internal flag computed only
@@ -244,14 +242,14 @@ class Quest
         uint32 GetCompleteEmote() const { return CompleteEmote; }
         uint32 GetQuestStartScript() const { return QuestStartScript; }
         uint32 GetQuestCompleteScript() const { return QuestCompleteScript; }
-        bool   IsRepeatable() const { return QuestFlags & QUEST_FLAGS_REPEATABLE; }
+        bool   IsRepeatable() const { return QuestFlags & QUEST_TRILLIUM_FLAGS_REPEATABLE; }
         bool   IsAutoComplete() const { return QuestMethod ? false : true; }
         uint32 GetFlags() const { return QuestFlags; }
         bool   IsDaily() const { return QuestFlags & QUEST_FLAGS_DAILY; }
         bool   IsWeekly() const { return QuestFlags & QUEST_FLAGS_WEEKLY; }
         bool   IsDailyOrWeekly() const { return QuestFlags & (QUEST_FLAGS_DAILY | QUEST_FLAGS_WEEKLY); }
         bool   IsAutoAccept() const { return QuestFlags & QUEST_FLAGS_AUTO_ACCEPT; }
-        bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25 || Type == QUEST_TYPE_PVP; }
+        bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25; }
         bool   IsAllowedInRaid() const;
         bool   IsDFQuest() const { return QuestFlags & QUEST_TRILLIUM_FLAGS_DF_QUEST; }
         uint32 CalculateHonorGain(uint8 level) const;

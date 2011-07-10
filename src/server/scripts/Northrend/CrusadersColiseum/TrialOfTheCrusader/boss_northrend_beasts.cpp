@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: northrend_beasts
-SD%Complete: 90%
-SDComment: based on /dev/rsa
-SDCategory:
-EndScriptData */
 
 // Known bugs:
 // Gormok - Not implemented as a vehicle
@@ -116,16 +107,16 @@ class boss_gormok : public CreatureScript
 public:
     boss_gormok() : CreatureScript("boss_gormok") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_gormokAI(creature);
+        return new boss_gormokAI(pCreature);
     }
 
     struct boss_gormokAI : public ScriptedAI
     {
-        boss_gormokAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+        boss_gormokAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -151,7 +142,7 @@ public:
             Summons.DespawnAll();
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_NORTHREND_BEASTS, GORMOK_DONE);
@@ -164,7 +155,7 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             me->SetInCombatWithZone();
             m_pInstance->SetData(TYPE_NORTHREND_BEASTS, GORMOK_IN_PROGRESS);
@@ -231,16 +222,16 @@ class mob_snobold_vassal : public CreatureScript
 public:
     mob_snobold_vassal() : CreatureScript("mob_snobold_vassal") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_snobold_vassalAI(creature);
+        return new mob_snobold_vassalAI(pCreature);
     }
 
     struct mob_snobold_vassalAI : public ScriptedAI
     {
-        mob_snobold_vassalAI(Creature* creature) : ScriptedAI(creature)
+        mob_snobold_vassalAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
             if (m_pInstance)
                 m_pInstance->SetData(DATA_SNOBOLD_COUNT, INCREASE);
         }
@@ -267,11 +258,11 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit *pWho)
         {
-            m_uiTargetGUID = who->GetGUID();
-            me->TauntApply(who);
-            DoCast(who, SPELL_SNOBOLLED);
+            m_uiTargetGUID = pWho->GetGUID();
+            me->TauntApply(pWho);
+            DoCast(pWho, SPELL_SNOBOLLED);
         }
 
         void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
@@ -293,11 +284,11 @@ public:
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
-            if (Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID))
-                if (target->isAlive())
-                    target->RemoveAurasDueToSpell(SPELL_SNOBOLLED);
+            if (Unit *pTarget = Unit::GetPlayer(*me, m_uiTargetGUID))
+                if (pTarget->isAlive())
+                    pTarget->RemoveAurasDueToSpell(SPELL_SNOBOLLED);
             if (m_pInstance)
                 m_pInstance->SetData(DATA_SNOBOLD_COUNT, DECREASE);
         }
@@ -307,9 +298,9 @@ public:
             if (m_bTargetDied || !UpdateVictim())
                 return;
 
-            if (Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID))
+            if (Unit* pTarget = Unit::GetPlayer(*me, m_uiTargetGUID))
             {
-                if (!target->isAlive())
+                if (!pTarget->isAlive())
                 {
                     if (m_pInstance)
                     {
@@ -331,24 +322,24 @@ public:
 
             if (m_uiFireBombTimer < uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_FIRE_BOMB);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_FIRE_BOMB);
                 m_uiFireBombTimer = 20000;
             }
             else m_uiFireBombTimer -= uiDiff;
 
             if (m_uiBatterTimer < uiDiff)
             {
-                if (Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID))
-                    DoCast(target, SPELL_BATTER);
+                if (Unit *pTarget = Unit::GetPlayer(*me, m_uiTargetGUID))
+                    DoCast(pTarget, SPELL_BATTER);
                 m_uiBatterTimer = 10000;
             }
             else m_uiBatterTimer -= uiDiff;
 
             if (m_uiHeadCrackTimer < uiDiff)
             {
-                if (Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID))
-                    DoCast(target, SPELL_HEAD_CRACK);
+                if (Unit *pTarget = Unit::GetPlayer(*me, m_uiTargetGUID))
+                    DoCast(pTarget, SPELL_HEAD_CRACK);
                 m_uiHeadCrackTimer = 35000;
             }
             else m_uiHeadCrackTimer -= uiDiff;
@@ -377,7 +368,7 @@ struct boss_jormungarAI : public ScriptedAI
         sweepTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
     }
 
-    void JustDied(Unit* /*killer*/)
+    void JustDied(Unit* /*pKiller*/)
     {
         if (instanceScript)
         {
@@ -404,16 +395,16 @@ struct boss_jormungarAI : public ScriptedAI
         me->DespawnOrUnsummon();
     }
 
-    void KilledUnit(Unit* who)
+    void KilledUnit(Unit *pWho)
     {
-        if (who->GetTypeId() == TYPEID_PLAYER)
+        if (pWho->GetTypeId() == TYPEID_PLAYER)
         {
             if (instanceScript)
                 instanceScript->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
         }
     }
 
-    void EnterCombat(Unit* /*who*/)
+    void EnterCombat(Unit* /*pWho*/)
     {
         me->SetInCombatWithZone();
         if (instanceScript)
@@ -502,8 +493,8 @@ struct boss_jormungarAI : public ScriptedAI
             case 4: // Stationary
                 if (sprayTimer <= uiDiff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, spraySpell);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, spraySpell);
                     sprayTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
                 } else sprayTimer -= uiDiff;
 
@@ -578,7 +569,7 @@ class boss_acidmaw : public CreatureScript
 
     struct boss_acidmawAI : public boss_jormungarAI
     {
-        boss_acidmawAI(Creature* creature) : boss_jormungarAI(creature) { }
+        boss_acidmawAI(Creature* pCreature) : boss_jormungarAI(pCreature) { }
 
         void Reset()
         {
@@ -610,7 +601,7 @@ public:
 
     struct boss_dreadscaleAI : public boss_jormungarAI
     {
-        boss_dreadscaleAI(Creature* creature) : boss_jormungarAI(creature) { }
+        boss_dreadscaleAI(Creature* pCreature) : boss_jormungarAI(pCreature) { }
 
         void Reset()
         {
@@ -628,9 +619,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_dreadscaleAI(creature);
+        return new boss_dreadscaleAI(pCreature);
     }
 };
 
@@ -639,14 +630,14 @@ class mob_slime_pool : public CreatureScript
 public:
     mob_slime_pool() : CreatureScript("mob_slime_pool") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_slime_poolAI(creature);
+        return new mob_slime_poolAI(pCreature);
     }
 
     struct mob_slime_poolAI : public ScriptedAI
     {
-        mob_slime_poolAI(Creature* creature) : ScriptedAI(creature)
+        mob_slime_poolAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
         }
 
@@ -674,16 +665,16 @@ class boss_icehowl : public CreatureScript
 public:
     boss_icehowl() : CreatureScript("boss_icehowl") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_icehowlAI(creature);
+        return new boss_icehowlAI(pCreature);
     }
 
     struct boss_icehowlAI : public ScriptedAI
     {
-        boss_icehowlAI(Creature* creature) : ScriptedAI(creature)
+        boss_icehowlAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
+            m_pInstance = (InstanceScript*)pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -699,7 +690,7 @@ public:
         bool   m_bMovementFinish;
         bool   m_bTrampleCasted;
         uint8  m_uiStage;
-        Unit*  target;
+        Unit*  pTarget;
 
         void Reset()
         {
@@ -718,7 +709,7 @@ public:
             m_uiStage = 0;
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_NORTHREND_BEASTS, ICEHOWL_DONE);
@@ -758,16 +749,16 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void KilledUnit(Unit* who)
+        void KilledUnit(Unit *pWho)
         {
-            if (who->GetTypeId() == TYPEID_PLAYER)
+            if (pWho->GetTypeId() == TYPEID_PLAYER)
             {
                 if (m_pInstance)
                     m_pInstance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_NORTHREND_BEASTS, ICEHOWL_IN_PROGRESS);
@@ -802,8 +793,8 @@ public:
 
                     if (m_uiArticBreathTimer <= uiDiff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_ARCTIC_BREATH);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            DoCast(pTarget, SPELL_ARCTIC_BREATH);
                         m_uiArticBreathTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else m_uiArticBreathTimer -= uiDiff;
 
@@ -827,11 +818,11 @@ public:
                     m_uiStage = 2;
                     break;
                 case 2:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
                     {
-                        m_uiTrampleTargetGUID = target->GetGUID();
+                        m_uiTrampleTargetGUID = pTarget->GetGUID();
                         me->SetUInt64Value(UNIT_FIELD_TARGET, m_uiTrampleTargetGUID);
-                        DoScriptText(SAY_TRAMPLE_STARE, me, target);
+                        DoScriptText(SAY_TRAMPLE_STARE, me, pTarget);
                         m_bTrampleCasted = false;
                         SetCombatMovement(false);
                         me->GetMotionMaster()->MoveIdle();
@@ -843,13 +834,13 @@ public:
                 case 3:
                     if (m_uiTrampleTimer <= uiDiff)
                     {
-                        if (Unit* target = Unit::GetPlayer(*me, m_uiTrampleTargetGUID))
+                        if (Unit* pTarget = Unit::GetPlayer(*me, m_uiTrampleTargetGUID))
                         {
                             m_bTrampleCasted = false;
                             m_bMovementStarted = true;
-                            m_fTrampleTargetX = target->GetPositionX();
-                            m_fTrampleTargetY = target->GetPositionY();
-                            m_fTrampleTargetZ = target->GetPositionZ();
+                            m_fTrampleTargetX = pTarget->GetPositionX();
+                            m_fTrampleTargetY = pTarget->GetPositionY();
+                            m_fTrampleTargetZ = pTarget->GetPositionZ();
                             me->GetMotionMaster()->MoveJump(2*me->GetPositionX()-m_fTrampleTargetX,
                                 2*me->GetPositionY()-m_fTrampleTargetY,
                                 me->GetPositionZ(),
@@ -877,8 +868,8 @@ public:
                         Map::PlayerList const &lPlayers = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
                         {
-                            if (Unit* player = itr->getSource())
-                                if (player->isAlive() && player->IsWithinDistInMap(me, 6.0f))
+                            if (Unit* pPlayer = itr->getSource())
+                                if (pPlayer->isAlive() && pPlayer->IsWithinDistInMap(me, 6.0f))
                                 {
                                     DoCastAOE(SPELL_TRAMPLE);
                                     m_uiTrampleTimer = IN_MILLISECONDS;

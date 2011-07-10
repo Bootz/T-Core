@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -95,11 +93,14 @@ enum Yells
 {
     CYANIGOSA_SAY_SPAWN                           = -1608005
 };
-
 enum Spells
 {
     CYANIGOSA_SPELL_TRANSFORM                     = 58668,
     CYANIGOSA_BLUE_AURA                           = 47759,
+};
+enum Achievements
+{
+    ACHIEV_DEFENSELESS                            = 1816
 };
 
 class instance_violet_hold : public InstanceMapScript
@@ -164,7 +165,6 @@ public:
         bool bWiped;
         bool bIsDoorSpellCasted;
         bool bCrystalActivated;
-        bool defenseless;
 
         std::list<uint8> NpcAtDoorCastingList;
 
@@ -214,7 +214,6 @@ public:
             bActive = false;
             bIsDoorSpellCasted = false;
             bCrystalActivated = false;
-            defenseless = true;
             uiMainEventPhase = NOT_STARTED;
 
             memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
@@ -335,6 +334,8 @@ public:
                         uiMainEventPhase = DONE;
                         if (GameObject* pMainDoor = instance->GetGameObject(uiMainDoor))
                             pMainDoor->SetGoState(GO_STATE_ACTIVE);
+                        if (!bCrystalActivated && uiDoorIntegrity == 100)
+                            DoCompleteAchievement(ACHIEV_DEFENSELESS);
                     }
                     break;
                 case DATA_WAVE_COUNT:
@@ -349,7 +350,6 @@ public:
                     break;
                 case DATA_DOOR_INTEGRITY:
                     uiDoorIntegrity = data;
-                    defenseless = false;
                     DoUpdateWorldState(WORLD_STATE_VH_PRISON_STATE, uiDoorIntegrity);
                     break;
                 case DATA_NPC_PRESENCE_AT_DOOR_ADD:
@@ -432,7 +432,6 @@ public:
                 case DATA_FIRST_BOSS:               return uiFirstBoss;
                 case DATA_SECOND_BOSS:              return uiSecondBoss;
                 case DATA_MAIN_EVENT_PHASE:         return uiMainEventPhase;
-                case DATA_DEFENSELESS:              return defenseless ? 1 : 0;
             }
 
             return 0;
@@ -668,11 +667,11 @@ public:
             Map::PlayerList const &players = instance->GetPlayers();
             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
             {
-                Player* player = itr->getSource();
-                if (player->isGameMaster())
+                Player* pPlayer = itr->getSource();
+                if (pPlayer->isGameMaster())
                     continue;
 
-                if (player->isAlive())
+                if (pPlayer->isAlive())
                     return false;
             }
 

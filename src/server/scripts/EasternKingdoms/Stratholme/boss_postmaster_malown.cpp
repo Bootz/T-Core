@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: boss_postmaster_malown
-SD%Complete: 50
-SDComment:
-SDCategory: Stratholme
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -42,14 +33,14 @@ class boss_postmaster_malown : public CreatureScript
 public:
     boss_postmaster_malown() : CreatureScript("boss_postmaster_malown") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_postmaster_malownAI (creature);
+        return new boss_postmaster_malownAI (pCreature);
     }
 
     struct boss_postmaster_malownAI : public ScriptedAI
     {
-        boss_postmaster_malownAI(Creature* c) : ScriptedAI(c) {}
+        boss_postmaster_malownAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 WailingDead_Timer;
         uint32 Backhand_Timer;
@@ -68,7 +59,7 @@ public:
             HasYelled = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 

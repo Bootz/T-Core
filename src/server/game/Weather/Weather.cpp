@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -190,7 +188,7 @@ bool Weather::ReGenerate()
     return m_type != old_type || m_grade != old_grade;
 }
 
-void Weather::SendWeatherUpdateToPlayer(Player* player)
+void Weather::SendWeatherUpdateToPlayer(Player *player)
 {
     WorldPacket data(SMSG_WEATHER, (4+4+4));
 
@@ -198,7 +196,7 @@ void Weather::SendWeatherUpdateToPlayer(Player* player)
     player->GetSession()->SendPacket(&data);
 }
 
-void Weather::SendFineWeatherUpdateToPlayer(Player* player)
+void Weather::SendFineWeatherUpdateToPlayer(Player *player)
 {
     WorldPacket data(SMSG_WEATHER, (4+4+4));
 

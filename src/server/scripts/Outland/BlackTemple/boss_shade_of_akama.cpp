@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Shade_of_Akama
-SD%Complete: 90
-SDComment: Seems to be complete.
-SDCategory: Black Temple
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "black_temple.h"
@@ -115,9 +106,9 @@ class mob_ashtongue_channeler : public CreatureScript
 public:
     mob_ashtongue_channeler() : CreatureScript("mob_ashtongue_channeler") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_ashtongue_channelerAI (creature);
+        return new mob_ashtongue_channelerAI (pCreature);
     }
 
     struct mob_ashtongue_channelerAI : public ScriptedAI
@@ -141,9 +132,9 @@ class mob_ashtongue_sorcerer : public CreatureScript
 public:
     mob_ashtongue_sorcerer() : CreatureScript("mob_ashtongue_sorcerer") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_ashtongue_sorcererAI (creature);
+        return new mob_ashtongue_sorcererAI (pCreature);
     }
 
     struct mob_ashtongue_sorcererAI : public ScriptedAI
@@ -196,9 +187,9 @@ class boss_shade_of_akama : public CreatureScript
 public:
     boss_shade_of_akama() : CreatureScript("boss_shade_of_akama") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_shade_of_akamaAI (creature);
+        return new boss_shade_of_akamaAI (pCreature);
     }
 
     struct boss_shade_of_akamaAI : public ScriptedAI
@@ -279,18 +270,18 @@ public:
         {
             summons.DespawnAll();
         }
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature *summon)
         {
             if (summon->GetEntry() == CREATURE_DEFENDER || summon->GetEntry() == 23523 || summon->GetEntry() == 23318 || summon->GetEntry() == 23524)
                 summons.Summon(summon);
         }
-        void SummonedCreatureDespawn(Creature* summon)
+        void SummonedCreatureDespawn(Creature *summon)
         {
             if (summon->GetEntry() == CREATURE_DEFENDER || summon->GetEntry() == 23523 || summon->GetEntry() == 23318 || summon->GetEntry() == 23524)
                 summons.Despawn(summon);
         }
 
-        void MoveInLineOfSight(Unit* /*who*/)
+        void MoveInLineOfSight(Unit * /*who*/)
         {
             if (!GridSearcherSucceeded)
             {
@@ -372,8 +363,8 @@ public:
                     {
                         Spawn->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
                         Spawn->GetMotionMaster()->MovePoint(0, AGGRO_X, AGGRO_Y, AGGRO_Z);
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                        Spawn->AI()->AttackStart(target);
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        Spawn->AI()->AttackStart(pTarget);
                     }
                 }
             }
@@ -542,32 +533,32 @@ class npc_akama_shade : public CreatureScript
 public:
     npc_akama_shade() : CreatureScript("npc_akama_shade") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)               //Fight time
         {
-            player->CLOSE_GOSSIP_MENU();
-            CAST_AI(npc_akama_shade::npc_akamaAI, creature->AI())->BeginEvent(player);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            CAST_AI(npc_akama_shade::npc_akamaAI, pCreature->AI())->BeginEvent(pPlayer);
         }
 
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (player->isAlive())
+        if (pPlayer->isAlive())
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            player->SEND_GOSSIP_MENU(907, creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(907, pCreature->GetGUID());
         }
 
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_akamaAI (creature);
+        return new npc_akamaAI (pCreature);
     }
 
     struct npc_akamaAI : public ScriptedAI
@@ -629,12 +620,12 @@ public:
             summons.DespawnAll();
         }
 
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature *summon)
         {
             if (summon->GetEntry() == CREATURE_BROKEN)
                 summons.Summon(summon);
         }
-        void SummonedCreatureDespawn(Creature* summon)
+        void SummonedCreatureDespawn(Creature *summon)
         {
             if (summon->GetEntry() == CREATURE_BROKEN)
                 summons.Despawn(summon);

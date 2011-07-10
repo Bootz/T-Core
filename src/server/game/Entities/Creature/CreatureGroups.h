@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,7 +35,7 @@ class CreatureGroupManager
     friend class ACE_Singleton<CreatureGroupManager, ACE_Null_Mutex>;
     public:
         void AddCreatureToGroup(uint32 group_id, Creature *creature);
-        void RemoveCreatureFromGroup(CreatureGroup* group, Creature *creature);
+        void RemoveCreatureFromGroup(CreatureGroup *group, Creature *creature);
         void LoadCreatureFormations();
 };
 
@@ -67,12 +65,12 @@ class CreatureGroup
         bool isEmpty() const { return m_members.empty(); }
         bool isFormed() const { return m_Formed; }
 
-        void AddMember(Creature* member);
-        void RemoveMember(Creature* member);
+        void AddMember(Creature *member);
+        void RemoveMember(Creature *member);
         void FormationReset(bool dismiss);
 
         void LeaderMoveTo(float x, float y, float z);
-        void MemberAttackStart(Creature* member, Unit* target);
+        void MemberAttackStart(Creature* member, Unit *target);
 };
 
 #endif

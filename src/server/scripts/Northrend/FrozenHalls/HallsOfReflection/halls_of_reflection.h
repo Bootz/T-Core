@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -81,7 +79,7 @@ enum Actions
 // handled the summonList and the notification events to/from the InstanceScript
 struct boss_horAI : ScriptedAI
 {
-    boss_horAI(Creature* creature) : ScriptedAI(creature), summons(creature)
+    boss_horAI(Creature *pCreature) : ScriptedAI(pCreature), summons(pCreature)
     {
         pInstance = me->GetInstanceScript();
     }
@@ -98,7 +96,7 @@ struct boss_horAI : ScriptedAI
         me->SetReactState(REACT_PASSIVE);
     }
 
-    void DamageTaken(Unit* /*who*/, uint32 &uiDamage)
+    void DamageTaken(Unit * /*pWho*/, uint32 &uiDamage)
     {
         if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
             uiDamage = 0;
@@ -116,7 +114,7 @@ struct boss_horAI : ScriptedAI
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
                 me->SetReactState(REACT_AGGRESSIVE);
 
-                if (Unit* pUnit = me->SelectNearestTarget())
+                if (Unit *pUnit = me->SelectNearestTarget())
                     AttackStart(pUnit);
 
                 DoZoneInCombat();
@@ -124,11 +122,11 @@ struct boss_horAI : ScriptedAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature *pSummoned)
     {
         summons.Summon(pSummoned);
 
-        if (Unit* pUnit = pSummoned->SelectNearestTarget())
+        if (Unit *pUnit = pSummoned->SelectNearestTarget())
         {
             if (pSummoned->AI())
                 pSummoned->AI()->AttackStart(pUnit);
@@ -143,7 +141,7 @@ struct boss_horAI : ScriptedAI
             pSummoned->AI()->DoZoneInCombat();
     }
 
-    void SummonedCreatureDespawn(Creature* pSummoned)
+    void SummonedCreatureDespawn(Creature *pSummoned)
     {
         summons.Despawn(pSummoned);
         if (summons.empty())

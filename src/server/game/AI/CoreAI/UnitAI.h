@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UNITAI_H
-#define UNITAI_H
+#ifndef TRILLIUM_UNITAI_H
+#define TRILLIUM_UNITAI_H
 
 #include "Define.h"
 #include <list>
@@ -101,7 +99,7 @@ struct DefaultTargetSelector : public std::unary_function<Unit* , bool>
 class UnitAI
 {
     protected:
-        Unit* const me;
+        Unit * const me;
     public:
         explicit UnitAI(Unit* unit) : me(unit) {}
         virtual ~UnitAI() {}

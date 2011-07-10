@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -264,7 +262,7 @@ int WorldSocket::open (void *a)
     BigNumber seed1;
     seed1.SetRand(16 * 8);
     packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
-
+    
     packet << uint8(1);
     packet << uint32(m_Seed);
 
@@ -736,7 +734,6 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                     return 0;
                 }
 
-
                 if (m_Session != NULL)
                 {
                     // Our Idle timer will reset on any non PING opcodes.
@@ -831,24 +828,24 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // Get the account information from the realmd database
     std::string safe_account = account; // Duplicate, else will screw the SHA hash verification below
-    LoginDatabase.EscapeString (safe_account);
+    LoginDatabase.escape_string (safe_account);
     // No SQL injection, username escaped.
 
     QueryResult result =
-          LoginDatabase.PQuery ("SELECT "
-                                "id, "                      //0
-                                "sessionkey, "              //1
-                                "last_ip, "                 //2
-                                "locked, "                  //3
-                                "v, "                       //4
-                                "s, "                       //5
-                                "expansion, "               //6
-                                "mutetime, "                //7
-                                "locale, "                  //8
-                                "recruiter "                //9
-                                "FROM account "
-                                "WHERE username = '%s'",
-                                safe_account.c_str());
+        LoginDatabase.PQuery ("SELECT "
+        "id, "                      //0
+        "sessionkey, "              //1
+        "last_ip, "                 //2
+        "locked, "                  //3
+        "v, "                       //4
+        "s, "                       //5
+        "expansion, "               //6
+        "mutetime, "                //7
+        "locale, "                  //8
+        "recruiter "                //9
+        "FROM account "
+        "WHERE username = '%s'",
+        safe_account.c_str());
 
     // Stop if the account is not found
     if (!result)
@@ -878,9 +875,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     const char* sStr = s.AsHexStr();                       //Must be freed by OPENSSL_free()
     const char* vStr = v.AsHexStr();                       //Must be freed by OPENSSL_free()
 
-    sLog->outStaticDebug ("WorldSocket::HandleAuthSession: (s, v) check s: %s v: %s",
-                sStr,
-                vStr);
+    sLog->outStaticDebug ("WorldSocket::HandleAuthSession: (s,v) check s: %s v: %s",
+        sStr,
+        vStr);
 
     OPENSSL_free ((void*) sStr);
     OPENSSL_free ((void*) vStr);
@@ -902,8 +899,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     id = fields[0].GetUInt32();
     /*
     if (security > SEC_ADMINISTRATOR)                        // prevent invalid security settings in DB
-        security = SEC_ADMINISTRATOR;
-        */
+    security = SEC_ADMINISTRATOR;
+    */
 
     K.SetHexStr (fields[1].GetCString());
 
@@ -916,15 +913,14 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 recruiter = fields[9].GetUInt32();
 
     // Checks gmlevel per Realm
-    result =
-        LoginDatabase.PQuery ("SELECT "
-                              "RealmID, "            //0
-                              "gmlevel "             //1
-                              "FROM account_access "
-                              "WHERE id = '%d'"
-                              " AND (RealmID = '%d'"
-                              " OR RealmID = '-1')",
-                              id, realmID);
+    result = LoginDatabase.PQuery ("SELECT "
+        "RealmID, "            //0
+        "gmlevel "             //1
+        "FROM account_access "
+        "WHERE id = '%d'"
+        " AND (RealmID = '%d'"
+        " OR RealmID = '-1')",
+        id, realmID);
     if (!result)
         security = 0;
     else
@@ -935,10 +931,10 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // Re-check account ban (same check as in realmd)
     QueryResult banresult =
-          LoginDatabase.PQuery ("SELECT 1 FROM account_banned WHERE id = %u AND active = 1 "
-                                "UNION "
-                                "SELECT 1 FROM ip_banned WHERE ip = '%s'",
-                                id, GetRemoteAddress().c_str());
+        LoginDatabase.PQuery ("SELECT 1 FROM account_banned WHERE id = %u AND active = 1 "
+        "UNION "
+        "SELECT 1 FROM ip_banned WHERE ip = '%s'",
+        id, GetRemoteAddress().c_str());
 
     if (banresult) // if account banned
     {
@@ -980,18 +976,18 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     std::string address = GetRemoteAddress();
 
     sLog->outStaticDebug ("WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
-                account.c_str(),
-                address.c_str());
+        account.c_str(),
+        address.c_str());
 
     // Update the last_ip in the database
     // No SQL injection, username escaped.
-    LoginDatabase.EscapeString (address);
+    LoginDatabase.escape_string (address);
 
     LoginDatabase.PExecute ("UPDATE account "
-                            "SET last_ip = '%s' "
-                            "WHERE username = '%s'",
-                            address.c_str(),
-                            safe_account.c_str());
+        "SET last_ip = '%s' "
+        "WHERE username = '%s'",
+        address.c_str(),
+        safe_account.c_str());
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
     ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter), -1);

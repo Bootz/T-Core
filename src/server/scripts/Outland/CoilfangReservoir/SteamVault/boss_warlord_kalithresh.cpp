@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Warlord_Kalithres
-SD%Complete: 65
-SDComment: Contains workarounds regarding warlord's rage spells not acting as expected. Both scripts here require review and fine tuning.
-SDCategory: Coilfang Resevoir, The Steamvault
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "steam_vault.h"
@@ -48,14 +39,14 @@ class mob_naga_distiller : public CreatureScript
 public:
     mob_naga_distiller() : CreatureScript("mob_naga_distiller") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_naga_distillerAI (creature);
+        return new mob_naga_distillerAI (pCreature);
     }
 
     struct mob_naga_distillerAI : public ScriptedAI
     {
-        mob_naga_distillerAI(Creature* c) : ScriptedAI(c)
+        mob_naga_distillerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -78,9 +69,9 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void EnterCombat(Unit * /*who*/) { }
 
-        void StartRageGen(Unit* /*caster*/)
+        void StartRageGen(Unit * /*caster*/)
         {
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -91,7 +82,7 @@ public:
                 pInstance->SetData(TYPE_DISTILLER, IN_PROGRESS);
         }
 
-        void DamageTaken(Unit* /*done_by*/, uint32 &damage)
+        void DamageTaken(Unit * /*done_by*/, uint32 &damage)
         {
             if (me->GetHealth() <= damage)
                 if (pInstance)
@@ -106,14 +97,14 @@ class boss_warlord_kalithresh : public CreatureScript
 public:
     boss_warlord_kalithresh() : CreatureScript("boss_warlord_kalithresh") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_warlord_kalithreshAI (creature);
+        return new boss_warlord_kalithreshAI (pCreature);
     }
 
     struct boss_warlord_kalithreshAI : public ScriptedAI
     {
-        boss_warlord_kalithreshAI(Creature* c) : ScriptedAI(c)
+        boss_warlord_kalithreshAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -136,7 +127,7 @@ public:
                 pInstance->SetData(TYPE_WARLORD_KALITHRESH, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
 
@@ -149,7 +140,7 @@ public:
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *spell)
+        void SpellHit(Unit * /*caster*/, const SpellEntry *spell)
         {
             //hack :(
             if (spell->Id == SPELL_WARLORDS_RAGE_PROC)
@@ -192,8 +183,8 @@ public:
             //Impale_Timer
             if (Impale_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_IMPALE);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_IMPALE);
 
                 Impale_Timer = 7500+rand()%5000;
             } else Impale_Timer -= diff;

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Renataki
-SD%Complete: 100
-SDComment:
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -43,7 +34,7 @@ class boss_renataki : public CreatureScript
 
         struct boss_renatakiAI : public ScriptedAI
         {
-            boss_renatakiAI(Creature* c) : ScriptedAI(c) {}
+            boss_renatakiAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 Invisible_Timer;
             uint32 Ambush_Timer;
@@ -66,7 +57,7 @@ class boss_renataki : public CreatureScript
                 Ambushed = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 
@@ -93,12 +84,12 @@ class boss_renataki : public CreatureScript
                 {
                     if (Ambush_Timer <= diff)
                     {
-                        Unit* target = NULL;
-                        target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                        if (target)
+                        Unit *pTarget = NULL;
+                        pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        if (pTarget)
                         {
-                            DoTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
-                            DoCast(target, SPELL_AMBUSH);
+                            DoTeleportTo(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+                            DoCast(pTarget, SPELL_AMBUSH);
                         }
 
                         Ambushed = true;
@@ -127,14 +118,14 @@ class boss_renataki : public CreatureScript
                 {
                     if (Aggro_Timer <= diff)
                     {
-                        Unit* target = NULL;
-                        target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        Unit *pTarget = NULL;
+                        pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
 
                         if (DoGetThreat(me->getVictim()))
                             DoModifyThreatPercent(me->getVictim(), -50);
 
-                        if (target)
-                            AttackStart(target);
+                        if (pTarget)
+                            AttackStart(pTarget);
 
                         Aggro_Timer = 7000 + rand()%13000;
                     } else Aggro_Timer -= diff;

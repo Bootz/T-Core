@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Prince_Keleseth
-SD%Complete: 90
-SDComment:  Needs Prince Movements, Needs adjustments to blizzlike timers, Needs Shadowbolt castbar, Needs right Ressurect Visual, Needs Some Heroic Spells
-SDCategory: Utgarde Keep
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "utgarde_keep.h"
@@ -67,14 +58,14 @@ class mob_frost_tomb : public CreatureScript
 public:
     mob_frost_tomb() : CreatureScript("mob_frost_tomb") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_frost_tombAI(creature);
+        return new mob_frost_tombAI(pCreature);
     }
 
     struct mob_frost_tombAI : public ScriptedAI
     {
-        mob_frost_tombAI(Creature* c) : ScriptedAI(c)
+        mob_frost_tombAI(Creature *c) : ScriptedAI(c)
         {
             FrostTombGUID = 0;
         }
@@ -91,7 +82,7 @@ public:
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit *killer)
         {
             if (killer->GetGUID() != me->GetGUID())
                 ShatterFrostTomb = true;
@@ -119,14 +110,14 @@ class boss_keleseth : public CreatureScript
 public:
     boss_keleseth() : CreatureScript("boss_keleseth") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_kelesethAI (creature);
+        return new boss_kelesethAI (pCreature);
     }
 
     struct boss_kelesethAI : public ScriptedAI
     {
-        boss_kelesethAI(Creature* c) : ScriptedAI(c)
+        boss_kelesethAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -154,7 +145,7 @@ public:
                 pInstance->SetData(DATA_PRINCEKELESETH_EVENT, NOT_STARTED);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;
@@ -207,9 +198,9 @@ public:
 
             if (ShadowboltTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
-                if (target && target->isAlive() && target->GetTypeId() == TYPEID_PLAYER)
-                    me->CastSpell(target, DUNGEON_MODE(SPELL_SHADOWBOLT, SPELL_SHADOWBOLT_HEROIC), true);
+                Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0);
+                if (pTarget && pTarget->isAlive() && pTarget->GetTypeId() == TYPEID_PLAYER)
+                    me->CastSpell(pTarget, DUNGEON_MODE(SPELL_SHADOWBOLT, SPELL_SHADOWBOLT_HEROIC), true);
                 ShadowboltTimer = 10000;
             } else ShadowboltTimer -= diff;
 
@@ -236,14 +227,14 @@ public:
 
             if (FrostTombTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    if (target->isAlive())
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (pTarget->isAlive())
                     {
-                        //DoCast(target, SPELL_FROST_TOMB_SUMMON, true);
-                        if (Creature* pChains = me->SummonCreature(CREATURE_FROSTTOMB, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
+                        //DoCast(pTarget, SPELL_FROST_TOMB_SUMMON, true);
+                        if (Creature *pChains = me->SummonCreature(CREATURE_FROSTTOMB, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
                         {
-                            CAST_AI(mob_frost_tomb::mob_frost_tombAI, pChains->AI())->SetPrisoner(target);
-                            pChains->CastSpell(target, SPELL_FROST_TOMB, true);
+                            CAST_AI(mob_frost_tomb::mob_frost_tombAI, pChains->AI())->SetPrisoner(pTarget);
+                            pChains->CastSpell(pTarget, SPELL_FROST_TOMB, true);
 
                             DoScriptText(SAY_FROST_TOMB, me);
                         }
@@ -262,14 +253,14 @@ class mob_vrykul_skeleton : public CreatureScript
 public:
     mob_vrykul_skeleton() : CreatureScript("mob_vrykul_skeleton") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_vrykul_skeletonAI (creature);
+        return new mob_vrykul_skeletonAI (pCreature);
     }
 
     struct mob_vrykul_skeletonAI : public ScriptedAI
     {
-        mob_vrykul_skeletonAI(Creature* c) : ScriptedAI(c)
+        mob_vrykul_skeletonAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -288,8 +279,8 @@ public:
             isDead = false;
         }
 
-        void EnterCombat(Unit* /*who*/){}
-        void DamageTaken(Unit* done_by, uint32 &damage)
+        void EnterCombat(Unit * /*who*/){}
+        void DamageTaken(Unit *done_by, uint32 &damage)
         {
             if (done_by->GetGUID() == me->GetGUID())
                 return;

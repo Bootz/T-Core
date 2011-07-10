@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Ragnaros
-SD%Complete: 95
-SDComment: some spells doesnt work correctly
-SDCategory: Molten Core
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "molten_core.h"
@@ -80,7 +71,7 @@ class boss_ragnaros : public CreatureScript
 
         struct boss_ragnarosAI : public BossAI
         {
-            boss_ragnarosAI(Creature* creature) : BossAI(creature, BOSS_RAGNAROS)
+            boss_ragnarosAI(Creature *pCreature) : BossAI(pCreature, BOSS_RAGNAROS)
             {
                 _introState = 0;
                 me->SetReactState(REACT_PASSIVE);
@@ -260,9 +251,9 @@ class boss_ragnaros : public CreatureScript
 
                                         // summon 8 elementals
                                         for (uint8 i = 0; i < 8; ++i)
-                                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                                if (Creature* pSummoned = me->SummonCreature(12143, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 900000))
-                                                    pSummoned->AI()->AttackStart(target);
+                                            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                                if (Creature* pSummoned = me->SummonCreature(12143, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 900000))
+                                                    pSummoned->AI()->AttackStart(pTarget);
 
                                         _hasSubmergedOnce = true;
                                         _isBanished = true;
@@ -275,9 +266,9 @@ class boss_ragnaros : public CreatureScript
                                         DoScriptText(SAY_REINFORCEMENTS2, me);
 
                                         for (uint8 i = 0; i < 8; ++i)
-                                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                                if (Creature* pSummoned = me->SummonCreature(12143, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 900000))
-                                                    pSummoned->AI()->AttackStart(target);
+                                            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                                if (Creature* pSummoned = me->SummonCreature(12143, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 900000))
+                                                    pSummoned->AI()->AttackStart(pTarget);
 
                                         _isBanished = true;
                                         //DoCast(me, SPELL_RAGSUBMERGE);
@@ -304,9 +295,9 @@ class boss_ragnaros : public CreatureScript
             bool _isBanished;
         };
 
-        CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* pCreature) const
         {
-            return new boss_ragnarosAI(creature);
+            return new boss_ragnarosAI(pCreature);
         }
 };
 
@@ -317,12 +308,12 @@ class mob_son_of_flame : public CreatureScript
 
         struct mob_son_of_flameAI : public ScriptedAI //didnt work correctly in EAI for me...
         {
-            mob_son_of_flameAI(Creature* c) : ScriptedAI(c)
+            mob_son_of_flameAI(Creature *c) : ScriptedAI(c)
             {
                 instance = me->GetInstanceScript();
             }
 
-            void JustDied(Unit* /*victim*/)
+            void JustDied(Unit * /*victim*/)
             {
                 if (instance)
                     instance->SetData(DATA_RAGNAROS_ADDS, 1);
@@ -340,9 +331,9 @@ class mob_son_of_flame : public CreatureScript
             InstanceScript* instance;
         };
 
-        CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* pCreature) const
         {
-            return new mob_son_of_flameAI(creature);
+            return new mob_son_of_flameAI(pCreature);
         }
 };
 

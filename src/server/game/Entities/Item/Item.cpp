@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -309,10 +307,6 @@ void Item::UpdateDuration(Player* owner, uint32 diff)
 
 void Item::SaveToDB(SQLTransaction& trans)
 {
-    bool isInTransaction = !(trans.null());
-    if (!isInTransaction)
-        trans = CharacterDatabase.BeginTransaction();
-
     uint32 guid = GetGUIDLow();
     switch (uState)
     {
@@ -373,21 +367,13 @@ void Item::SaveToDB(SQLTransaction& trans)
                 stmt->setUInt32(0, guid);
                 trans->Append(stmt);
             }
-
-            if (!isInTransaction)
-                CharacterDatabase.CommitTransaction(trans);
-
             delete this;
             return;
         }
         case ITEM_UNCHANGED:
             break;
     }
-
     SetState(ITEM_UNCHANGED);
-
-    if (!isInTransaction)
-        CharacterDatabase.CommitTransaction(trans);
 }
 
 bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entry)
@@ -703,7 +689,7 @@ void Item::SetState(ItemUpdateState state, Player *forplayer)
     }
 }
 
-void Item::AddToUpdateQueueOf(Player* player)
+void Item::AddToUpdateQueueOf(Player *player)
 {
     if (IsInUpdateQueue())
         return;
@@ -723,7 +709,7 @@ void Item::AddToUpdateQueueOf(Player* player)
     uQueuePos = player->m_itemUpdateQueue.size()-1;
 }
 
-void Item::RemoveFromUpdateQueueOf(Player* player)
+void Item::RemoveFromUpdateQueueOf(Player *player)
 {
     if (!IsInUpdateQueue())
         return;
@@ -796,12 +782,12 @@ uint32 Item::GetEnchantRequiredLevel() const
 
   uint32 level = 0;
 
-  // Check all enchants for required level
-  for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
-    if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
-      if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
-    if (enchantEntry->requiredLevel > level)
-      level = enchantEntry->requiredLevel;
+  //// Check all enchants for required level
+  //for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
+  //  if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
+  //    if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
+  //  if (enchantEntry->requiredLevel > level)
+  //    level = enchantEntry->requiredLevel;
 
   return level;
 }
@@ -834,36 +820,36 @@ InventoryResult Item::CanBeMergedPartlyWith(ItemTemplate const* proto) const
     return EQUIP_ERR_OK;
 }
 
-bool Item::IsFitToSpellRequirements(SpellEquippedItemsEntry const* spellInfo) const
+bool Item::IsFitToSpellRequirements(SpellEntry const* spellInfo) const
 {
     ItemTemplate const* proto = GetTemplate();
 
-    if (spellInfo->EquippedItemClass != -1)                 // -1 == any item class
+    if (spellInfo->GetEquippedItemClass() != -1)                 // -1 == any item class
     {
         // Special case - accept vellum for armor/weapon requirements
-        if ((spellInfo->EquippedItemClass == ITEM_CLASS_ARMOR && proto->IsArmorVellum())
-            ||(spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
+        if ((spellInfo->GetEquippedItemClass() == ITEM_CLASS_ARMOR && proto->IsArmorVellum())
+            ||(spellInfo->GetEquippedItemClass() == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
             if (sSpellMgr->IsSkillTypeSpell(spellInfo->Id, SKILL_ENCHANTING)) // only for enchanting spells
                 return true;
 
-        if (spellInfo->EquippedItemClass != int32(proto->Class))
+        if (spellInfo->GetEquippedItemClass() != int32(proto->Class))
             return false;                                   //  wrong item class
 
-        if (spellInfo->EquippedItemSubClassMask != 0)        // 0 == any subclass
+        if (spellInfo->GetEquippedItemSubClassMask() != 0)        // 0 == any subclass
         {
-            if ((spellInfo->EquippedItemSubClassMask & (1 << proto->SubClass)) == 0)
+            if ((spellInfo->GetEquippedItemSubClassMask() & (1 << proto->SubClass)) == 0)
                 return false;                               // subclass not present in mask
         }
     }
 
-    if (spellInfo->EquippedItemInventoryTypeMask != 0)       // 0 == any inventory type
+    if (spellInfo->GetEquippedItemInventoryTypeMask() != 0)       // 0 == any inventory type
     {
         // Special case - accept weapon type for main and offhand requirements
         if (proto->InventoryType == INVTYPE_WEAPON &&
-            (spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONMAINHAND) ||
-            spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONOFFHAND)))
+            (spellInfo->GetEquippedItemInventoryTypeMask() & (1 << INVTYPE_WEAPONMAINHAND) ||
+            spellInfo->GetEquippedItemInventoryTypeMask() & (1 << INVTYPE_WEAPONOFFHAND)))
             return true;
-        else if ((spellInfo->EquippedItemInventoryTypeMask & (1 << proto->InventoryType)) == 0)
+        else if ((spellInfo->GetEquippedItemInventoryTypeMask() & (1 << proto->InventoryType)) == 0)
             return false;                                   // inventory type not present in mask
     }
 

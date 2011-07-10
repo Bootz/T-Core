@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "Player.h"
 #include "SpellAuras.h"
 #include "SpellMgr.h"
@@ -29,7 +28,7 @@
 
 // Checks if player meets the condition
 // Can have CONDITION_SOURCE_TYPE_NONE && !mReferenceId if called from a special event (ie: eventAI)
-bool Condition::Meets(Player* player, Unit* invoker)
+bool Condition::Meets(Player * player, Unit* invoker)
 {
     if (!player)
     {
@@ -252,9 +251,9 @@ ConditionList ConditionMgr::GetConditionReferences(uint32 refId)
     return conditions;
 }
 
-bool ConditionMgr::IsPlayerMeetToConditionList(Player* player, ConditionList const& conditions, Unit* invoker /*= NULL*/)
+bool ConditionMgr::IsPlayerMeetToConditionList(Player* player, const ConditionList& conditions, Unit* invoker)
 {
-    std::map<uint32, bool> ElseGroupMap;
+    std::map<uint32, bool>ElseGroupMap;
     for (ConditionList::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
     {
         sLog->outDebug(LOG_FILTER_CONDITIONSYS, "ConditionMgr::IsPlayerMeetToConditionList condType: %u val1: %u", (*i)->mConditionType, (*i)->mConditionValue1);
@@ -271,7 +270,7 @@ bool ConditionMgr::IsPlayerMeetToConditionList(Player* player, ConditionList con
                 ConditionReferenceMap::const_iterator ref = m_ConditionReferenceMap.find((*i)->mReferenceId);
                 if (ref != m_ConditionReferenceMap.end())
                 {
-                    if (!IsPlayerMeetToConditionList(player, (*ref).second, invoker))
+                    if(!IsPlayerMeetToConditionList(player, (*ref).second, invoker))
                         ElseGroupMap[(*i)->mElseGroup] = false;
                 }
                 else
@@ -295,19 +294,19 @@ bool ConditionMgr::IsPlayerMeetToConditionList(Player* player, ConditionList con
     return false;
 }
 
-bool ConditionMgr::IsPlayerMeetToConditions(Player* player, ConditionList const& conditions, Unit* invoker /*= NULL*/)
+bool ConditionMgr::IsPlayerMeetToConditions(Player* player, ConditionList conditions, Unit* invoker)
 {
     if (conditions.empty())
         return true;
 
-    if (player)
+    if(player)
         player->m_ConditionErrorMsgId = 0;
 
     sLog->outDebug(LOG_FILTER_CONDITIONSYS, "ConditionMgr::IsPlayerMeetToConditions");
     bool result = IsPlayerMeetToConditionList(player, conditions, invoker);
 
     if (player && player->m_ConditionErrorMsgId && player->GetSession() && !result)
-        player->GetSession()->SendNotification(player->m_ConditionErrorMsgId);  //m_ConditionErrorMsgId is set only if a condition was not met
+            player->GetSession()->SendNotification(player->m_ConditionErrorMsgId);//m_ConditionErrorMsgId is set only if a condition was not met
 
     return result;
 }
@@ -620,9 +619,9 @@ bool ConditionMgr::addToGossipMenuItems(Condition* cond)
     {
         for (GossipMenuItemsMap::iterator itr = pMenuItemBounds.first; itr != pMenuItemBounds.second; ++itr)
         {
-            if ((*itr).second.MenuId == cond->mSourceGroup && (*itr).second.OptionIndex == cond->mSourceEntry)
+            if ((*itr).second.menu_id == cond->mSourceGroup && (*itr).second.id == cond->mSourceEntry)
             {
-                (*itr).second.Conditions.push_back(cond);
+                (*itr).second.conditions.push_back(cond);
                 return true;
             }
         }
@@ -865,21 +864,21 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             {
                 if (spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_SRC ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_AREA_ENTRY_SRC ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_SRC ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_DST ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_AREA_ENTRY_DST ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_AREA_ENTRY_DST ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_NEARBY_ENTRY ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_NEARBY_ENTRY ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_NEARBY_ENTRY ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_SRC ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_AREA_SRC ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_SRC ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_DST ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_GAMEOBJECT_AREA_DST ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_GAMEOBJECT_AREA_DST ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_DST_NEARBY_ENTRY ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_DST_NEARBY_ENTRY ||
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_DST_NEARBY_ENTRY ||
                     spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_CONE_ENTRY ||
-                    spellProto->GetEffectImplicitTargetBByIndex(i) == TARGET_UNIT_CONE_ENTRY)
+                    spellProto->GetEffectImplicitTargetAByIndex(i) == TARGET_UNIT_CONE_ENTRY)
                 {
                     targetfound = true;
                     //break;
@@ -955,9 +954,9 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
                         for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
                         {
                             if (pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
-                                pSpellInfo->GetEffectImplicitTargetBByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
+                                pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
                                 pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ANY ||
-                                pSpellInfo->GetEffectImplicitTargetBByIndex(j) == TARGET_UNIT_TARGET_ANY)
+                                pSpellInfo->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ANY)
                             {
                                 bIsItemSpellValid = true;
                                 break;
@@ -1289,7 +1288,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         }
         case CONDITION_MAPID:
         {
-            MapEntry const* me = sMapStore.LookupEntry(cond->mConditionValue1);
+            MapEntry const * me = sMapStore.LookupEntry(cond->mConditionValue1);
             if (!me)
             {
                 sLog->outErrorDb("Map condition has non existing map (%u), skipped", cond->mConditionValue1);

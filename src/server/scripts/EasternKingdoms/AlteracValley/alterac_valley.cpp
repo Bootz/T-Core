@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -60,7 +58,7 @@ class mob_av_marshal_or_warmaster : public CreatureScript
 
         struct mob_av_marshal_or_warmasterAI : public ScriptedAI
         {
-            mob_av_marshal_or_warmasterAI(Creature* c) : ScriptedAI(c) {}
+            mob_av_marshal_or_warmasterAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 uiChargeTimer;
             uint32 uiCleaveTimer;

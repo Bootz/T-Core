@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -84,14 +82,14 @@ class boss_four_horsemen : public CreatureScript
 public:
     boss_four_horsemen() : CreatureScript("boss_four_horsemen") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_four_horsemenAI (creature);
+        return new boss_four_horsemenAI (pCreature);
     }
 
     struct boss_four_horsemenAI : public BossAI
     {
-        boss_four_horsemenAI(Creature* c) : BossAI(c, BOSS_HORSEMEN)
+        boss_four_horsemenAI(Creature *c) : BossAI(c, BOSS_HORSEMEN)
         {
             id = Horsemen(0);
             for (uint8 i = 0; i < 4; ++i)
@@ -133,15 +131,15 @@ public:
             _Reset();
         }
 
-        bool DoEncounterAction(Unit* who, bool attack, bool reset, bool checkAllDead)
+        bool DoEncounterAction(Unit *who, bool attack, bool reset, bool checkAllDead)
         {
             if (!instance)
                 return false;
 
-            Creature* Thane = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_THANE)));
-            Creature* Lady = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_LADY)));
-            Creature* Baron = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_BARON)));
-            Creature* Sir = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_SIR)));
+            Creature *Thane = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_THANE)));
+            Creature *Lady = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_LADY)));
+            Creature *Baron = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_BARON)));
+            Creature *Sir = CAST_CRE(Unit::GetUnit(*me, instance->GetData64(DATA_SIR)));
 
             if (Thane && Lady && Baron && Sir)
             {
@@ -226,7 +224,7 @@ public:
                 movementCompleted = true;
                 me->SetReactState(REACT_AGGRESSIVE);
 
-                Unit* eventStarter = Unit::GetUnit(*me, uiEventStarterGUID);
+                Unit *eventStarter = Unit::GetUnit(*me, uiEventStarterGUID);
 
                 if (eventStarter && me->canAttack(eventStarter))
                     AttackStart(eventStarter);
@@ -250,7 +248,7 @@ public:
         }
 
         // switch to "who" if nearer than current target.
-        void SelectNearestTarget(Unit* who)
+        void SelectNearestTarget(Unit *who)
         {
             if (me->getVictim() && me->GetDistanceOrder(who, me->getVictim()) && me->canAttack(who))
             {
@@ -259,14 +257,14 @@ public:
             }
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             BossAI::MoveInLineOfSight(who);
             if (caster)
                 SelectNearestTarget(who);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit *who)
         {
             if (!movementCompleted && !movementStarted)
             {
@@ -317,7 +315,7 @@ public:
             DoScriptText(SAY_DEATH[id], me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             _EnterCombat();
 
@@ -363,8 +361,8 @@ public:
 
                         if (caster)
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
-                                DoCast(target, SPELL_PRIMARY(id));
+                            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
+                                DoCast(pTarget, SPELL_PRIMARY(id));
                         }
                         else
                             DoCast(me->getVictim(), SPELL_PRIMARY(id));

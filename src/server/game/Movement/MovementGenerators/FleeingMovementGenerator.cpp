@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -233,7 +231,7 @@ FleeingMovementGenerator<T>::_setMoveData(T &owner)
     float cur_dist;
     float angle_to_caster;
 
-    Unit* fright = ObjectAccessor::GetUnit(owner, i_frightGUID);
+    Unit * fright = ObjectAccessor::GetUnit(owner, i_frightGUID);
 
     if (fright)
     {
@@ -308,7 +306,7 @@ FleeingMovementGenerator<T>::Initialize(T &owner)
     owner.SetUInt64Value(UNIT_FIELD_TARGET, 0);
     owner.RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
-    if (Unit* fright = ObjectAccessor::GetUnit(owner, i_frightGUID))
+    if (Unit * fright = ObjectAccessor::GetUnit(owner, i_frightGUID))
     {
         i_caster_x = fright->GetPositionX();
         i_caster_y = fright->GetPositionY();

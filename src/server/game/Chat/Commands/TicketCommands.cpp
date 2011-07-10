@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -83,7 +81,7 @@ bool ChatHandler::HandleGMTicketGetByNameCommand(const char* args)
 
     // Detect target's GUID
     uint64 guid = 0;
-    if (Player* player = sObjectMgr->GetPlayer(name.c_str()))
+    if (Player *player = sObjectMgr->GetPlayer(name.c_str()))
         guid = player->GetGUID();
     else
         guid = sObjectMgr->GetPlayerGUIDByName(name);
@@ -135,7 +133,7 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
     SendGlobalGMSysMessage(msg.c_str());
 
     // Inform player, who submitted this ticket, that it is closed
-    if (Player* player = ticket->GetPlayer())
+    if (Player *player = ticket->GetPlayer())
         if (player->IsInWorld())
         {
             WorldPacket data(SMSG_GMTICKET_DELETETICKET, 4);
@@ -185,7 +183,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
         return true;
     }
     // If assigned to different player other than current, leave
-    Player* player = m_session->GetPlayer();
+    Player *player = m_session->GetPlayer();
     if (ticket->IsAssignedNotTo(player->GetGUID()))
     {
         PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.c_str());
@@ -232,7 +230,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
         security = sAccountMgr->GetSecurity(accountId, realmID);
     }
     // Check security
-    Player* player = m_session->GetPlayer();
+    Player *player = m_session->GetPlayer();
     if (security > uint32(player->GetSession()->GetSecurity()))
     {
         SendSysMessage(LANG_COMMAND_TICKETUNASSIGNSECURITY);
@@ -366,7 +364,7 @@ bool ChatHandler::HandleGMTicketCompleteCommand(const char* args)
         return true;
     }
 
-    if (Player* player = ticket->GetPlayer())
+    if (Player *player = ticket->GetPlayer())
         if (player->IsInWorld())
             ticket->SendResponse(player->GetSession());
 

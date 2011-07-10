@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS `achievement_dbc`;
+CREATE TABLE `achievement_dbc` (
+	`id` INT UNSIGNED NOT NULL DEFAULT '0',
+	`factionFlag` INT NOT NULL DEFAULT '0',
+	`mapId` INT NOT NULL DEFAULT '0',
+	`parentAchievement` INT UNSIGNED NOT NULL DEFAULT '0',
+	`name` TEXT NOT NULL,
+	`description` TEXT NOT NULL,
+	`categoryId` INT UNSIGNED NOT NULL DEFAULT '0',
+	`rewardPoints` INT UNSIGNED NOT NULL DEFAULT '0',
+	`OrderInCategory` INT UNSIGNED NOT NULL DEFAULT '0',
+	`flags` INT UNSIGNED NOT NULL DEFAULT '0',
+	`iconId` INT UNSIGNED NOT NULL DEFAULT '0',
+	`reward` TEXT NOT NULL,
+	`reqCriteriasCount` INT UNSIGNED NOT NULL DEFAULT '0',
+	`refAchievement` INT UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Export of Achievement.dbc';

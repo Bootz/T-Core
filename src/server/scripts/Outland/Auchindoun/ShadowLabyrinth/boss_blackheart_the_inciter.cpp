@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Blackheart_the_Inciter
-SD%Complete: 75
-SDComment: Incite Chaos not functional since core lacks Mind Control support
-SDCategory: Auchindoun, Shadow Labyrinth
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "shadow_labyrinth.h"
@@ -60,14 +51,14 @@ class boss_blackheart_the_inciter : public CreatureScript
 public:
     boss_blackheart_the_inciter() : CreatureScript("boss_blackheart_the_inciter") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_blackheart_the_inciterAI (creature);
+        return new boss_blackheart_the_inciterAI (pCreature);
     }
 
     struct boss_blackheart_the_inciterAI : public ScriptedAI
     {
-        boss_blackheart_the_inciterAI(Creature* c) : ScriptedAI(c)
+        boss_blackheart_the_inciterAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -92,12 +83,12 @@ public:
                 pInstance->SetData(DATA_BLACKHEARTTHEINCITEREVENT, NOT_STARTED);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -105,7 +96,7 @@ public:
                 pInstance->SetData(DATA_BLACKHEARTTHEINCITEREVENT, DONE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
 
@@ -137,9 +128,9 @@ public:
                 std::list<HostileReference *> t_list = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference *>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid());
-                    if (target && target->GetTypeId() == TYPEID_PLAYER)
-                        target->CastSpell(target, SPELL_INCITE_CHAOS_B, true);
+                    Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                    if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
+                        pTarget->CastSpell(pTarget, SPELL_INCITE_CHAOS_B, true);
                 }
 
                 DoResetThreat();
@@ -151,8 +142,8 @@ public:
             //Charge_Timer
             if (Charge_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_CHARGE);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_CHARGE);
                 Charge_Timer = 15000 + rand()%10000;
             } else Charge_Timer -= diff;
 

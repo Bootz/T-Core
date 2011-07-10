@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,7 +21,7 @@
 
 #define GOSSIP_START_EVENT  "Get your people to safety, we'll keep the Blue Dragonflight's forces at bay."
 #define GOSSIP_ITEM_1       "Activate the crystals when we get in trouble, right"
-#define GOSSIP_I_WANT_IN    "I'm not fighting, so send me in now!"
+#define GOSSIP_I_WANT_IN    "Sorry, I'm late! Can I get in to help my friends?"
 #define SPAWN_TIME          20000
 
 enum PortalCreatures
@@ -255,61 +253,61 @@ class npc_sinclari_vh : public CreatureScript
 public:
     npc_sinclari_vh() : CreatureScript("npc_sinclari_vh") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         switch(uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
-                player->CLOSE_GOSSIP_MENU();
-                CAST_AI(npc_sinclari_vh::npc_sinclariAI, (creature->AI()))->uiPhase = 1;
-                if (InstanceScript *pInstance = creature->GetInstanceScript())
+                pPlayer->CLOSE_GOSSIP_MENU();
+                CAST_AI(npc_sinclari_vh::npc_sinclariAI, (pCreature->AI()))->uiPhase = 1;
+                if (InstanceScript *pInstance = pCreature->GetInstanceScript())
                     pInstance->SetData(DATA_MAIN_EVENT_PHASE, SPECIAL);
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
-                player->SEND_GOSSIP_MENU(13854, creature->GetGUID());
+                pPlayer->SEND_GOSSIP_MENU(13854, pCreature->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+3:
-                player->NearTeleportTo(playerTeleportPosition.GetPositionX(), playerTeleportPosition.GetPositionY(), playerTeleportPosition.GetPositionZ(), playerTeleportPosition.GetOrientation(), true);
-                player->CLOSE_GOSSIP_MENU();
+                pPlayer->NearTeleportTo(playerTeleportPosition.GetPositionX(), playerTeleportPosition.GetPositionY(), playerTeleportPosition.GetPositionZ(), playerTeleportPosition.GetOrientation(), true);
+                pPlayer->CLOSE_GOSSIP_MENU();
                 break;
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (InstanceScript* pInstance = creature->GetInstanceScript())
+        if (InstanceScript* pInstance = pCreature->GetInstanceScript())
         {
             switch (pInstance->GetData(DATA_MAIN_EVENT_PHASE))
             {
                 case NOT_STARTED:
                 case FAIL: // Allow to start event if not started or wiped
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-                    player->SEND_GOSSIP_MENU(13853, creature->GetGUID());
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+                    pPlayer->SEND_GOSSIP_MENU(13853, pCreature->GetGUID());
                     break;
                 case IN_PROGRESS: // Allow to teleport inside if event is in progress
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_I_WANT_IN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
-                    player->SEND_GOSSIP_MENU(13853, creature->GetGUID());
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_I_WANT_IN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+                    pPlayer->SEND_GOSSIP_MENU(13853, pCreature->GetGUID());
                     break;
                 default:
-                    player->SEND_GOSSIP_MENU(13910, creature->GetGUID());
+                    pPlayer->SEND_GOSSIP_MENU(13910, pCreature->GetGUID());
             }
         }
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_sinclariAI(creature);
+        return new npc_sinclariAI(pCreature);
     }
 
     struct npc_sinclariAI : public ScriptedAI
     {
-        npc_sinclariAI(Creature* creature) : ScriptedAI(creature)
+        npc_sinclariAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-           pInstance = creature->GetInstanceScript();
+           pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -421,14 +419,14 @@ class mob_azure_saboteur : public CreatureScript
 public:
     mob_azure_saboteur() : CreatureScript("mob_azure_saboteur") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_saboteurAI (creature);
+        return new mob_azure_saboteurAI (pCreature);
     }
 
     struct mob_azure_saboteurAI : public npc_escortAI
     {
-        mob_azure_saboteurAI(Creature* c):npc_escortAI(c)
+        mob_azure_saboteurAI(Creature *c):npc_escortAI(c)
         {
             pInstance           = c->GetInstanceScript();
             bHasGotMovingPoints = false;
@@ -545,14 +543,14 @@ class npc_teleportation_portal_vh : public CreatureScript
 public:
     npc_teleportation_portal_vh() : CreatureScript("npc_teleportation_portal_vh") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature *pCreature) const
     {
-        return new npc_teleportation_portalAI(creature);
+        return new npc_teleportation_portalAI(pCreature);
     }
 
     struct npc_teleportation_portalAI : public ScriptedAI
     {
-        npc_teleportation_portalAI(Creature* c) : ScriptedAI(c), listOfMobs(me)
+        npc_teleportation_portalAI(Creature *c) : ScriptedAI(c), listOfMobs(me)
         {
             pInstance = c->GetInstanceScript();
             uiTypeOfMobsPortal = urand(0, 1);    // 0 - elite mobs   1 - portal guardian or portal keeper with regular mobs
@@ -573,9 +571,9 @@ public:
             bPortalGuardianOrKeeperOrEliteSpawn = false;
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
 
-        void MoveInLineOfSight(Unit* /*who*/) {}
+        void MoveInLineOfSight(Unit * /*who*/) {}
 
         void UpdateAI(const uint32 diff)
         {
@@ -637,7 +635,7 @@ public:
                         {
                             bPortalGuardianOrKeeperOrEliteSpawn = true;
                             uint32 entry = RAND(CREATURE_PORTAL_GUARDIAN, CREATURE_PORTAL_KEEPER);
-                            if (Creature* pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
+                            if (Creature *pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
                                 me->CastSpell(pPortalKeeper, SPELL_PORTAL_CHANNEL, false);
                         }
                         uiSpawnTimer = SPAWN_TIME;
@@ -658,14 +656,14 @@ public:
                 pInstance->SetData(DATA_WAVE_COUNT, pInstance->GetData(DATA_WAVE_COUNT)+1);
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void JustSummoned(Creature *pSummoned)
         {
             listOfMobs.Summon(pSummoned);
             if (pSummoned)
                 pInstance->SetData64(DATA_ADD_TRASH_MOB, pSummoned->GetGUID());
         }
 
-        void SummonedMobDied(Creature* pSummoned)
+        void SummonedMobDied(Creature *pSummoned)
         {
             listOfMobs.Despawn(pSummoned);
             if (pSummoned)
@@ -677,7 +675,7 @@ public:
 
 struct violet_hold_trashAI : public npc_escortAI
 {
-    violet_hold_trashAI(Creature* c):npc_escortAI(c)
+    violet_hold_trashAI(Creature *c):npc_escortAI(c)
     {
         pInstance = c->GetInstanceScript();
         bHasGotMovingPoints = false;
@@ -780,7 +778,7 @@ struct violet_hold_trashAI : public npc_escortAI
         }
     }
 
-    void JustDied(Unit* /*unit*/)
+    void JustDied(Unit * /*unit*/)
     {
         if (Creature* portal = Unit::GetCreature((*me), pInstance->GetData64(DATA_TELEPORTATION_PORTAL)))
             CAST_AI(npc_teleportation_portal_vh::npc_teleportation_portalAI, portal->AI())->SummonedMobDied(me);
@@ -803,14 +801,14 @@ class mob_azure_invader : public CreatureScript
 public:
     mob_azure_invader() : CreatureScript("mob_azure_invader") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_invaderAI (creature);
+        return new mob_azure_invaderAI (pCreature);
     }
 
     struct mob_azure_invaderAI : public violet_hold_trashAI
     {
-        mob_azure_invaderAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_invaderAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -846,9 +844,9 @@ public:
 
                 if (uiImpaleTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, SPELL_IMPALE);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_IMPALE);
                     uiImpaleTimer = 4000;
                 } else uiImpaleTimer -= diff;
             }
@@ -881,14 +879,14 @@ class mob_azure_binder : public CreatureScript
 public:
     mob_azure_binder() : CreatureScript("mob_azure_binder") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_binderAI (creature);
+        return new mob_azure_binderAI (pCreature);
     }
 
     struct mob_azure_binderAI : public violet_hold_trashAI
     {
-        mob_azure_binderAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_binderAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -924,9 +922,9 @@ public:
 
                     if (uiArcainBarrageTimer <= diff)
                 {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                            DoCast(target, DUNGEON_MODE(SPELL_ARCANE_BARRAGE, H_SPELL_ARCANE_BARRAGE));
+                        Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                            DoCast(pTarget, DUNGEON_MODE(SPELL_ARCANE_BARRAGE, H_SPELL_ARCANE_BARRAGE));
                     uiArcainBarrageTimer = 6000;
                 } else uiArcainBarrageTimer -= diff;
             }
@@ -941,9 +939,9 @@ public:
 
                 if (uiFrostboltTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, DUNGEON_MODE(SPELL_FROSTBOLT, H_SPELL_FROSTBOLT));
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, DUNGEON_MODE(SPELL_FROSTBOLT, H_SPELL_FROSTBOLT));
                     uiFrostboltTimer = 6000;
                 } else uiFrostboltTimer -= diff;
             }
@@ -959,14 +957,14 @@ class mob_azure_mage_slayer : public CreatureScript
 public:
     mob_azure_mage_slayer() : CreatureScript("mob_azure_mage_slayer") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_mage_slayerAI (creature);
+        return new mob_azure_mage_slayerAI (pCreature);
     }
 
     struct mob_azure_mage_slayerAI : public violet_hold_trashAI
     {
-        mob_azure_mage_slayerAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_mage_slayerAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1001,9 +999,9 @@ public:
             {
                 if (uiSpellLockTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, SPELL_SPELL_LOCK);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_SPELL_LOCK);
                     uiSpellLockTimer = 9000;
                 } else uiSpellLockTimer -= diff;
             }
@@ -1019,14 +1017,14 @@ class mob_azure_raider : public CreatureScript
 public:
     mob_azure_raider() : CreatureScript("mob_azure_raider") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_raiderAI (creature);
+        return new mob_azure_raiderAI (pCreature);
     }
 
     struct mob_azure_raiderAI : public violet_hold_trashAI
     {
-        mob_azure_raiderAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_raiderAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1071,14 +1069,14 @@ class mob_azure_stalker : public CreatureScript
 public:
     mob_azure_stalker() : CreatureScript("mob_azure_stalker") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_stalkerAI (creature);
+        return new mob_azure_stalkerAI (pCreature);
     }
 
     struct mob_azure_stalkerAI : public violet_hold_trashAI
     {
-        mob_azure_stalkerAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_stalkerAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1105,9 +1103,9 @@ public:
             {
                 if (uiTacticalBlinkTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true);
-                    if (target)
-                        DoCast(target, SPELL_TACTICAL_BLINK);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_TACTICAL_BLINK);
                         uiTacticalBlinkTimer = 6000;
                     TacticalBlinkCasted = true;
                 } else uiTacticalBlinkTimer -= diff;
@@ -1117,8 +1115,8 @@ public:
             {
                 if (uiBackstabTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 10, true);
-                    DoCast(target, SPELL_BACKSTAB);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0, 10, true);
+                    DoCast(pTarget, SPELL_BACKSTAB);
                     TacticalBlinkCasted = false;
                     uiBackstabTimer =1300;
                 } else uiBackstabTimer -= diff;
@@ -1167,17 +1165,17 @@ public:
             {
                 if (uiArcaneBlastTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, DUNGEON_MODE(SPELL_ARCANE_BLAST, H_SPELL_ARCANE_BLAST));
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, DUNGEON_MODE(SPELL_ARCANE_BLAST, H_SPELL_ARCANE_BLAST));
                     uiArcaneBlastTimer = 6000;
                 } else uiArcaneBlastTimer -= diff;
 
                 if (uiSlowTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                        if (target)
-                        DoCast(target, SPELL_SLOW);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                        if (pTarget)
+                        DoCast(pTarget, SPELL_SLOW);
                     uiSlowTimer = 5000;
                 } else uiSlowTimer -= diff;
             }
@@ -1186,9 +1184,9 @@ public:
             {
                 if (uiChainsOfIceTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, SPELL_CHAINS_OF_ICE);
+                    Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_CHAINS_OF_ICE);
                     uiChainsOfIceTimer = 7000;
                 } else uiChainsOfIceTimer -= diff;
 
@@ -1203,9 +1201,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_spellbreakerAI (creature);
+        return new mob_azure_spellbreakerAI (pCreature);
     }
 };
 
@@ -1214,14 +1212,14 @@ class mob_azure_captain : public CreatureScript
 public:
     mob_azure_captain() : CreatureScript("mob_azure_captain") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_captainAI (creature);
+        return new mob_azure_captainAI (pCreature);
     }
 
     struct  mob_azure_captainAI : public violet_hold_trashAI
     {
-        mob_azure_captainAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_captainAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1266,14 +1264,14 @@ class mob_azure_sorceror : public CreatureScript
 public:
     mob_azure_sorceror() : CreatureScript("mob_azure_sorceror") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_azure_sorcerorAI (creature);
+        return new mob_azure_sorcerorAI (pCreature);
     }
 
     struct  mob_azure_sorcerorAI : public violet_hold_trashAI
     {
-        mob_azure_sorcerorAI(Creature* c) : violet_hold_trashAI(c)
+        mob_azure_sorcerorAI(Creature *c) : violet_hold_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -1299,9 +1297,9 @@ public:
 
             if (uiArcaneStreamTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                if (target)
-                    DoCast(target, DUNGEON_MODE(SPELL_ARCANE_STREAM, H_SPELL_ARCANE_STREAM));
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                if (pTarget)
+                    DoCast(pTarget, DUNGEON_MODE(SPELL_ARCANE_STREAM, H_SPELL_ARCANE_STREAM));
                 uiArcaneStreamTimer = urand(0, 5000)+5000;
                 uiArcaneStreamTimerStartingValueHolder = uiArcaneStreamTimer;
             } else uiArcaneStreamTimer -= diff;

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -344,7 +342,7 @@ void BattlegroundEY::AddPlayer(Player *plr)
     m_PlayerScores[plr->GetGUID()] = sc;
 }
 
-void BattlegroundEY::RemovePlayer(Player *plr, uint64 guid, uint32 /*team*/)
+void BattlegroundEY::RemovePlayer(Player *plr, uint64 guid)
 {
     // sometimes flag aura not removed :(
     for (int j = EY_POINTS_MAX; j >= 0; --j)
@@ -575,7 +573,7 @@ void BattlegroundEY::RespawnFlagAfterDrop()
     SetDroppedFlagGUID(0);
 }
 
-void BattlegroundEY::HandleKillPlayer(Player* player, Player* killer)
+void BattlegroundEY::HandleKillPlayer(Player *player, Player *killer)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;

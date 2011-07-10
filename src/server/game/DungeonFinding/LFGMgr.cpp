@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,7 +17,7 @@
 
 #include "Common.h"
 #include "SharedDefines.h"
-#include "DataStorage.h"
+#include "DBCStores.h"
 
 #include "DisableMgr.h"
 #include "ObjectMgr.h"
@@ -432,7 +430,7 @@ void LFGMgr::InitializeLockedDungeons(Player* plr)
 */
 void LFGMgr::Join(Player* plr, uint8 roles, const LfgDungeonSet& selectedDungeons, const std::string& comment)
 {
-    if (!plr || !plr->GetSession() || selectedDungeons.empty())
+    if (!plr || !plr->GetSession() || !selectedDungeons.size())
       return;
 
     Group* grp = plr->GetGroup();
@@ -479,7 +477,7 @@ void LFGMgr::Join(Player* plr, uint8 roles, const LfgDungeonSet& selectedDungeon
         joinData.result = LFG_JOIN_DESERTER;
     else if (plr->HasAura(LFG_SPELL_DUNGEON_COOLDOWN))
         joinData.result = LFG_JOIN_RANDOM_COOLDOWN;
-    else if (dungeons.empty())
+    else if (!dungeons.size())
         joinData.result = LFG_JOIN_NOT_MEET_REQS;
     else if (grp)
     {
@@ -765,7 +763,7 @@ bool LFGMgr::CheckCompatibility(LfgGuidList check, LfgProposal*& pProposal)
 
     std::string strGuids = ConcatenateGuids(check);
 
-    if (check.size() > MAXGROUPSIZE || check.empty())
+    if (check.size() > MAXGROUPSIZE || !check.size())
     {
         sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::CheckCompatibility: (%s): Size wrong - Not compatibles", strGuids.c_str());
         return false;
@@ -1154,7 +1152,7 @@ void LFGMgr::GetCompatibleDungeons(LfgDungeonSet& dungeons, const PlayerSet& pla
     {
         uint64 guid = (*it)->GetGUID();
         LfgLockMap cachedLockMap = GetLockedDungeons(guid);
-        for (LfgLockMap::const_iterator it = cachedLockMap.begin(); it != cachedLockMap.end() && dungeons.size(); ++it)
+        for(LfgLockMap::const_iterator it = cachedLockMap.begin(); it != cachedLockMap.end() && dungeons.size(); ++it)
         {
             uint32 dungeonId = (it->first & 0x00FFFFFF); // Compare dungeon ids
             LfgDungeonSet::iterator itDungeon = dungeons.find(dungeonId);
@@ -1165,7 +1163,7 @@ void LFGMgr::GetCompatibleDungeons(LfgDungeonSet& dungeons, const PlayerSet& pla
             }
         }
     }
-    if (!dungeons.empty())
+    if (dungeons.size())
         lockMap.clear();
 }
 
@@ -1178,7 +1176,7 @@ void LFGMgr::GetCompatibleDungeons(LfgDungeonSet& dungeons, const PlayerSet& pla
 */
 bool LFGMgr::CheckGroupRoles(LfgRolesMap& groles, bool removeLeaderFlag /*= true*/)
 {
-    if (groles.empty())
+    if (!groles.size())
         return false;
 
     uint8 damage = 0;

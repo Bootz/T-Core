@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Watchkeeper_Gargolmar
-SD%Complete: 80
-SDComment: Missing adds to heal him. Surge should be used on target furthest away, not random.
-SDCategory: Hellfire Citadel, Hellfire Ramparts
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -58,7 +49,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
 
         struct boss_watchkeeper_gargolmarAI : public ScriptedAI
         {
-            boss_watchkeeper_gargolmarAI(Creature* creature) : ScriptedAI(creature)
+            boss_watchkeeper_gargolmarAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
             }
 
@@ -79,7 +70,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 YelledForHeal = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
             }
@@ -132,8 +123,8 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 {
                     DoScriptText(SAY_SURGE, me);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_SURGE);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, SPELL_SURGE);
 
                     Surge_Timer = 5000+rand()%8000;
                 }

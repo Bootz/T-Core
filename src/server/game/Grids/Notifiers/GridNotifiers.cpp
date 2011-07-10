@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -145,7 +143,7 @@ void PlayerRelocationNotifier::Visit(CreatureMapType &m)
 
     for (CreatureMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
-        Creature* c = iter->getSource();
+        Creature * c = iter->getSource();
 
         vis_guids.erase(c->GetGUID());
 
@@ -160,7 +158,7 @@ void CreatureRelocationNotifier::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
-        Player* pl = iter->getSource();
+        Player * pl = iter->getSource();
 
         if (!pl->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             pl->UpdateVisibilityOf(&i_creature);
@@ -188,7 +186,7 @@ void DelayedUnitRelocation::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        Creature* unit = iter->getSource();
+        Creature * unit = iter->getSource();
         if (!unit->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             continue;
 
@@ -206,7 +204,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        Player* player = iter->getSource();
+        Player * player = iter->getSource();
         WorldObject const *viewPoint = player->m_seer;
 
         if (!viewPoint->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))

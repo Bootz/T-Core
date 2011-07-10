@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -109,7 +107,7 @@ AccountOpResult AccountMgr::ChangeUsername(uint32 accid, std::string new_uname, 
     normalizeString(new_passwd);
 
     std::string safe_new_uname = new_uname;
-    LoginDatabase.EscapeString(safe_new_uname);
+    LoginDatabase.escape_string(safe_new_uname);
 
     LoginDatabase.PExecute("UPDATE account SET v='0', s='0', username='%s', sha_pass_hash='%s' WHERE id='%d'", safe_new_uname.c_str(),
                 CalculateShaPassHash(new_uname, new_passwd).c_str(), accid);
@@ -139,7 +137,7 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd)
 
 uint32 AccountMgr::GetId(std::string username)
 {
-    LoginDatabase.EscapeString(username);
+    LoginDatabase.escape_string(username);
     QueryResult result = LoginDatabase.PQuery("SELECT id FROM account WHERE username = '%s'", username.c_str());
     if (!result)
         return 0;

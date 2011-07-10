@@ -1,7 +1,5 @@
-/*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+/*/*
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,12 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Muru
-SD%Complete: 80
-SDComment: all sounds, black hole effect triggers to often (46228)
-*/
 
 #include "ScriptPCH.h"
 #include "sunwell_plateau.h"
@@ -108,14 +100,14 @@ class boss_entropius : public CreatureScript
 public:
     boss_entropius() : CreatureScript("boss_entropius") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_entropiusAI (creature);
+        return new boss_entropiusAI (pCreature);
     }
 
     struct boss_entropiusAI : public ScriptedAI
     {
-        boss_entropiusAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_entropiusAI(Creature *c) : ScriptedAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -136,7 +128,7 @@ public:
                 pInstance->SetData(DATA_MURU_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoCastAOE(SPELL_NEGATIVE_ENERGY_E, true);
             DoCast(me, SPELL_ENTROPIUS_SPAWN, false);
@@ -208,14 +200,14 @@ class boss_muru : public CreatureScript
 public:
     boss_muru() : CreatureScript("boss_muru") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_muruAI (creature);
+        return new boss_muruAI (pCreature);
     }
 
     struct boss_muruAI : public Scripted_NoMovementAI
     {
-        boss_muruAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
+        boss_muruAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -248,7 +240,7 @@ public:
                 pInstance->SetData(DATA_MURU_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoCastAOE(SPELL_NEGATIVE_ENERGY, false);
 
@@ -256,7 +248,7 @@ public:
                 pInstance->SetData(DATA_MURU_EVENT, IN_PROGRESS);
         }
 
-        void DamageTaken(Unit* /*done_by*/, uint32 &damage)
+        void DamageTaken(Unit * /*done_by*/, uint32 &damage)
         {
             if (damage > me->GetHealth() && Phase == 1)
             {
@@ -373,14 +365,14 @@ class npc_muru_portal : public CreatureScript
 public:
     npc_muru_portal() : CreatureScript("npc_muru_portal") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_muru_portalAI (creature);
+        return new npc_muru_portalAI (pCreature);
     }
 
     struct npc_muru_portalAI : public Scripted_NoMovementAI
     {
-        npc_muru_portalAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
+        npc_muru_portalAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -457,14 +449,14 @@ class npc_dark_fiend : public CreatureScript
 public:
     npc_dark_fiend() : CreatureScript("npc_dark_fiend") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_dark_fiendAI (creature);
+        return new npc_dark_fiendAI (pCreature);
     }
 
     struct npc_dark_fiendAI : public ScriptedAI
     {
-        npc_dark_fiendAI(Creature* c) : ScriptedAI(c) {}
+        npc_dark_fiendAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 WaitTimer;
         bool InAction;
@@ -520,14 +512,14 @@ class npc_void_sentinel : public CreatureScript
 public:
     npc_void_sentinel() : CreatureScript("npc_void_sentinel") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_void_sentinelAI (creature);
+        return new npc_void_sentinelAI (pCreature);
     }
 
     struct npc_void_sentinelAI : public ScriptedAI
     {
-        npc_void_sentinelAI(Creature* c) : ScriptedAI(c){}
+        npc_void_sentinelAI(Creature *c) : ScriptedAI(c){}
 
         uint32 PulseTimer;
         uint32 VoidBlastTimer;
@@ -576,14 +568,14 @@ class npc_blackhole : public CreatureScript
 public:
     npc_blackhole() : CreatureScript("npc_blackhole") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_blackholeAI (creature);
+        return new npc_blackholeAI (pCreature);
     }
 
     struct npc_blackholeAI : public ScriptedAI
     {
-        npc_blackholeAI(Creature* c) : ScriptedAI(c)
+        npc_blackholeAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }

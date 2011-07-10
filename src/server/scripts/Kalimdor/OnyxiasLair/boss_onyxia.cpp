@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,16 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Onyxia
-SD%Complete: 95
-SDComment: <Known bugs>
-               Ground visual for Deep Breath effect;
-               Not summoning whelps on phase 3 (lacks info)
-           </Known bugs>
-SDCategory: Onyxia's Lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "onyxias_lair.h"
@@ -107,16 +95,16 @@ class boss_onyxia : public CreatureScript
 public:
     boss_onyxia() : CreatureScript("boss_onyxia") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_onyxiaAI (creature);
+        return new boss_onyxiaAI (pCreature);
     }
 
     struct boss_onyxiaAI : public ScriptedAI
     {
-        boss_onyxiaAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+        boss_onyxiaAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
             Reset();
         }
 
@@ -179,7 +167,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             DoScriptText(SAY_AGGRO, me);
             me->SetInCombatWithZone();
@@ -199,11 +187,11 @@ public:
             Summons.DespawnAll();
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void JustSummoned(Creature *pSummoned)
         {
             pSummoned->SetInCombatWithZone();
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                pSummoned->AI()->AttackStart(target);
+            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                pSummoned->AI()->AttackStart(pTarget);
 
             switch (pSummoned->GetEntry())
             {
@@ -217,17 +205,17 @@ public:
             Summons.Summon(pSummoned);
         }
 
-        void SummonedCreatureDespawn(Creature* summon)
+        void SummonedCreatureDespawn(Creature *summon)
         {
             Summons.Despawn(summon);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit* /*pVictim*/)
         {
             DoScriptText(SAY_KILL, me);
         }
 
-        void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell)
+        void SpellHit(Unit * /*pCaster*/, const SpellEntry* pSpell)
         {
             if (pSpell->Id == SPELL_BREATH_EAST_TO_WEST ||
                 pSpell->Id == SPELL_BREATH_WEST_TO_EAST ||
@@ -459,8 +447,8 @@ public:
                 {
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != POINT_MOTION_TYPE)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_FIREBALL);
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            DoCast(pTarget, SPELL_FIREBALL);
 
                         m_uiFireballTimer = 8000;
                     }

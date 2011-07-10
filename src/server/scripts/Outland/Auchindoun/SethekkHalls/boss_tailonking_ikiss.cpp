@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Talon_King_Ikiss
-SD%Complete: 80
-SDComment: Heroic supported. Some details missing, but most are spell related.
-SDCategory: Auchindoun, Sethekk Halls
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "sethekk_halls.h"
@@ -58,14 +49,14 @@ class boss_talon_king_ikiss : public CreatureScript
 public:
     boss_talon_king_ikiss() : CreatureScript("boss_talon_king_ikiss") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_talon_king_ikissAI (creature);
+        return new boss_talon_king_ikissAI (pCreature);
     }
 
     struct boss_talon_king_ikissAI : public ScriptedAI
     {
-        boss_talon_king_ikissAI(Creature* c) : ScriptedAI(c)
+        boss_talon_king_ikissAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -92,7 +83,7 @@ public:
             ManaShield = false;
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!me->getVictim() && who->isTargetableForAttack() && (me->IsHostileTo(who)) && who->isInAccessiblePlaceFor(me))
             {
@@ -114,7 +105,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
         }
@@ -152,16 +143,16 @@ public:
 
             if (Sheep_Timer <= diff)
             {
-                Unit* target;
+                Unit *pTarget;
 
                 //second top aggro target in normal, random target in heroic correct?
                 if (IsHeroic())
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 else
-                    target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
+                    pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
 
-                if (target)
-                    DoCast(target, SPELL_POLYMORPH);
+                if (pTarget)
+                    DoCast(pTarget, SPELL_POLYMORPH);
                 Sheep_Timer = 15000+rand()%2500;
             } else Sheep_Timer -= diff;
 
@@ -185,21 +176,21 @@ public:
             {
                 DoScriptText(EMOTE_ARCANE_EXP, me);
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     if (me->IsNonMeleeSpellCasted(false))
                         me->InterruptNonMeleeSpells(false);
 
                     //Spell doesn't work, but we use for visual effect at least
-                    DoCast(target, SPELL_BLINK);
+                    DoCast(pTarget, SPELL_BLINK);
 
-                    float X = target->GetPositionX();
-                    float Y = target->GetPositionY();
-                    float Z = target->GetPositionZ();
+                    float X = pTarget->GetPositionX();
+                    float Y = pTarget->GetPositionY();
+                    float Z = pTarget->GetPositionZ();
 
                     DoTeleportTo(X, Y, Z);
 
-                    DoCast(target, SPELL_BLINK_TELEPORT);
+                    DoCast(pTarget, SPELL_BLINK_TELEPORT);
                     Blink = true;
                 }
                 Blink_Timer = 35000+rand()%5000;

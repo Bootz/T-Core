@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Emperor_Dagran_Thaurissan
-SD%Complete: 99
-SDComment:
-SDCategory: Blackrock Depths
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -43,14 +34,14 @@ class boss_emperor_dagran_thaurissan : public CreatureScript
 public:
     boss_emperor_dagran_thaurissan() : CreatureScript("boss_emperor_dagran_thaurissan") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_draganthaurissanAI (creature);
+        return new boss_draganthaurissanAI (pCreature);
     }
 
     struct boss_draganthaurissanAI : public ScriptedAI
     {
-        boss_draganthaurissanAI(Creature* c) : ScriptedAI(c) {}
+        boss_draganthaurissanAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 HandOfThaurissan_Timer;
         uint32 AvatarOfFlame_Timer;
@@ -63,7 +54,7 @@ public:
             //Counter= 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             me->CallForHelp(VISIBLE_RANGE);
@@ -82,8 +73,8 @@ public:
 
             if (HandOfThaurissan_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_HANDOFTHAURISSAN);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_HANDOFTHAURISSAN);
 
                 //3 Hands of Thaurissan will be casted
                 //if (Counter < 3)

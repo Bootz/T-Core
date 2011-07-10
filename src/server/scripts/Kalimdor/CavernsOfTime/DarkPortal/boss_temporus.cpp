@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Temporus
-SD%Complete: 75
-SDComment: More abilities need to be implemented
-SDCategory: Caverns of Time, The Dark Portal
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "dark_portal.h"
@@ -48,14 +39,14 @@ class boss_temporus : public CreatureScript
 public:
     boss_temporus() : CreatureScript("boss_temporus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_temporusAI (creature);
+        return new boss_temporusAI (pCreature);
     }
 
     struct boss_temporusAI : public ScriptedAI
     {
-        boss_temporusAI(Creature* c) : ScriptedAI(c)
+        boss_temporusAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -75,17 +66,17 @@ public:
             WingBuffet_Timer = 25000+rand()%10000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -93,7 +84,7 @@ public:
                 pInstance->SetData(TYPE_RIFT, SPECIAL);
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             //Despawn Time Keeper
             if (who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == C_TIME_KEEPER)

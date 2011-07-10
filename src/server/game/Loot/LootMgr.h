@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOOTMGR_H
-#define LOOTMGR_H
+#ifndef TRILLIUM_LOOTMGR_H
+#define TRILLIUM_LOOTMGR_H
 
 #include "ItemEnchantmentMgr.h"
 #include "ByteBuffer.h"
@@ -147,7 +145,7 @@ struct LootItem
     explicit LootItem(LootStoreItem const& li);
 
     // Basic checks for player/item compatibility - if false no chance to see the item in the loot
-    bool AllowedForPlayer(Player const* player) const;
+    bool AllowedForPlayer(Player const * player) const;
 
     void AddAllowedLooter(Player const* player);
     AllowedLooterSet* GetAllowedLooters() { return &allowedGUIDs; }
@@ -227,7 +225,7 @@ class LootTemplate
         // True if template includes at least 1 quest drop entry
         bool HasQuestDrop(LootTemplateMap const& store, uint8 groupId = 0) const;
         // True if template includes at least 1 quest drop for an active quest of the player
-        bool HasQuestDropForPlayer(LootTemplateMap const& store, Player const* player, uint8 groupId = 0) const;
+        bool HasQuestDropForPlayer(LootTemplateMap const& store, Player const * player, uint8 groupId = 0) const;
 
         // Checks integrity of the template
         void Verify(LootStore const& store, uint32 Id) const;
@@ -403,7 +401,7 @@ inline void LoadLootTables()
     LoadLootTemplates_Skinning();
     LoadLootTemplates_Disenchant();
     LoadLootTemplates_Prospecting();
-    LoadLootTemplates_Spell();
+    //LoadLootTemplates_Spell();
 
     LoadLootTemplates_Reference();
 }

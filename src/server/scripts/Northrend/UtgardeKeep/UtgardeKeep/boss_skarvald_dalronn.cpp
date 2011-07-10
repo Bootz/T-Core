@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Skarvald_Dalronn
-SD%Complete: 95
-SDComment: Needs adjustments to blizzlike timers, Yell Text + Sound to DB
-SDCategory: Utgarde Keep
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "utgarde_keep.h"
@@ -64,14 +55,14 @@ class boss_skarvald_the_constructor : public CreatureScript
 public:
     boss_skarvald_the_constructor() : CreatureScript("boss_skarvald_the_constructor") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_skarvald_the_constructorAI (creature);
+        return new boss_skarvald_the_constructorAI (pCreature);
     }
 
     struct boss_skarvald_the_constructorAI : public ScriptedAI
     {
-        boss_skarvald_the_constructorAI(Creature* c) : ScriptedAI(c)
+        boss_skarvald_the_constructorAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -103,7 +94,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             if (!ghost && pInstance)
             {
@@ -147,7 +138,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             if (!ghost)
             {
@@ -216,14 +207,14 @@ class boss_dalronn_the_controller : public CreatureScript
 public:
     boss_dalronn_the_controller() : CreatureScript("boss_dalronn_the_controller") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_dalronn_the_controllerAI (creature);
+        return new boss_dalronn_the_controllerAI (pCreature);
     }
 
     struct boss_dalronn_the_controllerAI : public ScriptedAI
     {
-        boss_dalronn_the_controllerAI(Creature* c) : ScriptedAI(c)
+        boss_dalronn_the_controllerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -260,7 +251,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             if (!ghost && pInstance)
             {
@@ -306,7 +297,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             if (!ghost)
             {

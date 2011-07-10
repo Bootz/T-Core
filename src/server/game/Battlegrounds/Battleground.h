@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,7 +20,7 @@
 
 #include "Common.h"
 #include "SharedDefines.h"
-#include "StoragesEnums.h"
+#include "DBCEnums.h"
 
 class Creature;
 class GameObject;
@@ -510,7 +508,7 @@ class Battleground
         // must be implemented in BG subclass
         virtual void HandleAreaTrigger(Player* /*Source*/, uint32 /*Trigger*/) {}
         // must be implemented in BG subclass if need AND call base class generic code
-        virtual void HandleKillPlayer(Player* player, Player* killer);
+        virtual void HandleKillPlayer(Player *player, Player *killer);
         virtual void HandleKillUnit(Creature* /*unit*/, Player* /*killer*/);
 
         // Battleground events
@@ -556,9 +554,9 @@ class Battleground
         void DoorOpen(uint32 type);
         void DoorClose(uint32 type);
         //to be removed
-        const char* GetTrinityString(int32 entry);
+        const char* GetTrilliumString(int32 entry);
 
-        virtual bool HandlePlayerUnderMap(Player* /*plr*/) { return false; }
+        virtual bool HandlePlayerUnderMap(Player * /*plr*/) { return false; }
 
         // since arenas can be AvA or Hvh, we have to get the "temporary" team of a player
         uint32 GetPlayerTeam(const uint64& guid) const;
@@ -592,7 +590,7 @@ class Battleground
         // Scorekeeping
         BattlegroundScoreMap m_PlayerScores;                // Player scores
         // must be implemented in BG subclass
-        virtual void RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*team*/) {}
+        virtual void RemovePlayer(Player * /*player*/, uint64 /*guid*/) {}
 
         // Player lists, those need to be accessible by inherited classes
         BattlegroundPlayerMap  m_Players;

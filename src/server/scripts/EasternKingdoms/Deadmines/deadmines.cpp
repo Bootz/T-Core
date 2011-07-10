@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Deadmines
-SD%Complete: 0
-SDComment: Placeholder
-SDCategory: Deadmines
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "deadmines.h"
@@ -48,7 +39,8 @@ public:
         }
         if (pInstance->GetData(EVENT_STATE)!= CANNON_NOT_USED)
             return false;
-        if (targets.GetGOTarget() && targets.GetGOTarget()->GetEntry() == GO_DEFIAS_CANNON)
+        if (targets.getGOTarget() && targets.getGOTarget()->GetTypeId() == TYPEID_GAMEOBJECT &&
+           targets.getGOTarget()->GetEntry() == GO_DEFIAS_CANNON)
         {
             pInstance->SetData(EVENT_STATE, CANNON_GUNPOWDER_USED);
         }

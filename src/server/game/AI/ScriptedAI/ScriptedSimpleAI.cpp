@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -109,7 +107,7 @@ void SimpleAI::EnterCombat(Unit *who)
                 DoPlaySoundToSet(me, Aggro_Sound[random_text]);
 }
 
-void SimpleAI::KilledUnit(Unit* victim)
+void SimpleAI::KilledUnit(Unit *victim)
 {
     uint8 random_text = urand(0, 2);
 
@@ -153,7 +151,7 @@ void SimpleAI::KilledUnit(Unit* victim)
         DoCast(pTarget, Kill_Spell);
 }
 
-void SimpleAI::DamageTaken(Unit* killer, uint32 &damage)
+void SimpleAI::DamageTaken(Unit *killer, uint32 &damage)
 {
     //Return if damage taken won't kill us
     if (me->GetHealth() > damage)

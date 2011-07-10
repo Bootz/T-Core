@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -112,25 +110,28 @@ void InstanceScript::UpdateDoorState(GameObject *door)
         return;
 
     bool open = true;
-    for (DoorInfoMap::iterator itr = lower; itr != upper && open; ++itr)
+    for (DoorInfoMap::iterator itr = lower; itr != upper; ++itr)
     {
-        switch (itr->second.type)
+        if (itr->second.type == DOOR_TYPE_ROOM)
         {
-            case DOOR_TYPE_ROOM:
-                open = (itr->second.bossInfo->state != IN_PROGRESS);
+            if (itr->second.bossInfo->state == IN_PROGRESS)
+            {
+                open = false;
                 break;
-            case DOOR_TYPE_PASSAGE:
-                open = (itr->second.bossInfo->state == DONE);
+            }
+        }
+        else if (itr->second.type == DOOR_TYPE_PASSAGE)
+        {
+            if (itr->second.bossInfo->state != DONE)
+            {
+                open = false;
                 break;
-            case DOOR_TYPE_SPAWN_HOLE:
-                open = (itr->second.bossInfo->state == IN_PROGRESS);
-                break;
-            default:
-                break;
+            }
         }
     }
 
     door->SetGoState(open ? GO_STATE_ACTIVE : GO_STATE_READY);
+    //sLog->outError("Door %u is %s.", door->GetEntry(), open ? "opened" : "closed");
 }
 
 void InstanceScript::AddDoor(GameObject *door, bool add)
@@ -318,6 +319,24 @@ void InstanceScript::DoSendNotifyToInstance(const char *format, ...)
         }
         va_end(ap);
     }
+}
+
+// Complete Achievement for all players in instance
+void InstanceScript::DoCompleteAchievement(uint32 achievement)
+{
+    AchievementEntry const* pAE = GetAchievementStore()->LookupEntry(achievement);
+    Map::PlayerList const &PlayerList = instance->GetPlayers();
+
+    if (!pAE)
+    {
+        sLog->outError("TSCR: DoCompleteAchievement called for not existing achievement %u", achievement);
+        return;
+    }
+
+    if (!PlayerList.isEmpty())
+        for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+            if (Player *pPlayer = i->getSource())
+                pPlayer->CompletedAchievement(pAE);
 }
 
 // Update Achievement Criteria for all players in instance

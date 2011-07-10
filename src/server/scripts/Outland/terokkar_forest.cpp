@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Terokkar_Forest
-SD%Complete: 85
-SDComment: Quest support: 9889, 10009, 10873, 10896, 10898, 11096, 10052, 10051. Skettis->Ogri'la Flight
-SDCategory: Terokkar Forest
-EndScriptData */
 
 /* ContentData
 mob_unkor_the_ruthless
@@ -56,9 +47,9 @@ class mob_unkor_the_ruthless : public CreatureScript
 public:
     mob_unkor_the_ruthless() : CreatureScript("mob_unkor_the_ruthless") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_unkor_the_ruthlessAI (creature);
+        return new mob_unkor_the_ruthlessAI (pCreature);
     }
 
     struct mob_unkor_the_ruthlessAI : public ScriptedAI
@@ -78,7 +69,7 @@ public:
             me->setFaction(FACTION_HOSTILE);
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
 
         void DoNice()
         {
@@ -91,7 +82,7 @@ public:
             UnkorUnfriendly_Timer = 60000;
         }
 
-        void DamageTaken(Unit* done_by, uint32 &damage)
+        void DamageTaken(Unit *done_by, uint32 &damage)
         {
             if (done_by->GetTypeId() == TYPEID_PLAYER)
                 if (me->HealthBelowPctDamaged(30, damage))
@@ -100,7 +91,7 @@ public:
                 {
                     for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL; itr = itr->next())
                     {
-                        Player* pGroupie = itr->getSource();
+                        Player *pGroupie = itr->getSource();
                         if (pGroupie &&
                             pGroupie->GetQuestStatus(QUEST_DONTKILLTHEFATONE) == QUEST_STATUS_INCOMPLETE &&
                             pGroupie->GetReqKillOrCastCurrentCount(QUEST_DONTKILLTHEFATONE, 18260) == 10)
@@ -163,19 +154,19 @@ class mob_infested_root_walker : public CreatureScript
 public:
     mob_infested_root_walker() : CreatureScript("mob_infested_root_walker") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_infested_root_walkerAI (creature);
+        return new mob_infested_root_walkerAI (pCreature);
     }
 
     struct mob_infested_root_walkerAI : public ScriptedAI
     {
-        mob_infested_root_walkerAI(Creature* c) : ScriptedAI(c) {}
+        mob_infested_root_walkerAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void EnterCombat(Unit * /*who*/) { }
 
-        void DamageTaken(Unit* done_by, uint32 &damage)
+        void DamageTaken(Unit *done_by, uint32 &damage)
         {
             if (done_by && done_by->GetTypeId() == TYPEID_PLAYER)
                 if (me->GetHealth() <= damage)
@@ -195,33 +186,33 @@ class npc_skywing : public CreatureScript
 public:
     npc_skywing() : CreatureScript("npc_skywing") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_skywingAI(creature);
+        return new npc_skywingAI(pCreature);
     }
 
     struct npc_skywingAI : public npc_escortAI
     {
     public:
-        npc_skywingAI(Creature* c) : npc_escortAI(c) {}
+        npc_skywingAI(Creature *c) : npc_escortAI(c) {}
 
         void WaypointReached(uint32 i)
         {
-            Player* player = GetPlayerForEscort();
-            if (!player)
+            Player* pPlayer = GetPlayerForEscort();
+            if (!pPlayer)
                 return;
 
             switch(i)
             {
                 case 8:
-                    player->AreaExploredOrEventHappens(10898);
+                    pPlayer->AreaExploredOrEventHappens(10898);
                     break;
             }
         }
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
                 return;
@@ -258,19 +249,19 @@ class mob_rotting_forest_rager : public CreatureScript
 public:
     mob_rotting_forest_rager() : CreatureScript("mob_rotting_forest_rager") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_rotting_forest_ragerAI (creature);
+        return new mob_rotting_forest_ragerAI (pCreature);
     }
 
     struct mob_rotting_forest_ragerAI : public ScriptedAI
     {
-        mob_rotting_forest_ragerAI(Creature* c) : ScriptedAI(c) {}
+        mob_rotting_forest_ragerAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void EnterCombat(Unit * /*who*/) { }
 
-        void DamageTaken(Unit* done_by, uint32 &damage)
+        void DamageTaken(Unit *done_by, uint32 &damage)
         {
             if (done_by->GetTypeId() == TYPEID_PLAYER)
                 if (me->GetHealth() <= damage)
@@ -298,18 +289,18 @@ class mob_netherweb_victim : public CreatureScript
 public:
     mob_netherweb_victim() : CreatureScript("mob_netherweb_victim") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_netherweb_victimAI (creature);
+        return new mob_netherweb_victimAI (pCreature);
     }
 
     struct mob_netherweb_victimAI : public ScriptedAI
     {
-        mob_netherweb_victimAI(Creature* c) : ScriptedAI(c) {}
+        mob_netherweb_victimAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
-        void MoveInLineOfSight(Unit* /*who*/) { }
+        void EnterCombat(Unit * /*who*/) { }
+        void MoveInLineOfSight(Unit * /*who*/) { }
 
         void JustDied(Unit* Killer)
         {
@@ -359,36 +350,36 @@ class npc_floon : public CreatureScript
 public:
     npc_floon() : CreatureScript("npc_floon") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FLOON2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-            player->SEND_GOSSIP_MENU(9443, creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FLOON2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->SEND_GOSSIP_MENU(9443, pCreature->GetGUID());
         }
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            player->CLOSE_GOSSIP_MENU();
-            creature->setFaction(FACTION_HOSTILE_FL);
-            DoScriptText(SAY_FLOON_ATTACK, creature, player);
-            creature->AI()->AttackStart(player);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pCreature->setFaction(FACTION_HOSTILE_FL);
+            DoScriptText(SAY_FLOON_ATTACK, pCreature, pPlayer);
+            pCreature->AI()->AttackStart(pPlayer);
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (player->GetQuestStatus(QUEST_CRACK_SKULLS) == QUEST_STATUS_INCOMPLETE)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FLOON1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+        if (pPlayer->GetQuestStatus(QUEST_CRACK_SKULLS) == QUEST_STATUS_INCOMPLETE)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FLOON1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
-        player->SEND_GOSSIP_MENU(9442, creature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(9442, pCreature->GetGUID());
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_floonAI (creature);
+        return new npc_floonAI (pCreature);
     }
 
     struct npc_floonAI : public ScriptedAI
@@ -412,7 +403,7 @@ public:
                 me->setFaction(m_uiNormFaction);
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
 
         void UpdateAI(const uint32 diff)
         {
@@ -470,9 +461,9 @@ public:
 
         void WaypointReached(uint32 i)
         {
-            Player* player = GetPlayerForEscort();
+            Player* pPlayer = GetPlayerForEscort();
 
-            if (!player)
+            if (!pPlayer)
                 return;
 
             switch(i)
@@ -484,18 +475,18 @@ public:
                     Cage->SetGoState(GO_STATE_ACTIVE);
                 }
                 break;
-            case 2: DoScriptText(SAY_PROGRESS_1, me, player); break;
-            case 5: DoScriptText(SAY_PROGRESS_2, me, player); break;
-            case 6: DoScriptText(SAY_PROGRESS_3, me, player); break;
-            case 29:DoScriptText(SAY_PROGRESS_4, me, player);
-                if (player)
+            case 2: DoScriptText(SAY_PROGRESS_1, me, pPlayer); break;
+            case 5: DoScriptText(SAY_PROGRESS_2, me, pPlayer); break;
+            case 6: DoScriptText(SAY_PROGRESS_3, me, pPlayer); break;
+            case 29:DoScriptText(SAY_PROGRESS_4, me, pPlayer);
+                if (pPlayer)
                 {
-                    if (player->GetTeam() == ALLIANCE)
-                        player->GroupEventHappens(QUEST_EFTW_A, me);
-                    else if (player->GetTeam() == HORDE)
-                        player->GroupEventHappens(QUEST_EFTW_H, me);
+                    if (pPlayer->GetTeam() == ALLIANCE)
+                        pPlayer->GroupEventHappens(QUEST_EFTW_A, me);
+                    else if (pPlayer->GetTeam() == HORDE)
+                        pPlayer->GroupEventHappens(QUEST_EFTW_H, me);
                 }
-                me->SetInFront(player); break;
+                me->SetInFront(pPlayer); break;
             case 30: me->HandleEmoteCommand(EMOTE_ONESHOT_WAVE); break;
             case 31: DoCast(me, SPELL_CAT);
                 me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING); break;
@@ -509,29 +500,29 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (Player* pPlayer = GetPlayerForEscort())
             {
-                if (player->GetTeam() == ALLIANCE)
-                    player->FailQuest(QUEST_EFTW_A);
-                else if (player->GetTeam() == HORDE)
-                    player->FailQuest(QUEST_EFTW_H);
+                if (pPlayer->GetTeam() == ALLIANCE)
+                    pPlayer->FailQuest(QUEST_EFTW_A);
+                else if (pPlayer->GetTeam() == HORDE)
+                    pPlayer->FailQuest(QUEST_EFTW_H);
             }
         }
     };
 
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
+    bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* quest)
     {
         if (quest->GetQuestId() == QUEST_EFTW_H || quest->GetQuestId() == QUEST_EFTW_A)
         {
-            CAST_AI(npc_escortAI, (creature->AI()))->Start(true, false, player->GetGUID());
-            creature->setFaction(113);
+            CAST_AI(npc_escortAI, (pCreature->AI()))->Start(true, false, pPlayer->GetGUID());
+            pCreature->setFaction(113);
         }
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_isla_starmaneAI(creature);
+        return new npc_isla_starmaneAI(pCreature);
     }
 
 };
@@ -549,45 +540,45 @@ class go_skull_pile : public GameObjectScript
 public:
     go_skull_pile() : GameObjectScript("go_skull_pile") { }
 
-    bool OnGossipSelect(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, GameObject* pGo, uint32 uiSender, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         switch(uiSender)
         {
-            case GOSSIP_SENDER_MAIN:    SendActionMenu(player, pGo, uiAction); break;
+            case GOSSIP_SENDER_MAIN:    SendActionMenu(pPlayer, pGo, uiAction); break;
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* pPlayer, GameObject* pGo)
     {
-        if ((player->GetQuestStatus(11885) == QUEST_STATUS_INCOMPLETE) || player->GetQuestRewardStatus(11885))
+        if ((pPlayer->GetQuestStatus(11885) == QUEST_STATUS_INCOMPLETE) || pPlayer->GetQuestRewardStatus(11885))
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_DARKSCREECHER_AKKARAI, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_KARROG, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_GEZZARAK_THE_HUNTRESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_VAKKIZ_THE_WINDRAGER, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_DARKSCREECHER_AKKARAI, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_KARROG, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_GEZZARAK_THE_HUNTRESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_VAKKIZ_THE_WINDRAGER, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         }
 
-        player->SEND_GOSSIP_MENU(pGo->GetGOInfo()->questgiver.gossipID, pGo->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(pGo->GetGOInfo()->questgiver.gossipID, pGo->GetGUID());
         return true;
     }
 
-    void SendActionMenu(Player* player, GameObject* /*pGo*/, uint32 uiAction)
+    void SendActionMenu(Player* pPlayer, GameObject* /*pGo*/, uint32 uiAction)
     {
         switch(uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF + 1:
-                  player->CastSpell(player, 40642, false);
+                  pPlayer->CastSpell(pPlayer, 40642, false);
                 break;
             case GOSSIP_ACTION_INFO_DEF + 2:
-                  player->CastSpell(player, 40640, false);
+                  pPlayer->CastSpell(pPlayer, 40640, false);
                 break;
             case GOSSIP_ACTION_INFO_DEF + 3:
-                  player->CastSpell(player, 40632, false);
+                  pPlayer->CastSpell(pPlayer, 40632, false);
                 break;
             case GOSSIP_ACTION_INFO_DEF + 4:
-                  player->CastSpell(player, 40644, false);
+                  pPlayer->CastSpell(pPlayer, 40644, false);
                 break;
         }
     }
@@ -607,24 +598,24 @@ class npc_slim : public CreatureScript
 public:
     npc_slim() : CreatureScript("npc_slim") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_TRADE)
-            player->GetSession()->SendListInventory(creature->GetGUID());
+            pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
 
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (creature->isVendor() && player->GetReputationRank(FACTION_CONSORTIUM) >= REP_FRIENDLY)
+        if (pCreature->isVendor() && pPlayer->GetReputationRank(FACTION_CONSORTIUM) >= REP_FRIENDLY)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
-            player->SEND_GOSSIP_MENU(9896, creature->GetGUID());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+            pPlayer->SEND_GOSSIP_MENU(9896, pCreature->GetGUID());
         }
         else
-            player->SEND_GOSSIP_MENU(9895, creature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(9895, pCreature->GetGUID());
 
         return true;
     }
@@ -646,35 +637,35 @@ class npc_akuno : public CreatureScript
 public:
     npc_akuno() : CreatureScript("npc_akuno") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* pQuest)
+    bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
     {
         if (pQuest->GetQuestId() == QUEST_ESCAPING_THE_TOMB)
         {
-            if (npc_akunoAI* pEscortAI = CAST_AI(npc_akuno::npc_akunoAI, creature->AI()))
-                pEscortAI->Start(false, false, player->GetGUID());
+            if (npc_akunoAI* pEscortAI = CAST_AI(npc_akuno::npc_akunoAI, pCreature->AI()))
+                pEscortAI->Start(false, false, pPlayer->GetGUID());
 
-            if (player->GetTeamId() == TEAM_ALLIANCE)
-                creature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
+            if (pPlayer->GetTeamId() == TEAM_ALLIANCE)
+                pCreature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
             else
-                creature->setFaction(FACTION_ESCORT_H_NEUTRAL_PASSIVE);
+                pCreature->setFaction(FACTION_ESCORT_H_NEUTRAL_PASSIVE);
         }
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_akunoAI(creature);
+        return new npc_akunoAI(pCreature);
     }
 
     struct npc_akunoAI : public npc_escortAI
     {
-        npc_akunoAI(Creature* c) : npc_escortAI(c) {}
+        npc_akunoAI(Creature *c) : npc_escortAI(c) {}
 
         void WaypointReached(uint32 i)
         {
-            Player* player = GetPlayerForEscort();
+            Player* pPlayer = GetPlayerForEscort();
 
-            if (!player)
+            if (!pPlayer)
                 return;
 
             switch(i)
@@ -684,8 +675,8 @@ public:
                     me->SummonCreature(NPC_CABAL_SKRIMISHER, -2793.55f, 5412.79f, -34.53f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                     break;
                 case 11:
-                    if (player && player->GetTypeId() == TYPEID_PLAYER)
-                        player->GroupEventHappens(QUEST_ESCAPING_THE_TOMB, me);
+                    if (pPlayer && pPlayer->GetTypeId() == TYPEID_PLAYER)
+                        pPlayer->GroupEventHappens(QUEST_ESCAPING_THE_TOMB, me);
                     break;
             }
         }

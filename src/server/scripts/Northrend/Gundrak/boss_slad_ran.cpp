@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -72,14 +70,14 @@ class boss_slad_ran : public CreatureScript
 public:
     boss_slad_ran() : CreatureScript("boss_slad_ran") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_slad_ranAI (creature);
+        return new boss_slad_ranAI (pCreature);
     }
 
     struct boss_slad_ranAI : public ScriptedAI
     {
-        boss_slad_ranAI(Creature* c) : ScriptedAI(c), lSummons(me)
+        boss_slad_ranAI(Creature *c) : ScriptedAI(c), lSummons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -178,7 +176,7 @@ public:
                 pInstance->SetData(DATA_SLAD_RAN_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
@@ -197,14 +195,14 @@ class mob_slad_ran_constrictor : public CreatureScript
 public:
     mob_slad_ran_constrictor() : CreatureScript("mob_slad_ran_constrictor") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_slad_ran_constrictorAI (creature);
+        return new mob_slad_ran_constrictorAI (pCreature);
     }
 
     struct mob_slad_ran_constrictorAI : public ScriptedAI
     {
-        mob_slad_ran_constrictorAI(Creature* c) : ScriptedAI(c) {}
+        mob_slad_ran_constrictorAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiGripOfSladRanTimer;
 
@@ -234,14 +232,14 @@ class mob_slad_ran_viper : public CreatureScript
 public:
     mob_slad_ran_viper() : CreatureScript("mob_slad_ran_viper") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_slad_ran_viperAI (creature);
+        return new mob_slad_ran_viperAI (pCreature);
     }
 
     struct mob_slad_ran_viperAI : public ScriptedAI
     {
-        mob_slad_ran_viperAI(Creature* c) : ScriptedAI(c) {}
+        mob_slad_ran_viperAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiVenomousBiteTimer;
 

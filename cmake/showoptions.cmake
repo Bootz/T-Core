@@ -1,6 +1,16 @@
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 # output generic information about the core and buildtype chosen
 message("")
-message("* TrilliumEMU commithash : ${rev_hash_str}")
+message("* TrilliumENCORE commithash : ${rev_hash_str}")
 if( UNIX )
   message("* Build binaries in      : ${CMAKE_BUILD_TYPE} mode")
 endif()
@@ -64,7 +74,7 @@ endif()
 
 if( WITH_COREDEBUG )
   message("* Use coreside debug     : Yes")
-  add_definitions(-DTRINITY_DEBUG)
+  add_definitions(-DTRILLIUM_DEBUG)
 else()
   message("* Use coreside debug     : No  (default)")
 endif()

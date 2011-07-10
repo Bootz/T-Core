@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SPELLAURADEFINES_H
-#define SPELLAURADEFINES_H
+#ifndef TRILLIUM_SPELLAURADEFINES_H
+#define TRILLIUM_SPELLAURADEFINES_H
 
 #define MAX_AURAS 64                                        // client support up to 255, but it will cause problems with group auras updating
 
@@ -35,21 +33,16 @@ enum AURA_FLAGS
     AFLAG_NEGATIVE          = 0x80
 };
 
-// these are modes, in which aura effect handler may be called
-
 enum AuraEffectHandleModes
 {
     AURA_EFFECT_HANDLE_DEFAULT = 0x0,
-    AURA_EFFECT_HANDLE_REAL = 0x01, // handler applies/removes effect from unit
-    AURA_EFFECT_HANDLE_SEND_FOR_CLIENT = 0x02, // handler sends apply/remove packet to unit
-    AURA_EFFECT_HANDLE_CHANGE_AMOUNT = 0x04, // handler updates effect on target after effect amount change
-    AURA_EFFECT_HANDLE_REAPPLY = 0x08, // handler updates effect on target after aura is reapplied on target
-    AURA_EFFECT_HANDLE_STAT = 0x10, // handler updates effect on target when stat removal/apply is needed for calculations by core
-    AURA_EFFECT_HANDLE_SKILL = 0x20, // handler updates effect on target when skill removal/apply is needed for calculations by core
-    AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK = (AURA_EFFECT_HANDLE_SEND_FOR_CLIENT | AURA_EFFECT_HANDLE_REAL), // any case handler need to send packet
-    AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK = (AURA_EFFECT_HANDLE_CHANGE_AMOUNT | AURA_EFFECT_HANDLE_REAL), // any case handler applies effect depending on amount
+    AURA_EFFECT_HANDLE_REAL = 0x01,
+    AURA_EFFECT_HANDLE_SEND_FOR_CLIENT = 0x02,
+    AURA_EFFECT_HANDLE_CHANGE_AMOUNT = 0x04,
+    AURA_EFFECT_HANDLE_STAT = 0x08,
+    AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK = (AURA_EFFECT_HANDLE_SEND_FOR_CLIENT | AURA_EFFECT_HANDLE_REAL),
+    AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK = (AURA_EFFECT_HANDLE_CHANGE_AMOUNT | AURA_EFFECT_HANDLE_REAL),
     AURA_EFFECT_HANDLE_CHANGE_AMOUNT_SEND_FOR_CLIENT_MASK = (AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK | AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK),
-    AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK = (AURA_EFFECT_HANDLE_REAPPLY | AURA_EFFECT_HANDLE_REAL),
 };
 
 //m_schoolAbsorb
@@ -337,7 +330,7 @@ enum AuraType
     SPELL_AURA_X_RAY = 273,
     SPELL_AURA_ABILITY_CONSUME_NO_AMMO = 274,
     SPELL_AURA_MOD_IGNORE_SHAPESHIFT = 275,
-    SPELL_AURA_276 = 276,                                   // Only "Test Mod Damage % GetMechanic()" spell, possible mod damage done
+    SPELL_AURA_276 = 276,                                   // Only "Test Mod Damage % Mechanic" spell, possible mod damage done
     SPELL_AURA_MOD_MAX_AFFECTED_TARGETS = 277,
     SPELL_AURA_MOD_DISARM_RANGED = 278,
     SPELL_AURA_INITIALIZE_IMAGES = 279,

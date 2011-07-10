@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -95,6 +93,7 @@ enum ScriptsType
     SCRIPTS_GAMEOBJECT,
     SCRIPTS_EVENT,
     SCRIPTS_WAYPOINT,
+    SCRIPTS_GOSSIP,
 
     SCRIPTS_LAST
 };
@@ -329,6 +328,7 @@ extern ScriptMapMap sQuestStartScripts;
 extern ScriptMapMap sSpellScripts;
 extern ScriptMapMap sGameObjectScripts;
 extern ScriptMapMap sEventScripts;
+extern ScriptMapMap sGossipScripts;
 extern ScriptMapMap sWaypointScripts;
 
 std::string GetScriptsTableNameByType(ScriptsType type);
@@ -347,7 +347,7 @@ struct SpellClickInfo
     SpellClickUserTypes userType;
 
     // helpers
-    bool IsFitToRequirements(Unit const* clicker, Unit const* clickee) const;
+    bool IsFitToRequirements(Unit const* clicker, Unit const * clickee) const;
 };
 
 typedef std::multimap<uint32, SpellClickInfo> SpellClickInfoMap;
@@ -375,18 +375,18 @@ typedef UNORDERED_MAP<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap> Map
 
 typedef UNORDERED_MAP<uint64/*(instance, guid) pair*/, time_t> RespawnTimes;
 
-// Trinity string ranges
-#define MIN_STRING_ID           1                    // 'string'
-#define MAX_STRING_ID           2000000000
-#define MIN_DB_SCRIPT_STRING_ID        MAX_STRING_ID // 'db_script_string'
+// Trillium string ranges
+#define MIN_TRILLIUM_STRING_ID           1                    // 'trillium_string'
+#define MAX_TRILLIUM_STRING_ID           2000000000
+#define MIN_DB_SCRIPT_STRING_ID        MAX_TRILLIUM_STRING_ID // 'db_script_string'
 #define MAX_DB_SCRIPT_STRING_ID        2000010000
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 
-// Trinity Trainer Reference start range
-#define TRAINER_START_REF      200000
+// Trillium Trainer Reference start range
+#define TRILLIUM_TRAINER_START_REF      200000
 
-struct TrinityStringLocale
+struct TrilliumStringLocale
 {
     StringVector Content;
 };
@@ -401,7 +401,7 @@ typedef UNORDERED_MAP<uint32, ItemSetNameLocale> ItemSetNameLocaleMap;
 typedef UNORDERED_MAP<uint32, QuestLocale> QuestLocaleMap;
 typedef UNORDERED_MAP<uint32, NpcTextLocale> NpcTextLocaleMap;
 typedef UNORDERED_MAP<uint32, PageTextLocale> PageTextLocaleMap;
-typedef UNORDERED_MAP<int32, TrinityStringLocale> TrinityStringLocaleMap;
+typedef UNORDERED_MAP<int32, TrilliumStringLocale> TrilliumStringLocaleMap;
 typedef UNORDERED_MAP<uint32, GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
 typedef UNORDERED_MAP<uint32, PointOfInterestLocale> PointOfInterestLocaleMap;
 
@@ -474,18 +474,19 @@ struct PointOfInterest
 
 struct GossipMenuItems
 {
-    uint32          MenuId;
-    uint32          OptionIndex;
-    uint8           OptionIcon;
-    std::string     OptionText;
-    uint32          OptionType;
-    uint32          OptionNpcflag;
-    uint32          ActionMenuId;
-    uint32          ActionPoiId;
-    bool            BoxCoded;
-    uint32          BoxMoney;
-    std::string     BoxText;
-    ConditionList   Conditions;
+    uint32          menu_id;
+    uint32          id;
+    uint8           option_icon;
+    std::string     option_text;
+    uint32          option_id;
+    uint32          npc_option_npcflag;
+    uint32          action_menu_id;
+    uint32          action_poi_id;
+    uint32          action_script_id;
+    bool            box_coded;
+    uint32          box_money;
+    std::string     box_text;
+    ConditionList   conditions;
 };
 
 struct GossipMenus
@@ -535,6 +536,9 @@ struct GraveYardData
     uint32 team;
 };
 typedef std::multimap<uint32, GraveYardData> GraveYardMap;
+
+// NPC gossip text id
+typedef UNORDERED_MAP<uint32, uint32> CacheNpcTextIdMap;
 
 typedef UNORDERED_MAP<uint32, VendorItemData> CacheVendorItemMap;
 typedef UNORDERED_MAP<uint32, TrainerSpellData> CacheTrainerSpellMap;
@@ -643,7 +647,7 @@ class ObjectMgr
         ItemSetNameEntry const* GetItemSetNameEntry(uint32 itemId)
         {
             ItemSetNameMap::iterator itr = mItemSetNameMap.find(itemId);
-            if (itr != mItemSetNameMap.end())
+            if(itr != mItemSetNameMap.end())
                 return &itr->second;
             return NULL;
         }
@@ -792,6 +796,14 @@ class ObjectMgr
             return NULL;
         }
 
+        VehicleScalingInfo const* GetVehicleScalingInfo(uint32 vehicleEntry) const
+        {
+            VehicleScalingMap::const_iterator itr = m_VehicleScalingMap.find(vehicleEntry);
+            if (itr != m_VehicleScalingMap.end())
+                return &itr->second;
+            return NULL;
+        }
+
         DungeonEncounterList const* GetDungeonEncounterList(uint32 mapId, Difficulty difficulty)
         {
             UNORDERED_MAP<uint32, DungeonEncounterList>::const_iterator itr = mDungeonEncounters.find(MAKE_PAIR32(mapId, difficulty));
@@ -837,11 +849,6 @@ class ObjectMgr
             return &mCreatureQuestRelations;
         }
 
-        QuestRelations* GetCreatureQuestInvolvedRelation()
-        {
-            return &mCreatureQuestInvolvedRelations;
-        }
-
         QuestRelationBounds GetCreatureQuestRelationBounds(uint32 creature_entry)
         {
             return mCreatureQuestRelations.equal_range(creature_entry);
@@ -857,13 +864,14 @@ class ObjectMgr
         void LoadQuestStartScripts();
         void LoadEventScripts();
         void LoadSpellScripts();
+        void LoadGossipScripts();
         void LoadWaypointScripts();
 
         void LoadSpellScriptNames();
         void ValidateSpellScripts();
 
-        bool LoadTrinityStrings(char const* table, int32 min_value, int32 max_value);
-        bool LoadTrinityStrings() { return LoadTrinityStrings("string", MIN_STRING_ID, MAX_STRING_ID); }
+        bool LoadTrilliumStrings(char const* table, int32 min_value, int32 max_value);
+        bool LoadTrilliumStrings() { return LoadTrilliumStrings("trillium_string", MIN_TRILLIUM_STRING_ID, MAX_TRILLIUM_STRING_ID); }
         void LoadDbScriptStrings();
         void LoadCreatureClassLevelStats();
         void LoadCreatureLocales();
@@ -894,6 +902,7 @@ class ObjectMgr
         void LoadMailLevelRewards();
         void LoadVehicleTemplateAccessories();
         void LoadVehicleAccessories();
+        void LoadVehicleScaling();
 
         void LoadGossipText();
 
@@ -1063,14 +1072,14 @@ class ObjectMgr
         GameObjectData& NewGOData(uint32 guid) { return mGameObjectDataMap[guid]; }
         void DeleteGOData(uint32 guid);
 
-        TrinityStringLocale const* GetTrinityStringLocale(int32 entry) const
+        TrilliumStringLocale const* GetTrilliumStringLocale(int32 entry) const
         {
-            TrinityStringLocaleMap::const_iterator itr = mTrinityStringLocaleMap.find(entry);
-            if (itr == mTrinityStringLocaleMap.end()) return NULL;
+            TrilliumStringLocaleMap::const_iterator itr = mTrilliumStringLocaleMap.find(entry);
+            if (itr == mTrilliumStringLocaleMap.end()) return NULL;
             return &itr->second;
         }
-        const char *GetTrinityString(int32 entry, LocaleConstant locale_idx) const;
-        const char *GetTrinityStringForDBCLocale(int32 entry) const { return GetTrinityString(entry, DBCLocaleIndex); }
+        const char *GetTrilliumString(int32 entry, LocaleConstant locale_idx) const;
+        const char *GetTrilliumStringForDBCLocale(int32 entry) const { return GetTrilliumString(entry, DBCLocaleIndex); }
         LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
         void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
 
@@ -1137,6 +1146,15 @@ class ObjectMgr
         GameTeleMap const& GetGameTeleMap() const { return m_GameTeleMap; }
         bool AddGameTele(GameTele& data);
         bool DeleteGameTele(const std::string& name);
+
+        uint32 GetNpcGossip(uint32 entry) const
+        {
+            CacheNpcTextIdMap::const_iterator iter = m_mCacheNpcTextIdMap.find(entry);
+            if (iter == m_mCacheNpcTextIdMap.end())
+                return 0;
+
+            return iter->second;
+        }
 
         TrainerSpellData const* GetNpcTrainerSpells(uint32 entry) const
         {
@@ -1277,6 +1295,7 @@ class ObjectMgr
 
         VehicleAccessoryMap m_VehicleTemplateAccessoryMap;
         VehicleAccessoryMap m_VehicleAccessoryMap;
+        VehicleScalingMap m_VehicleScalingMap;
 
         typedef             std::vector<LocaleConstant> LocalForIndex;
         LocalForIndex        m_LocalForIndex;
@@ -1341,7 +1360,7 @@ class ObjectMgr
         QuestLocaleMap mQuestLocaleMap;
         NpcTextLocaleMap mNpcTextLocaleMap;
         PageTextLocaleMap mPageTextLocaleMap;
-        TrinityStringLocaleMap mTrinityStringLocaleMap;
+        TrilliumStringLocaleMap mTrilliumStringLocaleMap;
         GossipMenuItemsLocaleMap mGossipMenuItemsLocaleMap;
         PointOfInterestLocaleMap mPointOfInterestLocaleMap;
         RespawnTimes mCreatureRespawnTimes;
@@ -1349,6 +1368,7 @@ class ObjectMgr
         RespawnTimes mGORespawnTimes;
         ACE_Thread_Mutex m_GORespawnTimesMtx;
 
+        CacheNpcTextIdMap m_mCacheNpcTextIdMap;
         CacheVendorItemMap m_mCacheVendorItemMap;
         CacheTrainerSpellMap m_mCacheTrainerSpellMap;
 
@@ -1368,7 +1388,7 @@ class ObjectMgr
 #define sObjectMgr ACE_Singleton<ObjectMgr, ACE_Null_Mutex>::instance()
 
 // scripting access functions
-bool LoadTrinityStrings(char const* table, int32 start_value = MAX_CREATURE_AI_TEXT_STRING_ID, int32 end_value = std::numeric_limits<int32>::min());
+bool LoadTrilliumStrings(char const* table, int32 start_value = MAX_CREATURE_AI_TEXT_STRING_ID, int32 end_value = std::numeric_limits<int32>::min());
 uint32 GetScriptId(const char *name);
 
 #endif

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -382,7 +380,7 @@ bool AchievementChatLink::ValidateName(char* buffer, const char* context)
 
     bool res = false;
     for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
-        if (_achievement->name[i] && strcmp(_achievement->name[i], buffer) == 0)
+        if (*_achievement->name[i] && strcmp(_achievement->name[i], buffer) == 0)
         {
             res = true;
             break;

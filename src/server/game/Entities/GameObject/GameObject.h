@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GAMEOBJECT_H
-#define TRINITYCORE_GAMEOBJECT_H
+#ifndef TRILLIUMCORE_GAMEOBJECT_H
+#define TRILLIUMCORE_GAMEOBJECT_H
 
 #include "Common.h"
 #include "SharedDefines.h"
@@ -632,7 +630,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         bool IsTransport() const;
         bool IsDynTransport() const;
-        bool IsDestructibleBuilding() const;
+        bool IsDestructableBuilding() const;
 
         uint32 GetDBTableGUIDLow() const { return m_DBTableGuid; }
 
@@ -766,7 +764,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         GameObject* LookupFishingHoleAround(float range);
 
-        void CastSpell(Unit* target, uint32 spell);
+        void CastSpell(Unit *target, uint32 spell);
         void SendCustomAnim(uint32 anim);
         bool IsInRange(float x, float y, float z, float radius) const;
         void TakenDamage(uint32 damage, Unit* who = NULL);
@@ -776,7 +774,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         uint64 GetRotation() const { return m_rotation; }
         virtual uint32 GetScriptId() const { return GetGOInfo()->ScriptId; }
-        GameObjectAI* AI() const { return m_AI; }
+        GameObjectAI* AI() const { return (GameObjectAI*)m_AI; }
 
         std::string GetAIName() const;
     protected:

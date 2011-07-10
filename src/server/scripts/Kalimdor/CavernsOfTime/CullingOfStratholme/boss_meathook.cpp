@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss meathook
-SDAuthor: Tartalo
-SD%Complete: 100
-SDComment: It may need timer adjustment
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
@@ -52,14 +42,14 @@ class boss_meathook : public CreatureScript
 public:
     boss_meathook() : CreatureScript("boss_meathook") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_meathookAI (creature);
+        return new boss_meathookAI (pCreature);
     }
 
     struct boss_meathookAI : public ScriptedAI
     {
-        boss_meathookAI(Creature* c) : ScriptedAI(c)
+        boss_meathookAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             if (pInstance)
@@ -110,8 +100,8 @@ public:
 
             if (uiChainTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_CONSTRICTING_CHAINS); //anyone but the tank
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_CONSTRICTING_CHAINS); //anyone but the tank
                 uiChainTimer = urand(2000, 4000);
             } else uiChainTimer -= diff;
 
@@ -126,7 +116,7 @@ public:
                 pInstance->SetData(DATA_MEATHOOK_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;

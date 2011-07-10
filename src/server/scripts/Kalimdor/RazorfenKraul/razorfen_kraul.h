@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,5 +18,5 @@
 #ifndef DEF_RAZORFEN_KRAUL_H
 #define DEF_RAZORFEN_KRAUL_H
 
-#define EVENT_WARD_KEEPER 1
+#define TYPE_WARD_KEEPERS       1
 #endif

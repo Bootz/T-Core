@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss epoch
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro, consecutive attacks to a random target durin time wrap, adjust timers
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
@@ -55,14 +45,14 @@ class boss_epoch : public CreatureScript
 public:
     boss_epoch() : CreatureScript("boss_epoch") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_epochAI (creature);
+        return new boss_epochAI (pCreature);
     }
 
     struct boss_epochAI : public ScriptedAI
     {
-        boss_epochAI(Creature* c) : ScriptedAI(c)
+        boss_epochAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -106,8 +96,8 @@ public:
 
             if (uiCurseOfExertionTimer < diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_CURSE_OF_EXERTION);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_CURSE_OF_EXERTION);
                 uiCurseOfExertionTimer = 9300;
             } else uiCurseOfExertionTimer -= diff;
 
@@ -141,7 +131,7 @@ public:
                 pInstance->SetData(DATA_EPOCH_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;

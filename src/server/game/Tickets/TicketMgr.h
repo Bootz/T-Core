@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -100,11 +98,10 @@ public:
     std::string GetAssignedToName() const
     {
         std::string name;
-        // save queries if ticket is not assigned
         if (_assignedTo)
-            sObjectMgr->GetPlayerNameByGUID(_assignedTo, name);
-
-        return name;
+            if (sObjectMgr->GetPlayerNameByGUID(_assignedTo, name))
+                return name;
+        return NULL;
     }
     const uint64& GetLastModifiedTime() const { return _lastModifiedTime; }
     GMTicketEscalationStatus GetEscalatedStatus() const { return _escalatedStatus; }

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -70,14 +68,14 @@ class boss_noth : public CreatureScript
 public:
     boss_noth() : CreatureScript("boss_noth") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_nothAI (creature);
+        return new boss_nothAI (pCreature);
     }
 
     struct boss_nothAI : public BossAI
     {
-        boss_nothAI(Creature* c) : BossAI(c, BOSS_NOTH) {}
+        boss_nothAI(Creature *c) : BossAI(c, BOSS_NOTH) {}
 
         uint32 waveCount, balconyCount;
 
@@ -88,7 +86,7 @@ public:
             _Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             _EnterCombat();
             DoScriptText(SAY_AGGRO, me);
@@ -119,7 +117,7 @@ public:
                 DoScriptText(SAY_SLAY, me);
         }
 
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature *summon)
         {
             summons.Summon(summon);
             summon->setActive(true);

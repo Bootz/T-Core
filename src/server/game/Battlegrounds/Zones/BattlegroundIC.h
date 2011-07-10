@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -870,11 +868,11 @@ class BattlegroundIC : public Battleground
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
 
-        void RemovePlayer(Player *plr, uint64 guid, uint32 team);
+        void RemovePlayer(Player *plr, uint64 guid);
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         bool SetupBattleground();
         void SpawnLeader(uint32 teamid);
-        void HandleKillUnit(Creature* unit, Player* killer);
+        void HandleKillUnit(Creature *unit, Player *killer);
         void HandleKillPlayer(Player* player, Player* killer);
         void EndBattleground(uint32 winner);
         void EventPlayerClickedOnFlag(Player *source, GameObject* /*target_obj*/);

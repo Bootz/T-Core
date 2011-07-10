@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Magmus
-SD%Complete: 100
-SDComment:
-SDCategory: Blackrock Depths
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -42,14 +33,14 @@ class boss_magmus : public CreatureScript
 public:
     boss_magmus() : CreatureScript("boss_magmus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_magmusAI (creature);
+        return new boss_magmusAI (pCreature);
     }
 
     struct boss_magmusAI : public ScriptedAI
     {
-        boss_magmusAI(Creature* c) : ScriptedAI(c) {}
+        boss_magmusAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 FieryBurst_Timer;
         uint32 WarStomp_Timer;
@@ -60,7 +51,7 @@ public:
             WarStomp_Timer =0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -90,7 +81,7 @@ public:
             DoMeleeAttackIfReady();
         }
         // When he die open door to last chamber
-        void JustDied(Unit* who)
+        void JustDied(Unit *who)
         {
             if (InstanceScript* pInstance = who->GetInstanceScript())
                 pInstance->HandleGameObject(pInstance->GetData64(DATA_THRONE_DOOR), true);

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -206,11 +204,11 @@ void Channel::Join(uint64 p, const char *pass)
     if (!IsConstant())
     {
         // Update last_used timestamp in db
-        if (!players.empty())
+        if(!players.empty())
             UpdateChannelUseageInDB();
 
         // If the channel has no owner yet and ownership is allowed, set the new owner.
-        if (!m_ownerGUID && m_ownership)
+        if ( !m_ownerGUID && m_ownership)
         {
             SetOwner(p, (players.size() > 1 ? true : false));
             players[p].SetModerator(true);

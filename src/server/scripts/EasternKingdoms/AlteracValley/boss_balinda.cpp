@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,7 +48,7 @@ public:
 
     struct mob_water_elementalAI : public ScriptedAI
     {
-        mob_water_elementalAI(Creature* c) : ScriptedAI(c) {}
+        mob_water_elementalAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiWaterBoltTimer;
         uint64 uiBalindaGUID;
@@ -76,7 +74,7 @@ public:
             // check if creature is not outside of building
             if (uiResetTimer < diff)
             {
-                if (Creature* pBalinda = Unit::GetCreature(*me, uiBalindaGUID))
+                if (Creature *pBalinda = Unit::GetCreature(*me, uiBalindaGUID))
                     if (me->GetDistance2d(pBalinda->GetHomePosition().GetPositionX(), pBalinda->GetHomePosition().GetPositionY()) > 50)
                         EnterEvadeMode();
                     uiResetTimer = 5*IN_MILLISECONDS;
@@ -86,7 +84,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new mob_water_elementalAI(creature);
     }
@@ -99,7 +97,7 @@ public:
 
     struct boss_balindaAI : public ScriptedAI
     {
-        boss_balindaAI(Creature* c) : ScriptedAI(c), Summons(me) {}
+        boss_balindaAI(Creature *c) : ScriptedAI(c), Summons(me) {}
 
         uint32 uiArcaneExplosionTimer;
         uint32 uiConeOfColdTimer;
@@ -122,7 +120,7 @@ public:
             Summons.DespawnAll();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(YELL_AGGRO, me);
         }
@@ -196,7 +194,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature *creature) const
     {
         return new boss_balindaAI(creature);
     }

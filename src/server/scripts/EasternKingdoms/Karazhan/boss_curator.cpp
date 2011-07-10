@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Curator
-SD%Complete: 100
-SDComment:
-SDCategory: Karazhan
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -49,14 +40,14 @@ class boss_curator : public CreatureScript
 public:
     boss_curator() : CreatureScript("boss_curator") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_curatorAI (creature);
+        return new boss_curatorAI (pCreature);
     }
 
     struct boss_curatorAI : public ScriptedAI
     {
-        boss_curatorAI(Creature* c) : ScriptedAI(c) {}
+        boss_curatorAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 AddTimer;
         uint32 HatefulBoltTimer;
@@ -76,17 +67,17 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE, true);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_KILL1, SAY_KILL2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
         }
@@ -133,13 +124,13 @@ public:
                 {
                     //Summon Astral Flare
                     Creature* AstralFlare = DoSpawnCreature(17096, float(rand()%37), float(rand()%37), 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                    Unit* target = NULL;
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    Unit *pTarget = NULL;
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
-                    if (AstralFlare && target)
+                    if (AstralFlare && pTarget)
                     {
                         AstralFlare->CastSpell(AstralFlare, SPELL_ASTRAL_FLARE_PASSIVE, false);
-                        AstralFlare->AI()->AttackStart(target);
+                        AstralFlare->AI()->AttackStart(pTarget);
                     }
 
                     //Reduce Mana by 10% of max health
@@ -185,8 +176,8 @@ public:
                 else
                     HatefulBoltTimer = 15000;
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
-                    DoCast(target, SPELL_HATEFUL_BOLT);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
+                    DoCast(pTarget, SPELL_HATEFUL_BOLT);
 
             } else HatefulBoltTimer -= diff;
 

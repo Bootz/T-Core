@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Stratholme
-SD%Complete: 100
-SDComment: Misc mobs for instance. pGo-script to apply aura and start event for quest 8945
-SDCategory: Stratholme
-EndScriptData */
 
 /* ContentData
 go_gauntlet_gate
@@ -44,7 +35,7 @@ class go_gauntlet_gate : public GameObjectScript
 public:
     go_gauntlet_gate() : GameObjectScript("go_gauntlet_gate") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* pPlayer, GameObject* pGo)
     {
         InstanceScript* pInstance = pGo->GetInstanceScript();
 
@@ -54,7 +45,7 @@ public:
         if (pInstance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
             return false;
 
-        if (Group *pGroup = player->GetGroup())
+        if (Group *pGroup = pPlayer->GetGroup())
         {
             for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL; itr = itr->next())
             {
@@ -67,10 +58,10 @@ public:
                     pGroupie->GetMap() == pGo->GetMap())
                     pGroupie->CastSpell(pGroupie, SPELL_BARON_ULTIMATUM, true);
             }
-        } else if (player->GetQuestStatus(QUEST_DEAD_MAN_PLEA) == QUEST_STATUS_INCOMPLETE &&
-                    !player->HasAura(SPELL_BARON_ULTIMATUM) &&
-                    player->GetMap() == pGo->GetMap())
-                    player->CastSpell(player, SPELL_BARON_ULTIMATUM, true);
+        } else if (pPlayer->GetQuestStatus(QUEST_DEAD_MAN_PLEA) == QUEST_STATUS_INCOMPLETE &&
+                    !pPlayer->HasAura(SPELL_BARON_ULTIMATUM) &&
+                    pPlayer->GetMap() == pGo->GetMap())
+                    pPlayer->CastSpell(pPlayer, SPELL_BARON_ULTIMATUM, true);
 
         pInstance->SetData(TYPE_BARON_RUN, IN_PROGRESS);
         return false;
@@ -93,14 +84,14 @@ class mob_freed_soul : public CreatureScript
 public:
     mob_freed_soul() : CreatureScript("mob_freed_soul") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_freed_soulAI (creature);
+        return new mob_freed_soulAI (pCreature);
     }
 
     struct mob_freed_soulAI : public ScriptedAI
     {
-        mob_freed_soulAI(Creature* c) : ScriptedAI(c) {}
+        mob_freed_soulAI(Creature *c) : ScriptedAI(c) {}
 
         void Reset()
         {
@@ -127,14 +118,14 @@ class mob_restless_soul : public CreatureScript
 public:
     mob_restless_soul() : CreatureScript("mob_restless_soul") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_restless_soulAI (creature);
+        return new mob_restless_soulAI (pCreature);
     }
 
     struct mob_restless_soulAI : public ScriptedAI
     {
-        mob_restless_soulAI(Creature* c) : ScriptedAI(c) {}
+        mob_restless_soulAI(Creature *c) : ScriptedAI(c) {}
 
         uint64 Tagger;
         uint32 Die_Timer;
@@ -149,7 +140,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void SpellHit(Unit* caster, const SpellEntry *spell)
+        void SpellHit(Unit *caster, const SpellEntry *spell)
         {
             if (caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -161,7 +152,7 @@ public:
             }
         }
 
-        void JustSummoned(Creature* summoned)
+        void JustSummoned(Creature *summoned)
         {
             summoned->CastSpell(summoned, SPELL_SOUL_FREED, false);
         }
@@ -205,14 +196,14 @@ class mobs_spectral_ghostly_citizen : public CreatureScript
 public:
     mobs_spectral_ghostly_citizen() : CreatureScript("mobs_spectral_ghostly_citizen") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mobs_spectral_ghostly_citizenAI (creature);
+        return new mobs_spectral_ghostly_citizenAI (pCreature);
     }
 
     struct mobs_spectral_ghostly_citizenAI : public ScriptedAI
     {
-        mobs_spectral_ghostly_citizenAI(Creature* c) : ScriptedAI(c) {}
+        mobs_spectral_ghostly_citizenAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 Die_Timer;
         bool Tagged;
@@ -225,7 +216,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *spell)
+        void SpellHit(Unit * /*caster*/, const SpellEntry *spell)
         {
             if (!Tagged && spell->Id == SPELL_EGAN_BLASTER)
                 Tagged = true;
@@ -259,26 +250,26 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void ReceiveEmote(Player* player, uint32 emote)
+        void ReceiveEmote(Player* pPlayer, uint32 emote)
         {
             switch(emote)
             {
-                case TEXT_EMOTE_DANCE:
+                case TEXTEMOTE_DANCE:
                     EnterEvadeMode();
                     break;
-                case TEXT_EMOTE_RUDE:
-                    if (me->IsWithinDistInMap(player, 5))
-                        DoCast(player, SPELL_SLAP, false);
+                case TEXTEMOTE_RUDE:
+                    if (me->IsWithinDistInMap(pPlayer, 5))
+                        DoCast(pPlayer, SPELL_SLAP, false);
                     else
                         me->HandleEmoteCommand(EMOTE_ONESHOT_RUDE);
                     break;
-                case TEXT_EMOTE_WAVE:
+                case TEXTEMOTE_WAVE:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_WAVE);
                     break;
-                case TEXT_EMOTE_BOW:
+                case TEXTEMOTE_BOW:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_BOW);
                     break;
-                case TEXT_EMOTE_KISS:
+                case TEXTEMOTE_KISS:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_FLEX);
                     break;
             }

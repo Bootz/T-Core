@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,7 +23,7 @@
 #include "Opcodes.h"
 #include "World.h"
 
-UpdateData::UpdateData() : m_blockCount(0)
+UpdateData::UpdateData() : m_blockCount(0), m_map(0)
 {
 }
 
@@ -45,23 +43,23 @@ void UpdateData::AddUpdateBlock(const ByteBuffer &block)
     ++m_blockCount;
 }
 
-bool UpdateData::BuildPacket(WorldPacket* packet)
+bool UpdateData::BuildPacket(WorldPacket *packet)
 {
     ASSERT(packet->empty());                                // shouldn't happen
 
     packet->Initialize(SMSG_UPDATE_OBJECT, 2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
 
-    *packet << (uint32) (!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
+    *packet << uint16(m_map);
+
+    *packet << uint32(!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
 
     if (!m_outOfRangeGUIDs.empty())
     {
-        *packet << (uint8) UPDATETYPE_OUT_OF_RANGE_OBJECTS;
-        *packet << (uint32) m_outOfRangeGUIDs.size();
+        *packet << uint8(UPDATETYPE_OUT_OF_RANGE_OBJECTS);
+        *packet << uint32(m_outOfRangeGUIDs.size());
 
         for (std::set<uint64>::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
-        {
             packet->appendPackGUID(*i);
-        }
     }
 
     packet->append(m_data);

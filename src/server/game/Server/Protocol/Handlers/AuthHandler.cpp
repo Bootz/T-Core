@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,13 +26,13 @@ void WorldSession::SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos)
     packet << uint32(0);                                   // BillingTimeRemaining
     packet << uint8(0);                                    // BillingPlanFlags
     packet << uint32(0);                                   // BillingTimeRested
-    packet << uint8(Expansion());                          // | 0 - normal | 1 - TBC | 2 - WOTLK | 3 - CATA |
-    packet << uint8(Expansion());                          // Server Expansion
-    
+    packet << uint8(Expansion());                          // payed expansion
+    packet << uint8(Expansion());                          // server expansion
+
     if (!shortForm)
     {
-        packet << uint32(queuePos);                        // Queue position
-        packet << uint8(0);                                // Unk 3.3.0
+        packet << uint32(queuePos);                             // Queue position
+        packet << uint8(0);                                     // Unk 3.3.0
     }
 
     SendPacket(&packet);

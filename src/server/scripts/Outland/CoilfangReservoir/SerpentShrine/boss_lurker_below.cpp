@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: boss_the_lurker_below
-SD%Complete: 80
-SDComment: Coilfang Frenzy, find out how could we fishing in the strangepool
-SDCategory: The Lurker Below
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "serpent_shrine.h"
@@ -72,23 +63,24 @@ class boss_the_lurker_below : public CreatureScript
 public:
     boss_the_lurker_below() : CreatureScript("boss_the_lurker_below") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_the_lurker_belowAI (creature);
+        return new boss_the_lurker_belowAI (pCreature);
     }
 
     struct boss_the_lurker_belowAI : public Scripted_NoMovementAI
     {
-        boss_the_lurker_belowAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
+        boss_the_lurker_belowAI(Creature *c) : Scripted_NoMovementAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
-            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_SPOUT_ANIM);
-            if (TempSpell)
-            {
-                TempSpell->Effect = 0;//remove all spell effect, only anim is needed
-                TempSpell->Effect = 0;
-                TempSpell->Effect = 0;
-            }
+            //TODO: rewrite this nasty hack
+            //SpellEntry *TempSpell = GET_SPELL(SPELL_SPOUT_ANIM);
+            //if (TempSpell)
+            //{
+            //    TempSpell->Effect[0] = 0;//remove all spell effect, only anim is needed
+            //    TempSpell->Effect[1] = 0;
+            //    TempSpell->Effect[2] = 0;
+            //}
         }
 
         InstanceScript* pInstance;
@@ -158,14 +150,14 @@ public:
             Summons.DespawnAll();
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             if (pInstance)
                 pInstance->SetData(DATA_THELURKERBELOWEVENT, IN_PROGRESS);
             Scripted_NoMovementAI::EnterCombat(who);
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!CanStartEvent)//boss is invisible, don't attack
                 return;
@@ -300,11 +292,11 @@ public:
 
                 if (GeyserTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                    if (!target && me->getVictim())
-                        target = me->getVictim();
-                    if (target)
-                        DoCast(target, SPELL_GEYSER, true);
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    if (!pTarget && me->getVictim())
+                        pTarget = me->getVictim();
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_GEYSER, true);
                     GeyserTimer = rand()%5000 + 15000;
                 } else GeyserTimer -= diff;
 
@@ -312,11 +304,11 @@ public:
                 {
                     if (WaterboltTimer <= diff)
                     {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                        if (!target && me->getVictim())
-                            target = me->getVictim();
-                        if (target)
-                            DoCast(target, SPELL_WATERBOLT, true);
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        if (!pTarget && me->getVictim())
+                            pTarget = me->getVictim();
+                        if (pTarget)
+                            DoCast(pTarget, SPELL_WATERBOLT, true);
                         WaterboltTimer = 3000;
                     } else WaterboltTimer -= diff;
                 }
@@ -376,9 +368,9 @@ class mob_coilfang_guardian : public CreatureScript
 public:
     mob_coilfang_guardian() : CreatureScript("mob_coilfang_guardian") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        SimpleAI* ai = new SimpleAI (creature);
+        SimpleAI* ai = new SimpleAI (pCreature);
 
         ai->Spell[0].Enabled = true;
         ai->Spell[0].Spell_Id = SPELL_ARCINGSMASH;
@@ -402,18 +394,19 @@ class mob_coilfang_ambusher : public CreatureScript
 public:
     mob_coilfang_ambusher() : CreatureScript("mob_coilfang_ambusher") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_coilfang_ambusherAI (creature);
+        return new mob_coilfang_ambusherAI (pCreature);
     }
 
     struct mob_coilfang_ambusherAI : public Scripted_NoMovementAI
     {
-        mob_coilfang_ambusherAI(Creature* c) : Scripted_NoMovementAI(c)
+        mob_coilfang_ambusherAI(Creature *c) : Scripted_NoMovementAI(c)
         {
-            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_SHOOT);
-            if (TempSpell)
-                TempSpell->Effect = 2;//change spell effect from weapon % dmg to simple phisical dmg
+            //TODO: rewrite this hack
+            //SpellEntry *TempSpell = GET_SPELL(SPELL_SHOOT);
+            //if (TempSpell)
+            //    TempSpell->Effect[0] = 2;//change spell effect from weapon % dmg to simple phisical dmg
         }
 
         uint32 MultiShotTimer;
@@ -426,12 +419,12 @@ public:
 
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
 
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!who || me->getVictim()) return;
 
@@ -454,11 +447,11 @@ public:
 
             if (ShootBowTimer <= diff)
             {
-                Unit* target = NULL;
-                target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                Unit *pTarget = NULL;
+                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 int bp0 = 1100;
-                if (target)
-                    me->CastCustomSpell(target, SPELL_SHOOT, &bp0, NULL, NULL, true);
+                if (pTarget)
+                    me->CastCustomSpell(pTarget, SPELL_SHOOT, &bp0, NULL, NULL, true);
                 ShootBowTimer = 4000+rand()%5000;
                 MultiShotTimer += 1500;//add global cooldown
             } else ShootBowTimer -= diff;

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,7 +53,7 @@ public:
             //DoCast(me, SPELL_ICEARMOR, true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             _EnterCombat();
             events.ScheduleEvent(EVENT_CURSE_OF_BLOOD, 2*IN_MILLISECONDS);
@@ -87,8 +85,8 @@ public:
                         events.ScheduleEvent(EVENT_CURSE_OF_BLOOD, 45*IN_MILLISECONDS);
                         break;
                     case EVENT_HEX:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            DoCast(target, SPELL_HEX);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(pTarget, SPELL_HEX);
                         events.ScheduleEvent(EVENT_HEX, 15*IN_MILLISECONDS);
                         break;
                     case EVENT_CLEAVE:

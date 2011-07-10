@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,12 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAP_INSTANCED_H
-#define MAP_INSTANCED_H
+#ifndef TRILLIUM_MAP_INSTANCED_H
+#define TRILLIUM_MAP_INSTANCED_H
 
 #include "Map.h"
 #include "InstanceSaveMgr.h"
-#include "StoragesEnums.h"
+#include "DBCEnums.h"
 
 class MapInstanced : public Map
 {
@@ -40,7 +38,7 @@ class MapInstanced : public Map
         void UnloadAll();
         bool CanEnter(Player* player);
 
-        Map* CreateInstance(const uint32 mapId, Player* player);
+        Map* CreateInstance(const uint32 mapId, Player * player);
         Map* FindMap(uint32 InstanceId) const { return _FindMap(InstanceId); }
         bool DestroyInstance(InstancedMaps::iterator &itr);
 

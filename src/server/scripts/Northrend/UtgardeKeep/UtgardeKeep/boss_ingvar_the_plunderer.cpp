@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Ingvar_The_Plunderer
-SD%Complete: 95
-SDComment: Some Problems with Annhylde Movement, Blizzlike Timers
-SDCategory: Udgarde Keep
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "utgarde_keep.h"
@@ -78,14 +69,14 @@ class boss_ingvar_the_plunderer : public CreatureScript
 public:
     boss_ingvar_the_plunderer() : CreatureScript("boss_ingvar_the_plunderer") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ingvar_the_plundererAI(creature);
+        return new boss_ingvar_the_plundererAI(pCreature);
     }
 
     struct boss_ingvar_the_plundererAI : public ScriptedAI
     {
-        boss_ingvar_the_plundererAI(Creature* c) : ScriptedAI(c)
+        boss_ingvar_the_plundererAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -123,7 +114,7 @@ public:
                 pInstance->SetData(DATA_INGVAR_EVENT, NOT_STARTED);
         }
 
-        void DamageTaken(Unit* /*done_by*/, uint32 &damage)
+        void DamageTaken(Unit * /*done_by*/, uint32 &damage)
         {
             if (damage >= me->GetHealth() && !bIsUndead)
             {
@@ -162,7 +153,7 @@ public:
             DoScriptText(YELL_AGGRO_2, me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(YELL_AGGRO_1, me);
 
@@ -178,7 +169,7 @@ public:
                 pInstance->SetData(DATA_INGVAR_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             if (bIsUndead)
                 DoScriptText(YELL_KILL_1, me);
@@ -244,10 +235,10 @@ public:
                     if (!me->HasUnitState(UNIT_STAT_CASTING))
                     {
                         // Spawn target for Axe
-                        Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
-                        if (target)
+                        Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 1);
+                        if (pTarget)
                         {
-                            me->SummonCreature(ENTRY_THROW_TARGET, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 2000);
+                            me->SummonCreature(ENTRY_THROW_TARGET, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 2000);
 
                             DoCast(me, SPELL_SHADOW_AXE_SUMMON);
                         }
@@ -291,14 +282,14 @@ class mob_annhylde_the_caller : public CreatureScript
 public:
     mob_annhylde_the_caller() : CreatureScript("mob_annhylde_the_caller") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_annhylde_the_callerAI (creature);
+        return new mob_annhylde_the_callerAI (pCreature);
     }
 
     struct mob_annhylde_the_callerAI : public ScriptedAI
     {
-        mob_annhylde_the_callerAI(Creature* c) : ScriptedAI(c)
+        mob_annhylde_the_callerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -355,7 +346,7 @@ public:
 
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
         void UpdateAI(const uint32 diff)
         {
             if (uiResurectTimer)
@@ -404,14 +395,14 @@ class mob_ingvar_throw_dummy : public CreatureScript
 public:
     mob_ingvar_throw_dummy() : CreatureScript("mob_ingvar_throw_dummy") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_ingvar_throw_dummyAI (creature);
+        return new mob_ingvar_throw_dummyAI (pCreature);
     }
 
     struct mob_ingvar_throw_dummyAI : public ScriptedAI
     {
-        mob_ingvar_throw_dummyAI(Creature* c) : ScriptedAI(c)
+        mob_ingvar_throw_dummyAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -419,19 +410,19 @@ public:
 
         void Reset()
         {
-            Unit* target = me->FindNearestCreature(ENTRY_THROW_TARGET, 50);
-            if (target)
+            Unit *pTarget = me->FindNearestCreature(ENTRY_THROW_TARGET, 50);
+            if (pTarget)
             {
                 DoCast(me, SPELL_SHADOW_AXE_DAMAGE);
                 float x, y, z;
-                target->GetPosition(x, y, z);
+                pTarget->GetPosition(x, y, z);
                 me->GetMotionMaster()->MovePoint(0, x, y, z);
             }
             uiDespawnTimer = 7000;
         }
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit * /*who*/) {}
         void UpdateAI(const uint32 diff)
         {
             if (uiDespawnTimer <= diff)

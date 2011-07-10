@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss salramm
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
@@ -61,14 +51,14 @@ class boss_salramm : public CreatureScript
 public:
     boss_salramm() : CreatureScript("boss_salramm") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_salrammAI (creature);
+        return new boss_salrammAI (pCreature);
     }
 
     struct boss_salrammAI : public ScriptedAI
     {
-        boss_salrammAI(Creature* c) : ScriptedAI(c)
+        boss_salrammAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             if (pInstance)
@@ -119,8 +109,8 @@ public:
             //Shadow bolt timer
             if (uiShadowBoltTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_SHADOW_BOLT);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_SHADOW_BOLT);
                 uiShadowBoltTimer = urand(8000, 12000);
             } else uiShadowBoltTimer -= diff;
 
@@ -153,7 +143,7 @@ public:
                 pInstance->SetData(DATA_SALRAMM_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;

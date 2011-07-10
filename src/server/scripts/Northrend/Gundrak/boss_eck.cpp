@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,14 +34,14 @@ class boss_eck : public CreatureScript
 public:
     boss_eck() : CreatureScript("boss_eck") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_eckAI (creature);
+        return new boss_eckAI (pCreature);
     }
 
     struct boss_eckAI : public ScriptedAI
     {
-        boss_eckAI(Creature* c) : ScriptedAI(c)
+        boss_eckAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -96,10 +94,10 @@ public:
 
             if (uiSpringTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                if (target && target->GetTypeId() == TYPEID_PLAYER)
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
                 {
-                    DoCast(target, RAND(SPELL_ECK_SPRING_1, SPELL_ECK_SPRING_2));
+                    DoCast(pTarget, RAND(SPELL_ECK_SPRING_1, SPELL_ECK_SPRING_2));
                     uiSpringTimer = urand(5*IN_MILLISECONDS, 10*IN_MILLISECONDS);
                 }
             } else uiSpringTimer -= diff;
@@ -140,21 +138,21 @@ class npc_ruins_dweller : public CreatureScript
 public:
     npc_ruins_dweller() : CreatureScript("npc_ruins_dweller") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_ruins_dwellerAI (creature);
+        return new npc_ruins_dwellerAI (pCreature);
     }
 
     struct npc_ruins_dwellerAI : public ScriptedAI
     {
-        npc_ruins_dwellerAI(Creature* c) : ScriptedAI(c)
+        npc_ruins_dwellerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        void JustDied(Unit* /*who*/)
+        void JustDied(Unit * /*who*/)
         {
             if (pInstance)
             {

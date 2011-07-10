@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,7 +24,7 @@ void Transaction::Append(const char* sql)
     SQLElementData data;
     data.type = SQL_ELEMENT_RAW;
     data.element.query = strdup(sql);
-    m_queries.push_back(data);
+    m_queries.push(data);
 }
 
 void Transaction::PAppend(const char* sql, ...)
@@ -46,18 +44,14 @@ void Transaction::Append(PreparedStatement* stmt)
     SQLElementData data;
     data.type = SQL_ELEMENT_PREPARED;
     data.element.stmt = stmt;
-    m_queries.push_back(data);
+    m_queries.push(data);
 }
 
 void Transaction::Cleanup()
 {
-    // This might be called by explicit calls to Cleanup or by the auto-destructor
-    if (_cleanedUp)
-        return;
-
     while (!m_queries.empty())
     {
-        SQLElementData const &data = m_queries.front();
+        SQLElementData data = m_queries.front();
         switch (data.type)
         {
             case SQL_ELEMENT_PREPARED:
@@ -67,11 +61,8 @@ void Transaction::Cleanup()
                 free((void*)(data.element.query));
             break;
         }
-
-        m_queries.pop_front();
+        m_queries.pop();
     }
-
-    _cleanedUp = true;
 }
 
 bool TransactionTask::Execute()
@@ -86,9 +77,6 @@ bool TransactionTask::Execute()
             if (m_conn->ExecuteTransaction(m_trans))
                 return true;
     }
-
-    // Clean up now.
-    m_trans->Cleanup();
 
     return false;
 }

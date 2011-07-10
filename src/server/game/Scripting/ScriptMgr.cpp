@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,7 +18,7 @@
 #include "ScriptPCH.h"
 #include "Config.h"
 #include "DatabaseEnv.h"
-#include "DataStorage.h"
+#include "DBCStores.h"
 #include "ObjectMgr.h"
 #include "OutdoorPvPMgr.h"
 #include "ScriptLoader.h"
@@ -213,14 +211,14 @@ void ScriptMgr::FillSpellSummary()
 {
     SpellSummary = new TSpellSummary[GetSpellStore()->GetNumRows()];
 
-    SpellEffectEntry const* pTempSpell;
+    SpellEntry const* pTempSpell;
 
     for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i)
     {
         SpellSummary[i].Effects = 0;
         SpellSummary[i].Targets = 0;
 
-        pTempSpell = GetSpellEffectStore()->LookupEntry(i);
+        pTempSpell = GetSpellStore()->LookupEntry(i);
         //This spell doesn't exist
         if (!pTempSpell)
             continue;
@@ -228,67 +226,67 @@ void ScriptMgr::FillSpellSummary()
         for (uint32 j = 0; j < MAX_SPELL_EFFECTS; ++j)
         {
             //Spell targets self
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_CASTER)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SELF-1);
 
             //Spell targets a single enemy
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ENEMY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_DST_TARGET_ENEMY)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DST_TARGET_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_ENEMY-1);
 
             //Spell targets AoE at enemy
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_AREA_ENEMY_SRC ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_AREA_ENEMY_DST ||
-                pTempSpell->EffectImplicitTargetA == TARGET_SRC_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_DEST_DYNOBJ_ENEMY)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_SRC ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_DST ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DEST_DYNOBJ_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_ENEMY-1);
 
             //Spell targets an enemy
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ENEMY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_DST_TARGET_ENEMY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_AREA_ENEMY_SRC ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_AREA_ENEMY_DST ||
-                pTempSpell->EffectImplicitTargetA == TARGET_SRC_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_DEST_DYNOBJ_ENEMY)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DST_TARGET_ENEMY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_SRC ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_DST ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DEST_DYNOBJ_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_ENEMY-1);
 
             //Spell targets a single friend(or self)
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ALLY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_PARTY)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_PARTY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_FRIEND-1);
 
             //Spell targets aoe friends
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ALLY_PARTY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_SRC_CASTER)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_TARGET ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_FRIEND-1);
 
             //Spell targets any friend(or self)
-            if (pTempSpell->EffectImplicitTargetA == TARGET_UNIT_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ALLY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_PARTY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->EffectImplicitTargetA == TARGET_UNIT_TARGET_ALLY_PARTY ||
-                pTempSpell->EffectImplicitTargetA == TARGET_SRC_CASTER)
+            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_PARTY ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_TARGET ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_FRIEND-1);
 
             //Make sure that this spell includes a damage effect
-            if (pTempSpell->Effect == SPELL_EFFECT_SCHOOL_DAMAGE ||
-                pTempSpell->Effect == SPELL_EFFECT_INSTAKILL ||
-                pTempSpell->Effect == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE ||
-                pTempSpell->Effect == SPELL_EFFECT_HEALTH_LEECH)
+            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_SCHOOL_DAMAGE ||
+                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_INSTAKILL ||
+                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE ||
+                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEALTH_LEECH)
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_DAMAGE-1);
 
             //Make sure that this spell includes a healing effect (or an apply aura with a periodic heal)
-            if (pTempSpell->Effect == SPELL_EFFECT_HEAL ||
-                pTempSpell->Effect == SPELL_EFFECT_HEAL_MAX_HEALTH ||
-                pTempSpell->Effect == SPELL_EFFECT_HEAL_MECHANICAL ||
-                (pTempSpell->Effect == SPELL_EFFECT_APPLY_AURA  && pTempSpell->EffectApplyAuraName == 8))
+            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL ||
+                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL_MAX_HEALTH ||
+                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL_MECHANICAL ||
+                (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA  && pTempSpell->GetEffectApplyAuraNameByIndex(j) == 8))
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_HEALING-1);
 
             //Make sure that this spell applies an aura
-            if (pTempSpell->Effect == SPELL_EFFECT_APPLY_AURA)
+            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA)
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA-1);
         }
     }
@@ -615,13 +613,13 @@ InstanceScript* ScriptMgr::CreateInstanceData(InstanceMap* map)
     return tmpscript->GetInstanceScript(map);
 }
 
-bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, Item* target)
+bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, Item* target)
 {
     ASSERT(caster);
     ASSERT(target);
 
     GET_SCRIPT_RET(ItemScript, target->GetScriptId(), tmpscript, false);
-    return tmpscript->OnDummyEffect(caster, spellId, effIndex, target);
+    return tmpscript->OnDummyEffect(caster, spellId, effect, target);
 }
 
 bool ScriptMgr::OnQuestAccept(Player* player, Item* item, Quest const* quest)
@@ -653,13 +651,13 @@ bool ScriptMgr::OnItemExpire(Player* player, ItemTemplate const* proto)
     return tmpscript->OnExpire(player, proto);
 }
 
-bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, Creature* target)
+bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, Creature* target)
 {
     ASSERT(caster);
     ASSERT(target);
 
     GET_SCRIPT_RET(CreatureScript, target->GetScriptId(), tmpscript, false);
-    return tmpscript->OnDummyEffect(caster, spellId, effIndex, target);
+    return tmpscript->OnDummyEffect(caster, spellId, effect, target);
 }
 
 bool ScriptMgr::OnGossipHello(Player* player, Creature* creature)
@@ -752,14 +750,6 @@ CreatureAI* ScriptMgr::GetCreatureAI(Creature* creature)
 
     GET_SCRIPT_RET(CreatureScript, creature->GetScriptId(), tmpscript, NULL);
     return tmpscript->GetAI(creature);
-}
-
-GameObjectAI* ScriptMgr::GetGameObjectAI(GameObject* gameobject)
-{
-    ASSERT(gameobject);
-        
-    GET_SCRIPT_RET(GameObjectScript, gameobject->GetScriptId(), tmpscript, NULL);
-    return tmpscript->GetAI(gameobject);
 }
 
 void ScriptMgr::OnCreatureUpdate(Creature* creature, uint32 diff)
@@ -856,13 +846,13 @@ void ScriptMgr::OnGameObjectUpdate(GameObject* go, uint32 diff)
     tmpscript->OnUpdate(go, diff);
 }
 
-bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex, GameObject* target)
+bool ScriptMgr::OnDummyEffect(Unit* caster, uint32 spellId, SpellEffectEntry const* effect, GameObject* target)
 {
     ASSERT(caster);
     ASSERT(target);
 
     GET_SCRIPT_RET(GameObjectScript, target->GetScriptId(), tmpscript, false);
-    return tmpscript->OnDummyEffect(caster, spellId, effIndex, target);
+    return tmpscript->OnDummyEffect(caster, spellId, effect, target);
 }
 
 bool ScriptMgr::OnAreaTrigger(Player* player, AreaTriggerEntry const* trigger)
@@ -1083,47 +1073,47 @@ bool ScriptMgr::OnCriteriaCheck(AchievementCriteriaData const* data, Player* sou
 }
 
 // Player
-void ScriptMgr::OnPVPKill(Player* killer, Player* killed)
+void ScriptMgr::OnPVPKill(Player *killer, Player *killed)
 {
     FOREACH_SCRIPT(PlayerScript)->OnPVPKill(killer, killed);
 }
 
-void ScriptMgr::OnCreatureKill(Player* killer, Creature* killed)
+void ScriptMgr::OnCreatureKill(Player *killer, Creature *killed)
 {
     FOREACH_SCRIPT(PlayerScript)->OnCreatureKill(killer, killed);
 }
 
-void ScriptMgr::OnPlayerKilledByCreature(Creature* killer, Player* killed)
+void ScriptMgr::OnPlayerKilledByCreature(Creature *killer, Player *killed)
 {
     FOREACH_SCRIPT(PlayerScript)->OnPlayerKilledByCreature(killer, killed);
 }
 
-void ScriptMgr::OnPlayerLevelChanged(Player* player, uint8 oldLevel)
+void ScriptMgr::OnPlayerLevelChanged(Player *player, uint8 newLevel)
 {
-    FOREACH_SCRIPT(PlayerScript)->OnLevelChanged(player, oldLevel);
+    FOREACH_SCRIPT(PlayerScript)->OnLevelChanged(player, newLevel);
 }
 
-void ScriptMgr::OnPlayerFreeTalentPointsChanged(Player* player, uint32 points)
+void ScriptMgr::OnPlayerFreeTalentPointsChanged(Player *player, uint32 points)
 {
     FOREACH_SCRIPT(PlayerScript)->OnFreeTalentPointsChanged(player, points);
 }
 
-void ScriptMgr::OnPlayerTalentsReset(Player* player, bool no_cost)
+void ScriptMgr::OnPlayerTalentsReset(Player *player, bool no_cost)
 {
     FOREACH_SCRIPT(PlayerScript)->OnTalentsReset(player, no_cost);
 }
 
-void ScriptMgr::OnPlayerMoneyChanged(Player* player, int32& amount)
+void ScriptMgr::OnPlayerMoneyChanged(Player *player, int32& amount)
 {
     FOREACH_SCRIPT(PlayerScript)->OnMoneyChanged(player, amount);
 }
 
-void ScriptMgr::OnGivePlayerXP(Player* player, uint32& amount, Unit* victim)
+void ScriptMgr::OnGivePlayerXP(Player *player, uint32& amount, Unit *victim)
 {
     FOREACH_SCRIPT(PlayerScript)->OnGiveXP(player, amount, victim);
 }
 
-void ScriptMgr::OnPlayerReputationChange(Player* player, uint32 factionID, int32& standing, bool incremental)
+void ScriptMgr::OnPlayerReputationChange(Player *player, uint32 factionID, int32& standing, bool incremental)
 {
     FOREACH_SCRIPT(PlayerScript)->OnReputationChange(player, factionID, standing, incremental);
 }
@@ -1133,7 +1123,7 @@ void ScriptMgr::OnPlayerDuelRequest(Player *target, Player *challenger)
     FOREACH_SCRIPT(PlayerScript)->OnDuelRequest(target, challenger);
 }
 
-void ScriptMgr::OnPlayerDuelStart(Player* player1, Player* player2)
+void ScriptMgr::OnPlayerDuelStart(Player *player1, Player *player2)
 {
     FOREACH_SCRIPT(PlayerScript)->OnDuelStart(player1, player2);
 }
@@ -1178,22 +1168,22 @@ void ScriptMgr::OnPlayerTextEmote(Player* player, uint32 text_emote, uint32 emot
     FOREACH_SCRIPT(PlayerScript)->OnTextEmote(player, text_emote, emoteNum, guid);
 }
 
-void ScriptMgr::OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck)
+void ScriptMgr::OnPlayerSpellCast(Player *player, Spell *spell, bool skipCheck)
 {
     FOREACH_SCRIPT(PlayerScript)->OnSpellCast(player, spell, skipCheck);
 }
 
-void ScriptMgr::OnPlayerLogin(Player* player)
+void ScriptMgr::OnPlayerLogin(Player *player)
 {
     FOREACH_SCRIPT(PlayerScript)->OnLogin(player);
 }
 
-void ScriptMgr::OnPlayerLogout(Player* player)
+void ScriptMgr::OnPlayerLogout(Player *player)
 {
     FOREACH_SCRIPT(PlayerScript)->OnLogout(player);
 }
 
-void ScriptMgr::OnPlayerCreate(Player* player)
+void ScriptMgr::OnPlayerCreate(Player *player)
 {
     FOREACH_SCRIPT(PlayerScript)->OnCreate(player);
 }
@@ -1209,32 +1199,32 @@ void ScriptMgr::OnPlayerBindToInstance(Player* player, Difficulty difficulty, ui
 }
 
 // Guild
-void ScriptMgr::OnGuildAddMember(Guild* guild, Player* player, uint8& plRank)
+void ScriptMgr::OnGuildAddMember(Guild *guild, Player *player, uint8& plRank)
 {
     FOREACH_SCRIPT(GuildScript)->OnAddMember(guild, player, plRank);
 }
 
-void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked)
+void ScriptMgr::OnGuildRemoveMember(Guild *guild, Player *player, bool isDisbanding, bool isKicked)
 {
     FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, isDisbanding, isKicked);
 }
 
-void ScriptMgr::OnGuildMOTDChanged(Guild* guild, const std::string& newMotd)
+void ScriptMgr::OnGuildMOTDChanged(Guild *guild, const std::string& newMotd)
 {
     FOREACH_SCRIPT(GuildScript)->OnMOTDChanged(guild, newMotd);
 }
 
-void ScriptMgr::OnGuildInfoChanged(Guild* guild, const std::string& newInfo)
+void ScriptMgr::OnGuildInfoChanged(Guild *guild, const std::string& newInfo)
 {
     FOREACH_SCRIPT(GuildScript)->OnInfoChanged(guild, newInfo);
 }
 
-void ScriptMgr::OnGuildCreate(Guild* guild, Player* leader, const std::string& name)
+void ScriptMgr::OnGuildCreate(Guild *guild, Player* leader, const std::string& name)
 {
     FOREACH_SCRIPT(GuildScript)->OnCreate(guild, leader, name);
 }
 
-void ScriptMgr::OnGuildDisband(Guild* guild)
+void ScriptMgr::OnGuildDisband(Guild *guild)
 {
     FOREACH_SCRIPT(GuildScript)->OnDisband(guild);
 }

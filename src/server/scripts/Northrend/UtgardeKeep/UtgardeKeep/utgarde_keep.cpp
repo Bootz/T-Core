@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,14 +30,14 @@ class npc_dragonflayer_forge_master : public CreatureScript
 public:
     npc_dragonflayer_forge_master() : CreatureScript("npc_dragonflayer_forge_master") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_dragonflayer_forge_masterAI(creature);
+        return new npc_dragonflayer_forge_masterAI(pCreature);
     }
 
     struct npc_dragonflayer_forge_masterAI : public ScriptedAI
     {
-        npc_dragonflayer_forge_masterAI(Creature* c) : ScriptedAI(c)
+        npc_dragonflayer_forge_masterAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             fm_Type = 0;
@@ -73,7 +71,7 @@ public:
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit * /*killer*/)
         {
             if (fm_Type == 0) fm_Type = GetForgeMasterType();
             if (pInstance)
@@ -93,7 +91,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (fm_Type == 0) fm_Type = GetForgeMasterType();
             if (pInstance)

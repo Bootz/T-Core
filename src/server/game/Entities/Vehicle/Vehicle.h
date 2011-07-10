@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __VEHICLE_H
-#define __VEHICLE_H
+#ifndef __TRILLIUM_VEHICLE_H
+#define __TRILLIUM_VEHICLE_H
 
 #include "ObjectDefines.h"
 
@@ -80,9 +78,9 @@ enum VehicleSpells
 
 struct VehicleSeat
 {
-    explicit VehicleSeat(VehicleSeatEntry const *seatInfo) : SeatInfo(seatInfo), Passenger(0) {}
-    VehicleSeatEntry const *SeatInfo;
-    uint64 Passenger;
+    explicit VehicleSeat(VehicleSeatEntry const *_seatInfo) : seatInfo(_seatInfo), passenger(0) {}
+    VehicleSeatEntry const *seatInfo;
+    uint64 passenger;
 };
 
 struct VehicleAccessory
@@ -96,10 +94,17 @@ struct VehicleAccessory
     uint32 SummonTime;
 };
 
+struct VehicleScalingInfo
+{
+    uint32 ID;
+    float baseItemLevel;
+    float scalingFactor;
+};
+
 typedef std::vector<VehicleAccessory> VehicleAccessoryList;
 typedef std::map<uint32, VehicleAccessoryList> VehicleAccessoryMap;
+typedef std::map<uint32, VehicleScalingInfo> VehicleScalingMap;
 typedef std::map<int8, VehicleSeat> SeatMap;
-typedef std::set<uint64> GuidSet;
 
 class Vehicle
 {
@@ -107,34 +112,32 @@ class Vehicle
     friend class WorldSession;
 
     public:
-        explicit Vehicle(Unit* unit, VehicleEntry const* vehInfo, uint32 creatureEntry);
+        explicit Vehicle(Unit *unit, VehicleEntry const *vehInfo, uint32 creatureEntry);
         virtual ~Vehicle();
 
         void Install();
         void Uninstall();
         void Reset(bool evading = false);
         void InstallAllAccessories(bool evading);
-        void ApplyAllImmunities();
 
-        Unit* GetBase() const { return _me; }
-        VehicleEntry const* GetVehicleInfo() const { return _vehicleInfo; }
-        uint32 const& GetCreatureEntry() const { return _creatureEntry; }
+        Unit *GetBase() const { return me; }
+        VehicleEntry const *GetVehicleInfo() const { return m_vehicleInfo; }
+        uint32 const& GetCreatureEntry() const { return m_creatureEntry; }
 
         bool HasEmptySeat(int8 seatId) const;
-        Unit* GetPassenger(int8 seatId) const;
+        Unit *GetPassenger(int8 seatId) const;
         int8 GetNextEmptySeat(int8 seatId, bool next) const;
         uint8 GetAvailableSeatCount() const;
 
-        bool AddPassenger(Unit* passenger, int8 seatId = -1);
+        bool AddPassenger(Unit *passenger, int8 seatId = -1);
         void EjectPassenger(Unit* passenger, Unit* controller);
         void RemovePassenger(Unit *passenger);
         void RelocatePassengers(float x, float y, float z, float ang);
         void RemoveAllPassengers();
         void Dismiss();
-        void TeleportVehicle(float x, float y, float z, float ang);
-        bool IsVehicleInUse() { return Seats.begin() != Seats.end(); }
+        bool IsVehicleInUse() { return m_Seats.begin() != m_Seats.end(); }
 
-        SeatMap Seats;
+        SeatMap m_Seats;
 
     protected:
         uint16 GetExtraMovementFlagsForBase() const;
@@ -143,12 +146,14 @@ class Vehicle
     private:
         SeatMap::iterator GetSeatIteratorForPassenger(Unit* passenger);
         void InitMovementInfoForBase();
-        void InstallAccessory(uint32 entry, int8 seatId, bool minion, uint8 type, uint32 summonTime);
 
-        Unit* _me;
-        VehicleEntry const* _vehicleInfo;
-        GuidSet vehiclePlayers;
-        uint32 _usableSeatNum;         // Number of seats that match VehicleSeatEntry::UsableByPlayer, used for proper display flags
-        uint32 _creatureEntry;         // Can be different than me->GetBase()->GetEntry() in case of players
+    protected:
+        Unit *me;
+        VehicleEntry const *m_vehicleInfo;
+        uint32 m_usableSeatNum;         // Number of seats that match VehicleSeatEntry::UsableByPlayer, used for proper display flags
+        uint32 m_bonusHP;
+        uint32 m_creatureEntry;         // Can be different than me->GetBase()->GetEntry() in case of players
+
+        void InstallAccessory(uint32 entry, int8 seatId, bool minion, uint8 type, uint32 summonTime);
 };
 #endif

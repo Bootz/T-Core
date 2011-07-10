@@ -1,5 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -41,5 +40,14 @@ if(SERVERS)
 endif()
 
 if(TOOLS)
+  add_subdirectory(StormLib)
+  add_subdirectory(jenkins)
+  add_subdirectory(libtomcrypt)
+  add_subdirectory(libtommath)
+  add_subdirectory(adpcm)
+  add_subdirectory(pklib)
+  add_subdirectory(lzma)
+  add_subdirectory(huffman)
+  add_subdirectory(sparse)
   add_subdirectory(libmpq)
 endif()

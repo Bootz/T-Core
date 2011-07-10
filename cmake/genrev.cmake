@@ -1,5 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
-# Copyright (C) 2008-2010 Trinity <http://www.trinitycore.org/>
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -53,9 +52,6 @@ endif()
 # If everything above fails (means the user has erased the git revision control directory or removed the origin/HEAD tag)
 if(NOT rev_info)
   # No valid ways available to find/set the revision/hash, so let's force some defaults
-  message("")
-  message(STATUS "WARNING - Missing repository tags - you may need to pull tags with git fetch -t")
-  message(STATUS "WARNING - Continuing, but the hash will be set to 'Archive'")
   set(rev_hash_str "Archive")
   set(rev_hash "0")
 else()

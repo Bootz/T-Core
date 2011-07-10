@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,7 +25,7 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "Language.h"
-#include "DataStorage.h"
+#include "DBCStores.h"
 #include "Item.h"
 
 void WorldSession::HandleSendMail(WorldPacket & recv_data)
@@ -80,7 +78,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (pl->getLevel() < sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ))
     {
-        SendNotification(GetTrinityString(LANG_MAIL_SENDER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
+        SendNotification(GetTrilliumString(LANG_MAIL_SENDER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
         return;
     }
 
@@ -154,7 +152,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
         if (item)
         {
             ItemTemplate const* itemProto = item->GetTemplate();
-            if (!itemProto || !(itemProto->Flags & ITEM_PROTO_FLAG_BIND_TO_ACCOUNT))
+            if(!itemProto || !(itemProto->Flags & ITEM_PROTO_FLAG_BIND_TO_ACCOUNT))
             {
                 accountBound = false;
                 break;
@@ -170,7 +168,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (receiveLevel < sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ))
     {
-        SendNotification(GetTrinityString(LANG_MAIL_RECEIVER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
+        SendNotification(GetTrilliumString(LANG_MAIL_RECEIVER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
         return;
     }
 
@@ -258,8 +256,12 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
                 pl->MoveItemFromInventory(items[i]->GetBagSlot(), item->GetSlot(), true);
 
                 item->DeleteFromInventoryDB(trans);     // deletes item from character's inventory
-                item->SetOwnerGUID(rc);
                 item->SaveToDB(trans);                  // recursive and not have transaction guard into self, item not in inventory and can be save standalone
+                // owner in data will set at mail receive and item extracting
+                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_ITEM_OWNER);
+                stmt->setUInt32(0, GUID_LOPART(rc));
+                stmt->setUInt32(1, item->GetGUIDLow());
+                trans->Append(stmt);
 
                 draft.AddItem(item);
             }
@@ -363,6 +365,7 @@ void WorldSession::HandleMailReturnToSender(WorldPacket & recv_data)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM mail WHERE id = '%u'", mailId);             // needed?
     trans->PAppend("DELETE FROM mail_items WHERE mail_id = '%u'", mailId);
+    CharacterDatabase.CommitTransaction(trans);
     pl->RemoveMail(mailId);
 
     // only return mail if the player exists (and delete if not existing)
@@ -387,10 +390,8 @@ void WorldSession::HandleMailReturnToSender(WorldPacket & recv_data)
                 pl->RemoveMItem(itr2->item_guid);
             }
         }
-        draft.AddMoney(m->money).SendReturnToSender(GetAccountId(), m->receiver, m->sender, trans);
+        draft.AddMoney(m->money).SendReturnToSender(GetAccountId(), m->receiver, m->sender);
     }
-
-    CharacterDatabase.CommitTransaction(trans);
 
     delete m;                                               //we can deallocate old mail
     pl->SendMailResult(mailId, MAIL_RETURNED_TO_SENDER, MAIL_OK);
@@ -456,7 +457,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
                     sender_accId = sObjectMgr->GetPlayerAccountIdByGUID(sender_guid);
 
                     if (!sObjectMgr->GetPlayerNameByGUID(sender_guid, sender_name))
-                        sender_name = sObjectMgr->GetTrinityStringForDBCLocale(LANG_UNKNOWN);
+                        sender_name = sObjectMgr->GetTrilliumStringForDBCLocale(LANG_UNKNOWN);
                 }
                 sLog->outCommand(GetAccountId(), "GM %s (Account: %u) receive mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
                     GetPlayerName(), GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);

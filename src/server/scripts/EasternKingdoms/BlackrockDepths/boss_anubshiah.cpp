@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Anubshiah
-SD%Complete: 100
-SDComment:
-SDCategory: Blackrock Depths
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -40,14 +31,14 @@ class boss_anubshiah : public CreatureScript
 public:
     boss_anubshiah() : CreatureScript("boss_anubshiah") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_anubshiahAI (creature);
+        return new boss_anubshiahAI (pCreature);
     }
 
     struct boss_anubshiahAI : public ScriptedAI
     {
-        boss_anubshiahAI(Creature* c) : ScriptedAI(c) {}
+        boss_anubshiahAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 ShadowBolt_Timer;
         uint32 CurseOfTongues_Timer;
@@ -64,7 +55,7 @@ public:
             EnvelopingWeb_Timer = 16000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -84,8 +75,8 @@ public:
             //CurseOfTongues_Timer
             if (CurseOfTongues_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_CURSEOFTONGUES);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_CURSEOFTONGUES);
                 CurseOfTongues_Timer = 18000;
             } else CurseOfTongues_Timer -= diff;
 
@@ -106,8 +97,8 @@ public:
             //EnvelopingWeb_Timer
             if (EnvelopingWeb_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_ENVELOPINGWEB);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_ENVELOPINGWEB);
                 EnvelopingWeb_Timer = 12000;
             } else EnvelopingWeb_Timer -= diff;
 

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss Volkhan
-SD%Complete: 90%
-SDComment: Event should be pretty close minus a few visual flaws
-SDCategory: Halls of Lightning
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "halls_of_lightning.h"
@@ -75,16 +66,16 @@ class boss_volkhan : public CreatureScript
 public:
     boss_volkhan() : CreatureScript("boss_volkhan") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_volkhanAI(creature);
+        return new boss_volkhanAI(pCreature);
     }
 
     struct boss_volkhanAI : public ScriptedAI
     {
-        boss_volkhanAI(Creature* creature) : ScriptedAI(creature)
+        boss_volkhanAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -126,7 +117,7 @@ public:
                 m_pInstance->SetData(TYPE_VOLKHAN, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             DoScriptText(SAY_AGGRO, me);
 
@@ -134,20 +125,20 @@ public:
                 m_pInstance->SetData(TYPE_VOLKHAN, IN_PROGRESS);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* pWho)
         {
-            if (me->Attack(who, true))
+            if (me->Attack(pWho, true))
             {
-                me->AddThreat(who, 0.0f);
-                me->SetInCombatWith(who);
-                who->SetInCombatWith(me);
+                me->AddThreat(pWho, 0.0f);
+                me->SetInCombatWith(pWho);
+                pWho->SetInCombatWith(me);
 
                 if (!m_bHasTemper)
-                    me->GetMotionMaster()->MoveChase(who);
+                    me->GetMotionMaster()->MoveChase(pWho);
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             DoScriptText(SAY_DEATH, me);
             DespawnGolem();
@@ -171,7 +162,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit* /*pVictim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
@@ -218,8 +209,8 @@ public:
             {
                 m_lGolemGUIDList.push_back(pSummoned->GetGUID());
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    pSummoned->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    pSummoned->GetMotionMaster()->MoveFollow(pTarget, 0.0f, 0.0f);
 
                 // Why healing when just summoned?
                 pSummoned->CastSpell(pSummoned, DUNGEON_MODE(SPELL_HEAT_N, SPELL_HEAT_H), false, NULL, NULL, me->GetGUID());
@@ -321,11 +312,11 @@ public:
 
                 case 3:
                     // 3 - Cast Temper on the Anvil
-                    if (Unit* target = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
+                    if (Unit* pTarget = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
                     {
                         me->SetOrientation(2.29f);
-                        DoCast(target, SPELL_TEMPER, false);
-                        DoCast(target, SPELL_TEMPER_DUMMY, false);
+                        DoCast(pTarget, SPELL_TEMPER, false);
+                        DoCast(pTarget, SPELL_TEMPER_DUMMY, false);
                     }
                     m_uiDelay_Timer = 1000;     // Delay 2 seconds before next phase can begin
                     m_uiSummonPhase = 4;        // Set Next Phase
@@ -335,11 +326,11 @@ public:
                     // 4 - Wait for delay to expire
                     if (m_uiDelay_Timer <= uiDiff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
                         {
                             me->SetReactState(REACT_AGGRESSIVE);
-                            me->SetInCombatWith(target);
-                            me->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
+                            me->SetInCombatWith(pTarget);
+                            me->GetMotionMaster()->MoveFollow(pTarget, 0.0f, 0.0f);
                         }
                         m_uiSummonPhase = 5;
                     }
@@ -372,14 +363,14 @@ class mob_molten_golem : public CreatureScript
 public:
     mob_molten_golem() : CreatureScript("mob_molten_golem") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_molten_golemAI(creature);
+        return new mob_molten_golemAI(pCreature);
     }
 
     struct mob_molten_golemAI : public ScriptedAI
     {
-        mob_molten_golemAI(Creature* creature) : ScriptedAI(creature) { }
+        mob_molten_golemAI(Creature *pCreature) : ScriptedAI(pCreature) { }
 
         bool m_bIsFrozen;
 
@@ -396,16 +387,16 @@ public:
             m_uiImmolation_Timer = 5000;
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* pWho)
         {
-            if (me->Attack(who, true))
+            if (me->Attack(pWho, true))
             {
-                me->AddThreat(who, 0.0f);
-                me->SetInCombatWith(who);
-                who->SetInCombatWith(me);
+                me->AddThreat(pWho, 0.0f);
+                me->SetInCombatWith(pWho);
+                pWho->SetInCombatWith(me);
 
                 if (!m_bIsFrozen)
-                    me->GetMotionMaster()->MoveChase(who);
+                    me->GetMotionMaster()->MoveChase(pWho);
             }
         }
 

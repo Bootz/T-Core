@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,11 +24,9 @@ class WorldPacket;
 enum OBJECT_UPDATE_TYPE
 {
     UPDATETYPE_VALUES               = 0,
-    UPDATETYPE_MOVEMENT             = 1,
-    UPDATETYPE_CREATE_OBJECT        = 2,
-    UPDATETYPE_CREATE_OBJECT2       = 3,
-    UPDATETYPE_OUT_OF_RANGE_OBJECTS = 4,
-    UPDATETYPE_NEAR_OBJECTS         = 5
+    UPDATETYPE_CREATE_OBJECT        = 1,
+    UPDATETYPE_CREATE_OBJECT2       = 2,
+    UPDATETYPE_OUT_OF_RANGE_OBJECTS = 3,
 };
 
 enum OBJECT_UPDATE_FLAGS
@@ -44,9 +40,9 @@ enum OBJECT_UPDATE_FLAGS
     UPDATEFLAG_VEHICLE      = 0x0080,
     UPDATEFLAG_POSITION     = 0x0100,
     UPDATEFLAG_ROTATION     = 0x0200,
-    UPDATEFLAG_UNK1         = 0x0400, //not found.
-    UPDATEFLAG_UNK2         = 0x0800, //added in 4.0.3
-    UPDATEFLAG_UNK3         = 0x1000, //added in 4.0.3
+    UPDATEFLAG_UNK1         = 0x0400,
+    UPDATEFLAG_UNK2         = 0x0800,
+    UPDATEFLAG_UNK3         = 0x1000,
 };
 
 class UpdateData
@@ -57,17 +53,17 @@ class UpdateData
         void AddOutOfRangeGUID(std::set<uint64>& guids);
         void AddOutOfRangeGUID(const uint64 &guid);
         void AddUpdateBlock(const ByteBuffer &block);
-        bool BuildPacket(WorldPacket* packet);
+        bool BuildPacket(WorldPacket *packet);
         bool HasData() { return m_blockCount > 0 || !m_outOfRangeGUIDs.empty(); }
         void Clear();
 
         std::set<uint64> const& GetOutOfRangeGUIDs() const { return m_outOfRangeGUIDs; }
+        uint16 m_map;
 
     protected:
         uint32 m_blockCount;
         std::set<uint64> m_outOfRangeGUIDs;
         ByteBuffer m_data;
-        void Compress(void* dst, uint32 *dst_size, void* src, int src_size);
 };
 #endif
 

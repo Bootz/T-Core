@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -166,7 +164,7 @@ public:
 };
 
 //class used to filer only thread-unsafe packets from queue
-//in order to update only be used in Trillium::UpdateSessions()
+//in order to update only be used in World::UpdateSessions()
 class WorldSessionFilter : public PacketFilter
 {
 public:
@@ -251,7 +249,7 @@ class WorldSession
 
         void SendTrainerList(uint64 guid);
         void SendTrainerList(uint64 guid, const std::string& strTitle);
-        void SendListInventory(uint64 vendorGuid);
+        void SendListInventory(uint64 guid);
         void SendShowBank(uint64 guid);
         void SendTabardVendorActivate(uint64 guid);
         void SendSpiritResurrect();
@@ -299,7 +297,7 @@ class WorldSession
         //used with item_page table
         bool SendItemInfo(uint32 itemid, WorldPacket data);
         //auction
-        void SendAuctionHello(uint64 guid, Creature* unit);
+        void SendAuctionHello(uint64 guid, Creature * unit);
         void SendAuctionCommandResult(uint32 auctionId, uint32 Action, uint32 ErrorCode, uint32 bidError = 0);
         void SendAuctionBidderNotification(uint32 location, uint32 auctionId, uint64 bidder, uint32 bidSum, uint32 diff, uint32 item_template);
         void SendAuctionOwnerNotification(AuctionEntry * auction);
@@ -320,7 +318,7 @@ class WorldSession
         void SendNotInArenaTeamPacket(uint8 type);
         void SendPetitionShowList(uint64 guid);
 
-        void BuildPartyMemberStatsChangedPacket(Player* player, WorldPacket *data);
+        void BuildPartyMemberStatsChangedPacket(Player *player, WorldPacket *data);
 
         void DoLootRelease(uint64 lguid);
 
@@ -330,7 +328,7 @@ class WorldSession
         // Locales
         LocaleConstant GetSessionDbcLocale() const { return m_sessionDbcLocale; }
         LocaleConstant GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
-        const char *GetTrinityString(int32 entry) const;
+        const char *GetTrilliumString(int32 entry) const;
 
         uint32 GetLatency() const { return m_latency; }
         void SetLatency(uint32 latency) { m_latency = latency; }
@@ -710,6 +708,7 @@ class WorldSession
         void HandlePetAbandon(WorldPacket & recv_data);
         void HandlePetRename(WorldPacket & recv_data);
         void HandlePetCancelAuraOpcode(WorldPacket& recvPacket);
+        void HandlePetUnlearnOpcode(WorldPacket& recvPacket);
         void HandlePetSpellAutocastOpcode(WorldPacket& recvPacket);
         void HandlePetCastSpellOpcode(WorldPacket& recvPacket);
         void HandlePetLearnTalent(WorldPacket& recvPacket);
@@ -750,16 +749,6 @@ class WorldSession
         void HandleResetInstancesOpcode(WorldPacket& recv_data);
         void HandleHearthAndResurrect(WorldPacket& recv_data);
         void HandleInstanceLockResponse(WorldPacket& recvPacket);
-
-        // Battlefield
-        void SendBfInvitePlayerToWar(uint32 BattleId,uint32 ZoneId,uint32 time);
-        void SendBfInvitePlayerToQueue(uint32 BattleId);
-        void SendBfQueueInviteResponce(uint32 BattleId,uint32 ZoneId);
-        void SendBfEntered(uint32 BattleId);
-        void SendBfLeaveMessage(uint32 BattleId);
-        void HandleBfQueueInviteResponse(WorldPacket &recv_data);
-        void HandleBfEntryInviteResponse(WorldPacket &recv_data);
-        void HandleBfExitRequest(WorldPacket &recv_data);
 
         // Looking for Dungeon/Raid
         void HandleLfgSetCommentOpcode(WorldPacket & recv_data);
@@ -870,34 +859,32 @@ class WorldSession
         void HandleUpdateProjectilePosition(WorldPacket& recvPacket);
 
     private:
-        void InitializeQueryCallbackParameters();
         void ProcessQueryCallbacks();
 
-        ACE_Future_Set<QueryResult> _nameQueryCallbacks;
-        QueryResultFuture _charEnumCallback;
-        QueryResultFuture _addIgnoreCallback;
-        QueryResultFuture _stablePetCallback;
-        QueryCallback<QueryResult, std::string> _charRenameCallback;
-        QueryCallback<QueryResult, std::string> _addFriendCallback;
-        QueryCallback<QueryResult, uint32> _unstablePetCallback;
-        QueryCallback<QueryResult, uint32> _stableSwapCallback;
-        QueryCallback<QueryResult, uint64> _sendStabledPetCallback;
-        QueryResultHolderFuture _charLoginCallback;
+        ACE_Future_Set<QueryResult> m_nameQueryCallbacks;
+        QueryResultFuture m_charEnumCallback;
+        QueryResultFuture m_addIgnoreCallback;
+        QueryResultFuture m_stablePetCallback;
+        QueryCallback<QueryResult, std::string> m_charRenameCallback;
+        QueryCallback<QueryResult, std::string> m_addFriendCallback;
+        QueryCallback<QueryResult, uint32> m_unstablePetCallback;
+        QueryCallback<QueryResult, uint32> m_stableSwapCallback;
+        QueryCallback<QueryResult, uint64> m_sendStabledPetCallback;
+        QueryResultHolderFuture m_charLoginCallback;
 
     private:
         // private trade methods
         void moveItems(Item* myItems[], Item* hisItems[]);
 
         // logging helper
-        void LogUnexpectedOpcode(WorldPacket* packet, const char* status, const char *reason);
-        void LogUnprocessedTail(WorldPacket* packet);
+        void LogUnexpectedOpcode(WorldPacket *packet, const char* status, const char *reason);
+        void LogUnprocessedTail(WorldPacket *packet);
 
         // EnumData helpers
         bool CharCanLogin(uint32 lowGUID)
         {
             return _allowedCharsToLogin.find(lowGUID) != _allowedCharsToLogin.end();
         }
-
         // this stores the GUIDs of the characters who can login
         // characters who failed on Player::BuildEnumData shouldn't login
         std::set<uint32> _allowedCharsToLogin;

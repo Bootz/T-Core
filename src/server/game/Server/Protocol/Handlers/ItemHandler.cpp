@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -719,14 +717,14 @@ void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)
     SendListInventory(guid);
 }
 
-void WorldSession::SendListInventory(uint64 vendorGuid)
+void WorldSession::SendListInventory(uint64 vendorguid)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_LIST_INVENTORY");
 
-    Creature* vendor = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR);
-    if (!vendor)
+    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
+    if (!pCreature)
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendListInventory - Unit (GUID: %u) not found or you can not interact with him.", uint32(GUID_LOPART(vendorGuid)));
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendListInventory - Unit (GUID: %u) not found or you can not interact with him.", uint32(GUID_LOPART(vendorguid)));
         _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, NULL, 0, 0);
         return;
     }
@@ -736,62 +734,56 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
     // Stop the npc if moving
-    if (vendor->HasUnitState(UNIT_STAT_MOVING))
-        vendor->StopMoving();
+    if (pCreature->HasUnitState(UNIT_STAT_MOVING))
+        pCreature->StopMoving();
 
-    VendorItemData const* items = vendor->GetVendorItems();
-    if (!items)
+    VendorItemData const* vItems = pCreature->GetVendorItems();
+    if (!vItems)
     {
-        WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1);
-        data << uint64(vendorGuid);
-        data << uint8(0);                                   // count == 0, next will be error code
+        WorldPacket data(SMSG_LIST_INVENTORY, (8+1+1));
+        data << uint64(vendorguid);
+        data << uint8(0);                                   // count==0, next will be error code
         data << uint8(0);                                   // "Vendor has no inventory"
         SendPacket(&data);
         return;
     }
 
-    uint8 itemCount = items->GetItemCount();
+    uint8 numitems = vItems->GetItemCount();
     uint8 count = 0;
 
-    WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + itemCount * 8 * 4);
-    data << uint64(vendorGuid);
+    WorldPacket data(SMSG_LIST_INVENTORY, (8+1+numitems*8*4));
+    data << uint64(vendorguid);
 
-    size_t countPos = data.wpos();
+    size_t count_pos = data.wpos();
     data << uint8(count);
 
-    float discountMod = _player->GetReputationPriceDiscount(vendor);
+    float discountMod = _player->GetReputationPriceDiscount(pCreature);
 
-    for (uint8 slot = 0; slot < itemCount; ++slot)
+    for (uint8 vendorslot = 0; vendorslot < numitems; ++vendorslot )
     {
-        if (VendorItem const* item = items->GetItem(slot))
+        if (VendorItem const* crItem = vItems->GetItem(vendorslot))
         {
-            if (ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(item->item))
+            if (ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(crItem->item))
             {
-                if (!(itemTemplate->AllowableClass & _player->getClassMask()) && itemTemplate->Bonding == BIND_WHEN_PICKED_UP && !_player->isGameMaster())
+                if ((pProto->AllowableClass & _player->getClassMask()) == 0 && pProto->Bonding == BIND_WHEN_PICKED_UP && !_player->isGameMaster())
                     continue;
                 // Only display items in vendor lists for the team the
                 // player is on. If GM on, display all items.
-                if (!_player->isGameMaster() && ((itemTemplate->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && _player->GetTeam() == ALLIANCE) || (itemTemplate->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && _player->GetTeam() == HORDE)))
+                if (!_player->isGameMaster() && ((pProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && _player->GetTeam() == ALLIANCE) || (pProto->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && _player->GetTeam() == HORDE)))
                     continue;
-
-                // Items sold out are not displayed in list
-                uint32 leftInStock = !item->maxcount ? 0xFFFFFFFF : vendor->GetVendorItemCurrentCount(item);
-                if (!_player->isGameMaster() && !leftInStock)
-                    continue;
-
                 ++count;
 
                 // reputation discount
-                int32 price = item->IsGoldRequired(itemTemplate) ? uint32(floor(itemTemplate->BuyPrice * discountMod)) : 0;
+                int32 price = crItem->IsGoldRequired(pProto) ? uint32(floor(pProto->BuyPrice * discountMod)) : 0;
 
-                data << uint32(slot + 1);       // client expects counting to start at 1
-                data << uint32(item->item);
-                data << uint32(itemTemplate->DisplayInfoID);
-                data << int32(leftInStock);
+                data << uint32(vendorslot+1);    // client expects counting to start at 1
+                data << uint32(crItem->item);
+                data << uint32(pProto->DisplayInfoID);
+                data << int32(crItem->maxcount <= 0 ? 0xFFFFFFFF : pCreature->GetVendorItemCurrentCount(crItem));
                 data << uint32(price);
-                data << uint32(itemTemplate->MaxDurability);
-                data << uint32(itemTemplate->BuyCount);
-                data << uint32(item->ExtendedCost);
+                data << uint32(pProto->MaxDurability);
+                data << uint32(pProto->BuyCount);
+                data << uint32(crItem->ExtendedCost);
             }
         }
     }
@@ -803,7 +795,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
         return;
     }
 
-    data.put<uint8>(countPos, count);
+    data.put<uint8>(count_pos, count);
     SendPacket(&data);
 }
 

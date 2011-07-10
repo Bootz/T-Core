@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OBJECTACCESSOR_H
-#define OBJECTACCESSOR_H
+#ifndef TRILLIUM_OBJECTACCESSOR_H
+#define TRILLIUM_OBJECTACCESSOR_H
 
 #include "Define.h"
 #include <ace/Singleton.h>
@@ -123,7 +121,7 @@ class ObjectAccessor
         // Player may be not in world while in ObjectAccessor
         static Player* GetObjectInWorld(uint64 guid, Player* /*typeSpecifier*/)
         {
-            Player* player = HashMapHolder<Player>::Find(guid);
+            Player * player = HashMapHolder<Player>::Find(guid);
             if (player && player->IsInWorld())
                 return player;
             return NULL;
@@ -195,7 +193,6 @@ class ObjectAccessor
         // ACCESS LIKE THAT IS NOT THREAD SAFE
         static Pet * FindPet(uint64);
         static Player* FindPlayer(uint64);
-        static Creature* FindCreature(uint64);
         static Unit* FindUnit(uint64);
         Player* FindPlayerByName(const char* name);
 

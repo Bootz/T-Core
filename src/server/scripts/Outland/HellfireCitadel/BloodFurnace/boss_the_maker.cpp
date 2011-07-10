@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_The_Maker
-SD%Complete: 80
-SDComment: Mind control no support
-SDCategory: Hellfire Citadel, Blood Furnace
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "blood_furnace.h"
@@ -53,9 +44,9 @@ class boss_the_maker : public CreatureScript
 
         struct boss_the_makerAI : public ScriptedAI
         {
-            boss_the_makerAI(Creature* creature) : ScriptedAI(creature)
+            boss_the_makerAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -79,7 +70,7 @@ class boss_the_maker : public CreatureScript
                 pInstance->HandleGameObject(pInstance->GetData64(DATA_DOOR2), true);
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
 
@@ -123,8 +114,8 @@ class boss_the_maker : public CreatureScript
 
                 if (ExplodingBreaker_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_EXPLODING_BREAKER);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, SPELL_EXPLODING_BREAKER);
                     ExplodingBreaker_Timer = 4000+rand()%8000;
                 }
                 else
@@ -133,10 +124,10 @@ class boss_the_maker : public CreatureScript
                 /* // Disabled until Core Support for mind control
                 if (domination_timer_timer <= diff)
                 {
-                Unit* target;
-                target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                Unit *pTarget;
+                pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
 
-                DoCast(target, SPELL_DOMINATION);
+                DoCast(pTarget, SPELL_DOMINATION);
 
                 domination_timer = 120000;
                 } else domination_timer -=diff;

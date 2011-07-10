@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SMARTAI_H
-#define SMARTAI_H
+#ifndef TRILLIUM_SMARTAI_H
+#define TRILLIUM_SMARTAI_H
 
 #include "Common.h"
 #include "Creature.h"
@@ -93,10 +91,10 @@ class SmartAI : public CreatureAI
         void KilledUnit(Unit* victim);
 
         // Called when the creature summon successfully other creature
-        void JustSummoned(Creature* creature);
+        void JustSummoned(Creature* pUnit);
 
         // Tell creature to attack and follow the victim
-        void AttackStart(Unit* who);
+        void AttackStart(Unit *who);
 
         // Called if IsVisible(Unit *who) is true at each *who move, reaction at visibility zone enter
         void MoveInLineOfSight(Unit *who);
@@ -126,7 +124,7 @@ class SmartAI : public CreatureAI
         void IsSummonedBy(Unit* summoner);
 
         // Called at any Damage to any victim (before damage apply)
-        void DamageDealt(Unit* done_to, uint32 & damage, DamageEffectType /*damagetype*/);
+        void DamageDealt(Unit * done_to, uint32 & damage, DamageEffectType /*damagetype*/);
 
         // Called when a summoned creature dissapears (UnSommoned)
         void SummonedCreatureDespawn(Creature* unit);
@@ -253,7 +251,7 @@ public:
     void SetScript9(SmartScriptHolder &e, uint32 entry, Unit* invoker);
 
 protected:
-    GameObject* const go;
+    GameObject * const go;
     SmartScript mScript;
 };
 #endif

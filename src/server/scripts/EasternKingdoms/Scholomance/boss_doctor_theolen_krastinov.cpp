@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Doctor_Theolen_Krastinov
-SD%Complete: 100
-SDComment:
-SDCategory: Scholomance
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "scholomance.h"
@@ -39,14 +30,14 @@ class boss_doctor_theolen_krastinov : public CreatureScript
 public:
     boss_doctor_theolen_krastinov() : CreatureScript("boss_doctor_theolen_krastinov") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_theolenkrastinovAI (creature);
+        return new boss_theolenkrastinovAI (pCreature);
     }
 
     struct boss_theolenkrastinovAI : public ScriptedAI
     {
-        boss_theolenkrastinovAI(Creature* c) : ScriptedAI(c) {}
+        boss_theolenkrastinovAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 m_uiRend_Timer;
         uint32 m_uiBackhand_Timer;
@@ -59,7 +50,7 @@ public:
             m_uiFrenzy_Timer = 1000;
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             InstanceScript* pInstance = me->GetInstanceScript();
             if (pInstance)

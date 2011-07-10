@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SMARTSCRIPTMGR_H
-#define SMARTSCRIPTMGR_H
+#ifndef TRILLIUM_SMARTSCRIPTMGR_H
+#define TRILLIUM_SMARTSCRIPTMGR_H
 
 #include "Common.h"
 #include "Creature.h"
@@ -27,7 +25,9 @@
 #include "ConditionMgr.h"
 #include "CreatureTextMgr.h"
 #include "Spell.h"
-#include "DataStorage.h"
+
+//#include "SmartScript.h"
+//#include "SmartAI.h"
 
 struct WayPoint
 {
@@ -458,12 +458,7 @@ enum SMART_ACTION
 
     SMART_ACTION_SEND_GO_CUSTOM_ANIM                = 93,     // anim id
 
-    SMART_ACTION_SET_DYNAMIC_FLAG                   = 94,     // Flags
-    SMART_ACTION_ADD_DYNAMIC_FLAG                   = 95,     // Flags
-    SMART_ACTION_REMOVE_DYNAMIC_FLAG                = 96,     // Flags
-    SMART_ACTION_JUMP_TO_POS                        = 97,     // speedXY, speedZ, targetX, targetY, targetZ
-
-    SMART_ACTION_END                                = 98,
+    SMART_ACTION_END                                = 94,
 };
 
 struct SmartAction
@@ -845,13 +840,6 @@ struct SmartAction
         {
             uint32 anim;
         } sendGoCustomAnim;
-
-        struct
-        {
-            uint32 speedxy;
-            uint32 speedz;
-        } jump;
-
         struct
         {
             uint32 param1;
@@ -1226,7 +1214,7 @@ class SmartAIMgr
                 return mEventMap[uint32(type)][entry];
             else
             {
-                if (entry > 0)//first search is for guid (negative), do not drop error if not found
+                if(entry > 0)//first search is for guid (negative), do not drop error if not found
                     sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartAIMgr::GetScript: Could not load Script for Entry %d ScriptType %u.", entry, uint32(type));
                 return temp;
             }
@@ -1321,11 +1309,11 @@ class SmartAIMgr
 
         bool IsItemValid(SmartScriptHolder const& e, uint32 entry)
         {
-            if (!sItemStore.LookupEntry(entry))
-            {
-                sLog->outErrorDb("SmartAIMgr: Entry %d SourceType %u Event %u Action %u uses non-existent Item entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
-                return false;
-            }
+            //if (!sItemStore.LookupEntry(entry))
+            //{
+            //    sLog->outErrorDb("SmartAIMgr: Entry %d SourceType %u Event %u Action %u uses non-existent Item entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
+            //    return false;
+            //}
             return true;
         }
         /*inline bool IsConditionValid(SmartScriptHolder e, int32 t, int32 v1, int32 v2, int32 v3)

@@ -1,9 +1,8 @@
-= TrilliumEMU -- General information =
+= TrilliumENCORE -- General information =
 
-Copyright (C) TrinityCore (http://www.trinitycore.org)
-Copyright (C) TrilliumEMU (http://www.trilliumemu.com/)
+Copyright (C) TrilliumENCORE (http://www.trilliumemu.com)
 
-  TrilliumEMU is free software; you can redistribute it and/or modify
+  TrilliumENCORE is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
@@ -17,34 +16,14 @@ Copyright (C) TrilliumEMU (http://www.trilliumemu.com/)
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-  In addition, as a special exception, the Trinity Core project
-  gives permission to link the code of its release of Trinity Core with
-  the OpenSSL project's "OpenSSL" library (or with modified versions of
-  it that use the same license as the "OpenSSL" library), and distribute
-  the linked executables.  You must obey the GNU General Public License
-  in all respects for all of the code used other than "OpenSSL".  If you
-  modify this file, you may extend this exception to your version of the
-  file, but you are not obligated to do so.  If you do not wish to do
-  so, delete this exception statement from your version.
-
-TrilliumEMU is a World of Warcraft game server emulator. It is derived
-from MaNGOS, TrinityCore, the Massive Network Game Object Server, and is based on the
-code of that project.
-
-For further information on the MaNGOS project, please visit the
-project website at http://www.getmangos.com/.
-
-For further information on the TrinityCore project, please visit our
-project website at http://www.trinitycore.org.
-
-For further information on the TrilliumEMU project, please visit our
-project website at http://www.trilliumemu.com.
+For further information on the TrilliumENCORE project, please visit our
+project website at http://www.trilliumemu.com
 
 API documentation can be obtained by running the "make doc" command inside
-the doc directory.
+the doc directory. (maybe -- doubt it -- this needs to be fixed or removed)
 
 SQL files to create the database can be found in the sql directory. Files
 to update your database from an older revision/version can be found in the
 sql/updates directory.
 
-See the docs/UnixInstall.txt file for installation instructions on Linux
+See the docs/UnixInstall.txt file for installation instructions on Linux.

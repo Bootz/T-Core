@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,7 +33,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Texts()
     m_CreatureEventAI_TextMap.clear();
 
     // Load EventAI Text
-    sObjectMgr->LoadTrinityStrings("creature_ai_texts", MIN_CREATURE_AI_TEXT_STRING_ID, MAX_CREATURE_AI_TEXT_STRING_ID);
+    sObjectMgr->LoadTrilliumStrings("creature_ai_texts", MIN_CREATURE_AI_TEXT_STRING_ID, MAX_CREATURE_AI_TEXT_STRING_ID);
 
     // Gather Additional data from EventAI Texts
     QueryResult result = WorldDatabase.Query("SELECT entry, sound, type, language, emote FROM creature_ai_texts");
@@ -68,7 +66,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Texts()
         }
 
         // range negative (don't must be happen, loaded from same table)
-        if (!sObjectMgr->GetTrinityStringLocale(i))
+        if (!sObjectMgr->GetTrilliumStringLocale(i))
         {
             sLog->outErrorDb("CreatureEventAI:  Entry %i in table `creature_ai_texts` not found", i);
             continue;
@@ -506,11 +504,11 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
                     /* FIXME: temp.raw.param3 not have event tipes with recovery time in it....
                     else
                     {
-                        if (spell->GetRecoveryTime() > 0 && temp.event_flags & EFLAG_REPEATABLE)
+                        if (spell->RecoveryTime > 0 && temp.event_flags & EFLAG_REPEATABLE)
                         {
-                            //output as debug for now, also because there's no general rule all spells have GetRecoveryTime()
-                            if (temp.event_param3 < spell->GetRecoveryTime())
-                                sLog->outDebug("CreatureEventAI:  Event %u Action %u uses SpellID %u but cooldown is longer(%u) than minumum defined in event param3(%u).", i, j+1, action.cast.spellId, spell->GetRecoveryTime(), temp.event_param3);
+                            //output as debug for now, also because there's no general rule all spells have RecoveryTime
+                            if (temp.event_param3 < spell->RecoveryTime)
+                                sLog->outDebug("CreatureEventAI:  Event %u Action %u uses SpellID %u but cooldown is longer(%u) than minumum defined in event param3(%u).", i, j+1, action.cast.spellId, spell->RecoveryTime, temp.event_param3);
                         }
                     }
                     */
@@ -731,20 +729,23 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
         m_CreatureEventAI_Event_Map[creature_id].push_back(temp);
         ++count;
 
-    }
-    while (result->NextRow());
-
-    for (CreatureEventAI_Event_Map::const_iterator itr = m_CreatureEventAI_Event_Map.begin(); itr != m_CreatureEventAI_Event_Map.end(); ++itr)
-    {
-        if (CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(itr->first))
+        if (CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(temp.creature_id))
         {
-            if (cInfo->AIName != "EventAI")
+            if (!cInfo->AIName.empty())
             {
-                sLog->outErrorDb("Creature entry %u has EventAI scripts, but its AIName is not 'EventAI', changing to EventAI", itr->first);
                 const_cast<CreatureTemplate*>(cInfo)->AIName = "EventAI";
+            }
+            if (cInfo->AIName.compare("EventAI"))
+            {
+                //sLog->outErrorDb("CreatureEventAI: Creature Entry %u has EventAI script but it has AIName %s. EventAI script will be overriden.", cInfo->Entry, cInfo->AIName);
+            }
+            if (cInfo->ScriptID)
+            {
+                //sLog->outErrorDb("CreatureEventAI: Creature Entry %u has EventAI script but it also has C++ script. EventAI script will be overriden.", cInfo->Entry);
             }
         }
     }
+    while (result->NextRow());
 
     sLog->outString(">> Loaded %u CreatureEventAI scripts in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();

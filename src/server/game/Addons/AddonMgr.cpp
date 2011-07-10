@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -68,7 +66,7 @@ void AddonMgr::LoadFromDB()
 void AddonMgr::SaveAddon(AddonInfo const& addon)
 {
     std::string name = addon.Name;
-    CharacterDatabase.EscapeString(name);
+    CharacterDatabase.escape_string(name);
     CharacterDatabase.PExecute("INSERT INTO addons (name, crc) VALUES ('%s', %u)", name.c_str(), addon.CRC);
 
     SavedAddon newAddon(addon.Name, addon.CRC);

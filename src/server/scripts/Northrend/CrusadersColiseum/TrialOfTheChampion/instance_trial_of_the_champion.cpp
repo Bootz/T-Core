@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,12 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance Trial of the Champion
-SDComment:
-SDCategory: Trial Of the Champion
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "trial_of_the_champion.h"
@@ -107,8 +99,8 @@ public:
 
             if (!players.isEmpty())
             {
-                if (Player* player = players.begin()->getSource())
-                    TeamInInstance = player->GetTeam();
+                if (Player* pPlayer = players.begin()->getSource())
+                    TeamInInstance = pPlayer->GetTeam();
             }
 
             switch(creature->GetEntry())
@@ -182,8 +174,8 @@ public:
                     if (uiData == IN_PROGRESS)
                     {
                         for (std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
-                            if (Creature* summon = instance->GetCreature(*itr))
-                                summon->RemoveFromWorld();
+                            if (Creature* pSummon = instance->GetCreature(*itr))
+                                pSummon->RemoveFromWorld();
                     }else if (uiData == DONE)
                     {
                         ++uiGrandChampionsDeaths;

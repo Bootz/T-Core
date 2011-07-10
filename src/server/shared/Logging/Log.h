@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_LOG_H
-#define TRINITYCORE_LOG_H
+#ifndef TRILLIUMCORE_LOG_H
+#define TRILLIUMCORE_LOG_H
 
 #include "Common.h"
 #include <ace/Singleton.h>
@@ -51,7 +49,6 @@ enum DebugLogFilters
     LOG_FILTER_LOOT                     = 0x00100000,   // Loot related
     LOG_FILTER_GUILD                    = 0x00200000,   // Guild related
     LOG_FILTER_TRANSPORTS               = 0x00400000,   // Transport related
-    LOG_FILTER_BATTLEFIELD              = 0x00800000,   // Battlefield related
 };
 
 enum LogTypes
@@ -122,7 +119,6 @@ class Log
         void outCrash( const char * err, ... )                  ATTR_PRINTF(2, 3);
         void outBasic( const char * str, ... )                  ATTR_PRINTF(2, 3);
         void outDetail( const char * str, ... )                 ATTR_PRINTF(2, 3);
-        void outSQLDev( const char * str, ... )                 ATTR_PRINTF(2, 3);
         void outDebug(DebugLogFilters f, const char* str, ...)  ATTR_PRINTF(3, 4);
         void outStaticDebug( const char * str, ... )            ATTR_PRINTF(2, 3);
         void outDebugInLine( const char * str, ... )            ATTR_PRINTF(2, 3);
@@ -164,7 +160,6 @@ class Log
         FILE* chatLogfile;
         FILE* arenaLogFile;
         FILE* sqlLogFile;
-        FILE* sqlDevLogFile;
 
         // cache values for after initilization use (like gm log per account case)
         std::string m_logsDir;

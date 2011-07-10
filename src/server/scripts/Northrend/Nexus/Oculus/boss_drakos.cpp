@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -158,9 +156,9 @@ class npc_unstable_sphere : public CreatureScript
 public:
     npc_unstable_sphere() : CreatureScript("npc_unstable_sphere") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_unstable_sphereAI (creature);
+        return new npc_unstable_sphereAI (pCreature);
     }
 
     struct npc_unstable_sphereAI : public ScriptedAI

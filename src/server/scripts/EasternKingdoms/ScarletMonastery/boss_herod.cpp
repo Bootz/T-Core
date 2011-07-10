@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Herod
-SD%Complete: 95
-SDComment: Should in addition spawn Myrmidons in the hallway outside
-SDCategory: Scarlet Monastery
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
@@ -46,14 +37,14 @@ class boss_herod : public CreatureScript
 public:
     boss_herod() : CreatureScript("boss_herod") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_herodAI(creature);
+        return new boss_herodAI(pCreature);
     }
 
     struct boss_herodAI : public ScriptedAI
     {
-        boss_herodAI(Creature* c) : ScriptedAI(c) {}
+        boss_herodAI(Creature *c) : ScriptedAI(c) {}
 
         bool Enrage;
 
@@ -67,13 +58,13 @@ public:
             Whirlwind_Timer = 60000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             DoCast(me, SPELL_RUSHINGCHARGE);
         }
 
-         void KilledUnit(Unit* /*victim*/)
+         void KilledUnit(Unit * /*victim*/)
          {
              DoScriptText(SAY_KILL, me);
          }
@@ -124,14 +115,14 @@ class mob_scarlet_trainee : public CreatureScript
 public:
     mob_scarlet_trainee() : CreatureScript("mob_scarlet_trainee") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_scarlet_traineeAI(creature);
+        return new mob_scarlet_traineeAI(pCreature);
     }
 
     struct mob_scarlet_traineeAI : public npc_escortAI
     {
-        mob_scarlet_traineeAI(Creature* c) : npc_escortAI(c)
+        mob_scarlet_traineeAI(Creature *c) : npc_escortAI(c)
         {
             Start_Timer = urand(1000, 6000);
         }

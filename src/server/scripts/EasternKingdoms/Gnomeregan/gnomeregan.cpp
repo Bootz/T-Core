@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Gnomeregan
-SDAuthor: Manuel
-SD%Complete: 90%
-SDComment: Some visual effects are not implemented.
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "gnomeregan.h"
@@ -92,45 +83,45 @@ class npc_blastmaster_emi_shortfuse : public CreatureScript
 public:
     npc_blastmaster_emi_shortfuse() : CreatureScript("npc_blastmaster_emi_shortfuse") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_blastmaster_emi_shortfuseAI(creature);
+        return new npc_blastmaster_emi_shortfuseAI(pCreature);
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            if (npc_escortAI* pEscortAI = CAST_AI(npc_blastmaster_emi_shortfuse::npc_blastmaster_emi_shortfuseAI, creature->AI()))
-                pEscortAI->Start(true, false, player->GetGUID());
+            if (npc_escortAI* pEscortAI = CAST_AI(npc_blastmaster_emi_shortfuse::npc_blastmaster_emi_shortfuseAI, pCreature->AI()))
+                pEscortAI->Start(true, false, pPlayer->GetGUID());
 
-            creature->setFaction(player->getFaction());
-            creature->AI()->SetData(1, 0);
+            pCreature->setFaction(pPlayer->getFaction());
+            pCreature->AI()->SetData(1, 0);
 
-            player->CLOSE_GOSSIP_MENU();
+            pPlayer->CLOSE_GOSSIP_MENU();
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        InstanceScript* pInstance = creature->GetInstanceScript();
+        InstanceScript* pInstance = pCreature->GetInstanceScript();
 
         if (pInstance && pInstance->GetData(TYPE_EVENT) == NOT_STARTED)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-        player->SEND_GOSSIP_MENU(GOSSIP_TEXT_EMI, creature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXT_EMI, pCreature->GetGUID());
 
         return true;
     }
 
     struct npc_blastmaster_emi_shortfuseAI : public npc_escortAI
     {
-        npc_blastmaster_emi_shortfuseAI(Creature* creature) : npc_escortAI(creature)
+        npc_blastmaster_emi_shortfuseAI(Creature* pCreature) : npc_escortAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
-            creature->RestoreFaction();
+            pInstance = pCreature->GetInstanceScript();
+            pCreature->RestoreFaction();
             Reset();
         }
 
@@ -176,9 +167,9 @@ public:
                {
                     if (pGo)
                     {
-                        if (Creature* trigger = pGo->SummonTrigger(pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0, 1))
+                        if (Creature *trigger = pGo->SummonTrigger(pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0, 1))
                         {
-                            //visual effects are not working!
+                            //visual effects are not working! ¬¬
                             trigger->CastSpell(trigger, 11542, true);
                             trigger->CastSpell(trigger, 35470, true);
                         }
@@ -234,12 +225,12 @@ public:
             if (!SummonList.empty())
                 for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
                 {
-                    if (Creature* summon = Unit::GetCreature(*me, *itr))
+                    if (Creature* pSummon = Unit::GetCreature(*me, *itr))
                     {
-                        if (summon->isAlive())
-                            summon->DisappearAndDie();
+                        if (pSummon->isAlive())
+                            pSummon->DisappearAndDie();
                         else
-                            summon->RemoveCorpse();
+                            pSummon->RemoveCorpse();
                     }
                 }
         }
@@ -253,16 +244,16 @@ public:
 
             for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (Player* pPlayer = i->getSource())
                 {
-                    if (player->isGameMaster())
+                    if (pPlayer->isGameMaster())
                         continue;
 
-                    if (player->isAlive())
+                    if (pPlayer->isAlive())
                     {
-                        pTemp->SetInCombatWith(player);
-                        player->SetInCombatWith(pTemp);
-                        pTemp->AddThreat(player, 0.0f);
+                        pTemp->SetInCombatWith(pPlayer);
+                        pPlayer->SetInCombatWith(pTemp);
+                        pTemp->AddThreat(pPlayer, 0.0f);
                     }
                 }
             }
@@ -536,10 +527,10 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature* pSummon)
         {
-            SummonList.push_back(summon->GetGUID());
-            AggroAllPlayers(summon);
+            SummonList.push_back(pSummon->GetGUID());
+            AggroAllPlayers(pSummon);
         }
     };
 
@@ -550,14 +541,14 @@ class boss_grubbis : public CreatureScript
 public:
     boss_grubbis() : CreatureScript("boss_grubbis") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_grubbisAI(creature);
+        return new boss_grubbisAI(pCreature);
     }
 
     struct boss_grubbisAI : public ScriptedAI
     {
-        boss_grubbisAI(Creature* creature) : ScriptedAI(creature)
+        boss_grubbisAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             SetDataSummoner();
         }
@@ -567,8 +558,8 @@ public:
             if (!me->isSummon())
                 return;
 
-            if (Unit* summon = me->ToTempSummon()->GetSummoner())
-                CAST_CRE(summon)->AI()->SetData(2, 1);
+            if (Unit* pSummon = CAST_SUM(me)->GetSummoner())
+                CAST_CRE(pSummon)->AI()->SetData(2, 1);
         }
 
         void UpdateAI(const uint32 /*diff*/)
@@ -579,14 +570,13 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (!me->isSummon())
                 return;
 
-            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
-                if (Creature* summonerCre = summoner->ToCreature())
-                    summonerCre->AI()->SetData(2, 2);
+            if (Unit* pSummon = CAST_SUM(me)->GetSummoner())
+                CAST_CRE(pSummon)->AI()->SetData(2, 2);
         }
     };
 

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INSTANCE_DATA_H
-#define INSTANCE_DATA_H
+#ifndef TRILLIUM_INSTANCE_DATA_H
+#define TRILLIUM_INSTANCE_DATA_H
 
 #include "ZoneScript.h"
 #include "World.h"
@@ -59,9 +57,8 @@ enum EncounterState
 
 enum DoorType
 {
-    DOOR_TYPE_ROOM          = 0,    // Door can open if encounter is not in progress
-    DOOR_TYPE_PASSAGE       = 1,    // Door can open if encounter is done
-    DOOR_TYPE_SPAWN_HOLE    = 2,    // Door can open if encounter is in progress, typically used for spawning places
+    DOOR_TYPE_ROOM = 0,
+    DOOR_TYPE_PASSAGE,
     MAX_DOOR_TYPES,
 };
 
@@ -169,6 +166,9 @@ class InstanceScript : public ZoneScript
 
         // Send Notify to all players in instance
         void DoSendNotifyToInstance(char const* format, ...);
+
+        // Complete Achievement for all players in instance
+        DECLSPEC_DEPRECATED void DoCompleteAchievement(uint32 achievement) ATTR_DEPRECATED;
 
         // Update Achievement Criteria for all players in instance
         void DoUpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);

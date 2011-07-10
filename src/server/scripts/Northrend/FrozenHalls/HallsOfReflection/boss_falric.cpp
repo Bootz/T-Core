@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -52,14 +50,14 @@ class boss_falric : public CreatureScript
 public:
     boss_falric() : CreatureScript("boss_falric") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_falricAI(creature);
+        return new boss_falricAI(pCreature);
     }
 
     struct boss_falricAI : public boss_horAI
     {
-        boss_falricAI(Creature* creature) : boss_horAI(creature) {}
+        boss_falricAI(Creature *pCreature) : boss_horAI(pCreature) {}
 
         uint8 uiHopelessnessCount;
 
@@ -92,7 +90,7 @@ public:
                 pInstance->SetData(DATA_FALRIC_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
         }
@@ -115,10 +113,10 @@ public:
                     events.ScheduleEvent(EVENT_QUIVERING_STRIKE, 10000);
                     break;
                 case EVENT_IMPENDING_DESPAIR:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
                     {
                         DoScriptText(SAY_IMPENDING_DESPAIR, me);
-                        DoCast(target, SPELL_IMPENDING_DESPAIR);
+                        DoCast(pTarget, SPELL_IMPENDING_DESPAIR);
                     }
                     events.ScheduleEvent(EVENT_IMPENDING_DESPAIR, 13000);
                     break;

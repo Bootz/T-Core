@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CREATUREAI_H
-#define CREATUREAI_H
+#ifndef TRILLIUM_CREATUREAI_H
+#define TRILLIUM_CREATUREAI_H
 
 #include "UnitAI.h"
 #include "Common.h"
@@ -116,6 +114,9 @@ class CreatureAI : public UnitAI
 
         // Called when spell hits a target
         virtual void SpellHitTarget(Unit* /*target*/, SpellEntry const* /*spell*/) {}
+
+        // Called to get trigger target for aura effect
+        virtual Unit* GetAuraEffectTriggerTarget(uint32 /*spellId*/, uint8 /*effIndex*/) { return NULL; }
 
         // Called when the creature is target of hostile action: swing, hostile spell landed, fear/etc)
         //virtual void AttackedBy(Unit* attacker);

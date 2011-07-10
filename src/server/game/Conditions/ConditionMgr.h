@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONDITIONMGR_H
-#define CONDITIONMGR_H
+#ifndef TRILLIUM_CONDITIONMGR_H
+#define TRILLIUM_CONDITIONMGR_H
 
 #include "LootMgr.h"
 
@@ -128,7 +126,7 @@ struct Condition
         mScriptId           = 0;
     }
 
-    bool Meets(Player* player, Unit* invoker = NULL);
+    bool Meets(Player * player, Unit* invoker = NULL);
     bool isLoaded() const { return mConditionType > CONDITION_NONE || mReferenceId; }
 };
 
@@ -151,7 +149,7 @@ class ConditionMgr
         bool isConditionTypeValid(Condition* cond);
         ConditionList GetConditionReferences(uint32 refId);
 
-        bool IsPlayerMeetToConditions(Player* player, ConditionList const& conditions, Unit* invoker = NULL);
+        bool IsPlayerMeetToConditions(Player* player, ConditionList conditions, Unit* invoker = NULL);
         ConditionList GetConditionsForNotGroupedEntry(ConditionSourceType sType, uint32 uEntry);
         ConditionList GetConditionsForVehicleSpell(uint32 creatureID, uint32 spellID);
 
@@ -167,7 +165,7 @@ class ConditionMgr
         bool addToLootTemplate(Condition* cond, LootTemplate* loot);
         bool addToGossipMenus(Condition* cond);
         bool addToGossipMenuItems(Condition* cond);
-        bool IsPlayerMeetToConditionList(Player* player, ConditionList const& conditions, Unit* invoker = NULL);
+        bool IsPlayerMeetToConditionList(Player* player, const ConditionList& conditions, Unit* invoker = NULL);
 
         bool isGroupable(ConditionSourceType sourceType) const
         {

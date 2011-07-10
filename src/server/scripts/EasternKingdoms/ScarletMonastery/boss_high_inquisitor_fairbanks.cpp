@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_High_Inquisitor_Fairbanks
-SD%Complete: 100
-SDComment: TODO: if this guy not involved in some special event, remove (and let ACID script)
-SDCategory: Scarlet Monastery
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -41,14 +32,14 @@ class boss_high_inquisitor_fairbanks : public CreatureScript
 public:
     boss_high_inquisitor_fairbanks() : CreatureScript("boss_high_inquisitor_fairbanks") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_high_inquisitor_fairbanksAI (creature);
+        return new boss_high_inquisitor_fairbanksAI (pCreature);
     }
 
     struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
     {
-        boss_high_inquisitor_fairbanksAI(Creature* c) : ScriptedAI(c) {}
+        boss_high_inquisitor_fairbanksAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 CurseOfBlood_Timer;
         uint32 DispelMagic_Timer;
@@ -69,7 +60,7 @@ public:
             PowerWordShield = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -88,8 +79,8 @@ public:
             //Fear_Timer
             if (Fear_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                    DoCast(target, SPELL_FEAR);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                    DoCast(pTarget, SPELL_FEAR);
 
                 Fear_Timer = 40000;
             } else Fear_Timer -= diff;
@@ -97,8 +88,8 @@ public:
             //Sleep_Timer
             if (Sleep_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
-                    DoCast(target, SPELL_SLEEP);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+                    DoCast(pTarget, SPELL_SLEEP);
 
                 Sleep_Timer = 30000;
             } else Sleep_Timer -= diff;
@@ -113,8 +104,8 @@ public:
             //Dispel_Timer
             if (Dispel_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_DISPELMAGIC);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_DISPELMAGIC);
 
                 DispelMagic_Timer = 30000;
             } else DispelMagic_Timer -= diff;

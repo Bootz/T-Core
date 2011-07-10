@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,7 +22,7 @@
 #include "Path.h"
 #include "ScriptMgr.h"
 #include "WorldPacket.h"
-#include "DataStorage.h"
+#include "DBCStores.h"
 #include "World.h"
 #include "GameObjectAI.h"
 
@@ -136,7 +134,7 @@ void MapManager::LoadTransportNPCs()
     //                                                         0    1          2                3             4             5             6             7
     QueryResult result = WorldDatabase.PQuery("SELECT guid, npc_entry, transport_entry, TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO, emote FROM creature_transport");
 
-    if (true || !result)
+    if (!result)
     {
         sLog->outString(">> Loaded 0 transport NPCs. DB table `creature_transport` is empty!");
         sLog->outString();
@@ -542,7 +540,7 @@ bool Transport::RemovePassenger(Player* passenger)
 
 void Transport::Update(uint32 p_diff)
 {
-    if (!AI())
+    if(!AI())
     {
         if (!AIM_Initialize())
             sLog->outError("Could not initialize GameObjectAI for Transport");
@@ -670,7 +668,7 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
     pCreature->SetHomePosition(pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation());
 
-    if (!pCreature->IsPositionValid())
+    if(!pCreature->IsPositionValid())
     {
         sLog->outError("Creature (guidlow %d, entry %d) not created. Suggested coordinates isn't valid (X: %f Y: %f)", pCreature->GetGUIDLow(), pCreature->GetEntry(), pCreature->GetPositionX(), pCreature->GetPositionY());
         delete pCreature;
@@ -688,6 +686,7 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
     else
         currenttguid = std::max(tguid, currenttguid);
 
+    pCreature->setActive(true);
     pCreature->SetGUIDTransport(tguid);
     sScriptMgr->OnAddCreaturePassenger(this, pCreature);
     return tguid;

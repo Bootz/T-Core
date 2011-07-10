@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -320,7 +318,7 @@ void WorldSession::HandlePetActionHelper(Unit *pet, uint64 guid1, uint16 spellid
                 pet->GetCharmInfo()->SetIsFollowing(false);
             }
 
-            Spell* spell = new Spell(pet, spellInfo, false);
+            Spell *spell = new Spell(pet, spellInfo, false);
 
             SpellCastResult result = spell->CheckPetCast(unit_target);
 
@@ -333,7 +331,7 @@ void WorldSession::HandlePetActionHelper(Unit *pet, uint64 guid1, uint16 spellid
                     if (unit_target->GetTypeId() == TYPEID_PLAYER)
                         pet->SendUpdateToPlayer((Player*)unit_target);
                 }
-                else if (Unit *unit_target2 = spell->m_targets.GetUnitTarget())
+                else if (Unit *unit_target2 = spell->m_targets.getUnitTarget())
                 {
                     pet->SetInFront(unit_target2);
                     if (unit_target2->GetTypeId() == TYPEID_PLAYER)
@@ -349,7 +347,7 @@ void WorldSession::HandlePetActionHelper(Unit *pet, uint64 guid1, uint16 spellid
             {
                 pet->ToCreature()->AddCreatureSpellCooldown(spellid);
 
-                unit_target = spell->m_targets.GetUnitTarget();
+                unit_target = spell->m_targets.getUnitTarget();
 
                 //10% chance to play special pet attack talk, else growl
                 //actually this only seems to happen on special spells, fire shield for imp, torment for voidwalker, but it's stupid to check every spell
@@ -644,13 +642,13 @@ void WorldSession::HandlePetRename(WorldPacket & recv_data)
     if (isdeclined)
     {
         for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
-            CharacterDatabase.EscapeString(declinedname.name[i]);
+            CharacterDatabase.escape_string(declinedname.name[i]);
         trans->PAppend("DELETE FROM character_pet_declinedname WHERE owner = '%u' AND id = '%u'", _player->GetGUIDLow(), pet->GetCharmInfo()->GetPetNumber());
         trans->PAppend("INSERT INTO character_pet_declinedname (id, owner, genitive, dative, accusative, instrumental, prepositional) VALUES ('%u', '%u', '%s', '%s', '%s', '%s', '%s')",
             pet->GetCharmInfo()->GetPetNumber(), _player->GetGUIDLow(), declinedname.name[0].c_str(), declinedname.name[1].c_str(), declinedname.name[2].c_str(), declinedname.name[3].c_str(), declinedname.name[4].c_str());
     }
 
-    CharacterDatabase.EscapeString(name);
+    CharacterDatabase.escape_string(name);
     trans->PAppend("UPDATE character_pet SET name = '%s', renamed = '1' WHERE owner = '%u' AND id = '%u'", name.c_str(), _player->GetGUIDLow(), pet->GetCharmInfo()->GetPetNumber());
     CharacterDatabase.CommitTransaction(trans);
 
@@ -770,12 +768,12 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
         return;
 
     SpellCastTargets targets;
-    targets.Read(recvPacket, caster);
+    targets.read(recvPacket, caster);
     HandleClientCastFlags(recvPacket, castFlags, targets);
 
     caster->ClearUnitState(UNIT_STAT_FOLLOW);
 
-    Spell* spell = new Spell(caster, spellInfo, false);
+    Spell *spell = new Spell(caster, spellInfo, false);
     spell->m_cast_count = castCount;                    // probably pending spell cast
     spell->m_targets = targets;
 

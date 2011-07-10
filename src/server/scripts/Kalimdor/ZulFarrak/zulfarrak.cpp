@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Zulfarrak
-SD%Complete: 50
-SDComment: Consider it temporary, no instance script made for this instance yet.
-SDCategory: Zul'Farrak
-EndScriptData */
 
 /* ContentData
 npc_sergeant_bly
@@ -62,47 +53,47 @@ class npc_sergeant_bly : public CreatureScript
 public:
     npc_sergeant_bly() : CreatureScript("npc_sergeant_bly") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            player->CLOSE_GOSSIP_MENU();
-            CAST_AI(npc_sergeant_bly::npc_sergeant_blyAI, creature->AI())->PlayerGUID = player->GetGUID();
-            creature->AI()->DoAction(0);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            CAST_AI(npc_sergeant_bly::npc_sergeant_blyAI, pCreature->AI())->PlayerGUID = pPlayer->GetGUID();
+            pCreature->AI()->DoAction(0);
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (InstanceScript* pInstance = creature->GetInstanceScript())
+        if (InstanceScript* pInstance = pCreature->GetInstanceScript())
         {
             if (pInstance->GetData(EVENT_PYRAMID) == PYRAMID_KILLED_ALL_TROLLS)
             {
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_BLY, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-                player->SEND_GOSSIP_MENU(1517, creature->GetGUID());
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_BLY, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+                pPlayer->SEND_GOSSIP_MENU(1517, pCreature->GetGUID());
             }
             else
                 if (pInstance->GetData(EVENT_PYRAMID) == PYRAMID_NOT_STARTED)
-                    player->SEND_GOSSIP_MENU(1515, creature->GetGUID());
+                    pPlayer->SEND_GOSSIP_MENU(1515, pCreature->GetGUID());
                 else
-                    player->SEND_GOSSIP_MENU(1516, creature->GetGUID());
+                    pPlayer->SEND_GOSSIP_MENU(1516, pCreature->GetGUID());
             return true;
         }
         return false;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_sergeant_blyAI (creature);
+        return new npc_sergeant_blyAI (pCreature);
     }
 
     struct npc_sergeant_blyAI : public ScriptedAI
     {
-        npc_sergeant_blyAI(Creature* creature) : ScriptedAI(creature)
+        npc_sergeant_blyAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
             postGossipStep = 0;
         }
 
@@ -111,7 +102,7 @@ public:
         uint32 postGossipStep;
         uint32 Text_Timer;
         uint32 ShieldBash_Timer;
-        uint32 Revenge_Timer;                                   //this is wrong, spell should never be used unless me->getVictim() dodge, parry or block attack. Trinity support required.
+        uint32 Revenge_Timer;                                   //this is wrong, spell should never be used unless me->getVictim() dodge, parry or block attack. Trillium support required.
         uint64 PlayerGUID;
 
         void Reset()
@@ -143,8 +134,8 @@ public:
                             break;
                         case 3:
                             me->setFaction(FACTION_HOSTILE);
-                            if (Player* target = Player::GetPlayer(*me, PlayerGUID))
-                                AttackStart(target);
+                            if (Player* pTarget = Player::GetPlayer(*me, PlayerGUID))
+                                AttackStart(pTarget);
 
                             if (pInstance)
                             {
@@ -217,7 +208,7 @@ class go_troll_cage : public GameObjectScript
 public:
     go_troll_cage() : GameObjectScript("go_troll_cage") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGo)
+    bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGo)
     {
         if (InstanceScript* pInstance = pGo->GetInstanceScript())
         {
@@ -259,49 +250,49 @@ class npc_weegli_blastfuse : public CreatureScript
 public:
     npc_weegli_blastfuse() : CreatureScript("npc_weegli_blastfuse") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            player->CLOSE_GOSSIP_MENU();
+            pPlayer->CLOSE_GOSSIP_MENU();
             //here we make him run to door, set the charge and run away off to nowhere
-            creature->AI()->DoAction(0);
+            pCreature->AI()->DoAction(0);
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (InstanceScript* pInstance = creature->GetInstanceScript())
+        if (InstanceScript* pInstance = pCreature->GetInstanceScript())
         {
             switch (pInstance->GetData(EVENT_PYRAMID))
             {
                 case PYRAMID_KILLED_ALL_TROLLS:
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_WEEGLI, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-                    player->SEND_GOSSIP_MENU(1514, creature->GetGUID());  //if event can proceed to end
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_WEEGLI, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+                    pPlayer->SEND_GOSSIP_MENU(1514, pCreature->GetGUID());  //if event can proceed to end
                     break;
                 case PYRAMID_NOT_STARTED:
-                    player->SEND_GOSSIP_MENU(1511, creature->GetGUID());  //if event not started
+                    pPlayer->SEND_GOSSIP_MENU(1511, pCreature->GetGUID());  //if event not started
                     break;
                 default:
-                    player->SEND_GOSSIP_MENU(1513, creature->GetGUID());  //if event are in progress
+                    pPlayer->SEND_GOSSIP_MENU(1513, pCreature->GetGUID());  //if event are in progress
             }
             return true;
         }
         return false;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_weegli_blastfuseAI (creature);
+        return new npc_weegli_blastfuseAI (pCreature);
     }
 
     struct npc_weegli_blastfuseAI : public ScriptedAI
     {
-        npc_weegli_blastfuseAI(Creature* creature) : ScriptedAI(creature)
+        npc_weegli_blastfuseAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
             destroyingDoor=false;
             Bomb_Timer = 10000;
             LandMine_Timer = 30000;
@@ -318,12 +309,12 @@ public:
                 pInstance->SetData(0, NOT_STARTED);*/
         }
 
-        void AttackStart(Unit* victim)
+        void AttackStart(Unit *victim)
         {
             AttackStartCaster(victim, 10);//keep back & toss bombs/shoot
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             /*if (pInstance)
                 pInstance->SetData(0, DONE);*/
@@ -411,7 +402,7 @@ class go_shallow_grave : public GameObjectScript
 public:
     go_shallow_grave() : GameObjectScript("go_shallow_grave") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGo)
+    bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGo)
     {
         // randomly summon a zombie or dead hero the first time a grave is used
         if (pGo->GetUseCount() == 0)
@@ -444,9 +435,9 @@ class at_zumrah : public AreaTriggerScript
 public:
     at_zumrah() : AreaTriggerScript("at_zumrah") { }
 
-    bool OnTrigger(Player* player, const AreaTriggerEntry * /*at*/)
+    bool OnTrigger(Player* pPlayer, const AreaTriggerEntry * /*at*/)
     {
-        Creature* pZumrah = player->FindNearestCreature(ZUMRAH_ID, 30.0f);
+        Creature* pZumrah = pPlayer->FindNearestCreature(ZUMRAH_ID, 30.0f);
 
         if (!pZumrah)
             return false;

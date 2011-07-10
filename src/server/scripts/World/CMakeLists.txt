@@ -1,5 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -13,7 +12,10 @@ set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   World/achievement_scripts.cpp
   World/areatrigger_scripts.cpp
-  World/boss_emerald_dragons.cpp
+  World/boss_emeriss.cpp
+  World/boss_lethon.cpp
+  World/boss_taerar.cpp
+  World/boss_ysondre.cpp
   World/chat_log.cpp
   World/go_scripts.cpp
   World/guards.cpp

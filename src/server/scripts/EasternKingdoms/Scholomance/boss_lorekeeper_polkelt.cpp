@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Lorekeeper_Polkelt
-SD%Complete: 100
-SDComment:
-SDCategory: Scholomance
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "scholomance.h"
 
@@ -37,14 +28,14 @@ class boss_lorekeeper_polkelt : public CreatureScript
 public:
     boss_lorekeeper_polkelt() : CreatureScript("boss_lorekeeper_polkelt") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_lorekeeperpolkeltAI (creature);
+        return new boss_lorekeeperpolkeltAI (pCreature);
     }
 
     struct boss_lorekeeperpolkeltAI : public ScriptedAI
     {
-        boss_lorekeeperpolkeltAI(Creature* c) : ScriptedAI(c) {}
+        boss_lorekeeperpolkeltAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 VolatileInfection_Timer;
         uint32 Darkplague_Timer;
@@ -59,7 +50,7 @@ public:
             NoxiousCatalyst_Timer = 35000;
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit * /*killer*/)
         {
             InstanceScript *pInstance = me->GetInstanceScript();
             if (pInstance)
@@ -71,7 +62,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 

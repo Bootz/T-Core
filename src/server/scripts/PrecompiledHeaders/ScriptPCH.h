@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,10 +31,9 @@
 #include "InstanceScript.h"
 #include "CombatAI.h"
 #include "PassiveAI.h"
-#include "GameObjectAI.h"
 #include "Chat.h"
-#include "StoragesStructure.h"
-#include "DataStorage.h"
+#include "DBCStructure.h"
+#include "DBCStores.h"
 #include "ObjectMgr.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"

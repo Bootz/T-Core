@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -488,7 +486,7 @@ enum EUnitFields
     PLAYER_FIELD_BUYBACK_PRICE_1              = UNIT_END + 0x046A, // Size: 12, Type: INT, Flags: PRIVATE
     PLAYER_FIELD_BUYBACK_TIMESTAMP_1          = UNIT_END + 0x0476, // Size: 12, Type: INT, Flags: PRIVATE
     PLAYER_FIELD_KILLS                        = UNIT_END + 0x0482, // Size: 1, Type: TWO_SHORT, Flags: PRIVATE
-    PLAYER_FIELD_LIFETIME_HONORABLE_KILLS     = UNIT_END + 0x0483, // Size: 1, Type: INT, Flags: PRIVATE
+    PLAYER_FIELD_LIFETIME_HONORBALE_KILLS     = UNIT_END + 0x0483, // Size: 1, Type: INT, Flags: PRIVATE
     PLAYER_FIELD_BYTES2                       = UNIT_END + 0x0484, // Size: 1, Type: 6, Flags: PRIVATE
     PLAYER_FIELD_WATCHED_FACTION_INDEX        = UNIT_END + 0x0485, // Size: 1, Type: INT, Flags: PRIVATE
     PLAYER_FIELD_COMBAT_RATING_1              = UNIT_END + 0x0486, // Size: 26, Type: INT, Flags: PRIVATE
@@ -550,4 +548,5 @@ enum ECorpseFields
     CORPSE_FIELD_DYNAMIC_FLAGS                = OBJECT_END + 0x001B, // Size: 1, Type: INT, Flags: UNUSED2
     CORPSE_END                                = OBJECT_END + 0x001C,
 };
+
 #endif

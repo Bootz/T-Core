@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -159,55 +157,55 @@ private:
 public:
     npc_jaina_or_sylvanas_hor(bool isSylvana, const char* name) : CreatureScript(name), m_isSylvana(isSylvana) { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
-                player->CLOSE_GOSSIP_MENU();
-                if (creature->AI())
-                    creature->AI()->DoAction(ACTION_START_INTRO);
-                creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                pPlayer->CLOSE_GOSSIP_MENU();
+                if (pCreature->AI())
+                    pCreature->AI()->DoAction(ACTION_START_INTRO);
+                pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
-                player->CLOSE_GOSSIP_MENU();
-                if (creature->AI())
-                    creature->AI()->DoAction(ACTION_SKIP_INTRO);
-                creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                pPlayer->CLOSE_GOSSIP_MENU();
+                if (pCreature->AI())
+                    pCreature->AI()->DoAction(ACTION_SKIP_INTRO);
+                pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 break;
         }
 
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (creature->isQuestGiver())
-            player->PrepareQuestMenu(creature->GetGUID());
+        if (pCreature->isQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        QuestStatus status = player->GetQuestStatus(m_isSylvana ? QUEST_DELIVRANCE_FROM_THE_PIT_H2 : QUEST_DELIVRANCE_FROM_THE_PIT_A2);
+        QuestStatus status = pPlayer->GetQuestStatus(m_isSylvana ? QUEST_DELIVRANCE_FROM_THE_PIT_H2 : QUEST_DELIVRANCE_FROM_THE_PIT_A2);
         if (status == QUEST_STATUS_COMPLETE || status == QUEST_STATUS_REWARDED)
-            player->ADD_GOSSIP_ITEM( 0, "Can you remove the sword?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->ADD_GOSSIP_ITEM( 0, "Can you remove the sword?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
         // once last quest is completed, she offers this shortcut of the starting event
-        status = player->GetQuestStatus(m_isSylvana ? QUEST_WRATH_OF_THE_LICH_KING_H2 : QUEST_WRATH_OF_THE_LICH_KING_A2);
+        status = pPlayer->GetQuestStatus(m_isSylvana ? QUEST_WRATH_OF_THE_LICH_KING_H2 : QUEST_WRATH_OF_THE_LICH_KING_A2);
         if (status == QUEST_STATUS_COMPLETE || status == QUEST_STATUS_REWARDED)
-            player->ADD_GOSSIP_ITEM( 0, "Dark Lady, I think I hear Arthas coming. Whatever you're going to do, do it quickly.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            pPlayer->ADD_GOSSIP_ITEM( 0, "Dark Lady, I think I hear Arthas coming. Whatever you're going to do, do it quickly.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
-        player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, pCreature->GetGUID());
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_jaina_or_sylvanas_horAI(creature);
+        return new npc_jaina_or_sylvanas_horAI(pCreature);
     }
 
     // AI of Part1: handle the intro till start of gauntlet event.
     struct npc_jaina_or_sylvanas_horAI : public ScriptedAI
     {
-        npc_jaina_or_sylvanas_horAI(Creature* creature) : ScriptedAI(creature)
+        npc_jaina_or_sylvanas_horAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -628,14 +626,14 @@ class npc_ghostly_priest : public CreatureScript
 public:
     npc_ghostly_priest() : CreatureScript("npc_ghostly_priest") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_ghostly_priestAI(creature);
+        return new npc_ghostly_priestAI(pCreature);
     }
 
     struct npc_ghostly_priestAI: public ScriptedAI
     {
-        npc_ghostly_priestAI(Creature* c) : ScriptedAI(c)
+        npc_ghostly_priestAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -669,25 +667,25 @@ public:
                 switch(eventId)
                 {
                     case EVENT_SHADOW_WORD_PAIN:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_SHADOW_WORD_PAIN);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_SHADOW_WORD_PAIN);
                         events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 8000);
                         return;
                     case EVENT_CIRCLE_OF_DESTRUCTION:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_CIRCLE_OF_DESTRUCTION);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_CIRCLE_OF_DESTRUCTION);
                         events.ScheduleEvent(EVENT_CIRCLE_OF_DESTRUCTION, 12000);
                         return;
                     case EVENT_COWER_IN_FEAR:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_COWER_IN_FEAR);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_COWER_IN_FEAR);
                         events.ScheduleEvent(EVENT_COWER_IN_FEAR, 10000);
                         return;
                     case EVENT_DARK_MENDING:
                         // find an ally with missing HP
-                        if (Unit* target = DoSelectLowestHpFriendly(40, DUNGEON_MODE(30000, 50000)))
+                        if (Unit *pTarget = DoSelectLowestHpFriendly(40, DUNGEON_MODE(30000, 50000)))
                         {
-                            DoCast(target, SPELL_DARK_MENDING);
+                            DoCast(pTarget, SPELL_DARK_MENDING);
                             events.ScheduleEvent(EVENT_DARK_MENDING, 20000);
                         }
                         else
@@ -710,14 +708,14 @@ class npc_phantom_mage : public CreatureScript
 public:
     npc_phantom_mage() : CreatureScript("npc_phantom_mage") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_phantom_mageAI(creature);
+        return new npc_phantom_mageAI(pCreature);
     }
 
     struct npc_phantom_mageAI: public ScriptedAI
     {
-        npc_phantom_mageAI(Creature* c) : ScriptedAI(c)
+        npc_phantom_mageAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -752,8 +750,8 @@ public:
                 switch(eventId)
                 {
                     case EVENT_FIREBALL:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_FIREBALL);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_FIREBALL);
                         events.ScheduleEvent(EVENT_FIREBALL, 15000);
                         return;
                     case EVENT_FLAMESTRIKE:
@@ -761,13 +759,13 @@ public:
                         events.ScheduleEvent(EVENT_FLAMESTRIKE, 15000);
                         return;
                     case EVENT_FROSTBOLT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_FROSTBOLT);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_FROSTBOLT);
                         events.ScheduleEvent(EVENT_FROSTBOLT, 15000);
                         return;
                     case EVENT_CHAINS_OF_ICE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_CHAINS_OF_ICE);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_CHAINS_OF_ICE);
                         events.ScheduleEvent(EVENT_CHAINS_OF_ICE, 15000);
                         return;
                     case EVENT_HALLUCINATION:
@@ -787,18 +785,18 @@ class npc_phantom_hallucination : public CreatureScript
 public:
     npc_phantom_hallucination() : CreatureScript("npc_phantom_hallucination") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_phantom_hallucinationAI(creature);
+        return new npc_phantom_hallucinationAI(pCreature);
     }
 
     struct npc_phantom_hallucinationAI : public npc_phantom_mage::npc_phantom_mageAI
     {
-        npc_phantom_hallucinationAI(Creature* c) : npc_phantom_mage::npc_phantom_mageAI(c)
+        npc_phantom_hallucinationAI(Creature *c) : npc_phantom_mage::npc_phantom_mageAI(c)
         {
         }
 
-        void JustDied(Unit* /*who*/)
+        void JustDied(Unit * /*pWho*/)
         {
             DoCast(SPELL_HALLUCINATION_2);
         }
@@ -811,14 +809,14 @@ class npc_shadowy_mercenary : public CreatureScript
 public:
     npc_shadowy_mercenary() : CreatureScript("npc_shadowy_mercenary") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_shadowy_mercenaryAI(creature);
+        return new npc_shadowy_mercenaryAI(pCreature);
     }
 
     struct npc_shadowy_mercenaryAI: public ScriptedAI
     {
-        npc_shadowy_mercenaryAI(Creature* c) : ScriptedAI(c)
+        npc_shadowy_mercenaryAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -860,8 +858,8 @@ public:
                         events.ScheduleEvent(EVENT_DEADLY_POISON, 10000);
                         return;
                     case EVENT_ENVENOMED_DAGGER_THROW:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_ENVENOMED_DAGGER_THROW);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_ENVENOMED_DAGGER_THROW);
                         events.ScheduleEvent(EVENT_ENVENOMED_DAGGER_THROW, 10000);
                         return;
                     case EVENT_KIDNEY_SHOT:
@@ -882,14 +880,14 @@ class npc_spectral_footman : public CreatureScript
 public:
     npc_spectral_footman() : CreatureScript("npc_spectral_footman") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_spectral_footmanAI(creature);
+        return new npc_spectral_footmanAI(pCreature);
     }
 
     struct npc_spectral_footmanAI: public ScriptedAI
     {
-        npc_spectral_footmanAI(Creature* c) : ScriptedAI(c)
+        npc_spectral_footmanAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -947,14 +945,14 @@ class npc_tortured_rifleman : public CreatureScript
 public:
     npc_tortured_rifleman() : CreatureScript("npc_tortured_rifleman") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_tortured_riflemanAI(creature);
+        return new npc_tortured_riflemanAI(pCreature);
     }
 
     struct npc_tortured_riflemanAI  : public ScriptedAI
     {
-        npc_tortured_riflemanAI(Creature* c) : ScriptedAI(c)
+        npc_tortured_riflemanAI(Creature *c) : ScriptedAI(c)
         {
         }
 
@@ -988,13 +986,13 @@ public:
                 switch(eventId)
                 {
                     case EVENT_SHOOT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_SHOOT);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_SHOOT);
                         events.ScheduleEvent(EVENT_SHOOT, 2000);
                         return;
                     case EVENT_CURSED_ARROW:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_CURSED_ARROW);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_CURSED_ARROW);
                         events.ScheduleEvent(EVENT_CURSED_ARROW, 10000);
                         return;
                     case EVENT_FROST_TRAP:
@@ -1002,8 +1000,8 @@ public:
                         events.ScheduleEvent(EVENT_FROST_TRAP, 30000);
                         return;
                     case EVENT_ICE_SHOT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                            DoCast(target, SPELL_ICE_SHOT);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(pTarget, SPELL_ICE_SHOT);
                         events.ScheduleEvent(EVENT_ICE_SHOT, 15000);
                         return;
                 }

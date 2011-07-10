@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,21 +48,22 @@ class boss_azgalor : public CreatureScript
 public:
     boss_azgalor() : CreatureScript("boss_azgalor") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_azgalorAI (creature);
+        return new boss_azgalorAI (pCreature);
     }
 
     struct boss_azgalorAI : public hyjal_trashAI
     {
-        boss_azgalorAI(Creature* c) : hyjal_trashAI(c)
+        boss_azgalorAI(Creature *c) : hyjal_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
             pGo = false;
             pos = 0;
-            SpellEffectEntry *TempSpell = GET_SPELL_EFFECT(SPELL_HOWL_OF_AZGALOR);
-            if (TempSpell)
-                TempSpell->EffectRadiusIndex = 12;//100yards instead of 50000?!
+            //HACK TODO: add decent support for this below
+            //SpellEntry *TempSpell = GET_SPELL(SPELL_HOWL_OF_AZGALOR);
+            //if (TempSpell)
+            //    TempSpell->EffectRadiusIndex[0] = 12;//100yards instead of 50000?!
         }
 
         uint32 RainTimer;
@@ -91,7 +90,7 @@ public:
                 pInstance->SetData(DATA_AZGALOREVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (pInstance && IsEvent)
                 pInstance->SetData(DATA_AZGALOREVENT, IN_PROGRESS);
@@ -99,7 +98,7 @@ public:
             me->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, 0);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             switch (urand(0, 2))
             {
@@ -123,13 +122,13 @@ public:
             pos = i;
             if (i == 7 && pInstance)
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_THRALL));
-                if (target && target->isAlive())
-                    me->AddThreat(target, 0.0f);
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_THRALL));
+                if (pTarget && pTarget->isAlive())
+                    me->AddThreat(pTarget, 0.0f);
             }
         }
 
-        void JustDied(Unit* victim)
+        void JustDied(Unit *victim)
         {
             hyjal_trashAI::JustDied(victim);
             if (pInstance && IsEvent)
@@ -213,14 +212,14 @@ class mob_lesser_doomguard : public CreatureScript
 public:
     mob_lesser_doomguard() : CreatureScript("mob_lesser_doomguard") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_lesser_doomguardAI (creature);
+        return new mob_lesser_doomguardAI (pCreature);
     }
 
     struct mob_lesser_doomguardAI : public hyjal_trashAI
     {
-        mob_lesser_doomguardAI(Creature* c) : hyjal_trashAI(c)
+        mob_lesser_doomguardAI(Creature *c) : hyjal_trashAI(c)
         {
             pInstance = c->GetInstanceScript();
             if (pInstance)
@@ -241,11 +240,11 @@ public:
             CheckTimer = 5000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
         }
 
@@ -253,13 +252,13 @@ public:
         {
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (me->IsWithinDist(who, 50) && !me->isInCombat() && me->IsHostileTo(who))
                 AttackStart(who);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
         }
 

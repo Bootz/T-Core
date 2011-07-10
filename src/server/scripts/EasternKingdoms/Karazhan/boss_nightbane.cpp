@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+
+ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -64,9 +64,9 @@ class boss_nightbane : public CreatureScript
 public:
     boss_nightbane() : CreatureScript("boss_nightbane") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_nightbaneAI (creature);
+        return new boss_nightbaneAI (pCreature);
     }
 
     struct boss_nightbaneAI : public ScriptedAI
@@ -155,7 +155,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(TYPE_NIGHTBANE, IN_PROGRESS);
@@ -178,7 +178,7 @@ public:
             HandleTerraceDoors(true);
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!Intro && !Flying)
                 ScriptedAI::MoveInLineOfSight(who);
@@ -230,7 +230,7 @@ public:
             }
         }
 
-        void JustSummoned(Creature* summoned)
+        void JustSummoned(Creature *summoned)
         {
             summoned->AI()->AttackStart(me->getVictim());
         }
@@ -322,23 +322,23 @@ public:
 
                 if (CharredEarthTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        DoCast(target, SPELL_CHARRED_EARTH);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        DoCast(pTarget, SPELL_CHARRED_EARTH);
                     CharredEarthTimer = 20000;
                 } else CharredEarthTimer -= diff;
 
                 if (TailSweepTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        if (!me->HasInArc(M_PI, target))
-                            DoCast(target, SPELL_TAIL_SWEEP);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (!me->HasInArc(M_PI, pTarget))
+                            DoCast(pTarget, SPELL_TAIL_SWEEP);
                     TailSweepTimer = 15000;
                 } else TailSweepTimer -= diff;
 
                 if (SearingCindersTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        DoCast(target, SPELL_SEARING_CINDERS);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        DoCast(pTarget, SPELL_SEARING_CINDERS);
                     SearingCindersTimer = 10000;
                 } else SearingCindersTimer -= diff;
 
@@ -379,8 +379,8 @@ public:
 
                     if (DistractingAshTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            DoCast(target, SPELL_DISTRACTING_ASH);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(pTarget, SPELL_DISTRACTING_ASH);
                         DistractingAshTimer = 2000; //timer wrong
                     } else DistractingAshTimer -= diff;
                 }
@@ -396,8 +396,8 @@ public:
 
                 if (FireballBarrageTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
-                        DoCast(target, SPELL_FIREBALL_BARRAGE);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_FARTHEST, 0))
+                        DoCast(pTarget, SPELL_FIREBALL_BARRAGE);
                     FireballBarrageTimer = 20000;
                 } else FireballBarrageTimer -= diff;
 

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss sjonnir
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
@@ -62,7 +52,11 @@ enum SjonnirCreatures
     CREATURE_IRON_SLUDGE                                   = 28165
 };
 
-#define DATA_TIME_BEFORE_OOZE                              150000 //2min 30 secs
+enum Misc
+{
+    DATA_TIME_BEFORE_OOZE                                  = 150000, //2min 30 secs
+    ACHIEV_ABUSE_THE_OOZE                                  = 2155
+};
 
 struct Locations
 {
@@ -71,12 +65,9 @@ struct Locations
 
 static Locations PipeLocations[] =
 {
-    {1295.44f, 734.07f, 200.3f}, //left
-    {1297.7f,  595.6f,  199.9f} //right
+  {1295.44f, 734.07f, 200.3f}, //left
+  {1297.7f,  595.6f,  199.9f} //right
 };
-
-#define ACTION_OOZE_DEAD                                   1
-#define DATA_ABUSE_THE_OOZE                                2
 
 static Locations CenterPoint = {1295.21f, 667.157f, 189.691f};
 
@@ -85,14 +76,14 @@ class boss_sjonnir : public CreatureScript
 public:
     boss_sjonnir() : CreatureScript("boss_sjonnir") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_sjonnirAI (creature);
+        return new boss_sjonnirAI (pCreature);
     }
 
     struct boss_sjonnirAI : public ScriptedAI
     {
-        boss_sjonnirAI(Creature* c) : ScriptedAI(c), lSummons(me)
+        boss_sjonnirAI(Creature *c) : ScriptedAI(c), lSummons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -106,7 +97,7 @@ public:
         uint32 uiSummonTimer;
         uint32 uiFrenzyTimer;
         uint32 uiEncounterTimer;
-        uint8 abuseTheOoze;
+        uint32 uiKilledIronSludges;
 
         SummonList lSummons;
 
@@ -123,7 +114,7 @@ public:
             uiLightningRingTimer = 30000 + rand()%5000;
             uiSummonTimer = 5000;
             uiFrenzyTimer = 300000; //5 minutes
-            abuseTheOoze = 0;
+            uiKilledIronSludges = 0;
 
             lSummons.DespawnAll();
 
@@ -139,7 +130,7 @@ public:
 
             if (pInstance)
             {
-                if (GameObject* pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_SJONNIR_DOOR)))
+                if (GameObject *pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_SJONNIR_DOOR)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -158,8 +149,8 @@ public:
 
             if (uiChainLightningTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(target, SPELL_CHAIN_LIGHTING);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(pTarget, SPELL_CHAIN_LIGHTING);
                 uiChainLightningTimer = 10000 + rand()%5000;
             } else uiChainLightningTimer -= diff;
 
@@ -211,8 +202,8 @@ public:
         void JustSummoned(Creature* summon)
         {
             summon->GetMotionMaster()->MovePoint(0, CenterPoint.x, CenterPoint.y, CenterPoint.z);
-            /*if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                summon->AI()->AttackStart(target);*/
+            /*if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                summon->AI()->AttackStart(pTarget);*/
             lSummons.Summon(summon);
         }
 
@@ -222,27 +213,22 @@ public:
             lSummons.DespawnAll();
 
             if (pInstance)
+            {
                 pInstance->SetData(DATA_SJONNIR_EVENT, DONE);
+                if (IsHeroic() && uiKilledIronSludges > 4)
+                    pInstance->DoCompleteAchievement(ACHIEV_ABUSE_THE_OOZE);
+            }
         }
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
 
-        void DoAction(int32 const action)
+        void KilledIronSludge()
         {
-            if (action == ACTION_OOZE_DEAD)
-                ++abuseTheOoze;
-        }
-
-        uint32 GetData(uint32 type)
-        {
-            if (type == DATA_ABUSE_THE_OOZE)
-                return abuseTheOoze;
-
-            return 0;
+            ++uiKilledIronSludges;
         }
     };
 
@@ -253,14 +239,14 @@ class mob_malformed_ooze : public CreatureScript
 public:
     mob_malformed_ooze() : CreatureScript("mob_malformed_ooze") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_malformed_oozeAI(creature);
+        return new mob_malformed_oozeAI(pCreature);
     }
 
     struct mob_malformed_oozeAI : public ScriptedAI
     {
-        mob_malformed_oozeAI(Creature* c) : ScriptedAI(c) {}
+        mob_malformed_oozeAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 uiMergeTimer;
 
@@ -296,48 +282,28 @@ class mob_iron_sludge : public CreatureScript
 public:
     mob_iron_sludge() : CreatureScript("mob_iron_sludge") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_iron_sludgeAI(creature);
+        return new mob_iron_sludgeAI(pCreature);
     }
 
     struct mob_iron_sludgeAI : public ScriptedAI
     {
-        mob_iron_sludgeAI(Creature* c) : ScriptedAI(c)
+        mob_iron_sludgeAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (pInstance)
-                if (Creature* Sjonnir = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
-                    Sjonnir->AI()->DoAction(ACTION_OOZE_DEAD);
+                if (Creature* pSjonnir = Unit::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
+                    CAST_AI(boss_sjonnir::boss_sjonnirAI, pSjonnir->AI())->KilledIronSludge();
         }
     };
 
-};
-
-class achievement_abuse_the_ooze : public AchievementCriteriaScript
-{
-    public:
-        achievement_abuse_the_ooze() : AchievementCriteriaScript("achievement_abuse_the_ooze")
-        {
-        }
-
-        bool OnCheck(Player* /*player*/, Unit* target)
-        {
-            if (!target)
-                return false;
-
-            if (Creature* Sjonnir = target->ToCreature())
-                if (Sjonnir->AI()->GetData(DATA_ABUSE_THE_OOZE) >= 5)
-                    return true;
-
-            return false;
-        }
 };
 
 void AddSC_boss_sjonnir()
@@ -345,5 +311,4 @@ void AddSC_boss_sjonnir()
     new boss_sjonnir();
     new mob_malformed_ooze();
     new mob_iron_sludge();
-    new achievement_abuse_the_ooze();
 }

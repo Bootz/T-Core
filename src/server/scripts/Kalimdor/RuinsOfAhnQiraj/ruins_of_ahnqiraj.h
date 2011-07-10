@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,28 +18,34 @@
 #ifndef DEF_RUINS_OF_AHNQIRAJ_H
 #define DEF_RUINS_OF_AHNQIRAJ_H
 
-enum Encounters
+enum Data
 {
-    BOSS_KURINNAXX          = 0,
-    BOSS_RAJAXX             = 1,
-    BOSS_MOAM               = 2,
-    BOSS_BURU               = 3,
-    BOSS_AYAMISS            = 4,
-    BOSS_OSSIRIAN           = 5,
-    MAX_ENCOUNTER,
+    DATA_KURINNAXX_EVENT,
+    DATA_RAJAXX_EVENT,
+    DATA_MOAM_EVENT,
+    DATA_BURU_EVENT,
+    DATA_AYAMISS_EVENT,
+    DATA_OSSIRIAN_EVENT
 };
 
-enum Creatures
+enum Data64
 {
-    NPC_KURINAXX                = 15348,
-    NPC_RAJAXX                  = 15341,
-    NPC_MOAM                    = 15340,
-    NPC_BURU                    = 15370,
-    NPC_AYAMISS                 = 15369,
-    NPC_OSSIRIAN                = 15339,
-    NPC_HIVEZARA_HORNET         = 15934,
-    NPC_HIVEZARA_SWARMER        = 15546,
-    NPC_HIVEZARA_LARVA          = 15555,
+    DATA_KURINNAXX,
+    DATA_RAJAXX,
+    DATA_MOAM,
+    DATA_BURU,
+    DATA_AYAMISS,
+    DATA_OSSIRIAN
+};
+
+enum Bosses
+{
+    CREATURE_KURINAXX              = 15348,
+    CREATURE_RAJAXX                = 15341,
+    CREATURE_MOAM                  = 15340,
+    CREATURE_BURU                  = 15370,
+    CREATURE_AYAMISS               = 15369,
+    CREATURE_OSSIRIAN              = 15339
 };
 
 #endif

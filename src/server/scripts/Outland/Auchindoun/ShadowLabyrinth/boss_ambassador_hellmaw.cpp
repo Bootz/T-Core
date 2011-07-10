@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Ambassador_Hellmaw
-SD%Complete: 80
-SDComment: Enrage spell missing/not known
-SDCategory: Auchindoun, Shadow Labyrinth
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
@@ -50,16 +41,16 @@ class boss_ambassador_hellmaw : public CreatureScript
 public:
     boss_ambassador_hellmaw() : CreatureScript("boss_ambassador_hellmaw") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ambassador_hellmawAI(creature);
+        return new boss_ambassador_hellmawAI(pCreature);
     }
 
     struct boss_ambassador_hellmawAI : public npc_escortAI
     {
-        boss_ambassador_hellmawAI(Creature* creature) : npc_escortAI(creature)
+        boss_ambassador_hellmawAI(Creature* pCreature) : npc_escortAI(pCreature)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -95,12 +86,12 @@ public:
                 m_pInstance->SetData(TYPE_HELLMAW, FAIL);
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit* pWho)
         {
             if (me->HasAura(SPELL_BANISH))
                 return;
 
-            npc_escortAI::MoveInLineOfSight(who);
+            npc_escortAI::MoveInLineOfSight(pWho);
         }
 
         void WaypointReached(uint32 /*i*/)
@@ -127,17 +118,17 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2, SAY_AGGRO3), me);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             DoScriptText(SAY_DEATH, me);
 

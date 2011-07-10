@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Sunwell_Plateau
-SD%Complete: 25
-SDComment: VERIFY SCRIPT
-SDCategory: Sunwell_Plateau
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "sunwell_plateau.h"
@@ -129,9 +120,9 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    Player* player = itr->getSource();
-                    if (player && !player->HasAura(45839, 0))
-                            return player;
+                    Player* plr = itr->getSource();
+                    if (plr && !plr->HasAura(45839, 0))
+                            return plr;
                 }
             }
 

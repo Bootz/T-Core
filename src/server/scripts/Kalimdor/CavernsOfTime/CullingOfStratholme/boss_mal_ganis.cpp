@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss mal_ganis
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro & outro
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
@@ -71,14 +61,14 @@ class boss_mal_ganis : public CreatureScript
 public:
     boss_mal_ganis() : CreatureScript("boss_mal_ganis") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_mal_ganisAI (creature);
+        return new boss_mal_ganisAI (pCreature);
     }
 
     struct boss_mal_ganisAI : public ScriptedAI
     {
-        boss_mal_ganisAI(Creature* c) : ScriptedAI(c)
+        boss_mal_ganisAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -120,7 +110,7 @@ public:
                 pInstance->SetData(DATA_MAL_GANIS_EVENT, IN_PROGRESS);
         }
 
-        void DamageTaken(Unit* done_by, uint32 &damage)
+        void DamageTaken(Unit *done_by, uint32 &damage)
         {
             if (damage >= me->GetHealth() && done_by != me)
                 damage = me->GetHealth()-1;
@@ -173,8 +163,8 @@ public:
 
                     if (uiMindBlastTimer < diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            DoCast(target, SPELL_MIND_BLAST);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(pTarget, SPELL_MIND_BLAST);
                         uiMindBlastTimer = 6000;
                     } else uiMindBlastTimer -= diff;
 
@@ -187,8 +177,8 @@ public:
                     if (uiSleepTimer < diff)
                     {
                         DoScriptText(RAND(SAY_SLEEP_1, SAY_SLEEP_2), me);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            DoCast(target, SPELL_SLEEP);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(pTarget, SPELL_SLEEP);
                         uiSleepTimer = urand(15000, 20000);
                     } else uiSleepTimer -= diff;
 
@@ -245,7 +235,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;

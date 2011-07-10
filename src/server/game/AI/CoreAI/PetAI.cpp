@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +19,7 @@
 #include "Errors.h"
 #include "Pet.h"
 #include "Player.h"
-#include "DataStorage.h"
+#include "DBCStores.h"
 #include "Spell.h"
 #include "ObjectAccessor.h"
 #include "SpellMgr.h"
@@ -171,7 +169,7 @@ void PetAI::UpdateAI(const uint32 diff)
                     continue;
             }
 
-            Spell* spell = new Spell(me, spellInfo, false, 0);
+            Spell *spell = new Spell(me, spellInfo, false, 0);
 
             // Fix to allow pets on STAY to autocast
             if (me->getVictim() && _CanAttack(me->getVictim()) && spell->CanAutoCast(me->getVictim()))
@@ -213,7 +211,7 @@ void PetAI::UpdateAI(const uint32 diff)
             targetSpellStore.erase(targetSpellStore.begin() + index);
 
             SpellCastTargets targets;
-            targets.SetUnitTarget(target);
+            targets.setUnitTarget(target);
 
             if (!me->HasInArc(M_PI, target))
             {
@@ -275,7 +273,7 @@ void PetAI::UpdateAllies()
         m_AllySet.insert(owner->GetGUID());
 }
 
-void PetAI::KilledUnit(Unit* victim)
+void PetAI::KilledUnit(Unit *victim)
 {
     // Called from Unit::Kill() in case where pet or owner kills something
     // if owner killed this victim, pet may still be attacking something else
@@ -297,7 +295,7 @@ void PetAI::KilledUnit(Unit* victim)
         HandleReturnMovement(); // Return
 }
 
-void PetAI::AttackStart(Unit* target)
+void PetAI::AttackStart(Unit *target)
 {
     // Overrides Unit::AttackStart to correctly evaluate Pet states
 
@@ -318,7 +316,7 @@ Unit *PetAI::SelectNextTarget()
     if (me->HasReactState(REACT_PASSIVE))
         return NULL;
 
-    Unit* target = me->getAttackerForHelper();
+    Unit *target = me->getAttackerForHelper();
     targetHasCC = false;
 
     // Check pet's attackers first to prevent dragging mobs back to owner
@@ -377,7 +375,7 @@ void PetAI::HandleReturnMovement()
 
 }
 
-void PetAI::DoAttack(Unit* target, bool chase)
+void PetAI::DoAttack(Unit *target, bool chase)
 {
     // Handles attack with or without chase and also resets all
     // PetAI flags for next update / creature kill
@@ -449,7 +447,7 @@ void PetAI::MovementInform(uint32 moveType, uint32 data)
     }
 }
 
-bool PetAI::_CanAttack(Unit* target)
+bool PetAI::_CanAttack(Unit *target)
 {
     // Evaluates wether a pet can attack a specific
     // target based on CommandState, ReactState and other flags
@@ -480,7 +478,7 @@ bool PetAI::_CanAttack(Unit* target)
     return false;
 }
 
-bool PetAI::_CheckTargetCC(Unit* target)
+bool PetAI::_CheckTargetCC(Unit *target)
 {
     if (me->GetCharmerOrOwnerGUID() && target->HasNegativeAuraWithAttribute(SPELL_ATTR0_BREAKABLE_BY_DAMAGE, me->GetCharmerOrOwnerGUID()))
         return true;

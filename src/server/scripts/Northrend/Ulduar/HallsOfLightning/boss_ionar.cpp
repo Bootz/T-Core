@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -72,16 +70,16 @@ class boss_ionar : public CreatureScript
 public:
     boss_ionar() : CreatureScript("boss_ionar") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_ionarAI(creature);
+        return new boss_ionarAI(pCreature);
     }
 
     struct boss_ionarAI : public ScriptedAI
     {
-        boss_ionarAI(Creature* creature) : ScriptedAI(creature), lSparkList(creature)
+        boss_ionarAI(Creature *pCreature) : ScriptedAI(pCreature), lSparkList(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -139,7 +137,7 @@ public:
                 pInstance->SetData(TYPE_IONAR, DONE);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
@@ -186,7 +184,7 @@ public:
             }
         }
 
-        void DamageTaken(Unit* /*pDoneBy*/, uint32 &uiDamage)
+        void DamageTaken(Unit * /*pDoneBy*/, uint32 &uiDamage)
         {
             if (!me->IsVisible())
                 uiDamage = 0;
@@ -200,17 +198,17 @@ public:
 
                 pSummoned->CastSpell(pSummoned, DUNGEON_MODE(SPELL_SPARK_VISUAL_TRIGGER, H_SPELL_SPARK_VISUAL_TRIGGER), true);
 
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (target)
+                Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (pTarget)
                 {
-                    pSummoned->SetInCombatWith(target);
+                    pSummoned->SetInCombatWith(pTarget);
                     pSummoned->GetMotionMaster()->Clear();
-                    pSummoned->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
+                    pSummoned->GetMotionMaster()->MoveFollow(pTarget, 0.0f, 0.0f);
                 }
             }
         }
 
-        void SummonedCreatureDespawn(Creature* pSummoned)
+        void SummonedCreatureDespawn(Creature *pSummoned)
         {
             if (pSummoned->GetEntry() == NPC_SPARK_OF_IONAR)
                 lSparkList.Despawn(pSummoned);
@@ -258,8 +256,8 @@ public:
 
             if (uiStaticOverloadTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_STATIC_OVERLOAD);
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_STATIC_OVERLOAD);
 
                 uiStaticOverloadTimer = urand(5*IN_MILLISECONDS, 6*IN_MILLISECONDS);
             }
@@ -302,16 +300,16 @@ class mob_spark_of_ionar : public CreatureScript
 public:
     mob_spark_of_ionar() : CreatureScript("mob_spark_of_ionar") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_spark_of_ionarAI(creature);
+        return new mob_spark_of_ionarAI(pCreature);
     }
 
     struct mob_spark_of_ionarAI : public ScriptedAI
     {
-        mob_spark_of_ionarAI(Creature* creature) : ScriptedAI(creature)
+        mob_spark_of_ionarAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -333,7 +331,7 @@ public:
                 me->DespawnOrUnsummon();
         }
 
-        void DamageTaken(Unit* /*pDoneBy*/, uint32 &uiDamage)
+        void DamageTaken(Unit * /*pDoneBy*/, uint32 &uiDamage)
         {
             uiDamage = 0;
         }

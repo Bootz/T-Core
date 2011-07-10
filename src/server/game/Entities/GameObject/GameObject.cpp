@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -145,7 +143,7 @@ void GameObject::RemoveFromWorld()
         // Possible crash at access to deleted GO in Unit::m_gameobj
         if (uint64 owner_guid = GetOwnerGUID())
         {
-            if (Unit* owner = GetOwner())
+            if (Unit * owner = GetOwner())
                 owner->RemoveGameObject(this, false);
             else
                 sLog->outError("Delete GameObject (GUID: %u Entry: %u) that have references in not found creature %u GO list. Crash possible later.", GetGUIDLow(), GetGOInfo()->entry, GUID_LOPART(owner_guid));
@@ -180,7 +178,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, uint32 phaseMa
     GameObjectTemplate const* goinfo = sObjectMgr->GetGameObjectTemplate(name_id);
     if (!goinfo)
     {
-        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: non-existing entry in `gameobject_template`. Map: %u (X: %f Y: %f Z: %f)", guidlow, name_id, map->GetId(), x, y, z);
+        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: it have not exist entry in `gameobject_template`. Map: %u  (X: %f Y: %f Z: %f) ang: %f rotation0: %f rotation1: %f rotation2: %f rotation3: %f", guidlow, name_id, map->GetId(), x, y, z, ang, rotation0, rotation1, rotation2, rotation3);
         return false;
     }
 
@@ -190,7 +188,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, uint32 phaseMa
 
     if (goinfo->type >= MAX_GAMEOBJECT_TYPE)
     {
-        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: non-existing GO type '%u' in `gameobject_template`. It will crash client if created.", guidlow, name_id, goinfo->type);
+        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: it have not exist GO type '%u' in `gameobject_template`. It's will crash client if created.", guidlow, name_id, goinfo->type);
         return false;
     }
 
@@ -233,13 +231,13 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, uint32 phaseMa
         case GAMEOBJECT_TYPE_TRAP:
             if (GetGOInfo()->trap.stealthed)
             {
-                m_stealth.AddFlag(STEALTH_TRAP);
+                m_stealth.AddFlag( STEALTH_TRAP);
                 m_stealth.AddValue(STEALTH_TRAP, 300);
             }
 
             if (GetGOInfo()->trap.invisible)
             {
-                m_invisibility.AddFlag(INVISIBILITY_TRAP);
+                m_invisibility.AddFlag( INVISIBILITY_TRAP);
                 m_invisibility.AddValue(INVISIBILITY_TRAP, 70);
             }
 
@@ -256,7 +254,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, uint32 phaseMa
 
 void GameObject::Update(uint32 diff)
 {
-    if (!AI())
+    if(!AI())
     {
         if (!AIM_Initialize())
             sLog->outError("Could not initialize GameObjectAI");
@@ -333,7 +331,7 @@ void GameObject::Update(uint32 diff)
                     if (linkedRespawntime)             // Can't respawn, the master is dead
                     {
                         uint64 targetGuid = sObjectMgr->GetLinkedRespawnGuid(dbtableHighGuid);
-                        if (targetGuid == dbtableHighGuid) // if linking self, never respawn (check delayed to next day)
+                        if (targetGuid == GetGUID()) // if linking self, never respawn (check delayed to next day)
                             SetRespawnTime(DAY);
                         else
                             m_respawnTime = (now > linkedRespawntime ? now : linkedRespawntime)+urand(5, MINUTE); // else copy time from master and add a little
@@ -610,7 +608,7 @@ void GameObject::Delete()
 {
     SetLootState(GO_NOT_READY);
     if (GetOwnerGUID())
-        if (Unit* owner = GetOwner())
+        if (Unit * owner = GetOwner())
             owner->RemoveGameObject(this, false);
 
     ASSERT (!GetOwnerGUID());
@@ -818,25 +816,28 @@ bool GameObject::hasInvolvedQuest(uint32 quest_id) const
 bool GameObject::IsTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
-    GameObjectTemplate const* gInfo = GetGOInfo();
-    if (!gInfo) return false;
+    GameObjectTemplate const * gInfo = GetGOInfo();
+    if (!gInfo)
+        return false;
     return gInfo->type == GAMEOBJECT_TYPE_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT;
+}
+
+bool GameObject::IsDestructableBuilding() const
+{
+    GameObjectTemplate const * gInfo = GetGOInfo();
+    if (!gInfo) 
+        return false;
+    return gInfo->type == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING;
 }
 
 // is Dynamic transport = non-stop Transport
 bool GameObject::IsDynTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
-    GameObjectTemplate const* gInfo = GetGOInfo();
-    if (!gInfo) return false;
+    GameObjectTemplate const * gInfo = GetGOInfo();
+    if (!gInfo)
+        return false;
     return gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT || (gInfo->type == GAMEOBJECT_TYPE_TRANSPORT && !gInfo->transport.pause);
-}
-
-bool GameObject::IsDestructibleBuilding() const
-{
-    GameObjectTemplate const* gInfo = GetGOInfo();
-    if (!gInfo) return false;
-    return gInfo->type == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING;
 }
 
 Unit* GameObject::GetOwner() const
@@ -855,7 +856,10 @@ bool GameObject::isAlwaysVisibleFor(WorldObject const* seer) const
     if (WorldObject::isAlwaysVisibleFor(seer))
         return true;
 
-    if (IsTransport() || IsDestructibleBuilding())
+    if (IsTransport())
+        return true;
+
+    if (IsDestructableBuilding())
         return true;
 
     return false;
@@ -937,7 +941,7 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
         return;
 
     float range;
-    SpellRangeEntry const* srentry = sSpellRangeStore.LookupEntry(trapSpell->rangeIndex);
+    SpellRangeEntry const * srentry = sSpellRangeStore.LookupEntry(trapSpell->rangeIndex);
     if (GetSpellMaxRangeForHostile(srentry) == GetSpellMaxRangeForFriend(srentry))
         range = GetSpellMaxRangeForHostile(srentry);
     else
@@ -1100,7 +1104,7 @@ void GameObject::Use(Unit* user)
             if (user->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            if (ChairListSlots.empty())        // this is called once at first chair use to make list of available slots
+            if (!ChairListSlots.size())        // this is called once at first chair use to make list of available slots
             {
                 if (info->chair.slots > 0)     // sometimes chairs in DB have error in fields and we dont know number of slots
                     for (uint32 i = 0; i < info->chair.slots; ++i)
@@ -1531,10 +1535,10 @@ void GameObject::Use(Unit* user)
             if (player->CanUseBattlegroundObject())
             {
                 // in battleground check
-                Battleground* bg = player->GetBattleground();
+                Battleground *bg = player->GetBattleground();
                 if (!bg)
                     return;
-                if (player->GetVehicle())
+                if( player->GetVehicle())
                     return;
                 // BG flag dropped
                 // WS:
@@ -1589,15 +1593,15 @@ void GameObject::Use(Unit* user)
             return;
         }
         default:
-            sLog->outError("GameObject::Use(): unit (type: %u, guid: %u, name: %s) tries to use object (guid: %u, entry: %u, name: %s) of unknown type (%u)",
-                user->GetTypeId(), user->GetGUIDLow(), user->GetName(), GetGUIDLow(), GetEntry(), GetGOInfo()->name.c_str(), GetGoType());
+            sLog->outError("GameObject::Use(): unit (type: %u, guid: %u) tries to use object (guid: %u) of unknown type (%u)",
+                user->GetTypeId(), user->GetGUIDLow(), GetGUIDLow(), GetGoType());
             break;
     }
 
     if (!spellId)
         return;
 
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+    SpellEntry const *spellInfo = sSpellStore.LookupEntry(spellId);
     if (!spellInfo)
     {
         if (user->GetTypeId() != TYPEID_PLAYER || !sOutdoorPvPMgr->HandleCustomSpell(user->ToPlayer(), spellId, this))
@@ -1665,7 +1669,7 @@ void GameObject::SendCustomAnim(uint32 anim)
 
 bool GameObject::IsInRange(float x, float y, float z, float radius) const
 {
-    GameObjectDisplayInfoEntry const* info = sGameObjectDisplayInfoStore.LookupEntry(GetUInt32Value(GAMEOBJECT_DISPLAYID));
+    GameObjectDisplayInfoEntry const * info = sGameObjectDisplayInfoStore.LookupEntry(GetUInt32Value(GAMEOBJECT_DISPLAYID));
     if (!info)
         return IsWithinDist3d(x, y, z, radius);
 

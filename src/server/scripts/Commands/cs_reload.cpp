@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-Name: reload_commandscript
-%Complete: 100
-Comment: All reload related commands
-Category: commandscripts
-EndScriptData */
 
 #include "ScriptMgr.h"
 #include "ObjectMgr.h"
@@ -100,6 +91,7 @@ public:
             { "gm_tickets",                   SEC_ADMINISTRATOR, true,  &HandleReloadGMTicketsCommand,                  "", NULL },
             { "gossip_menu",                  SEC_ADMINISTRATOR, true,  &HandleReloadGossipMenuCommand,                 "", NULL },
             { "gossip_menu_option",           SEC_ADMINISTRATOR, true,  &HandleReloadGossipMenuOptionCommand,           "", NULL },
+            { "gossip_scripts",               SEC_ADMINISTRATOR, true,  &HandleReloadGossipScriptsCommand,              "", NULL },
             { "item_enchantment_template",    SEC_ADMINISTRATOR, true,  &HandleReloadItemEnchantementsCommand,          "", NULL },
             { "item_loot_template",           SEC_ADMINISTRATOR, true,  &HandleReloadLootTemplatesItemCommand,          "", NULL },
             { "item_set_names",               SEC_ADMINISTRATOR, true,  &HandleReloadItemSetNamesCommand,               "", NULL },
@@ -139,6 +131,7 @@ public:
             { "smart_scripts",                SEC_ADMINISTRATOR, true,  &HandleReloadSmartScripts,                      "", NULL },
             { "spell_required",               SEC_ADMINISTRATOR, true,  &HandleReloadSpellRequiredCommand,              "", NULL },
             { "spell_area",                   SEC_ADMINISTRATOR, true,  &HandleReloadSpellAreaCommand,                  "", NULL },
+            { "spell_map",                    SEC_ADMINISTRATOR, true,  &HandleReloadSpellMapCommand,                  "", NULL },
             { "spell_bonus_data",             SEC_ADMINISTRATOR, true,  &HandleReloadSpellBonusesCommand,               "", NULL },
             { "spell_group",                  SEC_ADMINISTRATOR, true,  &HandleReloadSpellGroupsCommand,                "", NULL },
             { "spell_learn_spell",            SEC_ADMINISTRATOR, true,  &HandleReloadSpellLearnSpellCommand,            "", NULL },
@@ -146,12 +139,11 @@ public:
             { "spell_linked_spell",           SEC_ADMINISTRATOR, true,  &HandleReloadSpellLinkedSpellCommand,           "", NULL },
             { "spell_pet_auras",              SEC_ADMINISTRATOR, true,  &HandleReloadSpellPetAurasCommand,              "", NULL },
             { "spell_proc_event",             SEC_ADMINISTRATOR, true,  &HandleReloadSpellProcEventCommand,             "", NULL },
-            { "spell_proc",                   SEC_ADMINISTRATOR, true,  &HandleReloadSpellProcsCommand,             "", NULL },
             { "spell_scripts",                SEC_ADMINISTRATOR, true,  &HandleReloadSpellScriptsCommand,               "", NULL },
             { "spell_target_position",        SEC_ADMINISTRATOR, true,  &HandleReloadSpellTargetPositionCommand,        "", NULL },
             { "spell_threats",                SEC_ADMINISTRATOR, true,  &HandleReloadSpellThreatsCommand,               "", NULL },
             { "spell_group_stack_rules",      SEC_ADMINISTRATOR, true,  &HandleReloadSpellGroupStackRulesCommand,       "", NULL },
-            { "string",               SEC_ADMINISTRATOR, true,  &HandleReloadTrinityStringCommand,              "", NULL },
+            { "trinity_string",               SEC_ADMINISTRATOR, true,  &HandleReloadTrilliumStringCommand,              "", NULL },
             { "waypoint_scripts",             SEC_ADMINISTRATOR, true,  &HandleReloadWpScriptsCommand,                  "", NULL },
             { "vehicle_accessory",            SEC_ADMINISTRATOR, true,  &HandleReloadVehicleAccessoryCommand,           "", NULL },
             { "vehicle_template_accessory",   SEC_ADMINISTRATOR, true,  &HandleReloadVehicleTemplateAccessoryCommand,   "", NULL },
@@ -191,7 +183,7 @@ public:
         HandleReloadMailLevelRewardCommand(handler, "");
         HandleReloadCommandCommand(handler, "");
         HandleReloadReservedNameCommand(handler, "");
-        HandleReloadTrinityStringCommand(handler, "");
+        HandleReloadTrilliumStringCommand(handler, "");
         HandleReloadGameTeleCommand(handler, "");
 
         HandleReloadVehicleAccessoryCommand(handler, "");
@@ -259,6 +251,7 @@ public:
 
         sLog->outString("Re-Loading Scripts...");
         HandleReloadGameObjectScriptsCommand(handler, "a");
+        HandleReloadGossipScriptsCommand(handler, "a");
         HandleReloadEventScriptsCommand(handler, "a");
         HandleReloadQuestEndScriptsCommand(handler, "a");
         HandleReloadQuestStartScriptsCommand(handler, "a");
@@ -287,7 +280,6 @@ public:
         HandleReloadSpellLearnSpellCommand(handler, "a");
         HandleReloadSpellLinkedSpellCommand(handler, "a");
         HandleReloadSpellProcEventCommand(handler, "a");
-        HandleReloadSpellProcsCommand(handler, "a");
         HandleReloadSpellBonusesCommand(handler, "a");
         HandleReloadSpellTargetPositionCommand(handler, "a");
         HandleReloadSpellThreatsCommand(handler, "a");
@@ -301,6 +293,7 @@ public:
         HandleReloadGossipMenuCommand(handler, "a");
         HandleReloadGossipMenuOptionCommand(handler, "a");
         if(*args != 'a')                                          // already reload from all_scripts
+        HandleReloadGossipScriptsCommand(handler, "a");
         HandleReloadPointsOfInterestCommand(handler, "a");
         return true;
     }
@@ -712,11 +705,11 @@ public:
         return true;
     }
 
-    static bool HandleReloadTrinityStringCommand(ChatHandler* handler, const char* /*args*/)
+    static bool HandleReloadTrilliumStringCommand(ChatHandler* handler, const char* /*args*/)
     {
-        sLog->outString("Re-Loading string Table!");
-        sObjectMgr->LoadTrinityStrings();
-        handler->SendGlobalGMSysMessage("DB table `string` reloaded.");
+        sLog->outString("Re-Loading trinity_string Table!");
+        sObjectMgr->LoadTrilliumStrings();
+        handler->SendGlobalGMSysMessage("DB table `trinity_string` reloaded.");
         return true;
     }
 
@@ -816,6 +809,14 @@ public:
         return true;
     }
 
+    static bool HandleReloadSpellMapCommand(ChatHandler* handler, const char* /*args*/)
+    {
+        sLog->outString("Re-Loading SpellMap Data...");
+        sSpellMgr->LoadSpellMaps();
+        handler->SendGlobalGMSysMessage("DB table `spell_map` (spell dependences from map/quest/auras state) reloaded.");
+        return true;
+    }
+
     static bool HandleReloadSpellRequiredCommand(ChatHandler* handler, const char* /*args*/)
     {
         sLog->outString("Re-Loading Spell Required Data... ");
@@ -853,14 +854,6 @@ public:
         sLog->outString("Re-Loading Spell Proc Event conditions...");
         sSpellMgr->LoadSpellProcEvents();
         handler->SendGlobalGMSysMessage("DB table `spell_proc_event` (spell proc trigger requirements) reloaded.");
-        return true;
-    }
-
-    static bool HandleReloadSpellProcsCommand(ChatHandler* handler, const char* /*args*/)
-    {
-        sLog->outString("Re-Loading Spell Proc conditions and data...");
-        sSpellMgr->LoadSpellProcs();
-        handler->SendGlobalGMSysMessage("DB table `spell_proc` (spell proc conditions and data) reloaded.");
         return true;
     }
 
@@ -925,6 +918,26 @@ public:
         sLog->outString("Re-Loading Item set names...");
         LoadRandomEnchantmentsTable();
         handler->SendGlobalGMSysMessage("DB table `item_set_names` reloaded.");
+        return true;
+    }
+
+    static bool HandleReloadGossipScriptsCommand(ChatHandler* handler, const char* args)
+    {
+        if (sScriptMgr->IsScriptScheduled())
+        {
+            handler->SendSysMessage("DB scripts used currently, please attempt reload later.");
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (*args != 'a')
+            sLog->outString("Re-Loading Scripts from `gossip_scripts`...");
+
+        sObjectMgr->LoadGossipScripts();
+
+        if (*args != 'a')
+            handler->SendGlobalGMSysMessage("DB table `gossip_scripts` reloaded.");
+
         return true;
     }
 

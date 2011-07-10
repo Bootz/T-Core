@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,7 +49,7 @@ public:
     class spell_hun_chimera_shot_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
                 return false;
@@ -79,10 +77,10 @@ public:
                     continue;
 
                 // Search only Serpent Sting, Viper Sting, Scorpid Sting auras
-                flag96 familyFlag = aura->GetSpellClass()->SpellFamilyFlags;
+                flag96 familyFlag = aura->GetSpellProto()->GetSpellClassOptions()->SpellFamilyFlags;
                 if (!(familyFlag[1] & 0x00000080 || familyFlag[0] & 0x0000C000))
                     continue;
-                if (AuraEffect const* aurEff = aura->GetEffect(0))
+                if (AuraEffect const * aurEff = aura->GetEffect(0))
                 {
                     // Serpent Sting - Instantly deals 40% of the damage done by your Serpent Sting.
                     if (familyFlag[0] & 0x4000)
@@ -147,7 +145,7 @@ public:
     class spell_hun_invigoration_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_invigoration_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_INVIGORATION_TRIGGERED))
                 return false;
@@ -182,7 +180,7 @@ public:
     class spell_hun_last_stand_pet_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_last_stand_pet_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
                 return false;
@@ -191,7 +189,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            Unit* caster = GetCaster();
+            Unit *caster = GetCaster();
             int32 healthModSpellBasePoints0 = int32(caster->CountPctFromMaxHealth(30));
             caster->CastCustomSpell(caster, HUNTER_PET_SPELL_LAST_STAND_TRIGGERED, &healthModSpellBasePoints0, NULL, NULL, true, NULL);
         }
@@ -217,7 +215,7 @@ public:
     class spell_hun_masters_call_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_masters_call_SpellScript)
-        bool Validate(SpellEntry const* spellEntry)
+        bool Validate(SpellEntry const * spellEntry)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_MASTERS_CALL_TRIGGERED))
                 return false;
@@ -230,14 +228,14 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (Unit * target = GetHitUnit())
             {
                 target->CastSpell(target, GetEffectValue(), true);
                 target->CastSpell(target, HUNTER_SPELL_MASTERS_CALL_TRIGGERED, true);
                 // there is a possibility that this effect should access effect 0 (dummy) target, but i dubt that
                 // it's more likely that on on retail it's possible to call target selector based on dbc values
                 // anyways, we're using GetTargetUnit() here and it's ok
-                if (Unit* ally = GetTargetUnit())
+                if (Unit * ally = GetTargetUnit())
                 {
                     target->CastSpell(ally, GetEffectValue(), true);
                     target->CastSpell(ally, SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0), true);
@@ -267,7 +265,7 @@ public:
         PrepareSpellScript(spell_hun_readiness_SpellScript)
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            Unit* caster = GetCaster();
+            Unit *caster = GetCaster();
             if (caster->GetTypeId() != TYPEID_PLAYER)
                 return;
 
@@ -350,7 +348,7 @@ public:
     class spell_hun_sniper_training_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_hun_sniper_training_AuraScript)
-        bool Validate(SpellEntry const* /*entry*/)
+        bool Validate(SpellEntry const * /*entry*/)
         {
             if (!sSpellStore.LookupEntry(SPELL_SNIPER_TRAINING_R1))
                 return false;
@@ -359,35 +357,30 @@ public:
             return true;
         }
 
-        void HandlePeriodic(AuraEffect const* aurEff)
+        void HandlePeriodic(AuraEffect const * aurEff)
         {
             PreventDefaultAction();
             if (aurEff->GetAmount() > 0)
                 return;
 
-            Unit* caster = GetCaster();
-
-            if (!caster)
-                return;
-
             uint32 spellId = SPELL_SNIPER_TRAINING_BUFF_R1 + GetId() - SPELL_SNIPER_TRAINING_R1;
-            Unit* target = GetTarget();
-            if (!target->HasAura(spellId))
+            Unit * pTarget = GetTarget();
+            if (!pTarget->HasAura(spellId))
             {
-                SpellEntry const* triggeredSpellInfo = sSpellStore.LookupEntry(spellId);
-                Unit* triggerCaster = GetTriggeredSpellCaster(triggeredSpellInfo, caster, target);
-                triggerCaster->CastSpell(target, triggeredSpellInfo, true, 0, aurEff);
+                SpellEntry const * triggeredSpellInfo = sSpellStore.LookupEntry(spellId);
+                Unit* triggerCaster = GetTriggeredSpellCaster(triggeredSpellInfo, GetCaster(), pTarget);
+                triggerCaster->CastSpell(pTarget, triggeredSpellInfo, true, 0, aurEff);
             }
         }
 
         void HandleUpdatePeriodic(AuraEffect * aurEff)
         {
-            Unit* target = GetUnitOwner();
-            if (Player* pPlayerTarget = target->ToPlayer())
+            Unit * pTarget = GetUnitOwner();
+            if (Player* pPlayerTarget = pTarget->ToPlayer())
             {
                 int32 baseAmount = aurEff->GetBaseAmount();
                 int32 amount = pPlayerTarget->isMoving() ?
-                target->CalculateSpellDamage(target, GetSpellEffect(), aurEff->GetEffIndex(), &baseAmount) :
+                pTarget->CalculateSpellDamage(pTarget, GetSpellProto(), aurEff->GetEffIndex(), &baseAmount) :
                 aurEff->GetAmount() - 1;
                 aurEff->SetAmount(amount);
             }
@@ -414,7 +407,7 @@ public:
     class spell_hun_pet_heart_of_the_phoenix_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_heart_of_the_phoenix_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED))
                 return false;
@@ -425,8 +418,8 @@ public:
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            Unit* caster = GetCaster();
-            Unit* owner = caster->GetOwner();
+            Unit *caster = GetCaster();
+            Unit *owner = caster->GetOwner();
             if (!owner || caster->HasAura(HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
                 return;
             owner->CastCustomSpell(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED, SPELLVALUE_BASE_POINT0, 100, caster, true);
@@ -461,7 +454,7 @@ public:
     class spell_hun_pet_carrion_feeder_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_carrion_feeder_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED))
                 return false;
@@ -472,7 +465,7 @@ public:
         {
             if (!GetHitUnit())
                 return;
-            Unit* caster = GetCaster();
+            Unit *caster = GetCaster();
             caster->CastSpell(caster, HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED, false);
         }
 

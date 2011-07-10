@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Grilek
-SD%Complete: 100
-SDComment:
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -41,7 +32,7 @@ class boss_grilek : public CreatureScript
 
         struct boss_grilekAI : public ScriptedAI
         {
-            boss_grilekAI(Creature* c) : ScriptedAI(c) {}
+            boss_grilekAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 Avartar_Timer;
             uint32 GroundTremor_Timer;
@@ -52,7 +43,7 @@ class boss_grilek : public CreatureScript
                 GroundTremor_Timer = 8000 + rand()%8000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 
@@ -67,14 +58,14 @@ class boss_grilek : public CreatureScript
                 {
 
                     DoCast(me, SPELL_AVARTAR);
-                    Unit* target = NULL;
+                    Unit *pTarget = NULL;
 
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
 
                     if (DoGetThreat(me->getVictim()))
                         DoModifyThreatPercent(me->getVictim(), -50);
-                    if (target)
-                        AttackStart(target);
+                    if (pTarget)
+                        AttackStart(pTarget);
 
                     Avartar_Timer = 25000 + rand()%10000;
                 } else Avartar_Timer -= diff;

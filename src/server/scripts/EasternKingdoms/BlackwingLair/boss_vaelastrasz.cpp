@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Vaelastrasz
-SD%Complete: 75
-SDComment: Burning Adrenaline not correctly implemented in core
-SDCategory: Blackwing Lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -46,43 +37,43 @@ class boss_vaelastrasz : public CreatureScript
 public:
     boss_vaelastrasz() : CreatureScript("boss_vaelastrasz") { }
 
-    void SendDefaultMenu(Player* player, Creature* creature, uint32 uiAction)
+    void SendDefaultMenu(Player* pPlayer, Creature* pCreature, uint32 uiAction)
     {
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)               //Fight time
         {
-            player->CLOSE_GOSSIP_MENU();
-            CAST_AI(boss_vaelastrasz::boss_vaelAI, creature->AI())->BeginSpeech(player);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            CAST_AI(boss_vaelastrasz::boss_vaelAI, pCreature->AI())->BeginSpeech(pPlayer);
         }
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
+        pPlayer->PlayerTalkClass->ClearMenus();
         if (uiSender == GOSSIP_SENDER_MAIN)
-            SendDefaultMenu(player, creature, uiAction);
+            SendDefaultMenu(pPlayer, pCreature, uiAction);
 
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        if (creature->isQuestGiver())
-            player->PrepareQuestMenu(creature->GetGUID());
+        if (pCreature->isQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(907, creature->GetGUID());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(907, pCreature->GetGUID());
 
         return true;
     }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_vaelAI (creature);
+        return new boss_vaelAI (pCreature);
     }
 
     struct boss_vaelAI : public ScriptedAI
     {
-        boss_vaelAI(Creature* c) : ScriptedAI(c)
+        boss_vaelAI(Creature *c) : ScriptedAI(c)
         {
             c->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             c->setFaction(35);
@@ -116,10 +107,10 @@ public:
             DoingSpeech = false;
         }
 
-        void BeginSpeech(Unit* target)
+        void BeginSpeech(Unit *pTarget)
         {
             //Stand up and begin speach
-            PlayerGUID = target->GetGUID();
+            PlayerGUID = pTarget->GetGUID();
 
             //10 seconds
             DoScriptText(SAY_LINE1, me);
@@ -131,7 +122,7 @@ public:
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (rand()%5)
                 return;
@@ -139,7 +130,7 @@ public:
             DoScriptText(SAY_KILLTARGET, me, victim);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoCast(me, SPELL_ESSENCEOFTHERED);
             DoZoneInCombat();
@@ -209,18 +200,18 @@ public:
             //BurningAdrenalineCaster_Timer
             if (BurningAdrenalineCaster_Timer <= diff)
             {
-                Unit* target = NULL;
+                Unit *pTarget = NULL;
 
                 uint8 i = 0;
                 while (i < 3)                                   // max 3 tries to get a random target with power_mana
                 {
                     ++i;
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true); //not aggro leader
-                    if (target && target->getPowerType() == POWER_MANA)
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true); //not aggro leader
+                    if (pTarget && pTarget->getPowerType() == POWER_MANA)
                             i = 3;
                 }
-                if (target)                                     // cast on self (see below)
-                    target->CastSpell(target, SPELL_BURNINGADRENALINE, 1);
+                if (pTarget)                                     // cast on self (see below)
+                    pTarget->CastSpell(pTarget, SPELL_BURNINGADRENALINE, 1);
 
                 BurningAdrenalineCaster_Timer = 15000;
             } else BurningAdrenalineCaster_Timer -= diff;

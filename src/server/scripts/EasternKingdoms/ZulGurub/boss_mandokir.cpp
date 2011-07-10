@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Mandokir
-SD%Complete: 90
-SDComment: Ohgan function needs improvements.
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -56,7 +47,7 @@ class boss_mandokir : public CreatureScript
 
         struct boss_mandokirAI : public ScriptedAI
         {
-            boss_mandokirAI(Creature* c) : ScriptedAI(c)
+            boss_mandokirAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -135,7 +126,7 @@ class boss_mandokir : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
              DoScriptText(SAY_AGGRO, me);
             }
@@ -259,7 +250,7 @@ class boss_mandokir : public CreatureScript
                     {
                         if (m_pInstance)
                         {
-                            if (m_pInstance->GetData(DATA_OHGAN) == DONE)
+                            if (m_pInstance->GetData(TYPE_OHGAN) == DONE)
                             {
                                 if (!RaptorDead)
                                 {
@@ -295,7 +286,7 @@ class mob_ohgan : public CreatureScript
 
         struct mob_ohganAI : public ScriptedAI
         {
-            mob_ohganAI(Creature* c) : ScriptedAI(c)
+            mob_ohganAI(Creature *c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -308,12 +299,12 @@ class mob_ohgan : public CreatureScript
                 SunderArmor_Timer = 5000;
             }
 
-            void EnterCombat(Unit* /*who*/) {}
+            void EnterCombat(Unit * /*who*/) {}
 
             void JustDied(Unit* /*Killer*/)
             {
                 if (m_pInstance)
-                    m_pInstance->SetData(DATA_OHGAN, DONE);
+                    m_pInstance->SetData(TYPE_OHGAN, DONE);
             }
 
             void UpdateAI (const uint32 diff)

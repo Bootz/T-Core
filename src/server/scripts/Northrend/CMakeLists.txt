@@ -1,5 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -42,15 +41,9 @@ set(scripts_STAT_SRCS
   Northrend/Ulduar/HallsOfStone/boss_maiden_of_grief.cpp
   Northrend/Ulduar/HallsOfStone/boss_sjonnir.cpp
   Northrend/Ulduar/HallsOfStone/halls_of_stone.cpp
-  Northrend/ChamberOfAspects/ObsidianSanctum/instance_obsidian_sanctum.cpp
-  Northrend/ChamberOfAspects/ObsidianSanctum/obsidian_sanctum.h
-  Northrend/ChamberOfAspects/ObsidianSanctum/boss_sartharion.cpp
-  Northrend/ChamberOfAspects/RubySanctum/instance_ruby_sanctum.cpp
-  Northrend/ChamberOfAspects/RubySanctum/ruby_sanctum.h
-  Northrend/ChamberOfAspects/RubySanctum/ruby_sanctum.cpp
-  Northrend/ChamberOfAspects/RubySanctum/boss_baltharus_the_warborn.cpp
-  Northrend/ChamberOfAspects/RubySanctum/boss_saviana_ragefire.cpp
-  Northrend/ChamberOfAspects/RubySanctum/boss_general_zarithrian.cpp
+  Northrend/ObsidianSanctum/instance_obsidian_sanctum.cpp
+  Northrend/ObsidianSanctum/obsidian_sanctum.h
+  Northrend/ObsidianSanctum/boss_sartharion.cpp
   Northrend/FrozenHalls/HallsOfReflection/halls_of_reflection.h
   Northrend/FrozenHalls/HallsOfReflection/boss_falric.cpp
   Northrend/FrozenHalls/HallsOfReflection/instance_halls_of_reflection.cpp
@@ -172,10 +165,8 @@ set(scripts_STAT_SRCS
   Northrend/IcecrownCitadel/boss_professor_putricide.cpp
   Northrend/IcecrownCitadel/boss_blood_prince_council.cpp
   Northrend/IcecrownCitadel/boss_blood_queen_lana_thel.cpp
-  Northrend/IcecrownCitadel/boss_valithria_dreamwalker.cpp
   Northrend/IcecrownCitadel/boss_sindragosa.cpp
   Northrend/zuldrak.cpp
-  Northrend/wintergrasp.cpp
   Northrend/icecrown.cpp
   Northrend/Gundrak/boss_slad_ran.cpp
   Northrend/Gundrak/instance_gundrak.cpp

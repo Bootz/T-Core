@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -527,26 +525,9 @@ class boss_prince_keleseth_icc : public CreatureScript
                 }
             }
 
-            bool CheckRoom()
-            {
-                if (!CheckBoundary(me))
-                {
-                    EnterEvadeMode();
-                    if (Creature* taldaram = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_TALDARAM_GUID)))
-                        taldaram->AI()->EnterEvadeMode();
-
-                    if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_VALANAR_GUID)))
-                        valanar->AI()->EnterEvadeMode();
-
-                    return false;
-                }
-
-                return true;
-            }
-
             void UpdateAI(uint32 const diff)
             {
-                if (!UpdateVictim() || !CheckRoom())
+                if (!UpdateVictim() || !CheckInRoom())
                     return;
 
                 events.Update(diff);
@@ -742,26 +723,9 @@ class boss_prince_taldaram_icc : public CreatureScript
                 }
             }
 
-            bool CheckRoom()
-            {
-                if (!CheckBoundary(me))
-                {
-                    EnterEvadeMode();
-                    if (Creature* keleseth = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_KELESETH_GUID)))
-                        keleseth->AI()->EnterEvadeMode();
-
-                    if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_VALANAR_GUID)))
-                        valanar->AI()->EnterEvadeMode();
-
-                    return false;
-                }
-
-                return true;
-            }
-
             void UpdateAI(uint32 const diff)
             {
-                if (!UpdateVictim() || !CheckRoom())
+                if (!UpdateVictim() || !CheckInRoom())
                     return;
 
                 events.Update(diff);
@@ -976,26 +940,9 @@ class boss_prince_valanar_icc : public CreatureScript
                 }
             }
 
-            bool CheckRoom()
-            {
-                if (!CheckBoundary(me))
-                {
-                    EnterEvadeMode();
-                    if (Creature* keleseth = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_KELESETH_GUID)))
-                        keleseth->AI()->EnterEvadeMode();
-
-                    if (Creature* taldaram = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_TALDARAM_GUID)))
-                        taldaram->AI()->EnterEvadeMode();
-
-                    return false;
-                }
-
-                return true;
-            }
-
             void UpdateAI(uint32 const diff)
             {
-                if (!UpdateVictim() || !CheckRoom())
+                if (!UpdateVictim() || !CheckInRoom())
                     return;
 
                 events.Update(diff);
@@ -1483,7 +1430,7 @@ class spell_taldaram_flame_ball_visual : public SpellScriptLoader
 
             void Register()
             {
-                AfterEffectRemove += AuraEffectRemoveFn(spell_flame_ball_visual_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_STUN, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_flame_ball_visual_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_STUN, AURA_EFFECT_HANDLE_REAL);
             }
         };
 
@@ -1531,10 +1478,9 @@ class spell_valanar_kinetic_bomb : public SpellScriptLoader
 
             void ChangeSummonPos(SpellEffIndex /*effIndex*/)
             {
-                WorldLocation summonPos = *GetTargetDest();
+                WorldLocation* summonPos = GetTargetDest();
                 Position offset = {0.0f, 0.0f, 20.0f, 0.0f};
-                summonPos.RelocateOffset(offset);
-                SetTargetDest(summonPos);
+                summonPos->RelocateOffset(offset);  // +20 in height
             }
 
             void Register()

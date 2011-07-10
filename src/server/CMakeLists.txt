@@ -1,5 +1,4 @@
-# Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -23,9 +22,9 @@ if( SERVERS )
     ${CMAKE_SOURCE_DIR}/src/server/shared/Debugging/WheatyExceptionReport.h
   )
   add_subdirectory(shared)
-  add_subdirectory(game)
   add_subdirectory(collision)
   add_subdirectory(authserver)
+  add_subdirectory(game)
   add_subdirectory(scripts)
   add_subdirectory(worldserver)
 else()

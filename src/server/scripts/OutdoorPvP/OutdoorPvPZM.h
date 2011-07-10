@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -183,8 +181,8 @@ class OPvPCapturePointZM_Beacon : public OPvPCapturePoint
         void FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player* player);
-        void HandlePlayerLeave(Player* player);
+        bool HandlePlayerEnter(Player * plr);
+        void HandlePlayerLeave(Player * plr);
 
         void UpdateTowerState();
 
@@ -217,15 +215,15 @@ class OPvPCapturePointZM_GraveYard : public OPvPCapturePoint
 
         void UpdateTowerState();
 
-        int32 HandleOpenGo(Player* player, uint64 guid);
+        int32 HandleOpenGo(Player *plr, uint64 guid);
 
         void SetBeaconState(uint32 controlling_team); // not good atm
 
-        bool HandleGossipOption(Player* player, uint64 guid, uint32 gossipid);
+        bool HandleGossipOption(Player * plr, uint64 guid, uint32 gossipid);
 
-        bool HandleDropFlag(Player* player, uint32 spellId);
+        bool HandleDropFlag(Player * plr, uint32 spellId);
 
-        bool CanTalkTo(Player* player, Creature* c, GossipMenuItems const& gso);
+        bool CanTalkTo(Player * plr, Creature * c, GossipMenuItems gso);
 
     private:
 
@@ -248,16 +246,16 @@ class OutdoorPvPZM : public OutdoorPvP
 
         bool SetupOutdoorPvP();
 
-        void HandlePlayerEnterZone(Player* player, uint32 zone);
-        void HandlePlayerLeaveZone(Player* player, uint32 zone);
+        void HandlePlayerEnterZone(Player *plr, uint32 zone);
+        void HandlePlayerLeaveZone(Player *plr, uint32 zone);
 
         bool Update(uint32 diff);
 
         void FillInitialWorldStates(WorldPacket &data);
 
-        void SendRemoveWorldStates(Player* player);
+        void SendRemoveWorldStates(Player * plr);
 
-        void HandleKillImpl(Player* player, Unit* killed);
+        void HandleKillImpl(Player * plr, Unit * killed);
 
     private:
 

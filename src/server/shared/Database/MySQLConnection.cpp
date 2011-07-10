@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 #include "Common.h"
 
@@ -380,17 +379,15 @@ void MySQLConnection::CommitTransaction()
 
 bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
 {
-    std::list<SQLElementData> const& queries = transaction->m_queries;
+    std::queue<SQLElementData> &queries = transaction->m_queries;
     if (queries.empty())
         return false;
 
     BeginTransaction();
-
-    std::list<SQLElementData>::const_iterator itr;
-    for (itr = queries.begin(); itr != queries.end(); ++itr)
+    while (!queries.empty())
     {
-        SQLElementData const& data = *itr;
-        switch (itr->type)
+        SQLElementData data = queries.front();
+        switch (data.type)
         {
             case SQL_ELEMENT_PREPARED:
             {
@@ -402,6 +399,7 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                     RollbackTransaction();
                     return false;
                 }
+                delete data.element.stmt;
             }
             break;
             case SQL_ELEMENT_RAW:
@@ -414,15 +412,12 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                     RollbackTransaction();
                     return false;
                 }
+                free((void*)const_cast<char*>(sql));
             }
             break;
         }
+        queries.pop();
     }
-
-    // we might encounter errors during certain queries, and depending on the kind of error
-    // we might want to restart the transaction. So to prevent data loss, we only clean up when it's all done.
-    // This is done in calling functions DatabaseWorkerPool<T>::DirectCommitTransaction and TransactionTask::Execute,
-    // and not while iterating over every element.
 
     CommitTransaction();
     return true;
@@ -496,6 +491,8 @@ PreparedResultSet* MySQLConnection::Query(PreparedStatement* stmt)
 
 bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
 {
+    sLog->outSQLDriver("%s", __FUNCTION__);
+
     switch (errNo)
     {
         case 2006:  // "MySQL server has gone away"
@@ -524,7 +521,8 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
         }
 
         case 1213:      // "Deadlock found when trying to get lock; try restarting transaction"
-            return false;    // Implemented in TransactionTask::Execute and DatabaseWorkerPool<T>::DirectCommitTransaction
+            return true;    // Implemented in TransactionTask::Execute and DatabaseWorkerPool<T>::DirectCommitTransaction
+
         // Query related errors - skip query
         case 1058:      // "Column count doesn't match value count"
         case 1062:      // "Duplicate entry '%s' for key '%d'"

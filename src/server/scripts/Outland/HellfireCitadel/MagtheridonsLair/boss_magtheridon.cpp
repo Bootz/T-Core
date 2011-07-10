@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Magtheridon
-SD%Complete: 60
-SDComment: In Development
-SDCategory: Hellfire Citadel, Magtheridon's lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "magtheridons_lair.h"
@@ -110,7 +101,7 @@ class mob_abyssal : public CreatureScript
 
         struct mob_abyssalAI : public ScriptedAI
         {
-            mob_abyssalAI(Creature* creature) : ScriptedAI(creature)
+            mob_abyssalAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
                 trigger = 0;
                 Despawn_Timer = 60000;
@@ -152,12 +143,12 @@ class mob_abyssal : public CreatureScript
             {
                 DoZoneInCombat();
             }
-            void AttackStart(Unit* who)
+            void AttackStart(Unit *who)
             {
                 if (!trigger)
                     ScriptedAI::AttackStart(who);
             }
-            void MoveInLineOfSight(Unit* who)
+            void MoveInLineOfSight(Unit *who)
             {
                 if (!trigger)
                     ScriptedAI::MoveInLineOfSight(who);
@@ -216,25 +207,26 @@ class boss_magtheridon : public CreatureScript
 
         struct boss_magtheridonAI : public ScriptedAI
         {
-            boss_magtheridonAI(Creature* creature) : ScriptedAI(creature)
+            boss_magtheridonAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
                 me->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 10);
                 me->SetFloatValue(UNIT_FIELD_COMBATREACH, 10);
 
-                // target 7, random target with certain entry spell, need core fix
-                SpellEffectEntry *TempSpell;
-                TempSpell = GET_SPELL_EFFECT(SPELL_BLAZE_TARGET);
-                if (TempSpell && TempSpell->EffectImplicitTargetA != 6)
-                {
-                    TempSpell->EffectImplicitTargetA = 6;
-                    TempSpell->EffectImplicitTargetB = 0;
-                }
-                TempSpell = GET_SPELL_EFFECT(SPELL_QUAKE_TRIGGER);
-                if (TempSpell && TempSpell->EffectTriggerSpell != SPELL_QUAKE_KNOCKBACK)
-                {
-                    TempSpell->EffectTriggerSpell = SPELL_QUAKE_KNOCKBACK;
-                }
+                //TODO: rewrite this to decent code
+                //// target 7, random target with certain entry spell, need core fix
+                //SpellEntry *TempSpell;
+                //TempSpell = GET_SPELL(SPELL_BLAZE_TARGET);
+                //if (TempSpell && TempSpell->GetEffectImplicitTargetAByIndex(0) != 6)
+                //{
+                //    TempSpell->EffectImplicitTargetA[0] = 6;
+                //    TempSpell->EffectImplicitTargetB[0] = 0;
+                //}
+                //TempSpell = GET_SPELL(SPELL_QUAKE_TRIGGER);
+                //if (TempSpell && TempSpell->EffectTriggerSpell[0] != SPELL_QUAKE_KNOCKBACK)
+                //{
+                //    TempSpell->EffectTriggerSpell[0] = SPELL_QUAKE_KNOCKBACK;
+                //}
             }
 
             CubeMap Cube;
@@ -291,7 +283,7 @@ class boss_magtheridon : public CreatureScript
             }
 
             //function to interrupt channeling and debuff clicker with mind exh(used if second person clicks with same cube or after dispeling/ending shadow grasp DoT)
-            void DebuffClicker(Unit* clicker)
+            void DebuffClicker(Unit *clicker)
             {
                 if (!clicker || !clicker->isAlive())
                     return;
@@ -308,7 +300,7 @@ class boss_magtheridon : public CreatureScript
                 // if not - apply mind exhaustion and delete from clicker's list
                 for (CubeMap::iterator i = Cube.begin(); i != Cube.end(); ++i)
                 {
-                    Unit* clicker = Unit::GetUnit(*me, (*i).second);
+                    Unit *clicker = Unit::GetUnit(*me, (*i).second);
                     if (!clicker || !clicker->HasAura(SPELL_SHADOW_GRASP))
                     {
                         DebuffClicker(clicker);
@@ -347,13 +339,13 @@ class boss_magtheridon : public CreatureScript
 
             void MoveInLineOfSight(Unit* /*who*/) {}
 
-            void AttackStart(Unit* who)
+            void AttackStart(Unit *who)
             {
                 if (!me->HasUnitState(UNIT_STAT_STUNNED))
                     ScriptedAI::AttackStart(who);
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_MAGTHERIDON_EVENT, IN_PROGRESS);
@@ -427,11 +419,11 @@ class boss_magtheridon : public CreatureScript
 
                 if (Blaze_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         float x, y, z;
-                        target->GetPosition(x, y, z);
-                        Creature* summon = me->SummonCreature(MOB_ABYSSAL, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                        pTarget->GetPosition(x, y, z);
+                        Creature *summon = me->SummonCreature(MOB_ABYSSAL, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                         if (summon)
                         {
                             CAST_AI(mob_abyssal::mob_abyssalAI, summon->AI())->SetTrigger(2);
@@ -461,11 +453,11 @@ class boss_magtheridon : public CreatureScript
                 {
                     if (Debris_Timer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             float x, y, z;
-                            target->GetPosition(x, y, z);
-                            Creature* summon = me->SummonCreature(MOB_ABYSSAL, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                            pTarget->GetPosition(x, y, z);
+                            Creature *summon = me->SummonCreature(MOB_ABYSSAL, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                             if (summon)
                                 CAST_AI(mob_abyssal::mob_abyssalAI, summon->AI())->SetTrigger(1);
                         }
@@ -496,9 +488,9 @@ class mob_hellfire_channeler : public CreatureScript
 
         struct mob_hellfire_channelerAI : public ScriptedAI
         {
-            mob_hellfire_channelerAI(Creature* creature) : ScriptedAI(creature)
+            mob_hellfire_channelerAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -520,7 +512,7 @@ class mob_hellfire_channeler : public CreatureScript
                 Check_Timer = 5000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_CHANNELER_EVENT, IN_PROGRESS);
@@ -537,7 +529,7 @@ class mob_hellfire_channeler : public CreatureScript
                 DoCast(me, SPELL_SHADOW_GRASP_C, false);
             }
 
-            void JustSummoned(Creature* summon)
+            void JustSummoned(Creature *summon)
             {
                 summon->AI()->AttackStart(me->getVictim());
             }
@@ -578,8 +570,8 @@ class mob_hellfire_channeler : public CreatureScript
 
                 if (Fear_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                        DoCast(target, SPELL_FEAR);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                        DoCast(pTarget, SPELL_FEAR);
                     Fear_Timer = 25000 + rand()%15000;
                 }
                 else
@@ -587,8 +579,8 @@ class mob_hellfire_channeler : public CreatureScript
 
                 if (Infernal_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_BURNING_ABYSSAL, true);
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(pTarget, SPELL_BURNING_ABYSSAL, true);
                     Infernal_Timer = 30000 + rand()%10000;
                 }
                 else
@@ -612,7 +604,7 @@ public:
     {
     }
 
-    bool OnGossipHello(Player* player, GameObject* pGO)
+    bool OnGossipHello(Player *pPlayer, GameObject * pGO)
     {
         InstanceScript* pInstance = pGO->GetInstanceScript();
 
@@ -621,18 +613,18 @@ public:
 
         if (pInstance->GetData(DATA_MAGTHERIDON_EVENT) != IN_PROGRESS)
             return true;
-        Creature* Magtheridon =Unit::GetCreature(*pGO, pInstance->GetData64(DATA_MAGTHERIDON));
+        Creature *Magtheridon =Unit::GetCreature(*pGO, pInstance->GetData64(DATA_MAGTHERIDON));
         if (!Magtheridon || !Magtheridon->isAlive())
             return true;
 
         // if exhausted or already channeling return
-        if (player->HasAura(SPELL_MIND_EXHAUSTION) || player->HasAura(SPELL_SHADOW_GRASP))
+        if (pPlayer->HasAura(SPELL_MIND_EXHAUSTION) || pPlayer->HasAura(SPELL_SHADOW_GRASP))
             return true;
 
-        player->InterruptNonMeleeSpells(false);
-        player->CastSpell(player, SPELL_SHADOW_GRASP, true);
-        player->CastSpell(player, SPELL_SHADOW_GRASP_VISUAL, false);
-        CAST_AI(boss_magtheridon::boss_magtheridonAI, Magtheridon->AI())->SetClicker(pGO->GetGUID(), player->GetGUID());
+        pPlayer->InterruptNonMeleeSpells(false);
+        pPlayer->CastSpell(pPlayer, SPELL_SHADOW_GRASP, true);
+        pPlayer->CastSpell(pPlayer, SPELL_SHADOW_GRASP_VISUAL, false);
+        CAST_AI(boss_magtheridon::boss_magtheridonAI, Magtheridon->AI())->SetClicker(pGO->GetGUID(), pPlayer->GetGUID());
         return true;
     }
 };

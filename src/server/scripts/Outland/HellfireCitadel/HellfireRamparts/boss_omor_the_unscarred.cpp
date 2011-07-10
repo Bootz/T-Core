@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Omar_The_Unscarred
-SD%Complete: 90
-SDComment: Temporary solution for orbital/shadow whip-ability. Needs more core support before making it more proper.
-SDCategory: Hellfire Citadel, Hellfire Ramparts
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -61,7 +52,7 @@ class boss_omor_the_unscarred : public CreatureScript
 
         struct boss_omor_the_unscarredAI : public ScriptedAI
         {
-            boss_omor_the_unscarredAI(Creature* creature) : ScriptedAI(creature)
+            boss_omor_the_unscarredAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
                 SetCombatMovement(false);
             }
@@ -91,7 +82,7 @@ class boss_omor_the_unscarred : public CreatureScript
                 CanPullBack = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
             }
@@ -193,9 +184,9 @@ class boss_omor_the_unscarred : public CreatureScript
                 {
                     DoScriptText(SAY_CURSE, me);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
-                        DoCast(target, SPELL_TREACHEROUS_AURA);
+                        DoCast(pTarget, SPELL_TREACHEROUS_AURA);
                         Aura_Timer = 8000+rand()%8000;
                     }
                 }
@@ -204,12 +195,12 @@ class boss_omor_the_unscarred : public CreatureScript
 
                 if (Shadowbolt_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
-                        if (target)
-                            target = me->getVictim();
+                        if (pTarget)
+                            pTarget = me->getVictim();
 
-                        DoCast(target, SPELL_SHADOW_BOLT);
+                        DoCast(pTarget, SPELL_SHADOW_BOLT);
                         Shadowbolt_Timer = 4000+rand()%2500;
                     }
                 }

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,14 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Script Data Start
-SDName: Boss maiden_of_grief
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
 
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
@@ -60,14 +50,14 @@ class boss_maiden_of_grief : public CreatureScript
 public:
     boss_maiden_of_grief() : CreatureScript("boss_maiden_of_grief") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_maiden_of_griefAI (creature);
+        return new boss_maiden_of_griefAI (pCreature);
     }
 
     struct boss_maiden_of_griefAI : public ScriptedAI
     {
-        boss_maiden_of_griefAI(Creature* c) : ScriptedAI(c)
+        boss_maiden_of_griefAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -99,7 +89,7 @@ public:
 
             if (pInstance)
             {
-                if (GameObject* pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_MAIDEN_DOOR)))
+                if (GameObject *pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_MAIDEN_DOOR)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -121,10 +111,10 @@ public:
             {
                 if (PartingSorrowTimer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
-                    if (target)
-                        DoCast(target, SPELL_PARTING_SORROW);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_PARTING_SORROW);
 
                     PartingSorrowTimer = 30000 + rand()%10000;
                 } else PartingSorrowTimer -= diff;
@@ -146,10 +136,10 @@ public:
 
             if (PillarOfWoeTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
 
-                if (target)
-                    DoCast(target, SPELL_PILLAR_OF_WOE_N);
+                if (pTarget)
+                    DoCast(pTarget, SPELL_PILLAR_OF_WOE_N);
                 else
                     DoCast(me->getVictim(), SPELL_PILLAR_OF_WOE_N);
 
@@ -167,7 +157,7 @@ public:
                 pInstance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* victim)
+        void KilledUnit(Unit * victim)
         {
             if (victim == me)
                 return;

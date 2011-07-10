@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1547,7 +1545,7 @@ class BattlegroundAV : public Battleground
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
 
-        void RemovePlayer(Player *plr, uint64 guid, uint32 team);
+        void RemovePlayer(Player *plr, uint64 guid);
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         bool SetupBattleground();
         virtual void ResetBGSubclass();
@@ -1558,9 +1556,9 @@ class BattlegroundAV : public Battleground
 
         /*handlestuff*/ //these are functions which get called from extern
         virtual void EventPlayerClickedOnFlag(Player *source, GameObject* target_obj);
-        void HandleKillPlayer(Player* player, Player* killer);
-        void HandleKillUnit(Creature* unit, Player* killer);
-        void HandleQuestComplete(uint32 questid, Player* player);
+        void HandleKillPlayer(Player* player, Player *killer);
+        void HandleKillUnit(Creature *unit, Player *killer);
+        void HandleQuestComplete(uint32 questid, Player *player);
         bool PlayerCanDoMineQuest(int32 GOId, uint32 team);
 
         void EndBattleground(uint32 winner);

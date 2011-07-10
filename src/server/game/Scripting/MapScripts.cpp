@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -164,7 +162,7 @@ inline Unit* Map::_GetScriptUnit(Object* obj, bool isSource, const ScriptInfo* s
             scriptInfo->GetDebugInfo().c_str(), isSource ? "source" : "target", obj->GetTypeId(), obj->GetEntry(), obj->GetGUIDLow());
     else
     {
-        pUnit = obj->ToUnit();
+        pUnit = dynamic_cast<Unit*>(obj);
         if (!pUnit)
             sLog->outError("%s %s object could not be casted to unit.",
                 scriptInfo->GetDebugInfo().c_str(), isSource ? "source" : "target");
@@ -258,7 +256,7 @@ inline void Map::_ScriptProcessDoor(Object* source, Object* target, const Script
 
                 if (target && target->isType(TYPEMASK_GAMEOBJECT))
                 {
-                    GameObject* goTarget = target->ToGameObject();
+                    GameObject* goTarget = dynamic_cast<GameObject*>(target);
                     if (goTarget && goTarget->GetGoType() == GAMEOBJECT_TYPE_BUTTON)
                         goTarget->UseDoorOrButton(nTimeToToggle);
                 }
@@ -344,12 +342,14 @@ void Map::ScriptsProcess()
             switch (GUID_HIPART(step.targetGUID))
             {
                 case HIGHGUID_UNIT:
-                case HIGHGUID_VEHICLE:
                     target = HashMapHolder<Creature>::Find(step.targetGUID);
                     break;
                 case HIGHGUID_PET:
                     target = HashMapHolder<Pet>::Find(step.targetGUID);
                     break;
+                //case HIGHGUID_VEHICLE:
+                //    target = HashMapHolder<Vehicle>::Find(step.targetGUID);
+                //    break;
                 case HIGHGUID_PLAYER:                       // empty GUID case also
                     target = HashMapHolder<Player>::Find(step.targetGUID);
                     break;
@@ -381,7 +381,7 @@ void Map::ScriptsProcess()
                     if (Player *pSource = _GetScriptPlayerSourceOrTarget(source, target, step.script))
                     {
                         LocaleConstant loc_idx = pSource->GetSession()->GetSessionDbLocaleIndex();
-                        std::string text(sObjectMgr->GetTrinityString(step.script->Talk.TextID, loc_idx));
+                        std::string text(sObjectMgr->GetTrilliumString(step.script->Talk.TextID, loc_idx));
 
                         switch (step.script->Talk.ChatType)
                         {
@@ -512,7 +512,7 @@ void Map::ScriptsProcess()
                 break;
 
             case SCRIPT_COMMAND_TELEPORT_TO:
-                if (step.script->TeleportTo.Flags & SF_TELEPORT_USE_CREATURE)
+                if  (step.script->TeleportTo.Flags & SF_TELEPORT_USE_CREATURE)
                 {
                     // Source or target must be Creature.
                     if (Creature *cSource = _GetScriptCreatureSourceOrTarget(source, target, step.script, true))
@@ -679,7 +679,7 @@ void Map::ScriptsProcess()
                         break;
                     }
 
-                    if (GameObject *pGO = target->ToGameObject())
+                    if (GameObject *pGO = dynamic_cast<GameObject*>(target))
                         pGO->Use(pSource);
                 }
                 break;
@@ -708,24 +708,24 @@ void Map::ScriptsProcess()
                 switch (step.script->CastSpell.Flags)
                 {
                     case SF_CASTSPELL_SOURCE_TO_TARGET: // source -> target
-                        uSource = source ? source->ToUnit() : NULL;
-                        uTarget = target ? target->ToUnit() : NULL;
+                        uSource = dynamic_cast<Unit*>(source);
+                        uTarget = dynamic_cast<Unit*>(target);
                         break;
                     case SF_CASTSPELL_SOURCE_TO_SOURCE: // source -> source
-                        uSource = source ? source->ToUnit() : NULL;
+                        uSource = dynamic_cast<Unit*>(source);
                         uTarget = uSource;
                         break;
                     case SF_CASTSPELL_TARGET_TO_TARGET: // target -> target
-                        uSource = target ? target->ToUnit() : NULL;
+                        uSource = dynamic_cast<Unit*>(target);
                         uTarget = uSource;
                         break;
                     case SF_CASTSPELL_TARGET_TO_SOURCE: // target -> source
-                        uSource = target ? target->ToUnit() : NULL;
-                        uTarget = source ? source->ToUnit() : NULL;
+                        uSource = dynamic_cast<Unit*>(target);
+                        uTarget = dynamic_cast<Unit*>(source);
                         break;
                     case SF_CASTSPELL_SEARCH_CREATURE: // source -> creature with entry
-                        uSource = source ? source->ToUnit() : NULL;
-                        uTarget = uSource ? GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius) : NULL;
+                        uSource = dynamic_cast<Unit*>(source);
+                        uTarget = GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius);
                         break;
                 }
 
@@ -908,7 +908,7 @@ void Map::ScriptsProcess()
             case SCRIPT_COMMAND_CLOSE_GOSSIP:
                 // Source must be Player.
                 if (Player *pSource = _GetScriptPlayer(source, true, step.script))
-                    pSource->PlayerTalkClass->SendCloseGossip();
+                    pSource->PlayerTalkClass->CloseGossip();
                 break;
 
             case SCRIPT_COMMAND_PLAYMOVIE:

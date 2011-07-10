@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Urom
-SD%Complete: 80
-SDComment: Is not working SPELL_ARCANE_SHIELD. SPELL_FROSTBOMB has some issues, the damage aura should not stack.
-SDCategory: Instance Script
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "oculus.h"
@@ -93,9 +84,9 @@ class boss_urom : public CreatureScript
 public:
     boss_urom() : CreatureScript("boss_urom") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_uromAI (creature);
+        return new boss_uromAI (pCreature);
     }
 
     struct boss_uromAI : public BossAI
@@ -129,7 +120,7 @@ public:
             timeBombTimer = urand(20000, 25000);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             _EnterCombat();
 
@@ -141,24 +132,24 @@ public:
                 instance->SetData(DATA_UROM_PLATAFORM, instance->GetData(DATA_UROM_PLATAFORM)+1);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* pWho)
         {
-            if (!who)
+            if (!pWho)
                 return;
 
             if (me->GetPositionZ() > 518.63f)
-                DoStartNoMovement(who);
+                DoStartNoMovement(pWho);
 
             if (me->GetPositionZ() < 518.63f)
             {
-                if (me->Attack(who, true))
+                if (me->Attack(pWho, true))
                 {
                     DoScriptText(SayAggro[3], me);
 
-                    me->SetInCombatWith(who);
-                    who->SetInCombatWith(me);
+                    me->SetInCombatWith(pWho);
+                    pWho->SetInCombatWith(me);
 
-                    me->GetMotionMaster()->MoveChase(who, 0, 0);
+                    me->GetMotionMaster()->MoveChase(pWho, 0, 0);
                 }
             }
         }

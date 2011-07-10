@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,13 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Boss_Azshir_the_Sleepless
-SD%Complete: 80
-SDComment:
-SDCategory: Scarlet Monastery
-EndScriptData */
-
 #include "ScriptPCH.h"
 
 #define SPELL_CALLOFTHEGRAVE            17831
@@ -35,14 +26,14 @@ class boss_azshir_the_sleepless : public CreatureScript
 public:
     boss_azshir_the_sleepless() : CreatureScript("boss_azshir_the_sleepless") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_azshir_the_sleeplessAI (creature);
+        return new boss_azshir_the_sleeplessAI (pCreature);
     }
 
     struct boss_azshir_the_sleeplessAI : public ScriptedAI
     {
-        boss_azshir_the_sleeplessAI(Creature* c) : ScriptedAI(c) {}
+        boss_azshir_the_sleeplessAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 SoulSiphon_Timer;
         uint32 CallOftheGrave_Timer;
@@ -55,7 +46,7 @@ public:
             Terrify_Timer = 20000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 

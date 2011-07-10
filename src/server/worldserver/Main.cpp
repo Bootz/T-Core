@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,6 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// \addtogroup Trilliumd Trillium Daemon
+/// @{
+/// \file
+
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 #include <ace/Version.h>
@@ -28,15 +30,15 @@
 #include "Log.h"
 #include "Master.h"
 
-#ifndef _CORE_CONFIG
-# define _CORE_CONFIG  "worldserver.conf"
-#endif //_CORE_CONFIG
+#ifndef _TRILLIUM_CORE_CONFIG
+# define _TRILLIUM_CORE_CONFIG  "worldserver.conf"
+#endif //_TRILLIUM_CORE_CONFIG
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "world service";
-char serviceDescription[] = "World of Warcraft emulator world service";
+char serviceLongName[] = "Trillium ENCORE world service";
+char serviceDescription[] = "Trillium ENCORE World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -66,11 +68,11 @@ void usage(const char *prog)
         , prog);
 }
 
-/// Launch the Trinity server
+/// Launch the Trillium server
 extern int main(int argc, char **argv)
 {
     ///- Command line parsing to get the configuration file name
-    char const* cfg_file = _CORE_CONFIG;
+    char const* cfg_file = _TRILLIUM_CORE_CONFIG;
     int c = 1;
     while( c < argc )
     {
@@ -144,7 +146,7 @@ extern int main(int argc, char **argv)
     // at sMaster return function exist with codes
     // 0 - normal shutdown
     // 1 - shutdown at error
-    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+    // 2 - restart command used, this code can be used by restarter for restart Trilliumd
 
     return ret;
 }

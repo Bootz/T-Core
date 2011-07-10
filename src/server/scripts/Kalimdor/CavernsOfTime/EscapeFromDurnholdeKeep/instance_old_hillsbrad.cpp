@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Old_Hillsbrad
-SD%Complete: 75
-SDComment: If thrall escort fail, all parts will reset. In future, save sub-parts and continue from last known.
-SDCategory: Caverns of Time, Old Hillsbrad Foothills
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "old_hillsbrad.h"
@@ -79,8 +70,8 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
-                        return player;
+                    if (Player* plr = itr->getSource())
+                        return plr;
                 }
             }
 
@@ -96,8 +87,8 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
-                        player->KilledMonsterCredit(LODGE_QUEST_TRIGGER, 0);
+                    if (Player* pPlayer = itr->getSource())
+                        pPlayer->KilledMonsterCredit(LODGE_QUEST_TRIGGER, 0);
                 }
             }
         }
@@ -120,9 +111,9 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            Player* player = GetPlayerInMap();
+            Player* pPlayer = GetPlayerInMap();
 
-            if (!player)
+            if (!pPlayer)
             {
                 sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Instance Old Hillsbrad: SetData (Type: %u Data %u) cannot find any player.", type, data);
                 return;
@@ -147,7 +138,7 @@ public:
                         if (mBarrelCount == 5)
                         {
                             UpdateQuestCredit();
-                            player->SummonCreature(DRAKE_ENTRY, 2128.43f, 71.01f, 64.42f, 1.74f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);
+                            pPlayer->SummonCreature(DRAKE_ENTRY, 2128.43f, 71.01f, 64.42f, 1.74f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);
                             m_auiEncounter[0] = DONE;
                         }
                     }

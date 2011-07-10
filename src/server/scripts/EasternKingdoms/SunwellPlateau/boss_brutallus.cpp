@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,12 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Brutallus
-SD%Complete: 80
-SDComment: Find a way to start the intro, best code for the intro
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "sunwell_plateau.h"
@@ -72,14 +64,14 @@ class boss_brutallus : public CreatureScript
 public:
     boss_brutallus() : CreatureScript("boss_brutallus") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_brutallusAI (creature);
+        return new boss_brutallusAI (pCreature);
     }
 
     struct boss_brutallusAI : public ScriptedAI
     {
-        boss_brutallusAI(Creature* c) : ScriptedAI(c)
+        boss_brutallusAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             Intro = true;
@@ -120,7 +112,7 @@ public:
                 pInstance->SetData(DATA_BRUTALLUS_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(YELL_AGGRO, me);
 
@@ -156,7 +148,7 @@ public:
         {
             if (!Intro || IsIntro)
                 return;
-            Creature* Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0);
+            Creature *Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0);
             if (Madrigosa)
             {
                 Madrigosa->Respawn();
@@ -183,16 +175,16 @@ public:
             IsIntro = false;
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* pWho)
         {
-            if (!who || Intro || IsIntro)
+            if (!pWho || Intro || IsIntro)
                 return;
-            ScriptedAI::AttackStart(who);
+            ScriptedAI::AttackStart(pWho);
         }
 
         void DoIntro()
         {
-            Creature* Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0);
+            Creature *Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0);
             if (!Madrigosa)
                 return;
 
@@ -268,7 +260,7 @@ public:
             }
         }
 
-        void MoveInLineOfSight(Unit* who)
+        void MoveInLineOfSight(Unit *who)
         {
             if (!who->isTargetableForAttack() || !me->IsHostileTo(who))
                 return;
@@ -293,7 +285,7 @@ public:
                 {
                     if (IntroFrostBoltTimer <= diff)
                     {
-                        if (Creature* Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0))
+                        if (Creature *Madrigosa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_MADRIGOSA) : 0))
                         {
                             Madrigosa->CastSpell(me, SPELL_INTRO_FROSTBOLT, true);
                             IntroFrostBoltTimer = 2000;

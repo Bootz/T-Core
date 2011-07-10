@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SMARTSCRIPT_H
-#define SMARTSCRIPT_H
+#ifndef TRILLIUM_SMARTSCRIPT_H
+#define TRILLIUM_SMARTSCRIPT_H
 
 #include "Common.h"
 #include "Creature.h"
@@ -103,7 +101,7 @@ class SmartScript
 
         Unit* DoSelectLowestHpFriendly(float range, uint32 MinHPDiff);
         void DoFindFriendlyCC(std::list<Creature*>& _list, float range);
-        void DoFindFriendlyMissingBuff(std::list<Creature*>& list, float range, uint32 spellid);
+        void DoFindFriendlyMissingBuff(std::list<Creature*>& _list, float range, uint32 spellid);
 
         void StoreTargetList(ObjectList* targets, uint32 id)
         {
@@ -126,8 +124,7 @@ class SmartScript
                 smart = false;
 
             if (!smart)
-                sLog->outErrorDb("SmartScript: Action target Creature(entry: %u) is not using SmartAI, action skipped to prevent crash.", c ? c->GetEntry() : (me ? me->GetEntry() : 0));
-
+                sLog->outErrorDb("SmartScript: Action target Creature(entry: %u) is not using SmartAI, action skipped to prevent crash.", c?c->GetEntry():(me?me->GetEntry():0));
             return smart;
         }
 
@@ -140,15 +137,15 @@ class SmartScript
             if (!go || go->GetAIName() != "SmartGameObjectAI")
                 smart = false;
             if (!smart)
-                sLog->outErrorDb("SmartScript: Action target GameObject(entry: %u) is not using SmartGameObjectAI, action skipped to prevent crash.", g ? g->GetEntry() : (go ? go->GetEntry() : 0));
 
+                sLog->outErrorDb("SmartScript: Action target GameObject(entry: %u) is not using SmartGameObjectAI, action skipped to prevent crash.", g?g->GetEntry():(go?go->GetEntry():0));
             return smart;
         }
 
         ObjectList* GetTargetList(uint32 id)
         {
             ObjectListMap::iterator itr = mTargetStorage->find(id);
-            if (itr != mTargetStorage->end())
+            if(itr != mTargetStorage->end())
                 return (*itr).second;
             return NULL;
         }
@@ -219,7 +216,7 @@ class SmartScript
     private:
         void IncPhase(int32 p = 1)
         {
-            if (p >= 0)
+            if(p >= 0)
                 mEventPhase += (uint32)p;
             else
                 DecPhase(abs(p));

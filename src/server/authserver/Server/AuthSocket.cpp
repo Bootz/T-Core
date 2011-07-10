@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -342,9 +340,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     _login = (const char*)ch->I;
     _build = ch->build;
-    _expversion = (AuthHelper::IsPostWotLKAcceptedClientBuild(_build) ? POST_WOTLK_EXP_FLAG : NO_VALID_EXP_FLAG) |
-                  (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) |
-                  (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+    _expversion = (AuthHelper::IsPostCataAcceptedClientBuild(_build) ? POST_CATA_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreCataAcceptedClientBuild(_build) ? PRE_CATA_EXP_FLAG : NO_VALID_EXP_FLAG);
 
     pkt << (uint8)AUTH_LOGON_CHALLENGE;
     pkt << (uint8)0x00;
@@ -612,7 +608,7 @@ bool AuthSocket::_HandleLogonProof()
         sha.UpdateBigNumbers(&A, &M, &K, NULL);
         sha.Finalize();
 
-        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
+        if (_expversion & POST_CATA_EXP_FLAG)                 // 4.x clients
         {
             sAuthLogonProof_S proof;
             memcpy(proof.M2, sha.GetDigest(), 20);
@@ -739,7 +735,7 @@ bool AuthSocket::_HandleReconnectChallenge()
 
     // Reinitialize build, expansion and the account securitylevel
     _build = ch->build;
-    _expversion = (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+    _expversion = (AuthHelper::IsPostCataAcceptedClientBuild(_build) ? POST_CATA_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreCataAcceptedClientBuild(_build) ? PRE_CATA_EXP_FLAG : NO_VALID_EXP_FLAG);
 
     Field* fields = result->Fetch();
     uint8 secLevel = fields[2].GetUInt8();
@@ -832,17 +828,10 @@ bool AuthSocket::_HandleRealmList()
     for (RealmList::RealmMap::const_iterator i = sRealmList->begin(); i != sRealmList->end(); ++i)
     {
         // don't work with realms which not compatible with the client
-        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
-        {
-            if (i->second.gamebuild != _build)
-            {
-                sLog->outStaticDebug("Realm not added because of not correct build : %u != %u", i->second.gamebuild, _build);
+        if ((_expversion & POST_CATA_EXP_FLAG) && i->second.gamebuild != _build)
+            continue;
+        else if ((_expversion & PRE_CATA_EXP_FLAG) && !AuthHelper::IsPreCataAcceptedClientBuild(i->second.gamebuild))
                 continue;
-            }
-        }
-        else if (_expversion & PRE_BC_EXP_FLAG) // 1.12.1 and 1.12.2 clients are compatible with eachother
-            if (!AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
-	            continue;
 
         uint8 AmountOfCharacters;
 
@@ -859,7 +848,7 @@ bool AuthSocket::_HandleRealmList()
         uint8 lock = (i->second.allowedSecurityLevel > _accountSecurityLevel) ? 1 : 0;
 
         pkt << i->second.icon;                              // realm type
-        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))
+        if ( _expversion & POST_CATA_EXP_FLAG )             // only 4.x clients
             pkt << lock;                                    // if 1, then realm locked
         pkt << i->second.color;                             // if 2, then realm is offline
         pkt << i->first;
@@ -867,7 +856,7 @@ bool AuthSocket::_HandleRealmList()
         pkt << i->second.populationLevel;
         pkt << AmountOfCharacters;
         pkt << i->second.timezone;                          // realm category
-        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))
+        if (_expversion & POST_CATA_EXP_FLAG)               // 4.x clients
             pkt << (uint8)0x2C;                             // unk, may be realm number/id?
         else
             pkt << (uint8)0x0;                              // 1.12.1 and 1.12.2 clients
@@ -875,21 +864,21 @@ bool AuthSocket::_HandleRealmList()
         ++RealmListSize;
     }
 
-    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
+    if ( _expversion & POST_CATA_EXP_FLAG )                 // 4.x clients
     {
-        pkt << (uint8) 0x10;
-        pkt << (uint8) 0x00;
+        pkt << (uint8)0x10;
+        pkt << (uint8)0x00;
     }
-    else
+    else                                                    // 1.12.1 and 1.12.2 clients
     {
-        pkt << (uint8) 0x00;
-        pkt << (uint8) 0x02;
+        pkt << (uint8)0x00;
+        pkt << (uint8)0x02;
     }
 
     // make a ByteBuffer which stores the RealmList's size
     ByteBuffer RealmListSizeBuffer;
     RealmListSizeBuffer << (uint32)0;
-    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
+    if (_expversion & POST_CATA_EXP_FLAG)                   // only 4.x clients
         RealmListSizeBuffer << (uint16)RealmListSize;
     else
         RealmListSizeBuffer << (uint32)RealmListSize;

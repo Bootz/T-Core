@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,7 +16,7 @@
  */
 
 /** \file
-    \ingroup Trinityd
+    \ingroup Trilliumd
 */
 
 #include "Common.h"
@@ -49,7 +47,7 @@ void WorldRunnable::run()
 
     sScriptMgr->OnStartup();
 
-    ///- While we have not Trillium::m_stopEvent, update the world
+    ///- While we have not World::m_stopEvent, update the world
     while (!World::IsStopped())
     {
         ++World::m_worldLoopCounter;

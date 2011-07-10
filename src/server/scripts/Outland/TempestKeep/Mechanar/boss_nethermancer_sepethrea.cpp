@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Nethermancer_Sepethrea
-SD%Complete: 90
-SDComment: Need adjustments to initial summons
-SDCategory: Tempest Keep, The Mechanar
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "mechanar.h"
@@ -62,9 +53,9 @@ class boss_nethermancer_sepethrea : public CreatureScript
         }
         struct boss_nethermancer_sepethreaAI : public ScriptedAI
         {
-            boss_nethermancer_sepethreaAI(Creature* creature) : ScriptedAI(creature)
+            boss_nethermancer_sepethreaAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
             }
 
             InstanceScript *pInstance;
@@ -184,9 +175,9 @@ class mob_ragin_flames : public CreatureScript
 
             struct mob_ragin_flamesAI : public ScriptedAI
             {
-                mob_ragin_flamesAI(Creature* creature) : ScriptedAI(creature)
+                mob_ragin_flamesAI(Creature* pCreature) : ScriptedAI(pCreature)
                 {
-                    pInstance = creature->GetInstanceScript();
+                    pInstance = pCreature->GetInstanceScript();
                 }
 
                 InstanceScript *pInstance;
@@ -234,8 +225,8 @@ class mob_ragin_flames : public CreatureScript
 
                     if (!onlyonce)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->GetMotionMaster()->MoveChase(target);
+                        if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->GetMotionMaster()->MoveChase(pTarget);
                         onlyonce = true;
                     }
 

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Nefarian
-SD%Complete: 80
-SDComment: Some issues with class calls effecting more than one class
-SDCategory: Blackwing Lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -66,14 +57,14 @@ class boss_nefarian : public CreatureScript
 public:
     boss_nefarian() : CreatureScript("boss_nefarian") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_nefarianAI (creature);
+        return new boss_nefarianAI (pCreature);
     }
 
     struct boss_nefarianAI : public ScriptedAI
     {
-        boss_nefarianAI(Creature* c) : ScriptedAI(c) {}
+        boss_nefarianAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 ShadowFlame_Timer;
         uint32 BellowingRoar_Timer;
@@ -111,7 +102,7 @@ public:
             DoScriptText(SAY_DEATH, me);
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             DoScriptText(RAND(SAY_XHEALTH, SAY_AGGRO, SAY_SHADOWFLAME), me);
 

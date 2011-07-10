@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Wailing Caverns
-SD%Complete: 95
-SDComment: Need to add skill usage for Disciple of Naralex
-SDCategory: Wailing Caverns
-EndScriptData */
 
 /* ContentData
 EndContentData */
@@ -81,55 +72,55 @@ class npc_disciple_of_naralex : public CreatureScript
 public:
     npc_disciple_of_naralex() : CreatureScript("npc_disciple_of_naralex") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_disciple_of_naralexAI(creature);
+        return new npc_disciple_of_naralexAI(pCreature);
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        player->PlayerTalkClass->ClearMenus();
-        InstanceScript *pInstance = creature->GetInstanceScript();
+        pPlayer->PlayerTalkClass->ClearMenus();
+        InstanceScript *pInstance = pCreature->GetInstanceScript();
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
         {
-            player->CLOSE_GOSSIP_MENU();
+            pPlayer->CLOSE_GOSSIP_MENU();
             if (pInstance)
                 pInstance->SetData(TYPE_NARALEX_EVENT, IN_PROGRESS);
 
-            DoScriptText(SAY_MAKE_PREPARATIONS, creature);
+            DoScriptText(SAY_MAKE_PREPARATIONS, pCreature);
 
-            creature->setFaction(250);
-            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            pCreature->setFaction(250);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
 
-            CAST_AI(npc_escortAI, (creature->AI()))->Start(false, false, player->GetGUID());
-            CAST_AI(npc_escortAI, (creature->AI()))->SetDespawnAtFar(false);
-            CAST_AI(npc_escortAI, (creature->AI()))->SetDespawnAtEnd(false);
+            CAST_AI(npc_escortAI, (pCreature->AI()))->Start(false, false, pPlayer->GetGUID());
+            CAST_AI(npc_escortAI, (pCreature->AI()))->SetDespawnAtFar(false);
+            CAST_AI(npc_escortAI, (pCreature->AI()))->SetDespawnAtEnd(false);
         }
         return true;
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
     {
-        InstanceScript *pInstance = creature->GetInstanceScript();
+        InstanceScript *pInstance = pCreature->GetInstanceScript();
 
         if (pInstance)
         {
-            creature->CastSpell(player, SPELL_MARK_OF_THE_WILD_RANK_2, true);
+            pCreature->CastSpell(pPlayer, SPELL_MARK_OF_THE_WILD_RANK_2, true);
             if ((pInstance->GetData(TYPE_LORD_COBRAHN) == DONE) && (pInstance->GetData(TYPE_LORD_PYTHAS) == DONE) &&
                 (pInstance->GetData(TYPE_LADY_ANACONDRA) == DONE) && (pInstance->GetData(TYPE_LORD_SERPENTIS) == DONE))
             {
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_NARALEX, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                player->SEND_GOSSIP_MENU(GOSSIP_ID_START_2, creature->GetGUID());
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_NARALEX, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                pPlayer->SEND_GOSSIP_MENU(GOSSIP_ID_START_2, pCreature->GetGUID());
 
                 if (!pInstance->GetData(TYPE_NARALEX_YELLED))
                 {
-                    DoScriptText(SAY_AT_LAST, creature);
+                    DoScriptText(SAY_AT_LAST, pCreature);
                     pInstance->SetData(TYPE_NARALEX_YELLED, 1);
                 }
             }
             else
             {
-                player->SEND_GOSSIP_MENU(GOSSIP_ID_START_1, creature->GetGUID());
+                pPlayer->SEND_GOSSIP_MENU(GOSSIP_ID_START_1, pCreature->GetGUID());
             }
         }
         return true;
@@ -137,7 +128,7 @@ public:
 
     struct npc_disciple_of_naralexAI : public npc_escortAI
     {
-        npc_disciple_of_naralexAI(Creature* c) : npc_escortAI(c)
+        npc_disciple_of_naralexAI(Creature *c) : npc_escortAI(c)
         {
             pInstance = c->GetInstanceScript();
             eventTimer = 0;
@@ -194,7 +185,7 @@ public:
             DoScriptText(SAY_ATTACKED, me, who);
         }
 
-        void JustDied(Unit* /*slayer*/)
+        void JustDied(Unit * /*slayer*/)
         {
             if (pInstance)
             {

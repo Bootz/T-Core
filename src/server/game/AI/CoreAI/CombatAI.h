@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMBATAI_H
-#define COMBATAI_H
+#ifndef TRILLIUM_COMBATAI_H
+#define TRILLIUM_COMBATAI_H
 
 #include "CreatureAI.h"
 #include "CreatureAIImpl.h"
@@ -45,7 +43,7 @@ class CombatAI : public CreatureAI
         void InitializeAI();
         void Reset();
         void EnterCombat(Unit* who);
-        void JustDied(Unit* killer);
+        void JustDied(Unit *killer);
         void UpdateAI(const uint32 diff);
         static int Permissible(const Creature *);
     protected:
@@ -58,17 +56,17 @@ class CasterAI : public CombatAI
     public:
         explicit CasterAI(Creature *c) : CombatAI(c) { m_attackDist = MELEE_RANGE; }
         void InitializeAI();
-        void AttackStart(Unit* victim) { AttackStartCaster(victim, m_attackDist); }
+        void AttackStart(Unit * victim) { AttackStartCaster(victim, m_attackDist); }
         void UpdateAI(const uint32 diff);
-        void EnterCombat(Unit* /*who*/);
+        void EnterCombat(Unit * /*who*/);
     private:
         float m_attackDist;
 };
 
-struct ArcherAI : public CreatureAI
+struct ArchorAI : public CreatureAI
 {
     public:
-        explicit ArcherAI(Creature *c);
+        explicit ArchorAI(Creature *c);
         void AttackStart(Unit *who);
         void UpdateAI(const uint32 diff);
 
@@ -90,6 +88,16 @@ struct TurretAI : public CreatureAI
         float m_minRange;
 };
 
+struct AOEAI : public CreatureAI
+{
+    public:
+        explicit AOEAI(Creature *c);
+        bool CanAIAttack(const Unit *who) const;
+        void AttackStart(Unit *who);
+        void UpdateAI(const uint32 diff);
+
+        static int Permissible(const Creature *);
+};
 #define VEHICLE_CONDITION_CHECK_TIME 1000
 #define VEHICLE_DISMISS_TIME 5000
 struct VehicleAI : public CreatureAI

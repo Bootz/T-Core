@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAMEOBJECTAI_H
-#define GAMEOBJECTAI_H
+#ifndef TRILLIUM_GAMEOBJECTAI_H
+#define TRILLIUM_GAMEOBJECTAI_H
 
 #include "Define.h"
 #include <list>
@@ -29,7 +27,7 @@
 class GameObjectAI
 {
     protected:
-        GameObject* const go;
+        GameObject * const go;
     public:
         explicit GameObjectAI(GameObject *g) : go(g) {}
         virtual ~GameObjectAI() {}
@@ -39,12 +37,6 @@ class GameObjectAI
         virtual void InitializeAI() { Reset(); }
 
         virtual void Reset() {};
-
-        // Pass parameters between AI
-        virtual void DoAction(const int32 /*param = 0 */) {}
-        virtual uint32 GetData(uint32 /*id = 0*/) { return 0; }
-        virtual void SetGUID(const uint64 &/*guid*/, int32 /*id = 0 */) {}
-        virtual uint64 GetGUID(int32 /*id = 0 */) { return 0; }
 
         static int Permissible(const GameObject* go);
 

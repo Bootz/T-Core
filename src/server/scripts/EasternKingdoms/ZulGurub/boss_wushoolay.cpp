@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_Wushoolay
-SD%Complete: 100
-SDComment:
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -41,7 +32,7 @@ class boss_wushoolay : public CreatureScript
 
         struct boss_wushoolayAI : public ScriptedAI
         {
-            boss_wushoolayAI(Creature* c) : ScriptedAI(c) {}
+            boss_wushoolayAI(Creature *c) : ScriptedAI(c) {}
 
             uint32 LightningCloud_Timer;
             uint32 LightningWave_Timer;
@@ -52,7 +43,7 @@ class boss_wushoolay : public CreatureScript
                 LightningWave_Timer = 8000 + rand()%8000;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
             }
 
@@ -71,9 +62,9 @@ class boss_wushoolay : public CreatureScript
                 //LightningWave_Timer
                 if (LightningWave_Timer <= diff)
                 {
-                    Unit* target = NULL;
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                    if (target) DoCast(target, SPELL_LIGHTNINGWAVE);
+                    Unit *pTarget = NULL;
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    if (pTarget) DoCast(pTarget, SPELL_LIGHTNINGWAVE);
 
                     LightningWave_Timer = 12000 + rand()%4000;
                 } else LightningWave_Timer -= diff;

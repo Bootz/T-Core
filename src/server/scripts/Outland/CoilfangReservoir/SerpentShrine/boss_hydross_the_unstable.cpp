@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+
+ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -82,14 +82,14 @@ class boss_hydross_the_unstable : public CreatureScript
 public:
     boss_hydross_the_unstable() : CreatureScript("boss_hydross_the_unstable") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_hydross_the_unstableAI (creature);
+        return new boss_hydross_the_unstableAI (pCreature);
     }
 
     struct boss_hydross_the_unstableAI : public ScriptedAI
     {
-        boss_hydross_the_unstableAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_hydross_the_unstableAI(Creature *c) : ScriptedAI(c), Summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -167,7 +167,7 @@ public:
                 }
             }
         }
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
 
@@ -175,7 +175,7 @@ public:
                 pInstance->SetData(DATA_HYDROSSTHEUNSTABLEEVENT, IN_PROGRESS);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit * /*victim*/)
         {
             if (CorruptedForm)
             {
@@ -203,12 +203,12 @@ public:
             }
         }
 
-        void SummonedCreatureDespawn(Creature* summon)
+        void SummonedCreatureDespawn(Creature *summon)
         {
             Summons.Despawn(summon);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit * /*victim*/)
         {
             if (CorruptedForm)
                 DoScriptText(SAY_CORRUPT_DEATH, me);
@@ -263,9 +263,9 @@ public:
                 //VileSludge_Timer
                 if (VileSludge_Timer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                    if (target)
-                        DoCast(target, SPELL_VILE_SLUDGE);
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_VILE_SLUDGE);
 
                     VileSludge_Timer = 15000;
                 } else VileSludge_Timer -= diff;
@@ -330,9 +330,9 @@ public:
                 //WaterTomb_Timer
                 if (WaterTomb_Timer <= diff)
                 {
-                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
-                    if (target)
-                        DoCast(target, SPELL_WATER_TOMB);
+                    Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
+                    if (pTarget)
+                        DoCast(pTarget, SPELL_WATER_TOMB);
 
                     WaterTomb_Timer = 7000;
                 } else WaterTomb_Timer -= diff;

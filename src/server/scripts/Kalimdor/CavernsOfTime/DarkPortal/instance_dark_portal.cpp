@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_Dark_Portal
-SD%Complete: 50
-SDComment: Quest support: 9836, 10297. Currently in progress.
-SDCategory: Caverns of Time, The Dark Portal
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "dark_portal.h"
@@ -117,20 +108,21 @@ public:
             DoUpdateWorldState(WORLD_STATE_BM_RIFT, 0);
         }
 
-        bool IsEncounterInProgress()
+        bool IsEncounterInProgress() const
         {
-            if (GetData(TYPE_MEDIVH) == IN_PROGRESS)
+            //if (GetData(TYPE_MEDIVH) == IN_PROGRESS)
+            if (m_auiEncounter[0] == IN_PROGRESS)   // compile fix, GetData is not const
                 return true;
 
             return false;
         }
 
-        void OnPlayerEnter(Player* player)
+        void OnPlayerEnter(Player* pPlayer)
         {
             if (GetData(TYPE_MEDIVH) == IN_PROGRESS)
                 return;
 
-            player->SendUpdateWorldState(WORLD_STATE_BM, 0);
+            pPlayer->SendUpdateWorldState(WORLD_STATE_BM, 0);
         }
 
         void OnCreatureCreate(Creature* creature)
@@ -209,13 +201,13 @@ public:
                         {
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
-                                if (Player* player = itr->getSource())
+                                if (Player* pPlayer = itr->getSource())
                                 {
-                                    if (player->GetQuestStatus(QUEST_OPENING_PORTAL) == QUEST_STATUS_INCOMPLETE)
-                                        player->AreaExploredOrEventHappens(QUEST_OPENING_PORTAL);
+                                    if (pPlayer->GetQuestStatus(QUEST_OPENING_PORTAL) == QUEST_STATUS_INCOMPLETE)
+                                        pPlayer->AreaExploredOrEventHappens(QUEST_OPENING_PORTAL);
 
-                                    if (player->GetQuestStatus(QUEST_MASTER_TOUCH) == QUEST_STATUS_INCOMPLETE)
-                                        player->AreaExploredOrEventHappens(QUEST_MASTER_TOUCH);
+                                    if (pPlayer->GetQuestStatus(QUEST_MASTER_TOUCH) == QUEST_STATUS_INCOMPLETE)
+                                        pPlayer->AreaExploredOrEventHappens(QUEST_MASTER_TOUCH);
                                 }
                             }
                         }

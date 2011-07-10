@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss Black Knight
-SD%Complete: 80%
-SDComment: missing yells. not sure about timers.
-SDCategory: Trial of the Champion
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
@@ -80,9 +71,9 @@ public:
 
     struct boss_black_knightAI : public ScriptedAI
     {
-        boss_black_knightAI(Creature* creature) : ScriptedAI(creature)
+        boss_black_knightAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
-            pInstance = creature->GetInstanceScript();
+            pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -146,10 +137,10 @@ public:
             SummonList.clear();
         }
 
-        void JustSummoned(Creature* summon)
+        void JustSummoned(Creature* pSummon)
         {
-            SummonList.push_back(summon->GetGUID());
-            summon->AI()->AttackStart(me->getVictim());
+            SummonList.push_back(pSummon->GetGUID());
+            pSummon->AI()->AttackStart(me->getVictim());
         }
 
         void UpdateAI(const uint32 uiDiff)
@@ -197,10 +188,10 @@ public:
                         {
                             if (uiDeathRespiteTimer <= uiDiff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 {
-                                    if (target && target->isAlive())
-                                        DoCast(target, SPELL_DEATH_RESPITE);
+                                    if (pTarget && pTarget->isAlive())
+                                        DoCast(pTarget, SPELL_DEATH_RESPITE);
                                 }
                                 uiDeathRespiteTimer = urand(15000, 16000);
                             } else uiDeathRespiteTimer -= uiDiff;
@@ -225,10 +216,10 @@ public:
                             }
                             if (uiDesecration <= uiDiff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 {
-                                    if (target && target->isAlive())
-                                        DoCast(target, SPELL_DESECRATION);
+                                    if (pTarget && pTarget->isAlive())
+                                        DoCast(pTarget, SPELL_DESECRATION);
                                 }
                                 uiDesecration = urand(15000, 16000);
                             } else uiDesecration -= uiDiff;
@@ -252,10 +243,10 @@ public:
                     } else uiDeathBiteTimer -= uiDiff;
                     if (uiMarkedDeathTimer <= uiDiff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         {
-                            if (target && target->isAlive())
-                                DoCast(target, SPELL_MARKED_DEATH);
+                            if (pTarget && pTarget->isAlive())
+                                DoCast(pTarget, SPELL_MARKED_DEATH);
                         }
                         uiMarkedDeathTimer = urand (5000, 7000);
                     } else uiMarkedDeathTimer -= uiDiff;
@@ -288,16 +279,16 @@ public:
             }
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             if (pInstance)
                 pInstance->SetData(BOSS_BLACK_KNIGHT, DONE);
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature *pCreature) const
     {
-        return new boss_black_knightAI (creature);
+        return new boss_black_knightAI (pCreature);
     }
 };
 
@@ -308,7 +299,7 @@ public:
 
     struct npc_risen_ghoulAI : public ScriptedAI
     {
-        npc_risen_ghoulAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_risen_ghoulAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
         uint32 uiAttackTimer;
 
@@ -324,10 +315,10 @@ public:
 
             if (uiAttackTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                 {
-                    if (target && target->isAlive())
-                    DoCast(target, (SPELL_LEAP));
+                    if (pTarget && pTarget->isAlive())
+                    DoCast(pTarget, (SPELL_LEAP));
                 }
                 uiAttackTimer = 3500;
             } else uiAttackTimer -= uiDiff;
@@ -336,9 +327,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_risen_ghoulAI(creature);
+        return new npc_risen_ghoulAI(pCreature);
     }
 };
 
@@ -349,7 +340,7 @@ public:
 
     struct npc_black_knight_skeletal_gryphonAI : public npc_escortAI
     {
-        npc_black_knight_skeletal_gryphonAI(Creature* creature) : npc_escortAI(creature)
+        npc_black_knight_skeletal_gryphonAI(Creature* pCreature) : npc_escortAI(pCreature)
         {
             Start(false, true, 0, NULL);
         }
@@ -369,9 +360,9 @@ public:
 
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_black_knight_skeletal_gryphonAI(creature);
+        return new npc_black_knight_skeletal_gryphonAI(pCreature);
     }
 };
 

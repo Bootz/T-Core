@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: boss_kri, boss_yauj, boss_vem : The Bug Trio
-SD%Complete: 100
-SDComment:
-SDCategory: Temple of Ahn'Qiraj
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "temple_of_ahnqiraj.h"
@@ -43,14 +34,14 @@ class boss_kri : public CreatureScript
 public:
     boss_kri() : CreatureScript("boss_kri") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_kriAI (creature);
+        return new boss_kriAI (pCreature);
     }
 
     struct boss_kriAI : public ScriptedAI
     {
-        boss_kriAI(Creature* c) : ScriptedAI(c)
+        boss_kriAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -74,7 +65,7 @@ public:
             Death = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -140,14 +131,14 @@ class boss_vem : public CreatureScript
 public:
     boss_vem() : CreatureScript("boss_vem") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_vemAI (creature);
+        return new boss_vemAI (pCreature);
     }
 
     struct boss_vemAI : public ScriptedAI
     {
-        boss_vemAI(Creature* c) : ScriptedAI(c)
+        boss_vemAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -181,7 +172,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -194,13 +185,13 @@ public:
             //Charge_Timer
             if (Charge_Timer <= diff)
             {
-                Unit* target = NULL;
-                target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (target)
+                Unit *pTarget = NULL;
+                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (pTarget)
                 {
-                    DoCast(target, SPELL_CHARGE);
-                    //me->SendMonsterMove(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, true, 1);
-                    AttackStart(target);
+                    DoCast(pTarget, SPELL_CHARGE);
+                    //me->SendMonsterMove(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, true, 1);
+                    AttackStart(pTarget);
                 }
 
                 Charge_Timer = 8000 + rand()%8000;
@@ -233,14 +224,14 @@ class boss_yauj : public CreatureScript
 public:
     boss_yauj() : CreatureScript("boss_yauj") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_yaujAI (creature);
+        return new boss_yaujAI (pCreature);
     }
 
     struct boss_yaujAI : public ScriptedAI
     {
-        boss_yaujAI(Creature* c) : ScriptedAI(c)
+        boss_yaujAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -274,14 +265,14 @@ public:
 
             for (uint8 i = 0; i < 10; ++i)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 Creature* Summoned = me->SummonCreature(15621, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 90000);
-                if (Summoned && target)
-                    Summoned->AI()->AttackStart(target);
+                if (Summoned && pTarget)
+                    Summoned->AI()->AttackStart(pTarget);
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit * /*who*/)
         {
         }
 
@@ -304,8 +295,8 @@ public:
             {
                 if (pInstance)
                 {
-                    Unit* pKri = Unit::GetUnit((*me), pInstance->GetData64(DATA_KRI));
-                    Unit* pVem = Unit::GetUnit((*me), pInstance->GetData64(DATA_VEM));
+                    Unit *pKri = Unit::GetUnit((*me), pInstance->GetData64(DATA_KRI));
+                    Unit *pVem = Unit::GetUnit((*me), pInstance->GetData64(DATA_VEM));
 
                     switch (urand(0, 2))
                     {

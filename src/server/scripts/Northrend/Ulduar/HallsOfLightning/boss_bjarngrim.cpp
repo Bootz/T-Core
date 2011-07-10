@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss General Bjarngrim
-SD%Complete: 70%
-SDComment: Waypoint needed, we expect boss to always have 2x Stormforged Lieutenant following
-SDCategory: Halls of Lightning
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "halls_of_lightning.h"
@@ -87,16 +78,16 @@ class boss_bjarngrim : public CreatureScript
 public:
     boss_bjarngrim() : CreatureScript("boss_bjarngrim") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_bjarngrimAI(creature);
+        return new boss_bjarngrimAI(pCreature);
     }
 
     struct boss_bjarngrimAI : public ScriptedAI
     {
-        boss_bjarngrimAI(Creature* creature) : ScriptedAI(creature)
+        boss_bjarngrimAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
             m_uiStance = STANCE_DEFENSIVE;
             memset(&m_auiStormforgedLieutenantGUID, 0, sizeof(m_auiStormforgedLieutenantGUID));
         }
@@ -168,7 +159,7 @@ public:
                 m_pInstance->SetData(TYPE_BJARNGRIM, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*pWho*/)
         {
             DoScriptText(SAY_AGGRO, me);
 
@@ -179,12 +170,12 @@ public:
                 m_pInstance->SetData(TYPE_BJARNGRIM, IN_PROGRESS);
         }
 
-        void KilledUnit(Unit* /*victim*/)
+        void KilledUnit(Unit* /*pVictim*/)
         {
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*pKiller*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -363,16 +354,16 @@ class mob_stormforged_lieutenant : public CreatureScript
 public:
     mob_stormforged_lieutenant() : CreatureScript("mob_stormforged_lieutenant") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_stormforged_lieutenantAI(creature);
+        return new mob_stormforged_lieutenantAI(pCreature);
     }
 
     struct mob_stormforged_lieutenantAI : public ScriptedAI
     {
-        mob_stormforged_lieutenantAI(Creature* creature) : ScriptedAI(creature)
+        mob_stormforged_lieutenantAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
-            m_pInstance = creature->GetInstanceScript();
+            m_pInstance = pCreature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -386,14 +377,14 @@ public:
             m_uiRenewSteel_Timer = 10000 + rand()%1000;
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit* pWho)
         {
             if (m_pInstance)
             {
                 if (Creature* pBjarngrim = m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_BJARNGRIM)))
                 {
                     if (pBjarngrim->isAlive() && !pBjarngrim->getVictim())
-                        pBjarngrim->AI()->AttackStart(who);
+                        pBjarngrim->AI()->AttackStart(pWho);
                 }
             }
         }

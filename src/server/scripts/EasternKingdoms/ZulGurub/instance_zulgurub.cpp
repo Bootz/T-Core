@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Instance_ZulGurub
-SD%Complete: 80
-SDComment: Missing reset function after killing a boss for Ohgan, Thekal.
-SDCategory: Zul'Gurub
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulgurub.h"
@@ -79,35 +70,35 @@ class instance_zulgurub : public InstanceMapScript
             {
                 switch(uiType)
                 {
-                    case DATA_ARLOKK:
+                    case TYPE_ARLOKK:
                         m_auiEncounter[0] = uiData;
                         break;
 
-                    case DATA_JEKLIK:
+                    case TYPE_JEKLIK:
                         m_auiEncounter[1] = uiData;
                         break;
 
-                    case DATA_VENOXIS:
+                    case TYPE_VENOXIS:
                         m_auiEncounter[2] = uiData;
                         break;
 
-                    case DATA_MARLI:
+                    case TYPE_MARLI:
                         m_auiEncounter[3] = uiData;
                         break;
 
-                    case DATA_THEKAL:
+                    case TYPE_THEKAL:
                         m_auiEncounter[4] = uiData;
                         break;
 
-                    case DATA_LORKHAN:
+                    case TYPE_LORKHAN:
                         m_auiEncounter[5] = uiData;
                         break;
 
-                    case DATA_ZATH:
+                    case TYPE_ZATH:
                         m_auiEncounter[6] = uiData;
                         break;
 
-                    case DATA_OHGAN:
+                    case TYPE_OHGAN:
                         m_auiEncounter[7] = uiData;
                         break;
                 }
@@ -117,21 +108,21 @@ class instance_zulgurub : public InstanceMapScript
             {
                 switch(uiType)
                 {
-                    case DATA_ARLOKK:
+                    case TYPE_ARLOKK:
                         return m_auiEncounter[0];
-                    case DATA_JEKLIK:
+                    case TYPE_JEKLIK:
                         return m_auiEncounter[1];
-                    case DATA_VENOXIS:
+                    case TYPE_VENOXIS:
                         return m_auiEncounter[2];
-                    case DATA_MARLI:
+                    case TYPE_MARLI:
                         return m_auiEncounter[3];
-                    case DATA_THEKAL:
+                    case TYPE_THEKAL:
                         return m_auiEncounter[4];
-                    case DATA_LORKHAN:
+                    case TYPE_LORKHAN:
                         return m_auiEncounter[5];
-                    case DATA_ZATH:
+                    case TYPE_ZATH:
                         return m_auiEncounter[6];
-                    case DATA_OHGAN:
+                    case TYPE_OHGAN:
                         return m_auiEncounter[7];
                 }
                 return 0;

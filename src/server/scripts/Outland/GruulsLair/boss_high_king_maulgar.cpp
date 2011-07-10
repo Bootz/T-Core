@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_High_King_Maulgar
-SD%Complete: 90
-SDComment: Correct timers, after whirlwind melee attack bug, prayer of healing
-SDCategory: Gruul's Lair
-EndScriptData */
 
 #include "ScriptPCH.h"
 #include "gruuls_lair.h"
@@ -112,14 +103,14 @@ class boss_high_king_maulgar : public CreatureScript
 public:
     boss_high_king_maulgar() : CreatureScript("boss_high_king_maulgar") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_high_king_maulgarAI (creature);
+        return new boss_high_king_maulgarAI (pCreature);
     }
 
     struct boss_high_king_maulgarAI : public ScriptedAI
     {
-        boss_high_king_maulgarAI(Creature* c) : ScriptedAI(c)
+        boss_high_king_maulgarAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
             for (uint8 i = 0; i < 4; ++i)
@@ -150,16 +141,16 @@ public:
 
             Phase2 = false;
 
-            Creature* creature = NULL;
+            Creature *pCreature = NULL;
             for (uint8 i = 0; i < 4; ++i)
             {
                 if (Council[i])
                 {
-                    creature = (Unit::GetCreature((*me), Council[i]));
-                    if (creature && !creature->isAlive())
+                    pCreature = (Unit::GetCreature((*me), Council[i]));
+                    if (pCreature && !pCreature->isAlive())
                     {
-                        creature->Respawn();
-                        creature->AI()->EnterEvadeMode();
+                        pCreature->Respawn();
+                        pCreature->AI()->EnterEvadeMode();
                     }
                 }
             }
@@ -187,7 +178,7 @@ public:
                 DoScriptText(RAND(SAY_OGRE_DEATH1, SAY_OGRE_DEATH2, SAY_OGRE_DEATH3, SAY_OGRE_DEATH4), me);
            }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit *who)
         {
             StartEvent(who);
         }
@@ -204,7 +195,7 @@ public:
             }
         }
 
-        void StartEvent(Unit* who)
+        void StartEvent(Unit *who)
         {
             if (!pInstance)
                 return;
@@ -224,11 +215,11 @@ public:
             //Only if not incombat check if the event is started
             if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_MAULGAREVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
 
-                if (target)
+                if (pTarget)
                 {
-                    AttackStart(target);
+                    AttackStart(pTarget);
                     GetCouncil();
                 }
             }
@@ -281,12 +272,12 @@ public:
                 //Charging_Timer
                 if (Charging_Timer <= diff)
                 {
-                    Unit* target = NULL;
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                    if (target)
+                    Unit *pTarget = NULL;
+                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                    if (pTarget)
                     {
-                        AttackStart(target);
-                        DoCast(target, SPELL_BERSERKER_C);
+                        AttackStart(pTarget);
+                        DoCast(pTarget, SPELL_BERSERKER_C);
                     }
                     Charging_Timer = 20000;
                 } else Charging_Timer -= diff;
@@ -311,14 +302,14 @@ class boss_olm_the_summoner : public CreatureScript
 public:
     boss_olm_the_summoner() : CreatureScript("boss_olm_the_summoner") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new boss_olm_the_summonerAI (creature);
+        return new boss_olm_the_summonerAI (pCreature);
     }
 
     struct boss_olm_the_summonerAI : public ScriptedAI
     {
-        boss_olm_the_summonerAI(Creature* c) : ScriptedAI(c)
+        boss_olm_the_summonerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -340,22 +331,22 @@ public:
                 pInstance->SetData(DATA_MAULGAREVENT, NOT_STARTED);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* pWho)
         {
-            if (!who)
+            if (!pWho)
                 return;
 
-            if (me->Attack(who, true))
+            if (me->Attack(pWho, true))
             {
-                me->AddThreat(who, 0.0f);
-                me->SetInCombatWith(who);
-                who->SetInCombatWith(me);
+                me->AddThreat(pWho, 0.0f);
+                me->SetInCombatWith(pWho);
+                pWho->SetInCombatWith(me);
 
-                me->GetMotionMaster()->MoveChase(who, 30.0f);
+                me->GetMotionMaster()->MoveChase(pWho, 30.0f);
             }
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit *who)
         {
             if (pInstance)
             {
@@ -368,7 +359,7 @@ public:
         {
             if (pInstance)
             {
-                Creature* Maulgar = NULL;
+                Creature *Maulgar = NULL;
                 Maulgar = (Unit::GetCreature((*me), pInstance->GetData64(DATA_MAULGAR)));
 
                 if (Maulgar)
@@ -384,11 +375,11 @@ public:
             //Only if not incombat check if the event is started
             if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_MAULGAREVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
 
-                if (target)
+                if (pTarget)
                 {
-                    AttackStart(target);
+                    AttackStart(pTarget);
                 }
             }
 
@@ -420,10 +411,10 @@ public:
             //DeathCoil Timer /need correct timer
             if (DeathCoil_Timer <= diff)
             {
-                Unit* target = NULL;
-                target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (target)
-                    DoCast(target, SPELL_DEATH_COIL);
+                Unit *pTarget = NULL;
+                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (pTarget)
+                    DoCast(pTarget, SPELL_DEATH_COIL);
                 DeathCoil_Timer = 20000;
             } else DeathCoil_Timer -= diff;
 
@@ -439,14 +430,14 @@ class boss_kiggler_the_crazed : public CreatureScript
 public:
     boss_kiggler_the_crazed() : CreatureScript("boss_kiggler_the_crazed") { }
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature* pCreature) const
     {
-        return new boss_kiggler_the_crazedAI (creature);
+        return new boss_kiggler_the_crazedAI (pCreature);
     }
 
     struct boss_kiggler_the_crazedAI : public ScriptedAI
     {
-        boss_kiggler_the_crazedAI(Creature* c) : ScriptedAI(c)
+        boss_kiggler_the_crazedAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -483,7 +474,7 @@ public:
         {
             if (pInstance)
             {
-                Creature* Maulgar = NULL;
+                Creature *Maulgar = NULL;
                 Maulgar = (Unit::GetCreature((*me), pInstance->GetData64(DATA_MAULGAR)));
 
                 if (Maulgar)
@@ -499,11 +490,11 @@ public:
             //Only if not incombat check if the event is started
             if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_MAULGAREVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
 
-                if (target)
+                if (pTarget)
                 {
-                    AttackStart(target);
+                    AttackStart(pTarget);
                 }
             }
 
@@ -521,9 +512,9 @@ public:
             //GreaterPolymorph_Timer
             if (GreaterPolymorph_Timer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if (target)
-                    DoCast(target, SPELL_GREATER_POLYMORPH);
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (pTarget)
+                    DoCast(pTarget, SPELL_GREATER_POLYMORPH);
 
                 GreaterPolymorph_Timer = 15000 + rand()%5000;
             } else GreaterPolymorph_Timer -= diff;
@@ -561,14 +552,14 @@ class boss_blindeye_the_seer : public CreatureScript
 public:
     boss_blindeye_the_seer() : CreatureScript("boss_blindeye_the_seer") { }
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature* pCreature) const
     {
-        return new boss_blindeye_the_seerAI (creature);
+        return new boss_blindeye_the_seerAI (pCreature);
     }
 
     struct boss_blindeye_the_seerAI : public ScriptedAI
     {
-        boss_blindeye_the_seerAI(Creature* c) : ScriptedAI(c)
+        boss_blindeye_the_seerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -590,7 +581,7 @@ public:
                 pInstance->SetData(DATA_MAULGAREVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             if (pInstance)
             {
@@ -603,7 +594,7 @@ public:
         {
             if (pInstance)
             {
-                Creature* Maulgar = NULL;
+                Creature *Maulgar = NULL;
                 Maulgar = (Unit::GetCreature((*me), pInstance->GetData64(DATA_MAULGAR)));
 
                 if (Maulgar)
@@ -619,11 +610,11 @@ public:
             //Only if not incombat check if the event is started
             if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_MAULGAREVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
 
-                if (target)
+                if (pTarget)
                 {
-                    AttackStart(target);
+                    AttackStart(pTarget);
                 }
             }
 
@@ -671,14 +662,14 @@ class boss_krosh_firehand : public CreatureScript
 public:
     boss_krosh_firehand() : CreatureScript("boss_krosh_firehand") { }
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI *GetAI(Creature* pCreature) const
     {
-        return new boss_krosh_firehandAI (creature);
+        return new boss_krosh_firehandAI (pCreature);
     }
 
     struct boss_krosh_firehandAI : public ScriptedAI
     {
-        boss_krosh_firehandAI(Creature* c) : ScriptedAI(c)
+        boss_krosh_firehandAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -700,7 +691,7 @@ public:
                 pInstance->SetData(DATA_MAULGAREVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit * who)
         {
             if (pInstance)
             {
@@ -713,7 +704,7 @@ public:
         {
             if (pInstance)
             {
-                Creature* Maulgar = NULL;
+                Creature *Maulgar = NULL;
                 Maulgar = (Unit::GetCreature((*me), pInstance->GetData64(DATA_MAULGAR)));
 
                 if (Maulgar)
@@ -729,11 +720,11 @@ public:
             //Only if not incombat check if the event is started
             if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_MAULGAREVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
+                Unit *pTarget = Unit::GetUnit((*me), pInstance->GetData64(DATA_MAULGAREVENT_TANK));
 
-                if (target)
+                if (pTarget)
                 {
-                    AttackStart(target);
+                    AttackStart(pTarget);
                 }
             }
 
@@ -766,22 +757,22 @@ public:
             //BlastWave_Timer
             if (BlastWave_Timer <= diff)
             {
-                Unit* target = NULL;
+                Unit *pTarget = NULL;
                 std::list<HostileReference *> t_list = me->getThreatManager().getThreatList();
-                std::vector<Unit* > target_list;
+                std::vector<Unit *> target_list;
                 for (std::list<HostileReference *>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    target = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                    pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                                                                 //15 yard radius minimum
-                    if (target && target->IsWithinDist(me, 15, false))
-                        target_list.push_back(target);
-                    target = NULL;
+                    if (pTarget && pTarget->IsWithinDist(me, 15, false))
+                        target_list.push_back(pTarget);
+                    pTarget = NULL;
                 }
-                if (!target_list.empty())
-                    target = *(target_list.begin()+rand()%target_list.size());
+                if (target_list.size())
+                    pTarget = *(target_list.begin()+rand()%target_list.size());
 
                 me->InterruptNonMeleeSpells(false);
-                DoCast(target, SPELL_BLAST_WAVE);
+                DoCast(pTarget, SPELL_BLAST_WAVE);
                 BlastWave_Timer = 60000;
             } else BlastWave_Timer -= diff;
         }

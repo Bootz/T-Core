@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,13 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* ScriptData
-SDName: Boss_High_Botanist_Freywinn
-SD%Complete: 90
-SDComment: some strange visual related to tree form(if aura lost before normal duration end). possible make summon&transform -process smoother(transform after delay)
-SDCategory: Tempest Keep, The Botanica
-EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -60,7 +51,7 @@ class boss_high_botanist_freywinn : public CreatureScript
 
         struct boss_high_botanist_freywinnAI : public ScriptedAI
         {
-            boss_high_botanist_freywinnAI(Creature* creature) : ScriptedAI(creature) {}
+            boss_high_botanist_freywinnAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
             std::list<uint64> Adds_List;
 
@@ -81,12 +72,12 @@ class boss_high_botanist_freywinn : public CreatureScript
                 MoveFree = true;
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void EnterCombat(Unit * /*who*/)
             {
                 DoScriptText(SAY_AGGRO, me);
             }
 
-            void JustSummoned(Creature* summoned)
+            void JustSummoned(Creature *summoned)
             {
                 if (summoned->GetEntry() == ENTRY_FRAYER)
                     Adds_List.push_back(summoned->GetGUID());
@@ -147,7 +138,7 @@ class boss_high_botanist_freywinn : public CreatureScript
                         {
                             for (std::list<uint64>::iterator itr = Adds_List.begin(); itr != Adds_List.end(); ++itr)
                             {
-                                if (Unit* temp = Unit::GetUnit(*me, *itr))
+                                if (Unit *temp = Unit::GetUnit(*me, *itr))
                                 {
                                     if (!temp->isAlive())
                                     {

@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2011      TrilliumEMU <http://www.trilliumemu.com/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS      <http://getmangos.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRIDNOTIFIERS_H
-#define GRIDNOTIFIERS_H
+#ifndef TRILLIUM_GRIDNOTIFIERS_H
+#define TRILLIUM_GRIDNOTIFIERS_H
 
 #include "ObjectGridLoader.h"
 #include "UpdateData.h"
@@ -499,7 +497,7 @@ namespace Trillium
             bool operator()(Creature* u)
             {
                 if (i_funit->GetTypeId() != TYPEID_PLAYER || !((Player*)i_funit)->isHonorOrXPTarget(u) ||
-                    u->getDeathState() != CORPSE || u->isInFlight() ||
+                    u->getDeathState() != CORPSE || u->isDeadByDefault() || u->isInFlight() ||
                     (u->GetCreatureTypeMask() & (1 << (CREATURE_TYPE_HUMANOID-1))) == 0 ||
                     (u->GetDisplayId() != u->GetNativeDisplayId()))
                     return false;
@@ -526,7 +524,7 @@ namespace Trillium
             }
             bool operator()(Creature* u)
             {
-                if (u->getDeathState() != CORPSE || u->isInFlight() ||
+                if (u->getDeathState() != CORPSE || u->isInFlight() || u->isDeadByDefault() ||
                     (u->GetDisplayId() != u->GetNativeDisplayId()) ||
                     (u->GetCreatureTypeMask() & CREATURE_TYPEMASK_MECHANICAL_OR_ELEMENTAL) != 0)
                     return false;
@@ -792,9 +790,6 @@ namespace Trillium
                 if (!u->isAlive())
                     return false;
 
-                if (u->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET)
-                    return false;
-
                 if (u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->isTotem())
                     return false;
 
@@ -806,10 +801,10 @@ namespace Trillium
             float i_range;
     };
 
-    class AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck
+    class AnyUnfriendlyVisibleUnitInObjectRangeCheck
     {
         public:
-            AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range)
+            AnyUnfriendlyVisibleUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range)
                 : i_obj(obj), i_funit(funit), i_range(range) {}
 
             bool operator()(Unit* u)
@@ -817,8 +812,6 @@ namespace Trillium
                 return u->isAlive()
                     && i_obj->IsWithinDistInMap(u, i_range)
                     && !i_funit->IsFriendlyTo(u)
-                    && i_funit->canAttack(u)
-                    && u->GetCreatureType() != CREATURE_TYPE_CRITTER
                     && i_funit->canSeeOrDetect(u);
             }
         private:
