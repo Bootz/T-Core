@@ -21,7 +21,7 @@
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 
-#include "DBCfmt.h"
+#include "DataFormat.h"
 
 #include <map>
 
