@@ -25,7 +25,7 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "Language.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "Item.h"
 
 void WorldSession::HandleSendMail(WorldPacket & recv_data)

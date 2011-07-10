@@ -33,7 +33,7 @@
 #include "PassiveAI.h"
 #include "Chat.h"
 #include "DataStructure.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "ObjectMgr.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"

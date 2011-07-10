@@ -17,7 +17,7 @@
 
 #include "WorldSession.h"
 #include "WorldPacket.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "Player.h"
 #include "Group.h"
 #include "LFGMgr.h"

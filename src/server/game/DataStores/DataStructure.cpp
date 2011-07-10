@@ -17,7 +17,7 @@
 
 #include "Common.h"
 #include "DataStructure.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 
 int32 SpellEntry::CalculateSimpleValue(uint32 eff) const
 {

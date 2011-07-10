@@ -43,7 +43,7 @@
 #include "SpellMgr.h"
 #include "GroupMgr.h"
 #include "Chat.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "LootMgr.h"
 #include "ItemEnchantmentMgr.h"
 #include "MapManager.h"
@@ -1250,7 +1250,7 @@ void World::SetInitialWorldSettings()
 
     ///- Load the DBC files
     sLog->outString("Initialize data stores...");
-    LoadDBCStores(m_dataPath);
+    LoadDataStorage(m_dataPath);
     //DetectDBCLang();
 
     sLog->outString("Loading Script Names...");

@@ -19,7 +19,7 @@
 #include "ObjectMgr.h"
 #include "SpellAuras.h"
 #include "SpellAuraDefines.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "World.h"
 #include "Chat.h"
 #include "Spell.h"

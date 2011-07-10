@@ -18,7 +18,7 @@
 #include "ScriptPCH.h"
 #include "Config.h"
 #include "DatabaseEnv.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "ObjectMgr.h"
 #include "OutdoorPvPMgr.h"
 #include "ScriptLoader.h"

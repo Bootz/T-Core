@@ -22,7 +22,7 @@
 #include "Path.h"
 #include "ScriptMgr.h"
 #include "WorldPacket.h"
-#include "DBCStores.h"
+#include "DataStorage.h"
 #include "World.h"
 #include "GameObjectAI.h"
 
