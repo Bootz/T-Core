@@ -20,7 +20,7 @@
 
 #include "Map.h"
 #include "InstanceSaveMgr.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 
 class MapInstanced : public Map
 {

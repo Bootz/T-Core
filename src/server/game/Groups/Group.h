@@ -19,7 +19,7 @@
 #define TRILLIUMCORE_GROUP_H
 
 #include "Battleground.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "GroupRefManager.h"
 #include "LootMgr.h"
 #include "QueryResult.h"

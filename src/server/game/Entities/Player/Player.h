@@ -23,7 +23,7 @@
 #include "Bag.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "GroupReference.h"
 #include "ItemPrototype.h"
 #include "Item.h"

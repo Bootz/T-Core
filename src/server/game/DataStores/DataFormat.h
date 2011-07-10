@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRILLIUM_DBCSFRM_H
-#define TRILLIUM_DBCSFRM_H
+#ifndef TRILLIUM_DATAFORMAT_H
+#define TRILLIUM_DATAFORMAT_H
 
 const char Achievementfmt[]="niixsxiixixxii";
 //const std::string CustomAchievementfmt="ppppppppppppppp";

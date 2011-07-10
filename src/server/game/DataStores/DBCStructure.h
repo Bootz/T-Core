@@ -19,7 +19,7 @@
 #define TRILLIUM_DBCSTRUCTURE_H
 
 #include "Common.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "Define.h"
 #include "Path.h"
 #include "Util.h"

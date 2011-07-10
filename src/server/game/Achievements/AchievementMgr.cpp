@@ -16,7 +16,7 @@
  */
 
 #include "Common.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "ObjectMgr.h"
 #include "ArenaTeamMgr.h"
 #include "GuildMgr.h"

@@ -43,7 +43,7 @@
 #include "AccountMgr.h"
 #include "Vehicle.h"
 #include "CreatureAI.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "ScriptMgr.h"
 #include "MapManager.h"
 #include "InstanceScript.h"

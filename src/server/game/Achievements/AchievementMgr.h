@@ -24,7 +24,7 @@
 #include "Common.h"
 #include <ace/Singleton.h>
 #include "DatabaseEnv.h"
-#include "DBCEnums.h"
+#include "StorageData.h"
 #include "DBCStores.h"
 
 typedef std::list<AchievementCriteriaEntry const*> AchievementCriteriaEntryList;
