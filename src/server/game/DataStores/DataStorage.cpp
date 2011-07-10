@@ -106,7 +106,7 @@ DataStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSpt
 
 DataStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
-//DataStorage <ItemEntry>                    sItemStore(Itemfmt);
+DataStorage <ItemEntry>                    sItemStore(Itemfmt);
 DataStorage <ItemArmorQualityEntry>        sItemArmorQualityStore(ItemArmorQualityfmt);
 DataStorage <ItemArmorShieldEntry>         sItemArmorShieldStore(ItemArmorShieldfmt);
 DataStorage <ItemArmorTotalEntry>          sItemArmorTotalStore(ItemArmorTotalfmt);
@@ -281,10 +281,15 @@ void LoadDataStorages(const std::string& dataPath)
     uint32 oldMSTime = getMSTime();
 
     std::string dbcPath = dataPath+"dbc/";
+    std::string db2Path = dataPath+"db2/";
 
     StoreProblemList bad_dbc_files;
     uint32 availableDbcLocales = 0xFFFFFFFF;
 
+    //DB2 Files
+    LoadData(availableDbcLocales, bad_dbc_files, sItemStore,                   db2Path, "Item.db2");
+
+    //DBC Files
     LoadData(availableDbcLocales, bad_dbc_files, sAreaStore,                   dbcPath, "AreaTable.dbc");
 
     // must be after sAreaStore loading

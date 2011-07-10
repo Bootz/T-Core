@@ -68,7 +68,6 @@ const char gtOCTHpPerStaminafmt[]="xf";
 const char GtRegenMPPerSptfmt[]="xf";
 const char GtSpellScalingfmt[]="nf";
 const char Holidaysfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-//const char Itemfmt[]="niiiiiii";
 const char ItemArmorQualityfmt[]="nfffffffi";
 const char ItemArmorShieldfmt[]="nifffffff";
 const char ItemArmorTotalfmt[]="niffff";
@@ -147,4 +146,6 @@ const char WorldMapOverlayEntryfmt[]="nxiiiixxxxxxxxx";
 const char WorldSafeLocsEntryfmt[]="nifffx";
 const char PhaseEntryfmt[]="nsi";
 
+//DB2 Files
+const char Itemfmt[]="niiiiiii";
 #endif

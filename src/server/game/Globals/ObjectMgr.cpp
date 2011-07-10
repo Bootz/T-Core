@@ -1046,30 +1046,30 @@ void ObjectMgr::LoadEquipmentTemplates()
             if (!equipmentInfo.ItemEntry[i])
                 continue;
 
-           //ItemEntry const *dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
+           ItemEntry const *dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
 
-           // if (!dbcItem)
-           // {
-           //     sLog->outErrorDb("Unknown item (entry=%u) in creature_equip_template.itemEntry%u for entry = %u, forced to 0.",
-           //         equipmentInfo.ItemEntry[i], i+1, entry);
-           //     equipmentInfo.ItemEntry[i] = 0;
-           //     continue;
-           // }
+            if (!dbcItem)
+            {
+                sLog->outErrorDb("Unknown item (entry=%u) in creature_equip_template.itemEntry%u for entry = %u, forced to 0.",
+                    equipmentInfo.ItemEntry[i], i+1, entry);
+                equipmentInfo.ItemEntry[i] = 0;
+                continue;
+            }
 
-           // if (dbcItem->InventoryType != INVTYPE_WEAPON &&
-           //     dbcItem->InventoryType != INVTYPE_SHIELD &&
-           //     dbcItem->InventoryType != INVTYPE_RANGED &&
-           //     dbcItem->InventoryType != INVTYPE_2HWEAPON &&
-           //     dbcItem->InventoryType != INVTYPE_WEAPONMAINHAND &&
-           //     dbcItem->InventoryType != INVTYPE_WEAPONOFFHAND &&
-           //     dbcItem->InventoryType != INVTYPE_HOLDABLE &&
-           //     dbcItem->InventoryType != INVTYPE_THROWN &&
-           //     dbcItem->InventoryType != INVTYPE_RANGEDRIGHT)
-           // {
-           //     sLog->outErrorDb("Item (entry=%u) in creature_equip_template.itemEntry%u for entry = %u is not equipable in a hand, forced to 0.",
-           //         equipmentInfo.ItemEntry[i], i+1, entry);
-           //     equipmentInfo.ItemEntry[i] = 0;
-           // }
+            if (dbcItem->InventoryType != INVTYPE_WEAPON &&
+                dbcItem->InventoryType != INVTYPE_SHIELD &&
+                dbcItem->InventoryType != INVTYPE_RANGED &&
+                dbcItem->InventoryType != INVTYPE_2HWEAPON &&
+                dbcItem->InventoryType != INVTYPE_WEAPONMAINHAND &&
+                dbcItem->InventoryType != INVTYPE_WEAPONOFFHAND &&
+                dbcItem->InventoryType != INVTYPE_HOLDABLE &&
+                dbcItem->InventoryType != INVTYPE_THROWN &&
+                dbcItem->InventoryType != INVTYPE_RANGEDRIGHT)
+            {
+                sLog->outErrorDb("Item (entry=%u) in creature_equip_template.itemEntry%u for entry = %u is not equipable in a hand, forced to 0.",
+                    equipmentInfo.ItemEntry[i], i+1, entry);
+                equipmentInfo.ItemEntry[i] = 0;
+            }
         }
 
         ++count;
@@ -2174,7 +2174,6 @@ void ObjectMgr::LoadItemTemplates()
     }
 
     uint32 count = 0;
-    bool enforceDBCAttributes = sWorld->getBoolConfig(CONFIG_DBC_ENFORCE_ITEM_ATTRIBUTES);
 
     do
     {
@@ -2291,48 +2290,35 @@ void ObjectMgr::LoadItemTemplates()
 
         // Checks
 
-        ItemEntry const *dbcitem = NULL;
+        ItemEntry const *db2item = NULL;
 
-        if (dbcitem)
+        if (db2item)
         {
-            if (itemTemplate.Class != dbcitem->Class)
+            if (itemTemplate.Class != db2item->Class)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct class %u, must be %u .", entry, itemTemplate.Class, dbcitem->Class);
-                if (enforceDBCAttributes)
-                    itemTemplate.Class = dbcitem->Class;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct class %u, must be %u .", entry, itemTemplate.Class, db2item->Class);
             }
 
-            if (itemTemplate.Unk0 != dbcitem->Unk0)
+            if (itemTemplate.Unk0 != db2item->SubClass)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i) , must be %i .", entry, itemTemplate.Unk0, dbcitem->Unk0);
-                if (enforceDBCAttributes)
-                    itemTemplate.Unk0 = dbcitem->Unk0;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i) , must be %i .", entry, itemTemplate.SubClass, db2item->SubClass);
             }
-            if (itemTemplate.Material != dbcitem->Material)
+            if (itemTemplate.Material != db2item->Material)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct material (%i), must be %i .", entry, itemTemplate.Material, dbcitem->Material);
-                if (enforceDBCAttributes)
-                    itemTemplate.Material = dbcitem->Material;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct material (%i), must be %i .", entry, itemTemplate.Material, db2item->Material);
             }
-            if (itemTemplate.InventoryType != dbcitem->InventoryType)
+            if (itemTemplate.InventoryType != db2item->InventoryType)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct inventory type (%u), must be %u .", entry, itemTemplate.InventoryType, dbcitem->InventoryType);
-                if (enforceDBCAttributes)
-                    itemTemplate.InventoryType = dbcitem->InventoryType;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct inventory type (%u), must be %u .", entry, itemTemplate.InventoryType, db2item->InventoryType);
             }
-            if (itemTemplate.DisplayInfoID != dbcitem->DisplayId)
+            if (itemTemplate.DisplayInfoID != db2item->DisplayId)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct display id (%u), must be %u .", entry, itemTemplate.DisplayInfoID, dbcitem->DisplayId);
-                if (enforceDBCAttributes)
-                    itemTemplate.DisplayInfoID = dbcitem->DisplayId;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct display id (%u), must be %u .", entry, itemTemplate.DisplayInfoID, db2item->DisplayId);
             }
-            if (itemTemplate.Sheath != dbcitem->Sheath)
+            if (itemTemplate.Sheath != db2item->Sheath)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct sheathid (%u), must be %u .", entry, itemTemplate.Sheath, dbcitem->Sheath);
-                if (enforceDBCAttributes)
-                    itemTemplate.Sheath = dbcitem->Sheath;
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct sheathid (%u), must be %u .", entry, itemTemplate.Sheath, db2item->Sheath);
             }
-
         }
         else
             sLog->outErrorDb("Item (Entry: %u) does not exist in item.dbc! (not correct id?).", entry);

@@ -1309,11 +1309,11 @@ class SmartAIMgr
 
         bool IsItemValid(SmartScriptHolder const& e, uint32 entry)
         {
-            //if (!sItemStore.LookupEntry(entry))
-            //{
-            //    sLog->outErrorDb("SmartAIMgr: Entry %d SourceType %u Event %u Action %u uses non-existent Item entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
-            //    return false;
-            //}
+            if (!sItemStore.LookupEntry(entry))
+            {
+                sLog->outErrorDb("SmartAIMgr: Entry %d SourceType %u Event %u Action %u uses non-existent Item entry %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), entry);
+                return false;
+            }
             return true;
         }
         /*inline bool IsConditionValid(SmartScriptHolder e, int32 t, int32 v1, int32 v2, int32 v3)

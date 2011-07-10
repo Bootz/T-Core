@@ -202,6 +202,9 @@ extern DataStorage <WMOAreaTableEntry>            sWMOAreaTableStore;
 extern DataStorage <WorldMapOverlayEntry>         sWorldMapOverlayStore;
 extern DataStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
+//DB2 Storage
+extern DataStorage <ItemEntry>                    sItemStore;
+
 void LoadDataStorages(const std::string& dataPath);
 
 // script support functions
