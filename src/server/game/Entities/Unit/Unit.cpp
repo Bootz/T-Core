@@ -1455,6 +1455,9 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
 
             uint32 damage = (*dmgShieldItr)->GetAmount();
 
+            if (Unit* caster = (*dmgShieldItr)->GetCaster())
+                damage = caster->SpellDamageBonus(this, i_spellProto, damage, SPELL_DIRECT_DAMAGE);
+
             // No Unit::CalcAbsorbResist here - opcode doesn't send that data - this damage is probably not affected by that
             pVictim->DealDamageMods(this, damage, NULL);
 
@@ -2249,21 +2252,21 @@ void Unit::SendMeleeAttackStop(Unit* victim)
     sLog->outDetail("%s %u stopped attacking %s %u", (GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), GetGUIDLow(), (victim->GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), victim->GetGUIDLow());
 }
 
-bool Unit::isSpellBlocked(Unit *pVictim, SpellEntry const * spellProto, WeaponAttackType attackType)
+bool Unit::isSpellBlocked(Unit* victim, SpellEntry const * spellProto, WeaponAttackType attackType)
 {
-    if (pVictim->HasInArc(M_PI, this) || pVictim->HasAuraType(SPELL_AURA_IGNORE_HIT_DIRECTION))
+    // These spells can't be blocked
+    if (spellProto && spellProto->Attributes & SPELL_ATTR0_IMPOSSIBLE_DODGE_PARRY_BLOCK)
+        return false;
+
+    if (victim->HasAuraType(SPELL_AURA_IGNORE_HIT_DIRECTION) || victim->HasInArc(M_PI, this))
     {
         // Check creatures flags_extra for disable block
-        if (pVictim->GetTypeId() == TYPEID_UNIT &&
-            pVictim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_BLOCK)
+        if (victim->GetTypeId() == TYPEID_UNIT &&
+            victim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_BLOCK)
                 return false;
 
-        // These spells shouldn't be blocked
-        if (spellProto && spellProto->Attributes & SPELL_ATTR0_IMPOSSIBLE_DODGE_PARRY_BLOCK)
-            return false;
-
-        float blockChance = pVictim->GetUnitBlockChance();
-        blockChance += (int32(GetWeaponSkillValue(attackType)) - int32(pVictim->GetMaxSkillValueForLevel()))*0.04f;
+        float blockChance = victim->GetUnitBlockChance();
+        blockChance += (int32(GetWeaponSkillValue(attackType)) - int32(victim->GetMaxSkillValueForLevel()))*0.04f;
         if (roll_chance_f(blockChance))
             return true;
     }
@@ -8716,7 +8719,8 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
         // Combo points add triggers (need add combopoint only for main target, and after possible combopoints reset)
         case 15250: // Rogue Setup
         {
-            if (!pVictim || (ToPlayer() && pVictim != ToPlayer()->GetSelectedUnit())) // applied only for main target
+            // applied only for main target
+            if (!pVictim || (GetTypeId() == TYPEID_PLAYER && pVictim != ToPlayer()->GetSelectedUnit()))
                 return false;
             break;                                   // continue normal case
         }
@@ -10408,6 +10412,15 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
             }
         break;
+        case SPELLFAMILY_DRUID:
+            // Thorns
+            if (spellProto->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x100)
+            {
+                // Brambles
+                if (AuraEffect* aurEff = GetAuraEffectOfRankedSpell(16836, 0))
+                    AddPctN(DoneTotalMod, aurEff->GetAmount());
+            }
+        break;
         case SPELLFAMILY_WARLOCK:
             //Fire and Brimstone
             if (spellProto->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x00020040)
@@ -10423,7 +10436,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
                 }
             // Drain Soul - increased damage for targets under 25 % HP
             if (spellProto->GetSpellClassOptions()->SpellFamilyFlags[0] & 0x00004000)
-                if (HasAura(200000))
+                if (HasAura(100001))
                     DoneTotalMod *= 4;
             // Shadow Bite (15% increase from each dot)
             if (spellProto->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x00400000 && isPet())

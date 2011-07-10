@@ -10,7 +10,7 @@
  |   7.) Rewrite the extractor               |
  \__________________________________________/
  /                                           \
-|    7.) Start with updating the DB           \
+|    8.) Start with updating the DB           \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|

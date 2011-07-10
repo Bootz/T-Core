@@ -2996,8 +2996,7 @@ void Spell::EffectSummonType(SpellEffectEntry const* effect)
                 // Summons a vehicle, but doesn't force anyone to enter it (see SUMMON_CATEGORY_VEHICLE)
                 case SUMMON_TYPE_VEHICLE:
                 case SUMMON_TYPE_VEHICLE2:
-                    if (m_originalCaster)
-                        summon = m_caster->GetMap()->SummonCreature(entry, pos, properties, duration, m_originalCaster);
+                    summon = m_caster->GetMap()->SummonCreature(entry, pos, properties, duration, m_originalCaster);
                     break;
                 case SUMMON_TYPE_TOTEM:
                 {
