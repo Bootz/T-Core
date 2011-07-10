@@ -22,7 +22,7 @@
 
 #include "Common.h"
 #include "DatabaseEnv.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 
 class Item;
 class Player;

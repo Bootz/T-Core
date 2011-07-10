@@ -32,7 +32,7 @@
 #include "CombatAI.h"
 #include "PassiveAI.h"
 #include "Chat.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "DBCStores.h"
 #include "ObjectMgr.h"
 #include "SpellScript.h"

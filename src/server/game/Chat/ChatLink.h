@@ -19,7 +19,7 @@
 #define TRILLIUMCORE_CHATLINK_H
 
 #include "SharedDefines.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include <sstream>
 #include <list>
 

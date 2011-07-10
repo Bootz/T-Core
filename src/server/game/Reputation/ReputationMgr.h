@@ -21,7 +21,7 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include "Language.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "QueryResult.h"
 #include <map>
 

@@ -20,7 +20,7 @@
 
 #include "Common.h"
 #include "Storages.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 
 #include <list>
 

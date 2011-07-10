@@ -30,7 +30,7 @@
 #include "FollowerRefManager.h"
 #include "EventProcessor.h"
 #include "MotionMaster.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "Path.h"
 #include "WorldPacket.h"
 #include "Timer.h"

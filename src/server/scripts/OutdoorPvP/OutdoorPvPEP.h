@@ -19,7 +19,7 @@
 #ifndef OUTDOOR_PVP_EP_
 #define OUTDOOR_PVP_EP_
 
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "OutdoorPvP.h"
 
 const uint32 EP_AllianceBuffs[4] = {11413, 11414, 11415, 1386};

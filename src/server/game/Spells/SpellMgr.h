@@ -24,7 +24,7 @@
 
 #include "SharedDefines.h"
 #include "SpellAuraDefines.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "DBCStores.h"
 
 #include "UnorderedMap.h"

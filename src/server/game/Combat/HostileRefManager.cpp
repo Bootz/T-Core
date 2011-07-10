@@ -18,7 +18,7 @@
 #include "HostileRefManager.h"
 #include "ThreatManager.h"
 #include "Unit.h"
-#include "DBCStructure.h"
+#include "DataStructure.h"
 #include "SpellMgr.h"
 
 HostileRefManager::~HostileRefManager()
