@@ -1,0 +1,1 @@
+DELETE FROM `battleground_template` WHERE id = 120;
