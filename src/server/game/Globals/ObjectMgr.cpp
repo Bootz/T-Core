@@ -1019,7 +1019,7 @@ void ObjectMgr::LoadEquipmentTemplates()
 {
     uint32 oldMSTime = getMSTime();
 
-    QueryResult result = WorldDatabase.Query("SELECT entry, itemEntry1, itemEntry2, itemEntry3 FROM creature_equip_template");
+    QueryResult result = WorldDatabase.Query("SELECT entry, equipentry1, equipentry2, equipentry3 FROM creature_equip_template");
 
     if (!result)
     {
