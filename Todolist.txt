@@ -5,7 +5,7 @@
  \_____________________________________________/
  /                                            /
  |   4.) Drop Old Spells from Core           |
- |   5.) Find a new hoster for a forum       |
+ |   5.) Setup the forum                     |
  |   6.) Install a Bot in Mirc Channel!      |
  |   7.) Add db2 extract to extractor        |
  \__________________________________________/
