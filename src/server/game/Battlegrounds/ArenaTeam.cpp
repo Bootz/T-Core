@@ -758,71 +758,81 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchMakerRating, int32 rat
             //                                                  //
             //////////////////////////////////////////////////////
 
-            uint32 CapReached; // Checks if Soft Cap has been reached, if yes, do not earn anymore points,
+			bool CapReached;
 
-            if (CapReached == 0) // if not go ahead.
+			switch (plr->GetCurrency(390))     // Checks if Soft Cap has been reached, if yes, do not earn anymore points.
+			{
+			case 1343:
+			case 1940:
+			case 2533:
+			case 2849:
+			case 2964:
+			case 3000:
+				CapReached = true;
+			default:
+				CapReached = false;
+			}
+			
+			if (CapReached == false)       // if not go ahead.
             {
 
             plr->ModifyCurrency(390, 268.6f);
 
             // Conquest Point Soft Cap System - based on Personal Rating  
-            uint32 points = plr->GetCurrency(390);
-            uint32 rating = plr->GetArenaPersonalRating(GetSlot());
-			
+            uint32 OldPoints = plr->GetCurrency(390);
+            uint32 OldRating = plr->GetArenaPersonalRating(GetSlot());
+			uint32 NewPoints = OldPoints;
+			uint32 NewRating = OldRating;
+
             // First Check, points - Total Conquest Points cannot exceed the Soft Cap, So:
-            if (rating <=1500 && points >= 1343)            // If this happens..
+            if (OldRating <=1500 && OldPoints >= 1343)            // If this happens..
             {
-	            points = 1343;                              // ..set points = Soft Cap
-					
-	            CapReached = 1;                             // And set CapReached=1, so player cannot earn anymore points until next week
+	            NewPoints = 1343;                              // ..set points = Soft Cap, and set CapReached=1, 
+				                                               // so player cannot earn anymore points until next week
 
 	            // Second Check, rating - Rating has to remain the same 
 	            // for all the week, when a new week starts, rating can raise
 	            // THIS IS TO AVOID RATING RAISING IN THE SAME WEEK. 
                 // TODO: RATING RAISE WITHOUT EARNING POINTS.
-	            if (Stats.WeekGames != 0 && rating > 1500)
-		            rating = 1500;
+	            if (Stats.WeekGames != 0 && OldRating > 1500)
+		            NewRating = 1500;
             }
 
             // The same happens for all other brackets
-            if (1500 < rating < 1800 && points > 1940)
+            if (1500 < OldRating < 1800 && OldPoints > 1940)
             {
-	            points=1940;
-	            CapReached=1;
+	            NewPoints=1940;
 
-	            if (Stats.WeekGames != 0 && rating > 1800)
-		            rating = 1800;
+	            if (Stats.WeekGames != 0 && OldRating > 1800)
+		            NewRating = 1800;
             }
 
-            if (1800 < rating < 2100 && points > 2533)
+            if (1800 < OldRating < 2100 && OldPoints > 2533)
             {
-	            points = 2533;
-	            CapReached = 1;
+	            NewPoints = 2533;
 
-	            if (Stats.WeekGames != 0 && rating > 2100)
-		            rating = 2100;
+	            if (Stats.WeekGames != 0 && OldRating > 2100)
+		            NewRating = 2100;
             }
-            if (2100 < rating < 2400 && points > 2849)
+            if (2100 < OldRating < 2400 && OldPoints > 2849)
             {
-	            points = 2849;
-	            CapReached = 1;
+	            NewPoints = 2849;
 
-	            if (Stats.WeekGames != 0 && rating > 2400)
-		            rating = 2400;
+	            if (Stats.WeekGames != 0 && OldRating > 2400)
+		            NewRating = 2400;
             }
-            if (2400 < rating < 2700 && points > 2964)
+            if (2400 < OldRating < 2700 && OldPoints > 2964)
             {
-	            points = 2964;
-	            CapReached = 1;
+	            NewPoints = 2964;
 
-	            if (Stats.WeekGames != 0 && rating > 3000)
-		            rating = 3000;
+	            if (Stats.WeekGames != 0 && OldRating > 3000)
+		            NewRating = 3000;
             }
-            if (rating >= 3000)
-	            points = 3000;
+            if (OldRating >= 3000)
+	            NewPoints = 3000;
 
-            plr->SetCurrency(390, points);
-            itr->ModifyPersonalRating(plr, rating, GetSlot());
+            plr->SetCurrency(390, NewPoints);
+            itr->ModifyPersonalRating(plr, NewRating, GetSlot());
 			}
         }
     }
