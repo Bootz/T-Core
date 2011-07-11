@@ -541,32 +541,6 @@ bool ArenaTeam::IsMember(const uint64& guid) const
     return false;
 }
 
-uint32 ArenaTeam::GetPoints(uint32 memberRating)
-{
-    // Returns how many points would be awarded with this team type with this rating
-    float points;
-
-    uint32 rating = memberRating + 150 < Stats.Rating ? memberRating : Stats.Rating;
-
-    if (rating <= 1500)
-    {
-        if (sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID) < 6)
-            points = (float)rating * 0.22f + 14.0f;
-        else
-            points = 344;
-    }
-    else
-        points = 1511.26f / (1.0f + 1639.28f * exp(-0.00412f * (float)rating));
-
-    // Type penalties for teams < 5v5
-    if  (Type == ARENA_TEAM_2v2)
-        points *= 0.76f;
-    else if (Type == ARENA_TEAM_3v3)
-        points *= 0.88f;
-
-    return (uint32) points;
-}
-
 uint32 ArenaTeam::GetAverageMMR(Group* group) const
 {
     if (!group)
