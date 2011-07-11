@@ -1,12 +1,12 @@
 = TrilliumENCORE -- Linux installation =
-Copyright (C) 2011 TrilliumENCORE (http://www.trilliumemu.com)
+Copyright (C) 2011 TrilliumENCORE (http://www.trilliumemu.org)
 
 =========================================================
 WARNING: THIS DOCUMENTATION IS NOT ALWAYS UP TO DATE.
 FOR MORE UP-TO-DATE INFORMATION, CHECK THE TRILLIUM WIKI.
 =========================================================
 
-CHECK http://www.trilliumemu.com FOR FURTHER HELP
+CHECK http://www.trilliumemu.org FOR FURTHER HELP
 
 Installing TrilliumENCORE is fairly simple on a Linux machine, assuming you 
 have all required applications
