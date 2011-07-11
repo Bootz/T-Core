@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -129,7 +129,7 @@ int Master::Run()
     sLog->outString(" TrilliumEMU" );
     sLog->outString(" Welcome to TrilliumEMU" );
     sLog->outString("" );
-    sLog->outString(" http://www.trilliumemu.com" );
+    sLog->outString(" http://www.trilliumemu.org" );
     sLog->outString("===========================================================\n" ); 
 
 #ifdef USE_SFMT_FOR_RNG

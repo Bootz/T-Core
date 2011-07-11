@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.com/>
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
 
 
  *
