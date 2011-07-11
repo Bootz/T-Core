@@ -526,6 +526,12 @@ inline void KillRewarder::_RewardReputation(Player* player, float rate)
     player->RewardReputation(_victim, rate);
 }
 
+inline void KillRewarder::_RewardCurrency(Player *player)
+{
+    // Reward currency onkill.
+    player->RewardCurrency(_victim);
+}
+
 inline void KillRewarder::_RewardKillCredit(Player* player)
 {
     // 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
@@ -554,6 +560,7 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
         {
             // If killer is in dungeon then all members receive full reputation at kill.
             _RewardReputation(player, isDungeon ? 1.0f : rate);
+            _RewardCurrency(player);
             _RewardKillCredit(player);
         }
     }
@@ -6878,6 +6885,19 @@ int32 Player::CalculateReputationGain(uint32 creatureOrQuestLevel, int32 rep, in
         return 0;
 
     return int32(rep*percent/100);
+}
+
+void Player::RewardCurrency(Unit *pVictim)
+{
+    if (!pVictim || pVictim->GetTypeId() == TYPEID_PLAYER)
+        return;
+
+    CurrencyOnKillEntry const* Cur = sObjectMgr->GetCurrencyOnKillEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
+
+    if (!Cur)
+        return;
+
+    ModifyCurrency(Cur->type, Cur->amount);
 }
 
 //Calculates how many reputation points player gains in victim's enemy factions

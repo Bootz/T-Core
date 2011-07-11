@@ -1023,6 +1023,7 @@ private:
     void _RewardHonor(Player* player);
     void _RewardXP(Player* player, float rate);
     void _RewardReputation(Player* player, float rate);
+    void _RewardCurrency(Player* player);
     void _RewardKillCredit(Player* player);
     void _RewardPlayer(Player* player, bool isDungeon);
     void _RewardGroup();
@@ -2020,8 +2021,9 @@ class Player : public Unit, public GridObject<Player>
         ReputationMgr&       GetReputationMgr()       { return m_reputationMgr; }
         ReputationMgr const& GetReputationMgr() const { return m_reputationMgr; }
         ReputationRank GetReputationRank(uint32 faction_id) const;
-        void RewardReputation(Unit *pVictim, float rate);
+        void RewardReputation(Unit* pVictim, float rate);
         void RewardReputation(Quest const *pQuest);
+        void RewardCurrency(Unit* pVictim);
 
         void UpdateSkillsForLevel();
         void UpdateSkillsToMaxSkillsForLevel();             // for .levelup

@@ -441,6 +441,12 @@ struct RepRewardRate
     float spell_rate;
 };
 
+struct CurrencyOnKillEntry
+{
+    uint32 type;
+    int32 amount;
+};
+
 struct ReputationOnKillEntry
 {
     uint32 repfaction1;
@@ -611,6 +617,8 @@ class ObjectMgr
 
         typedef UNORDERED_MAP<uint32, AccessRequirement> AccessRequirementMap;
 
+        typedef UNORDERED_MAP<uint32, CurrencyOnKillEntry> CurOnKillMap;
+
         typedef UNORDERED_MAP<uint32, RepRewardRate > RepRewardRateMap;
         typedef UNORDERED_MAP<uint32, ReputationOnKillEntry> RepOnKillMap;
         typedef UNORDERED_MAP<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
@@ -736,6 +744,14 @@ class ObjectMgr
 
         uint32 GetAreaTriggerScriptId(uint32 trigger_id);
         SpellScriptsBounds GetSpellScriptsBounds(uint32 spell_id);
+
+       CurrencyOnKillEntry const* GetCurrencyOnKillEntry(uint32 id) const
+       {
+           CurOnKillMap::const_iterator itr = mCurOnKill.find(id);
+           if (itr != mCurOnKill.end())
+               return &itr->second;
+           return NULL;
+       }
 
         RepRewardRate const* GetRepRewardRate(uint32 factionId) const
         {
@@ -923,6 +939,8 @@ class ObjectMgr
         void LoadPetNumber();
         void LoadCorpses();
         void LoadFishingBaseSkillLevel();
+
+        void LoadCurrencyOnKill();
 
         void LoadReputationRewardRate();
         void LoadReputationOnKill();
@@ -1262,6 +1280,7 @@ class ObjectMgr
         AccessRequirementMap  mAccessRequirements;
         DungeonEncounterMap mDungeonEncounters;
 
+        CurOnKillMap        mCurOnKill;
         RepRewardRateMap    m_RepRewardRateMap;
         RepOnKillMap        mRepOnKill;
         RepSpilloverTemplateMap m_RepSpilloverTemplateMap;
