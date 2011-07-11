@@ -147,16 +147,16 @@ void ArenaTeamMgr::DistributeArenaPoints()
             at->UpdateArenaPointsHelper(PlayerPoints);
 
     // Cycle that gives points to all players
-    for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
-    {
-        // Update database
-        CharacterDatabase.PExecute("UPDATE characters SET arenaPoints = arenaPoints + '%u' WHERE guid = '%u'", playerItr->second, playerItr->first);
+    //for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
+    //{
+    //    // Update database
+    //    CharacterDatabase.PExecute("UPDATE characters SET arenaPoints = arenaPoints + '%u' WHERE guid = '%u'", playerItr->second, playerItr->first);
 
-        // Add points to player if online
-        Player* pl = sObjectMgr->GetPlayer(playerItr->first);
-        if (pl)
-            pl->ModifyArenaPoints(playerItr->second);
-    }
+    //    // Add points to player if online
+    //    Player* pl = sObjectMgr->GetPlayer(playerItr->first);
+    //    if (pl)
+    //        pl->ModifyArenaPoints(playerItr->second);
+    //}
 
     PlayerPoints.clear();
 

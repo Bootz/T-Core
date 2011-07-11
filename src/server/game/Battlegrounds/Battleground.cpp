@@ -798,8 +798,8 @@ void Battleground::EndBattleground(uint32 winner)
             if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID()))
             {
                 UpdatePlayerScore(plr, SCORE_BONUS_HONOR, GetBonusHonorFromKill(winner_kills));
-                if (CanAwardArenaPoints())
-                    plr->ModifyArenaPoints(winner_arena);
+                //if (CanAwardArenaPoints())
+                //    plr->ModifyArenaPoints(winner_arena);
                 if (!plr->GetRandomWinner())
                     plr->SetRandomWinner(true);
             }

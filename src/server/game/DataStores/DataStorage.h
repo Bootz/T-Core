@@ -208,13 +208,14 @@ extern DataStorage <ItemEntry>                    sItemStore;
 void LoadDataStorages(const std::string& dataPath);
 
 // script support functions
- DataStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
- DataStorage <SpellEntry>                 const* GetSpellStore();
- DataStorage <SpellRangeEntry>            const* GetSpellRangeStore();
- DataStorage <FactionEntry>               const* GetFactionStore();
- DataStorage <ItemEntry>                  const* GetItemDisplayStore();
- DataStorage <CreatureDisplayInfoEntry>   const* GetCreatureDisplayStore();
- DataStorage <EmotesEntry>                const* GetEmotesStore();
- DataStorage <EmotesTextEntry>            const* GetEmotesTextStore();
- DataStorage <AchievementEntry>           const* GetAchievementStore();
+DataStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
+DataStorage <SpellEntry>                 const* GetSpellStore();
+DataStorage <SpellRangeEntry>            const* GetSpellRangeStore();
+DataStorage <FactionEntry>               const* GetFactionStore();
+DataStorage <ItemEntry>                  const* GetItemDisplayStore();
+DataStorage <CreatureDisplayInfoEntry>   const* GetCreatureDisplayStore();
+DataStorage <EmotesEntry>                const* GetEmotesStore();
+DataStorage <EmotesTextEntry>            const* GetEmotesTextStore();
+DataStorage <AchievementEntry>           const* GetAchievementStore();
+
 #endif
