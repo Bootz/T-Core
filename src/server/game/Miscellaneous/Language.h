@@ -799,7 +799,8 @@ enum TrilliumStrings
     LANG_BANLIST_CHARACTERS_HEADER      = 1133,
     LANG_ALLOW_TICKETS                  = 1134,
     LANG_DISALLOW_TICKETS               = 1135,
-    // Room for more level 3              1136-1199 not used
+    LANG_WEEK_RESET                     = 1136,
+    // Room for more level 3              1137-1199 not used
 
     // Debug commands
     LANG_CINEMATIC_NOT_EXIST            = 1200,

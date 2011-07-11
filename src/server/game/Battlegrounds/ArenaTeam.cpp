@@ -774,37 +774,83 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchMakerRating, int32 rat
             plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK, itr->WeekGames);
             plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON, itr->SeasonGames);
             return;
+
+            //////////////////////////////////////////////////////
+            //                                                  //
+            //               CATACLYSM ARENA SYSTEM             //
+            //  Winners receive fixed amount of Conquest Points //
+            //                                                  //
+            //                Losers, only Shame                //
+            //                                                  //
+            //////////////////////////////////////////////////////
+
+            uint32 CapReached; // Checks if Soft Cap has been reached, if yes, do not earn anymore points,
+
+            if (CapReached == 0) // if not go ahead.
+            {
+
+            plr->ModifyCurrency(390, 268.6f);
+
+            // Conquest Point Soft Cap System - based on Personal Rating  
+            uint32 points = plr->GetCurrency(390);
+            uint32 rating = plr->GetArenaPersonalRating(GetSlot());
+			
+            // First Check, points - Total Conquest Points cannot exceed the Soft Cap, So:
+            if (rating <=1500 && points >= 1343)            // If this happens..
+            {
+	            points = 1343;                              // ..set points = Soft Cap
+					
+	            CapReached = 1;                             // And set CapReached=1, so player cannot earn anymore points until next week
+
+	            // Second Check, rating - Rating has to remain the same 
+	            // for all the week, when a new week starts, rating can raise
+	            // THIS IS TO AVOID RATING RAISING IN THE SAME WEEK. 
+                // TODO: RATING RAISE WITHOUT EARNING POINTS.
+	            if (Stats.WeekGames != 0 && rating > 1500)
+		            rating = 1500;
+            }
+
+            // The same happens for all other brackets
+            if (1500 < rating < 1800 && points > 1940)
+            {
+	            points=1940;
+	            CapReached=1;
+
+	            if (Stats.WeekGames != 0 && rating > 1800)
+		            rating = 1800;
+            }
+
+            if (1800 < rating < 2100 && points > 2533)
+            {
+	            points = 2533;
+	            CapReached = 1;
+
+	            if (Stats.WeekGames != 0 && rating > 2100)
+		            rating = 2100;
+            }
+            if (2100 < rating < 2400 && points > 2849)
+            {
+	            points = 2849;
+	            CapReached = 1;
+
+	            if (Stats.WeekGames != 0 && rating > 2400)
+		            rating = 2400;
+            }
+            if (2400 < rating < 2700 && points > 2964)
+            {
+	            points = 2964;
+	            CapReached = 1;
+
+	            if (Stats.WeekGames != 0 && rating > 3000)
+		            rating = 3000;
+            }
+            if (rating >= 3000)
+	            points = 3000;
+
+            plr->SetCurrency(390, points);
+            itr->ModifyPersonalRating(plr, rating, GetSlot());
+			}
         }
-    }
-}
-
-void ArenaTeam::UpdateArenaPointsHelper(std::map<uint32, uint32>& playerPoints)
-{
-    // Called after a match has ended and the stats are already modified
-    // Helper function for arena point distribution (this way, when distributing, no actual calculation is required, just a few comparisons)
-    // 10 played games per week is a minimum
-    if (Stats.WeekGames < 10)
-        return;
-
-    // To get points, a player has to participate in at least 30% of the matches
-    uint32 requiredGames = (uint32) ceil(Stats.WeekGames * 0.3);
-
-    for (MemberList::const_iterator itr = Members.begin(); itr !=  Members.end(); ++itr)
-    {
-        // The player participated in enough games, update his points
-        uint32 pointsToAdd = 0;
-        if (itr->WeekGames >= requiredGames)
-            pointsToAdd = GetPoints(itr->PersonalRating);
-
-        std::map<uint32, uint32>::iterator plr_itr = playerPoints.find(GUID_LOPART(itr->Guid));
-        if (plr_itr != playerPoints.end())
-        {
-            // Check if there is already more points
-            if (plr_itr->second < pointsToAdd)
-                playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
-        }
-        else
-            playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
     }
 }
 

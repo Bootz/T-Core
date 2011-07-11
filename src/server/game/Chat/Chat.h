@@ -333,7 +333,7 @@ class ChatHandler
         /*bool HandleCharDeleteCommand(const char *args);
         bool HandleSendMessageCommand(const char * args);*/
 
-        bool HandleFlushArenaPointsCommand(const char *args);
+        bool HandleWeekResetCommand(const char *args);
         bool HandlePlayAllCommand(const char* args);
         bool HandleRepairitemsCommand(const char* args);
 

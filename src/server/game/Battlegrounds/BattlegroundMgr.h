@@ -82,7 +82,6 @@ class BattlegroundMgr
         uint32 GetRatingDiscardTimer()  const;
         uint32 GetPrematureFinishTime() const;
 
-        void InitAutomaticArenaPointDistribution();
         void ToggleArenaTesting();
         void ToggleTesting();
 
@@ -119,8 +118,8 @@ class BattlegroundMgr
         std::vector<uint64> m_QueueUpdateScheduler;
         std::set<uint32> m_ClientBattlegroundIds[MAX_BATTLEGROUND_TYPE_ID][MAX_BATTLEGROUND_BRACKETS]; //the instanceids just visible for the client
         uint32 m_NextRatingDiscardUpdate;
-        time_t m_NextAutoDistributionTime;
-        uint32 m_AutoDistributionTimeChecker;
+        time_t m_NextWeekResetTime;
+        uint32 m_WeekResetTimeChecker;
         bool   m_ArenaTesting;
         bool   m_Testing;
 };

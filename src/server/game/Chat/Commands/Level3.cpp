@@ -4385,9 +4385,10 @@ bool ChatHandler::HandleSendMessageCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleFlushArenaPointsCommand(const char * /*args*/)
+bool ChatHandler::HandleWeekResetCommand(const char * /*args*/)
 {
-    sArenaTeamMgr->DistributeArenaPoints();
+    sArenaTeamMgr->WeekReset();
+    sWorld->SendWorldText(LANG_WEEK_RESET);
     return true;
 }
 

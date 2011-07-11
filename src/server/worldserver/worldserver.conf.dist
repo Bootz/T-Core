@@ -2411,20 +2411,12 @@ Arena.MaxRatingDifference = 150
 Arena.RatingDiscardTimer = 600000
 
 #
-#    Arena.AutoDistributePoints
-#        Description: Automatically distribute arena points.
-#        Default:     0 - (Disabled)
-#                     1 - (Enabled)
+#    Arena.AutoWeekReset
+#        Description: Set if WeekGames / WeekWins should be reset automatically,
+#        Default:     0 - (Disabled) - WeekGames / WeekWins are reset automatically
+#                     1 - (Enabled) - use gm command to reset WeekGames / WeekWins
 
-Arena.AutoDistributePoints = 0
-
-#
-#    Arena.AutoDistributeInterval
-#        Description: Time (in days) how often arena points should be distributed if automatic
-#                     distribution is enabled.
-#        Default:     7 - (Weekly)
-
-Arena.AutoDistributeInterval = 7
+Arena.AutoWeekReset = 0
 
 #
 #    Arena.QueueAnnouncer.Enable

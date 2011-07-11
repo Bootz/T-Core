@@ -131,38 +131,8 @@ void ArenaTeamMgr::LoadArenaTeams()
     sLog->outString();
 }
 
-void ArenaTeamMgr::DistributeArenaPoints()
+void ArenaTeamMgr::WeekReset()
 {
-    // Used to distribute arena points based on last week's stats
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_START);
-
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_ONLINE_START);
-
-    // Temporary structure for storing maximum points to add values for all players
-    std::map<uint32, uint32> PlayerPoints;
-
-    // At first update all points for all team members
-    for (ArenaTeamContainer::iterator teamItr = GetArenaTeamMapBegin(); teamItr != GetArenaTeamMapEnd(); ++teamItr)
-        if (ArenaTeam * at = teamItr->second)
-            at->UpdateArenaPointsHelper(PlayerPoints);
-
-    // Cycle that gives points to all players
-    //for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
-    //{
-    //    // Update database
-    //    CharacterDatabase.PExecute("UPDATE characters SET arenaPoints = arenaPoints + '%u' WHERE guid = '%u'", playerItr->second, playerItr->first);
-
-    //    // Add points to player if online
-    //    Player* pl = sObjectMgr->GetPlayer(playerItr->first);
-    //    if (pl)
-    //        pl->ModifyArenaPoints(playerItr->second);
-    //}
-
-    PlayerPoints.clear();
-
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_ONLINE_END);
-
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_START);
     for (ArenaTeamContainer::iterator titr = GetArenaTeamMapBegin(); titr != GetArenaTeamMapEnd(); ++titr)
     {
         if (ArenaTeam * at = titr->second)
@@ -172,8 +142,4 @@ void ArenaTeamMgr::DistributeArenaPoints()
             at->NotifyStatsChanged();
         }
     }
-
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_END);
-
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_END);
 }
