@@ -162,7 +162,6 @@ class ArenaTeam
         void SendStats(WorldSession* session);
         void Inspect(WorldSession* session, uint64 guid);
 
-        uint32 GetPoints(uint32 MemberRating);
         int32  GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won, bool calculating_mmr = false);
         int32  GetPersonalRatingMod(int32 base_rating, uint32 ownRating, uint32 opponentRating);
         float  GetChanceAgainst(uint32 ownRating, uint32 opponentRating);

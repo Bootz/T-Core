@@ -1116,9 +1116,12 @@ public:
         return false;
     }
 
-        target->ModifyCurrency(uint32(currencyid), amount);
+        // If currency specified is Conquest, Honor or Justice Points automatically multiply amount * 100
+        if (currencyid == 390 || currencyid == 392 || currencyid == 395)
+	        target->ModifyCurrency(uint32(currencyid), amount * 100);
+        else
+		        target->ModifyCurrency(uint32(currencyid), amount);
 
-        handler->PSendSysMessage(LANG_COMMAND_MODIFY_HONOR, handler->GetNameLink(target).c_str(), target->GetCurrency(uint32(currencyid)));
         return true;
     }
 

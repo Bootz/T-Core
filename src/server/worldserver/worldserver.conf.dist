@@ -2413,8 +2413,8 @@ Arena.RatingDiscardTimer = 600000
 #
 #    Arena.AutoWeekReset
 #        Description: Set if WeekGames / WeekWins should be reset automatically,
-#        Default:     0 - (Disabled) - WeekGames / WeekWins are reset automatically
-#                     1 - (Enabled) - use gm command to reset WeekGames / WeekWins
+#        Default:     0 - (Disabled) - WeekGames / WeekWins need to be reset with GM command.
+#                     1 - (Enabled) - WeekGames / WeekWins reset automatically
 
 Arena.AutoWeekReset = 0
 
