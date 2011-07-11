@@ -24487,8 +24487,8 @@ void Player::RefundItem(Item *item)
     bool store_error = false;
     for (uint8 i = 0; i < MAX_ITEM_EXT_COST_ITEMS; ++i)
     {
-        uint32 count = iece->RequiredItem[i];
-        uint32 itemid = iece->RequiredItemCount[i];
+        uint32 count = iece->RequiredItemCount[i];
+        uint32 itemid = iece->RequiredItem[i];
 
         if (count && itemid)
         {
