@@ -7,7 +7,7 @@
  |   4.) Drop Old Spells from Core           |
  |   5.) Setup the forum                     |
  |   6.) Install a Bot in Mirc Channel!      |
- |   7.) Add db2 extract to extractor        |
+ |   7.) Add maps extract to extractor        |
  \__________________________________________/
  /                                           \
 |    8.) Start with updating the DB           \
