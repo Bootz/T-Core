@@ -2290,7 +2290,7 @@ void ObjectMgr::LoadItemTemplates()
 
         // Checks
 
-        ItemEntry const *db2item = NULL;
+        ItemEntry const *db2item = sItemStore.LookupEntry(entry);
 
         if (db2item)
         {
@@ -2298,10 +2298,9 @@ void ObjectMgr::LoadItemTemplates()
             {
                 sLog->outErrorDb("Item (Entry: %u) does not have a correct class %u, must be %u .", entry, itemTemplate.Class, db2item->Class);
             }
-
-            if (itemTemplate.Unk0 != db2item->SubClass)
+            if (itemTemplate.Unk0 != db2item->Unk0)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i) , must be %i .", entry, itemTemplate.SubClass, db2item->SubClass);
+                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i) , must be %i .", entry, itemTemplate.Unk0, db2item->Unk0);
             }
             if (itemTemplate.Material != db2item->Material)
             {
@@ -2321,7 +2320,7 @@ void ObjectMgr::LoadItemTemplates()
             }
         }
         else
-            sLog->outErrorDb("Item (Entry: %u) does not exist in item.dbc! (not correct id?).", entry);
+            sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (not correct id?).", entry);
 
         if (itemTemplate.Class >= MAX_ITEM_CLASS)
         {
