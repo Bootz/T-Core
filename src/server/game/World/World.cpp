@@ -1341,9 +1341,6 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Creature template addons...");
     sObjectMgr->LoadCreatureTemplateAddons();
 
-    sLog->outString("Loading Vehicle scaling information...");
-    sObjectMgr->LoadVehicleScaling();
-
     sLog->outString("Loading Creature Currency OnKill Data...");
     sObjectMgr->LoadCurrencyOnKill();
 
