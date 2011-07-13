@@ -3167,7 +3167,7 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellEntry cons
         case SPELLFAMILY_WARLOCK:
         {
             // Banish - limit to 6 seconds in PvP
-            if (spellproto->SpellFamilyFlags[1] & 0x8000000)
+            if (spellproto->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x8000000)
                 return 6 * IN_MILLISECONDS;
             break;
         }

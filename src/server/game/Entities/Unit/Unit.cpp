@@ -2474,7 +2474,7 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
     int32 thisLevel = getLevelForTarget(pVictim);
     if (GetTypeId() == TYPEID_UNIT && ToCreature()->isTrigger())
-        thisLevel = std::max<int32>(thisLevel, spell->spellLevel);
+        thisLevel = std::max<int32>(thisLevel, spell->GetSpellLevel());
     int32 leveldif = int32(pVictim->getLevelForTarget(this)) - thisLevel;
 
     // Base hit chance from attacker and victim levels
