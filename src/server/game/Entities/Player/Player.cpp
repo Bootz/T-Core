@@ -18244,6 +18244,8 @@ void Player::SaveToDB()
 
     ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ", ";
 
+    ss << uint32(0) << ", ";
+
     ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ", ";
     //drunk
     ss << (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ", ";
