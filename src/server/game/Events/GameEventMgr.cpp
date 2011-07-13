@@ -928,7 +928,7 @@ uint32 GameEventMgr::GetNPCFlag(Creature * cr)
 
 void GameEventMgr::Initialize()
 {
-    QueryResult result = WorldDatabase.Query("SELECT MAX(entry) FROM game_event");
+    QueryResult result = WorldDatabase.Query("SELECT MAX(eventEntry) FROM game_event");
     if (result)
     {
         Field *fields = result->Fetch();
