@@ -356,11 +356,11 @@ class spell_rog_deadly_poison : public SpellScriptLoader
                         }
 
                         // Proc only rogue poisons
-                        if (spellInfo->SpellFamilyName != SPELLFAMILY_ROGUE || spellInfo->Dispel != DISPEL_POISON)
+                        if (spellInfo->GetSpellFamilyName() != SPELLFAMILY_ROGUE || spellInfo->GetDispel() != DISPEL_POISON)
                             continue;
 
                         // Do not reproc deadly
-                        if (spellInfo->SpellFamilyFlags.IsEqual(0x10000, 0x80000, 0))
+                        if (spellInfo->GetSpellClassOptions()->SpellFamilyFlags.IsEqual(0x10000, 0x80000, 0))
                             continue;
 
                         if (IsPositiveSpell(enchant->spellid[s]))
