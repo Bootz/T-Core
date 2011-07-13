@@ -2148,22 +2148,12 @@ void AuraEffect::PeriodicDummyTick(Unit * target, Unit * caster) const
     }
 }
 
-Unit* AuraEffect::GetTriggerTarget(Unit * target) const
-{
-    if (target->GetTypeId() == TYPEID_UNIT)
-    {
-        if (Unit * trigger = target->ToCreature()->AI()->GetAuraEffectTriggerTarget(GetId(), GetEffIndex()))
-            return trigger;
-    }
-    return target;
-}
-
 void AuraEffect::TriggerSpell(Unit * target, Unit * caster) const
 {
     if (!caster || !target)
         return;
 
-    Unit* triggerTarget = GetTriggerTarget(target);
+    Unit* triggerTarget = target;
 
     // generic casting code with custom spells and target/caster customs
     uint32 triggerSpellId = GetSpellProto()->GetEffectTriggerSpell(GetEffIndex());
@@ -2467,7 +2457,7 @@ void AuraEffect::TriggerSpellWithValue(Unit * target, Unit * caster) const
     if (!caster || !target)
         return;
 
-    Unit* triggerTarget = GetTriggerTarget(target);
+    Unit* triggerTarget = target;
 
     uint32 triggerSpellId = GetSpellProto()->GetEffectTriggerSpell(m_effIndex);
     SpellEntry const *triggeredSpellInfo = sSpellStore.LookupEntry(triggerSpellId);
