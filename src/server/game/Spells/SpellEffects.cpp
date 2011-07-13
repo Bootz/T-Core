@@ -794,7 +794,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     };
 
                     // get remaining damage of old Deep Wound aura
-                    AuraEffect* deepWound = unitTarget->GetAuraEffect(12721, 0);
+                    AuraEffect* deepWound = unitTarget->GetAuraEffect(12721, 0, m_caster->GetGUID());
                     if (deepWound)
                     {
                         int32 remainingTicks = deepWound->GetBase()->GetDuration() / deepWound->GetAmplitude();
@@ -3004,6 +3004,10 @@ void Spell::EffectSummonType(SpellEffectEntry const* effect)
                     summon = m_caster->GetMap()->SummonCreature(entry, pos, properties, duration, m_originalCaster);
                     if (!summon || !summon->isTotem())
                         return;
+
+                    // Mana Tide Totem
+                    if (m_spellInfo->Id == 16190)
+                        damage = m_caster->CountPctFromMaxHealth(10);
 
                     if (damage)                                            // if not spell info, DB values used
                     {
