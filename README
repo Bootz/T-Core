@@ -1,6 +1,6 @@
 = TrilliumENCORE -- General information =
 
-Copyright (C) TrilliumENCORE (http://www.trilliumemu.com)
+Copyright (C) TrilliumENCORE (http://www.trilliumemu.org)
 
   TrilliumENCORE is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@ Copyright (C) TrilliumENCORE (http://www.trilliumemu.com)
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-For further information on the TrilliumENCORE project, please visit our
-project website at http://www.trilliumemu.com
+For further information on the TrilliumEMU project, please visit our
+project website at http://www.trilliumemu.org
 
 API documentation can be obtained by running the "make doc" command inside
 the doc directory. (maybe -- doubt it -- this needs to be fixed or removed)
