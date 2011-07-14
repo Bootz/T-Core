@@ -58,7 +58,7 @@ class boss_doomlord_kazzak : public CreatureScript
 
         struct boss_doomlordkazzakAI : public ScriptedAI
         {
-            boss_doomlordkazzakAI(Creature* creature) : ScriptedAI(creature) 
+            boss_doomlordkazzakAI(Creature* creature) : ScriptedAI(creature)
             {
             }
 
