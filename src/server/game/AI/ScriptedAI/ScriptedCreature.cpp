@@ -80,10 +80,10 @@ void SummonList::DespawnAll()
         else
         {
             erase(begin());
-            if (summon->isSummon())
+            if (TempSummon* summ = summon->ToTempSummon())
             {
                 summon->DestroyForNearbyPlayers();
-                CAST_SUM(summon)->UnSummon();
+                summ->UnSummon();
             }
             else
                 summon->DisappearAndDie();
@@ -632,6 +632,22 @@ void BossAI::JustSummoned(Creature* summon)
 void BossAI::SummonedCreatureDespawn(Creature* summon)
 {
     summons.Despawn(summon);
+}
+
+void BossAI::UpdateAI(uint32 const diff)
+{
+    if (!UpdateVictim())
+        return;
+
+    events.Update(diff);
+
+    if (me->HasUnitState(UNIT_STAT_CASTING))
+        return;
+
+    while (uint32 eventId = events.ExecuteEvent())
+        ExecuteEvent(eventId);
+
+    DoMeleeAttackIfReady();
 }
 
 // SD2 grid searchers.

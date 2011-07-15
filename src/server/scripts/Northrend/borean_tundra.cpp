@@ -1300,7 +1300,7 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* pSummoner = CAST_SUM(me)->GetSummoner())
+                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bArthasInPosition = true;
         }
     };
@@ -1332,7 +1332,7 @@ public:
             me->AddUnitState(UNIT_STAT_STUNNED);
             me->CastSpell(me, SPELL_STUN, true);
             if (me->isSummon())
-                if (Unit* pSummoner = CAST_SUM(me)->GetSummoner())
+                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bArlosInPosition = true;
         }
     };
@@ -1389,7 +1389,7 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* pSummoner = CAST_SUM(me)->GetSummoner())
+                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bTalbotInPosition = true;
         }
 
@@ -1494,21 +1494,21 @@ public:
             if (!bDone)
             {
                 if (Creature* pTalbot = me->FindNearestCreature(NPC_PRINCE_VALANAR, 50.0f, true))
-                    CAST_AI(npc_counselor_talbot::npc_counselor_talbotAI, pTalbot->AI())->bCheck = true;
+                    CAST_AI(npc_counselor_talbot::npc_counselor_talbotAI, pTalbot->GetAI())->bCheck = true;
 
                 me->AddUnitState(UNIT_STAT_STUNNED);
                 me->CastSpell(me, SPELL_STUN, true);
 
                 if (me->isSummon())
-                    if (Unit* pSummoner = CAST_SUM(me)->GetSummoner())
-                        CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bLeryssaInPosition = true;
+                    if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
+                        CAST_AI(npc_thassarian::npc_thassarianAI, pSummoner->GetAI())->bLeryssaInPosition = true;
                 bDone = true;
             }
             else
             {
                 me->SetStandState(UNIT_STAND_STATE_SIT);
                 if (me->isSummon())
-                    if (Unit* pSummoner = CAST_SUM(me)->GetSummoner())
+                    if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
                     pSummoner->SetStandState(UNIT_STAND_STATE_SIT);
                 uiPhaseTimer = 1500;
                 Phase = 1;
@@ -1525,7 +1525,7 @@ public:
                 {
                     case 1:
                         if (me->isSummon())
-                            if (Unit* pThassarian = CAST_SUM(me)->GetSummoner())
+                            if (Unit* pThassarian = me->ToTempSummon()->GetSummoner())
                                 DoScriptText(SAY_THASSARIAN_4, pThassarian);
                         uiPhaseTimer = 5000;
                         ++Phase;
@@ -1537,7 +1537,7 @@ public:
                         break;
                     case 3:
                         if (me->isSummon())
-                            if (Unit* pThassarian = CAST_SUM(me)->GetSummoner())
+                            if (Unit* pThassarian = me->ToTempSummon()->GetSummoner())
                                 DoScriptText(SAY_THASSARIAN_5, pThassarian);
                         uiPhaseTimer = 5000;
                         ++Phase;
@@ -1549,7 +1549,7 @@ public:
                         break;
                     case 5:
                         if (me->isSummon())
-                            if (Unit* pThassarian = CAST_SUM(me)->GetSummoner())
+                            if (Unit* pThassarian = me->ToTempSummon()->GetSummoner())
                         DoScriptText(SAY_THASSARIAN_6, pThassarian);
                         uiPhaseTimer = 5000;
                         ++Phase;
@@ -1562,10 +1562,10 @@ public:
                         break;
                     case 7:
                         if (me->isSummon())
-                            if (Unit* pThassarian = CAST_SUM(me)->GetSummoner())
+                            if (Unit* pThassarian = me->ToTempSummon()->GetSummoner())
                             {
                                 DoScriptText(SAY_THASSARIAN_7, pThassarian);
-                                CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pThassarian)->AI())->uiPhase = 16;
+                                CAST_AI(npc_thassarian::npc_thassarianAI, pThassarian->GetAI())->uiPhase = 16;
                             }
                         uiPhaseTimer = 5000;
                         Phase = 0;

@@ -264,13 +264,14 @@ void BattlegroundSA::StartShips()
     {
         for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end();itr++)
         {
-            if (Player* p = sObjectMgr->GetPlayer(itr->first))
+            if (Player* player = sObjectMgr->GetPlayer(itr->first))
             {
                 UpdateData data;
+                data.m_map = uint16(player->GetMapId());
                 WorldPacket pkt;
-                GetBGObject(i)->BuildValuesUpdateBlockForPlayer(&data, p);
+                GetBGObject(i)->BuildValuesUpdateBlockForPlayer(&data, player);
                 data.BuildPacket(&pkt);
-                p->GetSession()->SendPacket(&pkt);
+                player->GetSession()->SendPacket(&pkt);
             }
         }
     }

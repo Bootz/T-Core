@@ -23,14 +23,9 @@
 #include "CreatureAIImpl.h"
 #include "InstanceScript.h"
 
-#define SCRIPT_CAST_TYPE dynamic_cast
-
-#define CAST_PLR(a)     (SCRIPT_CAST_TYPE<Player*>(a))
-#define CAST_CRE(a)     (SCRIPT_CAST_TYPE<Creature*>(a))
-#define CAST_SUM(a)     (SCRIPT_CAST_TYPE<TempSummon*>(a))
-#define CAST_PET(a)     (SCRIPT_CAST_TYPE<Pet*>(a))
-#define CAST_AI(a, b)    (SCRIPT_CAST_TYPE<a*>(b))
-#define CAST_INST(a, b)  (SCRIPT_CAST_TYPE<a*>(b))
+#define CAST_PLR(a)     (dynamic_cast<Player*>(a))
+#define CAST_CRE(a)     (dynamic_cast<Creature*>(a))
+#define CAST_AI(a, b)   (dynamic_cast<a*>(b))
 
 #define GET_SPELL(a)    (const_cast<SpellEntry*>(GetSpellStore()->LookupEntry(a)))
 
@@ -270,7 +265,13 @@ class BossAI : public ScriptedAI
         void JustSummoned(Creature* summon);
         void SummonedCreatureDespawn(Creature* summon);
 
-        void UpdateAI(uint32 const diff) = 0;
+        virtual void UpdateAI(uint32 const diff);
+
+        // Hook used to execute events scheduled into EventMap without the need
+        // to override UpdateAI
+        // note: You must re-schedule the event within this method if the event
+        // is supposed to run more than once
+        virtual void ExecuteEvent(uint32 const eventId) { }
 
         void Reset() { _Reset(); }
         void EnterCombat(Unit* /*who*/) { _EnterCombat(); }
@@ -300,7 +301,7 @@ class BossAI : public ScriptedAI
 
     private:
         BossBoundaryMap const* const _boundary;
-        const uint32 _bossId;
+        uint32 const _bossId;
 };
 
 // SD2 grid searchers.
@@ -309,4 +310,4 @@ GameObject* GetClosestGameObjectWithEntry(WorldObject* source, uint32 entry, flo
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& list, WorldObject* source, uint32 entry, float maxSearchRange);
 void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& list, WorldObject* source, uint32 entry, float maxSearchRange);
 
-#endif
+#endif // SCRIPTEDCREATURE_H_
