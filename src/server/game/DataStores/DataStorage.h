@@ -127,7 +127,6 @@ extern DataStorage <ItemDamageEntry>              sItemDamageTwoHandStore;
 extern DataStorage <ItemDamageEntry>              sItemDamageTwoHandCasterStore;
 extern DataStorage <ItemDamageEntry>              sItemDamageWandStore;
 //extern DataStorage <ItemDisplayInfoEntry>      sItemDisplayInfoStore; -- not used currently
-extern DataStorage <ItemExtendedCostEntry>        sItemExtendedCostStore;
 extern DataStorage <ItemLimitCategoryEntry>       sItemLimitCategoryStore;
 extern DataStorage <ItemRandomPropertiesEntry>    sItemRandomPropertiesStore;
 extern DataStorage <ItemRandomSuffixEntry>        sItemRandomSuffixStore;
@@ -204,7 +203,7 @@ extern DataStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
 //DB2 Storage
 extern DataStorage <ItemEntry>                    sItemStore;
-
+extern DataStorage <ItemExtendedCostEntry>        sItemExtendedCostStore;
 void LoadDataStorages(const std::string& dataPath);
 
 // script support functions
