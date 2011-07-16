@@ -274,6 +274,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
     {
         ((Unit*)this)->BuildMovementPacket(data);
 
+        // 9 speed floats
         *data << ((Unit*)this)->GetSpeed(MOVE_WALK);
         *data << ((Unit*)this)->GetSpeed(MOVE_RUN);
         *data << ((Unit*)this)->GetSpeed(MOVE_SWIM_BACK);
@@ -284,7 +285,8 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << ((Unit*)this)->GetSpeed(MOVE_TURN_RATE);
         *data << ((Unit*)this)->GetSpeed(MOVE_PITCH_RATE);
 
-        // 0x08000000
+        // SPLINE flags are to be updated
+        /*// 0x08000000
         if (GetTypeId() == TYPEID_PLAYER && this->ToPlayer()->isInFlight())
         {
             Player *player = const_cast<Object*>(this)->ToPlayer();
@@ -351,7 +353,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
             *data << float(path[poscount-1].x);
             *data << float(path[poscount-1].y);
             *data << float(path[poscount-1].z);
-        }
+        }*/
     }
     else
     {

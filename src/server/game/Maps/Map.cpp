@@ -1870,7 +1870,7 @@ void Map::SendInitSelf(Player * player)
     sLog->outDetail("Creating player data for himself %u", player->GetGUIDLow());
 
     UpdateData data;
-    data.m_map = uint16(player->GetMapId());
+    data.m_map = GetEntry()->MapID;
 
     // attach to player data current transport data
     if (Transport* transport = player->GetTransport())
