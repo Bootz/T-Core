@@ -233,7 +233,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( MSG_MOVE_SET_FACING,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     DEFINE_OPCODE_HANDLER( MSG_MOVE_SET_PITCH,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     DEFINE_OPCODE_HANDLER( MSG_MOVE_WORLDPORT_ACK,                       STATUS_TRANSFER, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveWorldportAckOpcode    );
-    DEFINE_OPCODE_HANDLER( SMSG_PLAYER_MOVE),                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );   
+    DEFINE_OPCODE_HANDLER( SMSG_PLAYER_MOVE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );   
     DEFINE_OPCODE_HANDLER( SMSG_MONSTER_MOVE,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_MOVE_WATER_WALK,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_MOVE_LAND_WALK,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
