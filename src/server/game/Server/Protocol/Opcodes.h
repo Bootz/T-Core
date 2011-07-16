@@ -162,7 +162,7 @@ enum Opcodes
     CMSG_MESSAGECHAT_BATTLEGROUND_LEADER             = 0x00860, //
     CMSG_MESSAGECHAT_RAID_WARNING                    = 0x00061, //
     SMSG_MESSAGECHAT                                 = 0x06A2A, // 14333
-    CMSG_JOIN_CHANNEL                                = 0x00002, //
+    CMSG_JOIN_CHANNEL                                = 0x05B15, // 14333
     CMSG_LEAVE_CHANNEL                               = 0x0000B, //
     SMSG_CHANNEL_NOTIFY                              = 0x026B6, // 14333
     CMSG_CHANNEL_LIST                                = 0x07FE0, //
@@ -949,7 +949,7 @@ enum Opcodes
     SMSG_DISMOUNT                                    = 0x0263B, // 14333
     MSG_MOVE_UPDATE_CAN_FLY                          = 0x025E0, //
     MSG_RAID_READY_CHECK_CONFIRM                     = 0x0AE76, // 14333
-    CMSG_VOICE_SESSION_ENABLE                        = 0x0FEA4, //
+    CMSG_VOICE_SESSION_ENABLE                        = 0x0BAA3, // 14333
     SMSG_VOICE_SESSION_ENABLE                        = 0x10170, //
     SMSG_VOICE_PARENTAL_CONTROLS                     = 0x0B6EA, // 14333
     CMSG_GM_WHISPER                                  = 0x10172, //
@@ -1102,7 +1102,7 @@ enum Opcodes
     SMSG_CALENDAR_EVENT_UPDATED_ALERT                = 0x029C0, //
     SMSG_CALENDAR_EVENT_MODERATOR_STATUS_ALERT       = 0x0ABC8, //
     CMSG_CALENDAR_COMPLAIN                           = 0x01E75, //
-    CMSG_CALENDAR_GET_NUM_PENDING                    = 0x0EFAC, //
+    CMSG_CALENDAR_GET_NUM_PENDING                    = 0x02AEF, // 14333
     SMSG_CALENDAR_SEND_NUM_PENDING                   = 0x0A8E0, //
     CMSG_SAVE_DANCE                                  = 0x101C3, //
     SMSG_NOTIFY_DANCE                                = 0x02632, // 14333
