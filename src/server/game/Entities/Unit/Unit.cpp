@@ -13487,6 +13487,9 @@ void Unit::SetMaxHealth(uint32 val)
 
 void Unit::SetPower(Powers power, uint32 val)
 {
+    if (power > POWER_HAPPINESS)
+        return; // TODO: in 4.1 powers were cut to 5
+
     if (GetPower(power) == val)
         return;
 
@@ -13526,6 +13529,8 @@ void Unit::SetPower(Powers power, uint32 val)
 
 void Unit::SetMaxPower(Powers power, uint32 val)
 {
+    if (power > POWER_HAPPINESS)
+        return; // TODO: in 4.1 powers were cut to 5
     uint32 cur_power = GetPower(power);
     SetStatInt32Value(UNIT_FIELD_MAXPOWER1 + power, val);
 
