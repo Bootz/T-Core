@@ -197,8 +197,8 @@ enum Opcodes
     MSG_MOVE_START_BACKWARD                          = 0x072E4, //
     MSG_MOVE_STOP                                    = 0x0286A, // 14333
     MSG_MOVE_START_STRAFE_LEFT                       = 0x060E8, //
-    MSG_MOVE_START_STRAFE_RIGHT                      = 0x07DA4, //
-    MSG_MOVE_STOP_STRAFE                             = 0x0F9A8, //
+    MSG_MOVE_START_STRAFE_RIGHT                      = 0x0B843, // 14333
+    MSG_MOVE_STOP_STRAFE                             = 0x0A8E0, // 14333
     MSG_MOVE_JUMP                                    = 0x0386A, // 14333
     MSG_MOVE_START_TURN_LEFT                         = 0x0084A, // 14333
     MSG_MOVE_START_TURN_RIGHT                        = 0x088E0, // 14333
@@ -233,6 +233,7 @@ enum Opcodes
     MSG_MOVE_SET_FACING                              = 0x09848, // 14333
     MSG_MOVE_SET_PITCH                               = 0x0EBA0, //
     MSG_MOVE_WORLDPORT_ACK                           = 0x02FC0, //
+    SMSG_PLAYER_MOVE                                 = 0x05341, // 14333
     SMSG_MONSTER_MOVE                                = 0x0F1A4, //
     SMSG_MOVE_WATER_WALK                             = 0x02E84, //
     SMSG_MOVE_LAND_WALK                              = 0x02084, //
