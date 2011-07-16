@@ -13487,9 +13487,6 @@ void Unit::SetMaxHealth(uint32 val)
 
 void Unit::SetPower(Powers power, uint32 val)
 {
-    if (power > POWER_HAPPINESS)
-        return; // TODO: in 4.1 powers were cut to 5
-
     if (GetPower(power) == val)
         return;
 
@@ -13530,8 +13527,6 @@ void Unit::SetPower(Powers power, uint32 val)
 
 void Unit::SetMaxPower(Powers power, uint32 val)
 {
-    if (power > POWER_HAPPINESS)
-        return; // TODO: in 4.1 powers were cut to 5
     uint32 cur_power = GetPower(power);
     SetStatInt32Value(UNIT_FIELD_MAXPOWER1 + power, val);
 
@@ -13561,14 +13556,25 @@ uint32 Unit::GetCreatePowers(Powers power) const
     // POWER_FOCUS and POWER_HAPPINESS only have hunter pet
     switch (power)
     {
-        case POWER_MANA:      return GetCreateMana();
-        case POWER_RAGE:      return 1000;
-        case POWER_FOCUS:     return (GetTypeId() == TYPEID_PLAYER || !((Creature const*)this)->isPet() || ((Pet const*)this)->getPetType() != HUNTER_PET ? 0 : 100);
-        case POWER_ENERGY:    return 100;
+        case POWER_MANA:
+            if (getClass() == CLASS_HUNTER || getClass() == CLASS_WARRIOR || getClass() == CLASS_ROGUE || getClass() == CLASS_DEATH_KNIGHT)
+                return false;
+            else
+                return GetCreateMana();
+
+        case POWER_RAGE: return 1000;
+        case POWER_FOCUS:
+            if(GetTypeId() == TYPEID_PLAYER && (ToPlayer()->getClass() == CLASS_HUNTER))
+                return 100;
+            return (GetTypeId() == TYPEID_PLAYER || !((Creature const*)this)->isPet() || ((Pet const*)this)->getPetType() != HUNTER_PET ? 0 : 100);
+        case POWER_ENERGY: return 100;
         case POWER_HAPPINESS: return (GetTypeId() == TYPEID_PLAYER || !((Creature const*)this)->isPet() || ((Pet const*)this)->getPetType() != HUNTER_PET ? 0 : 1050000);
-        case POWER_RUNIC_POWER: return 1000;
-        case POWER_RUNE:      return 0;
-        case POWER_HEALTH:    return 0;
+        case POWER_RUNE: return (GetTypeId() == TYPEID_PLAYER && ((Player const*)this)->getClass() == CLASS_DEATH_KNIGHT ? 8 : 0);
+        case POWER_RUNIC_POWER: return (GetTypeId() == TYPEID_PLAYER && ((Player const*)this)->getClass() == CLASS_DEATH_KNIGHT ? 1000 : 0);
+        case POWER_SOUL_SHARDS: return (GetTypeId() == TYPEID_PLAYER && ((Player const*)this)->getClass() == CLASS_WARLOCK ? 3 : 0);
+        case POWER_ECLIPSE: return (GetTypeId() == TYPEID_PLAYER && ((Player const*)this)->getClass() == CLASS_DRUID ? 100 : 0);
+        case POWER_HOLY_POWER: return (GetTypeId() == TYPEID_PLAYER && ((Player const*)this)->getClass() == CLASS_PALADIN ? 3 : 0);
+        case POWER_HEALTH: return 0;
         default:
             break;
     }

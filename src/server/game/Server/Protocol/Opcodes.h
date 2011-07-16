@@ -1162,7 +1162,7 @@ enum Opcodes
     SMSG_ALL_ACHIEVEMENT_DATA                        = 0x0400E, //
     CMSG_FORCE_SAY_CHEAT                             = 0x101E7, //
     SMSG_HEALTH_UPDATE                               = 0x02AA8, //
-    SMSG_POWER_UPDATE                                = 0x065E8, //
+    SMSG_POWER_UPDATE                                = 0x0B6BE, //
     CMSG_GAMEOBJ_REPORT_USE                          = 0x023A0, //
     SMSG_HIGHEST_THREAT_UPDATE                       = 0x03F7E, //
     SMSG_THREAT_UPDATE                               = 0x0B480, //
