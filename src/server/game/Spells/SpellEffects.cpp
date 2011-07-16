@@ -730,6 +730,9 @@ void Spell::SpellDamageSchoolDmg(SpellEffectEntry const* effect)
             damage = m_originalCaster->SpellDamageBonus(unitTarget, m_spellInfo, (uint32)damage, SPELL_DIRECT_DAMAGE);
 
         m_damage += damage;
+
+        // Start combat. Needed since new cata systems
+        m_originalCaster->CombatStart(unitTarget, true);
     }
 }
 
