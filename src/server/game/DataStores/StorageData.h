@@ -239,8 +239,9 @@ enum AchievementCriteriaTypes
     // 133 Create and purchase a guild crest.
     // 134 Complete quests
     // 135 Honorable kills
-    // 0..135 => 136 criteria types total
-    ACHIEVEMENT_CRITERIA_TYPE_TOTAL = 136,
+    // 136 Kill X critters in a guild.
+    // 0..135 => 137 criteria types total
+    ACHIEVEMENT_CRITERIA_TYPE_TOTAL = 137,
 };
 
 enum AchievementCriteriaMoreReqType

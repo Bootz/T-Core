@@ -225,8 +225,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
 void Object::SendUpdateToPlayer(Player* player)
 {
     // send create update to playe
-    UpdateData upd;
-    upd.m_map = uint16(player->GetMapId());
+    UpdateData upd(player->GetMapId());
     WorldPacket packet;
 
     BuildCreateUpdateBlockForPlayer(&upd, player);
@@ -725,9 +724,7 @@ void Object::BuildFieldsUpdate(Player *pl, UpdateDataMapType &data_map) const
 
     if (iter == data_map.end())
     {
-        UpdateData udata;
-        udata.m_map = uint16(pl->GetMapId());
-        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, udata));
+        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, UpdateData(pl->GetMapId())));
         ASSERT(p.second);
         iter = p.first;
     }
@@ -773,7 +770,7 @@ void Object::_SetUpdateBits(UpdateMask *updateMask, Player* target) const
     if (GetTypeId() == TYPEID_PLAYER && target != this)
         valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;
     
-    for (uint16 index = 0; index < valuesCount; ++index, ++value, ++mirror)
+    for (uint16 index = 0; index < valuesCount; index++, ++value, ++mirror)
     {
         if (*mirror != *value)
             updateMask->SetBit(index);
@@ -788,7 +785,7 @@ void Object::_SetCreateBits(UpdateMask *updateMask, Player* target) const
     if (GetTypeId() == TYPEID_PLAYER && target != this)
         valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;
     
-    for (uint16 index = 0; index < valuesCount; ++index, ++value)
+    for (uint16 index = 0; index < valuesCount; index++, ++value)
     {
         if (*value)
             updateMask->SetBit(index);
