@@ -287,6 +287,25 @@ void LoadDataStorages(const std::string& dataPath)
 
     //DB2 Files
     LoadData(availableDbcLocales, bad_dbc_files, sItemStore,                   db2Path, "Item.db2");
+
+    for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
+    {
+        const ItemEntry* itemEntry = sItemStore.LookupEntry(i);
+        if (!itemEntry)
+            continue;
+
+        if (itemEntry->Class >= MAX_ITEM_CLASS)
+        {
+			sLog->outErrorDb("Item (Entry: %u) in Item.db2 has too high class value %u", itemEntry->ID, itemEntry->Class);
+            const_cast<ItemEntry*>(itemEntry)->Class = 0;
+        }
+        if (itemEntry->SubClass >= MaxItemSubclassValues[itemEntry->Class])
+        {
+            sLog->outErrorDb("Item (Entry: %u) in Item.db2 has too high subclass value %u for class %u", itemEntry->ID, itemEntry->SubClass, itemEntry->Class);
+            const_cast<ItemEntry*>(itemEntry)->SubClass = 0;
+        }
+    }
+
     LoadData(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,       db2Path, "ItemExtendedCost.db2");
 
     //DBC Files
