@@ -299,7 +299,7 @@ enum Opcodes
     CMSG_IGNORE_TRADE                                = 0x1004D, //
     CMSG_ACCEPT_TRADE                                = 0x008C0, // 14333
     CMSG_UNACCEPT_TRADE                              = 0x00811, //
-    CMSG_CANCEL_TRADE                                = 0x00013, //
+    CMSG_CANCEL_TRADE                                = 0x028EA, // 14333
     CMSG_SET_TRADE_ITEM                              = 0x00A11, //
     CMSG_CLEAR_TRADE_ITEM                            = 0x00213, //
     CMSG_SET_TRADE_GOLD                              = 0x00C13, //
@@ -1054,7 +1054,7 @@ enum Opcodes
     CMSG_TOTEM_DESTROYED                             = 0x03EB7, // 14333
     CMSG_EXPIRE_RAID_INSTANCE                        = 0x101A7, //
     CMSG_NO_SPELL_VARIANCE                           = 0x101A8, //
-    CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY            = 0x02DAC, //
+    CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY            = 0x0A2FA, // 14333
     SMSG_QUESTGIVER_STATUS_MULTIPLE                  = 0x0F5C0, //
     CMSG_SET_PLAYER_DECLINED_NAMES                   = 0x03EE6, // 14333
     SMSG_SET_PLAYER_DECLINED_NAMES_RESULT            = 0x0BAAC, //
