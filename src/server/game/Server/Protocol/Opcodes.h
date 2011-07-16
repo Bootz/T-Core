@@ -1299,6 +1299,7 @@ enum Opcodes
     CMSG_WORLD_LOGIN                                 = 0x04011, // 14333
     CMSG_RETURN_TO_GRAVEYARD                         = 0x0B8EB, // 14333
     CMSG_VIOLENCE_LEVEL                              = 0x08842, // 14333
+    CMSG_LOG_DISCONNECT                              = 0x00920, // 14333
     MSG_CHECK_CONNECTION                             = 0x04F57, // 14333
 };
 
