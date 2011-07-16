@@ -35,7 +35,7 @@ class ResultSet
         ResultSet(MYSQL_RES *result, MYSQL_FIELD *fields, uint64 rowCount, uint32 fieldCount);
         ~ResultSet();
 
-        bool NextRow();
+        bool NextRow(bool no_cleanup = false);
         uint64 GetRowCount() const { return m_rowCount; }
         uint32 GetFieldCount() const { return m_fieldCount; }
 
@@ -44,6 +44,12 @@ class ResultSet
         {
             ASSERT(index < m_fieldCount);
             return m_currentRow[index];
+        }
+
+        void Reset()
+        {
+            mysql_data_seek(m_result, 0);
+            NextRow(true); // neccessary
         }
 
     protected:
