@@ -71,12 +71,28 @@ public:
         int32 hp = atoi((char*)args);
         int32 hpm = atoi((char*)args);
 
-        if (hp < 1 || hpm < 1 || hpm < hp)
+		if (hpm < hp)
+		{
+			hpm = hp;
+		}
+
+		if (hp < 1)
         {
             handler->SendSysMessage(LANG_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
+
+		if (handler->GetSession()->GetSecurity() >= SEC_ADMINISTRATOR)   // admins can set HP of any unit
+		{
+			Unit *unit = handler->getSelectedUnit();
+			if (!unit)
+				return false;
+        
+			unit->SetMaxHealth(hpm);
+			unit->SetHealth(hp);
+			return true;
+		}
 
         Player* target = handler->getSelectedPlayer();
         if (!target)
