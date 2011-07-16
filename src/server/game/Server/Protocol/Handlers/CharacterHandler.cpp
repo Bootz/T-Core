@@ -200,7 +200,7 @@ bool LoginQueryHolder::Initialize()
 
 void WorldSession::HandleCharEnum(QueryResult result)
 {
-    WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
+    WorldPacket data(SMSG_CHAR_ENUM, 360);                  // we guess size
 
     uint8 num = 0;
 

@@ -1273,6 +1273,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_GROUP_SET_ROLES,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( MSG_CHECK_CONNECTION,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
 
 #undef DEFINE_OPCODE_HANDLER
 }

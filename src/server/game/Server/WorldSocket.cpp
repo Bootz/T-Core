@@ -256,19 +256,20 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
+    SendAuthConnection();
+
     // Send startup packet.
-    WorldPacket packet (SMSG_AUTH_CHALLENGE, 37);
-
-    BigNumber seed1;
-    seed1.SetRand(16 * 8);
-    packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
-    
+    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << m_Seed;
     packet << uint8(1);
-    packet << uint32(m_Seed);
-
-    BigNumber seed2;
-    seed2.SetRand(16 * 8);
-    packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
 
     if (SendPacket(packet) == -1)
         return -1;
@@ -282,6 +283,14 @@ int WorldSocket::open (void *a)
 
     // reactor takes care of the socket from now on
     remove_reference();
+
+    return 0;
+}
+
+int WorldSocket::HandleAuthConnection(WorldPacket& recvPacket)
+{
+    std::string ClientToServerMsg;
+    recvPacket >> ClientToServerMsg;
 
     return 0;
 }
@@ -709,6 +718,9 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     {
         switch(opcode)
         {
+            case MSG_CHECK_CONNECTION:
+                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
+                return HandleAuthConnection(*new_pct);
             case CMSG_PING:
                 return HandlePing (*new_pct);
             case CMSG_AUTH_SESSION:
@@ -773,11 +785,10 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
 
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 {
-    uint8 digest[20];
-    uint16 clientBuild, security;
-    uint32 id;
-    uint32 m_addonSize;
+    uint8 Hash[20];
+    uint16 clientBuild, id, security;
     uint32 clientSeed;
+    uint32 m_addonSize;
     std::string account;
     LocaleConstant locale;
 
@@ -785,36 +796,28 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     BigNumber v, s, g, N, K;
     WorldPacket packet;
 
-    recvPacket.read(digest, 7);
-    recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
-    recvPacket.read_skip<uint64>();
-    recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
     recvPacket.read_skip<uint8>();
-    recvPacket.read(digest, 2);
-    recvPacket >> clientSeed;
-    recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 6);
+    recvPacket.read(Hash, 5);
     recvPacket >> clientBuild;
-    recvPacket.read(digest, 1);
+    recvPacket.read(Hash, 2);
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 2);
-
-    recvPacket >> m_addonSize;
-    uint8 * tableauAddon = new uint8[m_addonSize];
-    WorldPacket packetAddon;
-    for (uint32 i = 0; i < m_addonSize; i++)
-    {
-        uint8 ByteSize = 0;
-        recvPacket >> ByteSize;
-        tableauAddon[i] = ByteSize;
-        packetAddon << ByteSize;
-    }
-    delete tableauAddon;
-
+    recvPacket.read(Hash, 4);
+    recvPacket.read_skip<uint64>();
+    recvPacket.read_skip<uint8>();
+    recvPacket.read(Hash, 2);
+    recvPacket.read_skip<uint32>();
+    recvPacket.read(Hash, 4);
+    recvPacket >> clientSeed;
+    recvPacket.read(Hash, 2);
+    recvPacket.read_skip<uint32>();
+    recvPacket.read(Hash, 1);
+    recvPacket.read_skip<uint32>();
     recvPacket >> account;
+
+    recvPacket >> m_addonSize;                            // addon data size
+    size_t addonInfoPos = recvPacket.rpos();
+    recvPacket.rpos(recvPacket.rpos() + m_addonSize);     // skip it
 
     if (sWorld->IsClosed())
     {
@@ -996,8 +999,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     m_Session->LoadGlobalAccountData();
     m_Session->LoadTutorialsData();
-    packetAddon.rpos(0);
-    m_Session->ReadAddonsInfo(packetAddon);
+    recvPacket.rpos(addonInfoPos);
+    m_Session->ReadAddonsInfo(recvPacket);
 
     // Sleep this Network thread for
     uint32 sleepTime = sWorld->getIntConfig(CONFIG_SESSION_ADD_DELAY);

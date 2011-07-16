@@ -1297,6 +1297,7 @@ enum Opcodes
     CMSG_GROUP_SET_ROLES                             = 0x08509, //
     CMSG_WORLD_LOGIN                                 = 0x04011, // 14333
     CMSG_RETURN_TO_GRAVEYARD                         = 0x0B8EB, // 14333
+    MSG_CHECK_CONNECTION                             = 0x04F57, // 14333
 };
 
 /// Player state
