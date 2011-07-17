@@ -129,7 +129,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
     if (!pObject || (pObject->GetTypeId() != TYPEID_PLAYER && !pObject->hasQuest(quest)) ||
         (pObject->GetTypeId() == TYPEID_PLAYER && !pObject->ToPlayer()->CanShareQuest(quest)))
     {
-        _player->PlayerTalkClass->CloseGossip();
+        _player->PlayerTalkClass->SendCloseGossip();
         _player->SetDivider(0);
         return;
     }
@@ -140,7 +140,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
         // prevent cheating
         if (!GetPlayer()->CanTakeQuest(qInfo, true))
         {
-            _player->PlayerTalkClass->CloseGossip();
+            _player->PlayerTalkClass->SendCloseGossip();
             _player->SetDivider(0);
             return;
         }
@@ -175,7 +175,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
                             pPlayer->SetDivider(_player->GetGUID());
 
                             //need confirmation that any gossip window will close
-                            pPlayer->PlayerTalkClass->CloseGossip();
+                            pPlayer->PlayerTalkClass->SendCloseGossip();
 
                             _player->SendQuestConfirmAccept(qInfo, pPlayer);
                         }
@@ -220,7 +220,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
                 default:
                     break;
             }
-            _player->PlayerTalkClass->CloseGossip();
+            _player->PlayerTalkClass->SendCloseGossip();
 
             if (qInfo->GetSrcSpell() > 0)
                 _player->CastSpell(_player, qInfo->GetSrcSpell(), true);
@@ -229,7 +229,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
         }
     }
 
-    _player->PlayerTalkClass->CloseGossip();
+    _player->PlayerTalkClass->SendCloseGossip();
 }
 
 void WorldSession::HandleQuestgiverQueryQuestOpcode(WorldPacket & recv_data)
@@ -244,7 +244,7 @@ void WorldSession::HandleQuestgiverQueryQuestOpcode(WorldPacket & recv_data)
     Object* pObject = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT|TYPEMASK_ITEM);
     if (!pObject || (!pObject->hasQuest(quest) && !pObject->hasInvolvedQuest(quest)))
     {
-        _player->PlayerTalkClass->CloseGossip();
+        _player->PlayerTalkClass->SendCloseGossip();
         return;
     }
 
@@ -371,7 +371,7 @@ void WorldSession::HandleQuestgiverCancel(WorldPacket& /*recv_data*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_CANCEL");
 
-    _player->PlayerTalkClass->CloseGossip();
+    _player->PlayerTalkClass->SendCloseGossip();
 }
 
 void WorldSession::HandleQuestLogSwapQuest(WorldPacket& recv_data)
