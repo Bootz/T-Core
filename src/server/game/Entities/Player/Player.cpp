@@ -18154,9 +18154,8 @@ void Player::SaveToDB()
     std::string sql_name = m_name;
     CharacterDatabase.escape_string(sql_name);
 
-    trans->PAppend("DELETE FROM characters WHERE guid = '%u'", GetGUIDLow());
     std::ostringstream ss;
-    ss << "INSERT INTO characters (guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
+    ss << "REPLACE INTO characters (guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
         "map, instance_id, instance_mode_mask, position_x, position_y, position_z, orientation, "
         "taximask, online, cinematic, "
         "totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, resettalents_time, "
