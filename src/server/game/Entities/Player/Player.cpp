@@ -18265,11 +18265,11 @@ void Player::SaveToDB()
         ss << GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) << " ";
 
     // cache equipment...
-    ss << "', ";
+    ss << "', '";
     for (uint32 i = 0; i < EQUIPMENT_SLOT_END * 2; ++i)
         ss << GetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + i) << " ";
 
-    ss << "', ";
+    ss << "', '";
 
     for (uint32 i = 0; i < KNOWN_TITLES_SIZE*2; ++i)
         ss << GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i) << " ";
