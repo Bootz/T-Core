@@ -8637,14 +8637,6 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                 return false;
             break;
         }
-        // Evasive Maneuvers (Commendation of Kael`thas trinket)
-        case 45057:
-        {
-            // reduce you below $s1% health
-            if ((GetHealth() - damage) > CalculatePctN(GetMaxHealth(), triggerAmount))
-                return false;
-            break;
-        }
         // Rapid Recuperation
         case 53228:
         case 53232:
@@ -8686,6 +8678,17 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
             if (pVictim)
                 pVictim->CastSpell(pVictim, trigger_spell_id, true);    // EffectImplicitTarget is self
             return true;
+        case 45057: // Evasive Maneuvers (Commendation of Kael`thas trinket)
+        case 71634: // Item - Icecrown 25 Normal Tank Trinket 1
+        case 71640: // Item - Icecrown 25 Heroic Tank Trinket 1
+        case 75475: // Item - Chamber of Aspects 25 Normal Tank Trinket
+        case 75481: // Item - Chamber of Aspects 25 Heroic Tank Trinket
+        {
+            // Procs only if damage takes health below $s1%
+            if (!HealthBelowPctDamaged(triggerAmount, damage))
+                return false;
+            break;
+        }
         default:
             break;
     }
