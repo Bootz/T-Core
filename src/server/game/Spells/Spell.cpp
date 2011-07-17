@@ -4474,6 +4474,8 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
     damage = CalculateDamage(i, NULL);
 
     const SpellEffectEntry * Effect = m_spellInfo->GetSpellEffect((SpellEffIndex)i);
+    if (!Effect)
+        return;
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
     if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
