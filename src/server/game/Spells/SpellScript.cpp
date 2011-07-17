@@ -19,6 +19,7 @@
 #include "Spell.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"
+#include "SpellMgr.h"
 
 bool _SpellScript::_Validate(SpellEntry const* entry)
 {
@@ -227,10 +228,10 @@ bool SpellScript::_Validate(SpellEntry const * entry)
 
 bool SpellScript::_Load(Spell* spell)
 {
-    m_currentScriptState = SPELL_SCRIPT_STATE_LOADING;
     m_spell = spell;
+    _PrepareScriptCall((SpellScriptHookType)SPELL_SCRIPT_STATE_LOADING);
     bool load = Load();
-    m_currentScriptState = SPELL_SCRIPT_STATE_NONE;
+    _FinishScriptCall();
     return load;
 }
 
@@ -468,6 +469,10 @@ void SpellScript::SetCustomCastResultMessage(SpellCustomErrors result)
 
 bool AuraScript::_Validate(SpellEntry const * entry)
 {
+    for (std::list<CheckAreaTargetHandler>::iterator itr = DoCheckAreaTarget.begin(); itr != DoCheckAreaTarget.end();  ++itr)
+        if (!HasAreaAuraEffect(entry))
+            sLog->outError("TSCR: Spell `%u` of script `%s` does not have area aura effect - handler bound to hook `DoCheckAreaTarget` of AuraScript won't be executed", entry->Id, m_scriptName->c_str());
+
     for (std::list<EffectApplyHandler>::iterator itr = OnEffectApply.begin(); itr != OnEffectApply.end();  ++itr)
         if (!(*itr).GetAffectedEffectsMask(entry))
             sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler bound to hook `OnEffectApply` of AuraScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
@@ -521,6 +526,16 @@ bool AuraScript::_Validate(SpellEntry const * entry)
             sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler bound to hook `AfterEffectManaShield` of AuraScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
 
     return _SpellScript::_Validate(entry);
+}
+
+AuraScript::CheckAreaTargetHandler::CheckAreaTargetHandler(AuraCheckAreaTargetFnType _pHandlerScript)
+{
+    pHandlerScript = _pHandlerScript;
+}
+
+bool AuraScript::CheckAreaTargetHandler::Call(AuraScript* auraScript, Unit * _target)
+{
+    return (auraScript->*pHandlerScript)(_target);
 }
 
 AuraScript::EffectBase::EffectBase(uint8 _effIndex, uint16 _effName)
@@ -630,35 +645,28 @@ void AuraScript::EffectManaShieldHandler::Call(AuraScript* auraScript, AuraEffec
 
 bool AuraScript::_Load(Aura* aura)
 {
-    m_currentScriptState = SPELL_SCRIPT_STATE_LOADING;
     m_aura = aura;
+    _PrepareScriptCall((AuraScriptHookType)SPELL_SCRIPT_STATE_LOADING, NULL);
     bool load = Load();
-    m_currentScriptState = SPELL_SCRIPT_STATE_NONE;
+    _FinishScriptCall();
     return load;
 }
 
 void AuraScript::_PrepareScriptCall(AuraScriptHookType hookType, AuraApplication const* aurApp)
 {
+    m_scriptStates.push(ScriptStateStore(m_currentScriptState, m_auraApplication, m_defaultActionPrevented));
     m_currentScriptState = hookType;
-    switch (m_currentScriptState)
-    {
-        case AURA_SCRIPT_HOOK_EFFECT_APPLY:
-        case AURA_SCRIPT_HOOK_EFFECT_REMOVE:
-        case AURA_SCRIPT_HOOK_EFFECT_PERIODIC:
-        case AURA_SCRIPT_HOOK_EFFECT_ABSORB:
-        case AURA_SCRIPT_HOOK_EFFECT_MANASHIELD:
-            m_defaultActionPrevented = false;
-            break;
-        default:
-            break;
-    }
+    m_defaultActionPrevented = false;
     m_auraApplication = aurApp;
 }
 
 void AuraScript::_FinishScriptCall()
 {
-    m_currentScriptState = SPELL_SCRIPT_STATE_NONE;
-    m_auraApplication = NULL;
+    ScriptStateStore stateStore = m_scriptStates.top();
+    m_currentScriptState = stateStore._currentScriptState;
+    m_auraApplication = stateStore._auraApplication;
+    m_defaultActionPrevented = stateStore._defaultActionPrevented;
+    m_scriptStates.pop();
 }
 
 bool AuraScript::_IsDefaultActionPrevented()
@@ -670,8 +678,7 @@ bool AuraScript::_IsDefaultActionPrevented()
         case AURA_SCRIPT_HOOK_EFFECT_PERIODIC:
             return m_defaultActionPrevented;
         default:
-            //TOFIX: probably one hook is called from another hook
-            //ASSERT(false && "m_defaultActionPrevented has incorrect value, or AuraScript::_IsDefaultActionPrevented is called in a wrong place");
+            ASSERT(false && "AuraScript::_IsDefaultActionPrevented is called in a wrong place");
             return false;
     }
 }
@@ -801,14 +808,14 @@ uint8 AuraScript::GetStackAmount() const
     return m_aura->GetStackAmount();
 }
 
-void AuraScript::SetStackAmount(uint8 num, bool applied)
+void AuraScript::SetStackAmount(uint8 num)
 {
-    m_aura->SetStackAmount(num, applied);
+    m_aura->SetStackAmount(num);
 }
 
-bool AuraScript::ModStackAmount(int32 num)
+void AuraScript::ModStackAmount(int32 num, AuraRemoveMode removeMode)
 {
-    return m_aura->ModStackAmount(num);
+    return m_aura->ModStackAmount(num, removeMode);
 }
 
 bool AuraScript::IsPassive() const
@@ -842,6 +849,8 @@ Unit* AuraScript::GetTarget() const
     {
         case AURA_SCRIPT_HOOK_EFFECT_APPLY:
         case AURA_SCRIPT_HOOK_EFFECT_REMOVE:
+        case AURA_SCRIPT_HOOK_EFFECT_AFTER_APPLY:
+        case AURA_SCRIPT_HOOK_EFFECT_AFTER_REMOVE:
         case AURA_SCRIPT_HOOK_EFFECT_PERIODIC:
         case AURA_SCRIPT_HOOK_EFFECT_ABSORB:
         case AURA_SCRIPT_HOOK_EFFECT_AFTER_ABSORB:
