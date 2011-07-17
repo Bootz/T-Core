@@ -1914,22 +1914,22 @@ bool Player::BuildEnumData(QueryResult result, WorldPacket* data)
     *data << uint8(playerBytes >> 16);                    // Hair style
     *data << uint8(0);                                    // character order id (used for char list positioning)
 
-    Tokens data1(fields[19].GetString(), ' ');
+    Tokens equipment(fields[19].GetString(), ' ');
     for (uint8 slot = 0; slot < EQUIPMENT_SLOT_END; ++slot)
     {
         uint32 visualbase = slot * 2;
-        uint32 item_id = GetUInt32ValueFromArray(data1, visualbase);
-        const ItemTemplate* proto = sObjectMgr->GetItemTemplate(item_id);
+        uint32 itemId = GetUInt32ValueFromArray(equipment, visualbase);
+        ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemId);
         //if (!proto)
         //{
             *data << uint32(0);
             *data << uint32(0);
             *data << uint8(0);
             continue;
-        //}
+       /* }*/
 
         SpellItemEnchantmentEntry const *enchant = NULL;
-        uint32 enchants = GetUInt32ValueFromArray(data1, visualbase + 1);
+        uint32 enchants = GetUInt32ValueFromArray(equipment, visualbase + 1);
         for (uint8 enchantSlot = PERM_ENCHANTMENT_SLOT; enchantSlot <= TEMP_ENCHANTMENT_SLOT; ++enchantSlot)
         {
             // values stored in 2 uint16
@@ -2293,12 +2293,19 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 
             if (!GetSession()->PlayerLogout())
             {
-                WorldPacket data(SMSG_NEW_WORLD, 4 + 4 + 4 + 4 + 4);
-                data << uint32(mapid);
+                WorldPacket data(SMSG_NEW_WORLD, (3 * 4) + 4 + 4);
                 if (m_transport)
-                    data << m_movementInfo.t_pos.PositionXYZOStream();
+                {
+                    data << m_movementInfo.t_pos.PositionXYZStream();
+                    data << uint32(mapid);
+                    data << m_movementInfo.t_pos.GetOrientation();
+                }
                 else
-                    data << m_teleport_dest.PositionXYZOStream();
+                {
+                    data << m_teleport_dest.PositionXYZStream();
+                    data << uint32(mapid);
+                    data << m_teleport_dest.GetOrientation();
+                }
 
                 GetSession()->SendPacket(&data);
                 SendSavedInstances();

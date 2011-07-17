@@ -51,7 +51,7 @@ enum Opcodes
     SMSG_CHAR_ENUM                                   = 0x0C727, // 14333
     SMSG_CHAR_DELETE                                 = 0x03E36, // 14333
     CMSG_PLAYER_LOGIN                                = 0x010D1, // 14333
-    SMSG_NEW_WORLD                                   = 0x0451E, //
+    SMSG_NEW_WORLD                                   = 0x00F01, // 14333
     SMSG_TRANSFER_PENDING                            = 0x026EA, // 14333
     SMSG_TRANSFER_ABORTED                            = 0x066AF, // 14333
     SMSG_CHARACTER_LOGIN_FAILED                      = 0x0B2E3, // 14333
