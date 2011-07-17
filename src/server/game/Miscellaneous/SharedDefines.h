@@ -176,10 +176,11 @@ enum Powers
     POWER_SOUL_SHARDS                   = 7,
     POWER_ECLIPSE                       = 8,
     POWER_HOLY_POWER                    = 9,
-    MAX_POWERS                          = 10,     // checks are < not <=
     POWER_ALL                           = 127,    // default for class?
     POWER_HEALTH                        = 0xFFFFFFFE    // (-2 as signed value)
 };
+
+#define MAX_POWERS                        5
 
 enum SpellSchools
 {
