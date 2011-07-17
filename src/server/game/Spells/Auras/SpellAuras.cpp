@@ -194,7 +194,7 @@ void AuraApplication::ClientUpdate(bool remove)
     Aura const * aura = GetBase();
     data << uint32(aura->GetId());
     uint32 flags = m_flags;
-    if (aura->GetMaxDuration() > 0)
+    if (aura->GetMaxDuration() > 0 && !(aura->GetSpellProto()->AttributesEx5 & SPELL_ATTR5_HIDE_DURATION))
         flags |= AFLAG_DURATION;
     data << uint8(flags);
     data << uint8(aura->GetCasterLevel());
@@ -310,6 +310,8 @@ Aura * Aura::Create(SpellEntry const* spellproto, uint8 effMask, WorldObject * o
     {
         case TYPEID_UNIT:
         case TYPEID_PLAYER:
+            if (aura = owner->ToUnit()->_TryStackingOrRefreshingExistingAura(spellproto, effMask, baseAmount, castItem, casterGUID))
+                return aura;
             aura = new UnitAura(spellproto, effMask, owner, caster, baseAmount, castItem, casterGUID);
             break;
         case TYPEID_DYNAMICOBJECT:
@@ -716,9 +718,6 @@ void Aura::SetDuration(int32 duration, bool withMods)
 void Aura::RefreshDuration()
 {
     SetDuration(GetMaxDuration());
-    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-        if (m_effects[i])
-            m_effects[i]->ResetPeriodic();
 
     if (m_spellProto->GetManaPerSecond())
         m_timeCla = 1 * IN_MILLISECONDS;
@@ -747,31 +746,36 @@ bool Aura::DropCharge()
     return false;
 }
 
-void Aura::SetStackAmount(uint8 stackAmount, bool /*applied*/)
+void Aura::SetStackAmount(uint8 stackAmount)
 {
-    if (stackAmount != m_stackAmount)
-    {
-        m_stackAmount = stackAmount;
-        RecalculateAmountOfEffects();
-    }
+    m_stackAmount = stackAmount;
+    Unit * caster = GetCaster();
+    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        if (HasEffect(i))
+            m_effects[i]->ChangeAmount(m_effects[i]->CalculateAmount(caster), false, true);
     SetNeedClientUpdateForTargets();
 }
 
-bool Aura::ModStackAmount(int32 num)
+void Aura::ModStackAmount(int32 num, AuraRemoveMode removeMode)
 {
-    // Can`t mod
-    if (!m_spellProto->GetStackAmount() || !GetStackAmount())
-        return true;
-
-    // Modify stack but limit it
     int32 stackAmount = m_stackAmount + num;
+
+    // limit the stack amount
     if (stackAmount > int32(m_spellProto->GetStackAmount()))
-        stackAmount = m_spellProto->GetStackAmount();
-    else if (stackAmount <= 0) // Last aura from stack removed
     {
-        m_stackAmount = 0;
-        return true; // need remove aura
+        // not stackable aura - set stack amount to 1
+        if(!m_spellProto->GetStackAmount())
+            stackAmount = 1;
+        else
+            stackAmount = m_spellProto->GetStackAmount();
     }
+    // we're out of stacks, remove
+    else if (stackAmount <= 0)
+    {
+        Remove(removeMode);
+        return;
+    }
+
     bool refresh = stackAmount >= GetStackAmount();
 
     // Update stack amount
@@ -780,8 +784,6 @@ bool Aura::ModStackAmount(int32 num)
     if (refresh)
         RefreshDuration();
     SetNeedClientUpdateForTargets();
-
-    return false;
 }
 
 bool Aura::IsPassive() const
@@ -858,7 +860,7 @@ bool Aura::HasEffectType(AuraType type) const
 {
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (m_effects[i] && m_effects[i]->GetAuraType() == type)
+        if (HasEffect(i) && m_effects[i]->GetAuraType() == type)
             return true;
     }
     return false;
@@ -869,7 +871,7 @@ void Aura::RecalculateAmountOfEffects()
     ASSERT (!IsRemoved());
     Unit * caster = GetCaster();
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-        if (m_effects[i])
+        if (HasEffect(i))
             m_effects[i]->RecalculateAmount(caster);
 }
 
@@ -1134,7 +1136,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
     else
     {
         // Remove Linked Auras
-        if (removeMode != AURA_REMOVE_BY_STACK && removeMode != AURA_REMOVE_BY_DEATH)
+        if (removeMode != AURA_REMOVE_BY_DEATH)
         {
             if (uint32 customAttr = sSpellMgr->GetSpellCustomAttr(GetId()))
             {
@@ -1274,11 +1276,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
                 switch(GetId())
                 {
                    case 48018: // Demonic Circle
-                        // Do not remove GO when aura is removed by stack
-                        // to prevent remove GO added by new spell
-                        // old one is already removed
-                        if (removeMode != AURA_REMOVE_BY_STACK)
-                            target->RemoveGameObject(GetId(), true);
+                        target->RemoveGameObject(GetId(), true);
                         target->RemoveAura(62388);
                     break;
                 }
