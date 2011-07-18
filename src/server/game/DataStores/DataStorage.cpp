@@ -411,6 +411,9 @@ void LoadDataStorages(const std::string& dataPath)
     for (uint32 i = 1; i < sMapDifficultyStore.GetNumRows(); ++i)
         if (MapDifficultyEntry const* entry = sMapDifficultyStore.LookupEntry(i))
             sMapDifficultyMap[MAKE_PAIR32(entry->MapId, entry->Difficulty)] = MapDifficulty(entry->resetTime, entry->maxPlayers, entry->areaTriggerText > 0);
+
+    sMapDifficultyMap[MAKE_PAIR32(0, 0)] = MapDifficulty(0, 0, 0 > 0);
+
     sMapDifficultyStore.Clear();
 
     LoadData(availableDbcLocales, bad_dbc_files, sMovieStore,                  dbcPath, "Movie.dbc");
