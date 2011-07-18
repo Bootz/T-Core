@@ -720,9 +720,8 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
 void WorldSession::HandleWorldLoginOpcode(WorldPacket& recv_data)
 {
     sLog->outStaticDebug("WORLD: Recvd World Login Message");
-    uint32 unk;
-    uint8 unk1;
-    recv_data >> unk >> unk1;
+    recv_data.read_skip<uint32>();
+    recv_data.read_skip<uint8>();
 }
 
 void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)

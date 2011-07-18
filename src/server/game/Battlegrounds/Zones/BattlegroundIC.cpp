@@ -73,7 +73,7 @@ void BattlegroundIC::SendTransportInit(Player* player)
     if (!gunshipAlliance || !gunshipHorde)
         return;
 
-    UpdateData transData(player->GetMapId());
+    UpdateData transData;
 
     gunshipAlliance->BuildCreateUpdateBlockForPlayer(&transData, player);
     gunshipHorde->BuildCreateUpdateBlockForPlayer(&transData, player);

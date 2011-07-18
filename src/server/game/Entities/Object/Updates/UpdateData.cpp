@@ -23,7 +23,7 @@
 #include "Opcodes.h"
 #include "World.h"
 
-UpdateData::UpdateData(uint16 map) : m_map(0), m_blockCount(0)
+UpdateData::UpdateData() : m_map(0), m_blockCount(0)
 {
 }
 
@@ -47,24 +47,27 @@ bool UpdateData::BuildPacket(WorldPacket *packet)
 {
     ASSERT(packet->empty());                                // shouldn't happen
 
-    packet->Initialize(SMSG_UPDATE_OBJECT, 2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
+    ByteBuffer buf(2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
 
-    *packet << uint16(m_map);
-    *packet << uint32(!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
+    buf << uint16(m_map);
+    buf << uint32((!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount));
 
     if (!m_outOfRangeGUIDs.empty())
     {
-        *packet << uint8(UPDATETYPE_OUT_OF_RANGE_OBJECTS);
-        *packet << uint32(m_outOfRangeGUIDs.size());
+        buf << uint8(UPDATETYPE_OUT_OF_RANGE_OBJECTS);
+        buf << uint32(m_outOfRangeGUIDs.size());
 
         for (std::set<uint64>::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
-            packet->appendPackGUID(*i);
+            buf.appendPackGUID(*i);
     }
 
-    packet->append(m_data);
+    buf.append(m_data);
 
-    if (packet->wpos() > 100)
-        packet->compress(SMSG_COMPRESSED_UPDATE_OBJECT);
+    //if (buf.wpos() > 100)
+    //    packet->compress(SMSG_COMPRESSED_UPDATE_OBJECT);
+
+    packet->append(buf);
+    packet->SetOpcode(SMSG_UPDATE_OBJECT);
 
     return true;
 }
