@@ -975,7 +975,7 @@ enum Opcodes
     MSG_RAID_READY_CHECK_FINISHED                    = 0x0A0A0, //
     CMSG_COMPLAIN                                    = 0x0EA63, // 14333
     SMSG_COMPLAIN_RESULT                             = 0x070CC, //
-    SMSG_FEATURE_SYSTEM_STATUS                       = 0x03DAC, //
+    SMSG_FEATURE_SYSTEM_STATUS                       = 0x01F61, // 14333
     CMSG_GM_SHOW_COMPLAINTS                          = 0x10181, //
     CMSG_GM_UNSQUELCH                                = 0x10182, //
     CMSG_CHANNEL_SILENCE_VOICE                       = 0x00801, //
