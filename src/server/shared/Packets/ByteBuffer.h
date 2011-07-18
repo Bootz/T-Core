@@ -68,6 +68,8 @@ class ByteBuffer
         {
             _storage.clear();
             _rpos = _wpos = 0;
+            _bitpos = 8;
+            _curbitval = 0;
         }
 
         template <typename T> void append(T value)
@@ -128,7 +130,7 @@ class ByteBuffer
             {
                 if(readBit())
                 {
-                    value |= (1 << (_bitpos));
+                    value |= (1 << i);
                 }
             }
             return value;
