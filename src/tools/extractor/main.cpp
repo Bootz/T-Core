@@ -89,10 +89,10 @@ int main(int argc, char * arg[])
                     return 0;
                 }
                 if(extractDBC)
-                    ExtractDBCFiles(i, true);
+                    ExtractDataFiles(i, true);
             }
             else if(extractDBC)
-                ExtractDBCFiles(i, false);
+                ExtractDataFiles(i, false);
         }
     }
 	

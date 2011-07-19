@@ -22,11 +22,11 @@
 
 #include <set>
 
-void ExtractDBCFiles(int locale, bool basicLocale)
+void ExtractDataFiles(int locale, bool basicLocale)
 {
-    printf("Extracting dbc files...\n");
+    printf("Extracting Storages Files...\n");
 	
-    std::set<std::pair<int, std::string> > dbcfiles;
+    std::set<std::pair<int, std::string> > datafiles;
 	
     int foundCount = 0;
 	
@@ -46,7 +46,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
 			   pFileEntry->szFileName != NULL)
             {
                 std::string name = pFileEntry->szFileName;
-                if (i != 0)
+                if (i != 0 && i < 7 )
                 {
                     if(name.find(langs[locale]) == 0)
                         name = name.substr(strlen(langs[locale]) + 1);
@@ -64,7 +64,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                     if(i != 0)
                     {
                         bool alreadyExist = false;
-                        for(std::set<std::pair<int, std::string> >::iterator itr = dbcfiles.begin(); itr != dbcfiles.end(); itr++)
+                        for(std::set<std::pair<int, std::string> >::iterator itr = datafiles.begin(); itr != datafiles.end(); itr++)
                         {
                             if(itr->second == name)
                             {
@@ -78,7 +78,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                             continue;
                         }
                     }
-                    dbcfiles.insert(std::pair<int, std::string>(i, name));
+                    datafiles.insert(std::pair<int, std::string>(i, name));
                     foundCount++;
                 }
             }
@@ -87,9 +87,9 @@ void ExtractDBCFiles(int locale, bool basicLocale)
             pFileEntry++;
         }
     }
-    printf("Found %i dbc files\n", foundCount);
+    printf("Found %i Storages Files\n", foundCount);
 	
-    std::string path = "./dbc/";
+    std::string path = "./storages/";
     if(!basicLocale)
     {
         path += langs[locale];
@@ -97,21 +97,21 @@ void ExtractDBCFiles(int locale, bool basicLocale)
     }
 	CreateDir(path);
 	
-    // extract DBCs
+    // extract Storages
     int count = 0;
-    for (std::set<std::pair<int, std::string> >::iterator iter = dbcfiles.begin(); iter != dbcfiles.end(); ++iter)
+    for (std::set<std::pair<int, std::string> >::iterator iter = datafiles.begin(); iter != datafiles.end(); ++iter)
     {
         std::string filename = path;
         filename += (iter->second.c_str() + strlen("DBFilesClient\\"));
 		
-        if(ExtractFileToHardDrive(localeMPQ[iter->first], iter->second.c_str(), filename.c_str()) == ERROR_SUCCESS)
+        if(ExtractFileToHardDrive(localeMPQ[0], iter->second.c_str(), filename.c_str()) == ERROR_SUCCESS)
             ++count;
         else
         {
             assert(false);
         }
     }
-    printf("Extracted %u DBC files\n\n", count);
+    printf("Extracted %u Storages files\n\n", count);
 }
 
 uint32 ReadMapDBC()

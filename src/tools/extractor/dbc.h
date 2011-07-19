@@ -20,7 +20,7 @@
 
 #include "headers.h"
 
-void ExtractDBCFiles(int locale, bool basicLocale);
+void ExtractDataFiles(int locale, bool basicLocale);
 uint32 ReadMapDBC();
 void ReadAreaTableDBC();
 void ReadLiquidTypeTableDBC();

@@ -285,7 +285,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << ((Unit*)this)->GetSpeed(MOVE_PITCH_RATE);
 
         // SPLINE flags are to be updated
-        /*// 0x08000000
+        // 0x08000000
         if (GetTypeId() == TYPEID_PLAYER && this->ToPlayer()->isInFlight())
         {
             Player *player = const_cast<Object*>(this)->ToPlayer();
@@ -298,19 +298,19 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
 
             *data << uint32(flags3);                        // splines flag?
 
-            if (flags3 & 0x20000)                            // may be orientation
+            if (flags3 & 0x4000)                            // may be orientation
             {
-                *data << (float)0;
+                *data << float(player->GetOrientation());
             }
             else
             {
-                if (flags3 & 0x10000)                        // probably guid there
+                if (flags3 & 0x2000)                        // probably guid there
                 {
                     *data << uint64(0);
                 }
                 else
                 {
-                    if (flags3 & 0x8000)
+                    if (flags3 & 0x1000)
                     {
                         *data << float(player->GetPositionX());
                         *data << float(player->GetPositionY());
@@ -352,7 +352,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
             *data << float(path[poscount-1].x);
             *data << float(path[poscount-1].y);
             *data << float(path[poscount-1].z);
-        }*/
+        }
     }
     else
     {
@@ -442,8 +442,10 @@ void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask 
         return;
 
     uint32 valuesCount = m_valuesCount;
-    if (GetTypeId() == TYPEID_PLAYER && target != this)
-        valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;
+    if(GetTypeId() == TYPEID_PLAYER && target != this)
+        valuesCount = valuesCount = m_valuesCount;
+    if(GetTypeId() == TYPEID_PLAYER && target != this)
+        valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;;
 
     bool IsActivateToQuest = false;
     if (updatetype == UPDATETYPE_CREATE_OBJECT || updatetype == UPDATETYPE_CREATE_OBJECT2)
@@ -757,8 +759,14 @@ void Object::_LoadIntoDataField(const char* data, uint32 startOffset, uint32 cou
     if (tokens.size() != count)
         return;
 
-    for (uint32 index = 0; index < count; ++index)
+    uint32 valuesCount = m_valuesCount;
+
+    Tokens::iterator iter;
+    uint32 index;
+    for (iter = tokens.begin(), index = 0; index < count; ++iter, ++index)
+    {
         m_uint32Values[startOffset + index] = atol(tokens[index]);
+    }
 }
 
 void Object::_SetUpdateBits(UpdateMask *updateMask, Player* target) const
