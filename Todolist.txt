@@ -5,12 +5,11 @@
  \_____________________________________________/
  /                                            /
  |   4.) Drop Old Spells from Core           |
- |   5.) Setup the forum                     |
- |   6.) Install a Bot in Mirc Channel!      |
- |   7.) Fix the creature and gameobject invisbility bug |
+ |   5.) Install a Bot in Mirc Channel!      |
+ |   6.) Fix the creature and gameobject invisbility bug |
  \__________________________________________/
  /                                           \
-|    8.) Start with updating the DB           \
+|    7.) Fix startup errors.                  \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|
