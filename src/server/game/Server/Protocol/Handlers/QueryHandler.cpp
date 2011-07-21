@@ -170,7 +170,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
                 sObjectMgr->GetLocaleString(cl->SubName, loc_idx, SubName);
             }
         }
-        sLog->outDetail("WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name, entry);
+        sLog->outDetail("WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), entry);
                                                             // guess size
         WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 100);
         data << uint32(entry);                              // creature entry
@@ -238,7 +238,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
                 sObjectMgr->GetLocaleString(gl->CastBarCaption, loc_idx, CastBarCaption);
             }
         }
-        sLog->outDetail("WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name, entryID);
+        sLog->outDetail("WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name.c_str(), entryID);
         WorldPacket data (SMSG_GAMEOBJECT_QUERY_RESPONSE, 150);
         data << uint32(entryID);
         data << uint32(info->type);
