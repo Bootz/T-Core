@@ -33,8 +33,8 @@
 /// List of Opcodes
 enum Opcodes
 {
-    NUM_OPCODE_HANDLERS                              = 0x102B7,  // last unknown opcode + 1.
-    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS, // must be >= NUM_OPCODE_HANDLERS
+    NUM_OPCODE_HANDLERS                              = (0xFFFF+1),  // last unknown opcode + 1.
+    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS,                           // must be >= NUM_OPCODE_HANDLERS
 
     CMSG_WORLD_TELEPORT                              = 0x10000, //
     CMSG_TELEPORT_TO_UNIT                            = 0x10001, //
