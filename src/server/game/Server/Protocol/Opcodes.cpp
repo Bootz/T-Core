@@ -1277,6 +1277,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_VIOLENCE_LEVEL,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( MSG_CHECK_CONNECTION,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
+    DEFINE_OPCODE_HANDLER( SMSG_COMPRESSED_CHAR_ENUM,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
 
 #undef DEFINE_OPCODE_HANDLER
 }
