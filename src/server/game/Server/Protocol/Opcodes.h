@@ -1047,7 +1047,7 @@ enum Opcodes
     CMSG_GRANT_LEVEL                                 = 0x03A2E, // 14333
     CMSG_REFER_A_FRIEND                              = 0x101EF, //
     MSG_GM_CHANGE_ARENA_RATING                       = 0x101F0, //
-    CMSG_DECLINE_CHANNEL_INVITE                      = 0x101F1, //
+    CMSG_DECLINE_CHANNEL_INVITE                      = 0x07633, // 14333
     SMSG_GROUPACTION_THROTTLED                       = 0x101F2, //
     SMSG_OVERRIDE_LIGHT                              = 0x03A36, // 14333
     SMSG_TOTEM_CREATED                               = 0x101F3, //
