@@ -196,7 +196,7 @@ enum Opcodes
     MSG_MOVE_START_FORWARD                           = 0x018E1, // 14333
     MSG_MOVE_START_BACKWARD                          = 0x00863, // 14333
     MSG_MOVE_STOP                                    = 0x0286A, // 14333
-    MSG_MOVE_START_STRAFE_LEFT                       = 0x10049, //
+    MSG_MOVE_START_STRAFE_LEFT                       = 0x088C2, // 14333
     MSG_MOVE_START_STRAFE_RIGHT                      = 0x0B843, // 14333
     MSG_MOVE_STOP_STRAFE                             = 0x0A8E0, // 14333
     MSG_MOVE_JUMP                                    = 0x0386A, // 14333
