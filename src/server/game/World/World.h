@@ -66,6 +66,8 @@ enum ShutdownExitCode
 /// Timers for different object refresh rates
 enum WorldTimers
 {
+    WUPDATE_OBJECTS,
+    WUPDATE_SESSIONS,
     WUPDATE_AUCTIONS,
     WUPDATE_WEATHERS,
     WUPDATE_UPTIME,

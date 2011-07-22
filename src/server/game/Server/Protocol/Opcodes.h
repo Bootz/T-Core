@@ -232,7 +232,7 @@ enum Opcodes
     MSG_MOVE_TOGGLE_COLLISION_CHEAT                  = 0x10063, // 
     MSG_MOVE_SET_FACING                              = 0x09848, // 14333
     MSG_MOVE_SET_PITCH                               = 0x10064, //
-    MSG_MOVE_WORLDPORT_ACK                           = 0x10065, //
+    MSG_MOVE_WORLDPORT_ACK                           = 0x05050, // 14333 /NOT SURE
     SMSG_PLAYER_MOVE                                 = 0x05341, // 14333
     SMSG_MONSTER_MOVE                                = 0x0AAE6, // 14333
     SMSG_MOVE_WATER_WALK                             = 0x10067, //
@@ -712,7 +712,7 @@ enum Opcodes
     SMSG_PET_ACTION_FEEDBACK                         = 0x06A7B, // 14333
     CMSG_CHAR_RENAME                                 = 0x06263, // 14333
     SMSG_CHAR_RENAME                                 = 0x1012D, //
-    CMSG_MOVE_SPLINE_DONE                            = 0x1012E, //
+    CMSG_MOVE_SPLINE_DONE                            = 0x018CA, // 14333
     CMSG_MOVE_FALL_RESET                             = 0x1012F, //
     SMSG_INSTANCE_SAVE_CREATED                       = 0x0AE2B, // 14333
     SMSG_RAID_INSTANCE_INFO                          = 0x10130, //
