@@ -273,7 +273,7 @@ enum Opcodes
     CMSG_TUTORIAL_CLEAR                              = 0x0B2FB, // 14333
     CMSG_TUTORIAL_RESET                              = 0x0B6BF, // 14333
     CMSG_STANDSTATECHANGE                            = 0x032EA, // 14333
-    CMSG_EMOTE                                       = 0x10083, //
+    CMSG_EMOTE                                       = 0x0B6AF, // 14333
     SMSG_EMOTE                                       = 0x076FE, // 14333
     CMSG_TEXT_EMOTE                                  = 0x10084, //
     SMSG_TEXT_EMOTE                                  = 0x026EF, // 14333
@@ -509,7 +509,7 @@ enum Opcodes
     CMSG_AUTH_SESSION                                = 0x029A0, // 14333
     SMSG_AUTH_RESPONSE                               = 0x0BEFB, // 14333
     MSG_GM_SHOWLABEL                                 = 0x100D9, //
-    CMSG_PET_CAST_SPELL                              = 0x100DA, //
+    CMSG_PET_CAST_SPELL                              = 0x0B66B, // 14333
     MSG_SAVE_GUILD_EMBLEM                            = 0x06A36, // 14333
     MSG_TABARDVENDOR_ACTIVATE                        = 0x0EAEF, // 14333
     SMSG_PLAY_SPELL_VISUAL                           = 0x100DB, //
@@ -1202,7 +1202,7 @@ enum Opcodes
     SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x1025C, //
     SMSG_PLAYER_VEHICLE_DATA                         = 0x1025D, //
     CMSG_PLAYER_VEHICLE_ENTER                        = 0x1025E, //
-    CMSG_EJECT_PASSENGER                             = 0x1025F, //
+    CMSG_EJECT_PASSENGER                             = 0x03E6E, // 14333
     SMSG_PET_GUIDS                                   = 0x0EE2F, // 14333
     SMSG_CLIENTCACHE_VERSION                         = 0x0A237, // 14333
     SMSG_ITEM_REFUND_INFO_RESPONSE                   = 0x10260, // 
@@ -1215,7 +1215,7 @@ enum Opcodes
     CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x10267, //
     SMSG_CALENDAR_ACTION_PENDING                     = 0x10268, //
     SMSG_EQUIPMENT_SET_LIST                          = 0x10269, //
-    CMSG_EQUIPMENT_SET_SAVE                          = 0x1026A, //
+    CMSG_EQUIPMENT_SET_SAVE                          = 0x0E26E, // 14333
     CMSG_UPDATE_PROJECTILE_POSITION                  = 0x1026B, //
     SMSG_SET_PROJECTILE_POSITION                     = 0x1026C, //
     SMSG_TALENTS_INFO                                = 0x0BABF, // 14333
