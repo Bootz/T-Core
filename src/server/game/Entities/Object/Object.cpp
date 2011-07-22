@@ -224,8 +224,8 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
 
 void Object::SendUpdateToPlayer(Player* player)
 {
-    // send create update to player
-    UpdateData upd;
+    // send create update to playe
+    UpdateData upd(player->GetMapId());
     WorldPacket packet;
 
     BuildCreateUpdateBlockForPlayer(&upd, player);
@@ -237,7 +237,7 @@ void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) c
 {
     ByteBuffer buf(500);
 
-    buf << uint8(UPDATETYPE_VALUES);
+    buf << (uint8) UPDATETYPE_VALUES;
     buf.append(GetPackGUID());
 
     UpdateMask updateMask;
@@ -726,7 +726,7 @@ void Object::BuildFieldsUpdate(Player *pl, UpdateDataMapType &data_map) const
 
     if (iter == data_map.end())
     {
-        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, UpdateData()));
+        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, UpdateData(pl->GetMapId())));
         ASSERT(p.second);
         iter = p.first;
     }
