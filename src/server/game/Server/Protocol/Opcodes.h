@@ -1209,7 +1209,7 @@ enum Opcodes
     CMSG_ITEM_REFUND_INFO                            = 0x10261, //
     CMSG_ITEM_REFUND                                 = 0x10262, //
     SMSG_ITEM_REFUND_RESULT                          = 0x10263, // 
-    CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x10264, //
+    CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x0E626, // 14333
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x10265, //
     CMSG_LFG_SET_ROLES_2                             = 0x10266, //
     CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x10267, //
