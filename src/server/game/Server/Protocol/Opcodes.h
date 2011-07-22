@@ -33,8 +33,8 @@
 /// List of Opcodes
 enum Opcodes
 {
-    NUM_OPCODE_HANDLERS                              = (0xFFFF+1),  // last unknown opcode + 1.
-    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS,                           // must be >= NUM_OPCODE_HANDLERS
+    NUM_OPCODE_HANDLERS                              = 0x102B7,  // last unknown opcode + 1.
+    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS, // must be >= NUM_OPCODE_HANDLERS
 
     CMSG_WORLD_TELEPORT                              = 0x10000, //
     CMSG_TELEPORT_TO_UNIT                            = 0x10001, //
@@ -234,7 +234,7 @@ enum Opcodes
     MSG_MOVE_SET_PITCH                               = 0x10064, //
     MSG_MOVE_WORLDPORT_ACK                           = 0x10065, //
     SMSG_PLAYER_MOVE                                 = 0x05341, // 14333
-    SMSG_MONSTER_MOVE                                = 0x10066, //
+    SMSG_MONSTER_MOVE                                = 0x0AAE6, // 14333
     SMSG_MOVE_WATER_WALK                             = 0x10067, //
     SMSG_MOVE_LAND_WALK                              = 0x10068, //
     MSG_MOVE_SET_RAW_POSITION_ACK                    = 0x10069, //
