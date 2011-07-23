@@ -445,10 +445,11 @@ enum ItemSubclassRecipe
 
 enum ItemSubclassMoney
 {
-    ITEM_SUBCLASS_MONEY                         = 0
+    ITEM_SUBCLASS_MONEY                         = 0,
+    ITEM_SUBCLASS_MONEY_UNK7                    = 7 // 41749
 };
 
-#define MAX_ITEM_SUBCLASS_MONEY                   1
+#define MAX_ITEM_SUBCLASS_MONEY                   8
 
 enum ItemSubclassQuiver
 {
@@ -492,10 +493,11 @@ enum ItemSubclassJunk
     ITEM_SUBCLASS_JUNK_PET                      = 2,
     ITEM_SUBCLASS_JUNK_HOLIDAY                  = 3,
     ITEM_SUBCLASS_JUNK_OTHER                    = 4,
-    ITEM_SUBCLASS_JUNK_MOUNT                    = 5
+    ITEM_SUBCLASS_JUNK_MOUNT                    = 5,
+    ITEM_SUBCLASS_JUNK_UNK12                    = 12 // 37677
 };
 
-#define MAX_ITEM_SUBCLASS_JUNK                    6
+#define MAX_ITEM_SUBCLASS_JUNK                    13
 
 enum ItemSubclassGlyph
 {
