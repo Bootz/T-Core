@@ -620,7 +620,7 @@ enum Opcodes
     SMSG_SET_FLAT_SPELL_MODIFIER                     = 0x0B6EB, // 14333
     SMSG_SET_PCT_SPELL_MODIFIER                      = 0x0FAAF, // 14333
     UMSG_SET_AMMO                                    = 0x100BF, // 14333          =*UNUSED*=
-    SMSG_CORPSE_RECLAIM_DELAY                        = 0x10100, //
+    SMSG_CORPSE_RECLAIM_DELAY                        = 0x0F623, // 14333
     CMSG_SET_ACTIVE_MOVER                            = 0x0B633, // 14333
     CMSG_PET_CANCEL_AURA                             = 0x10102, //
     CMSG_PLAYER_AI_CHEAT                             = 0x10103, //
