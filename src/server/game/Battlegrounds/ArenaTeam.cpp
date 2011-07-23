@@ -799,7 +799,7 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchMakerRating, int32 rat
                 }
 
                 // The same happens for all other brackets
-                if (1500 < OldRating < 1800 && OldPoints > 1940)
+                if ((OldRating > 1500 && OldRating < 1800) && OldPoints > 1940)
                 {
                     NewPoints=1940;
 
@@ -807,21 +807,21 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchMakerRating, int32 rat
                         NewRating = 1800;
                 }
 
-                if (1800 < OldRating < 2100 && OldPoints > 2533)
+                if ((OldRating > 1800 && OldRating < 2100) && OldPoints > 2533)
                 {
                     NewPoints = 2533;
 
                     if (Stats.WeekGames != 0 && OldRating > 2100)
                         NewRating = 2100;
                 }
-                if (2100 < OldRating < 2400 && OldPoints > 2849)
+                if ((OldRating > 2100 && OldRating < 2400) && OldPoints > 2849)
                 {
                     NewPoints = 2849;
 
                     if (Stats.WeekGames != 0 && OldRating > 2400)
                         NewRating = 2400;
                 }
-                if (2400 < OldRating < 2700 && OldPoints > 2964)
+                if ((OldRating > 2400 && OldRating < 2700) && OldPoints > 2964)
                 {
                     NewPoints = 2964;
 

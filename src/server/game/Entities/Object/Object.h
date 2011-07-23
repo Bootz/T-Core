@@ -642,7 +642,7 @@ class WorldObject : public Object, public WorldLocation
         }
 
         uint32 GetInstanceId() const { return m_InstanceId; }
-
+        uint32 GetMapId() const { return m_mapId; }
         virtual void SetPhaseMask(uint32 newPhaseMask, bool update);
         uint32 GetPhaseMask() const { return m_phaseMask; }
         bool InSamePhase(WorldObject const* obj) const { return InSamePhase(obj->GetPhaseMask()); }
@@ -870,7 +870,7 @@ class WorldObject : public Object, public WorldLocation
     private:
         Map * m_currMap;                                    //current object's Map location
 
-        //uint32 m_mapId;                                     // object at map with map_id
+        uint32 m_mapId;                                     // object at map with map_id
         uint32 m_InstanceId;                                // in map copy with instance id
         uint32 m_phaseMask;                                 // in area phase state
 
