@@ -1790,22 +1790,8 @@ class Player : public Unit, public GridObject<Player>
         void RemoveFromGroup(RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT) { RemoveFromGroup(GetGroup(), GetGUID(), method); }
         void SendUpdateToOutOfRangeGroupMembers();
 
-        void SetInGuild(uint32 GuildId) 
-        {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_GUILD_ID);
-            stmt->setUInt32(0, GuildId);
-            stmt->setUInt64(1, GetGUID());
-            CharacterDatabase.Execute(stmt);
-        }
-
-        uint32 GetGuildId() 
-        {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
-            stmt->setUInt64(0, GetGUIDLow());
-            PreparedQueryResult result = CharacterDatabase.Query(stmt);
-            return result ? (*result)[0].GetUInt32() : 0;
-        }
-
+        void SetInGuild(uint32 GuildId);
+        uint32 GetGuildId() { return m_guildId; }
         void SetRank(uint8 rankId) { SetUInt32Value(PLAYER_GUILDRANK, rankId); }
         uint8 GetRank() { return uint8(GetUInt32Value(PLAYER_GUILDRANK)); }
         void SetGuildIdInvited(uint32 GuildId) { m_GuildIdInvited = GuildId; }
@@ -2696,6 +2682,7 @@ class Player : public Unit, public GridObject<Player>
 
         // Social
         PlayerSocial *m_social;
+        uint32 m_guildId;
 
         // Groups
         GroupReference m_group;
