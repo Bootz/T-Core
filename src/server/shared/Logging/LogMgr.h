@@ -87,7 +87,7 @@ public:
 
     void Write(const std::string& logName, const std::string& msg);
     void Write(const std::string& logName, const char* fmt, va_list& lst);
-    void Write(const std::string& logName, const char* fmt, ...)     ATTR_PRINTF(2, 3);
+    void Write(const std::string& logName, const char* fmt, ...)     ATTR_PRINTF(3, 4);
 
 private:
     void RegisterLogFile(LogFile* logFile);
