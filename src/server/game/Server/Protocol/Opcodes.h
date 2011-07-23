@@ -1231,7 +1231,7 @@ enum Opcodes
     SMSG_MOVE_LEVITATING                             = 0x10273, //
     SMSG_SPLINE_MOVE_UNKNOWN_1235                    = 0x10274, //
     SMSG_SPLINE_MOVE_UNKNOWN_1236                    = 0x10275, //
-    CMSG_EQUIPMENT_SET_USE                           = 0x10276, //
+    CMSG_EQUIPMENT_SET_USE                           = 0x026BA, // 14333
     SMSG_EQUIPMENT_SET_USE_RESULT                    = 0x10277, //
     SMSG_UNKNOWN_1240                                = 0x10278, //
     CMSG_CHAR_FACTION_CHANGE                         = 0x07636, // 14333
