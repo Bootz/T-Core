@@ -162,7 +162,7 @@ void Corpse::DeleteFromDB(SQLTransaction& trans)
 
 bool Corpse::LoadFromDB(uint32 guid, Field *fields)
 {
-    uint32 ownerGuid = fields[17].GetUInt32();
+    uint32 ownerGuid = fields[16].GetUInt32();
     //        0     1     2     3            4      5          6          7       8       9      10        11    12          13          14          15         16
     // SELECT posX, posY, posZ, orientation, mapId, displayId, itemCache, bytes1, bytes2, flags, dynFlags, time, corpseType, instanceId, phaseMask, corpseGuid, guid FROM corpse WHERE corpseType <> 0
     m_type = CorpseType(fields[12].GetUInt8());
