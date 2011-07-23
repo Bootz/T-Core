@@ -249,7 +249,7 @@ enum Opcodes
     SMSG_FORCE_MOVE_ROOT                             = 0x0DB47, // 14333
     CMSG_FORCE_MOVE_ROOT_ACK                         = 0x008EB, // 14333
     SMSG_FORCE_MOVE_UNROOT                           = 0x01705, // 14333
-    CMSG_FORCE_MOVE_UNROOT_ACK                       = 0x10074, //
+    CMSG_FORCE_MOVE_UNROOT_ACK                       = 0x0A8E2, // 14333
     MSG_MOVE_ROOT                                    = 0x10075, //
     MSG_MOVE_UNROOT                                  = 0x10076, //
     MSG_MOVE_HEARTBEAT                               = 0x028E3, // 14333
@@ -914,7 +914,7 @@ enum Opcodes
     CMSG_MAELSTROM_INVALIDATE_CACHE                  = 0x101A2, //
     SMSG_FLIGHT_SPLINE_SYNC                          = 0x0FEF2, // 14333
     CMSG_SET_TAXI_BENCHMARK_MODE                     = 0x07E3F, // 14333
-    SMSG_REALM_SPLIT                                 = 0x0692C, // 14333
+    SMSG_REALM_SPLIT                                 = 0x0A266, // 14333 // 0x0692C ?
     CMSG_REALM_SPLIT                                 = 0x0B6E2, // 14333
     CMSG_MOVE_CHNG_TRANSPORT                         = 0x101A3, //
     MSG_PARTY_ASSIGNMENT                             = 0x0A22A, // 14333
@@ -1271,8 +1271,8 @@ enum Opcodes
     SMSG_UPDATE_ITEM_ENCHANTMENTS                    = 0x10288, //
     SMSG_REDIRECT_CLIENT                             = 0x00410, // 14333
     CMSG_REDIRECTION_FAILED                          = 0x1028A, //
-    SMSG_UNKNOWN_1295                                = 0x1028B, //
-    CMSG_UNKNOWN_1296                                = 0x009A0, // 14333
+    SMSG_SUSPEND_COMMS                               = 0x1028B, //
+    CMSG_SUSPEND_COMMS_ACK                           = 0x08490, // 14333
     SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x00C10, // 14333
     CMSG_REDIRECTION_AUTH_PROOF                      = 0x02120, // 14333
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x0EE77, // 14333
