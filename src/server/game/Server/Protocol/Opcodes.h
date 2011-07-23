@@ -918,7 +918,7 @@ enum Opcodes
     CMSG_MOVE_CHNG_TRANSPORT                         = 0x101A3, //
     MSG_PARTY_ASSIGNMENT                             = 0x0A22A, // 14333
     SMSG_OFFER_PETITION_ERROR                        = 0x0267B, // 14333
-    SMSG_TIME_SYNC_REQ                               = 0x101A4, //
+    SMSG_TIME_SYNC_REQ                               = 0x04F21, // 14333
     CMSG_TIME_SYNC_RESP                              = 0x101A5, //
     CMSG_SEND_LOCAL_EVENT                            = 0x101A6, //
     CMSG_SEND_GENERAL_TRIGGER                        = 0x101A7, //
