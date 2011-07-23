@@ -34,7 +34,7 @@ LogMgr::LogFile::~LogFile()
 
 void LogMgr::LogFile::Close()
 {
-    sLogMgr->UnregisterLogFile(this);
+    sLogMgr->UnregisterLogFile(_name);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,13 +196,19 @@ LogMgr::~LogMgr()
 void LogMgr::Initialize()
 {
     // Initialize all common logs here
-    RegisterLogFile(new LogFile("AntiCheat"));
 }
 
-void LogMgr::RegisterLogFile(LogFile* logFile)
+void LogMgr::RegisterLogFile(const std::string& logName)
 {
-    PhysicalLogFile* log = NULL;
+    if (_logsMap.find(logName) != _logsMap.end())
+    {
+        // TODO: Inform that such log is already registered
+        return;
+    }
+    // Create new log file
+    LogFile* logFile = new LogFile(logName);
     // Check if there is already PhysicalLog for given file path
+    PhysicalLogFile* log = NULL;
     for (PhysicalLogs::iterator itr = _physicalLogs.begin(); itr != _physicalLogs.end(); ++itr)
     {
         if ((*itr)->GetFileName() == logFile->_fileName)
@@ -216,26 +222,26 @@ void LogMgr::RegisterLogFile(LogFile* logFile)
     // No, there is not
     if (!log)
     {
-        log = new PhysicalLogFile(logFile->_fileName, logFile->_dateSplit, logFile->_isAppend, logFile->_flushBytes);
+        log = new PhysicalLogFile(logName, logFile->_dateSplit, logFile->_isAppend, logFile->_flushBytes);
         _physicalLogs.push_back(log);
     }
     _physicalLogsMap[logFile->_name] = log;
     // Save log
-    _logsMap[logFile->_name] = logFile;
-    sLog->outString("LogMgr: log %s succesfully registered for file %s", logFile->_name.c_str(), logFile->_fileName.c_str());
+    _logsMap[logName] = logFile;
+    sLog->outString("LogMgr: log %s succesfully registered for file %s", logName.c_str(), logFile->_fileName.c_str());
 }
 
-void LogMgr::UnregisterLogFile(LogFile* logFile)
+void LogMgr::UnregisterLogFile(const std::string& logName)
 {
     // Find corresponding physical log
-    if (PhysicalLogFile* log = _physicalLogsMap[logFile->_name])
+    if (PhysicalLogFile* log = _physicalLogsMap[logName])
     {
         // Decrease reference count
         // If no more references are found, delete object
         if (!log->DecreaseRefCount())
             delete log;
         // Remove information from log map
-        _physicalLogsMap.erase(logFile->_name);
+        _physicalLogsMap.erase(logName);
     }
     else
         // TODO: WTF?!

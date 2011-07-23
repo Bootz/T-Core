@@ -18,11 +18,14 @@
 #ifndef TRILLIUMCORE_LOGMGR_H
 #define TRILLIUMCORE_LOGMGR_H
 
-#include "Common.h"
 #include <ace/Singleton.h>
 
 class LogMgr
 {
+    friend class ACE_Singleton<LogMgr, ACE_Thread_Mutex>;
+    LogMgr();
+    ~LogMgr();
+
     class LogFile
     {
         friend class LogMgr;
@@ -77,9 +80,6 @@ class LogMgr
     typedef UNORDERED_MAP <std::string, LogFile*> LogsMap;
     typedef std::vector<PhysicalLogFile*> PhysicalLogs;
 
-    friend class ACE_Singleton<LogMgr, ACE_Thread_Mutex>;
-    LogMgr();
-    ~LogMgr();
 public:
     static void OutTimestamp(FILE* file);
 
@@ -89,10 +89,10 @@ public:
     void Write(const std::string& logName, const char* fmt, va_list& lst);
     void Write(const std::string& logName, const char* fmt, ...)     ATTR_PRINTF(3, 4);
 
-private:
-    void RegisterLogFile(LogFile* logFile);
-    void UnregisterLogFile(LogFile* logFile);
+    void RegisterLogFile(const std::string& logName);
+    void UnregisterLogFile(const std::string& logName);
 
+private:
     PhysicalLogsMap _physicalLogsMap;
     PhysicalLogs _physicalLogs;
     LogsMap _logsMap;
