@@ -1163,7 +1163,7 @@ enum Opcodes
     CMSG_FORCE_SAY_CHEAT                             = 0x10240, //
     SMSG_HEALTH_UPDATE                               = 0x0B66A, // 14333
     SMSG_POWER_UPDATE                                = 0x0B6BE, // 14333
-    CMSG_GAMEOBJ_REPORT_USE                          = 0x10241, //
+    CMSG_GAMEOBJ_REPORT_USE                          = 0x0EE27, // 14333
     SMSG_HIGHEST_THREAT_UPDATE                       = 0x10242, //
     SMSG_THREAT_UPDATE                               = 0x10243, //
     SMSG_THREAT_REMOVE                               = 0x07626, // 14333
