@@ -897,7 +897,7 @@ enum Opcodes
     SMSG_FORCED_DEATH_UPDATE                         = 0x10192, //
     CMSG_CHEAT_SET_HONOR_CURRENCY                    = 0x10193, //
     CMSG_CHEAT_SET_ARENA_CURRENCY                    = 0x10194, //
-    SMSG_INIT_CURRENCY                               = 0x10195, //
+    SMSG_INIT_CURRENCY                               = 0x08B07, // 14333
     SMSG_UPDATE_CURRENCY                             = 0x10196, //
     SMSG_UPDATE_CURRENCY_WEEK_LIMIT                  = 0x10197, //
     MSG_MOVE_SET_FLIGHT_SPEED_CHEAT                  = 0x10198, //
