@@ -1428,7 +1428,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask, bool 
 
         if (m_originalCaster)
         {
-            m_spellAura = Aura::TryCreate(aurSpellInfo, effectMask, unit,
+            m_spellAura = Aura::TryRefreshStackOrCreate(aurSpellInfo, effectMask, unit,
                 m_originalCaster, (aurSpellInfo == m_spellInfo)? &m_spellValue->EffectBasePoints[0] : &basePoints[0], m_CastItem);
             if (m_spellAura)
             {
@@ -2006,7 +2006,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                     break;
                 case TARGET_UNIT_TARGET_RAID:
                 case TARGET_UNIT_TARGET_PARTY:
-                case TARGET_UNIT_TARGET_PUPPET:
+                case TARGET_UNIT_TARGET_MINIPET:
                     if (IsValidSingleTargetSpell(target))
                         AddUnitTarget(target, i);
                     break;
@@ -2113,8 +2113,8 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                 case TARGET_DEST_CASTER_FRONT_LEAP:
                 case TARGET_DEST_CASTER_FRONT:      angle = 0.0f;                                          break;
                 case TARGET_DEST_CASTER_BACK:       angle = static_cast<float>(M_PI);                      break;
-                case TARGET_DEST_CASTER_RIGHT:      angle = static_cast<float>(M_PI/2);                    break;
-                case TARGET_DEST_CASTER_LEFT:       angle = static_cast<float>(-M_PI/2);                   break;
+                case TARGET_DEST_CASTER_RIGHT:      angle = static_cast<float>(-M_PI/2);                   break;
+                case TARGET_DEST_CASTER_LEFT:       angle = static_cast<float>(M_PI/2);                    break;
                 default:                            angle = (float)rand_norm()*static_cast<float>(2*M_PI); break;
             }
 
@@ -2257,7 +2257,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
         {
             if (!m_originalCaster || !m_originalCaster->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             {
-                sLog->outError("SPELL: no current channeled spell for spell ID %u", m_spellInfo->Id);
+                sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SPELL: no current channeled spell for spell ID %u - spell triggering this spell was interrupted.", m_spellInfo->Id);
                 break;
             }
 
@@ -4507,6 +4507,9 @@ SpellCastResult Spell::CheckCast(bool strict)
         }
     }
 
+    if (m_spellInfo->AttributesEx7 & SPELL_ATTR7_IS_CHEAT_SPELL && !m_caster->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_ALLOW_CHEAT_SPELLS))
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+
     // Check global cooldown
     if (strict && !m_IsTriggeredSpell && HasGlobalCooldown())
         return SPELL_FAILED_NOT_READY;
@@ -6574,8 +6577,8 @@ bool Spell::IsValidSingleTargetEffect(Unit const* target, Targets type) const
             return m_caster != target && m_caster->IsInPartyWith(target);
         case TARGET_UNIT_TARGET_RAID:
             return m_caster->IsInRaidWith(target);
-        case TARGET_UNIT_TARGET_PUPPET:
-            return target->HasUnitTypeMask(UNIT_MASK_PUPPET) && m_caster == target->GetOwner();
+        case TARGET_UNIT_TARGET_MINIPET:
+            return target->GetGUID() == m_caster->GetCritterGUID();
         default:
             break;
     }
