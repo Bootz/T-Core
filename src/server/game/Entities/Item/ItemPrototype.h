@@ -462,10 +462,13 @@ enum ItemSubclassQuiver
 
 enum ItemSubclassQuest
 {
-    ITEM_SUBCLASS_QUEST                         = 0
+    ITEM_SUBCLASS_QUEST                         = 0,
+    ITEM_SUBCLASS_QUEST_UNK3                    = 3, // 33604
+    ITEM_SUBCLASS_QUEST_UNK8                    = 8, // 37445, 49700
+    ITEM_SUBCLASS_QUEST_UNK11                   = 11 // 71141
 };
 
-#define MAX_ITEM_SUBCLASS_QUEST                   1
+#define MAX_ITEM_SUBCLASS_QUEST                   12
 
 enum ItemSubclassKey
 {
