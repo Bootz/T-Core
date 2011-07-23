@@ -1158,7 +1158,7 @@ enum Opcodes
     CMSG_REQUEST_VEHICLE_SWITCH_SEAT                 = 0x1023B, //
     CMSG_PET_LEARN_TALENT                            = 0x1023C, //
     CMSG_PET_UNLEARN_TALENTS                         = 0x1023D, //
-    SMSG_SET_PHASE_SHIFT                             = 0x1023E, //
+    SMSG_SET_PHASE_SHIFT                             = 0x0DB05, // 14333
     SMSG_ALL_ACHIEVEMENT_DATA                        = 0x1023F, //
     CMSG_FORCE_SAY_CHEAT                             = 0x10240, //
     SMSG_HEALTH_UPDATE                               = 0x0B66A, // 14333
