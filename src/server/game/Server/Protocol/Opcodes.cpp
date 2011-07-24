@@ -81,7 +81,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_GUILD_QUERY,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildQueryOpcode          );
     DEFINE_OPCODE_HANDLER( SMSG_GUILD_QUERY_RESPONSE,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_COMMENTATOR_START_WARGAME,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( CMSG_ITEM_QUERY_MULTIPLE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( CMSG_ITEM_QUERY_MULTIPLE,                     STATUS_UNHANDLED,PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_ITEM_QUERY_SINGLE_RESPONSE,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_ITEM_QUERY_MULTIPLE_RESPONSE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_PAGE_TEXT_QUERY,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandlePageTextQueryOpcode       );
