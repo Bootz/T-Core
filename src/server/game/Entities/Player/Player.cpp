@@ -1991,7 +1991,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
     *data << uint8(playerBytes2 & 0xFF);                  // facial hair
     *data << uint8(playerBytes);                          // skin
 
-    return true;
+    return;
 }
 
 bool Player::ToggleAFK()
