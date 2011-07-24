@@ -1274,7 +1274,7 @@ enum Opcodes
     SMSG_SUSPEND_COMMS                               = 0x1028B, //
     CMSG_SUSPEND_COMMS_ACK                           = 0x08490, // 14333
     SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x00C10, // 14333
-    CMSG_REDIRECTION_AUTH_PROOF                      = 0x02120, // 14333
+    CMSG_REDIRECTION_AUTH_PROOF                      = 0x001A0, // 14333
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x0EE77, // 14333
     SMSG_LFG_OPEN_FROM_GOSSIP                        = 0x1028E, //
     SMSG_UNKNOWN_1302                                = 0x1028F, //
@@ -1303,7 +1303,6 @@ enum Opcodes
     CMSG_LOG_DISCONNECT                              = 0x00920, // 14333
     MSG_CHECK_CONNECTION                             = 0x04F57, // 14333
     SMSG_COMPRESSED_CHAR_ENUM                        = 0x0F645, // 14333
-    CMSG_AUTH_CONTINUED_SESSION                      = 0x001A0, // 14333
     CMSG_UNREGISTER_ALL_ADDON_PREFIXES               = 0x01115, // 14333
     CMSG_REQUEST_CATEGORY_COOLDOWNS                  = 0x0B8E3, // 14333
     CMSG_CUF_PROFILES_SAVE                           = 0x01862, // 14333
