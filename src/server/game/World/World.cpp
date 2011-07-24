@@ -949,7 +949,7 @@ void World::LoadConfigSettings(bool reload)
     if (m_int_configs[CONFIG_EXPANSION] > MAX_EXPANSION)
     {
         sLog->outError("Expansion option can't be  greater %u but set to %u, used %u", MAX_EXPANSION, m_int_configs[CONFIG_EXPANSION], MAX_EXPANSION);
-        m_configs[CONFIG_EXPANSION] = MAX_EXPANSION;
+        m_int_configs[CONFIG_EXPANSION] = MAX_EXPANSION;
     }
 
     m_int_configs[CONFIG_CHATFLOOD_MESSAGE_COUNT] = sConfig->GetIntDefault("ChatFlood.MessageCount", 10);
