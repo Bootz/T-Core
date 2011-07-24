@@ -44,6 +44,6 @@ class BattlegroundAA : public Battleground
         void RemovePlayer(Player *plr, uint64 guid);
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         bool SetupBattleground();
-        void HandleKillPlayer(Player* player, Player *killer);
+        void HandleKillPlayer(Player* player, Player* killer);
 };
 #endif

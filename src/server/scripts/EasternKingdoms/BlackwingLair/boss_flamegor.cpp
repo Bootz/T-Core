@@ -48,7 +48,7 @@ public:
             Frenzy_Timer = 10000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoZoneInCombat();
         }

@@ -27,7 +27,7 @@
 #include "ScriptMgr.h"
 
 DynamicObject::DynamicObject() : WorldObject(),
-    _aura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
+    _aura(NULL), _removedAura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
 {
     m_objectType |= TYPEMASK_DYNAMICOBJECT;
     m_objectTypeId = TYPEID_DYNAMICOBJECT;
@@ -43,6 +43,7 @@ DynamicObject::~DynamicObject()
     ASSERT(!_aura);
     ASSERT(!_caster);
     ASSERT(!_isViewpoint);
+    delete _removedAura;
 }
 
 void DynamicObject::AddToWorld()
@@ -177,11 +178,11 @@ void DynamicObject::SetAura(Aura* aura)
 
 void DynamicObject::RemoveAura()
 {
-    ASSERT(_aura);
-    if (!_aura->IsRemoved())
-        _aura->_Remove(AURA_REMOVE_BY_DEFAULT);
-    delete _aura;
+    ASSERT(_aura && !_removedAura);
+    _removedAura = _aura;
     _aura = NULL;
+    if (!_removedAura->IsRemoved())
+        _removedAura->_Remove(AURA_REMOVE_BY_DEFAULT);
 }
 
 void DynamicObject::SetCasterViewpoint()
@@ -195,7 +196,7 @@ void DynamicObject::SetCasterViewpoint()
 
 void DynamicObject::RemoveCasterViewpoint()
 {
-    if (Player * caster = _caster->ToPlayer())
+    if (Player* caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, false);
         _isViewpoint = false;

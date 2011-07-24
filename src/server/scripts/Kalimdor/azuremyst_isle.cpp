@@ -89,7 +89,7 @@ public:
             me->SetStandState(UNIT_STAND_STATE_SLEEP);
         }
 
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void MoveInLineOfSight(Unit *who)
         {
@@ -306,9 +306,9 @@ public:
             }
         }
 
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
-        void MoveInLineOfSight(Unit * /*who*/)
+        void MoveInLineOfSight(Unit* /*who*/)
         {
         }
 

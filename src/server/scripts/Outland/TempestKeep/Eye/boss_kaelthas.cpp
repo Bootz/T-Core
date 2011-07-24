@@ -415,7 +415,7 @@ class boss_kaelthas : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
                 if (m_pInstance && !m_pInstance->GetData(DATA_KAELTHASEVENT) && !Phase)
                     StartEvent();
@@ -1415,9 +1415,9 @@ class mob_kael_flamestrike : public CreatureScript
                 me->setFaction(14);
             }
 
-            void MoveInLineOfSight(Unit * /*who*/) {}
+            void MoveInLineOfSight(Unit* /*who*/) {}
 
-            void EnterCombat(Unit * /*who*/) {}
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 diff)
             {

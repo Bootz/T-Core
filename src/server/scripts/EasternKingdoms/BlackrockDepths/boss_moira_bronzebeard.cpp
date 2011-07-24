@@ -54,7 +54,7 @@ public:
             Smite_Timer = 8000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

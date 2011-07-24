@@ -46,7 +46,7 @@ public:
             Terrify_Timer = 20000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

@@ -49,7 +49,7 @@ public:
             RepulsiveGaze_Timer = 23000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

@@ -195,7 +195,7 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                     ScriptedAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
                 DoScriptText(RAND(SAY_AGGRO_1, SAY_AGGRO_2, SAY_AGGRO_3), me);
             }
@@ -324,7 +324,7 @@ class mob_fel_orc_convert : public CreatureScript
                 Hemorrhage_Timer = 3000;
             }
 
-            void MoveInLineOfSight(Unit * /*who*/)
+            void MoveInLineOfSight(Unit* /*who*/)
             {
             }
 
@@ -396,7 +396,7 @@ class mob_lesser_shadow_fissure : public CreatureScript
             mob_lesser_shadow_fissureAI(Creature* pCreature) : ScriptedAI(pCreature) {}
 
             void Reset() { }
-            void MoveInLineOfSight(Unit * /*who*/) {}
+            void MoveInLineOfSight(Unit* /*who*/) {}
             void AttackStart(Unit* /*who*/) {}
             void EnterCombat(Unit* /*who*/) {}
         };

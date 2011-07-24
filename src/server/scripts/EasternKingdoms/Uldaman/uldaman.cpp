@@ -54,7 +54,7 @@ class mob_jadespine_basilisk : public CreatureScript
                 uiCslumberTimer = 2000;
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
             }
 

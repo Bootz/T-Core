@@ -169,7 +169,7 @@ void PetAI::UpdateAI(const uint32 diff)
                     continue;
             }
 
-            Spell *spell = new Spell(me, spellInfo, false, 0);
+            Spell* spell = new Spell(me, spellInfo, false, 0);
 
             // Fix to allow pets on STAY to autocast
             if (me->getVictim() && _CanAttack(me->getVictim()) && spell->CanAutoCast(me->getVictim()))
@@ -273,7 +273,7 @@ void PetAI::UpdateAllies()
         m_AllySet.insert(owner->GetGUID());
 }
 
-void PetAI::KilledUnit(Unit *victim)
+void PetAI::KilledUnit(Unit* victim)
 {
     // Called from Unit::Kill() in case where pet or owner kills something
     // if owner killed this victim, pet may still be attacking something else
@@ -295,7 +295,7 @@ void PetAI::KilledUnit(Unit *victim)
         HandleReturnMovement(); // Return
 }
 
-void PetAI::AttackStart(Unit *target)
+void PetAI::AttackStart(Unit* target)
 {
     // Overrides Unit::AttackStart to correctly evaluate Pet states
 
@@ -316,7 +316,7 @@ Unit *PetAI::SelectNextTarget()
     if (me->HasReactState(REACT_PASSIVE))
         return NULL;
 
-    Unit *target = me->getAttackerForHelper();
+    Unit* target = me->getAttackerForHelper();
     targetHasCC = false;
 
     // Check pet's attackers first to prevent dragging mobs back to owner
@@ -375,7 +375,7 @@ void PetAI::HandleReturnMovement()
 
 }
 
-void PetAI::DoAttack(Unit *target, bool chase)
+void PetAI::DoAttack(Unit* target, bool chase)
 {
     // Handles attack with or without chase and also resets all
     // PetAI flags for next update / creature kill
@@ -447,7 +447,7 @@ void PetAI::MovementInform(uint32 moveType, uint32 data)
     }
 }
 
-bool PetAI::_CanAttack(Unit *target)
+bool PetAI::_CanAttack(Unit* target)
 {
     // Evaluates wether a pet can attack a specific
     // target based on CommandState, ReactState and other flags
@@ -478,7 +478,7 @@ bool PetAI::_CanAttack(Unit *target)
     return false;
 }
 
-bool PetAI::_CheckTargetCC(Unit *target)
+bool PetAI::_CheckTargetCC(Unit* target)
 {
     if (me->GetCharmerOrOwnerGUID() && target->HasNegativeAuraWithAttribute(SPELL_ATTR0_BREAKABLE_BY_DAMAGE, me->GetCharmerOrOwnerGUID()))
         return true;

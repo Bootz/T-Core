@@ -49,7 +49,7 @@ class mob_crystalcore_devastator : public CreatureScript
                 Knockaway_Timer = 25000;
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
             }
 

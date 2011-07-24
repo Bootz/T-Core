@@ -281,7 +281,7 @@ public:
                 summons.Despawn(summon);
         }
 
-        void MoveInLineOfSight(Unit * /*who*/)
+        void MoveInLineOfSight(Unit* /*who*/)
         {
             if (!GridSearcherSucceeded)
             {

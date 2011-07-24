@@ -273,7 +273,7 @@ class spell_ex_66244 : public SpellScriptLoader
             {
             }
 
-            bool DoCheckAreaTarget(Unit * proposedTarget)
+            bool DoCheckAreaTarget(Unit* proposedTarget)
             {
             }*/
         };
@@ -372,7 +372,7 @@ class spell_ex : public SpellScriptLoader
         {
             PrepareSpellScript(spell_ex_SpellScript);
 
-            //bool Validate(SpellEntry const * spellEntry){return true;}
+            //bool Validate(SpellEntry const* spellEntry){return true;}
             //bool Load(){return true;}
             //void Unload(){}
 

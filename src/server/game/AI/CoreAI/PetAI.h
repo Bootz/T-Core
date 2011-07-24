@@ -31,13 +31,13 @@ class PetAI : public CreatureAI
         explicit PetAI(Creature *c);
 
         void EnterEvadeMode();
-        void JustDied(Unit * /*who*/) { _stopAttack(); }
+        void JustDied(Unit* /*who*/) { _stopAttack(); }
 
         void UpdateAI(const uint32);
         static int Permissible(const Creature *);
 
-        void KilledUnit(Unit * /*victim*/);
-        void AttackStart(Unit *target);
+        void KilledUnit(Unit* /*victim*/);
+        void AttackStart(Unit* target);
         void MovementInform(uint32 moveType, uint32 data);
 
     private:
@@ -55,9 +55,9 @@ class PetAI : public CreatureAI
 
         Unit *SelectNextTarget();
         void HandleReturnMovement();
-        void DoAttack(Unit *target, bool chase);
-        bool _CanAttack(Unit *target);
-        bool _CheckTargetCC(Unit *target);
+        void DoAttack(Unit* target, bool chase);
+        bool _CanAttack(Unit* target);
+        bool _CheckTargetCC(Unit* target);
 };
 #endif
 

@@ -55,7 +55,7 @@ public:
             //Possess_Timer = 35000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

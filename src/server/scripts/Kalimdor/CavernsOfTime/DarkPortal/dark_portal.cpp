@@ -123,7 +123,7 @@ public:
             }
         }
 
-        void AttackStart(Unit * /*who*/)
+        void AttackStart(Unit* /*who*/)
         {
             //if (pInstance && pInstance->GetData(TYPE_MEDIVH) == IN_PROGRESS)
             //return;
@@ -131,7 +131,7 @@ public:
             //ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void SpellHit(Unit* /*caster*/, const SpellEntry* spell)
         {
@@ -283,7 +283,7 @@ public:
             else mWaveId = 1;
 
         }
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void DoSummonAtRift(uint32 creature_entry)
         {

@@ -92,7 +92,7 @@ void BattlegroundRL::RemovePlayer(Player* /*plr*/, uint64 /*guid*/)
     CheckArenaWinConditions();
 }
 
-void BattlegroundRL::HandleKillPlayer(Player *player, Player *killer)
+void BattlegroundRL::HandleKillPlayer(Player* player, Player* killer)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -109,7 +109,7 @@ void BattlegroundRL::HandleKillPlayer(Player *player, Player *killer)
     CheckArenaWinConditions();
 }
 
-bool BattlegroundRL::HandlePlayerUnderMap(Player *player)
+bool BattlegroundRL::HandlePlayerUnderMap(Player* player)
 {
     player->TeleportTo(GetMapId(), 1285.810547f, 1667.896851f, 39.957642f, player->GetOrientation(), false);
     return true;

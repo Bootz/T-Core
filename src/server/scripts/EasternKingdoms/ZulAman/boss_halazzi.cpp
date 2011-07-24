@@ -115,7 +115,7 @@ class boss_halazzi : public CreatureScript
                 EnterPhase(PHASE_LYNX);
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_HALAZZIEVENT, IN_PROGRESS);
@@ -133,7 +133,7 @@ class boss_halazzi : public CreatureScript
                     LynxGUID = summon->GetGUID();
             }
 
-            void DamageTaken(Unit * /*done_by*/, uint32 &damage)
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage)
             {
                 if (damage >= me->GetHealth() && Phase != PHASE_ENRAGE)
                     damage = 0;
@@ -360,7 +360,7 @@ class mob_halazzi_lynx : public CreatureScript
                 shredder_timer = 4000;
             }
 
-            void DamageTaken(Unit * /*done_by*/, uint32 &damage)
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage)
             {
                 if (damage >= me->GetHealth())
                     damage = 0;
@@ -372,7 +372,7 @@ class mob_halazzi_lynx : public CreatureScript
                     ScriptedAI::AttackStart(who);
             }
 
-            void EnterCombat(Unit * /*who*/) {/*DoZoneInCombat();*/}
+            void EnterCombat(Unit* /*who*/) {/*DoZoneInCombat();*/}
 
             void UpdateAI(const uint32 diff)
             {

@@ -219,7 +219,7 @@ public:
                     pInstance->DoCompleteAchievement(ACHIEV_ABUSE_THE_OOZE);
             }
         }
-        void KilledUnit(Unit * victim)
+        void KilledUnit(Unit* victim)
         {
             if (victim == me)
                 return;

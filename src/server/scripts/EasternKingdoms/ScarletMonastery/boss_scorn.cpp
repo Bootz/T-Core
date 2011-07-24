@@ -49,7 +49,7 @@ public:
             FrostNova_Timer = 30000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

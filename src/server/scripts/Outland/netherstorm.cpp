@@ -90,7 +90,7 @@ public:
             add = NULL;
         }
 
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         /*void SpellHit(Unit *caster, const SpellEntry *spell)
         {
@@ -413,7 +413,7 @@ public:
             isEvent = false;
         }
 
-        void EnterCombat(Unit * /*who*/) { }
+        void EnterCombat(Unit* /*who*/) { }
 
         void JustSummoned(Creature *summoned)
         {
@@ -768,13 +768,13 @@ public:
                 me->UpdateEntry(NPC_PHASE_HUNTER_ENTRY);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
                 PlayerGUID = who->GetGUID();
         }
 
-        void SpellHit(Unit * /*caster*/, const SpellEntry * /*spell*/)
+        void SpellHit(Unit* /*caster*/, const SpellEntry * /*spell*/)
         {
             DoCast(me, SPELL_DE_MATERIALIZE);
         }

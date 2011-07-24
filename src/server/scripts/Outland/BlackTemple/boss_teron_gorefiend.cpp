@@ -68,7 +68,7 @@ public:
             TeronGUID = 0;
         }
 
-        void EnterCombat(Unit * /*who*/) { }
+        void EnterCombat(Unit* /*who*/) { }
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
 
@@ -255,7 +255,7 @@ public:
             Done = false;
         }
 
-        void EnterCombat(Unit * /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void MoveInLineOfSight(Unit* pWho)
         {
@@ -278,12 +278,12 @@ public:
                 ScriptedAI::MoveInLineOfSight(pWho);
         }
 
-        void KilledUnit(Unit * /*victim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
         }
 
-        void JustDied(Unit * /*victim*/)
+        void JustDied(Unit* /*victim*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_TERONGOREFIENDEVENT, DONE);

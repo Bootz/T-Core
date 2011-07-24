@@ -53,7 +53,7 @@ public:
             DrainLife_Timer = 31000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

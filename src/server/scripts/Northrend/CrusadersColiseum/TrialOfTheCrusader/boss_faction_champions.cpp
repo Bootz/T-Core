@@ -373,7 +373,7 @@ struct boss_faction_championsAI : public ScriptedAI
     {
         std::list<HostileReference*> const& tList = me->getThreatManager().getThreatList();
         std::list<HostileReference*>::const_iterator iter;
-        Unit *target;
+        Unit* target;
         for (iter = tList.begin(); iter!=tList.end(); ++iter)
         {
             target = Unit::GetUnit((*me), (*iter)->getUnitGuid());
@@ -388,7 +388,7 @@ struct boss_faction_championsAI : public ScriptedAI
         std::list<HostileReference*> const& tList = me->getThreatManager().getThreatList();
         std::list<HostileReference*>::const_iterator iter;
         uint32 count = 0;
-        Unit *target;
+        Unit* target;
         for (iter = tList.begin(); iter!=tList.end(); ++iter)
         {
             target = Unit::GetUnit((*me), (*iter)->getUnitGuid());

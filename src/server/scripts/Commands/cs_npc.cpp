@@ -488,7 +488,7 @@ public:
     //npc follow handling
     static bool HandleNpcFollowCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player *player = handler->GetSession()->GetPlayer();
+        Player* player = handler->GetSession()->GetPlayer();
         Creature *creature = handler->getSelectedCreature();
 
         if (!creature)
@@ -979,7 +979,7 @@ public:
     //npc unfollow handling
     static bool HandleNpcUnFollowCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player *player = handler->GetSession()->GetPlayer();
+        Player* player = handler->GetSession()->GetPlayer();
         Creature *creature = handler->getSelectedCreature();
 
         if (!creature)
@@ -1094,7 +1094,7 @@ public:
             return false;
         }
 
-        Player *player = handler->GetSession()->GetPlayer ();
+        Player* player = handler->GetSession()->GetPlayer ();
 
         if (player->GetPetGUID ())
         {

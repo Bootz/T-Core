@@ -95,7 +95,7 @@ struct boss_twinemperorsAI : public ScriptedAI
             return NULL;
     }
 
-    void DamageTaken(Unit * /*done_by*/, uint32 &damage)
+    void DamageTaken(Unit* /*done_by*/, uint32 &damage)
     {
         Unit *pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
@@ -131,7 +131,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         DoPlaySoundToSet(me, IAmVeklor() ? SOUND_VL_KILL : SOUND_VN_KILL);
     }
 
-    void EnterCombat(Unit * who)
+    void EnterCombat(Unit* who)
     {
         DoZoneInCombat();
         Creature *pOtherBoss = GetOtherBoss();

@@ -790,6 +790,9 @@ namespace Trillium
                 if (!u->isAlive())
                     return false;
 
+                if (u->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET)
+                    return false;
+
                 if (u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->isTotem())
                     return false;
 

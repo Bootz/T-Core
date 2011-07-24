@@ -140,7 +140,7 @@ public:
                 pInstance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             DoZoneInCombat();
 
@@ -155,7 +155,7 @@ public:
                 pInstance->SetData(DATA_EREDAR_TWINS_EVENT, IN_PROGRESS);
         }
 
-        void KilledUnit(Unit * /*victim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             if (rand()%4 == 0)
                 DoScriptText(RAND(YELL_SAC_KILL_1, YELL_SAC_KILL_2), me);
@@ -403,7 +403,7 @@ public:
                 pInstance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             DoZoneInCombat();
 
@@ -449,7 +449,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit * /*victim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             if (rand()%4 == 0)
             {
@@ -693,7 +693,7 @@ public:
             KillTimer = 15000;
         }
 
-        void EnterCombat(Unit * /*who*/){}
+        void EnterCombat(Unit* /*who*/){}
 
         void SpellHitTarget(Unit *pTarget, const SpellEntry* spell)
         {

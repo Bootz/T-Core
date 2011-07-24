@@ -72,7 +72,7 @@ public:
             me->SetDisplayId(MODEL_HUMAN);
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

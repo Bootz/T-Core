@@ -46,7 +46,7 @@ public:
             MortalStrike_Timer = 22000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

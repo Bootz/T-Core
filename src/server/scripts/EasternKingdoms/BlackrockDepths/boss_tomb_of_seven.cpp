@@ -176,7 +176,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 
@@ -193,7 +193,7 @@ public:
                 pInstance->SetData64(DATA_EVENSTARTER, 0);
         }
 
-        void JustDied(Unit * /*who*/)
+        void JustDied(Unit* /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_GHOSTKILL, 1);

@@ -102,7 +102,7 @@ class boss_harbinger_skyriss : public CreatureScript
                 ScriptedAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit * /*who*/) {}
+            void EnterCombat(Unit* /*who*/) {}
 
             void JustDied(Unit* /*Killer*/)
             {
@@ -286,7 +286,7 @@ class boss_harbinger_skyriss_illusion : public CreatureScript
 
             void Reset() { }
 
-            void EnterCombat(Unit * /*who*/) { }
+            void EnterCombat(Unit* /*who*/) { }
         };
 
         CreatureAI* GetAI(Creature* creature) const

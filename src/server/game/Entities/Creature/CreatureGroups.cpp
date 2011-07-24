@@ -25,7 +25,7 @@
 
 CreatureGroupInfoType   CreatureGroupMap;
 
-void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature *member)
+void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature* member)
 {
     Map *map = member->FindMap();
     if (!map)
@@ -49,7 +49,7 @@ void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature *member)
     }
 }
 
-void CreatureGroupManager::RemoveCreatureFromGroup(CreatureGroup *group, Creature *member)
+void CreatureGroupManager::RemoveCreatureFromGroup(CreatureGroup* group, Creature* member)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "Deleting member pointer to GUID: %u from group %u", group->GetId(), member->GetDBTableGUIDLow());
     group->RemoveMember(member);
@@ -150,7 +150,7 @@ void CreatureGroupManager::LoadCreatureFormations()
     sLog->outString();
 }
 
-void CreatureGroup::AddMember(Creature *member)
+void CreatureGroup::AddMember(Creature* member)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::AddMember: Adding unit GUID: %u.", member->GetGUIDLow());
 
@@ -165,7 +165,7 @@ void CreatureGroup::AddMember(Creature *member)
     member->SetFormation(this);
 }
 
-void CreatureGroup::RemoveMember(Creature *member)
+void CreatureGroup::RemoveMember(Creature* member)
 {
     if (m_leader == member)
         m_leader = NULL;
@@ -174,7 +174,7 @@ void CreatureGroup::RemoveMember(Creature *member)
     member->SetFormation(NULL);
 }
 
-void CreatureGroup::MemberAttackStart(Creature *member, Unit *target)
+void CreatureGroup::MemberAttackStart(Creature* member, Unit* target)
 {
     uint8 groupAI = CreatureGroupMap[member->GetDBTableGUIDLow()]->groupAI;
     if (!groupAI)
@@ -228,7 +228,7 @@ void CreatureGroup::LeaderMoveTo(float x, float y, float z)
 
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        Creature *member = itr->first;
+        Creature* member = itr->first;
         if (member == m_leader || !member->isAlive() || member->getVictim())
             continue;
 

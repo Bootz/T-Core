@@ -259,7 +259,7 @@ class boss_nalorakk : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit * /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
                 if (pInstance)
                     pInstance->SetData(DATA_NALORAKKEVENT, IN_PROGRESS);

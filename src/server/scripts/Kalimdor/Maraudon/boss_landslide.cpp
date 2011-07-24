@@ -46,7 +46,7 @@ public:
             Landslide_Timer = 0;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

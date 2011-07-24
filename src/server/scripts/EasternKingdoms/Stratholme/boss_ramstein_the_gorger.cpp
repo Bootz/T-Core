@@ -51,7 +51,7 @@ public:
             Knockout_Timer = 12000;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 

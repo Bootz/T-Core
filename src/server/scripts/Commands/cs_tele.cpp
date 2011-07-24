@@ -50,7 +50,7 @@ public:
         if (!*args)
             return false;
 
-        Player *player = handler->GetSession()->GetPlayer();
+        Player* player = handler->GetSession()->GetPlayer();
         if (!player)
             return false;
 
@@ -180,7 +180,7 @@ public:
         if (!*args)
             return false;
 
-        Player *player = handler->getSelectedPlayer();
+        Player* player = handler->getSelectedPlayer();
         if (!player)
         {
             handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
@@ -201,7 +201,7 @@ public:
             return false;
         }
 
-        MapEntry const * map = sMapStore.LookupEntry(tele->mapId);
+        MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
             handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);
@@ -282,7 +282,7 @@ public:
             return false;
         }
 
-        MapEntry const * map = sMapStore.LookupEntry(tele->mapId);
+        MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
             handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);

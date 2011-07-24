@@ -581,7 +581,7 @@ public:
                 pInstance->SetData(DATA_MAULGAREVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             if (pInstance)
             {
@@ -691,7 +691,7 @@ public:
                 pInstance->SetData(DATA_MAULGAREVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             if (pInstance)
             {

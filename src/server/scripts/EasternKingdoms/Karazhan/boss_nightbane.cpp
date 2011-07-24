@@ -155,7 +155,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(TYPE_NIGHTBANE, IN_PROGRESS);
