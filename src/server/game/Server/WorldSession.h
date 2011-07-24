@@ -857,6 +857,8 @@ class WorldSession
         void HandleEnterPlayerVehicle(WorldPacket &data);
         void HandleUpdateProjectilePosition(WorldPacket& recvPacket);
 
+        void HandleViolenceLevelOpcode(WorldPacket& recvPacket);
+
     private:
         void ProcessQueryCallbacks();
 
