@@ -387,9 +387,8 @@ void WorldSession::HandleGuildBankDepositMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_DEPOSIT_MONEY)");
 
     uint64 GoGuid;
+    uint64 money;
     recv_data >> GoGuid;
-
-    uint32 money;
     recv_data >> money;
 
     if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
@@ -403,9 +402,8 @@ void WorldSession::HandleGuildBankWithdrawMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_WITHDRAW_MONEY)");
 
     uint64 GoGuid;
+    uint64 money;
     recv_data >> GoGuid;
-
-    uint32 money;
     recv_data >> money;
 
     if (money)
@@ -515,15 +513,12 @@ void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_UPDATE_TAB)");
 
     uint64 GoGuid;
-    recv_data >> GoGuid;
-
     uint8 tabId;
-    recv_data >> tabId;
+    std::string name, icon;
 
-    std::string name;
+    recv_data >> GoGuid;
+    recv_data >> tabId;  
     recv_data >> name;
-
-    std::string icon;
     recv_data >> icon;
 
     if (!name.empty() && !icon.empty())

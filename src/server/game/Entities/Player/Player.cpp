@@ -1845,7 +1845,7 @@ void Player::setDeathState(DeathState s)
         SetUInt32Value(PLAYER_SELF_RES_SPELL, 0);
 }
 
-bool Player::BuildEnumData(QueryResult result, WorldPacket* data)
+void Player::BuildEnumData(QueryResult result, WorldPacket* data)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -21732,7 +21732,28 @@ void Player::SendAurasForTarget(Unit *target)
     for (Unit::VisibleAuraMap::const_iterator itr = visibleAuras->begin(); itr != visibleAuras->end(); ++itr)
     {
         AuraApplication * auraApp = itr->second;
-        auraApp->BuildUpdatePacket(data, false);
+        Aura * aura = auraApp->GetBase();
+        data << uint8(auraApp->GetSlot());
+        data << uint32(aura->GetId());
+
+        // flags
+        uint32 flags = auraApp->GetFlags();
+        if (aura->GetMaxDuration() > 0)
+            flags |= AFLAG_DURATION;
+        data << uint8(flags);
+        // level
+        data << uint16(aura->GetCasterLevel());
+        // charges
+        data << uint8(aura->GetStackAmount() > 1 ? aura->GetStackAmount() : (aura->GetCharges()) ? aura->GetCharges() : 1);
+
+        if (!(flags & AFLAG_CASTER))
+            data.appendPackGUID(aura->GetCasterGUID());
+
+        if (flags & AFLAG_DURATION)          // include aura duration
+        {
+            data << uint32(aura->GetMaxDuration());
+            data << uint32(aura->GetDuration());
+        }
     }
 
     GetSession()->SendPacket(&data);
