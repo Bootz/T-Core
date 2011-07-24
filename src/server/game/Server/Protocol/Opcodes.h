@@ -250,7 +250,7 @@ enum Opcodes
     CMSG_FORCE_MOVE_ROOT_ACK                         = 0x008EB, // 14333
     SMSG_FORCE_MOVE_UNROOT                           = 0x01705, // 14333
     CMSG_FORCE_MOVE_UNROOT_ACK                       = 0x0A8E2, // 14333
-    MSG_MOVE_ROOT                                    = 0x008EB, // 14333
+    MSG_MOVE_ROOT                                    = 0x10075, //
     MSG_MOVE_UNROOT                                  = 0x10076, //
     MSG_MOVE_HEARTBEAT                               = 0x028E3, // 14333
     SMSG_MOVE_KNOCK_BACK                             = 0x10077, //
