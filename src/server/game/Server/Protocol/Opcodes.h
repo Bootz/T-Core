@@ -1299,13 +1299,13 @@ enum Opcodes
     CMSG_GROUP_SET_ROLES                             = 0x102A0, //
     CMSG_WORLD_LOGIN                                 = 0x04011, // 14333
     CMSG_RETURN_TO_GRAVEYARD                         = 0x0B8EB, // 14333
-    CMSG_VIOLENCE_LEVEL                              = 0x08842, // 14333
+    //CMSG_VIOLENCE_LEVEL                              = 0x08842, // 14333
     CMSG_LOG_DISCONNECT                              = 0x00920, // 14333
     MSG_CHECK_CONNECTION                             = 0x04F57, // 14333
     SMSG_COMPRESSED_CHAR_ENUM                        = 0x0F645, // 14333
     CMSG_AUTH_CONTINUED_SESSION                      = 0x001A0, // 14333
-    CMSG_UNREGISTER_ALL_ADDON_PREFIXES               = 0x01115, // 14333
-    CMSG_REQUEST_CATEGORY_COOLDOWNS                  = 0x0B8E3, // 14333
+    //CMSG_UNREGISTER_ALL_ADDON_PREFIXES               = 0x01115, // 14333
+    //CMSG_REQUEST_CATEGORY_COOLDOWNS                  = 0x0B8E3, // 14333
     CMSG_CUF_PROFILES_SAVE                           = 0x01862, // 14333
     SMSG_CUF_PROFILES_LOAD                           = 0x0CF23, // 14333
     CMSG_REQUEST_CEMETERY_LIST                       = 0x098E8, // 14333
