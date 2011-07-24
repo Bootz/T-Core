@@ -104,7 +104,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     uint32 cost = items_count ? 30 * items_count : 30;  // price hardcoded in client
 
-    uint32 reqmoney = cost + money;
+    uint64 reqmoney = cost + money;
 
     if (!pl->HasEnoughMoney(reqmoney))
     {

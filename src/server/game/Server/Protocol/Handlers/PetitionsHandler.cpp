@@ -102,7 +102,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
     uint32 charterid = 0;
-    uint32 cost = 0;
+    uint64 cost = 0;
     uint32 type = 0;
     if (pCreature->isTabardDesigner())
     {

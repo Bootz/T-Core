@@ -198,7 +198,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(pCreature->getFaction());
 
     //we have to take deposit :
-    uint32 deposit = sAuctionMgr->GetAuctionDeposit(auctionHouseEntry, etime, it, count);
+    uint64 deposit = sAuctionMgr->GetAuctionDeposit(auctionHouseEntry, etime, it, count);
     if (!pl->HasEnoughMoney(deposit))
     {
         SendAuctionCommandResult(0, AUCTION_SELL_ITEM, AUCTION_NOT_ENOUGHT_MONEY);
@@ -255,7 +255,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 {
     uint64 auctioneer;
     uint32 auctionId;
-    uint32 price;
+    uint64 price;
     recv_data >> auctioneer;
     recv_data >> auctionId >> price;
 
@@ -404,7 +404,7 @@ void WorldSession::HandleAuctionRemoveItem(WorldPacket & recv_data)
         {
             if (auction->bidder > 0)                        // If we have a bidder, we have to send him the money he paid
             {
-                uint32 auctionCut = auction->GetAuctionCut();
+                uint64 auctionCut = auction->GetAuctionCut();
                 if (!pl->HasEnoughMoney(auctionCut))          //player doesn't have enough money, maybe message needed
                     return;
                 //some auctionBidderNotification would be needed, but don't know that parts..

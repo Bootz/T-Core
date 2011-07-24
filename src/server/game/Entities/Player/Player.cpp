@@ -4374,7 +4374,7 @@ bool Player::resetTalents(bool no_cost)
         return false;
     }
 
-    uint32 cost = 0;
+    uint64 cost = 0;
 
     if (!no_cost && !sWorld->getBoolConfig(CONFIG_NO_RESET_TALENT_COST))
     {
@@ -5419,7 +5419,7 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
             }
 
             uint32 dmultiplier = dcost->multiplier[ItemSubClassToDurabilityMultiplierId(ditemProto->Class, ditemProto->SubClass)];
-            uint32 costs = uint32(LostDurability*dmultiplier*double(dQualitymodEntry->quality_mod));
+            uint64 costs = uint32(LostDurability*dmultiplier*double(dQualitymodEntry->quality_mod));
 
             costs = uint32(costs * discountMod * sWorld->getRate(RATE_REPAIRCOST));
 
@@ -20383,7 +20383,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         }
     }
 
-    uint32 price  = crItem->IsGoldRequired(pProto) ? pProto->BuyPrice * count : 0;
+    uint64 price  = crItem->IsGoldRequired(pProto) ? pProto->BuyPrice * count : 0;
 
     // reputation discount
     if (price)
