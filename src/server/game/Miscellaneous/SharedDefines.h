@@ -3115,4 +3115,11 @@ enum RemoveMethod
     GROUP_REMOVEMETHOD_LEAVE   = 2,
 };
 
+// max supported expansion level in worldserver
+// NOTE: not set it more that supported by targeted client version with all expansions installed
+// account with expansion > client supported will rejected at connection by client
+// because if client receive unsupported expansion level it think
+// that it not have expansion installed and reject
+#define MAX_EXPANSION 3
+
 #endif
