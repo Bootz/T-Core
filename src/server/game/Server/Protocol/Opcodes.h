@@ -302,7 +302,7 @@ enum Opcodes
     CMSG_UNACCEPT_TRADE                              = 0x08848, // 14333
     CMSG_CANCEL_TRADE                                = 0x028EA, // 14333
     CMSG_SET_TRADE_ITEM                              = 0x09863, // 14333
-    CMSG_CLEAR_TRADE_ITEM                            = 0x10098, //
+    CMSG_CLEAR_TRADE_ITEM                            = 0x009A0, // 14333
     CMSG_SET_TRADE_GOLD                              = 0x10099, //
     SMSG_TRADE_STATUS                                = 0x0DB61, // 14333
     SMSG_TRADE_STATUS_EXTENDED                       = 0x0DF27, // 14333
@@ -772,9 +772,9 @@ enum Opcodes
     SMSG_COMPRESSED_MOVES                            = 0x0662F, // 14333
     CMSG_GUILD_INFO_TEXT                             = 0x1014D, //
     SMSG_CHAT_RESTRICTED                             = 0x07667, // 14333
-    SMSG_SPLINE_SET_RUN_SPEED                        = 0x1014E, //
-    SMSG_SPLINE_SET_RUN_BACK_SPEED                   = 0x1014F, //
-    SMSG_SPLINE_SET_SWIM_SPEED                       = 0x10150, //
+    SMSG_SPLINE_SET_RUN_SPEED                        = 0x0C321, // 14333
+    SMSG_SPLINE_SET_RUN_BACK_SPEED                   = 0x05741, // 14333
+    SMSG_SPLINE_SET_SWIM_SPEED                       = 0x05B23, // 14333
     SMSG_SPLINE_SET_WALK_SPEED                       = 0x10151, //
     SMSG_SPLINE_SET_SWIM_BACK_SPEED                  = 0x10152, //
     SMSG_SPLINE_SET_TURN_RATE                        = 0x10153, //
@@ -867,9 +867,9 @@ enum Opcodes
     SMSG_ARENA_TEAM_STATS                            = 0x02EBB, // 14333
     CMSG_LFG_JOIN                                    = 0x03EB2, // 14333
     CMSG_LFG_LEAVE                                   = 0x072A6, // 14333
-    CMSG_SEARCH_LFG_JOIN                             = 0x10189, //
+    CMSG_SEARCH_LFG_JOIN                             = 0x0AA26, // 14333
     CMSG_SEARCH_LFG_LEAVE                            = 0x0FAEA, // 14333
-    SMSG_UPDATE_LFG_LIST                             = 0x1018A, //
+    SMSG_UPDATE_LFG_LIST                             = 0x0EE37, // 14333
     SMSG_LFG_PROPOSAL_UPDATE                         = 0x0FAE2, // 14333
     CMSG_LFG_PROPOSAL_RESULT                         = 0x0BAEA, // 14333
     SMSG_LFG_ROLE_CHECK_UPDATE                       = 0x026A3, // 14333
@@ -1138,7 +1138,7 @@ enum Opcodes
     CMSG_SET_GLYPH                                   = 0x10228, //
     SMSG_ACHIEVEMENT_EARNED                          = 0x10229, //
     SMSG_DYNAMIC_DROP_ROLL_RESULT                    = 0x1022A, //
-    SMSG_CRITERIA_UPDATE                             = 0x1022B, // 
+    SMSG_CRITERIA_UPDATE                             = 0x0A2F7, // 14333
     CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x032A7, // 14333
     SMSG_RESPOND_INSPECT_ACHIEVEMENTS                = 0x0CB63, // 14333
     CMSG_DISMISS_CONTROLLED_VEHICLE                  = 0x1022D, //
