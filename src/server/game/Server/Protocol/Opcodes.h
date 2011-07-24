@@ -215,7 +215,7 @@ enum Opcodes
     MSG_MOVE_TELEPORT_ACK                            = 0x10052, //
     MSG_MOVE_TOGGLE_FALL_LOGGING                     = 0x10053, //
     MSG_MOVE_FALL_LAND                               = 0x088E1, // 14333
-    MSG_MOVE_START_SWIM                              = 0x10054, //
+    MSG_MOVE_START_SWIM                              = 0x0B841, // 14333
     MSG_MOVE_STOP_SWIM                               = 0x10055, //
     MSG_MOVE_SET_RUN_SPEED_CHEAT                     = 0x10056, //
     MSG_MOVE_SET_RUN_SPEED                           = 0x10057, //
@@ -232,7 +232,7 @@ enum Opcodes
     MSG_MOVE_SET_TURN_RATE                           = 0x10062, //
     MSG_MOVE_TOGGLE_COLLISION_CHEAT                  = 0x10063, // 
     MSG_MOVE_SET_FACING                              = 0x09848, // 14333
-    MSG_MOVE_SET_PITCH                               = 0x10064, //
+    MSG_MOVE_SET_PITCH                               = 0x0B861, // 14333
     MSG_MOVE_WORLDPORT_ACK                           = 0x05050, // 14333 /NOT SURE
     SMSG_PLAYER_MOVE                                 = 0x05341, // 14333
     SMSG_MONSTER_MOVE                                = 0x0AAE6, // 14333
@@ -250,7 +250,7 @@ enum Opcodes
     CMSG_FORCE_MOVE_ROOT_ACK                         = 0x008EB, // 14333
     SMSG_FORCE_MOVE_UNROOT                           = 0x01705, // 14333
     CMSG_FORCE_MOVE_UNROOT_ACK                       = 0x0A8E2, // 14333
-    MSG_MOVE_ROOT                                    = 0x10075, //
+    MSG_MOVE_ROOT                                    = 0x008EB, // 14333
     MSG_MOVE_UNROOT                                  = 0x10076, //
     MSG_MOVE_HEARTBEAT                               = 0x028E3, // 14333
     SMSG_MOVE_KNOCK_BACK                             = 0x10077, //
@@ -862,8 +862,8 @@ enum Opcodes
     CMSG_ARENA_TEAM_LEADER                           = 0x06E6B, // 14333
     SMSG_ARENA_TEAM_EVENT                            = 0x07273, // 14333
     CMSG_BATTLEMASTER_JOIN_ARENA                     = 0x10186, //
-    MSG_MOVE_START_ASCEND                            = 0x10187, //
-    MSG_MOVE_STOP_ASCEND                             = 0x10188, //
+    MSG_MOVE_START_ASCEND                            = 0x018EA, // 14333
+    MSG_MOVE_STOP_ASCEND                             = 0x01869, // 14333
     SMSG_ARENA_TEAM_STATS                            = 0x02EBB, // 14333
     CMSG_LFG_JOIN                                    = 0x03EB2, // 14333
     CMSG_LFG_LEAVE                                   = 0x072A6, // 14333
@@ -942,7 +942,7 @@ enum Opcodes
     SMSG_SET_EXTRA_AURA_INFO_OBSOLETE                = 0x101B0, //
     SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE    = 0x101B1, //
     SMSG_CLEAR_EXTRA_AURA_INFO_OBSOLETE              = 0x101B2, //
-    MSG_MOVE_START_DESCEND                           = 0x101B3, //
+    MSG_MOVE_START_DESCEND                           = 0x00849, // 14333
     CMSG_IGNORE_REQUIREMENTS_CHEAT                   = 0x101B4, //
     SMSG_IGNORE_REQUIREMENTS_CHEAT                   = 0x101B5, //
     SMSG_SPELL_CHANCE_PROC_LOG                       = 0x101B6, //
@@ -1165,8 +1165,8 @@ enum Opcodes
     SMSG_HEALTH_UPDATE                               = 0x0B66A, // 14333
     SMSG_POWER_UPDATE                                = 0x0B6BE, // 14333
     CMSG_GAMEOBJ_REPORT_USE                          = 0x0EE27, // 14333
-    SMSG_HIGHEST_THREAT_UPDATE                       = 0x10242, //
-    SMSG_THREAT_UPDATE                               = 0x10243, //
+    SMSG_HIGHEST_THREAT_UPDATE                       = 0x036AB, // 14333
+    SMSG_THREAT_UPDATE                               = 0x02E67, // 14333
     SMSG_THREAT_REMOVE                               = 0x07626, // 14333
     SMSG_THREAT_CLEAR                                = 0x03A76, // 14333
     SMSG_CONVERT_RUNE                                = 0x0A2EA, // 14333
@@ -1220,7 +1220,7 @@ enum Opcodes
     CMSG_UPDATE_PROJECTILE_POSITION                  = 0x1026B, //
     SMSG_SET_PROJECTILE_POSITION                     = 0x1026C, //
     SMSG_TALENTS_INFO                                = 0x0BABF, // 14333
-    CMSG_LEARN_PREVIEW_TALENTS                       = 0x1026D, //
+    CMSG_LEARN_PREVIEW_TALENTS                       = 0x0F22A, // 14333
     CMSG_LEARN_PREVIEW_TALENTS_PET                   = 0x032FA, // 14333
     SMSG_ARENA_OPPONENT_UPDATE                       = 0x1026E, //
     SMSG_ARENA_TEAM_CHANGE_FAILED_QUEUED             = 0x0A22B, // 14333
@@ -1268,7 +1268,7 @@ enum Opcodes
     CMSG_SET_ALLOW_LOW_LEVEL_RAID1                   = 0x10285, //
     CMSG_SET_ALLOW_LOW_LEVEL_RAID2                   = 0x10286, //
     SMSG_CAMERA_SHAKE                                = 0x10287, //
-    SMSG_UPDATE_ITEM_ENCHANTMENTS                    = 0x10288, //
+    SMSG_UPDATE_ITEM_ENCHANTMENTS                    = 0x036BA, // 14333
     SMSG_REDIRECT_CLIENT                             = 0x00410, // 14333
     CMSG_REDIRECTION_FAILED                          = 0x1028A, //
     SMSG_SUSPEND_COMMS                               = 0x1028B, //
