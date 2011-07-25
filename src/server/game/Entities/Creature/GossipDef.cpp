@@ -300,6 +300,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
     std::string questDetails    = quest->GetDetails();
     std::string questObjectives = quest->GetObjectives();
     std::string questEndText    = quest->GetEndText();
+    std::string unk        = "";
 
     int32 locale = _session->GetSessionDbLocaleIndex();
     if (locale >= 0)
@@ -320,10 +321,33 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
     data << questTitle;
     data << questDetails;
     data << questObjectives;
+    data << unk;                                            // 4.0.1, unknow
+    data << unk;                                            // 4.0.1, unknow
+    data << unk;                                            // 4.0.1, unknow
+    data << unk;                                            // 4.0.1, unknow
+    data << uint32(0);                                      // 4.0.1, unknow
+    data << uint32(0);                                      // 4.0.1, unknow
     data << uint8(activateAccept ? 1 : 0);                  // auto finish
     data << uint32(quest->GetFlags());                      // 3.3.3 questFlags
     data << uint32(quest->GetSuggestedPlayers());
+    data << uint8(0);                                       // 4.0.1, unknow
     data << uint8(0);                                       // IsFinished? value is sent back to server in quest accept packet
+    data << uint32(0);                                      // 4.0.1, unknow
+
+    ItemTemplate const* IProto;
+    data << uint32(quest->GetRewChoiceItemsCount());
+    for (uint32 i=0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+        data << uint32(quest->RewChoiceItemId[i]);
+    for (uint32 i=0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+        data << uint32(quest->RewChoiceItemCount[i]);
+    for (uint32 i=0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+    {
+        IProto = sObjectMgr->GetItemTemplate(quest->RewChoiceItemId[i]);
+        if (IProto)
+            data << uint32(IProto->DisplayInfoID);
+        else
+            data << uint32(0x00);
+    }
 
     if (quest->HasFlag(QUEST_FLAGS_HIDDEN_REWARDS))
     {
@@ -349,6 +373,8 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
                 data << uint32(0x00);
         }
 
+        data << uint32(0); // unknow 4.0.1
+        data << uint32(0); // unknow 4.0.1
         data << uint32(quest->GetRewItemsCount());
 
         for (uint32 i=0; i < QUEST_REWARDS_COUNT; ++i)
@@ -372,6 +398,9 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
     // rewarded honor points. Multiply with 10 to satisfy client
     data << 10 * Trillium::Honor::hk_honor_at_level(_session->GetPlayer()->getLevel(), quest->GetRewHonorMultiplier());
     data << float(0);                                       // new 3.3.0, honor multiplier?
+    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknow 4.0.1
     data << uint32(quest->GetRewSpell());                   // reward spell, this spell will display (icon) (casted if RewSpellCast == 0)
     data << int32(quest->GetRewSpellCast());                // casted spell
     data << uint32(quest->GetCharTitleId());                // CharTitleId, new 2.4.0, player gets this title (id from CharTitles)
@@ -387,6 +416,15 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
 
     for (uint32 i = 0; i < QUEST_REPUTATIONS_COUNT; ++i)
         data << int32(quest->RewRepValue[i]);
+
+    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknow 4.0.1
+
+    for(int i = 0; i < 4; i++)
+        data << uint32(0);
+
+    for(int i = 0; i < 4; i++)
+        data << uint32(0);
 
     data << uint32(QUEST_EMOTE_COUNT);
     for (uint32 i = 0; i < QUEST_EMOTE_COUNT; ++i)
@@ -528,6 +566,18 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
 
     for (uint32 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         data << questObjectiveText[i];
+
+    for(uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency reward id and count
+    {
+        data << uint32(0);
+        data << uint32(0);
+    }
+
+    for(uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency required id and count
+    {
+        data << uint32(0);
+        data << uint32(0);
+    }
 
     _session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUEST_QUERY_RESPONSE questid=%u", quest->GetQuestId());
