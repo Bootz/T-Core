@@ -426,7 +426,7 @@ enum Opcodes
     SMSG_QUESTUPDATE_FAILEDTIMER                     = 0x0BAF7, // 14333
     SMSG_QUESTUPDATE_COMPLETE                        = 0x03A73, // 14333
     SMSG_QUESTUPDATE_ADD_KILL                        = 0x0B67A, // 14333
-    SMSG_QUESTUPDATE_ADD_ITEM                        = 0x100B6, //
+    SMSG_QUESTUPDATE_ADD_ITEM                        = 0x0727E, // 14333
     CMSG_QUEST_CONFIRM_ACCEPT                        = 0x0F2B7, // 14333
     SMSG_QUEST_CONFIRM_ACCEPT                        = 0x022AF, // 14333
     CMSG_PUSHQUESTTOPARTY                            = 0x022B2, // 14333
