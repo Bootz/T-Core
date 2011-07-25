@@ -1431,14 +1431,15 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
             pVictim->DealDamageMods(this, damage, NULL);
 
             // TODO: Move this to a packet handler
-            WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8+8+4+4+4+4));
+            WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8+8+4+4+4+4+4));
             data << uint64(pVictim->GetGUID());
             data << uint64(GetGUID());
             data << uint32(i_spellProto->Id);
-            data << uint32(damage);                  // Damage
+            data << uint32(damage);                      // Damage
             int32 overkill = int32(damage) - int32(GetHealth());
             data << uint32(overkill > 0 ? overkill : 0); // Overkill
             data << uint32(i_spellProto->SchoolMask);
+            data << uint32(0);                           // Found in 4.2.0
             pVictim->SendMessageToSet(&data, true);
 
             pVictim->DealDamage(this, damage, 0, SPELL_DIRECT_DAMAGE, GetSpellSchoolMask(i_spellProto), i_spellProto, true);
