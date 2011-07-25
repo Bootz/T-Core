@@ -404,7 +404,7 @@ enum Opcodes
     SMSG_NPC_WONT_TALK                               = 0x100B1, //
     CMSG_QUESTGIVER_STATUS_QUERY                     = 0x07223, // 14333
     SMSG_QUESTGIVER_STATUS                           = 0x066FB, // 14333
-    CMSG_QUESTGIVER_HELLO                            = 0x100B2, //
+    CMSG_QUESTGIVER_HELLO                            = 0x0B22A, // 14333
     SMSG_QUESTGIVER_QUEST_LIST                       = 0x07AE6, // 14333
     CMSG_QUESTGIVER_QUERY_QUEST                      = 0x0BEEB, // 14333
     CMSG_QUESTGIVER_QUEST_AUTOLAUNCH                 = 0x100B3, //
