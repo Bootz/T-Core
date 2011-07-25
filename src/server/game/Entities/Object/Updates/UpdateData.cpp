@@ -23,7 +23,7 @@
 #include "Opcodes.h"
 #include "World.h"
 
-UpdateData::UpdateData(uint16 map) : m_map(0), m_blockCount(0)
+UpdateData::UpdateData() : m_map(0), m_blockCount(0)
 {
 }
 
