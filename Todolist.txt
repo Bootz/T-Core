@@ -6,7 +6,7 @@
  /                                            /
  |   4.) Drop Old Spells from Core           |
  |   5.) Install a Bot in Mirc Channel!      |
- |   6.) Fix the creature and gameobject invisbility bug |
+ |   6.) Fix the gameobject bug              |
  \__________________________________________/
  /                                           \
 |    7.) Fix startup errors.                  \
