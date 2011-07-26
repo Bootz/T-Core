@@ -25,7 +25,7 @@
 #include "Chat.h"
 #include "CliRunnable.h"
 #include "Language.h"
-#include "Log.h"
+#include "LogMgr.h"
 #include "MapManager.h"
 #include "Player.h"
 #include "Util.h"
@@ -484,11 +484,16 @@ bool ChatHandler::HandleServerSetLogFileLevelCommand(const char *args)
     if (!*args)
         return false;
 
-    char *NewLevel = strtok((char*)args, " ");
-    if (!NewLevel)
+    char* logName = strtok((char*)args, " ");
+    if (!logName)
         return false;
 
-    sLog->SetLogFileLevel(NewLevel);
+    char* newLevel = strtok(NULL, " ");
+    if (!newLevel)
+        return false;
+
+    uint32 level(atoi(newLevel));
+    sLogMgr->SetLogLevel(logName, level);
     return true;
 }
 
@@ -498,11 +503,12 @@ bool ChatHandler::HandleServerSetLogLevelCommand(const char *args)
     if (!*args)
         return false;
 
-    char *NewLevel = strtok((char*)args, " ");
-    if (!NewLevel)
+    char *newLevel = strtok((char*)args, " ");
+    if (!newLevel)
         return false;
 
-    sLog->SetLogLevel(NewLevel);
+    uint32 level(atoi(newLevel));
+    sLogMgr->SetConsoleLogLevel(level);
     return true;
 }
 
@@ -528,11 +534,8 @@ bool ChatHandler::HandleServerSetDiffTimeCommand(const char *args)
 /// toggle sql driver query logging
 bool ChatHandler::HandleServerToggleQueryLogging(const char* /* args */)
 {
-    sLog->SetSQLDriverQueryLogging(!sLog->GetSQLDriverQueryLogging());
-    if(sLog->GetSQLDriverQueryLogging())
-        PSendSysMessage(LANG_SQLDRIVER_QUERY_LOGGING_ENABLED);
-    else
-        PSendSysMessage(LANG_SQLDRIVER_QUERY_LOGGING_DISABLED);
+    bool enabled = sLogMgr->ToggleLogEnabled(SQLDRIVER_LOG);
+    SendSysMessage(enabled ? LANG_SQLDRIVER_QUERY_LOGGING_ENABLED : LANG_SQLDRIVER_QUERY_LOGGING_DISABLED);
 
     return true;
 }

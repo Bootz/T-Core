@@ -473,29 +473,30 @@ bool Utf8FitTo(const std::string& str, std::wstring search)
     return true;
 }
 
-void utf8printf(FILE *out, const char *str, ...)
+void utf8printf(FILE* file, const char* fmt, ...)
 {
-    va_list ap;
-    va_start(ap, str);
-    vutf8printf(out, str, &ap);
-    va_end(ap);
+    va_list args;
+    va_start(args, fmt);
+    vutf8printf(file, fmt, args);
+    va_end(args);
 }
 
-void vutf8printf(FILE *out, const char *str, va_list* ap)
+void vutf8printf(FILE* file, const char* fmt, va_list& args)
 {
 #if PLATFORM == PLATFORM_WINDOWS
-    char temp_buf[32*1024];
-    wchar_t wtemp_buf[32*1024];
+    #define BUFFER_LENGTH 32 * 1024
+    char temp_buf[BUFFER_LENGTH];
+    wchar_t wtemp_buf[BUFFER_LENGTH];
 
-    size_t temp_len = vsnprintf(temp_buf, 32*1024, str, *ap);
+    size_t temp_len = vsnprintf(temp_buf, BUFFER_LENGTH, fmt, args);
 
-    size_t wtemp_len = 32*1024-1;
+    size_t wtemp_len = BUFFER_LENGTH - 1;
     Utf8toWStr(temp_buf, temp_len, wtemp_buf, wtemp_len);
 
-    CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], wtemp_len+1);
-    fprintf(out, "%s", temp_buf);
+    CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], wtemp_len + 1);
+    fprintf(file, "%s", temp_buf);
 #else
-    vfprintf(out, str, *ap);
+    vfprintf(file, fmt, args);
 #endif
 }
 

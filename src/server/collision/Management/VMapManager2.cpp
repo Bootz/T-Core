@@ -24,6 +24,7 @@
 #include "ModelInstance.h"
 #include "WorldModel.h"
 #include "VMapDefinitions.h"
+#include "Common.h"
 #include "Log.h"
 
 using G3D::Vector3;

@@ -30,7 +30,7 @@
 #include "PreparedStatement.h"
 #include "DatabaseWorker.h"
 #include "Timer.h"
-#include "Log.h"
+#include "LogMgr.h"
 
 MySQLConnection::MySQLConnection(MySQLConnectionInfo& connInfo) :
 m_reconnecting(false),
@@ -58,7 +58,7 @@ MySQLConnection::~MySQLConnection()
 {
     ASSERT (m_Mysql); /// MySQL context must be present at this point
 
-    sLog->outSQLDriver("MySQLConnection::~MySQLConnection()");
+    sLogMgr->WriteLn(SQLDRIVER_LOG, "MySQLConnection::~MySQLConnection()");
     for (size_t i = 0; i < m_stmts.size(); ++i)
         delete m_stmts[i];
 
@@ -127,10 +127,10 @@ bool MySQLConnection::Open()
     {
         if (!m_reconnecting)
         {
-            sLog->outSQLDriver("MySQL client library: %s", mysql_get_client_info());
-            sLog->outSQLDriver("MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "MySQL client library: %s", mysql_get_client_info());
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
             if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
-                sLog->outSQLDriver("[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
+                sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
         }
 
         sLog->outDetail("Connected to MySQL database at %s", m_connectionInfo.host.c_str());
@@ -164,24 +164,24 @@ bool MySQLConnection::Execute(const char* sql)
 
     {
         uint32 _s = 0;
-        if (sLog->GetSQLDriverQueryLogging())
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
             _s = getMSTime();
 
         if (mysql_query(m_Mysql, sql))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
 
-            sLog->outSQLDriver("SQL: %s", sql);
-            sLog->outSQLDriver("ERROR: [%u] %s", lErrno, mysql_error(m_Mysql));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL: %s", sql);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "ERROR: [%u] %s", lErrno, mysql_error(m_Mysql));
 
             if (_HandleMySQLErrno(lErrno))  // If it returns true, an error was handled successfully (i.e. reconnection)
                 return Execute(sql);       // Try again
 
             return false;
         }
-        else if (sLog->GetSQLDriverQueryLogging())
+        else if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
         {
-            sLog->outSQLDriver("[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
         }
     }
 
@@ -206,13 +206,13 @@ bool MySQLConnection::Execute(PreparedStatement* stmt)
         MYSQL_BIND* msql_BIND = m_mStmt->GetBind();
 
         uint32 _s = 0;
-        if (sLog->GetSQLDriverQueryLogging())
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
             _s = getMSTime();
 
         if (mysql_stmt_bind_param(msql_STMT, msql_BIND))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
-            sLog->outSQLDriver("SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
 
             if (_HandleMySQLErrno(lErrno))  // If it returns true, an error was handled successfully (i.e. reconnection)
                 return Execute(stmt);       // Try again
@@ -224,7 +224,7 @@ bool MySQLConnection::Execute(PreparedStatement* stmt)
         if (mysql_stmt_execute(msql_STMT))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
-            sLog->outSQLDriver("SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
 
             if (_HandleMySQLErrno(lErrno))  // If it returns true, an error was handled successfully (i.e. reconnection)
                 return Execute(stmt);       // Try again
@@ -233,8 +233,8 @@ bool MySQLConnection::Execute(PreparedStatement* stmt)
             return false;
         }
 
-        if (sLog->GetSQLDriverQueryLogging())
-            sLog->outSQLDriver("[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
 
         m_mStmt->ClearParameters();
         return true;
@@ -259,13 +259,13 @@ bool MySQLConnection::_Query(PreparedStatement* stmt, MYSQL_RES **pResult, uint6
         MYSQL_BIND* msql_BIND = m_mStmt->GetBind();
 
         uint32 _s = 0;
-        if (sLog->GetSQLDriverQueryLogging())
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
             _s = getMSTime();
 
         if (mysql_stmt_bind_param(msql_STMT, msql_BIND))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
-            sLog->outSQLDriver("SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL(p): %s\n [ERROR]: [%u] %s", m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
 
             if (_HandleMySQLErrno(lErrno))  // If it returns true, an error was handled successfully (i.e. reconnection)
                 return _Query(stmt, pResult, pRowCount, pFieldCount);       // Try again
@@ -277,7 +277,7 @@ bool MySQLConnection::_Query(PreparedStatement* stmt, MYSQL_RES **pResult, uint6
         if (mysql_stmt_execute(msql_STMT))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
-            sLog->outSQLDriver("SQL(p): %s\n [ERROR]: [%u] %s",
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL(p): %s\n [ERROR]: [%u] %s",
                 m_mStmt->getQueryString(m_queries[index].first).c_str(), lErrno, mysql_stmt_error(msql_STMT));
 
             if (_HandleMySQLErrno(lErrno))  // If it returns true, an error was handled successfully (i.e. reconnection)
@@ -287,8 +287,8 @@ bool MySQLConnection::_Query(PreparedStatement* stmt, MYSQL_RES **pResult, uint6
             return false;
         }
 
-        if (sLog->GetSQLDriverQueryLogging())
-            sLog->outSQLDriver("[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
 
         m_mStmt->ClearParameters();
 
@@ -324,23 +324,23 @@ bool MySQLConnection::_Query(const char *sql, MYSQL_RES **pResult, MYSQL_FIELD *
 
     {
         uint32 _s = 0;
-        if (sLog->GetSQLDriverQueryLogging())
+        if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
             _s = getMSTime();
 
         if (mysql_query(m_Mysql, sql))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
-            sLog->outSQLDriver("SQL: %s", sql);
-            sLog->outSQLDriver("ERROR: [%u] %s", lErrno, mysql_error(m_Mysql));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "SQL: %s", sql);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "ERROR: [%u] %s", lErrno, mysql_error(m_Mysql));
 
             if (_HandleMySQLErrno(lErrno))      // If it returns true, an error was handled successfully (i.e. reconnection)
                 return _Query(sql, pResult, pFields, pRowCount, pFieldCount);    // We try again
 
             return false;
         }
-        else if (sLog->GetSQLDriverQueryLogging())
+        else if (sLogMgr->IsLogEnabled(SQLDRIVER_LOG))
         {
-            sLog->outSQLDriver("[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
         }
 
         *pResult = mysql_store_result(m_Mysql);
@@ -397,7 +397,7 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                 ASSERT(stmt);
                 if (!Execute(stmt))
                 {
-                    sLog->outSQLDriver("[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
+                    sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING] Transaction aborted. %u queries not executed.", (uint32)queries.size());
                     RollbackTransaction();
                     return false;
                 }
@@ -409,7 +409,7 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                 ASSERT(sql);
                 if (!Execute(sql))
                 {
-                    sLog->outSQLDriver("[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
+                    sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING] Transaction aborted. %u queries not executed.", (uint32)queries.size());
                     RollbackTransaction();
                     return false;
                 }
@@ -432,7 +432,7 @@ MySQLPreparedStatement* MySQLConnection::GetPreparedStatement(uint32 index)
     ASSERT(index < m_stmts.size());
     MySQLPreparedStatement* ret = m_stmts[index];
     if (!ret)
-        sLog->outSQLDriver("ERROR: Could not fetch prepared statement %u on database `%s`, connection type: %s.",
+        sLogMgr->WriteLn(SQLDRIVER_LOG, "ERROR: Could not fetch prepared statement %u on database `%s`, connection type: %s.",
             index, m_connectionInfo.database.c_str(), (m_connectionFlags & CONNECTION_ASYNC) ? "asynchronous" : "synchronous");
 
     return ret;
@@ -456,16 +456,16 @@ void MySQLConnection::PrepareStatement(uint32 index, const char* sql, Connection
     MYSQL_STMT * stmt = mysql_stmt_init(m_Mysql);
     if (!stmt)
     {
-        sLog->outSQLDriver("[ERROR]: In mysql_stmt_init() id: %u, sql: \"%s\"", index, sql);
-        sLog->outSQLDriver("[ERROR]: %s", mysql_error(m_Mysql));
+        sLogMgr->WriteLn(SQLDRIVER_LOG, "[ERROR]: In mysql_stmt_init() id: %u, sql: \"%s\"", index, sql);
+        sLogMgr->WriteLn(SQLDRIVER_LOG, "[ERROR]: %s", mysql_error(m_Mysql));
         m_prepareError = true;
     }
     else
     {
         if (mysql_stmt_prepare(stmt, sql, static_cast<unsigned long>(strlen(sql))))
         {
-            sLog->outSQLDriver("[ERROR]: In mysql_stmt_prepare() id: %u, sql: \"%s\"", index, sql);
-            sLog->outSQLDriver("[ERROR]: %s", mysql_stmt_error(stmt));
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[ERROR]: In mysql_stmt_prepare() id: %u, sql: \"%s\"", index, sql);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "[ERROR]: %s", mysql_stmt_error(stmt));
             mysql_stmt_close(stmt);
             m_prepareError = true;
         }
@@ -507,9 +507,9 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
             mysql_close(GetHandle());
             if (this->Open())                           // Don't remove 'this' pointer unless you want to skip loading all prepared statements....
             {
-                sLog->outSQLDriver("Connection to the MySQL server is active.");
+                sLogMgr->WriteLn(SQLDRIVER_LOG, "Connection to the MySQL server is active.");
                 if (oldThreadId != mysql_thread_id(GetHandle()))
-                    sLog->outSQLDriver("Successfully reconnected to %s @%s:%s (%s).",
+                    sLogMgr->WriteLn(SQLDRIVER_LOG, "Successfully reconnected to %s @%s:%s (%s).",
                         m_connectionInfo.database.c_str(), m_connectionInfo.host.c_str(), m_connectionInfo.port_or_socket.c_str(),
                             (m_connectionFlags & CONNECTION_ASYNC) ? "asynchronous" : "synchronous");
 
@@ -531,7 +531,7 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
             return false;
 
         default:
-            sLog->outSQLDriver("Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
+            sLogMgr->WriteLn(SQLDRIVER_LOG, "Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
             return false;
     }
 }

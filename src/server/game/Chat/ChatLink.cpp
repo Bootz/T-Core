@@ -57,15 +57,15 @@ inline bool ReadInt32(std::istringstream& iss, int32& res)
 
 inline std::string ReadSkip(std::istringstream& iss, char term)
 {
-    std::string res;
+    std::ostringstream ss;
     char c = iss.peek();
     while (c != term && c != '\0')
     {
-        res += c;
+        ss << c;
         iss.ignore(1);
         c = iss.peek();
     }
-    return res;
+    return ss.str();
 }
 
 inline bool CheckDelimiter(std::istringstream& iss, char delimiter, const char* context)
@@ -547,6 +547,10 @@ LinkExtractor::LinkExtractor(const char* msg) : _iss(msg)
 {
 }
 
+LinkExtractor::LinkExtractor(const std::string& msg) : _iss(msg)
+{
+}
+
 LinkExtractor::~LinkExtractor()
 {
     for (Links::iterator itr = _links.begin(); itr != _links.end(); ++itr)
@@ -704,4 +708,12 @@ bool LinkExtractor::IsValidMessage()
     }
 
     return true;
+}
+
+std::string LinkExtractor::RemoveLinks() const
+{
+    std::string s(_iss.str());
+    for (Links::const_reverse_iterator itr = _links.rbegin(); itr != _links.rend(); ++itr)
+        (*itr)->RemoveLink(s);
+    return s;
 }

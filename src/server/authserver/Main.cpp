@@ -25,7 +25,7 @@
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
 #include "Configuration/Config.h"
-#include "Log.h"
+#include "LogMgr.h"
 #include "SystemConfig.h"
 #include "Util.h"
 #include "SignalHandler.h"
@@ -62,7 +62,7 @@ public:
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
 {
-    sLog->outString("Usage: \n %s [<options>]\n"
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "Usage: \n %s [<options>]\n"
         "    -c config_file           use config_file as configuration file\n\r",
         prog);
 }
@@ -70,7 +70,7 @@ void usage(const char *prog)
 // Launch the auth server
 extern int main(int argc, char **argv)
 {
-    sLog->SetLogDB(false);
+    sLogMgr->ResetLogDb();
     // Command line parsing to get the configuration file name
     char const *cfg_file = _AUTHSERVER_CONFIG;
     int c = 1;
@@ -80,7 +80,7 @@ extern int main(int argc, char **argv)
         {
             if (++c >= argc)
             {
-                sLog->outError("Runtime-Error: -c option requires an input argument");
+                sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Runtime-Error: -c option requires an input argument");
                 usage(argv[0]);
                 return 1;
             }
@@ -92,17 +92,16 @@ extern int main(int argc, char **argv)
 
     if (!sConfig->SetSource(cfg_file))
     {
-        sLog->outError("Invalid or missing configuration file : %s", cfg_file);
-        sLog->outError("Verify that the file exists and has \'[authserver]\' written in the top of the file!");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Invalid or missing configuration file : %s", cfg_file);
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Verify that the file exists and has \'[authserver]\' written in the top of the file!");
         return 1;
     }
-    sLog->Initialize();
+    sLogMgr->Initialize();
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "%s (authserver)", _FULLVERSION);
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "<Ctrl-C> to stop.\n");
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "Using configuration file %s.", cfg_file);
 
-    sLog->outString("%s (authserver)", _FULLVERSION);
-    sLog->outString("<Ctrl-C> to stop.\n");
-    sLog->outString("Using configuration file %s.", cfg_file);
-
-    sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_INFO, "%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
 #if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
@@ -110,7 +109,7 @@ extern int main(int argc, char **argv)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_TP_Reactor(), true), true);
 #endif
 
-    sLog->outBasic("Max allowed open files is %d", ACE::max_handles());
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_WARNING, "Max allowed open files is %d", ACE::max_handles());
 
     // authserver PID file creation
     std::string pidfile = sConfig->GetStringDefault("PidFile", "");
@@ -119,11 +118,11 @@ extern int main(int argc, char **argv)
         uint32 pid = CreatePIDFile(pidfile);
         if (!pid)
         {
-            sLog->outError("Cannot create PID file %s.\n", pidfile.c_str());
+            sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Cannot create PID file %s.\n", pidfile.c_str());
             return 1;
         }
 
-        sLog->outString("Daemon PID: %u\n", pid);
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "Daemon PID: %u\n", pid);
     }
 
     // Initialize the database connection
@@ -131,15 +130,14 @@ extern int main(int argc, char **argv)
         return 1;
 
     // Initialize the log database
-    sLog->SetLogDBLater(sConfig->GetBoolDefault("EnableLogDB", false)); // set var to enable DB logging once startup finished.
-    sLog->SetLogDB(false);
-    sLog->SetRealmID(0);                                               // ensure we've set realm to 0 (authserver realmid)
+    sLogMgr->ResetLogDb();
+    sLogMgr->SetRealmId(0);
 
     // Get the list of realms for the server
     sRealmList->Initialize(sConfig->GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList->size() == 0)
     {
-        sLog->outError("No valid realms specified.");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "No valid realms specified.");
         return 1;
     }
 
@@ -153,7 +151,7 @@ extern int main(int argc, char **argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -181,13 +179,13 @@ extern int main(int argc, char **argv)
                 ULONG_PTR curAff = Aff & appAff;            // remove non accessible processors
 
                 if (!curAff)
-                    sLog->outError("Processors marked in UseProcessors bitmask (hex) %x not accessible for authserver. Accessible processors bitmask (hex): %x", Aff, appAff);
+                    sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Processors marked in UseProcessors bitmask (hex) %x not accessible for authserver. Accessible processors bitmask (hex): %x", Aff, appAff);
                 else if (SetProcessAffinityMask(hProcess, curAff))
-                    sLog->outString("Using processors (bitmask, hex): %x", curAff);
+                    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "Using processors (bitmask, hex): %x", curAff);
                 else
-                    sLog->outError("Can't set used processors (hex): %x", curAff);
+                    sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Can't set used processors (hex): %x", curAff);
             }
-            sLog->outString();
+            sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, std::string());
         }
 
         bool Prio = sConfig->GetBoolDefault("ProcessPriority", false);
@@ -195,10 +193,10 @@ extern int main(int argc, char **argv)
         if (Prio)
         {
             if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-                sLog->outString("The auth server process priority class has been set to HIGH");
+                sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "The auth server process priority class has been set to HIGH");
             else
-                sLog->outError("Can't set auth server process priority class.");
-            sLog->outString();
+                sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Can't set auth server process priority class.");
+            sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, std::string());
         }
     }
 #endif
@@ -208,15 +206,7 @@ extern int main(int argc, char **argv)
     uint32 loopCounter = 0;
 
     // possibly enable db logging; avoid massive startup spam by doing it here.
-    if (sLog->GetLogDBLater())
-    {
-        sLog->outString("Enabling database logging...");
-        sLog->SetLogDBLater(false);
-        // login db needs thread for logging
-        sLog->SetLogDB(true);
-    }
-    else
-        sLog->SetLogDB(false);
+    sLogMgr->SetLogDb();
 
     // Wait for termination signal
     while (!stopEvent)
@@ -230,7 +220,7 @@ extern int main(int argc, char **argv)
         if ((++loopCounter) == numLoops)
         {
             loopCounter = 0;
-            sLog->outDetail("Ping MySQL to keep connection alive");
+            sLogMgr->WriteLn(SERVER_LOG, LOGL_INFO, "Ping MySQL to keep connection alive");
             LoginDatabase.KeepAlive();
         }
     }
@@ -238,7 +228,7 @@ extern int main(int argc, char **argv)
     // Close the Database Pool and library
     StopDB();
 
-    sLog->outString("Halting process...");
+    sLogMgr->WriteLn(SERVER_LOG, LOGL_STRING, "Halting process...");
     return 0;
 }
 
@@ -250,28 +240,28 @@ bool StartDB()
     std::string dbstring = sConfig->GetStringDefault("LoginDatabaseInfo", "");
     if (dbstring.empty())
     {
-        sLog->outError("Database not specified");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Database not specified");
         return false;
     }
 
     uint8 worker_threads = sConfig->GetIntDefault("LoginDatabase.WorkerThreads", 1);
     if (worker_threads < 1 || worker_threads > 32)
     {
-        sLog->outError("Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
         worker_threads = 1;
     }
 
     uint8 synch_threads = sConfig->GetIntDefault("LoginDatabase.SynchThreads", 1);
     if (synch_threads < 1 || synch_threads > 32)
     {
-        sLog->outError("Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
         synch_threads = 1;
     }
 
     // NOTE: While authserver is singlethreaded you should keep synch_threads == 1. Increasing it is just silly since only 1 will be used ever.
     if (!LoginDatabase.Open(dbstring.c_str(), worker_threads, synch_threads))
     {
-        sLog->outError("Cannot connect to database");
+        sLogMgr->WriteLn(SERVER_LOG, LOGL_ERROR, "Cannot connect to database");
         return false;
     }
 

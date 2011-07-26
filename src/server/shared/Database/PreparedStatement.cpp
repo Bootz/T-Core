@@ -68,10 +68,9 @@ void PreparedStatement::BindParameters()
                 break;
         }
     }
-    #ifdef _DEBUG
+
     if (i < m_stmt->m_paramCount)
-        sLog->outSQLDriver("[WARNING]: BindParameters() for statement %u did not bind all allocated parameters", m_index);
-    #endif
+        sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING]: BindParameters() for statement %u did not bind all allocated parameters", m_index);
 }
 
 //- Bind to buffer
@@ -224,7 +223,7 @@ bool MySQLPreparedStatement::CheckValidIndex(uint8 index)
         return false;
 
     if (m_paramsSet[index])
-        sLog->outSQLDriver("[WARNING] Prepared Statement (id: %u) trying to bind value on already bound index (%u).", m_stmt->m_index, index);
+        sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING] Prepared Statement (id: %u) trying to bind value on already bound index (%u).", m_stmt->m_index, index);
     return true;
 }
 

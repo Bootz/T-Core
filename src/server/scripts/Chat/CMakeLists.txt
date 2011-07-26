@@ -10,17 +10,10 @@
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
-  World/achievement_scripts.cpp
-  World/areatrigger_scripts.cpp
-  World/boss_emerald_dragons.cpp
-  World/go_scripts.cpp
-  World/guards.cpp
-  World/item_scripts.cpp
-  World/mob_generic_creature.cpp
-  World/npc_innkeeper.cpp
-  World/npc_professions.cpp
-  World/npc_taxi.cpp
-  World/npcs_special.cpp
+  Chat/chat_log.cpp
+  Chat/chat_log.h
+  Chat/ChatLexicsCutter.cpp
+  Chat/ChatLexicsCutter.h
 )
 
-message("  -> Prepared: World")
+message("  -> Prepared: Chat")

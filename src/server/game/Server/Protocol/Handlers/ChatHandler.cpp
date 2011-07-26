@@ -38,6 +38,7 @@
 #include "SpellAuraEffects.h"
 #include "Util.h"
 #include "ScriptMgr.h"
+#include "Config.h"
 
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg, uint32 lang)
 {
@@ -47,8 +48,9 @@ bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg
         if (sWorld->getBoolConfig(CONFIG_CHAT_FAKE_MESSAGE_PREVENTING))
             stripLineInvisibleChars(msg);
 
-        if (sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) && GetSecurity() < SEC_MODERATOR
-                && !ChatHandler(this).isValidChatMessage(msg.c_str()))
+        if (!sConfig->GetBoolDefault("Log.Chat.Enable", true) &&     // To prevent double checking (if chat log is used, message is automatically validated)
+            sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) && GetSecurity() < SEC_MODERATOR &&
+            !ChatHandler(this).isValidChatMessage(msg.c_str()))
         {
             sLog->outError("Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName(),
                     GetPlayer()->GetGUIDLow(), msg.c_str());
@@ -172,16 +174,13 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     if (lang == LANG_ADDON)
     {
-        if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
-        {
-            std::string msg = "";
-            recv_data >> msg;
+        std::string msg = "";
+        recv_data >> msg;
 
-            if (msg.empty())
-                return;
+        if (msg.empty())
+            return;
 
-            sScriptMgr->OnPlayerChat(GetPlayer(), uint32(CHAT_MSG_ADDON), lang, msg);
-        }
+        sScriptMgr->OnPlayerChat(GetPlayer(), uint32(CHAT_MSG_ADDON), lang, msg);
 
         // Disabled addon channel?
         if (!sWorld->getBoolConfig(CONFIG_ADDON_CHANNEL))

@@ -187,9 +187,13 @@ endif()
 if( UNIX )
   install(TARGETS worldserver DESTINATION bin)
   install(FILES worldserver.conf.dist DESTINATION etc)
+  install(FILES innormative_words.txt.dist DESTINATION bin)
+  install(FILES letter_analogs.txt.dist DESTINATION bin)
 elseif( WIN32 )
   install(TARGETS worldserver DESTINATION "${CMAKE_INSTALL_PREFIX}")
   install(FILES worldserver.conf.dist DESTINATION "${CMAKE_INSTALL_PREFIX}")
+  install(FILES innormative_words.txt.dist DESTINATION "${CMAKE_INSTALL_PREFIX}")
+  install(FILES letter_analogs.txt.dist DESTINATION "${CMAKE_INSTALL_PREFIX}")
 endif()
 
 # Generate precompiled header
