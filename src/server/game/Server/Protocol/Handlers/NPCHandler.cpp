@@ -346,47 +346,6 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket & recv_data)
     unit->AI()->sGossipHello(_player);
 }
 
-/*void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
-{
-    sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_GOSSIP_SELECT_OPTION");
-
-    uint32 option;
-    uint32 unk;
-    uint64 guid;
-    std::string code = "";
-
-    recv_data >> guid >> unk >> option;
-
-    if (_player->PlayerTalkClass->GossipOptionCoded(option))
-    {
-        sLog->outDebug(LOG_FILTER_PACKETIO, "reading string");
-        recv_data >> code;
-        sLog->outDebug(LOG_FILTER_PACKETIO, "string read: %s", code.c_str());
-    }
-
-    Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_NONE);
-    if (!unit)
-    {
-        sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: HandleGossipSelectOptionOpcode - Unit (GUID: %u) not found or you can't interact with him.", uint32(GUID_LOPART(guid)));
-        return;
-    }
-
-    // remove fake death
-    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
-        GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
-
-    if (!code.empty())
-    {
-        if (!Script->GossipSelectWithCode(_player, unit, _player->PlayerTalkClass->GossipOptionSender (option), _player->PlayerTalkClass->GossipOptionAction(option), code.c_str()))
-            unit->OnGossipSelect (_player, option);
-    }
-    else
-    {
-        if (!Script->OnGossipSelect (_player, unit, _player->PlayerTalkClass->GossipOptionSender (option), _player->PlayerTalkClass->GossipOptionAction (option)))
-           unit->OnGossipSelect (_player, option);
-    }
-}*/
-
 void WorldSession::HandleSpiritHealerActivateOpcode(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_SPIRIT_HEALER_ACTIVATE");
