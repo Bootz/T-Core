@@ -19,8 +19,6 @@
 #define TRILLIUM_DATAFORMAT_H
 
 const char Achievementfmt[]="niixsxiixixxii";
-//const std::string CustomAchievementfmt="ppppppppppppppp";
-//const std::string CustomAchievementIndex = "ID";
 const char AchievementCriteriafmt[]="niiiiiiiixsiiiiixxxxxxx";
 const char AreaTableEntryfmt[]="iiinixxxxxisixxxxxxxxxxxxx";
 const char AreaGroupEntryfmt[]="niiiiiii";
