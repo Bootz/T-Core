@@ -330,22 +330,12 @@ class ChatHandler
         bool HandleComeToMeCommand(const char *args);
         bool HandleCombatStopCommand(const char *args);
 
-        /*bool HandleCharDeleteCommand(const char *args);
-        bool HandleSendMessageCommand(const char * args);*/
-
         bool HandleWeekResetCommand(const char *args);
         bool HandlePlayAllCommand(const char* args);
         bool HandleRepairitemsCommand(const char* args);
-
         bool HandleTempGameObjectCommand(const char* args);
 
         //! Development Commands
-
-        /*bool HandleQuestAdd(const char * args);
-        bool HandleQuestRemove(const char * args);
-        bool HandleQuestComplete(const char * args);*/
-
-        //bool HandleSet32Bit(const char* args);
         bool HandleSaveAllCommand(const char* args);
 
         // Utility methods for commands
@@ -394,9 +384,6 @@ class CliHandler : public ChatHandler
         bool isAvailable(ChatCommand const& cmd) const;
         void SendSysMessage(const char *str);
         std::string GetNameLink() const;
-        bool needReportToTarget(Player* chr) const;
-        LocaleConstant GetSessionDbcLocale() const;
-        int GetSessionDbLocaleIndex() const;
 
     private:
         void* m_callbackArg;

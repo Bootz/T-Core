@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `game_event_npc_gossip`;
