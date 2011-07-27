@@ -329,7 +329,7 @@ class boss_xt002 : public CreatureScript
                     // Need this so we can properly determine when to expose heart again in damagetaken hook
                     if (me->GetHealthPct() > (25 * (4 - _heartExposed)))
                         ++_heartExposed;
-                        
+
                     _healthRecovered = true;
                 }
             }
@@ -703,7 +703,7 @@ class mob_boombot : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 const /*diff*/)
             {
                 if (!UpdateVictim())
                     return;
@@ -1052,7 +1052,7 @@ class achievement_nerf_engineering : public AchievementCriteriaScript
         {
             if (!target || !target->GetAI())
                 return false;
-            
+
             return !(target->GetAI()->GetData(DATA_HEALTH_RECOVERED));
         }
 };
@@ -1076,7 +1076,7 @@ class achievement_nerf_gravity_bombs : public AchievementCriteriaScript
     public:
         achievement_nerf_gravity_bombs() : AchievementCriteriaScript("achievement_nerf_gravity_bombs") { }
 
-        bool OnCheck(Player* source, Unit* target)
+        bool OnCheck(Player* /*source*/, Unit* target)
         {
             if (!target || !target->GetAI())
                 return false;
