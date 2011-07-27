@@ -299,6 +299,11 @@ inline bool IsLootCraftingSpell(SpellEntry const *spellInfo)
         (totems->TotemCategory[0] != 0 || spellInfo->GetEffectItemType(0) == 0)));
 }
 
+inline bool IsQuestTameSpell(SpellEntry const* spellInfo)
+{
+    return spellInfo->GetSpellEffectIdByIndex(0) == SPELL_EFFECT_THREAT && spellInfo->GetSpellEffectIdByIndex(1) == SPELL_EFFECT_APPLY_AURA && spellInfo->GetEffectApplyAuraNameByIndex(1) == SPELL_AURA_DUMMY;
+}
+
 bool IsHigherHankOfSpell(uint32 spellId_1, uint32 spellId_2);
 bool IsSingleFromSpellSpecificPerCaster(SpellSpecific spellSpec1, SpellSpecific spellSpec2);
 bool IsSingleFromSpellSpecificPerTarget(SpellSpecific spellSpec1, SpellSpecific spellSpec2);

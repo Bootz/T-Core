@@ -23,7 +23,6 @@
 #define TRILLIUM_SPELLAURAEFFECTS_H
 
 class Unit;
-class DynamicObject;
 class AuraEffect;
 class Aura;
 
