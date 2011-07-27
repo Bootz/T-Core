@@ -27,15 +27,12 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Opcode %u", recvPacket.GetOpcode());
 
     uint32 _channelId;
-    uint32 unk;
-    bool _isCustom; // If channel is custom or not
-    bool _serverJoined; // player gets joined to channel on login (by server)
-    std::string _channelName;
-    std::string _password;
-    std::string _unk;
+    std::string _password, _channelName;
+
+    recvPacket.read_skip<uint8>();
+    recvPacket.read_skip<uint8>();
 
     recvPacket >> _channelId;
-    recvPacket >> unk;
 
     if (_channelId)
     {
@@ -51,11 +48,8 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
             return;
     }
 
-    recvPacket >> _isCustom;
-    recvPacket >> _serverJoined;
-    recvPacket >> _password;
     recvPacket >> _channelName;
-    recvPacket >> _unk; // always empty
+    recvPacket >> _password;
 
     if (_channelName.empty())
         return;
