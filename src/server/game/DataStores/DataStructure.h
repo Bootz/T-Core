@@ -1294,7 +1294,7 @@ struct MapEntry
     uint32  MapID;                                          // 0
     //DBCString       internalname;                         // 1 unused
     uint32  map_type;                                       // 2
-    //uint32 unk_330;                                       // 3
+    //uint32 flags;                                         // 3 flags
     //uint32 unk4;                                          // 4 4.0.1
     //uint32 isPvP;                                         // 5        m_PVP 0 or 1 for battlegrounds (not arenas)
     DBCString name;                                         // 6        m_MapName_lang
@@ -1344,7 +1344,7 @@ struct MapDifficultyEntry
     //uint32      Id;                                       // 0
     uint32      MapId;                                      // 1
     uint32      Difficulty;                                 // 2       (for arenas: arena slot)
-    DBCString   areaTriggerText;                            // 3        m_message_lang (text showed when transfer to map failed)
+    //DBCString   areaTriggerText;                          // 3        m_message_lang (text showed when transfer to map failed)
     uint32      resetTime;                                  // 4,       m_raidDuration in secs, 0 if no fixed reset time
     uint32      maxPlayers;                                 // 5,       m_maxPlayers some heroic versions have 0 when expected same amount as in normal version
     //DBCString       difficultyString;                     // 6        m_difficultystring
@@ -2277,14 +2277,15 @@ struct WorldMapAreaEntry
     //uint32  ID;                                           // 0
     uint32  map_id;                                         // 1
     uint32  area_id;                                        // 2 index (continent 0 areas ignored)
-    //DBCString internal_name                                   // 3
+    //DBCString internal_name                               // 3
     float   y1;                                             // 4
     float   y2;                                             // 5
     float   x1;                                             // 6
     float   x2;                                             // 7
     int32   virtual_map_id;                                 // 8 -1 (map_id have correct map) other: virtual map where zone show (map_id - where zone in fact internally)
-    // int32   dungeonMap_id;                               // 9 pointer to DungeonMap.dbc (owerride x1, x2, y1, y2 coordinates)
-    // uint32  someMapID;                                   // 10
+    //int32   dungeonMap_id;                                // 9 pointer to DungeonMap.dbc (owerride x1,x2,y1,y2 coordinates)
+    //uint32  someMapID;                                    // 10
+    //uint32   unk1;                                        // 11 4.0.0
 };
 
 #define MAX_WORLD_MAP_OVERLAY_AREA_IDX 4
