@@ -468,7 +468,7 @@ void BattlegroundSA::AddPlayer(Player *plr)
     m_PlayerScores[plr->GetGUID()] = sc;
 }
 
-void BattlegroundSA::RemovePlayer(Player* /*plr*/, uint64 /*guid*/)
+void BattlegroundSA::RemovePlayer(Player* /*plr*/, uint64 /*guid*/, uint32 /*team*/)
 {
 }
 

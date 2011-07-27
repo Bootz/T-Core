@@ -909,7 +909,7 @@ void Battleground::RemovePlayerAtLeave(const uint64& guid, bool Transport, bool 
         plr->SpawnCorpseBones();
     }
 
-    RemovePlayer(plr, guid);                                // BG subclass specific code
+    RemovePlayer(plr, guid, team);                           // BG subclass specific code
 
     if (participant) // if the player was a match participant, remove auras, calc rating, update queue
     {
@@ -1194,7 +1194,7 @@ void Battleground::EventPlayerLoggedOut(Player* player)
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
         // drop flag and handle other cleanups
-        RemovePlayer(player, player->GetGUID());
+        RemovePlayer(player, player->GetGUID(), GetPlayerTeam(player->GetGUID()));
 
         // 1 player is logging out, if it is the last, then end arena!
         if (isArena())

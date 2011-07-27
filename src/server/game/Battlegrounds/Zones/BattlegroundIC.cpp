@@ -313,7 +313,7 @@ void BattlegroundIC::AddPlayer(Player *plr)
     SendTransportInit(plr);
 }
 
-void BattlegroundIC::RemovePlayer(Player* plr, uint64 /*guid*/)
+void BattlegroundIC::RemovePlayer(Player* plr, uint64 /*guid*/, uint32 /*team*/)
 {
     plr->RemoveAura(SPELL_QUARRY);
     plr->RemoveAura(SPELL_OIL_REFINERY);
