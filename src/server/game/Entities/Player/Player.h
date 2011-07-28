@@ -394,11 +394,11 @@ enum PlayerFlags
     PLAYER_FLAGS_IN_PVP            = 0x00000200,
     PLAYER_FLAGS_HIDE_HELM         = 0x00000400,
     PLAYER_FLAGS_HIDE_CLOAK        = 0x00000800,
-    PLAYER_FLAGS_PLAYED_LONG_TIME  = 0x00001000,           // played long time
-    PLAYER_FLAGS_PLAYED_TOO_LONG   = 0x00002000,           // played too long time
+    PLAYER_FLAGS_PLAYED_LONG_TIME  = 0x00001000,               // played long time
+    PLAYER_FLAGS_PLAYED_TOO_LONG   = 0x00002000,               // played too long time
     PLAYER_FLAGS_IS_OUT_OF_BOUNDS  = 0x00004000,
     PLAYER_FLAGS_DEVELOPER         = 0x00008000,               // <Dev> prefix for something?
-    PLAYER_FLAGS_UNK17             = 0x00010000,               // pre-3.0.3 PLAYER_FLAGS_SANCTUARY flag for player entered sanctuary
+    PLAYER_FLAGS_ENABLE_LOW_LEVEL_RAID  = 0x00010000,
     PLAYER_FLAGS_TAXI_BENCHMARK    = 0x00020000,               // taxi benchmark mode (on/off) (2.0.1)
     PLAYER_FLAGS_PVP_TIMER         = 0x00040000,               // 3.0.2, pvp timer active (after you disable pvp manually)
     PLAYER_FLAGS_UNK20             = 0x00080000,
