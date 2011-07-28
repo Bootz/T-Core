@@ -57,7 +57,7 @@ enum Opcodes
     SMSG_CHARACTER_LOGIN_FAILED                      = 0x0B2E3, // 14333
     SMSG_LOGIN_SETTIMESPEED                          = 0x0766F, // 14333
     SMSG_GAMETIME_UPDATE                             = 0x06AFE, // 14333
-    CMSG_GAMETIME_SET                                = 0x0F2AB, // 14333
+    CMSG_GAMETIME_SET                                = 0x10007, //
     SMSG_GAMETIME_SET                                = 0x0B26F, // 14333
     CMSG_GAMESPEED_SET                               = 0x10009, // 
     SMSG_GAMESPEED_SET                               = 0x0AAB2, // 14333
@@ -191,7 +191,7 @@ enum Opcodes
     SMSG_READ_ITEM_FAILED                            = 0x06EE7, // 14333
     SMSG_ITEM_COOLDOWN                               = 0x0F6FE, // 14333
     CMSG_GAMEOBJ_USE                                 = 0x072BB, // 14333
-    CMSG_DESTROY_ITEMS                               = 0x06E7A, // 14333
+    CMSG_DESTROY_ITEMS                               = 0x10046, //
     SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x10047, // 
     CMSG_AREATRIGGER                                 = 0x062A6, // 14333
     MSG_MOVE_START_FORWARD                           = 0x018E1, // 14333
@@ -276,7 +276,7 @@ enum Opcodes
     CMSG_STANDSTATECHANGE                            = 0x032EA, // 14333
     CMSG_EMOTE                                       = 0x0B6AF, // 14333
     SMSG_EMOTE                                       = 0x076FE, // 14333
-    CMSG_TEXT_EMOTE                                  = 0x07EB6, // 14333
+    CMSG_TEXT_EMOTE                                  = 0x10084, //
     SMSG_TEXT_EMOTE                                  = 0x026EF, // 14333
     CMSG_AUTOEQUIP_GROUND_ITEM                       = 0x10085, //
     CMSG_AUTOSTORE_GROUND_ITEM                       = 0x10086, //
@@ -708,7 +708,7 @@ enum Opcodes
     MSG_PETITION_RENAME                              = 0x0FAFA, // 14333
     SMSG_INIT_WORLD_STATES                           = 0x07EB7, // 14333
     SMSG_UPDATE_WORLD_STATE                          = 0x02A3F, // 14333
-    CMSG_ITEM_NAME_QUERY                             = 0x07EF7, // 14333
+    CMSG_ITEM_NAME_QUERY                             = 0x1012B, //
     SMSG_ITEM_NAME_QUERY_RESPONSE                    = 0x1012C, //
     SMSG_PET_ACTION_FEEDBACK                         = 0x06A7B, // 14333
     CMSG_CHAR_RENAME                                 = 0x06263, // 14333
@@ -1022,8 +1022,8 @@ enum Opcodes
     CMSG_CLEAR_CHANNEL_WATCH                         = 0x03EA2, // 14333
     SMSG_INSPECT_TALENT                              = 0x101E1, //
     SMSG_GOGOGO_OBSOLETE                             = 0x101E2, //
-    SMSG_ECHO_PARTY_SQUELCH                          = 0x02A7A, // 14333
-    CMSG_SET_TITLE_SUFFIX                            = 0x101E3, //
+    SMSG_ECHO_PARTY_SQUELCH                          = 0x101E3, //
+    CMSG_SET_TITLE_SUFFIX                            = 0x101E4, //
     CMSG_SPELLCLICK                                  = 0x0EA77, // 14333
     SMSG_LOOT_LIST                                   = 0x0B2AB, // 14333
     CMSG_GM_CHARACTER_RESTORE                        = 0x101E5, //

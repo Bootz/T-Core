@@ -1042,7 +1042,6 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_GRANT_LEVEL,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_REFER_A_FRIEND,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_DECLINE_CHANNEL_INVITE,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleChannelDeclineInvite      );
-    DEFINE_OPCODE_HANDLER( CMSG_DECLINE_CHANNEL_INVITE,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_GROUPACTION_THROTTLED,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_OVERRIDE_LIGHT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_TOTEM_CREATED,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
