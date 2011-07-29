@@ -1,2 +1,0 @@
-ALTER TABLE `gameobject_template`
-ADD COLUMN `unk2` INT(3) UNSIGNED DEFAULT '0' NOT NULL AFTER `data31`;
