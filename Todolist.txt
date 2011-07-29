@@ -6,10 +6,9 @@
  /                                            /
  |   4.) Drop Old Spells from Core           |
  |   5.) Install a Bot in Mirc Channel!      |
- |   6.) Fix the gameobject bug              |
  \__________________________________________/
  /                                           \
-|    7.) Fix startup errors.                  \
+|    6.) Fix startup errors.                  \
  \_____________________________________________\
  /                                             /
 |Please Edit this file if you change anything.|
