@@ -2521,7 +2521,6 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                                 || (m_targets.GetUnitTarget()->getDeathState() == CORPSE
                                     && m_targets.GetUnitTarget()->GetDisplayId() == m_targets.GetUnitTarget()->GetNativeDisplayId()
                                     && m_targets.GetUnitTarget()->GetTypeId() == TYPEID_UNIT
-                                    && !m_targets.GetUnitTarget()->ToCreature()->isDeadByDefault()
                                     && !(m_targets.GetUnitTarget()->GetCreatureTypeMask() & CREATURE_TYPEMASK_MECHANICAL_OR_ELEMENTAL)
                                     && m_targets.GetUnitTarget()->GetDisplayId() == m_targets.GetUnitTarget()->GetNativeDisplayId()))))
                             {
@@ -4493,7 +4492,7 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
         return;
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
-    if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
+    if (!preventDefault && eff & !Effect < TOTAL_SPELL_EFFECTS)
     {
         (this->*SpellEffects[eff])(Effect);
     }
