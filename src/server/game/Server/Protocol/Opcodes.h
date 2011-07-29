@@ -723,7 +723,7 @@ enum Opcodes
     CMSG_MOVE_WATER_WALK_ACK                         = 0x10133, //
     CMSG_MOVE_NOT_ACTIVE_MOVER                       = 0x10134, //
     SMSG_PLAY_SOUND                                  = 0x02622, // 14333
-    CMSG_BATTLEFIELD_STATUS                          = 0x050D0, // 14333
+    CMSG_BATTLEFIELD_STATUS                          = 0x03620, // 14333
     SMSG_BATTLEFIELD_STATUS1                         = 0x00B07, // 14333
     SMSG_BATTLEFIELD_STATUS2                         = 0x04B05, // 14333
     SMSG_BATTLEFIELD_STATUS3                         = 0x04F63, // 14333
@@ -1277,6 +1277,7 @@ enum Opcodes
     CMSG_REDIRECTION_AUTH_PROOF                      = 0x001A0, // 14333
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x0EE77, // 14333
     SMSG_LFG_OPEN_FROM_GOSSIP                        = 0x0AEFA, // 14333
+    MSG_LFG_GET_PLAYER_INFO                          = 0x0B6E3, // 14333
     SMSG_UNKNOWN_1302                                = 0x1028F, //
     CMSG_UNKNOWN_1303                                = 0x10290, //
     SMSG_UNKNOWN_1304                                = 0x10291, //
