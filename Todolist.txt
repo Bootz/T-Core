@@ -19,6 +19,7 @@ TODO-List for TrilliumEMU Developer #
 11. Implemented the new Battlegrounds.
 12. Fixed the Packets for Battlegrounds.
 13. Implemented Wintergrasp Battlefield.
+14. Update the rest of Opcodes to 4.2.0.
 
 // Database Developer:
 1. Fixed all startup errors.
