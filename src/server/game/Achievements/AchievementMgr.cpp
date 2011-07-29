@@ -575,6 +575,13 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
             if (need_execute_ins)
                 trans->Append(ssins.str().c_str());
         }
+        // Save the AchievementPoints
+        if (m_achievementPoints)
+        {
+            std::ostringstream ss;
+            ss << "UPDATE characters SET achievementPoints=" << m_achievementPoints << " WHERE guid = " << GetPlayer()->GetGUIDLow();
+            trans->Append(ss.str().c_str());
+        }
     }
 }
 
@@ -607,6 +614,9 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
                     if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(titleId))
                         if (!GetPlayer()->HasTitle(titleEntry))
                             GetPlayer()->SetTitle(titleEntry);
+
+            if (const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievementid))
+                m_achievementPoints += achievement->points;
 
         } while (achievementResult->NextRow());
     }
@@ -2024,6 +2034,9 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
     ca.date = time(NULL);
     ca.changed = true;
+  
+    if (const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievement->ID))
+    m_achievementPoints += achievement->points;
 
     // don't insert for ACHIEVEMENT_FLAG_REALM_FIRST_KILL since otherwise only the first group member would reach that achievement
     // TODO: where do set this instead?

@@ -6809,7 +6809,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     // At melee attack or Hammer of the Righteous spell damage considered as melee attack
                     bool stacker = !procSpell || procSpell->Id == 53595;
-                    bool damager = procSpell && procSpell->GetEquippedItemClass() == ITEM_CLASS_WEAPON;
+                    // spells with SPELL_DAMAGE_CLASS_MELEE excluding Judgements
+                    bool damager = procSpell && procSpell->GetEquippedItemClass() != -1;
 
                     if (!stacker && !damager)
                         return false;
@@ -6840,7 +6841,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* trigger
 
                     // At melee attack or Hammer of the Righteous spell damage considered as melee attack
                     bool stacker = !procSpell || procSpell->Id == 53595;
-                    bool damager = procSpell && procSpell->GetEquippedItemClass() == ITEM_CLASS_WEAPON;
+                    // spells with SPELL_DAMAGE_CLASS_MELEE excluding Judgements
+                    bool damager = procSpell && procSpell->GetEquippedItemClass() != -1;
 
                     if (!stacker && !damager)
                         return false;
@@ -12274,6 +12276,7 @@ int32 Unit::GetHealthGain(int32 dVal)
     return gain;
 }
 
+// returns negative amount on power reduction
 int32 Unit::ModifyPower(Powers power, int32 dVal)
 {
     int32 gain = 0;
