@@ -27,7 +27,7 @@ class WorldPacket;
 
 enum OBJECT_UPDATE_TYPE
 {
-    UPDATETYPE_MOVEMENT             = 0xFF,
+    UPDATETYPE_MOVEMENT             = 0,
     UPDATETYPE_CREATE_OBJECT        = 1,
     UPDATETYPE_CREATE_OBJECT2       = 2,
     UPDATETYPE_OUT_OF_RANGE_OBJECTS = 3,
