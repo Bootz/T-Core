@@ -469,6 +469,7 @@ void AchievementMgr::DeleteFromDB(uint32 lowguid)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM character_achievement WHERE guid = %u", lowguid);
     trans->PAppend("DELETE FROM character_achievement_progress WHERE guid = %u", lowguid);
+    trans->PAppend("UPDATE characters SET achievementPoints = 0 WHERE guid = %u",lowguid);
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -523,6 +524,7 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
         bool need_execute_ins = false;
         std::ostringstream ssdel;
         std::ostringstream ssins;
+        std::ostringstream ss;
         for (CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         {
             if (!iter->second.changed)
@@ -578,7 +580,6 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
         // Save the AchievementPoints
         if (m_achievementPoints)
         {
-            std::ostringstream ss;
             ss << "UPDATE characters SET achievementPoints=" << m_achievementPoints << " WHERE guid = " << GetPlayer()->GetGUIDLow();
             trans->Append(ss.str().c_str());
         }
@@ -597,12 +598,9 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
             uint32 achievementid = fields[0].GetUInt16();
 
             const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievementid);
-
             // don't must happen: cleanup at server startup in sAchievementMgr->LoadCompletedAchievements()
             if (!achievement)
                 continue;
-
-            m_achievementPoints += achievement->points;
 
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
@@ -2034,9 +2032,6 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
     ca.date = time(NULL);
     ca.changed = true;
-  
-    if (const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievement->ID))
-    m_achievementPoints += achievement->points;
 
     // don't insert for ACHIEVEMENT_FLAG_REALM_FIRST_KILL since otherwise only the first group member would reach that achievement
     // TODO: where do set this instead?
