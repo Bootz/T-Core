@@ -2085,7 +2085,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                     target = SearchNearbyTarget(range, SPELL_TARGETS_ENEMY, m_spellInfo->GetSpellEffect(i));
                     break;
                 case TARGET_UNIT_NEARBY_ALLY:
-                case TARGET_UNIT_NEARBY_ALLY_UNK:
+                case TARGET_UNIT_NEARBY_PARTY: // TODO: fix party/raid targets
                 case TARGET_UNIT_NEARBY_RAID:
                     range = GetSpellMaxRange(m_spellInfo, true);
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
@@ -2401,7 +2401,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
                     break;
                 case TARGET_UNIT_CHAINHEAL:
                 case TARGET_UNIT_NEARBY_ALLY:  // fix me
-                case TARGET_UNIT_NEARBY_ALLY_UNK:
+                case TARGET_UNIT_NEARBY_PARTY:
                 case TARGET_UNIT_NEARBY_RAID:
                     range = GetSpellMaxRange(m_spellInfo, true);
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
@@ -4487,14 +4487,15 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
     //we do not need DamageMultiplier here.
     damage = CalculateDamage(i, NULL);
 
-    const SpellEffectEntry * Effect = m_spellInfo->GetSpellEffect((SpellEffIndex)i);
-    if (!Effect)
-        return;
+    const SpellEffectEntry *Effect = m_spellInfo->GetSpellEffect((SpellEffIndex)i);
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
-    if (!preventDefault && eff & !Effect < TOTAL_SPELL_EFFECTS)
+    if (!Effect)
     {
-        (this->*SpellEffects[eff])(Effect);
+        if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
+        {
+            (this->*SpellEffects[eff])(Effect);
+        }
     }
 }
 
@@ -4779,7 +4780,7 @@ SpellCastResult Spell::CheckCast(bool strict)
         }
 
         //Target must be facing you.
-        if ((m_spellInfo->Attributes == (SPELL_ATTR0_UNK4 | SPELL_ATTR0_NOT_SHAPESHIFT | SPELL_ATTR0_UNK18 | SPELL_ATTR0_STOP_ATTACK_TARGET)) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
+        if ((m_spellInfo->Attributes == (SPELL_ATTR0_ABILITY | SPELL_ATTR0_NOT_SHAPESHIFT | SPELL_ATTR0_UNK18 | SPELL_ATTR0_STOP_ATTACK_TARGET)) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_INFRONT;
