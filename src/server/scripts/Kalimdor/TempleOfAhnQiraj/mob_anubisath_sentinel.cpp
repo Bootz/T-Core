@@ -56,9 +56,9 @@ class mob_anubisath_sentinel : public CreatureScript
 public:
     mob_anubisath_sentinel() : CreatureScript("mob_anubisath_sentinel") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new aqsentinelAI (pCreature);
+        return new aqsentinelAI (creature);
     }
 
     struct aqsentinelAI : public ScriptedAI
@@ -82,7 +82,7 @@ public:
             }
         }
 
-        aqsentinelAI(Creature *c) : ScriptedAI(c)
+        aqsentinelAI(Creature* c) : ScriptedAI(c)
         {
             ClearBuddyList();
             abselected = 0;                                     // just initialization of variable
@@ -112,7 +112,7 @@ public:
             }
         }
 
-        void GiveBuddyMyList(Creature *c)
+        void GiveBuddyMyList(Creature* c)
         {
             aqsentinelAI *cai = CAST_AI(aqsentinelAI, (c)->AI());
             for (int i=0; i<3; ++i)
@@ -124,15 +124,15 @@ public:
         void SendMyListToBuddies()
         {
             for (int i=0; i<3; ++i)
-                if (Creature *pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
+                if (Creature* pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
                     GiveBuddyMyList(pNearby);
         }
 
-        void CallBuddiesToAttack(Unit *who)
+        void CallBuddiesToAttack(Unit* who)
         {
             for (int i=0; i<3; ++i)
             {
-                Creature *c = Unit::GetCreature(*me, NearbyGUID[i]);
+                Creature* c = Unit::GetCreature(*me, NearbyGUID[i]);
                 if (c)
                 {
                     if (!c->isInCombat())
@@ -173,7 +173,7 @@ public:
             return 0;                                           // should never happen
         }
 
-        void GetOtherSentinels(Unit *who)
+        void GetOtherSentinels(Unit* who)
         {
             bool *chosenAbilities = new bool[9];
             memset(chosenAbilities, 0, 9*sizeof(bool));
@@ -187,7 +187,7 @@ public:
                 if (!NearbyGUID[bli])
                     break;
 
-                Creature *pNearby = Unit::GetCreature(*me, NearbyGUID[bli]);
+                Creature* pNearby = Unit::GetCreature(*me, NearbyGUID[bli]);
                 if (!pNearby)
                     break;
 
@@ -213,7 +213,7 @@ public:
                 {
                     if (!NearbyGUID[i])
                         continue;
-                    if (Creature *pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
+                    if (Creature* pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
                     {
                         if (pNearby->isDead())
                             pNearby->Respawn();
@@ -242,7 +242,7 @@ public:
         {
             for (int ni=0; ni<3; ++ni)
             {
-                Creature *sent = Unit::GetCreature(*me, NearbyGUID[ni]);
+                Creature* sent = Unit::GetCreature(*me, NearbyGUID[ni]);
                 if (!sent)
                     continue;
                 if (sent->isDead())

@@ -53,7 +53,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
 
         struct boss_watchkeeper_gargolmarAI : public ScriptedAI
         {
-            boss_watchkeeper_gargolmarAI(Creature* pCreature) : ScriptedAI(pCreature)
+            boss_watchkeeper_gargolmarAI(Creature* creature) : ScriptedAI(creature)
             {
             }
 
@@ -127,8 +127,8 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 {
                     DoScriptText(SAY_SURGE, me);
 
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pTarget, SPELL_SURGE);
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(target, SPELL_SURGE);
 
                     Surge_Timer = 5000+rand()%8000;
                 }

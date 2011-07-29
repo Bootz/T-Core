@@ -63,9 +63,9 @@ class boss_magus_telestra : public CreatureScript
 public:
     boss_magus_telestra() : CreatureScript("boss_magus_telestra") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_magus_telestraAI (pCreature);
+        return new boss_magus_telestraAI (creature);
     }
 
     struct boss_magus_telestraAI : public ScriptedAI
@@ -187,14 +187,14 @@ public:
                         break;
                     }
                 }
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    Summoned->AI()->AttackStart(pTarget);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    Summoned->AI()->AttackStart(target);
                 return Summoned->GetGUID();
             }
             return 0;
         }
 
-        void SummonedCreatureDespawn(Creature *summon)
+        void SummonedCreatureDespawn(Creature* summon)
         {
             if (summon->isAlive())
                 return;
@@ -306,9 +306,9 @@ public:
 
             if (uiIceNovaTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
-                    DoCast(pTarget, SPELL_ICE_NOVA, false);
+                    DoCast(target, SPELL_ICE_NOVA, false);
                     uiCooldown = 1500;
                 }
                 uiIceNovaTimer = 15*IN_MILLISECONDS;
@@ -316,9 +316,9 @@ public:
 
             if (uiGravityWellTimer <= diff)
             {
-                if (Unit *pTarget = me->getVictim())
+                if (Unit* target = me->getVictim())
                 {
-                    DoCast(pTarget, SPELL_GRAVITY_WELL);
+                    DoCast(target, SPELL_GRAVITY_WELL);
                     uiCooldown = 6*IN_MILLISECONDS;
                 }
                 uiGravityWellTimer = 15*IN_MILLISECONDS;
@@ -326,9 +326,9 @@ public:
 
             if (uiFireBombTimer <= diff)
             {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
-                    DoCast(pTarget, SPELL_FIREBOMB, false);
+                    DoCast(target, SPELL_FIREBOMB, false);
                     uiCooldown = 2*IN_MILLISECONDS;
                 }
                 uiFireBombTimer = 2*IN_MILLISECONDS;

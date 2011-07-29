@@ -44,9 +44,9 @@ class boss_broggok : public CreatureScript
 
         struct boss_broggokAI : public ScriptedAI
         {
-            boss_broggokAI(Creature* pCreature) : ScriptedAI(pCreature)
+            boss_broggokAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = pCreature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
 
             InstanceScript* pInstance;
@@ -77,7 +77,7 @@ class boss_broggok : public CreatureScript
                 }
             }
 
-            void JustSummoned(Creature *summoned)
+            void JustSummoned(Creature* summoned)
             {
                 summoned->setFaction(16);
                 summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);

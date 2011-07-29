@@ -79,14 +79,14 @@ class boss_sjonnir : public CreatureScript
 public:
     boss_sjonnir() : CreatureScript("boss_sjonnir") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_sjonnirAI (pCreature);
+        return new boss_sjonnirAI (creature);
     }
 
     struct boss_sjonnirAI : public ScriptedAI
     {
-        boss_sjonnirAI(Creature *c) : ScriptedAI(c), lSummons(me)
+        boss_sjonnirAI(Creature* c) : ScriptedAI(c), lSummons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -133,7 +133,7 @@ public:
 
             if (pInstance)
             {
-                if (GameObject *pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_SJONNIR_DOOR)))
+                if (GameObject* pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_SJONNIR_DOOR)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -152,8 +152,8 @@ public:
 
             if (uiChainLightningTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_CHAIN_LIGHTING);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_CHAIN_LIGHTING);
                 uiChainLightningTimer = 10000 + rand()%5000;
             } else uiChainLightningTimer -= diff;
 
@@ -205,8 +205,8 @@ public:
         void JustSummoned(Creature* summon)
         {
             summon->GetMotionMaster()->MovePoint(0, CenterPoint.x, CenterPoint.y, CenterPoint.z);
-            /*if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                summon->AI()->AttackStart(pTarget);*/
+            /*if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                summon->AI()->AttackStart(target);*/
             lSummons.Summon(summon);
         }
 
@@ -247,14 +247,14 @@ class mob_malformed_ooze : public CreatureScript
 public:
     mob_malformed_ooze() : CreatureScript("mob_malformed_ooze") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_malformed_oozeAI(pCreature);
+        return new mob_malformed_oozeAI(creature);
     }
 
     struct mob_malformed_oozeAI : public ScriptedAI
     {
-        mob_malformed_oozeAI(Creature *c) : ScriptedAI(c) {}
+        mob_malformed_oozeAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiMergeTimer;
 
@@ -290,21 +290,21 @@ class mob_iron_sludge : public CreatureScript
 public:
     mob_iron_sludge() : CreatureScript("mob_iron_sludge") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_iron_sludgeAI(pCreature);
+        return new mob_iron_sludgeAI(creature);
     }
 
     struct mob_iron_sludgeAI : public ScriptedAI
     {
-        mob_iron_sludgeAI(Creature *c) : ScriptedAI(c)
+        mob_iron_sludgeAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             if (pInstance)
                 if (Creature* Sjonnir = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))

@@ -289,7 +289,7 @@ void WorldSession::SendLfgUpdatePlayer(const LfgUpdateData& updateData)
     bool queued = false;
     bool extrainfo = false;
 
-    switch(updateData.updateType)
+    switch (updateData.updateType)
     {
         case LFG_UPDATETYPE_JOIN_PROPOSAL:
         case LFG_UPDATETYPE_ADDED_TO_QUEUE:
@@ -332,7 +332,7 @@ void WorldSession::SendLfgUpdateParty(const LfgUpdateData& updateData)
     bool extrainfo = false;
     bool queued = false;
 
-    switch(updateData.updateType)
+    switch (updateData.updateType)
     {
         case LFG_UPDATETYPE_JOIN_PROPOSAL:
             extrainfo = true;
@@ -405,7 +405,7 @@ void WorldSession::SendLfgRoleCheckUpdate(const LfgRoleCheck* pRoleCheck)
     data << uint32(pRoleCheck->state);                     // Check result
     data << uint8(pRoleCheck->state == LFG_ROLECHECK_INITIALITING);
     data << uint8(dungeons.size());                        // Number of dungeons
-    if (dungeons.size())
+    if (!dungeons.empty())
     {
         for (LfgDungeonSet::iterator it = dungeons.begin(); it != dungeons.end(); ++it)
         {
@@ -415,7 +415,7 @@ void WorldSession::SendLfgRoleCheckUpdate(const LfgRoleCheck* pRoleCheck)
     }
 
     data << uint8(pRoleCheck->roles.size());               // Players in group
-    if (pRoleCheck->roles.size())
+    if (!pRoleCheck->roles.empty())
     {
         // Leader info MUST be sent 1st :S
         uint64 guid = pRoleCheck->leader;

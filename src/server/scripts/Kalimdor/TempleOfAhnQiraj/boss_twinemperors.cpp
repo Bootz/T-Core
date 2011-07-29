@@ -57,7 +57,7 @@
 
 struct boss_twinemperorsAI : public ScriptedAI
 {
-    boss_twinemperorsAI(Creature *c): ScriptedAI(c)
+    boss_twinemperorsAI(Creature* c): ScriptedAI(c)
     {
         pInstance = c->GetInstanceScript();
     }
@@ -75,7 +75,7 @@ struct boss_twinemperorsAI : public ScriptedAI
 
     virtual bool IAmVeklor() = 0;
     virtual void Reset() = 0;
-    virtual void CastSpellOnBug(Creature *pTarget) = 0;
+    virtual void CastSpellOnBug(Creature* target) = 0;
 
     void TwinReset()
     {
@@ -91,7 +91,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         EnrageTimer = 15*60000;
     }
 
-    Creature *GetOtherBoss()
+    Creature* GetOtherBoss()
     {
         if (pInstance)
             return Unit::GetCreature(*me, pInstance->GetData64(IAmVeklor() ? DATA_VEKNILASH : DATA_VEKLOR));
@@ -101,7 +101,7 @@ struct boss_twinemperorsAI : public ScriptedAI
 
     void DamageTaken(Unit* /*done_by*/, uint32 &damage)
     {
-        Unit *pOtherBoss = GetOtherBoss();
+        Unit* pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
         {
             float dPercent = ((float)damage) / ((float)me->GetMaxHealth());
@@ -118,7 +118,7 @@ struct boss_twinemperorsAI : public ScriptedAI
 
     void JustDied(Unit* /*Killer*/)
     {
-        Creature *pOtherBoss = GetOtherBoss();
+        Creature* pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
         {
             pOtherBoss->SetHealth(0);
@@ -138,7 +138,7 @@ struct boss_twinemperorsAI : public ScriptedAI
     void EnterCombat(Unit* who)
     {
         DoZoneInCombat();
-        Creature *pOtherBoss = GetOtherBoss();
+        Creature* pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
         {
             // TODO: we should activate the other boss location so he can start attackning even if nobody
@@ -153,12 +153,12 @@ struct boss_twinemperorsAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *entry)
+    void SpellHit(Unit* caster, const SpellEntry *entry)
     {
         if (caster == me)
             return;
 
-        Creature *pOtherBoss = GetOtherBoss();
+        Creature* pOtherBoss = GetOtherBoss();
         if (entry->Id != SPELL_HEAL_BROTHER || !pOtherBoss)
             return;
 
@@ -189,7 +189,7 @@ struct boss_twinemperorsAI : public ScriptedAI
 
         if (Heal_Timer <= diff)
         {
-            Unit *pOtherBoss = GetOtherBoss();
+            Unit* pOtherBoss = GetOtherBoss();
             if (pOtherBoss && pOtherBoss->IsWithinDist(me, 60))
             {
                 DoCast(pOtherBoss, SPELL_HEAL_BROTHER);
@@ -208,7 +208,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         if (IAmVeklor())
             return;                                         // mechanics handled by veknilash so they teleport exactly at the same time and to correct coordinates
 
-        Creature *pOtherBoss = GetOtherBoss();
+        Creature* pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
         {
             //me->MonsterYell("Teleporting ...", LANG_UNIVERSAL, 0);
@@ -256,7 +256,7 @@ struct boss_twinemperorsAI : public ScriptedAI
             {
                 AfterTeleport = false;
                 me->ClearUnitState(UNIT_STAT_STUNNED);
-                if (Unit *nearu = me->SelectNearestTarget(100))
+                if (Unit* nearu = me->SelectNearestTarget(100))
                 {
                     //DoYell(nearu->GetName(), LANG_UNIVERSAL, 0);
                     AttackStart(nearu);
@@ -285,7 +285,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         }
     }
 
-    void MoveInLineOfSight(Unit *who)
+    void MoveInLineOfSight(Unit* who)
     {
         if (!who || me->getVictim())
             return;
@@ -304,7 +304,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         }
     }
 
-    Creature *RespawnNearbyBugsAndGetOne()
+    Creature* RespawnNearbyBugsAndGetOne()
     {
         std::list<Creature*> lUnitList;
         me->GetCreatureListWithEntryInGrid(lUnitList, 15316, 150.0f);
@@ -313,11 +313,11 @@ struct boss_twinemperorsAI : public ScriptedAI
         if (lUnitList.empty())
             return NULL;
 
-        Creature *nearb = NULL;
+        Creature* nearb = NULL;
 
         for (std::list<Creature*>::const_iterator iter = lUnitList.begin(); iter != lUnitList.end(); ++iter)
         {
-            Creature *c = *iter;
+            Creature* c = *iter;
             if (c)
             {
                 if (c->isDead())
@@ -340,7 +340,7 @@ struct boss_twinemperorsAI : public ScriptedAI
     {
         if (BugsTimer < diff || Abuse_Bug_Timer <= diff)
         {
-            Creature *c = RespawnNearbyBugsAndGetOne();
+            Creature* c = RespawnNearbyBugsAndGetOne();
             if (Abuse_Bug_Timer <= diff)
             {
                 if (c)
@@ -384,15 +384,15 @@ class boss_veknilash : public CreatureScript
 public:
     boss_veknilash() : CreatureScript("boss_veknilash") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_veknilashAI (pCreature);
+        return new boss_veknilashAI (creature);
     }
 
     struct boss_veknilashAI : public boss_twinemperorsAI
     {
         bool IAmVeklor() {return false;}
-        boss_veknilashAI(Creature *c) : boss_twinemperorsAI(c) {}
+        boss_veknilashAI(Creature* c) : boss_twinemperorsAI(c) {}
 
         uint32 UpperCut_Timer;
         uint32 UnbalancingStrike_Timer;
@@ -414,12 +414,12 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void CastSpellOnBug(Creature *pTarget)
+        void CastSpellOnBug(Creature* target)
         {
-            pTarget->setFaction(14);
-            pTarget->AI()->AttackStart(me->getThreatManager().getHostilTarget());
-            pTarget->AddAura(SPELL_MUTATE_BUG, pTarget);
-            pTarget->SetFullHealth();
+            target->setFaction(14);
+            target->AI()->AttackStart(me->getThreatManager().getHostilTarget());
+            target->AddAura(SPELL_MUTATE_BUG, target);
+            target->SetFullHealth();
         }
 
         void UpdateAI(const uint32 diff)
@@ -470,15 +470,15 @@ class boss_veklor : public CreatureScript
 public:
     boss_veklor() : CreatureScript("boss_veklor") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_veklorAI (pCreature);
+        return new boss_veklorAI (creature);
     }
 
     struct boss_veklorAI : public boss_twinemperorsAI
     {
         bool IAmVeklor() {return true;}
-        boss_veklorAI(Creature *c) : boss_twinemperorsAI(c) {}
+        boss_veklorAI(Creature* c) : boss_twinemperorsAI(c) {}
 
         uint32 ShadowBolt_Timer;
         uint32 Blizzard_Timer;
@@ -504,11 +504,11 @@ public:
             me->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, 0);
         }
 
-        void CastSpellOnBug(Creature *pTarget)
+        void CastSpellOnBug(Creature* target)
         {
-            pTarget->setFaction(14);
-            pTarget->AddAura(SPELL_EXPLODEBUG, pTarget);
-            pTarget->SetFullHealth();
+            target->setFaction(14);
+            target->AddAura(SPELL_EXPLODEBUG, target);
+            target->SetFullHealth();
         }
 
         void UpdateAI(const uint32 diff)
@@ -538,16 +538,16 @@ public:
             //Blizzard_Timer
             if (Blizzard_Timer <= diff)
             {
-                Unit *pTarget = NULL;
-                pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 45, true);
-                if (pTarget)
-                    DoCast(pTarget, SPELL_BLIZZARD);
+                Unit* target = NULL;
+                target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45, true);
+                if (target)
+                    DoCast(target, SPELL_BLIZZARD);
                 Blizzard_Timer = 15000+rand()%15000;
             } else Blizzard_Timer -= diff;
 
             if (ArcaneBurst_Timer <= diff)
             {
-                Unit *mvic;
+                Unit* mvic;
                 if ((mvic=SelectTarget(SELECT_TARGET_NEAREST, 0, NOMINAL_MELEE_RANGE, true)) != NULL)
                 {
                     DoCast(mvic, SPELL_ARCANEBURST);

@@ -37,9 +37,9 @@ class boss_kurinnaxx : public CreatureScript
 public:
     boss_kurinnaxx() : CreatureScript("boss_kurinnaxx") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_kurinnaxxAI (pCreature);
+        return new boss_kurinnaxxAI (creature);
     }
 
     struct boss_kurinnaxxAI : public ScriptedAI
@@ -105,8 +105,8 @@ public:
             //Santrap spell
             if (uiSandtrapTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_SANDTRAP);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_SANDTRAP);
                 uiSandtrapTimer = 30000;
             } else uiSandtrapTimer -= diff;
 
@@ -127,8 +127,8 @@ public:
             //Summon Player spell
             if (uiSummonPlayerTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_SUMMON_PLAYER);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_SUMMON_PLAYER);
                 uiSummonPlayerTimer = urand(30000, 40000);
             } else uiSummonPlayerTimer -= diff;
 

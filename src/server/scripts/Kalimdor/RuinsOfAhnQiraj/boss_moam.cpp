@@ -53,9 +53,9 @@ class boss_moam : public CreatureScript
 public:
     boss_moam() : CreatureScript("boss_moam") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_moamAI (pCreature);
+        return new boss_moamAI (creature);
     }
 
     struct boss_moamAI : public ScriptedAI
@@ -102,9 +102,9 @@ public:
         {
             for (uint8 i=0;i<6;++i)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                 {
-                    pTarget->ModifyPower(POWER_MANA, -500);
+                    target->ModifyPower(POWER_MANA, -500);
                     me->ModifyPower(POWER_MANA, 1000);
                 }
             }

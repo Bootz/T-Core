@@ -54,7 +54,7 @@ public:
         if (!*args)
             return false;
 
-        Player *target = handler->getSelectedPlayer();
+        Player* target = handler->getSelectedPlayer();
         if (!target)
         {
             handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -89,7 +89,7 @@ public:
     }
     static bool HandleHonorUpdateCommand(ChatHandler* handler, const char* /*args*/)
     {
-        Player *target = handler->getSelectedPlayer();
+        Player* target = handler->getSelectedPlayer();
         if (!target)
         {
             handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);

@@ -95,7 +95,7 @@ public:
 
     struct boss_anub_arakAI : public ScriptedAI
     {
-        boss_anub_arakAI(Creature *c) : ScriptedAI(c), lSummons(me)
+        boss_anub_arakAI(Creature* c) : ScriptedAI(c), lSummons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -146,10 +146,10 @@ public:
             }
         }
 
-        Creature* DoSummonImpaleTarget(Unit *pTarget)
+        Creature* DoSummonImpaleTarget(Unit* target)
         {
             Position targetPos;
-            pTarget->GetPosition(&targetPos);
+            target->GetPosition(&targetPos);
 
             if (TempSummon* pImpaleTarget = me->SummonCreature(CREATURE_IMPALE_TARGET, targetPos, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 6*IN_MILLISECONDS))
             {
@@ -163,7 +163,7 @@ public:
             return NULL;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             if (pInstance)
@@ -188,7 +188,7 @@ public:
                     case IMPALE_PHASE_TARGET:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         {
-                            if (Creature *pImpaleTarget = DoSummonImpaleTarget(target))
+                            if (Creature* pImpaleTarget = DoSummonImpaleTarget(target))
                                 pImpaleTarget->CastSpell(pImpaleTarget, SPELL_IMPALE_SHAKEGROUND, true);
                             uiImpaleTimer = 3*IN_MILLISECONDS;
                             uiImpalePhase = IMPALE_PHASE_ATTACK;
@@ -216,7 +216,7 @@ public:
                 {
                     for (uint8 i = 0; i < 2; ++i)
                     {
-                        if (Creature *Guardian = me->SummonCreature(CREATURE_GUARDIAN, SpawnPointGuardian[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                        if (Creature* Guardian = me->SummonCreature(CREATURE_GUARDIAN, SpawnPointGuardian[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                         {
                             Guardian->AddThreat(me->getVictim(), 0.0f);
                             DoZoneInCombat(Guardian);
@@ -233,7 +233,7 @@ public:
                         {
                             for (uint8 i = 0; i < 2; ++i)
                             {
-                                if (Creature *Venomancer = me->SummonCreature(CREATURE_VENOMANCER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                                if (Creature* Venomancer = me->SummonCreature(CREATURE_VENOMANCER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                                 {
                                     Venomancer->AddThreat(me->getVictim(), 0.0f);
                                     DoZoneInCombat(Venomancer);
@@ -252,7 +252,7 @@ public:
                         {
                             for (uint8 i = 0; i < 2; ++i)
                             {
-                                if (Creature *Datter = me->SummonCreature(CREATURE_DATTER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                                if (Creature* Datter = me->SummonCreature(CREATURE_DATTER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                                 {
                                     Datter->AddThreat(me->getVictim(), 0.0f);
                                     DoZoneInCombat(Datter);
@@ -318,7 +318,7 @@ public:
                 {
                     if (Unit* target = me->getVictim())
                     {
-                        if (Creature *pImpaleTarget = DoSummonImpaleTarget(target))
+                        if (Creature* pImpaleTarget = DoSummonImpaleTarget(target))
                             me->CastSpell(pImpaleTarget, DUNGEON_MODE(SPELL_POUND, SPELL_POUND_H), false);
                     }
                     uiPoundTimer = 16500;
@@ -329,7 +329,7 @@ public:
             }
         }
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             DoScriptText(SAY_DEATH, me);
             lSummons.DespawnAll();
@@ -337,9 +337,9 @@ public:
                 pInstance->SetData(DATA_ANUBARAK_EVENT, DONE);
         }
 
-        void KilledUnit(Unit *pVictim)
+        void KilledUnit(Unit* victim)
         {
-            if (pVictim == me)
+            if (victim == me)
                 return;
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
@@ -350,7 +350,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new boss_anub_arakAI(creature);
     }

@@ -66,16 +66,16 @@ class boss_xevozz : public CreatureScript
 public:
     boss_xevozz() : CreatureScript("boss_xevozz") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_xevozzAI (pCreature);
+        return new boss_xevozzAI (creature);
     }
 
     struct boss_xevozzAI : public ScriptedAI
     {
-        boss_xevozzAI(Creature* pCreature) : ScriptedAI(pCreature)
+        boss_xevozzAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance  = pCreature->GetInstanceScript();
+            pInstance  = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
@@ -118,33 +118,33 @@ public:
         void JustSummoned(Creature* pSummoned)
         {
             pSummoned->SetSpeed(MOVE_RUN, 0.5f);
-            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
             {
-                pSummoned->AddThreat(pTarget, 0.00f);
-                pSummoned->AI()->AttackStart(pTarget);
+                pSummoned->AddThreat(target, 0.00f);
+                pSummoned->AI()->AttackStart(target);
             }
         }
 
-        void AttackStart(Unit* pWho)
+        void AttackStart(Unit* who)
         {
             if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                 return;
 
-            if (me->Attack(pWho, true))
+            if (me->Attack(who, true))
             {
-                me->AddThreat(pWho, 0.0f);
-                me->SetInCombatWith(pWho);
-                pWho->SetInCombatWith(me);
-                DoStartMovement(pWho);
+                me->AddThreat(who, 0.0f);
+                me->SetInCombatWith(who);
+                who->SetInCombatWith(me);
+                DoStartMovement(who);
             }
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             if (pInstance)
             {
-                if (GameObject *pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_XEVOZZ_CELL)))
+                if (GameObject* pDoor = pInstance->instance->GetGameObject(pInstance->GetData64(DATA_XEVOZZ_CELL)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -157,7 +157,7 @@ public:
             }
         }
 
-        void MoveInLineOfSight(Unit* /*pWho*/) {}
+        void MoveInLineOfSight(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 uiDiff)
         {
@@ -197,7 +197,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void JustDied(Unit* /*pKiller*/)
+        void JustDied(Unit* /*killer*/)
         {
             DoScriptText(SAY_DEATH, me);
 
@@ -217,9 +217,9 @@ public:
                 }
             }
         }
-        void KilledUnit(Unit* pVictim)
+        void KilledUnit(Unit* victim)
         {
-            if (pVictim == me)
+            if (victim == me)
                 return;
 
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
@@ -233,16 +233,16 @@ class mob_ethereal_sphere : public CreatureScript
 public:
     mob_ethereal_sphere() : CreatureScript("mob_ethereal_sphere") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_ethereal_sphereAI (pCreature);
+        return new mob_ethereal_sphereAI (creature);
     }
 
     struct mob_ethereal_sphereAI : public ScriptedAI
     {
-        mob_ethereal_sphereAI(Creature* pCreature) : ScriptedAI(pCreature)
+        mob_ethereal_sphereAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance   = pCreature->GetInstanceScript();
+            pInstance   = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;

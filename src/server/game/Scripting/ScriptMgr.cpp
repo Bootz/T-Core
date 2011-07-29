@@ -262,7 +262,7 @@ void ScriptMgr::FillSpellSummary()
 
             //Spell targets aoe friends
             if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_TARGET ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY_PARTY ||
                 pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_FRIEND-1);
 
@@ -271,7 +271,7 @@ void ScriptMgr::FillSpellSummary()
                 pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY ||
                 pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_PARTY ||
                 pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_TARGET ||
+                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY_PARTY ||
                 pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_FRIEND-1);
 

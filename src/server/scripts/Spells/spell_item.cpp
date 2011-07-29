@@ -226,13 +226,13 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* pTarget = GetHitUnit())
+            if (Unit* target = GetHitUnit())
             {
                 Unit* pCaster = GetCaster();
                 if (urand(0, 99) < 15)
                     pCaster->CastSpell(pCaster, SPELL_GNOMISH_DEATH_RAY_SELF, true, NULL);    // failure
                 else
-                    pCaster->CastSpell(pTarget, SPELL_GNOMISH_DEATH_RAY_TARGET, true, NULL);
+                    pCaster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET, true, NULL);
             }
         }
 
@@ -398,7 +398,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* pTarget = GetHitUnit())
+            if (Unit* target = GetHitUnit())
             {
                 uint32 spellId = SPELL_NET_O_MATIC_TRIGGERED3;
                 uint32 roll = urand(0, 99);
@@ -407,7 +407,7 @@ public:
                 else if (roll < 4)                       // 2% for 20 sec root, charge to target (off-like chance unknown)
                     spellId = SPELL_NET_O_MATIC_TRIGGERED2;
 
-                GetCaster()->CastSpell(pTarget, spellId, true, NULL);
+                GetCaster()->CastSpell(target, spellId, true, NULL);
             }
         }
 
@@ -576,7 +576,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* pTarget = GetHitUnit())
+            if (Unit* target = GetHitUnit())
             {
                 Unit* pCaster = GetCaster();
 
@@ -592,17 +592,17 @@ public:
                 {
                     spellId = SPELL_POLYMORPH;
                     if (urand(0, 100) <= 30)        // 30% chance to self-cast
-                        pTarget = pCaster;
+                        target = pCaster;
                 }
                 else if (rand < 95)                 // Enveloping Winds (15% chance)
                     spellId = SPELL_ENVELOPING_WINDS;
                 else                                // Summon Felhund minion (5% chance)
                 {
                     spellId = SPELL_SUMMON_FELHOUND_MINION;
-                    pTarget = pCaster;
+                    target = pCaster;
                 }
 
-                pCaster->CastSpell(pTarget, spellId, true, GetCastItem());
+                pCaster->CastSpell(target, spellId, true, GetCastItem());
             }
         }
 

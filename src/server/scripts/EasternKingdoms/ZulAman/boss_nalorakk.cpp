@@ -97,7 +97,7 @@ class boss_nalorakk : public CreatureScript
 
         struct boss_nalorakkAI : public ScriptedAI
         {
-            boss_nalorakkAI(Creature *c) : ScriptedAI(c)
+            boss_nalorakkAI(Creature* c) : ScriptedAI(c)
             {
                 MoveEvent = true;
                 MovePhase = 0;
@@ -151,7 +151,7 @@ class boss_nalorakk : public CreatureScript
                 // me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, 5122);  // TODO: find the correct equipment id
             }
 
-            void SendAttacker(Unit *pTarget)
+            void SendAttacker(Unit* target)
             {
                 std::list<Creature*> templist;
                 float x, y, z;
@@ -171,7 +171,7 @@ class boss_nalorakk : public CreatureScript
                     cell.Visit(pair, cSearcher, *(me->GetMap()));
                 }
 
-                if (!templist.size())
+                if (templist.empty())
                     return;
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
@@ -179,7 +179,7 @@ class boss_nalorakk : public CreatureScript
                     if ((*i) && me->IsWithinDistInMap((*i), 25))
                     {
                         (*i)->SetNoCallAssistance(true);
-                        (*i)->AI()->AttackStart(pTarget);
+                        (*i)->AI()->AttackStart(target);
                     }
                 }
             }
@@ -190,7 +190,7 @@ class boss_nalorakk : public CreatureScript
                     ScriptedAI::AttackStart(who);
             }
 
-            void MoveInLineOfSight(Unit *who)
+            void MoveInLineOfSight(Unit* who)
             {
                 if (!MoveEvent)
                 {
@@ -410,9 +410,9 @@ class boss_nalorakk : public CreatureScript
                     {
                         me->MonsterYell(YELL_SURGE, LANG_UNIVERSAL, 0);
                         DoPlaySoundToSet(me, SOUND_YELL_SURGE);
-                        Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1, 45, true);
-                        if (pTarget)
-                            DoCast(pTarget, SPELL_SURGE);
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 45, true);
+                        if (target)
+                            DoCast(target, SPELL_SURGE);
                         Surge_Timer = 15000 + rand()%5000;
                     } else Surge_Timer -= diff;
                 }

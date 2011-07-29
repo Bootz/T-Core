@@ -46,7 +46,7 @@ class boss_venoxis : public CreatureScript
 
         struct boss_venoxisAI : public ScriptedAI
         {
-            boss_venoxisAI(Creature *c) : ScriptedAI(c)
+            boss_venoxisAI(Creature* c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -121,8 +121,8 @@ class boss_venoxis : public CreatureScript
                             TargetInRange = 0;
                             for (uint8 i = 0; i < 10; ++i)
                             {
-                                if (Unit *pTarget = SelectTarget(SELECT_TARGET_TOPAGGRO, i))
-                                    if (me->IsWithinMeleeRange(pTarget))
+                                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, i))
+                                    if (me->IsWithinMeleeRange(target))
                                         ++TargetInRange;
                             }
 
@@ -140,8 +140,8 @@ class boss_venoxis : public CreatureScript
 
                         if (HolyFire_Timer < diff && TargetInRange < 3)
                         {
-                            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                DoCast(pTarget, SPELL_HOLY_FIRE);
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                DoCast(target, SPELL_HOLY_FIRE);
 
                             HolyFire_Timer = 8000;
                         } else HolyFire_Timer -= diff;
@@ -170,8 +170,8 @@ class boss_venoxis : public CreatureScript
 
                         if (PhaseTwo && VenomSpit_Timer <= diff)
                         {
-                            if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                DoCast(pTarget, SPELL_VENOMSPIT);
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                DoCast(target, SPELL_VENOMSPIT);
 
                             VenomSpit_Timer = 15000 + rand()%5000;
                         } else VenomSpit_Timer -= diff;

@@ -83,14 +83,14 @@ class boss_palehoof : public CreatureScript
 public:
     boss_palehoof() : CreatureScript("boss_palehoof") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_palehoofAI (pCreature);
+        return new boss_palehoofAI (creature);
     }
 
     struct boss_palehoofAI : public ScriptedAI
     {
-        boss_palehoofAI(Creature *c) : ScriptedAI(c)
+        boss_palehoofAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -191,8 +191,8 @@ public:
 
             if (uiImpaleTimer <= diff)
             {
-              if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                  DoCast(pTarget, SPELL_IMPALE);
+              if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                  DoCast(target, SPELL_IMPALE);
               uiImpaleTimer = urand(8000, 12000);
             } else uiImpaleTimer -= diff;
 
@@ -252,7 +252,7 @@ public:
                 move = (Phase)(move % 4);
             }
             //send orb to summon spot
-            Creature *pOrb = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_MOB_ORB) : 0);
+            Creature* pOrb = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_MOB_ORB) : 0);
             if (pOrb && pOrb->isAlive())
             {
                 if (currentPhase == PHASE_NONE)
@@ -286,14 +286,14 @@ class mob_ravenous_furbolg : public CreatureScript
 public:
     mob_ravenous_furbolg() : CreatureScript("mob_ravenous_furbolg") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_ravenous_furbolgAI (pCreature);
+        return new mob_ravenous_furbolgAI (creature);
     }
 
     struct mob_ravenous_furbolgAI : public ScriptedAI
     {
-        mob_ravenous_furbolgAI(Creature *c) : ScriptedAI(c)
+        mob_ravenous_furbolgAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -315,7 +315,7 @@ public:
             if (pInstance)
                 if (pInstance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -369,7 +369,7 @@ public:
         {
             if (pInstance)
             {
-                Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -399,14 +399,14 @@ class mob_frenzied_worgen : public CreatureScript
 public:
     mob_frenzied_worgen() : CreatureScript("mob_frenzied_worgen") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_frenzied_worgenAI (pCreature);
+        return new mob_frenzied_worgenAI (creature);
     }
 
     struct mob_frenzied_worgenAI : public ScriptedAI
     {
-        mob_frenzied_worgenAI(Creature *c) : ScriptedAI(c)
+        mob_frenzied_worgenAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -428,7 +428,7 @@ public:
             if (pInstance)
                 if (pInstance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -484,7 +484,7 @@ public:
         {
             if (pInstance)
             {
-                Creature *pPalehoof = Unit::GetCreature((*me), pInstance->GetData64(DATA_GORTOK_PALEHOOF));
+                Creature* pPalehoof = Unit::GetCreature((*me), pInstance->GetData64(DATA_GORTOK_PALEHOOF));
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -515,14 +515,14 @@ class mob_ferocious_rhino : public CreatureScript
 public:
     mob_ferocious_rhino() : CreatureScript("mob_ferocious_rhino") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_ferocious_rhinoAI (pCreature);
+        return new mob_ferocious_rhinoAI (creature);
     }
 
     struct mob_ferocious_rhinoAI : public ScriptedAI
     {
-        mob_ferocious_rhinoAI(Creature *c) : ScriptedAI(c)
+        mob_ferocious_rhinoAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -544,7 +544,7 @@ public:
             if (pInstance)
                 if (pInstance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -570,8 +570,8 @@ public:
 
             if (uiGrievousWoundTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_GRIEVOUS_WOUND);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_GRIEVOUS_WOUND);
                 uiGrievousWoundTimer = 18000 + rand() % 4000;
             } else uiGrievousWoundTimer -= diff;
 
@@ -599,7 +599,7 @@ public:
         {
             if (pInstance)
             {
-                Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -635,14 +635,14 @@ class mob_massive_jormungar : public CreatureScript
 public:
     mob_massive_jormungar() : CreatureScript("mob_massive_jormungar") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_massive_jormungarAI (pCreature);
+        return new mob_massive_jormungarAI (creature);
     }
 
     struct mob_massive_jormungarAI : public ScriptedAI
     {
-        mob_massive_jormungarAI(Creature *c) : ScriptedAI(c)
+        mob_massive_jormungarAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -664,7 +664,7 @@ public:
             if (pInstance)
                 if (pInstance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -678,8 +678,8 @@ public:
 
             if (uiAcidSpitTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_ACID_SPIT);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_ACID_SPIT);
                 uiAcidSpitTimer = 2000 + rand() % 2000;
             } else uiAcidSpitTimer -= diff;
 
@@ -691,8 +691,8 @@ public:
 
             if (uiPoisonBreathTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_POISON_BREATH);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    DoCast(target, SPELL_POISON_BREATH);
                 uiPoisonBreathTimer = 8000 + rand() % 4000;
             } else uiPoisonBreathTimer -= diff;
 
@@ -720,7 +720,7 @@ public:
         {
             if (pInstance)
             {
-                Creature *pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -741,14 +741,14 @@ class mob_palehoof_orb : public CreatureScript
 public:
     mob_palehoof_orb() : CreatureScript("mob_palehoof_orb") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_palehoof_orbAI (pCreature);
+        return new mob_palehoof_orbAI (creature);
     }
 
     struct mob_palehoof_orbAI : public ScriptedAI
     {
-        mob_palehoof_orbAI(Creature *c) : ScriptedAI(c)
+        mob_palehoof_orbAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -775,7 +775,7 @@ public:
             {
                 if (currentPhase<5&&currentPhase >= 0)
                 {
-                   Creature *pNext = NULL;
+                   Creature* pNext = NULL;
                    switch(currentPhase)
                    {
                         case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
@@ -806,7 +806,7 @@ public:
                 return;
             if (id > 4)
                 return;
-            Creature *pNext = NULL;
+            Creature* pNext = NULL;
             switch(id)
             {
                 case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), pInstance ? pInstance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
@@ -830,11 +830,11 @@ class go_palehoof_sphere : public GameObjectScript
 public:
     go_palehoof_sphere() : GameObjectScript("go_palehoof_sphere") { }
 
-    bool OnGossipHello(Player* /*pPlayer*/, GameObject *pGO)
+    bool OnGossipHello(Player* /*player*/, GameObject* pGO)
     {
         InstanceScript *pInstance = pGO->GetInstanceScript();
 
-        Creature *pPalehoof = Unit::GetCreature(*pGO, pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+        Creature* pPalehoof = Unit::GetCreature(*pGO, pInstance ? pInstance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
         if (pPalehoof && pPalehoof->isAlive())
         {
             pGO->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);

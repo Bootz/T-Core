@@ -50,7 +50,7 @@ class boss_hakkar : public CreatureScript
 
         struct boss_hakkarAI : public ScriptedAI
         {
-            boss_hakkarAI(Creature *c) : ScriptedAI(c)
+            boss_hakkarAI(Creature* c) : ScriptedAI(c)
             {
                 m_pInstance = c->GetInstanceScript();
             }
@@ -127,8 +127,8 @@ class boss_hakkar : public CreatureScript
                 //CauseInsanity_Timer
                 /*if (CauseInsanity_Timer <= diff)
                 {
-                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_CAUSEINSANITY);
+                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                DoCast(target, SPELL_CAUSEINSANITY);
 
                 CauseInsanity_Timer = 35000 + rand()%8000;
                 } else CauseInsanity_Timer -= diff;*/
@@ -136,8 +136,8 @@ class boss_hakkar : public CreatureScript
                 //WillOfHakkar_Timer
                 if (WillOfHakkar_Timer <= diff)
                 {
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pTarget, SPELL_WILLOFHAKKAR);
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(target, SPELL_WILLOFHAKKAR);
 
                     WillOfHakkar_Timer = 25000 + rand()%10000;
                 } else WillOfHakkar_Timer -= diff;

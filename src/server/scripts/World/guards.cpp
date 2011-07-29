@@ -297,7 +297,7 @@ public:
         bool canTeleport;
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new guard_shattrath_scryerAI(creature);
     }
@@ -361,7 +361,7 @@ public:
         bool canTeleport;
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new guard_shattrath_aldorAI(creature);
     }

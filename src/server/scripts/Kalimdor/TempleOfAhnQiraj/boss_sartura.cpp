@@ -38,14 +38,14 @@ class boss_sartura : public CreatureScript
 public:
     boss_sartura() : CreatureScript("boss_sartura") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_sarturaAI (pCreature);
+        return new boss_sarturaAI (creature);
     }
 
     struct boss_sarturaAI : public ScriptedAI
     {
-        boss_sarturaAI(Creature *c) : ScriptedAI(c) {}
+        boss_sarturaAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;
@@ -101,12 +101,12 @@ public:
                 if (WhirlWindRandom_Timer <= diff)
                 {
                     //Attack random Gamers
-                    Unit *pTarget = NULL;
-                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                    if (pTarget)
-                    me->AddThreat(pTarget, 1.0f);
-                    me->TauntApply(pTarget);
-                    AttackStart(pTarget);
+                    Unit *target = NULL;
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    if (target)
+                    me->AddThreat(target, 1.0f);
+                    me->TauntApply(target);
+                    AttackStart(target);
 
                     WhirlWindRandom_Timer = 3000 + rand()%4000;
                 } else WhirlWindRandom_Timer -= diff;
@@ -130,12 +130,12 @@ public:
                 if (AggroReset_Timer <= diff)
                 {
                     //Attack random Gamers
-                    Unit *pTarget = NULL;
-                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                    if (pTarget)
-                    me->AddThreat(pTarget, 1.0f);
-                    me->TauntApply(pTarget);
-                    AttackStart(pTarget);
+                    Unit *target = NULL;
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    if (target)
+                    me->AddThreat(target, 1.0f);
+                    me->TauntApply(target);
+                    AttackStart(target);
 
                         AggroReset = true;
                         AggroReset_Timer = 2000 + rand()%3000;
@@ -183,14 +183,14 @@ class mob_sartura_royal_guard : public CreatureScript
 public:
     mob_sartura_royal_guard() : CreatureScript("mob_sartura_royal_guard") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_sartura_royal_guardAI (pCreature);
+        return new mob_sartura_royal_guardAI (creature);
     }
 
     struct mob_sartura_royal_guardAI : public ScriptedAI
     {
-        mob_sartura_royal_guardAI(Creature *c) : ScriptedAI(c) {}
+        mob_sartura_royal_guardAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;
@@ -238,12 +238,12 @@ public:
                 if (WhirlWindRandom_Timer <= diff)
                 {
                     //Attack random Gamers
-                    Unit *pTarget = NULL;
-                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                    if (pTarget)
-                    me->AddThreat(pTarget, 1.0f);
-                    me->TauntApply(pTarget);
-                    AttackStart(pTarget);
+                    Unit *target = NULL;
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    if (target)
+                    me->AddThreat(target, 1.0f);
+                    me->TauntApply(target);
+                    AttackStart(target);
 
                     WhirlWindRandom_Timer = 3000 + rand()%4000;
                 } else WhirlWindRandom_Timer -= diff;
@@ -259,12 +259,12 @@ public:
                 if (AggroReset_Timer <= diff)
                 {
                     //Attack random Gamers
-                    Unit *pTarget = NULL;
-                    pTarget = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                    if (pTarget)
-                    me->AddThreat(pTarget, 1.0f);
-                    me->TauntApply(pTarget);
-                    AttackStart(pTarget);
+                    Unit *target = NULL;
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                    if (target)
+                    me->AddThreat(target, 1.0f);
+                    me->TauntApply(target);
+                    AttackStart(target);
 
                     AggroReset = true;
                     AggroReset_Timer = 2000 + rand()%3000;

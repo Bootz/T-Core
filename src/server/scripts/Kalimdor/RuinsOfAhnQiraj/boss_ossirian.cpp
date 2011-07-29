@@ -40,9 +40,9 @@ class boss_ossirian : public CreatureScript
 public:
     boss_ossirian() : CreatureScript("boss_ossirian") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_ossirianAI (pCreature);
+        return new boss_ossirianAI (creature);
     }
 
     struct boss_ossirianAI : public ScriptedAI

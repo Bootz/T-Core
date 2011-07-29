@@ -99,16 +99,16 @@ class boss_onyxia : public CreatureScript
 public:
     boss_onyxia() : CreatureScript("boss_onyxia") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_onyxiaAI (pCreature);
+        return new boss_onyxiaAI (creature);
     }
 
     struct boss_onyxiaAI : public ScriptedAI
     {
-        boss_onyxiaAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
+        boss_onyxiaAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            m_pInstance = pCreature->GetInstanceScript();
+            m_pInstance = creature->GetInstanceScript();
             Reset();
         }
 
@@ -171,7 +171,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
             me->SetInCombatWithZone();
@@ -191,11 +191,11 @@ public:
             Summons.DespawnAll();
         }
 
-        void JustSummoned(Creature *pSummoned)
+        void JustSummoned(Creature* pSummoned)
         {
             pSummoned->SetInCombatWithZone();
-            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                pSummoned->AI()->AttackStart(pTarget);
+            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                pSummoned->AI()->AttackStart(target);
 
             switch (pSummoned->GetEntry())
             {
@@ -209,12 +209,12 @@ public:
             Summons.Summon(pSummoned);
         }
 
-        void SummonedCreatureDespawn(Creature *summon)
+        void SummonedCreatureDespawn(Creature* summon)
         {
             Summons.Despawn(summon);
         }
 
-        void KilledUnit(Unit* /*pVictim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(SAY_KILL, me);
         }
@@ -451,8 +451,8 @@ public:
                 {
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != POINT_MOTION_TYPE)
                     {
-                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_FIREBALL);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_FIREBALL);
 
                         m_uiFireballTimer = 8000;
                     }

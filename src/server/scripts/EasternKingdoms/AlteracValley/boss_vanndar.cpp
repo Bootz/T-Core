@@ -50,7 +50,7 @@ public:
 
     struct boss_vanndarAI : public ScriptedAI
     {
-        boss_vanndarAI(Creature *c) : ScriptedAI(c) {}
+        boss_vanndarAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiAvatarTimer;
         uint32 uiThunderclapTimer;
@@ -122,7 +122,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI *GetAI(Creature* creature) const
     {
         return new boss_vanndarAI(creature);
     }
