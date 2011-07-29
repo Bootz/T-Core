@@ -155,6 +155,7 @@ public:
         static ChatCommand commandTable[] =
         {
             { "reload",         SEC_ADMINISTRATOR,  true,  NULL,                 "", reloadCommandTable },
+            { "reload all",     SEC_ADMINISTRATOR,  true,  NULL,                 "", reloadAllCommandTable },
             { NULL,             0,                  false, NULL,                               "", NULL }
         };
         return commandTable;
