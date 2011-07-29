@@ -36,7 +36,7 @@ enum Opcodes
     NUM_OPCODE_HANDLERS                              = (0xFFFF+1),  // last unknown opcode + 1.
     UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS,                           // must be >= NUM_OPCODE_HANDLERS
 
-    CMSG_WORLD_TELEPORT                              = 0x10000, //
+    CMSG_WORLD_TELEPORT                              = 0x00080, // 14333
     CMSG_TELEPORT_TO_UNIT                            = 0x10001, //
     SMSG_CHECK_FOR_BOTS                              = 0x10002, //
     CMSG_BOT_DETECTED2                               = 0x10003, //
@@ -723,7 +723,7 @@ enum Opcodes
     CMSG_MOVE_WATER_WALK_ACK                         = 0x10133, //
     CMSG_MOVE_NOT_ACTIVE_MOVER                       = 0x10134, //
     SMSG_PLAY_SOUND                                  = 0x02622, // 14333
-    CMSG_BATTLEFIELD_STATUS                          = 0x03620, // 14333
+    CMSG_BATTLEFIELD_STATUS                          = 0x050D0, // 14333
     SMSG_BATTLEFIELD_STATUS1                         = 0x00B07, // 14333
     SMSG_BATTLEFIELD_STATUS2                         = 0x04B05, // 14333
     SMSG_BATTLEFIELD_STATUS3                         = 0x04F63, // 14333
@@ -1136,7 +1136,7 @@ enum Opcodes
     CMSG_COMPLETE_MOVIE                              = 0x0F63F, // 14333
     CMSG_SET_GLYPH_SLOT                              = 0x10227, //
     CMSG_SET_GLYPH                                   = 0x10228, //
-    SMSG_ACHIEVEMENT_EARNED                          = 0x10229, //
+    SMSG_ACHIEVEMENT_EARNED                          = 0x0BAFA, // 14333
     SMSG_DYNAMIC_DROP_ROLL_RESULT                    = 0x1022A, //
     SMSG_CRITERIA_UPDATE                             = 0x0A2F7, // 14333
     CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x032A7, // 14333
@@ -1193,8 +1193,8 @@ enum Opcodes
     CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE          = 0x10253, //
     CMSG_HEARTH_AND_RESURRECT                        = 0x07E66, // 14333
     SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA        = 0x10254, //
-    SMSG_CRITERIA_DELETED                            = 0x10255, //
-    SMSG_ACHIEVEMENT_DELETED                         = 0x10256, //
+    SMSG_CRITERIA_DELETED                            = 0x0F227, // 14333
+    SMSG_ACHIEVEMENT_DELETED                         = 0x0EAFE, // 14333
     CMSG_SERVER_INFO_QUERY                           = 0x10257, //
     SMSG_SERVER_INFO_RESPONSE                        = 0x10258, //
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x10259, //
@@ -1208,7 +1208,7 @@ enum Opcodes
     SMSG_CLIENTCACHE_VERSION                         = 0x0A237, // 14333
     SMSG_ITEM_REFUND_INFO_RESPONSE                   = 0x10260, // 
     CMSG_ITEM_REFUND_INFO                            = 0x0E276, // 14333
-    CMSG_ITEM_REFUND                                 = 0x10262, //
+    CMSG_ITEM_REFUND                                 = 0x0762A, // 14333
     SMSG_ITEM_REFUND_RESULT                          = 0x10263, // 
     CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x0E626, // 14333
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x06E73, // 14333
