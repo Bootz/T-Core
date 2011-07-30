@@ -708,8 +708,6 @@ enum Opcodes
     MSG_PETITION_RENAME                              = 0x0FAFA, // 14333
     SMSG_INIT_WORLD_STATES                           = 0x07EB7, // 14333
     SMSG_UPDATE_WORLD_STATE                          = 0x02A3F, // 14333
-    CMSG_ITEM_NAME_QUERY                             = 0x1012B, //
-    SMSG_ITEM_NAME_QUERY_RESPONSE                    = 0x1012C, //
     SMSG_PET_ACTION_FEEDBACK                         = 0x06A7B, // 14333
     CMSG_CHAR_RENAME                                 = 0x06263, // 14333
     SMSG_CHAR_RENAME                                 = 0x02E33, // 14333

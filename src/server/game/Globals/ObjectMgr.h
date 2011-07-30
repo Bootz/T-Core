@@ -399,7 +399,6 @@ typedef UNORDERED_MAP<uint32, GameObjectData> GameObjectDataMap;
 typedef UNORDERED_MAP<uint32, CreatureLocale> CreatureLocaleMap;
 typedef UNORDERED_MAP<uint32, GameObjectLocale> GameObjectLocaleMap;
 typedef UNORDERED_MAP<uint32, ItemLocale> ItemLocaleMap;
-typedef UNORDERED_MAP<uint32, ItemSetNameLocale> ItemSetNameLocaleMap;
 typedef UNORDERED_MAP<uint32, QuestLocale> QuestLocaleMap;
 typedef UNORDERED_MAP<uint32, NpcTextLocale> NpcTextLocaleMap;
 typedef UNORDERED_MAP<uint32, PageTextLocale> PageTextLocaleMap;
@@ -650,14 +649,6 @@ class ObjectMgr
         ItemTemplate const* GetItemTemplate(uint32 entry);
         ItemTemplateContainer const* GetItemTemplateStore() { return &ItemTemplateStore; }
 
-        ItemSetNameEntry const* GetItemSetNameEntry(uint32 itemId)
-        {
-            ItemSetNameMap::iterator itr = mItemSetNameMap.find(itemId);
-            if (itr != mItemSetNameMap.end())
-                return &itr->second;
-            return NULL;
-        }
-
         InstanceTemplate const* GetInstanceTemplate(uint32 mapID);
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint8 level) const;
@@ -895,8 +886,6 @@ class ObjectMgr
         void LoadGameobjectRespawnTimes();
         void LoadItemTemplates();
         void LoadItemLocales();
-        void LoadItemSetNames();
-        void LoadItemSetNameLocales();
         void LoadQuestLocales();
         void LoadNpcTextLocales();
         void LoadPageTextLocales();
@@ -1021,12 +1010,6 @@ class ObjectMgr
         {
             ItemLocaleMap::const_iterator itr = mItemLocaleMap.find(entry);
             if (itr == mItemLocaleMap.end()) return NULL;
-            return &itr->second;
-        }
-        ItemSetNameLocale const* GetItemSetNameLocale(uint32 entry) const
-        {
-            ItemSetNameLocaleMap::const_iterator itr = mItemSetNameLocaleMap.find(entry);
-            if (itr == mItemSetNameLocaleMap.end())return NULL;
             return &itr->second;
         }
         QuestLocale const* GetQuestLocale(uint32 entry) const
@@ -1335,9 +1318,6 @@ class ObjectMgr
         HalfNameMap PetHalfName0;
         HalfNameMap PetHalfName1;
 
-        typedef UNORDERED_MAP<uint32, ItemSetNameEntry> ItemSetNameMap;
-        ItemSetNameMap mItemSetNameMap;
-
         MapObjectGuids mMapObjectGuids;
         CreatureDataMap mCreatureDataMap;
         CreatureTemplateContainer CreatureTemplateStore;
@@ -1353,7 +1333,6 @@ class ObjectMgr
 
         ItemTemplateContainer ItemTemplateStore;
         ItemLocaleMap mItemLocaleMap;
-        ItemSetNameLocaleMap mItemSetNameLocaleMap;
         QuestLocaleMap mQuestLocaleMap;
         NpcTextLocaleMap mNpcTextLocaleMap;
         PageTextLocaleMap mPageTextLocaleMap;
