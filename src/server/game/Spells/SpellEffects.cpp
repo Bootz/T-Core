@@ -154,9 +154,9 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectStuck,                                    // 84 SPELL_EFFECT_STUCK
     &Spell::EffectSummonPlayer,                             // 85 SPELL_EFFECT_SUMMON_PLAYER
     &Spell::EffectActivateObject,                           // 86 SPELL_EFFECT_ACTIVATE_OBJECT
-    &Spell::EffectWMODamage,                                // 87 SPELL_EFFECT_WMO_DAMAGE
-    &Spell::EffectWMORepair,                                // 88 SPELL_EFFECT_WMO_REPAIR
-    &Spell::EffectWMOChange,                                // 89 SPELL_EFFECT_WMO_CHANGE // 0 intact // 1 damaged // 2 destroyed // 3 rebuilding
+    &Spell::EffectGameObjectDamage,                         // 87 SPELL_EFFECT_GAMEOBJECT_DAMAGE
+    &Spell::EffectGameObjectRepair,                         // 88 SPELL_EFFECT_GAMEOBJECT_REPAIR
+    &Spell::EffectGameObjectSetDestructionState,            // 89 SPELL_EFFECT_GAMEOBJECT_SET_DESTRUCTION_STATE
     &Spell::EffectKillCreditPersonal,                       // 90 SPELL_EFFECT_KILL_CREDIT              Kill credit but only for single person
     &Spell::EffectUnused,                                   // 91 SPELL_EFFECT_THREAT_ALL               one spell: zzOLDBrainwash
     &Spell::EffectEnchantHeldItem,                          // 92 SPELL_EFFECT_ENCHANT_HELD_ITEM
@@ -568,11 +568,11 @@ void Spell::SpellDamageSchoolDmg(SpellEffectEntry const* effect)
             case SPELLFAMILY_PRIEST:
             {
                 // Shadow Word: Death - deals damage equal to damage done to caster
-                if ((m_spellInfo->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x2))
+                if (m_spellInfo->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x2)
                 {
                     int32 back_damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, (uint32)damage, SPELL_DIRECT_DAMAGE);
                     // Pain and Suffering reduces damage
-                    if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 0))
+                    if (AuraEffect* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 0))
                         AddPctN(back_damage, -aurEff->GetAmount());
 
                     if (back_damage < int32(unitTarget->GetHealth()))
@@ -781,35 +781,28 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     if (!unitTarget)
                         return;
 
-                    float damage;
-                    // DW should benefit of attack power, damage percent mods etc.
-                    // TODO: check if using offhand damage is correct and if it should be divided by 2
-                    if (m_caster->haveOffhandWeapon() && m_caster->getAttackTimer(BASE_ATTACK) > m_caster->getAttackTimer(OFF_ATTACK))
-                        damage = (m_caster->GetFloatValue(UNIT_FIELD_MINOFFHANDDAMAGE) + m_caster->GetFloatValue(UNIT_FIELD_MAXOFFHANDDAMAGE))/2;
-                    else
-                        damage = (m_caster->GetFloatValue(UNIT_FIELD_MINDAMAGE) + m_caster->GetFloatValue(UNIT_FIELD_MAXDAMAGE))/2;
+                    // apply percent damage mods
+                    damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, damage, SPELL_DIRECT_DAMAGE);
 
                     switch (m_spellInfo->Id)
                     {
-                        case 12162: damage *= 0.16f; break; // Rank 1
-                        case 12850: damage *= 0.32f; break; // Rank 2
-                        case 12868: damage *= 0.48f; break; // Rank 3
+                        case 12162: ApplyPctN(damage, 16); break; // Rank 1
+                        case 12850: ApplyPctN(damage, 32); break; // Rank 2
+                        case 12868: ApplyPctN(damage, 48); break; // Rank 3
                         default:
                             sLog->outError("Spell::EffectDummy: Spell %u not handled in DW", m_spellInfo->Id);
                             return;
-                    };
-
-                    // get remaining damage of old Deep Wound aura
-                    AuraEffect* deepWound = unitTarget->GetAuraEffect(12721, 0, m_caster->GetGUID());
-                    if (deepWound)
-                    {
-                        int32 remainingTicks = deepWound->GetBase()->GetDuration() / deepWound->GetAmplitude();
-                        damage += remainingTicks * deepWound->GetAmount();
                     }
 
-                    // 1 tick/sec * 6 sec = 6 ticks
-                    int32 deepWoundsDotBasePoints0 = int32(damage / 6);
-                    m_caster->CastCustomSpell(unitTarget, 12721, &deepWoundsDotBasePoints0, NULL, NULL, true, NULL);
+                    SpellEntry const* spellInfo = sSpellStore.LookupEntry(12721);
+                    uint32 ticks = GetSpellDuration(spellInfo) / spellInfo->EffectAmplitude[0];
+
+                    // Add remaining ticks to damage done
+                    if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(12721, EFFECT_0, m_caster->GetGUID()))
+                        damage += aurEff->GetAmount() * (ticks - aurEff->GetTickNumber());
+
+                    damage = damage / ticks;
+                    m_caster->CastCustomSpell(unitTarget, 12721, &damage, NULL, NULL, true);
                     return;
                 }
                 case 13567:                                 // Dummy Trigger
@@ -1623,11 +1616,14 @@ void Spell::EffectForceCast(SpellEffectEntry const* effect)
             case 73058: // Blood Nova
                 m_caster->CastSpell(unitTarget, damage, true);   // additional spell cast
                 break;
-            case 51888: // Summon Eye of Acherus - a hack for GO cast
-                unitTarget->CastSpell(unitTarget, spellInfo->Id, true, NULL, NULL, m_originalCasterGUID);
-                return;
-
         }
+    }
+
+    // temphack
+    if (m_spellInfo->Id == 51888)
+    {
+        unitTarget->CastSpell(unitTarget, spellInfo->Id, true, NULL, NULL, m_originalCasterGUID);
+        return;
     }
 
     unitTarget->CastSpell(m_caster, spellInfo, true);
@@ -2134,23 +2130,18 @@ void Spell::EffectSendEvent(SpellEffectEntry const* effect)
     */
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell ScriptStart %u for spellid %u in EffectSendEvent ", effect->EffectMiscValue, m_spellInfo->Id);
 
-    Object *pTarget;
+    Object* target = NULL;
     if (focusObject)
-        pTarget = focusObject;
+        target = focusObject;
     else if (unitTarget)
-        pTarget = unitTarget;
+        target = unitTarget;
     else if (gameObjTarget)
-        pTarget = gameObjTarget;
-    else
-        pTarget = NULL;
+        target = gameObjTarget;
 
-    if (unitTarget)
-    {
-        if (ZoneScript* zoneScript = unitTarget->GetZoneScript())
-            zoneScript->ProcessEvent(unitTarget, effect->EffectMiscValue);
-    }
+    if (ZoneScript* zoneScript = m_caster->GetZoneScript())
+        zoneScript->ProcessEvent(unitTarget, effect->EffectMiscValue);
 
-    m_caster->GetMap()->ScriptsStart(sEventScripts, effect->EffectMiscValue, m_caster, pTarget);
+    m_caster->GetMap()->ScriptsStart(sEventScripts, effect->EffectMiscValue, m_caster, target);
 }
 
 void Spell::EffectPowerBurn(SpellEffectEntry const* effect)
@@ -4331,18 +4322,49 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                 // Glyph of Backstab
                 case 63975:
                 {
+                    // search our Rupture aura on target
                     if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00100000, 0, 0, m_caster->GetGUID()))
                     {
                         uint32 countMin = aurEff->GetBase()->GetMaxDuration();
-                        uint32 countMax = 12000;
+                        uint32 countMax = 12000; // this can be wrong, duration should be based on combo-points
                         countMax += m_caster->HasAura(56801) ? 4000 : 0;
 
                         if (countMin < countMax)
                         {
-                            aurEff->GetBase()->SetDuration(uint32(aurEff->GetBase()->GetDuration()+3000));
-                            aurEff->GetBase()->SetMaxDuration(countMin+2000);
+                            aurEff->GetBase()->SetDuration(uint32(aurEff->GetBase()->GetDuration() + 3000));
+                            aurEff->GetBase()->SetMaxDuration(countMin + 2000);
                         }
 
+                    }
+                    return;
+                }
+                // Glyph of Scourge Strike
+                case 69961:
+                {
+                    Unit::AuraEffectList const &mPeriodic = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    for (Unit::AuraEffectList::const_iterator i = mPeriodic.begin(); i != mPeriodic.end(); ++i)
+                    {
+                        AuraEffect const* aurEff = *i;
+                        SpellEntry const* spellInfo = aurEff->GetSpellProto();
+                        // search our Blood Plague and Frost Fever on target
+                        if (spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && spellInfo->SpellFamilyFlags[2] & 0x2 &&
+                            aurEff->GetCasterGUID() == m_caster->GetGUID())
+                        {
+                            uint32 countMin = aurEff->GetBase()->GetMaxDuration();
+                            uint32 countMax = GetSpellMaxDuration(spellInfo);
+
+                            // this Glyph
+                            countMax += 9000;
+                            // talent Epidemic
+                            if (AuraEffect const* epidemic = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 234, EFFECT_0))
+                                countMax += epidemic->GetAmount();
+
+                            if (countMin < countMax)
+                            {
+                                aurEff->GetBase()->SetDuration(aurEff->GetBase()->GetDuration() + 3000);
+                                aurEff->GetBase()->SetMaxDuration(countMin + 3000);
+                            }
+                        }
                     }
                     return;
                 }
@@ -6730,73 +6752,37 @@ void Spell::EffectRedirectThreat(SpellEffectEntry const* /*effect*/)
         m_caster->SetReducedThreatPercent((uint32)damage, unitTarget->GetGUID());
 }
 
-void Spell::EffectWMODamage(SpellEffectEntry const* /*effect*/)
+void Spell::EffectGameObjectDamage(SpellEffectEntry const* /*effect*/)
 {
-    if (gameObjTarget && gameObjTarget->GetGoType() == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING)
-    {
-        Unit* caster = m_originalCaster;
-        if (!caster)
-            return;
+    if (!gameObjTarget)
+        return;
 
-        // Do not allow damage if hp is 0
-        if (gameObjTarget->GetGOValue()->building.health == 0)
-            return;
+    Unit* caster = m_originalCaster;
+    if (!caster)
+        return;
 
-        FactionTemplateEntry const *casterft, *goft;
-        casterft = caster->getFactionTemplateEntry();
-        goft = sFactionTemplateStore.LookupEntry(gameObjTarget->GetUInt32Value(GAMEOBJECT_FACTION));
-        // Do not allow to damage GO's of friendly factions (ie: Wintergrasp Walls/Ulduar Storm Beacons)
-        if ((casterft && goft && !casterft->IsFriendlyTo(*goft)) || !goft)
-        {
-            gameObjTarget->TakenDamage(uint32(damage), caster);
-            WorldPacket data(SMSG_DESTRUCTIBLE_BUILDING_DAMAGE, 8+8+8+4+4);
-            data.append(gameObjTarget->GetPackGUID());
-            data.append(caster->GetPackGUID());
-            if (Unit* who = caster->GetCharmerOrOwner())
-                data.append(who->GetPackGUID());
-            else
-                data << uint8(0);
-            data << uint32(damage);
-            data << uint32(m_spellInfo->Id);
-            gameObjTarget->SendMessageToSet(&data, false);
-        }
-    }
+    FactionTemplateEntry const* casterFaction = caster->getFactionTemplateEntry();
+    FactionTemplateEntry const* targetFaction = sFactionTemplateStore.LookupEntry(gameObjTarget->GetUInt32Value(GAMEOBJECT_FACTION));
+    // Do not allow to damage GO's of friendly factions (ie: Wintergrasp Walls/Ulduar Storm Beacons)
+    if ((casterFaction && targetFaction && !casterFaction->IsFriendlyTo(*targetFaction)) || !targetFaction)
+        gameObjTarget->ModifyHealth(-damage, caster, GetSpellInfo()->Id);
 }
 
-void Spell::EffectWMORepair(SpellEffectEntry const* /*effect*/)
+void Spell::EffectGameObjectRepair(SpellEffectEntry const* /*effect*/)
 {
-    if (gameObjTarget && gameObjTarget->GetGoType() == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING)
-        gameObjTarget->Rebuild();
+    if (!gameObjTarget)
+        return;
+
+    gameObjTarget->ModifyHealth(damage, m_caster);
 }
 
-void Spell::EffectWMOChange(SpellEffectEntry const* effect)
+void Spell::EffectGameObjectSetDestructionState(SpellEffectEntry const* effect)
 {
-    if (gameObjTarget && gameObjTarget->GetGoType() == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING)
-    {
-        Unit* caster = m_originalCaster;
-        if (!caster)
-            return;
+    if (!gameObjTarget || !m_originalCaster)
+        return;
 
-        int ChangeType = effect->EffectMiscValue;
-        switch (ChangeType)
-        {
-            case 0: // intact
-                if (gameObjTarget->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED))
-                    gameObjTarget->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
-                if (gameObjTarget->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED))
-                    gameObjTarget->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
-                break;
-            case 1: // damaged
-                gameObjTarget->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
-                break;
-            case 2: // destroyed
-                gameObjTarget->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
-                break;
-            case 3: // rebuild
-                gameObjTarget->Rebuild();
-                break;
-        }
-    }
+    Player* player = m_originalCaster->GetCharmerOrOwnerPlayerOrPlayerItself();
+    gameObjTarget->SetDestructibleState(GameObjectDestructibleState(effect->EffectMiscValue), player, true);
 }
 
 void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const *properties)

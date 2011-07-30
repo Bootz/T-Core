@@ -650,7 +650,7 @@ enum MovementFlags
     MOVEMENTFLAG_WALKING               = 0x00000100,               // Walking
     MOVEMENTFLAG_ONTRANSPORT           = 0x00000200,               // Used for flying on some creatures
     MOVEMENTFLAG_LEVITATING            = 0x00000400,
-    MOVEMENTFLAG_ROOT                  = 0x00000800,               // Must not be set along with MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD | MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT -> client freeze
+    MOVEMENTFLAG_ROOT                  = 0x00000800,               // Must not be set along with MOVEMENTFLAG_MASK_MOVING
     MOVEMENTFLAG_JUMPING               = 0x00001000,
     MOVEMENTFLAG_FALLING               = 0x00002000,               // damage dealt on that type of falling
     MOVEMENTFLAG_PENDING_STOP          = 0x00004000,
@@ -671,11 +671,13 @@ enum MovementFlags
     MOVEMENTFLAG_FALLING_SLOW          = 0x20000000,               // active rogue safe fall spell (passive)
     MOVEMENTFLAG_HOVER                 = 0x40000000,               // hover, cannot jump
 
-    MOVEMENTFLAG_MOVING         =
-        MOVEMENTFLAG_FORWARD |MOVEMENTFLAG_BACKWARD  |MOVEMENTFLAG_STRAFE_LEFT|MOVEMENTFLAG_STRAFE_RIGHT|
-        MOVEMENTFLAG_PITCH_UP|MOVEMENTFLAG_PITCH_DOWN|MOVEMENTFLAG_JUMPING
-        |MOVEMENTFLAG_FALLING|MOVEMENTFLAG_ASCENDING| MOVEMENTFLAG_SPLINE_ELEVATION,
-    MOVEMENTFLAG_TURNING        =
+    // TODO: Check if PITCH_UP and PITCH_DOWN really belong here..
+    MOVEMENTFLAG_MASK_MOVING =
+        MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD | MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT |
+        MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN | MOVEMENTFLAG_JUMPING | MOVEMENTFLAG_FALLING | MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING | 
+        MOVEMENTFLAG_SPLINE_ELEVATION,
+
+    MOVEMENTFLAG_MASK_TURNING =
         MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT,
 };
 enum MovementFlags2
@@ -2116,8 +2118,8 @@ class Unit : public WorldObject
 
         void BuildMovementPacket(ByteBuffer *data) const;
 
-        bool isMoving() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_MOVING); }
-        bool isTurning() const  { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_TURNING); }
+        bool isMoving() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_MOVING); }
+        bool isTurning() const  { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_TURNING); }
         bool canFly() const     { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
         bool IsFlying() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING); }
         void SetFlying(bool apply);
@@ -2134,6 +2136,37 @@ class Unit : public WorldObject
         Totem* ToTotem(){ if (isTotem()) return reinterpret_cast<Totem*>(this); else return NULL; }
         TempSummon* ToTempSummon() { if (isSummon()) return reinterpret_cast<TempSummon*>(this); else return NULL; }
         const TempSummon* ToTempSummon() const { if (isSummon()) return reinterpret_cast<const TempSummon*>(this); else return NULL; }
+
+        void SetTarget(uint64 guid)
+        {
+            if (!_targetLocked)
+                SetUInt64Value(UNIT_FIELD_TARGET, guid);
+        }
+
+        void FocusTarget(Spell const* focusSpell, uint64 target)
+        {
+            // already focused
+            if (_focusSpell)
+                return;
+
+            _focusSpell = focusSpell;
+            _targetLocked = true;
+            SetUInt64Value(UNIT_FIELD_TARGET, target);
+        }
+
+        void ReleaseFocus(Spell const* focusSpell)
+        {
+            // focused to something else
+            if (focusSpell != _focusSpell)
+                return;
+
+            _focusSpell = NULL;
+            _targetLocked = false;
+            if (Unit* victim = getVictim())
+                SetUInt64Value(UNIT_FIELD_TARGET, victim->GetGUID());
+            else
+                SetUInt64Value(UNIT_FIELD_TARGET, 0);
+        }
 
     protected:
         explicit Unit ();
@@ -2251,6 +2284,9 @@ class Unit : public WorldObject
 
         bool m_cleanupDone; // lock made to not add stuff after cleanup before delete
         bool m_duringRemoveFromWorld; // lock made to not add stuff after begining removing from world
+
+        Spell const* _focusSpell;
+        bool _targetLocked; // locks the target during spell cast for proper facing
 };
 
 namespace Trillium

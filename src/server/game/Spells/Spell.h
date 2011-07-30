@@ -371,9 +371,9 @@ class Spell
         void EffectQuestFail(SpellEffectEntry const* effect);
         void EffectQuestStart(SpellEffectEntry const* effect);
         void EffectRedirectThreat(SpellEffectEntry const* effect);
-        void EffectWMODamage(SpellEffectEntry const* effect);
-        void EffectWMORepair(SpellEffectEntry const* effect);
-        void EffectWMOChange(SpellEffectEntry const* effect);
+        void EffectGameObjectDamage(SpellEffectEntry const* effect);
+        void EffectGameObjectRepair(SpellEffectEntry const* effect);
+        void EffectGameObjectSetDestructionState(SpellEffectEntry const* effect);
         void EffectActivateRune(SpellEffectEntry const* effect);
         void EffectCreateTamedPet(SpellEffectEntry const* effect);
         void EffectDiscoverTaxi(SpellEffectEntry const* effect);

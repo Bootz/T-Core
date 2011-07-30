@@ -218,7 +218,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNoImmediateEffect,                         //160 SPELL_AURA_MOD_AOE_AVOIDANCE                 implemented in Unit::MagicSpellHitResult
     &AuraEffect::HandleNoImmediateEffect,                         //161 SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT
     &AuraEffect::HandleNoImmediateEffect,                         //162 SPELL_AURA_POWER_BURN_MANA implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNoImmediateEffect,                         //163 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_MELEE
+    &AuraEffect::HandleNoImmediateEffect,                         //163 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS
     &AuraEffect::HandleUnused,                                    //164 unused (3.2.0), only one test spell
     &AuraEffect::HandleNoImmediateEffect,                         //165 SPELL_AURA_MELEE_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
     &AuraEffect::HandleAuraModAttackPowerPercent,                 //166 SPELL_AURA_MOD_ATTACK_POWER_PCT
@@ -5244,37 +5244,9 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
             //    break;
             break;
         case SPELLFAMILY_DEATHKNIGHT:
-        {
-            if (!(mode & AURA_EFFECT_HANDLE_REAL))
-                break;
-            // Improved Unholy Presence
-            if (m_spellProto->SpellIconID == 2633)
-            {
-                if (apply)
-                {
-                    if (target->HasAura(48265) && !target->HasAura(63622))
-                    {
-                        // Not listed as any effect, only base points set
-                        int32 basePoints0 = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), 1);
-                        target->CastCustomSpell(target, 63622, &basePoints0 , &basePoints0, &basePoints0, true, 0, this);
-                    }
-                }
-                else
-                    target->RemoveAurasDueToSpell(63622);
-            }
-            // Improved Blood Presence
-            else if (m_spellProto->SpellIconID == 2636)
-            {
-                if (apply)
-                {
-                    if (!target->HasAura(48266) && !target->HasAura(63611))
-                        target->CastSpell(target, 63611, true);
-                }
-                else
-                    target->RemoveAurasDueToSpell(63611);
-            }
+            //if (!(mode & AURA_EFFECT_HANDLE_REAL))
+            //    break;
             break;
-        }
     }
 }
 

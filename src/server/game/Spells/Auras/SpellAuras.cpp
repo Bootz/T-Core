@@ -1664,7 +1664,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         target->CastSpell(target, 61261, true);
                     else if (frostPresenceAura)
                     {
-                        int32 basePoints0=frostPresenceAura->GetAmount();
+                        int32 basePoints0 = frostPresenceAura->GetAmount();
                         target->CastCustomSpell(target, 61261, &basePoints0, NULL, NULL, true, 0, frostPresenceAura);
                     }
                     // Unholy Presence bonus
@@ -1755,7 +1755,7 @@ bool Aura::IsProcOnCooldown() const
     return false;
 }
 
-void Aura::AddProcCooldown(uint32 msec)
+void Aura::AddProcCooldown(uint32 /*msec*/)
 {
     //m_procCooldown = time(NULL) + msec;
 }
