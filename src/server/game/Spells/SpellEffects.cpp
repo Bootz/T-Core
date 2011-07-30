@@ -795,7 +795,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     }
 
                     SpellEntry const* spellInfo = sSpellStore.LookupEntry(12721);
-                    uint32 ticks = GetSpellDuration(spellInfo) / spellInfo->EffectAmplitude[0];
+                    uint32 ticks = GetSpellDuration(spellInfo) / spellInfo->GetEffectAmplitude(0);
 
                     // Add remaining ticks to damage done
                     if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(12721, EFFECT_0, m_caster->GetGUID()))
@@ -4347,7 +4347,7 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                         AuraEffect const* aurEff = *i;
                         SpellEntry const* spellInfo = aurEff->GetSpellProto();
                         // search our Blood Plague and Frost Fever on target
-                        if (spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && spellInfo->SpellFamilyFlags[2] & 0x2 &&
+                        if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && spellInfo->GetSpellClassOptions()->SpellFamilyFlags[2] & 0x2 &&
                             aurEff->GetCasterGUID() == m_caster->GetGUID())
                         {
                             uint32 countMin = aurEff->GetBase()->GetMaxDuration();

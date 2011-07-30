@@ -10653,7 +10653,7 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellEntry const* spellProto, uint32
                     AddPctN(DoneTotalMod, aurEff->GetAmount());
             }
             // Shadow Word: Death
-            else if (spellProto->SpellFamilyFlags[1] & 0x2)
+            else if (spellProto->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x2)
             {
                 // Glyph of Shadow Word: Death
                 if (AuraEffect* aurEff = GetAuraEffect(55682, 1))
