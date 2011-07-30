@@ -940,10 +940,10 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 t = 0;
     uint32 seed = m_Seed;
 
-    sha.UpdateData (account);
-    sha.UpdateData ((uint8 *) & t, 4);
-    sha.UpdateData ((uint8 *) & clientSeed, 4);
-    sha.UpdateData ((uint8 *) & seed, 4);
+    sha.UpdateData(account);
+    sha.UpdateData((uint8 *) & t, 4);
+    sha.UpdateData((uint8 *) & clientSeed, 4);
+    sha.UpdateData((uint8 *) & seed, 4);
     sha.UpdateBigNumbers (&K, NULL);
     sha.Finalize();
 
