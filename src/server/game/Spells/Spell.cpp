@@ -4752,7 +4752,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_TARGET_AURASTATE;
 
         //Must be behind the target.
-        if (m_spellInfo->AttributesEx2 == SPELL_ATTR2_UNK20 && m_spellInfo->AttributesEx & SPELL_ATTR1_MELEE_COMBAT_SPELL && target->HasInArc(static_cast<float>(M_PI), m_caster)
+        if (m_spellInfo->AttributesEx2 == SPELL_ATTR2_UNK20 && m_spellInfo->AttributesEx & SPELL_ATTR1_MELEE_COMBAT_START && target->HasInArc(static_cast<float>(M_PI), m_caster)
             //Exclusion for Pounce: Facing Limitation was removed in 2.0.1, but it still uses the same, old Ex-Flags
             && (!(m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellInfo->GetSpellClassOptions()->SpellFamilyFlags.IsEqual(0x20000, 0, 0)))
             //Mutilate no longer requires you be behind the target as of patch 3.0.3
