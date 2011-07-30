@@ -3042,7 +3042,7 @@ enum BattlegroundTypeId
     BATTLEGROUND_RB            = 32
 };
 
-#define MAX_BATTLEGROUND_TYPE_ID 33
+#define MAX_BATTLEGROUND_TYPE_ID 657
 
 enum MailResponseType
 {
