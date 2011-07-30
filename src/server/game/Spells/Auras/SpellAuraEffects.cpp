@@ -1079,7 +1079,7 @@ void AuraEffect::ApplySpellMod(Unit* target, bool apply)
     target->ToPlayer()->AddSpellMod(m_spellmod, apply);
 
     // Auras with charges do not mod amount of passive auras
-    if (GetBase()->GetCharges())
+    if (GetBase()->IsUsingCharges())
         return;
     // reapply some passive spells after add/remove related spellmods
     // Warning: it is a dead loop if 2 auras each other amount-shouldn't happen
@@ -1306,6 +1306,20 @@ bool AuraEffect::IsPeriodicTickCrit(Unit* target, Unit const* caster) const
     return false;
 }
 
+bool AuraEffect::IsAffectedOnSpell(SpellEntry const* spell) const
+{
+    if (!spell)
+        return false;
+    // Check family name
+    if (spell->GetSpellFamilyName() != m_spellProto->GetSpellFamilyName())
+        return false;
+
+    // Check EffectClassMask
+    if (m_spellProto->GetEffectSpellClassMask(m_effIndex) && spell->GetSpellClassOptions()->SpellFamilyFlags)
+        return true;
+    return false;
+}
+
 void AuraEffect::SendTickImmune(Unit* target, Unit *caster) const
 {
     if (caster)
@@ -1367,18 +1381,29 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
     }
 }
 
-bool AuraEffect::IsAffectedOnSpell(SpellEntry const* spell) const
+void AuraEffect::HandleProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
 {
-    if (!spell)
-        return false;
-    // Check family name
-    if (spell->GetSpellFamilyName() != m_spellProto->GetSpellFamilyName())
-        return false;
-
-    // Check EffectClassMask
-    if (m_spellProto->GetEffectSpellClassMask(m_effIndex) && spell->GetSpellClassOptions()->SpellFamilyFlags)
-        return true;
-    return false;
+    // TODO: effect script handlers here
+    switch(GetAuraType())
+    {
+        case SPELL_AURA_PROC_TRIGGER_SPELL:
+            HandleProcTriggerSpellAuraProc(aurApp, eventInfo);
+            break;
+        case SPELL_AURA_PROC_TRIGGER_SPELL_WITH_VALUE:
+            HandleProcTriggerSpellWithValueAuraProc(aurApp, eventInfo);
+            break;
+        case SPELL_AURA_PROC_TRIGGER_DAMAGE:
+            HandleProcTriggerDamageAuraProc(aurApp, eventInfo);
+            break;
+        case SPELL_AURA_RAID_PROC_FROM_CHARGE:
+            HandleRaidProcFromChargeAuraProc(aurApp, eventInfo);
+            break;
+        case SPELL_AURA_RAID_PROC_FROM_CHARGE_WITH_VALUE:
+            HandleRaidProcFromChargeWithValueAuraProc(aurApp, eventInfo);
+            break;
+        default:
+            break;
+    }
 }
 
 void AuraEffect::CleanupTriggeredSpells(Unit* target)
@@ -3909,6 +3934,8 @@ void AuraEffect::HandleModPowerRegen(AuraApplication const* aurApp, uint8 mode, 
     // Update manaregen value
     if (GetMiscValue() == POWER_MANA)
         target->ToPlayer()->UpdateManaRegen();
+    else if (GetMiscValue() == POWER_RUNE)
+        target->ToPlayer()->UpdateRuneRegen(RuneType(GetMiscValueB()));
     // other powers are not immediate effects - implemented in Player::Regenerate, Creature::Regenerate
 }
 
@@ -5216,6 +5243,38 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
             // if (!(mode & AURA_EFFECT_HANDLE_REAL))
             //    break;
             break;
+        case SPELLFAMILY_DEATHKNIGHT:
+        {
+            if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                break;
+            // Improved Unholy Presence
+            if (m_spellProto->SpellIconID == 2633)
+            {
+                if (apply)
+                {
+                    if (target->HasAura(48265) && !target->HasAura(63622))
+                    {
+                        // Not listed as any effect, only base points set
+                        int32 basePoints0 = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), 1);
+                        target->CastCustomSpell(target, 63622, &basePoints0 , &basePoints0, &basePoints0, true, 0, this);
+                    }
+                }
+                else
+                    target->RemoveAurasDueToSpell(63622);
+            }
+            // Improved Blood Presence
+            else if (m_spellProto->SpellIconID == 2636)
+            {
+                if (apply)
+                {
+                    if (!target->HasAura(48266) && !target->HasAura(63611))
+                        target->CastSpell(target, 63611, true);
+                }
+                else
+                    target->RemoveAurasDueToSpell(63611);
+            }
+            break;
+        }
     }
 }
 
@@ -5694,7 +5753,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                         Cell cell(p);
                         cell.data.Part.reserved = ALL_DISTRICT;
 
-                        Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck u_check(target, target, radius);
+                        Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck u_check(target, radius);
                         Trillium::UnitListSearcher<Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
 
                         TypeContainerVisitor<Trillium::UnitListSearcher<Trillium::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
@@ -5918,13 +5977,13 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                         return;
                     }
                     // Remote Toy
-                    case 37027: triggerSpellId = 37029; break;
+                    case 37027:
+                        triggerSpellId = 37029;
+                        break;
                     // Eye of Grillok
                     case 38495:
-                    {
-                        target->CastSpell(target, 38530, true, NULL, this);
-                        return;
-                    }
+                        triggerSpellId = 38530;
+                        break;
                     // Absorb Eye of Grillok (Zezzak's Shard)
                     case 38554:
                     {
@@ -6047,6 +6106,28 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
             {
                 if (caster)
                     caster->CastSpell(target, triggerSpellId, true, NULL, NULL, caster->GetGUID());
+                return;
+            }
+            case 24745: // Summon Templar, Trigger
+            case 24747: // Summon Templar Fire, Trigger
+            case 24757: // Summon Templar Air, Trigger
+            case 24759: // Summon Templar Earth, Trigger
+            case 24761: // Summon Templar Water, Trigger
+            case 24762: // Summon Duke, Trigger
+            case 24766: // Summon Duke Fire, Trigger
+            case 24769: // Summon Duke Air, Trigger
+            case 24771: // Summon Duke Earth, Trigger
+            case 24773: // Summon Duke Water, Trigger
+            case 24785: // Summon Royal, Trigger
+            case 24787: // Summon Royal Fire, Trigger
+            case 24791: // Summon Royal Air, Trigger
+            case 24792: // Summon Royal Earth, Trigger
+            case 24793: // Summon Royal Water, Trigger
+            {
+                // All this spells trigger a spell that requires reagents; if the
+                // triggered spell is cast as "triggered", reagents are not consumed
+                if (caster)
+                    caster->CastSpell(target, triggerSpellId, false);
                 return;
             }
         }
@@ -6644,4 +6725,145 @@ void AuraEffect::HandlePeriodicPowerBurnManaAuraTick(Unit* target, Unit* caster)
     caster->ProcDamageAndSpell(damageInfo.target, procAttacker, procVictim, procEx, damageInfo.damage, BASE_ATTACK, spellProto);
 
     caster->DealSpellDamage(&damageInfo, true);
+}
+
+void AuraEffect::HandleProcTriggerSpellAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
+{
+    Unit* triggerCaster = aurApp->GetTarget();
+    Unit* triggerTarget = eventInfo.GetProcTarget();
+
+    uint32 triggerSpellId = GetSpellProto()->GetEffectTriggerSpell(GetEffIndex());
+    if (SpellEntry const* triggeredSpellInfo = sSpellStore.LookupEntry(triggerSpellId))
+    {
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleProcTriggerSpellAuraProc: Triggering spell %u from aura %u proc", triggeredSpellInfo->Id, GetId());
+        triggerCaster->CastSpell(triggerTarget, triggeredSpellInfo, true, NULL, this);
+    }
+    else
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS,"AuraEffect::HandleProcTriggerSpellAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
+}
+
+void AuraEffect::HandleProcTriggerSpellWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
+{
+    Unit* triggerCaster = aurApp->GetTarget();
+    Unit* triggerTarget = eventInfo.GetProcTarget();
+
+    uint32 triggerSpellId = GetSpellProto()->GetEffectTriggerSpell(m_effIndex);
+    if (SpellEntry const *triggeredSpellInfo = sSpellStore.LookupEntry(triggerSpellId))
+    {
+        int32 basepoints0 = GetAmount();
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleProcTriggerSpellWithValueAuraProc: Triggering spell %u with value %d from aura %u proc", triggeredSpellInfo->Id, basepoints0, GetId());
+        triggerCaster->CastCustomSpell(triggerTarget, triggerSpellId, &basepoints0, NULL, NULL, true, NULL, this);
+    }
+    else
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS,"AuraEffect::HandleProcTriggerSpellWithValueAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
+}
+
+void AuraEffect::HandleProcTriggerDamageAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
+{
+    Unit* target = aurApp->GetTarget();
+    Unit* triggerTarget = eventInfo.GetProcTarget();
+    SpellNonMeleeDamage damageInfo(target, triggerTarget, GetId(), GetSpellProto()->SchoolMask);
+    uint32 damage = target->SpellDamageBonus(triggerTarget, GetSpellProto(), GetAmount(), SPELL_DIRECT_DAMAGE);
+    target->CalculateSpellDamageTaken(&damageInfo, damage, GetSpellProto());
+    target->DealDamageMods(damageInfo.target, damageInfo.damage, &damageInfo.absorb);
+    target->SendSpellNonMeleeDamageLog(&damageInfo);
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleProcTriggerDamageAuraProc: Triggering %u spell damage from aura %u proc", damage, GetId());
+    target->DealSpellDamage(&damageInfo, true);
+}
+
+void AuraEffect::HandleRaidProcFromChargeAuraProc(AuraApplication* aurApp, ProcEventInfo& /*eventInfo*/)
+{
+    Unit* target = aurApp->GetTarget();
+
+    uint32 triggerSpellId;
+    switch (GetId())
+    {
+        case 57949:            // Shiver
+            triggerSpellId = 57952;
+            //animationSpellId = 57951; dummy effects for jump spell have unknown use (see also 41637)
+            break;
+        case 59978:            // Shiver
+            triggerSpellId = 59979;
+            break;
+        case 43593:            // Cold Stare
+            triggerSpellId = 43594;
+            break;
+        default:
+            sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleRaidProcFromChargeAuraProc: received not handled spell: %u", GetId());
+            return;
+    }
+
+    int32 jumps = GetBase()->GetCharges();
+
+    // current aura expire on proc finish
+    GetBase()->SetCharges(0);
+    GetBase()->SetUsingCharges(true);
+
+    // next target selection
+    if (jumps > 0)
+    {
+        Unit* caster = GetCaster();
+        float radius = (float)GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(GetSpellProto()->GetEffectRadiusIndex(GetEffIndex())));
+
+        if (caster)
+        {
+            if (Player* modOwner = caster->GetSpellModOwner())
+                modOwner->ApplySpellMod(GetId(), SPELLMOD_RADIUS, radius, NULL);
+
+            if (Unit* triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
+            {
+                target->CastSpell(triggerTarget, GetSpellProto(), true, NULL, this, GetCasterGUID());
+                if (Aura* aura = triggerTarget->GetAura(GetId(), GetCasterGUID()))
+                    aura->SetCharges(jumps);
+            }
+        }
+    }
+
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleRaidProcFromChargeAuraProc: Triggering spell %u from aura %u proc", triggerSpellId, GetId());
+    target->CastSpell(target, triggerSpellId, true, NULL, this, GetCasterGUID());
+}
+
+
+void AuraEffect::HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& /*eventInfo*/)
+{
+    Unit* target = aurApp->GetTarget();
+
+    // Currently only Prayer of Mending
+    if (!(GetSpellProto()->GetSpellFamilyName() == SPELLFAMILY_PRIEST && GetSpellProto()->GetSpellClassOptions()->SpellFamilyFlags[1] & 0x20))
+    {
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleRaidProcFromChargeWithValueAuraProc: received not handled spell: %u", GetId());
+        return;
+    }
+    uint32 triggerSpellId = 33110;
+
+    int32 value = GetAmount();
+
+    int32 jumps = GetBase()->GetCharges();
+
+    // current aura expire on proc finish
+    GetBase()->SetCharges(0);
+    GetBase()->SetUsingCharges(true);
+
+    // next target selection
+    if (jumps > 0)
+    {
+        Unit* caster = GetCaster();
+        float radius = (float)GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(GetSpellProto()->GetEffectRadiusIndex(GetEffIndex())));
+
+        if (caster)
+        {
+            if (Player* modOwner = caster->GetSpellModOwner())
+                modOwner->ApplySpellMod(GetId(), SPELLMOD_RADIUS, radius, NULL);
+
+            if (Unit* triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
+            {
+                target->CastCustomSpell(triggerTarget, GetId(), &value, NULL, NULL, true, NULL, this, GetCasterGUID());
+                if (Aura* aura = triggerTarget->GetAura(GetId(), GetCasterGUID()))
+                    aura->SetCharges(jumps);
+            }
+        }
+    }
+
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleRaidProcFromChargeWithValueAuraProc: Triggering spell %u from aura %u proc", triggerSpellId, GetId());
+    target->CastCustomSpell(target, triggerSpellId, &value, NULL, NULL, true, NULL, this, GetCasterGUID());
 }

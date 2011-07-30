@@ -401,6 +401,19 @@ void Trillium::PlayerSearcher<Check>::Visit(PlayerMapType &m)
     }
 }
 
+template<class Check>
+void Trillium::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
+{
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
 template<class Builder>
 void Trillium::LocalizedPacketDo<Builder>::operator()(Player* p)
 {

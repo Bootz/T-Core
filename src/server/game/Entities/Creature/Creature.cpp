@@ -236,6 +236,7 @@ void Creature::RemoveCorpse(bool setSpawnTime)
 
     m_corpseRemoveTime = time(NULL);
     setDeathState(DEAD);
+    RemoveAllAuras();
     UpdateObjectVisibility();
     loot.clear();
     uint32 respawnDelay = m_respawnDelay;
@@ -473,11 +474,15 @@ void Creature::Update(uint32 diff)
         }
         case CORPSE:
         {
+            m_Events.Update(diff);
+            _UpdateSpells(diff);
+
+            // deathstate changed on spells update, prevent problems
+            if (m_deathState != CORPSE)
+                break;
+
             if (m_groupLootTimer && lootingGroupLowGUID)
             {
-                // for delayed spells
-                m_Events.Update(diff);
-
                 if (m_groupLootTimer <= diff)
                 {
                     Group* group = sGroupMgr->GetGroupByGUID(lootingGroupLowGUID);
@@ -493,12 +498,6 @@ void Creature::Update(uint32 diff)
                 RemoveCorpse(false);
                 sLog->outStaticDebug("Removing corpse... %u ", GetUInt32Value(OBJECT_FIELD_ENTRY));
             }
-            else
-            {
-                // for delayed spells
-                m_Events.Update(diff);
-            }
-
             break;
         }
         case ALIVE:
@@ -1816,6 +1815,17 @@ Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
     }
+
+    return target;
+}
+
+Player* Creature::SelectNearestPlayer(float distance) const
+{
+    Player* target = NULL;
+
+    Trillium::NearestPlayerInObjectRangeCheck checker(this, distance);
+    Trillium::PlayerLastSearcher<Trillium::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
+    VisitNearbyObject(distance, searcher);
 
     return target;
 }
