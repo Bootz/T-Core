@@ -529,27 +529,9 @@ m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
 
     m_channelTargetEffectMask = 0;
 
-    // determine reflection
-    m_canReflect = false;
-
-    if (m_spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC && !IsAreaOfEffectSpell(m_spellInfo) && !(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CANT_REFLECTED))
-    {
-        for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
-        {
-            if (m_spellInfo->GetSpellEffectIdByIndex(j) == 0)
-                continue;
-
-            if (!IsPositiveTarget(m_spellInfo->GetEffectImplicitTargetAByIndex(j), m_spellInfo->GetEffectImplicitTargetAByIndex(j)))
-                m_canReflect = true;
-            else
-                m_canReflect = (m_spellInfo->AttributesEx & SPELL_ATTR1_NEGATIVE) ? true : false;
-
-            if (m_canReflect)
-                continue;
-            else
-                break;
-        }
-    }
+    m_canReflect = m_spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC && !(m_spellInfo->Attributes & SPELL_ATTR0_ABILITY) 
+        && !(m_spellInfo->AttributesEx & SPELL_ATTR1_CANT_BE_REFLECTED) && !(m_spellInfo->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
+        && !IsPassiveSpell(m_spellInfo) && !IsPositiveSpell(m_spellInfo->Id);
 
     CleanupTargetList();
     CleanupEffectExecuteData();
@@ -768,11 +750,6 @@ void Spell::SelectSpellTargets()
                             break;
                     }
                     break;
-                case SPELL_EFFECT_APPLY_AREA_AURA_PARTY:
-                                                            // AreaAura
-                    if (m_spellInfo->Attributes & (SPELL_ATTR0_CASTABLE_WHILE_SITTING | SPELL_ATTR0_CASTABLE_WHILE_MOUNTED | SPELL_ATTR0_UNK18 | SPELL_ATTR0_NOT_SHAPESHIFT) || m_spellInfo->Attributes == SPELL_ATTR0_NOT_SHAPESHIFT)
-                        SelectEffectTargets(i, TARGET_UNIT_TARGET_ALLY_PARTY);
-                    break;
                 case SPELL_EFFECT_SKIN_PLAYER_CORPSE:
                     if (m_targets.GetUnitTarget())
                         AddUnitTarget(m_targets.GetUnitTarget(), i);
@@ -914,8 +891,8 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
     if (!(m_procAttacker & PROC_FLAG_DONE_RANGED_AUTO_ATTACK))
     {
         if (m_IsTriggeredSpell &&
-            (m_spellInfo->AttributesEx2 & SPELL_ATTR2_TRIGGERED_CAN_TRIGGER ||
-            m_spellInfo->AttributesEx3 & SPELL_ATTR3_TRIGGERED_CAN_TRIGGER_2))
+            (m_spellInfo->AttributesEx2 & SPELL_ATTR2_TRIGGERED_CAN_TRIGGER_PROC ||
+            m_spellInfo->AttributesEx3 & SPELL_ATTR3_TRIGGERED_CAN_TRIGGER_PROC_2))
             m_procEx |= PROC_EX_INTERNAL_CANT_PROC;
         else if (m_IsTriggeredSpell)
             m_procEx |= PROC_EX_INTERNAL_TRIGGERED;
@@ -1171,7 +1148,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
                             //Spells with this flag cannot trigger if effect is casted on self
                             // Slice and Dice, relentless strikes, eviscerate
-    bool canEffectTrigger = unitTarget->CanProc() && CanExecuteTriggersOnHit(mask);
+    bool canEffectTrigger = !(m_spellInfo->AttributesEx3 & SPELL_ATTR3_CANT_TRIGGER_PROC) && unitTarget->CanProc() && CanExecuteTriggersOnHit(mask);
     Unit* spellHitTarget = NULL;
 
     if (missInfo == SPELL_MISS_NONE)                          // In case spell hit target, do all effect on that target
@@ -2151,7 +2128,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur)
             float angle, dist;
 
             float objSize = m_caster->GetObjectSize();            
-            if (m_spellInfo->AttributesEx & SPELL_ATTR1_USE_RADIUS_AS_MAX_DISTANCE)
+            if (cur == TARGET_MINION)
                 dist = 0.0f;
             else
                 dist = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(m_spellInfo->GetSpellEffect(i)->EffectRadiusIndex));
@@ -4128,31 +4105,22 @@ void Spell::SendChannelStart(uint32 duration)
 
 void Spell::SendResurrectRequest(Player* target)
 {
-    // Both players and NPCs can resurrect using spells - have a look at creature 28487 for example
-    // However, the packet structure differs slightly
+    // get ressurector name for creature resurrections, otherwise packet will be not accepted
+    // for player resurrections the name is looked up by guid
+    char const* resurrectorName = m_caster->GetTypeId() == TYPEID_PLAYER ? "" : m_caster->GetNameForLocaleIdx(target->GetSession()->GetSessionDbLocaleIndex());
 
-    const char* sentName = m_caster->GetTypeId() == TYPEID_PLAYER ? "" : m_caster->GetNameForLocaleIdx(target->GetSession()->GetSessionDbLocaleIndex());
+    WorldPacket data(SMSG_RESURRECT_REQUEST, (8+4+strlen(resurrectorName)+1+1+1+4));
+    data << uint64(m_caster->GetGUID()); // resurrector guid
+    data << uint32(strlen(resurrectorName) + 1);
 
-    WorldPacket data(SMSG_RESURRECT_REQUEST, (8+4+strlen(sentName)+1+1+1));
-    data << uint64(m_caster->GetGUID());
-    data << uint32(strlen(sentName) + 1);
+    data << resurrectorName;
+    data << uint8(0); // null terminator
 
-    data << sentName;
-    data << uint8(0);
-
-    data << uint8(m_caster->GetTypeId() == TYPEID_PLAYER ? 0 : 1);
+    data << uint8(m_caster->GetTypeId() == TYPEID_PLAYER ? 0 : 1); // "you'll be afflicted with resurrection sickness"
+    // override delay sent with SMSG_CORPSE_RECLAIM_DELAY, set instant resurrection for spells with this attribute
+    if (m_spellInfo->AttributesEx3 & SPELL_ATTR3_IGNORE_RESURRECTION_TIMER)
+        data << uint32(0);
     target->GetSession()->SendPacket(&data);
-}
-
-void Spell::SendPlaySpellVisual(uint32 SpellID)
-{
-    if (m_caster->GetTypeId() != TYPEID_PLAYER)
-        return;
-
-    WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 8 + 4);
-    data << uint64(m_caster->GetGUID());
-    data << uint32(SpellID);                                // spell visual id?
-    m_caster->ToPlayer()->GetSession()->SendPacket(&data);
 }
 
 void Spell::TakeCastItem()
@@ -4652,8 +4620,8 @@ SpellCastResult Spell::CheckCast(bool strict)
 
             if (m_caster->GetTypeId() == TYPEID_PLAYER)
             {
-                // Do not allow to banish target tapped by someone not in caster's group
-                if (m_spellInfo->GetMechanic() == MECHANIC_BANISH)
+                // Do not allow these spells to target creatures not tapped by us (Banish, Polymorph, many quest spells)
+                if (m_spellInfo->AttributesEx2 & SPELL_ATTR2_CANT_TARGET_TAPPED)
                     if (Creature *targetCreature = target->ToCreature())
                         if (targetCreature->hasLootRecipient() && !targetCreature->isTappedBy(m_caster->ToPlayer()))
                             return SPELL_FAILED_CANT_CAST_ON_TAPPED;
@@ -4724,8 +4692,8 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
         }
 
-        //check creature type
-        //ignore self casts (including area casts when caster selected as target)
+        // check creature type
+        // ignore self casts (including area casts when caster selected as target)
         if (non_caster_target)
         {
             if (!CheckTargetCreatureType(target))
@@ -4765,7 +4733,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_TARGET_AURASTATE;
 
         //Must be behind the target.
-        if (m_spellInfo->AttributesEx2 == SPELL_ATTR2_UNK20 && m_spellInfo->AttributesEx & SPELL_ATTR1_UNK9 && target->HasInArc(static_cast<float>(M_PI), m_caster)
+        if (m_spellInfo->AttributesEx2 == SPELL_ATTR2_UNK20 && m_spellInfo->AttributesEx & SPELL_ATTR1_MELEE_COMBAT_SPELL && target->HasInArc(static_cast<float>(M_PI), m_caster)
             //Exclusion for Pounce: Facing Limitation was removed in 2.0.1, but it still uses the same, old Ex-Flags
             && (!(m_spellInfo->GetSpellFamilyName() == SPELLFAMILY_DRUID && m_spellInfo->GetSpellClassOptions()->SpellFamilyFlags.IsEqual(0x20000, 0, 0)))
             //Mutilate no longer requires you be behind the target as of patch 3.0.3
@@ -4777,8 +4745,8 @@ SpellCastResult Spell::CheckCast(bool strict)
             return SPELL_FAILED_NOT_BEHIND;
         }
 
-        //Target must be facing you.
-        if ((m_spellInfo->Attributes == (SPELL_ATTR0_ABILITY | SPELL_ATTR0_NOT_SHAPESHIFT | SPELL_ATTR0_UNK18 | SPELL_ATTR0_STOP_ATTACK_TARGET)) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
+        // Target must be facing you.
+        if ((m_spellInfo->Attributes == (SPELL_ATTR0_ABILITY | SPELL_ATTR0_NOT_SHAPESHIFT | SPELL_ATTR0_DONT_AFFECT_SHEATH_STATE | SPELL_ATTR0_STOP_ATTACK_TARGET)) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_INFRONT;
@@ -5497,7 +5465,7 @@ SpellCastResult Spell::CheckCasterAuras() const
             else if (m_spellInfo->GetEffectApplyAuraNameByIndex(i) == SPELL_AURA_MECHANIC_IMMUNITY)
                 mechanic_immune |= 1 << uint32(m_spellInfo->GetEffectMiscValue(i));
             else if (m_spellInfo->GetEffectApplyAuraNameByIndex(i) == SPELL_AURA_DISPEL_IMMUNITY)
-                dispel_immune |= GetDispellMask(DispelType(m_spellInfo->GetEffectMiscValue(i)));
+                dispel_immune |= GetDispelMask(DispelType(m_spellInfo->GetEffectMiscValue(i)));
         }
         // immune movement impairment and loss of control
         if (m_spellInfo->Id == 42292 || m_spellInfo->Id == 59752)

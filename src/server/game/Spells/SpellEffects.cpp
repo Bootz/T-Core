@@ -1318,7 +1318,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     if (AuraEffect const* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 208, 0))
                         AddPctN(mana, aurEff->GetAmount());
 
-                    m_caster->CastCustomSpell(unitTarget, 31818, &mana, NULL, NULL, true);
+                    m_caster->CastCustomSpell(unitTarget, 31818, &mana, NULL, NULL, false);
 
                     // Mana Feed
                     int32 manaFeedVal = 0;
@@ -1611,27 +1611,26 @@ void Spell::EffectForceCast(SpellEffectEntry const* effect)
     {
         switch (m_spellInfo->Id)
         {
+            case 52588: // Skeletal Gryphon Escape
             case 48598: // Ride Flamebringer Cue
                 unitTarget->RemoveAura(damage);
                 break;
-            case 52588: // Skeletal Gryphon Escape
-                unitTarget->RemoveAura(damage);
-                unitTarget->CastSpell(unitTarget, spellInfo, true);
-                return;
             case 52463: // Hide In Mine Car
             case 52349: // Overtake
                 unitTarget->CastCustomSpell(unitTarget, spellInfo->Id, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
                 return;
             case 72378: // Blood Nova
             case 73058: // Blood Nova
-                m_caster->CastSpell(unitTarget, 72380, true);   // additional spell cast
+                m_caster->CastSpell(unitTarget, damage, true);   // additional spell cast
                 break;
+            case 51888: // Summon Eye of Acherus - a hack for GO cast
+                unitTarget->CastSpell(unitTarget, spellInfo->Id, true, NULL, NULL, m_originalCasterGUID);
+                return;
+
         }
     }
 
-    Unit* caster = GetTriggeredSpellCaster(spellInfo, m_caster, unitTarget);
-
-    caster->CastSpell(unitTarget, spellInfo, true, NULL, NULL, m_originalCasterGUID);
+    unitTarget->CastSpell(m_caster, spellInfo, true);
 }
 
 void Spell::EffectForceCastWithValue(SpellEffectEntry const* effect)
@@ -1650,9 +1649,8 @@ void Spell::EffectForceCastWithValue(SpellEffectEntry const* effect)
         return;
     }
     int32 bp = damage;
-    Unit* caster = GetTriggeredSpellCaster(spellInfo, m_caster, unitTarget);
 
-    caster->CastCustomSpell(unitTarget, spellInfo->Id, &bp, &bp, &bp, true, NULL, NULL, m_originalCasterGUID);
+    unitTarget->CastCustomSpell(m_caster, spellInfo->Id, &bp, &bp, &bp, true);
 }
 
 void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
@@ -1749,7 +1747,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
         // Cloak of Shadows
         case 35729:
         {
-            uint32 dispelMask = GetDispellMask(DISPEL_ALL);
+            uint32 dispelMask = GetDispelMask(DISPEL_ALL);
             Unit::AuraApplicationMap& Auras = unitTarget->GetAppliedAuras();
             for (Unit::AuraApplicationMap::iterator iter = Auras.begin(); iter != Auras.end();)
             {
@@ -2166,7 +2164,7 @@ void Spell::EffectPowerBurn(SpellEffectEntry const* effect)
         return;
 
     // burn x% of target's mana, up to maximum of 2x% of caster's mana (Mana Burn)
-    if (m_spellInfo->GetManaCostPercentage())
+    if (m_spellInfo->Id == 8129)
     {
         int32 maxDamage = int32(CalculatePctN(m_caster->GetMaxPower(powerType), damage * 2));
         damage = int32(CalculatePctN(unitTarget->GetMaxPower(powerType), damage));
@@ -3148,7 +3146,7 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
 
     // Create dispel mask by dispel type
     uint32 dispel_type = effect->EffectMiscValue;
-    uint32 dispelMask  = GetDispellMask(DispelType(dispel_type));
+    uint32 dispelMask  = GetDispelMask(DispelType(dispel_type));
 
     // we should not be able to dispel diseases if the target is affected by unholy blight
     if (dispelMask & (1 << DISPEL_DISEASE) && unitTarget->HasAura(50536))
@@ -3170,11 +3168,9 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
         {
             if (aura->GetSpellProto()->GetDispel() == DISPEL_MAGIC)
             {
-                bool positive = aurApp->IsPositive() ? (!(aura->GetSpellProto()->AttributesEx & SPELL_ATTR1_NEGATIVE)) : false;
-
                 // do not remove positive auras if friendly target
                 //               negative auras if non-friendly target
-                if (positive == unitTarget->IsFriendlyTo(m_caster))
+                if (aurApp->IsPositive() == unitTarget->IsFriendlyTo(m_caster))
                     continue;
             }
 
@@ -4483,18 +4479,16 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                 }
                 // Plant Warmaul Ogre Banner
                 case 32307:
-                {
-                    Player* p_caster = dynamic_cast<Player*>(m_caster);
-                    if (!p_caster)
-                        break;
-                    p_caster->RewardPlayerAndGroupAtEvent(18388, unitTarget);
-                    Creature* cTarget = dynamic_cast<Creature*>(unitTarget);
-                    if (!cTarget)
-                        break;
-                    cTarget->setDeathState(CORPSE);
-                    cTarget->RemoveCorpse();
+                    if (Player* caster = m_caster->ToPlayer())
+                    {
+                        caster->RewardPlayerAndGroupAtEvent(18388, unitTarget);
+                        if (Creature* target = unitTarget->ToCreature())
+                        {
+                            target->setDeathState(CORPSE);
+                            target->RemoveCorpse();
+                        }
+                    }
                     break;
-                }
                 case 48025:                                     // Headless Horseman's Mount
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
@@ -5079,8 +5073,10 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                     {
                         if (Vehicle* seat = m_caster->GetVehicleKit())
                         {
-                            if (Creature* oldContainer = dynamic_cast<Creature*>(seat->GetPassenger(1)))
-                                oldContainer->DisappearAndDie();
+                            if (Unit* passenger = seat->GetPassenger(1))
+                                if (Creature* oldContainer = passenger->ToCreature())
+                                    oldContainer->DisappearAndDie();
+
                             // TODO: a hack, range = 11, should after some time cast, otherwise too far
                             m_caster->CastSpell(seat->GetBase(), 62496, true);
                             unitTarget->EnterVehicle(m_caster, 1);
@@ -5517,23 +5513,17 @@ void Spell::EffectSummonPlayer(SpellEffectEntry const* /*effect*/)
     unitTarget->ToPlayer()->GetSession()->SendPacket(&data);
 }
 
-static ScriptInfo generateActivateCommand()
-{
-    ScriptInfo si;
-    si.command = SCRIPT_COMMAND_ACTIVATE_OBJECT;
-    return si;
-}
-
 void Spell::EffectActivateObject(SpellEffectEntry const* effect)
 {
     if (!gameObjTarget)
         return;
 
-    static ScriptInfo activateCommand = generateActivateCommand();
+    ScriptInfo activateCommand;
+    activateCommand.command = SCRIPT_COMMAND_ACTIVATE_OBJECT;
 
-    int32 delay_secs = effect->EffectMiscValue;
+    // int32 unk = m_spellInfo->EffectMiscValue[effIndex]; // This is set for EffectActivateObject spells; needs research
 
-    gameObjTarget->GetMap()->ScriptCommandStart(activateCommand, delay_secs, m_caster, gameObjTarget);
+    gameObjTarget->GetMap()->ScriptCommandStart(activateCommand, 0, m_caster, gameObjTarget);
 }
 
 void Spell::EffectApplyGlyph(SpellEffectEntry const* effect)
@@ -6517,7 +6507,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffectEntry const* effect)
     DispelChargesList steal_list;
 
     // Create dispel mask by dispel type
-    uint32 dispelMask  = GetDispellMask(DispelType(effect->EffectMiscValue));
+    uint32 dispelMask  = GetDispelMask(DispelType(effect->EffectMiscValue));
     Unit::AuraMap const& auras = unitTarget->GetOwnedAuras();
     for (Unit::AuraMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {

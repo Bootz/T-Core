@@ -1555,8 +1555,14 @@ class Player : public Unit, public GridObject<Player>
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_GOLD_VALUE_OWNED);
         }
 
-        RewardedQuestSet& getRewardedQuests() { return m_RewardedQuests; }
+        RewardedQuestSet const& getRewardedQuests() const { return m_RewardedQuests; }
         QuestStatusMap& getQuestStatusMap() { return m_QuestStatus; };
+
+        size_t GetRewardedQuestCount() const { return m_RewardedQuests.size(); }
+        bool IsQuestRewarded(uint32 quest_id) const
+        {
+            return m_RewardedQuests.find(quest_id) != m_RewardedQuests.end();
+        }
 
         const uint64& GetSelection() const { return m_curSelection; }
         Unit *GetSelectedUnit() const;
@@ -1899,6 +1905,7 @@ class Player : public Unit, public GridObject<Player>
         void ApplyManaRegenBonus(int32 amount, bool apply);
         void ApplyHealthRegenBonus(int32 amount, bool apply);
         void UpdateManaRegen();
+        void UpdateRuneRegen(RuneType rune);
 
         const uint64& GetLootGUID() const { return m_lootGuid; }
         void SetLootGUID(const uint64 &guid) { m_lootGuid = guid; }
