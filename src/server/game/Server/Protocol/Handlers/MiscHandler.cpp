@@ -1197,7 +1197,7 @@ void WorldSession::HandleWorldTeleportOpcode(WorldPacket& recv_data)
     // Received opcode CMSG_WORLD_TELEPORT
     // Time is ***, map=469, x=452.000000, y=6454.000000, z=2536.000000, orient=3.141593
 
-    uint32 time;
+    uint64 time;
     uint32 mapid;
     float PositionX;
     float PositionY;
@@ -1210,6 +1210,8 @@ void WorldSession::HandleWorldTeleportOpcode(WorldPacket& recv_data)
     recv_data >> PositionY;
     recv_data >> PositionZ;
     recv_data >> Orientation;                               // o (3.141593 = 180 degrees)
+
+    recv_data.read_skip<uint64>();
 
     if (GetPlayer()->isInFlight())
     {
