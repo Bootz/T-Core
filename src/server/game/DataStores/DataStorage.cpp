@@ -331,6 +331,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sAchievementStore,            storagesPath, "Achievement.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sAchievementCriteriaStore,    storagesPath, "Achievement_Criteria.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sAreaTriggerStore,            storagesPath, "AreaTrigger.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sArmorLocationStore,          storagesPath, "ArmorLocation.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sAreaGroupStore,              storagesPath, "AreaGroup.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sAreaPOIStore,                storagesPath, "AreaPOI.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sAuctionHouseStore,           storagesPath, "AuctionHouse.dbc");
