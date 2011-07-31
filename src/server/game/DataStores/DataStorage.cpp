@@ -504,7 +504,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellTotemsStore,         storagesPath,"SpellTotems.dbc");
 
     LoadData(availableDbcLocales, bad_dbc_files, sSpellCastTimesStore,         storagesPath, "SpellCastTimes.dbc");
-    LoadData(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,        storagesPath, "SpellDifficulty.dbc"/*, &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex*/);
+    LoadData(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,        storagesPath, "SpellDifficulty.dbc", &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex);
     LoadData(availableDbcLocales, bad_dbc_files, sSpellDurationStore,          storagesPath, "SpellDuration.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellFocusObjectStore,       storagesPath, "SpellFocusObject.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellItemEnchantmentStore,   storagesPath, "SpellItemEnchantment.dbc");
