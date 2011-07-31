@@ -1769,16 +1769,16 @@ void GameObject::ModifyHealth(int32 change, Unit* attackerOrHealer /*= NULL*/, u
 
     // dealing damage, send packet
     // TODO: is there any packet for healing?
-    if (change < 0 && player)
-    {
-        WorldPacket data(SMSG_DESTRUCTIBLE_BUILDING_DAMAGE, 8 + 8 + 8 + 4 + 4);
-        data.appendPackGUID(GetGUID());
-        data.appendPackGUID(attackerOrHealer->GetGUID());
-        data.appendPackGUID(player->GetGUID());
-        data << uint32(-change);
-        data << uint32(spellId);
-        player->GetSession()->SendPacket(&data);
-    }
+    //if (change < 0 && player)
+    //{
+    //    WorldPacket data(SMSG_DESTRUCTIBLE_BUILDING_DAMAGE, 8 + 8 + 8 + 4 + 4);
+    //    data.appendPackGUID(GetGUID());
+    //    data.appendPackGUID(attackerOrHealer->GetGUID());
+    //    data.appendPackGUID(player->GetGUID());
+    //    data << uint32(-change);
+    //    data << uint32(spellId);
+    //    player->GetSession()->SendPacket(&data);
+    //}
 
     GameObjectDestructibleState newState = GetDestructibleState();
 
