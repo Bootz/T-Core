@@ -17705,7 +17705,7 @@ void Player::_LoadWeeklyQuestStatus(PreparedQueryResult result)
 void Player::_LoadCurrency(PreparedQueryResult result)
 {
     //         0          1       2
-    // "SELECT currency, `count`, thisweek FROM character_currency WHERE guid = '%u'"
+    // "SELECT currency, count, thisweek FROM character_currency WHERE guid = '%u'"
 
     if (result)
     {
@@ -18776,10 +18776,10 @@ void Player::_SaveCurrency(SQLTransaction& trans)
     for (PlayerCurrenciesMap::iterator itr = m_currencies.begin(); itr != m_currencies.end();)
     {
         if (itr->second.state == PLAYERCURRENCY_CHANGED)
-            trans->PAppend("UPDATE character_currency SET `count` = '%u', thisweek = '%u' WHERE guid = '%u' AND currency = '%u'",
+            trans->PAppend("UPDATE character_currency SET count = '%u', thisweek = '%u' WHERE guid = '%u' AND currency = '%u'",
                 itr->second.totalCount, itr->second.weekCount, GetGUIDLow(), itr->first);
         else if (itr->second.state == PLAYERCURRENCY_NEW)
-            trans->PAppend("INSERT INTO character_currency (guid, currency, `count`, thisweek) VALUES ('%u','%u','%u','%u')",
+            trans->PAppend("INSERT INTO character_currency (guid, currency, count, thisweek) VALUES ('%u','%u','%u','%u')",
                  GetGUIDLow(), itr->first, itr->second.totalCount, itr->second.weekCount);
 
         if (itr->second.state == PLAYERCURRENCY_REMOVED)
@@ -18789,7 +18789,6 @@ void Player::_SaveCurrency(SQLTransaction& trans)
             itr->second.state = PLAYERCURRENCY_UNCHANGED;
             ++itr;
         }
-
     }
 }
 
