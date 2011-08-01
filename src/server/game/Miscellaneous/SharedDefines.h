@@ -3039,10 +3039,24 @@ enum BattlegroundTypeId
     BATTLEGROUND_DS            = 10,
     BATTLEGROUND_RV            = 11,
     BATTLEGROUND_IC            = 30,
-    BATTLEGROUND_RB            = 32
+    BATTLEGROUND_RB            = 32,                        // Random Battleground
+    BATTLEGROUND_RA_BG         = 100,                       // Rated Battleground
+    BATTLEGROUND_RA_BG1        = 101,                       // Rated Battleground
+    BATTLEGROUND_RA_BG2        = 102,                       // Rated Battleground
+    BATTLEGROUND_TP            = 108,                       // Twin Peaks
+    BATTLEGROUND_BG            = 120,                       // The Battle for Gilneas
+    BATTLEGROUND_ICD           = 441,                       // Icecrown Citadel
+    BATTLEGROUND_RS            = 443,                       // The Ruby Sanctum
+    BATTLEGROUND_FL            = 522,                       // Firelands
+    BATTLEGROUND_FL2           = 523,                       // Firelands Terrain 2
+    BATTLEGROUND_TFW           = 530,                       // Throne of the Four Winds
+    BATTLEGROUND_BD            = 531,                       // Blackwing Descent
+    BATTLEGROUND_BT            = 532,                       // The Bastion of Twilight
+    BATTLEGROUND_BH            = 533,                       // Baradin Hold
+    BATTLEGROUND_RA_ES         = 656                        // Rated Eye of the Storm
 };
 
-#define MAX_BATTLEGROUND_TYPE_ID 33
+#define MAX_BATTLEGROUND_TYPE_ID 657
 
 enum MailResponseType
 {
