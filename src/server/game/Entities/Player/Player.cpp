@@ -7758,7 +7758,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
                 ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
                 break;
             case ITEM_MOD_ATTACK_POWER:
-            if (float(val) > 0)
+            if (float(val) > 0.f)
             {
                 HandleStatModifier(UNIT_MOD_ATTACK_POWER_POS, TOTAL_VALUE, float(val), apply);
                 HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
@@ -7770,7 +7770,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             }
                 break;
             case ITEM_MOD_RANGED_ATTACK_POWER:
-            if (float(val) > 0)
+            if (float(val) > 0.f)
                 HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
             else
                 HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, -float(val), apply);
@@ -19598,6 +19598,13 @@ void Player::AddSpellMod(SpellModifier* mod, bool apply)
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Player::AddSpellMod %d", mod->spellId);
     Opcodes Opcode = (mod->type == SPELLMOD_FLAT) ? SMSG_SET_FLAT_SPELL_MODIFIER : SMSG_SET_PCT_SPELL_MODIFIER;
 
+    WorldPacket data(Opcode);
+    data << uint32(1); //number of spell mod to add
+    size_t wpos_count2 = data.wpos();
+    uint32 count2 = 0;
+    data << uint32(count2);
+    data << uint8(mod->op);
+
     int i = 0;
     flag96 _mask = 0;
     for (int eff = 0; eff < 96; ++eff)
@@ -19615,13 +19622,14 @@ void Player::AddSpellMod(SpellModifier* mod, bool apply)
                     val += (*itr)->value;
             }
             val += apply ? mod->value : -(mod->value);
-            WorldPacket data(Opcode, (1+1+4));
             data << uint8(eff);
-            data << uint8(mod->op);
             data << int32(val);
-            SendDirectMessage(&data);
+            count2++;
         }
     }
+    data.put(wpos_count2, count2);
+
+    SendDirectMessage(&data);
 
     if (apply)
         m_spellMods[mod->op].push_back(mod);
