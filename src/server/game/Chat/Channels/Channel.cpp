@@ -794,8 +794,8 @@ void Channel::DeVoice(uint64 /*guid1*/, uint64 /*guid2*/)
 // done
 void Channel::MakeNotifyPacket(WorldPacket *data, uint8 notify_type)
 {
-    data->Initialize(SMSG_CHANNEL_NOTIFY, (1+35));  // we guess size
-    (*data) << uint8(0x5);
+    data->Initialize(SMSG_CHANNEL_NOTIFY, 1 + m_name.size() + 35);  // we guess size
+    (*data) << uint8(notify_type);
     (*data) << m_name;
 }
 
