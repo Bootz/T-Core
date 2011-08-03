@@ -183,6 +183,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Karazhan/boss_moroes.cpp
   EasternKingdoms/Karazhan/boss_terestian_illhoof.cpp
   EasternKingdoms/Karazhan/karazhan.h
+  EasternKingdoms/Gilneas/gilneas.cpp
+  EasternKingdoms/Gilneas/gilneas_quest.cpp
 )
 
 message("  -> Prepared: Eastern Kingdoms")
