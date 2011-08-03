@@ -2418,7 +2418,8 @@ enum QuestSort
     QUEST_SORT_BREWFEST            = 370,
     QUEST_SORT_INSCRIPTION         = 371,
     QUEST_SORT_DEATH_KNIGHT        = 372,
-    QUEST_SORT_JEWELCRAFTING       = 373
+    QUEST_SORT_JEWELCRAFTING       = 373,
+    QUEST_SORT_ARCHAEOLOGY         = 374
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -2641,6 +2642,7 @@ inline uint32 SkillByQuestSort(int32 QuestSort)
         case QUEST_SORT_FIRST_AID:      return SKILL_FIRST_AID;
         case QUEST_SORT_JEWELCRAFTING:  return SKILL_JEWELCRAFTING;
         case QUEST_SORT_INSCRIPTION:    return SKILL_INSCRIPTION;
+        case QUEST_SORT_ARCHAEOLOGY:    return SKILL_ARCHAEOLOGY;
     }
     return 0;
 }
