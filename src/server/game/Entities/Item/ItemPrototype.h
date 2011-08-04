@@ -632,16 +632,8 @@ struct ItemTemplate
     _ItemStat ItemStat[MAX_ITEM_PROTO_STATS];
     uint32 ScalingStatDistribution;                         // id from ScalingStatDistribution.dbc
     uint32 ScalingStatValue;                                // mask for selecting column in ScalingStatValues.dbc
-    _Damage Damage[MAX_ITEM_PROTO_DAMAGES];                 // TODO: remove it
-    uint32 Armor;                                           // TODO: remove it
-    uint32 HolyRes;                                         // TODO: remove it
-    uint32 FireRes;                                         // TODO: remove it
-    uint32 NatureRes;                                       // TODO: remove it
-    uint32 FrostRes;                                        // TODO: remove it
-    uint32 ShadowRes;                                       // TODO: remove it
-    uint32 ArcaneRes;                                       // TODO: remove it
+    uint32 damageType;
     uint32 Delay;
-    uint32 AmmoType;
     float  RangedModRange;
     _Spell Spells[MAX_ITEM_PROTO_SPELLS];
     uint32 Bonding;

@@ -488,7 +488,7 @@ m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
         // wand case
         if ((m_caster->getClassMask() & CLASSMASK_WAND_USERS) != 0 && m_caster->GetTypeId() == TYPEID_PLAYER)
             if (Item* pItem = m_caster->ToPlayer()->GetWeaponForAttack(RANGED_ATTACK))
-                m_spellSchoolMask = SpellSchoolMask(1 << pItem->GetTemplate()->Damage[0].DamageType);
+                m_spellSchoolMask = SpellSchoolMask(1 << pItem->GetTemplate()->damageType);
 
     if (originalCasterGUID)
         m_originalCasterGUID = originalCasterGUID;
