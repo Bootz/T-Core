@@ -485,20 +485,30 @@ public:
 
         void JustRespawned()
         {
-			delay = RUN_DELAY;
-			run = false;
-			despawn = CITIZEN_DESPAWN;
-			onceTimer = true;
-			x = me->m_positionX+cos(me->m_orientation)*16;
-			y = me->m_positionY+sin(me->m_orientation)*16;
-			z = me->m_positionZ;
-			
-			sayID = urand(1,3);
-			if (sayID == 1) text = CITIZEN_SAY_1;
-			if (sayID == 2) text = CITIZEN_SAY_2;
-			if (sayID == 3) text = CITIZEN_SAY_3;
-			me->MonsterSay(text, 0, NULL);
-		}
+            delay = RUN_DELAY;
+            run = false;
+            despawn = CITIZEN_DESPAWN;
+            onceTimer = true;
+            x = me->m_positionX+cos(me->m_orientation)*16;
+            y = me->m_positionY+sin(me->m_orientation)*16;
+            z = me->m_positionZ;
+
+            sayID = urand(1,3);
+            switch (sayID)
+            {
+                case 1:
+                    text = CITIZEN_SAY_1;
+                break;
+                case 2:
+                    text = CITIZEN_SAY_2;
+                    break;
+                case 3:
+                    text = CITIZEN_SAY_3;
+                break;
+            }
+
+            me->MonsterSay(text, 0, NULL);
+        }
 
 		void UpdateAI(const uint32 diff)
         {
