@@ -72,7 +72,7 @@ BEGIN
     BEGIN
         BLOCK "080004b0"
         BEGIN
-            VALUE "FileDescription", "authserver"
+            VALUE "FileDescription", "Trillium Auth"
             VALUE "FileVersion", STRFILEVER
             VALUE "InternalName", "authserver"
             VALUE "LegalCopyright", "Copyright (C) 2008-2010"

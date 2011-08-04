@@ -81,6 +81,7 @@ public:
             { "info",           SEC_ADMINISTRATOR,  false, &HandleNpcInfoCommand,              "", NULL },
             { "move",           SEC_GAMEMASTER,     false, &HandleNpcMoveCommand,              "", NULL },
             { "playemote",      SEC_ADMINISTRATOR,  false, &HandleNpcPlayEmoteCommand,         "", NULL },
+			{ "createemote",    SEC_ADMINISTRATOR,  false, &HandleNpcCreateEmoteCommand,       "", NULL },
             { "say",            SEC_MODERATOR,      false, &HandleNpcSayCommand,               "", NULL },
             { "textemote",      SEC_MODERATOR,      false, &HandleNpcTextEmoteCommand,         "", NULL },
             { "whisper",        SEC_MODERATOR,      false, &HandleNpcWhisperCommand,           "", NULL },
@@ -655,6 +656,27 @@ public:
 
         return true;
     }
+
+	//create emote in sqldevlog can only be used if SQLDevLog in config file is enabled
+	static bool HandleNpcCreateEmoteCommand(ChatHandler* handler, const char* args)
+	{
+		uint32 emoteId = atoi((char*)args);
+
+		Creature* target = handler->getSelectedCreature();
+		if (!target)
+        {
+            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+		target->SetUInt32Value(UNIT_NPC_EMOTESTATE, emoteId); // Set emote to creature until server restart
+		sLog->outSQLDev("SET @GUID := %u;", target->GetGUID());
+		sLog->outSQLDev("INSERT INTO creature_addon (guid, emote) VALUES (@GUID, &u);", emoteId);
+
+		handler->PSendSysMessage("Emote SQL written to SQL Developer log Creature plays this emote until server restart!");
+
+		return true;
+	}
 
     //set model of creature
     static bool HandleNpcSetModelCommand(ChatHandler* handler, const char* args)

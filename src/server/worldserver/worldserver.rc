@@ -72,7 +72,7 @@ BEGIN
     BEGIN
         BLOCK "080004b0"
         BEGIN
-            VALUE "FileDescription", "worldserver"
+            VALUE "FileDescription", "Trillium World"
             VALUE "FileVersion", STRFILEVER
             VALUE "InternalName", "worldserver"
             VALUE "LegalCopyright", "Copyright (C) 2008-2010"

@@ -148,13 +148,13 @@ inline float finiteAlways(float f) { return finite(f) ? f : 0.0f; }
 
 enum TimeConstants
 {
-    MINUTE = 60,
-    HOUR   = MINUTE*60,
-    DAY    = HOUR*24,
-    WEEK   = DAY*7,
-    MONTH  = DAY*30,
-    YEAR   = MONTH*12,
-    IN_MILLISECONDS = 1000
+    MINUTE           = 60,
+    HOUR             = MINUTE*60,
+    DAY              = HOUR*24,
+    WEEK             = DAY*7,
+    MONTH            = DAY*30,
+    YEAR             = MONTH*12,
+    IN_MILLISECONDS  = 1000
 };
 
 enum AccountTypes
@@ -163,7 +163,9 @@ enum AccountTypes
     SEC_MODERATOR      = 1,
     SEC_GAMEMASTER     = 2,
     SEC_ADMINISTRATOR  = 3,
-    SEC_CONSOLE        = 4                                  // must be always last in list, accounts must have less security level always also
+	SEC_LEVEL_4        = 4,
+	SEC_LEVEL_5        = 5,
+    SEC_CONSOLE        = 6      	// must be always last in list, accounts must have less security level always also
 };
 
 enum LocaleConstant
@@ -201,7 +203,7 @@ typedef std::vector<std::string> StringVector;
 #endif
 
 #ifndef M_PI
-#define M_PI            3.14159265358979323846f
+#define M_PI            3.14159265358979323846f		// Math Pi 
 #endif
 
 #define MAX_QUERY_LEN 32*1024

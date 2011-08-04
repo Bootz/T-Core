@@ -1,0 +1,2 @@
+DELETE FROM command WHERE name = 'npc createemote';
+INSERT INTO command VALUES ('npc createemote', 3, 'Syntax: .npc createemote #emoteID This command creates an Entry in SQL Developer Logfile if this option is enabled in ConfigFile only for Developer');
