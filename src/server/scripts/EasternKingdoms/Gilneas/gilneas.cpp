@@ -388,13 +388,13 @@ public:
         {
             case 1:
                 creatureID = WORGEN2;
-            break;
+                break;
             case 2:
                 creatureID = CITIZEN1;
-            break;
+                break;
             case 3:
                 creatureID = CITIZEN2;
-            break;
+                break;
         }
 
         angle = pGO->GetOrientation();
