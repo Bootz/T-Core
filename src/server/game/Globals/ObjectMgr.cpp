@@ -2211,7 +2211,6 @@ void ObjectMgr::LoadItemTemplates()
 				itemTemplate.ItemStat[i].ItemStatType = 0;
 				i = MAX_ITEM_PROTO_STATS;
 			}
-			sLog->outError("Item [Entry: %u] has Stat%d StatType[%d] with StatValue[%u]", entry, i, itemTemplate.ItemStat[i].ItemStatType, itemTemplate.ItemStat[i].ItemStatValue);
         }
 
         itemTemplate.ScalingStatDistribution = uint32(fields[47].GetUInt16());

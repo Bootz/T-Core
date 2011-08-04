@@ -7637,8 +7637,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
         if (val <= 0)
             continue;
 
-		sLog->outError("Item [Entry: %u] has StatType[%d] with StatValue[%u]", proto->ItemId, statType, val);
-
         switch (statType)
         {
             case ITEM_MOD_MANA:
