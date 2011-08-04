@@ -2163,12 +2163,12 @@ void ObjectMgr::LoadItemTemplates()
     }
 
     uint32 count = 0;
-	uint32 internStatCounter = 0;
 
     do
     {
         Field *fields = result->Fetch();
 
+		uint32 internStatCounter = 0;
         uint32 entry = fields[0].GetUInt32();
 
         ItemTemplate& itemTemplate = ItemTemplateStore[entry];
@@ -2447,7 +2447,7 @@ void ObjectMgr::LoadItemTemplates()
 
             if (itemTemplate.damageType >= MAX_SPELL_SCHOOL)
             {
-                sLog->outErrorDb("Item (Entry: %u) has wrong dmg_type%d (%u)", entry, j+1, itemTemplate.Damage[j].DamageType);
+                sLog->outErrorDb("Item (Entry: %u) has wrong damageType (%u)", entry, itemTemplate.damageType);
                 itemTemplate.damageType = 0;
             }
 
