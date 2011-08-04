@@ -7634,7 +7634,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             val = proto->ItemStat[i].ItemStatValue;
         }
 
-        if (val == 0)
+        if (val <= 0)
             continue;
 
         switch (statType)
