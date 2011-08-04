@@ -62,51 +62,51 @@ class npc_gilneas_city_guard : public CreatureScript
 public:
     npc_gilneas_city_guard() : CreatureScript("npc_gilneas_city_guard") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_gilneas_city_guardAI (pCreature);
+        return new npc_gilneas_city_guardAI (creature);
     }
 
     struct npc_gilneas_city_guardAI : public ScriptedAI
     {
-        npc_gilneas_city_guardAI(Creature *c) : ScriptedAI(c) {}
+        npc_gilneas_city_guardAI(Creature * creature) : ScriptedAI(creature) {}
 
 		uint32 tAnimate;
 		uint32 tSound;
-		uint32 dmgCount;
-		bool playSnd;
+		uint32 damageCount;
+		bool playSound;
 
         void Reset()
         {
 			tAnimate = ANIMATE_DELAY;
-			dmgCount = 0;
+			damageCount = 0;
 			tSound = SOUND_DELAY;
-			playSnd = false;
+			playSound = false;
         }
 
-		void DamageTaken(Unit * pWho, uint32 &uiDamage)
+		void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 100000.0f);
-                me->AddThreat(pWho, 100000.0f);
-                me->AI()->AttackStart(pWho);
-                dmgCount = 0;
+                who->AddThreat(me, 100000.0f);
+                me->AddThreat(who, 100000.0f);
+                me->AI()->AttackStart(who);
+                damageCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
 			{
 				me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 100000.0f);
-				me->AI()->AttackStart(pWho);
-				dmgCount = 0;
+                me->AddThreat(who, 100000.0f);
+				me->AI()->AttackStart(who);
+				damageCount = 0;
 			}
         }
 
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
 			if (target->GetEntry() == WORGEN)
-				dmgCount ++;
+				++damageCount;
 		}
 
         void UpdateAI(const uint32 diff)
@@ -122,21 +122,21 @@ public:
 			{
 				me->PlayDistanceSound(SWORD_FLESH_SOUND);
 				tSound = SOUND_DELAY;
-				playSnd = false;
+				playSound = false;
 			}
 
-			if (playSnd == true) tSound -= diff;
+			if (playSound == true) tSound -= diff;
 
-			if (dmgCount < 2)
+			if (damageCount < 2)
 				DoMeleeAttackIfReady();
-			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-			else if (me->getVictim()->isPet()) dmgCount = 0;
+			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) damageCount = 0;
+			else if (me->getVictim()->isPet()) damageCount = 0;
 			else
 			{
 				if (tAnimate <= diff)
 				{
 					me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
-					playSnd = true;
+					playSound = true;
 					tAnimate = ANIMATE_DELAY;
 				}
 				else
@@ -157,57 +157,63 @@ class npc_prince_liam_greymane : public CreatureScript
 public:
     npc_prince_liam_greymane() : CreatureScript("npc_prince_liam_greymane") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_prince_liam_greymaneAI (pCreature);
+        return new npc_prince_liam_greymaneAI (creature);
     }
 
     struct npc_prince_liam_greymaneAI : public ScriptedAI
     {
-        npc_prince_liam_greymaneAI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_liam_greymaneAI(Creature *creature) : ScriptedAI(creature) {}
 
 		uint32 tAnimate;
 		uint32 tSound;
-		uint32 dmgCount;
-		bool playSnd;
+		uint32 damageCount;
+		bool playSound;
 
         void Reset()
         {
 			tAnimate = ANIMATE_DELAY;
-			dmgCount = 0;
+			damageCount = 0;
 			tSound = SOUND_DELAY;
-			playSnd = false;
+			playSound = false;
         }
 
-		void sQuestReward(Player *pPlayer, const Quest *pQuest, uint32 data)
+		void sQuestReward(Player *player, const Quest *quest, uint32 data)
 		{
-			if (pQuest->GetQuestId() == 14098 && pPlayer->GetPhaseMask() == 2)
-				pPlayer->SetAuraStack(59074, pPlayer, 1); //phaseshift
+			if (quest->GetQuestId() == 14098 && player->GetPhaseMask() == 2)
+				player->SetAuraStack(59074, player, 1); //phaseshift
 		}
 
-		void DamageTaken(Unit * pWho, uint32 &uiDamage)
+		void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 100000.0f);
-                me->AddThreat(pWho, 100000.0f);
-                me->AI()->AttackStart(pWho);
-                dmgCount = 0;
+                who->AddThreat(me, 100000.0f);
+                me->AddThreat(who, 100000.0f);
+                me->AI()->AttackStart(who);
+                damageCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
 			{
 				me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 100000.0f);
-				me->AI()->AttackStart(pWho);
-				dmgCount = 0;
+                me->AddThreat(who, 100000.0f);
+				me->AI()->AttackStart(who);
+				damageCount = 0;
 			}
         }
 
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
-			if (target->GetEntry() == WORGEN)
-				dmgCount ++;
+			switch (target->GetEntry())
+			{
+				case WORGEN:
+					++damageCount;
+					break;
+				default:
+					break;
+			}
 		}
 
         void UpdateAI(const uint32 diff)
@@ -219,21 +225,21 @@ public:
 			{
 				me->PlayDistanceSound(SWORD_PLATE_SOUND);
 				tSound = SOUND_DELAY;
-				playSnd = false;
+				playSound = false;
 			}
 
-			if (playSnd == true) tSound -= diff;
+			if (playSound == true) tSound -= diff;
 
-			if (dmgCount < 2)
+			if (damageCount < 2)
 				DoMeleeAttackIfReady();
-			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-			else if (me->getVictim()->isPet()) dmgCount = 0;
+			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) damageCount = 0;
+			else if (me->getVictim()->isPet()) damageCount = 0;
 			else
 			{
 				if (tAnimate <= diff)
 				{
 					me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
-					playSnd = true;
+					playSound = true;
 					tAnimate = ANIMATE_DELAY;
 				}
 				else
@@ -260,17 +266,17 @@ class npc_rampaging_worgen : public CreatureScript
 public:
     npc_rampaging_worgen() : CreatureScript("npc_rampaging_worgen") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_rampaging_worgenAI (pCreature);
+        return new npc_rampaging_worgenAI (creature);
     }
 
     struct npc_rampaging_worgenAI : public ScriptedAI
     {
-        npc_rampaging_worgenAI(Creature *c) : ScriptedAI(c) {}
+        npc_rampaging_worgenAI(Creature *creature) : ScriptedAI(creature) {}
 
 		uint32 tEnrage;
-		uint32 dmgCount;
+		uint32 damageCount;
 		uint32 tAnimate;
 		uint32 tSound;
 		bool playSound;
@@ -278,7 +284,7 @@ public:
         void Reset()
         {
 			tEnrage = 0;
-			dmgCount = 0;
+			damageCount = 0;
 			tAnimate = ANIMATE_DELAY;
 			tSound = SOUND_DELAY;
 			playSound = false;
@@ -287,25 +293,25 @@ public:
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
 			if (target->GetEntry() == GUARD || target->GetEntry() == PRINCE_LIAN_GREYMANE)
-				dmgCount ++;
+				damageCount ++;
 		}
 
-		void DamageTaken(Unit * pWho, uint32 &uiDamage)
+		void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 100000.0f);
-                me->AddThreat(pWho, 100000.0f);
-                me->AI()->AttackStart(pWho);
-                dmgCount = 0;
+                who->AddThreat(me, 100000.0f);
+                me->AddThreat(who, 100000.0f);
+                me->AI()->AttackStart(who);
+                damageCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
 			{
 				me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 100000.0f);
-				me->AI()->AttackStart(pWho);
-				dmgCount = 0;
+                me->AddThreat(who, 100000.0f);
+				me->AI()->AttackStart(who);
+				damageCount = 0;
 			}
         }
 
@@ -339,10 +345,10 @@ public:
 				playSound = false;
 			}
 			
-			if (dmgCount < 2)
+			if (damageCount < 2)
 				DoMeleeAttackIfReady();
-			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-			else if (me->getVictim()->isPet()) dmgCount = 0;
+			else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) damageCount = 0;
+			else if (me->getVictim()->isPet()) damageCount = 0;
 			else
 			{
 				if (tAnimate <= diff)
@@ -379,9 +385,9 @@ public:
     uint8 SpawnID;
     float x, y, z, angle;
 
-    bool OnGossipHello(Player *pPlayer, GameObject *pGO)
+    bool OnGossipHello(Player *player, GameObject *go)
     {
-        pGO->Use(pPlayer);
+        go->Use(player);
 
         SpawnID = urand(1, 3);
         switch (SpawnID)
@@ -397,24 +403,24 @@ public:
                 break;
         }
 
-        angle = pGO->GetOrientation();
-        x = pGO->GetPositionX() - cos(angle) * 2;
-        y = pGO->GetPositionY() - sin(angle) * 2;
-        z = pGO->GetPositionZ();	
+        angle = go->GetOrientation();
+        x = go->GetPositionX() - cos(angle) * 2;
+        y = go->GetPositionY() - sin(angle) * 2;
+        z = go->GetPositionZ();	
 		
-        if (Creature *spawnedCreature = pGO->SummonCreature(creatureID, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON_TTL))
+        if (Creature *spawnedCreature = go->SummonCreature(creatureID, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON_TTL))
         {
             spawnedCreature->SetPhaseMask(2, 1);
             if (creatureID == WORGEN2)
             {
                 spawnedCreature->getThreatManager().resetAllAggro();
-                pPlayer->AddThreat(spawnedCreature, 100000.0f);
-                spawnedCreature->AddThreat(pPlayer, 100000.0f);
-                spawnedCreature->AI()->AttackStart(pPlayer);
+                player->AddThreat(spawnedCreature, 100000.0f);
+                spawnedCreature->AddThreat(player, 100000.0f);
+                spawnedCreature->AI()->AttackStart(player);
             }
-            else if (pPlayer->GetQuestStatus(QUEST_EVAC_MERCH) == QUEST_STATUS_INCOMPLETE)
+            else if (player->GetQuestStatus(QUEST_EVAC_MERCH) == QUEST_STATUS_INCOMPLETE)
             {
-                pPlayer->KilledMonsterCredit(35830, 0);
+                player->KilledMonsterCredit(35830, 0);
                 spawnedCreature->Respawn(1);
             }
         }
@@ -438,20 +444,20 @@ class npc_lieutenant_walden : public CreatureScript
 public:
     npc_lieutenant_walden() : CreatureScript("npc_lieutenant_walden") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lieutenant_waldenAI (pCreature);
+        return new npc_lieutenant_waldenAI (creature);
     }
 
     struct npc_lieutenant_waldenAI : public ScriptedAI
     {
         
-		npc_lieutenant_waldenAI(Creature *c) : ScriptedAI(c) {}
+		npc_lieutenant_waldenAI(Creature *creature) : ScriptedAI(creature) {}
 		
-		void sQuestReward(Player *pPlayer, const Quest *pQuest, uint32 data)
+		void sQuestReward(Player *player, const Quest *quest, uint32 data)
 		{
-			if (pQuest->GetQuestId() == QUEST_LOCKDOWN && pPlayer->GetPhaseMask() == 1)
-				pPlayer->SetAuraStack(SPELL_PHASE2, pPlayer, 1); //phaseshift
+			if (quest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
+				player->SetAuraStack(SPELL_PHASE2, player, 1); //phaseshift
 		}
 	};
 
@@ -465,7 +471,7 @@ public:
 #define CITIZEN_SAY_2  "No time to Waste!"
 #define CITIZEN_SAY_3  "This place isn't safe. Let's Leave!"
 
-enum eFrightened_citizen
+enum Frightenedcitizen
 {
     RUN_DELAY = 3000,
     CITIZEN_DESPAWN = 5000,
@@ -476,14 +482,14 @@ class npc_frightened_citizen : public CreatureScript
 public:
     npc_frightened_citizen() : CreatureScript("npc_frightened_citizen") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_frightened_citizenAI (pCreature);
+        return new npc_frightened_citizenAI (creature);
     }
 
     struct npc_frightened_citizenAI : public ScriptedAI
     {
-        npc_frightened_citizenAI(Creature *c) : ScriptedAI(c) {}
+        npc_frightened_citizenAI(Creature *creature) : ScriptedAI(creature) {}
 
 		int16 delay, despawn;
 		bool run, onceTimer;
@@ -506,7 +512,7 @@ public:
             {
                 case 1:
                     text = CITIZEN_SAY_1;
-                break;
+                    break;
                 case 2:
                     text = CITIZEN_SAY_2;
                     break;
