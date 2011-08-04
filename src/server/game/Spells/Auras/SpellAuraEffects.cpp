@@ -1955,10 +1955,9 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
     {
         case FORM_CAT:                                      // 0x01
         case FORM_GHOUL:                                    // 0x07
+		case FORM_CREATURECAT:								// 0x0F
 			PowerType = POWER_ENERGY;
 			break;
-		//fixed brecky
-       // case FORM_CREATURECAT:
         
 
         case FORM_BEAR:                                     // 0x05
@@ -1981,7 +1980,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
         case FORM_BLB_PLAYER:                               // 0x0C
         case FORM_SHADOW_DANCE:                             // 0x0D
         case FORM_CREATUREBEAR:                             // 0x0E
-        case FORM_CREATURECAT:                              // 0x0F
         case FORM_GHOSTWOLF:                                // 0x10
 
         case FORM_TEST:                                     // 0x14
