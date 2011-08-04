@@ -375,43 +375,51 @@ class go_merchant_square_door : public GameObjectScript
 public:
     go_merchant_square_door() : GameObjectScript("go_merchant_square_door") { }
 
-	uint32 creatureID;
-	uint8 spawnID;
-	float x, y, z, angle;
+    uint32 creatureID;
+    uint8 SpawnID;
+    float x, y, z, angle;
 
-	bool OnGossipHello(Player *pPlayer, GameObject *pGO)
+    bool OnGossipHello(Player *pPlayer, GameObject *pGO)
     {
-		pGO->Use(pPlayer);
-		spawnID=urand(1, 3);
+        pGO->Use(pPlayer);
 
-		if (spawnID == 1) creatureID = WORGEN2;
-		if (spawnID == 2) creatureID = CITIZEN1;
-		if (spawnID == 3) creatureID = CITIZEN2;
+        SpawnID = urand(1, 3);
+        switch (SpawnID)
+        {
+            case 1:
+                creatureID = WORGEN2;
+            break;
+            case 2:
+                creatureID = CITIZEN1;
+            break;
+            case 3:
+                creatureID = CITIZEN2;
+            break;
+        }
 
-		angle=pGO->GetOrientation();
-		x=pGO->GetPositionX()-cos(angle)*2;
-		y=pGO->GetPositionY()-sin(angle)*2;
-		z=pGO->GetPositionZ();
+        angle = pGO->GetOrientation();
+        x = pGO->GetPositionX() - cos(angle) * 2;
+        y = pGO->GetPositionY() - sin(angle) * 2;
+        z = pGO->GetPositionZ();	
 		
-		
-		if (Creature *spawnedCreature = pGO->SummonCreature(creatureID,x,y,z,angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON_TTL))
-		{
-			spawnedCreature->SetPhaseMask(2, 1);
-			if (creatureID == WORGEN2)
-			{
-				spawnedCreature->getThreatManager().resetAllAggro();
-				pPlayer->AddThreat(spawnedCreature, 100000.0f);
-				spawnedCreature->AddThreat(pPlayer, 100000.0f);
-				spawnedCreature->AI()->AttackStart(pPlayer);
-			}
-			else if (pPlayer->GetQuestStatus(QUEST_EVAC_MERCH) == QUEST_STATUS_INCOMPLETE)
-			{
-				pPlayer->KilledMonsterCredit(35830, 0);
-				spawnedCreature->Respawn(1);
-			}
-		}
+        if (Creature *spawnedCreature = pGO->SummonCreature(creatureID, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON_TTL))
+        {
+            spawnedCreature->SetPhaseMask(2, 1);
+            if (creatureID == WORGEN2)
+            {
+                spawnedCreature->getThreatManager().resetAllAggro();
+                pPlayer->AddThreat(spawnedCreature, 100000.0f);
+                spawnedCreature->AddThreat(pPlayer, 100000.0f);
+                spawnedCreature->AI()->AttackStart(pPlayer);
+            }
+            else if (pPlayer->GetQuestStatus(QUEST_EVAC_MERCH) == QUEST_STATUS_INCOMPLETE)
+            {
+                pPlayer->KilledMonsterCredit(35830, 0);
+                spawnedCreature->Respawn(1);
+            }
+        }
 			
-		return false;
+        return false;
     }
 };
 
