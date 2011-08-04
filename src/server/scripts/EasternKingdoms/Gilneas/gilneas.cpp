@@ -9,19 +9,18 @@
  * 
  * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* ScriptData
@@ -37,20 +36,21 @@ EndContentData */
 
 #include "ScriptPCH.h"
 
-enum eGilneas_city_phase2
+enum GilneasCityPhase2
 {
-	#define sword_flesh_sound 143
-	#define sword_plate_sound 147
-	#define sound_delay 500
-	#define animate_delay 2000
-	//npcs
-	#define prince_liam_greymane 34913
-	#define guard 34916
-	#define lieutenant_walden 34863
-	#define worgen 34884
-	#define worgen2 35660
-	#define citizen1 34981
-	#define citizen2 35836
+    SWORD_FLESH_SOUND = 143,
+    SWORD_PLATE_SOUND = 147,
+    SOUND_DELAY       = 500,
+    ANIMATE_DELAY     = 2000,
+
+    // NPC's
+    PRINCE_LIAN_GREYMANE = 34913,
+    GUARD                = 34916,
+    LIEUTENANT_WALDEN    = 34836,
+    WORGEN               = 34884,
+    WORGEN2              = 35660,
+    CITIZEN1             = 34981,
+    CITIZEN2             = 35836
 };
 
 /*######
@@ -78,9 +78,9 @@ public:
 
         void Reset()
         {
-			tAnimate = animate_delay;
+			tAnimate = ANIMATE_DELAY;
 			dmgCount = 0;
-			tSound = sound_delay;
+			tSound = SOUND_DELAY;
 			playSnd = false;
         }
 
@@ -105,14 +105,14 @@ public:
 
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
-			if (target->GetEntry() == worgen)
+			if (target->GetEntry() == WORGEN)
 				dmgCount ++;
 		}
 
         void UpdateAI(const uint32 diff)
         {
 			if (me->isAlive() && !me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f))
-				if (Creature* enemy = me->FindNearestCreature(worgen, 16.0f, true))
+				if (Creature* enemy = me->FindNearestCreature(WORGEN, 16.0f, true))
 					me->AI()->AttackStart(enemy);
 
             if (!UpdateVictim())
@@ -120,8 +120,8 @@ public:
 
 			if (tSound <= diff)
 			{
-				me->PlayDistanceSound(sword_flesh_sound);
-				tSound = sound_delay;
+				me->PlayDistanceSound(SWORD_FLESH_SOUND);
+				tSound = SOUND_DELAY;
 				playSnd = false;
 			}
 
@@ -137,7 +137,7 @@ public:
 				{
 					me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
 					playSnd = true;
-					tAnimate = animate_delay;
+					tAnimate = ANIMATE_DELAY;
 				}
 				else
 					tAnimate -= diff;
@@ -173,9 +173,9 @@ public:
 
         void Reset()
         {
-			tAnimate = animate_delay;
+			tAnimate = ANIMATE_DELAY;
 			dmgCount = 0;
-			tSound = sound_delay;
+			tSound = SOUND_DELAY;
 			playSnd = false;
         }
 
@@ -206,7 +206,7 @@ public:
 
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
-			if (target->GetEntry() == worgen)
+			if (target->GetEntry() == WORGEN)
 				dmgCount ++;
 		}
 
@@ -217,8 +217,8 @@ public:
 
 			if (tSound <= diff)
 			{
-				me->PlayDistanceSound(sword_flesh_sound);
-				tSound = sound_delay;
+				me->PlayDistanceSound(SWORD_PLATE_SOUND);
+				tSound = SOUND_DELAY;
 				playSnd = false;
 			}
 
@@ -234,7 +234,7 @@ public:
 				{
 					me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
 					playSnd = true;
-					tAnimate = animate_delay;
+					tAnimate = ANIMATE_DELAY;
 				}
 				else
 					tAnimate -= diff;
@@ -251,8 +251,8 @@ public:
 
 enum eRampaging_worgen
 {
-	#define spell_enrage 8599
-	#define enrage_cd 30000
+	SPELL_ENRAGE = 8599,
+	ENRAGE_CD    = 30000,
 };
 
 class npc_rampaging_worgen : public CreatureScript
@@ -279,14 +279,14 @@ public:
         {
 			tEnrage = 0;
 			dmgCount = 0;
-			tAnimate = animate_delay;
-			tSound = sound_delay;
+			tAnimate = ANIMATE_DELAY;
+			tSound = SOUND_DELAY;
 			playSound = false;
         }
 
 		void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
 		{
-			if (target->GetEntry() == guard || target->GetEntry() == prince_liam_greymane)
+			if (target->GetEntry() == GUARD || target->GetEntry() == PRINCE_LIAN_GREYMANE)
 				dmgCount ++;
 		}
 
@@ -312,7 +312,7 @@ public:
         void UpdateAI(const uint32 diff)
         {
 			if (me->isAlive() && !me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f))
-				if (Creature* enemy = me->FindNearestCreature(prince_liam_greymane, 10.0f, true))
+				if (Creature* enemy = me->FindNearestCreature(PRINCE_LIAN_GREYMANE, 10.0f, true))
 					me->AI()->AttackStart(enemy);
 					
 
@@ -323,8 +323,8 @@ public:
 			{
 				if (me->GetHealthPct() <= 30)
 				{
-					DoCast(me, spell_enrage);
-					tEnrage = enrage_cd;
+					DoCast(me, SPELL_ENRAGE);
+					tEnrage = ENRAGE_CD;
 				}
 			}
 			else tEnrage -= diff;
@@ -334,8 +334,8 @@ public:
 
 			if (tSound <= diff)
 			{
-				me->PlayDistanceSound(sword_plate_sound);
-				tSound = sound_delay;
+				me->PlayDistanceSound(SWORD_PLATE_SOUND);
+				tSound = SOUND_DELAY;
 				playSound = false;
 			}
 			
@@ -348,7 +348,7 @@ public:
 				if (tAnimate <= diff)
 				{
 					me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
-					tAnimate = animate_delay;
+					tAnimate = ANIMATE_DELAY;
 					playSound = true;
 				}
 				else
@@ -366,8 +366,8 @@ public:
 
 enum eMerchant_square_door
 {
-	#define summon1_ttl 30000
-	#define q_evac_merch_sq 14098
+    SUMMON_TTL = 30000,
+    QUEST_EVAC_MERCH = 14098,
 };
 
 class go_merchant_square_door : public GameObjectScript
@@ -384,9 +384,9 @@ public:
 		pGO->Use(pPlayer);
 		spawnID=urand(1, 3);
 
-		if (spawnID == 1) creatureID = worgen2;
-		if (spawnID == 2) creatureID = citizen1;
-		if (spawnID == 3) creatureID = citizen2;
+		if (spawnID == 1) creatureID = WORGEN2;
+		if (spawnID == 2) creatureID = CITIZEN1;
+		if (spawnID == 3) creatureID = CITIZEN2;
 
 		angle=pGO->GetOrientation();
 		x=pGO->GetPositionX()-cos(angle)*2;
@@ -394,17 +394,17 @@ public:
 		z=pGO->GetPositionZ();
 		
 		
-		if (Creature *spawnedCreature = pGO->SummonCreature(creatureID,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,summon1_ttl))
+		if (Creature *spawnedCreature = pGO->SummonCreature(creatureID,x,y,z,angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON_TTL))
 		{
 			spawnedCreature->SetPhaseMask(2, 1);
-			if (creatureID == worgen2)
+			if (creatureID == WORGEN2)
 			{
 				spawnedCreature->getThreatManager().resetAllAggro();
 				pPlayer->AddThreat(spawnedCreature, 100000.0f);
 				spawnedCreature->AddThreat(pPlayer, 100000.0f);
 				spawnedCreature->AI()->AttackStart(pPlayer);
 			}
-			else if (pPlayer->GetQuestStatus(q_evac_merch_sq) == QUEST_STATUS_INCOMPLETE)
+			else if (pPlayer->GetQuestStatus(QUEST_EVAC_MERCH) == QUEST_STATUS_INCOMPLETE)
 			{
 				pPlayer->KilledMonsterCredit(35830, 0);
 				spawnedCreature->Respawn(1);
@@ -421,8 +421,8 @@ public:
 
 enum eLieutenant_walden
 {
-	#define q_lockdown 14078
-	#define spell_phase2 59073
+    QUEST_LOCKDOWN = 14078,
+    SPELL_PHASE2   = 58073,
 };
 
 class npc_lieutenant_walden : public CreatureScript
@@ -442,8 +442,8 @@ public:
 		
 		void sQuestReward(Player *pPlayer, const Quest *pQuest, uint32 data)
 		{
-			if (pQuest->GetQuestId() == q_lockdown && pPlayer->GetPhaseMask() == 1)
-				pPlayer->SetAuraStack(spell_phase2, pPlayer, 1); //phaseshift
+			if (pQuest->GetQuestId() == QUEST_LOCKDOWN && pPlayer->GetPhaseMask() == 1)
+				pPlayer->SetAuraStack(SPELL_PHASE2, pPlayer, 1); //phaseshift
 		}
 	};
 
@@ -453,13 +453,14 @@ public:
 ## npc_frightened_citizen
 ######*/
 
+#define CITIZEN_SAY_1  "Worgen! Worgen everywhere!"
+#define CITIZEN_SAY_2  "No time to Waste!"
+#define CITIZEN_SAY_3  "This place isn't safe. Let's Leave!"
+
 enum eFrightened_citizen
 {
-	#define run_delay 3000
-	#define citizen_despawn 5000
-	#define citizen_say_1 "Worgen! Worgen everywhere!"
-	#define citizen_say_2 "No time to Waste!"
-	#define citizen_say_3 "This place isn't safe. Let's Leave!"
+    RUN_DELAY = 3000,
+    CITIZEN_DESPAWN = 5000,
 };
 
 class npc_frightened_citizen : public CreatureScript
@@ -484,18 +485,18 @@ public:
 
         void JustRespawned()
         {
-			delay = run_delay;
+			delay = RUN_DELAY;
 			run = false;
-			despawn = citizen_despawn;
+			despawn = CITIZEN_DESPAWN;
 			onceTimer = true;
 			x = me->m_positionX+cos(me->m_orientation)*16;
 			y = me->m_positionY+sin(me->m_orientation)*16;
 			z = me->m_positionZ;
 			
 			sayID = urand(1,3);
-			if (sayID == 1) text = citizen_say_1;
-			if (sayID == 2) text = citizen_say_2;
-			if (sayID == 3) text = citizen_say_3;
+			if (sayID == 1) text = CITIZEN_SAY_1;
+			if (sayID == 2) text = CITIZEN_SAY_2;
+			if (sayID == 3) text = CITIZEN_SAY_3;
 			me->MonsterSay(text, 0, NULL);
 		}
 
