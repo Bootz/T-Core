@@ -901,7 +901,6 @@ bool BattlegroundMgr::IsArenaType(BattlegroundTypeId bgTypeId)
     return (bgTypeId == BATTLEGROUND_AA ||
         bgTypeId == BATTLEGROUND_BE ||
         bgTypeId == BATTLEGROUND_NA ||
-        bgTypeId == BATTLEGROUND_DS ||
         bgTypeId == BATTLEGROUND_RV ||
         bgTypeId == BATTLEGROUND_RL ||
         bgTypeId == BATTLEGROUND_DS);
