@@ -1584,22 +1584,37 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
         }
     }
 
+    // Apply Player CR_ARMOR_PENETRATION rating
+    if (GetTypeId() == TYPEID_PLAYER)
+    {
+        float maxArmorPen = 0;
+        if (getLevel() < 60)
+            maxArmorPen = float(400 + 85 * victim->getLevel());
+        else
+            maxArmorPen = 400 + 85 * victim->getLevel() + 4.5f * 85 * (victim->getLevel() - 59);
+        // Cap armor penetration to this number
+        maxArmorPen = std::min((armor + maxArmorPen) / 3, armor);
+        // Figure out how much armor do we ignore
+        float armorPen = CalculatePctF(maxArmorPen, ToPlayer()->GetRatingBonusValue(CR_ARMOR_PENETRATION));
+        // Got the value, apply it
+        armor -= armorPen;
+    }
+
     if (armor < 0.0f)
         armor = 0.0f;
 
-    float levelModifier = getLevel();
-    if (levelModifier > 59)
-        levelModifier = levelModifier + (4.5f * (levelModifier - 59));
+    float armorReduce = armor / (armor + 85.f * getLevel() + 400.f);
+    if(getLevel() > 59)
+        armorReduce =   armor / (armor + 467.5f * getLevel() - 22167.5f);
+    if(getLevel() > 80)
+        armorReduce =   armor / (armor + 2167.5f * getLevel() - 158167.5f);
 
-    float tmpvalue = 0.1f * armor / (8.5f * levelModifier + 40);
-    tmpvalue = tmpvalue / (1.0f + tmpvalue);
+    if (armorReduce < 0.0f)
+        armorReduce = 0.0f;
+    if (armorReduce > 0.75f)
+        armorReduce = 0.75f;
 
-    if (tmpvalue < 0.0f)
-        tmpvalue = 0.0f;
-    if (tmpvalue > 0.75f)
-        tmpvalue = 0.75f;
-
-    newdamage = uint32(damage - (damage * tmpvalue));
+    newdamage = uint32(damage - (damage * armorReduce));
 
     return (newdamage > 1) ? newdamage : 1;
 }
@@ -16373,24 +16388,18 @@ void Unit::ApplyResilience(Unit const* victim, int32* damage, bool isCrit, Comba
         case CR_CRIT_TAKEN_MELEE:
             if (source && damage)
             {
-                if (isCrit)
-                    *damage -= target->GetMeleeCritDamageReduction(*damage);
                 *damage -= target->GetMeleeDamageReduction(*damage);
             }
             break;
         case CR_CRIT_TAKEN_RANGED:
             if (source && damage)
             {
-                if (isCrit)
-                    *damage -= target->GetRangedCritDamageReduction(*damage);
                 *damage -= target->GetRangedDamageReduction(*damage);
             }
             break;
         case CR_CRIT_TAKEN_SPELL:
             if (source && damage)
             {
-                if (isCrit)
-                    *damage -= target->GetSpellCritDamageReduction(*damage);
                 *damage -= target->GetSpellDamageReduction(*damage);
             }
             break;

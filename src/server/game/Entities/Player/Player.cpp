@@ -5967,6 +5967,10 @@ void Player::UpdateRating(CombatRating cr)
                 UpdateExpertise(BASE_ATTACK);
                 UpdateExpertise(OFF_ATTACK);
             }
+        case CR_ARMOR_PENETRATION:
+            if (affectStats)
+                UpdateArmorPenetration(amount);
+            break;
             break;
     }
 }
@@ -12055,6 +12059,16 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
         else if (slot == EQUIPMENT_SLOT_OFFHAND)
             UpdateExpertise(OFF_ATTACK);
+
+        switch(slot)
+        {
+        case EQUIPMENT_SLOT_MAINHAND:
+        case EQUIPMENT_SLOT_OFFHAND:
+        case EQUIPMENT_SLOT_RANGED:
+            RecalculateRating(CR_ARMOR_PENETRATION);
+        default:
+            break;
+        }
     }
     else
     {
@@ -12203,6 +12217,17 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
                     }
                     else if (slot == EQUIPMENT_SLOT_OFFHAND)
                         UpdateExpertise(OFF_ATTACK);
+                    // update armor penetration
+                    switch(slot)
+                    {
+                        case EQUIPMENT_SLOT_MAINHAND:
+                        case EQUIPMENT_SLOT_OFFHAND:
+                        case EQUIPMENT_SLOT_RANGED:
+                            RecalculateRating(CR_ARMOR_PENETRATION);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -12316,10 +12341,23 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
                 // remove item dependent auras and casts (only weapon and armor slots)
                 RemoveItemDependentAurasAndCasts(pItem);
 
-                if (slot == EQUIPMENT_SLOT_MAINHAND)
-                    UpdateExpertise(BASE_ATTACK);
-                else if (slot == EQUIPMENT_SLOT_OFFHAND)
-                    UpdateExpertise(OFF_ATTACK);
+                // update expertise and armor penetration - passive auras may need it
+                switch (slot)
+                {
+                    case EQUIPMENT_SLOT_MAINHAND:
+                        RecalculateRating(CR_ARMOR_PENETRATION);
+                        UpdateExpertise(BASE_ATTACK);
+                        break;
+                    case EQUIPMENT_SLOT_OFFHAND:
+                        RecalculateRating(CR_ARMOR_PENETRATION);
+                        UpdateExpertise(OFF_ATTACK);
+                        break;
+                    case EQUIPMENT_SLOT_RANGED:
+                        RecalculateRating(CR_ARMOR_PENETRATION);
+                        break;
+                    default:
+                        break;
+                }
 
                 // equipment visual show
                 SetVisibleItemSlot(slot, NULL);
