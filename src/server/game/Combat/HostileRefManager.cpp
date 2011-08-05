@@ -24,6 +24,7 @@
 #include "Unit.h"
 #include "DataStructure.h"
 #include "SpellMgr.h"
+#include "SpellInfo.h"
 
 HostileRefManager::~HostileRefManager()
 {
@@ -35,7 +36,7 @@ HostileRefManager::~HostileRefManager()
 // The pVictim is hated than by them as well
 // use for buffs and healing threat functionality
 
-void HostileRefManager::threatAssist(Unit *pVictim, float fThreat, SpellEntry const *pThreatSpell, bool pSingleTarget)
+void HostileRefManager::threatAssist(Unit *pVictim, float fThreat, SpellInfo const *pThreatSpell, bool pSingleTarget)
 {
     HostileReference* ref;
 
@@ -43,7 +44,7 @@ void HostileRefManager::threatAssist(Unit *pVictim, float fThreat, SpellEntry co
     ref = getFirst();
     while (ref != NULL)
     {
-        float threat = ThreatCalcHelper::calcThreat(pVictim, iOwner, fThreat, (pThreatSpell ? GetSpellSchoolMask(pThreatSpell) : SPELL_SCHOOL_MASK_NORMAL), pThreatSpell);
+        float threat = ThreatCalcHelper::calcThreat(pVictim, iOwner, fThreat, (pThreatSpell ? pThreatSpell->GetSchoolMask() : SPELL_SCHOOL_MASK_NORMAL), pThreatSpell);
         if (pVictim == getOwner())
             ref->addThreat(threat / size);          // It is faster to modify the threat durectly if possible
         else

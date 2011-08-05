@@ -153,7 +153,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* caster, const SpellEntry *entry)
+    void SpellHit(Unit* caster, const SpellInfo *entry)
     {
         if (caster == me)
             return;

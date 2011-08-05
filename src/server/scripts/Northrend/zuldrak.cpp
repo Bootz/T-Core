@@ -87,7 +87,7 @@ public:
             me->setDeathState(DEAD);
         }
 
-        void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+        void SpellHit(Unit* pCaster, const SpellInfo* pSpell)
         {
             if (pSpell->Id == SPELL_UNLOCK_SHACKLE)
             {
@@ -150,7 +150,7 @@ public:
 
         void MoveInLineOfSight(Unit* /*who*/){}
 
-        void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell)
+        void SpellHit(Unit* /*pCaster*/, const SpellInfo* pSpell)
         {
             if (pSpell->Id == SPELL_FREE_RAGECLAW)
             {

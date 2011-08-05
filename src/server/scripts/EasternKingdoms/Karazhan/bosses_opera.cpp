@@ -336,7 +336,7 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *Spell)
+        void SpellHit(Unit* /*caster*/, const SpellInfo *Spell)
         {
             if ((Spell->SchoolMask == SPELL_SCHOOL_MASK_FIRE) && (!(rand()%10)))
             {
@@ -1076,7 +1076,7 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *Spell)
+        void SpellHit(Unit* /*caster*/, const SpellInfo *Spell)
         {
             if (Spell->Id == SPELL_DRINK_POISON)
             {

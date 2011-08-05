@@ -1657,12 +1657,12 @@ struct SpellEffectEntry
 {
     //uint32    Id;                                           // 0         m_ID
     uint32    Effect;                                       // 1         m_effect
-    float     EffectMultipleValue;                          // 2         m_effectAmplitude
+    float     EffectValueMultiplier;                        // 2         m_effectAmplitude
     uint32    EffectApplyAuraName;                          // 3         m_effectAura
     uint32    EffectAmplitude;                              // 4         m_effectAuraPeriod
     int32     EffectBasePoints;                             // 5         m_effectBasePoints (don't must be used in spell/auras explicitly, must be used cached Spell::m_currentBasePoints)
-    //float   unk_320_4;                                    // 6         3.2.0
-    float     DmgMultiplier;                                // 7         m_effectChainAmplitude
+    float     EffectBonusMultiplier;                        // 6         m_effectBonus
+    float     EffectDamageMultiplier;                       // 7         m_effectChainAmplitude
     uint32    EffectChainTarget;                            // 8         m_effectChainTargets
     int32     EffectDieSides;                               // 9         m_effectDieSides
     uint32    EffectItemType;                               // 10        m_effectItemType
@@ -1682,19 +1682,21 @@ struct SpellEffectEntry
     //uint32  Unk0                                          // 24        4.2.0
 
     // helpers
-    int32 CalculateSimpleValue() const { return EffectBasePoints; }
+    uint32 GetEffectMechanic() const { return EffectMechanic; }
+    int32  GetEffectBasePoints() const { return EffectBasePoints; }
     uint32 GetEffectItemType() const { return EffectItemType; }
     uint32 GetEffectTriggerSpell() const { return EffectTriggerSpell; }
     uint32 GetEffectAmplitude() const { return EffectAmplitude; }
-    uint32 GetEffectMiscValue() const { return EffectMiscValue; }
-    uint32 GetEffectMiscValueB() const { return EffectMiscValueB; }
+    int32 GetEffectMiscValue() const { return EffectMiscValue; }
+    int32 GetEffectMiscValueB() const { return EffectMiscValueB; }
     uint32 GetEffectChainTarget() const { return EffectChainTarget; }
-    uint32 GetEffectDieSides() const { return EffectDieSides; }
-    uint32 GetEffectPointsPerComboPoint() const { return EffectPointsPerComboPoint; }
-    uint32 GetEffectRealPointsPerLevel() const { return EffectRealPointsPerLevel; }
+    int32 GetEffectDieSides() const { return EffectDieSides; }
+    float GetEffectPointsPerComboPoint() const { return EffectPointsPerComboPoint; }
+    float GetEffectRealPointsPerLevel() const { return EffectRealPointsPerLevel; }
     uint32 GetEffectRadiusIndex() const { return EffectRadiusIndex; }
-    uint32 GetDmgMultiplier() const { return DmgMultiplier; }
-    uint32 GetEffectMultipleValue() const { return EffectMultipleValue; }
+    float GetEffectDamageMultiplier() const { return EffectDamageMultiplier; }
+    float GetEffectValueMultiplier() const { return EffectValueMultiplier; }
+    float GetEffectBonusMultiplier() const { return EffectBonusMultiplier; }
 };
 
 // SpellEquippedItems.dbc
@@ -1819,7 +1821,7 @@ struct SpellEntry
     uint32    AttributesEx4;                                // 5        m_attributesExD
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
-    uint32    AttributesEx7;                                // 8        m_attributesExG (0x20 - totems, 0x4 - paladin auras, etc...)
+    uint32    AttributesEx7;                                // 8        m_attributesExG
     // uint32 someFlags;                                    // 9        4.0.0
     // uint32 unk_400_1;                                    // 10       4.0.0
     // uint32 unk_420_1                                     // 11       4.2.0
@@ -1859,7 +1861,7 @@ struct SpellEntry
     uint32 SpellTotemsId;                                   // 46       SpellTotems.dbc
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
-    int32 CalculateSimpleValue(uint32 eff) const;
+    int32 GetEffectBasePoints(uint32 eff) const;
     //SpellEffectEntry
     uint32 GetEffectItemType(uint32 eff) const;
     uint32 GetEffectTriggerSpell(uint32 eff) const;
@@ -1867,13 +1869,15 @@ struct SpellEntry
     int32 GetEffectMiscValue(uint32 eff) const;
     int32 GetEffectMiscValueB(uint32 eff) const;
     uint32 GetEffectChainTarget(uint32 eff) const;
-    uint32 GetEffectDieSides(uint32 eff) const;
-    uint32 GetEffectPointsPerComboPoint(uint32 eff) const;
-    uint32 GetEffectRealPointsPerLevel(uint32 eff) const;
+    int32 GetEffectDieSides(uint32 eff) const;
+    float GetEffectPointsPerComboPoint(uint32 eff) const;
+    float GetEffectRealPointsPerLevel(uint32 eff) const;
     uint32 GetEffectRadiusIndex(uint32 eff) const;
-    uint32 GetDmgMultiplier(uint32 eff) const;
-    uint32 GetEffectMultipleValue(uint32 eff) const;
-    uint32 const* GetEffectSpellClassMask(uint32 eff) const;
+    float GetEffectDamageMultiplier(uint32 eff) const;
+    float GetEffectBonusMultiplier(uint32 eff) const;
+    uint32 GetEffectMechanic(uint32 eff) const;
+    float GetEffectValueMultiplier(uint32 eff) const;
+    uint32 GetEffectSpellClassMask(uint32 eff) const;
 
     // struct access functions
     SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
@@ -1948,10 +1952,6 @@ struct SpellEntry
     //SpellReagentsEntry
     uint32 GetReagent(uint8 reagent) const;
     uint32 GetReagentCount(uint8 reagent) const; 
-
-    private:
-        // prevent creating custom entries (copy data from original in fact)
-        SpellEntry(SpellEntry const&);                      // DON'T must have implementation
 };
 
 typedef std::set<uint32> SpellCategorySet;
@@ -1982,9 +1982,9 @@ struct SpellFocusObjectEntry
 struct SpellRadiusEntry
 {
     uint32    ID;
-    float     radiusHostile;
+    float     radiusMin;
     //uint32    Unk    //always 0
-    float     radiusFriend;
+    float     radiusMax;
 };
 
 struct SpellRangeEntry
@@ -1993,7 +1993,7 @@ struct SpellRangeEntry
     float     minRangeHostile;
     float     minRangeFriend;
     float     maxRangeHostile;
-    float     maxRangeFriend;                               //friend means unattackable unit here
+    float     maxRangeFriend;
     uint32    type;
     //DBCString   Name;                                         // 6-21     m_displayName_lang
     //DBCString   ShortName;                                    // 23-38    m_displayNameShort_lang

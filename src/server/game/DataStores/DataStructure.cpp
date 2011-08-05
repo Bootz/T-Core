@@ -23,10 +23,10 @@
 #include "DataStructure.h"
 #include "DataStorage.h"
 
-int32 SpellEntry::CalculateSimpleValue(uint32 eff) const
+int32 SpellEntry::GetEffectBasePoints(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->CalculateSimpleValue();
+        return effectEntry->GetEffectBasePoints();
     return 0;
 }
 
@@ -72,21 +72,21 @@ uint32 SpellEntry::GetEffectChainTarget(uint32 eff) const
     return NULL;
 }
 
-uint32 SpellEntry::GetEffectDieSides(uint32 eff) const
+int32 SpellEntry::GetEffectDieSides(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
         return effectEntry->GetEffectDieSides();
     return NULL;
 }
 
-uint32 SpellEntry::GetEffectPointsPerComboPoint(uint32 eff) const
+float SpellEntry::GetEffectPointsPerComboPoint(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
         return effectEntry->GetEffectPointsPerComboPoint();
     return NULL;
 }
 
-uint32 SpellEntry::GetEffectRealPointsPerLevel(uint32 eff) const
+float SpellEntry::GetEffectRealPointsPerLevel(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
         return effectEntry->GetEffectRealPointsPerLevel();
@@ -100,24 +100,38 @@ uint32 SpellEntry::GetEffectRadiusIndex(uint32 eff) const
     return NULL;
 }
 
-uint32 SpellEntry::GetDmgMultiplier(uint32 eff) const
+float SpellEntry::GetEffectDamageMultiplier(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetDmgMultiplier();
+        return effectEntry->GetEffectDamageMultiplier();
     return NULL;
 }
 
-uint32 SpellEntry::GetEffectMultipleValue(uint32 eff) const
+float SpellEntry::GetEffectBonusMultiplier(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectMultipleValue();
+        return effectEntry->GetEffectBonusMultiplier();
     return NULL;
 }
 
-uint32 const* SpellEntry::GetEffectSpellClassMask(uint32 eff) const
+uint32 SpellEntry::GetEffectMechanic(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return &effectEntry->EffectSpellClassMaskA[0];
+        return effectEntry->GetEffectMechanic();
+    return NULL;
+}
+
+float SpellEntry::GetEffectValueMultiplier(uint32 eff) const
+{
+    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
+        return effectEntry->GetEffectValueMultiplier();
+    return NULL;
+}
+
+uint32 SpellEntry::GetEffectSpellClassMask(uint32 eff) const
+{
+    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
+        return effectEntry->EffectSpellClassMaskA[0];
     return NULL;
 }
 

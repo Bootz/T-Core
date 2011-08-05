@@ -189,7 +189,7 @@ class boss_razorscale_controller : public CreatureScript
                 me->SetReactState(REACT_PASSIVE);
             }
 
-            void SpellHit(Unit* /*caster*/, SpellEntry const* spell)
+            void SpellHit(Unit* /*caster*/, SpellInfo const* spell)
             {
                 switch (spell->Id)
                 {
@@ -364,7 +364,7 @@ class boss_razorscale : public CreatureScript
                     controller->AI()->Reset();
             }
 
-            void SpellHit(Unit* /*caster*/, SpellEntry const* spell)
+            void SpellHit(Unit* /*caster*/, SpellInfo const* spell)
             {
                 if (spell->Id == SPELL_HARPOON_TRIGGER)
                     ++HarpoonCounter;
@@ -1008,7 +1008,7 @@ class spell_razorscale_devouring_flame : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);
                 Unit* caster = GetCaster();
-                uint32 entry = uint32(GetSpellInfo()->GetEffectMiscValue(effIndex));
+                uint32 entry = uint32(GetSpellInfo()->Effects[effIndex].MiscValue);
                 WorldLocation const* summonLocation = GetTargetDest();
                 if (!caster || !summonLocation)
                     return;
