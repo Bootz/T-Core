@@ -1051,7 +1051,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
 
                 // unit32 used to prevent interpreting uint8 as char at output
                 // find rank of learned spell for learning spell, or talent rank
-                uint32 rank = talentCost ? talentCost : learn ? learnSpellInfo->GetRank() : spellInfo->GetRank();
+                uint32 rank = talentCost ? talentCost : learn && learnSpellInfo ? learnSpellInfo->GetRank() : spellInfo->GetRank();
 
                 // send spell in "id - [name, rank N] [talent] [passive] [learn] [known]" format
                 std::ostringstream ss;
@@ -1065,9 +1065,9 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
                     ss << GetTrilliumString(LANG_SPELL_RANK) << rank;
 
                 if (m_session)
-                    ss << " " << localeNames[loc] << "]|h|r";
+                    ss << ' ' << localeNames[loc] << "]|h|r";
                 else
-                    ss << " " << localeNames[loc];
+                    ss << ' ' << localeNames[loc];
 
                 if (talent)
                     ss << GetTrilliumString(LANG_TALENT);
@@ -1592,9 +1592,9 @@ bool ChatHandler::HandleLookupMapCommand(const char *args)
                 std::ostringstream ss;
 
                 if (m_session)
-                    ss << id << " - |cffffffff|Hmap:" << id << "|h[" << name << "]";
+                    ss << id << " - |cffffffff|Hmap:" << id << "|h[" << name << ']';
                 else // console
-                    ss << id << " - [" << name << "]";
+                    ss << id << " - [" << name << ']';
 
                 if (MapInfo->IsContinent())
                     ss << GetTrilliumString(LANG_CONTINENT);
@@ -4030,7 +4030,7 @@ std::string GetTimeString(uint64 time)
     std::ostringstream ss;
     if (days) ss << days << "d ";
     if (hours) ss << hours << "h ";
-    ss << minute << "m";
+    ss << minute << 'm';
     return ss.str();
 }
 

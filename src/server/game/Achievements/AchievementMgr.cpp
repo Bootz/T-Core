@@ -496,20 +496,20 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
             /// next new/changed record prefix
             else
             {
-                ssdel << ", ";
-                ssins << ", ";
+                ssdel << ',';
+                ssins << ',';
             }
 
             // new/changed record data
             ssdel << iter->first;
-            ssins << "("<<GetPlayer()->GetGUIDLow() << ", " << iter->first << ", " << uint64(iter->second.date) << ")";
+            ssins << '(' << GetPlayer()->GetGUIDLow() << ',' << iter->first << ',' << uint64(iter->second.date) << ')';
 
             /// mark as saved in db
             iter->second.changed = false;
         }
 
         if (need_execute)
-            ssdel << ")";
+            ssdel << ')';
 
         if (need_execute)
         {
@@ -541,7 +541,7 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
                 }
                 /// next new/changed record prefix
                 else
-                    ssdel << ", ";
+                    ssdel << ',';
 
                 // new/changed record data
                 ssdel << iter->first;
@@ -558,10 +558,10 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
                 }
                 /// next new/changed record prefix
                 else
-                    ssins << ", ";
+                    ssins << ',';
 
                 // new/changed record data
-                ssins << "(" << GetPlayer()->GetGUIDLow() << ", " << iter->first << ", " << iter->second.counter << ", " << iter->second.date << ")";
+                ssins << '(' << GetPlayer()->GetGUIDLow() << ',' << iter->first << ',' << iter->second.counter << ',' << iter->second.date << ')';
             }
 
             /// mark as updated in db
@@ -569,7 +569,7 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
         }
 
         if (need_execute_del)                                // DELETE ... IN (.... _)_
-            ssdel << ")";
+            ssdel << ')';
 
         if (need_execute_del || need_execute_ins)
         {

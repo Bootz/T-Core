@@ -98,7 +98,7 @@ public:
             if (!tEntry)
                 return false;
 
-            whereClause << "WHERE id = '" << tEntry << "'";
+            whereClause << "WHERE id = '" << tEntry << '\'';
         }
         else
         {
@@ -111,11 +111,11 @@ public:
             {
                 std::string name = pParam1;
                 WorldDatabase.EscapeString(name);
-                whereClause << ", creature_template WHERE creature.id = creature_template.entry AND creature_template.name "_LIKE_" '" << name << "'";
+                whereClause << ", creature_template WHERE creature.id = creature_template.entry AND creature_template.name "_LIKE_" '" << name << '\'';
             }
             else
             {
-                whereClause <<  "WHERE guid = '" << guid << "'";
+                whereClause <<  "WHERE guid = '" << guid << '\'';
             }
         }
         //sLog->outError("DEBUG: %s", whereClause.c_str());

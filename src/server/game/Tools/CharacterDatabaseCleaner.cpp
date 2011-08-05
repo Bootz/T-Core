@@ -82,7 +82,6 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
     std::ostringstream ss;
     do
     {
-
         Field *fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
@@ -95,7 +94,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
                 found = true;
             }
             else
-                ss << ", ";
+                ss << ',';
 
             ss << id;
         }
@@ -104,7 +103,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
 
     if (found)
     {
-        ss << ")";
+        ss << ')';
         CharacterDatabase.Execute(ss.str().c_str());
     }
 }
