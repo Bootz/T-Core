@@ -19,6 +19,7 @@ TODO-List for TrilliumEMU Developer #
 11. Implemented Wintergrasp Battlefield.
 12. Update the rest of Opcodes to 4.2.0.
 13. Fix The New Power System
+14. Gameplay Things and Misc Changes -- IN PROGRESS
 
 // Database Developer:
 1. Fixed all startup errors.
