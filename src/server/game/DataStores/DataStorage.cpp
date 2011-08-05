@@ -444,7 +444,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellStore,                  storagesPath, "Spell.dbc", &CustomSpellEntryfmt, &CustomSpellEntryIndex);
     for (uint32 i = 1; i < sSpellStore.GetNumRows(); ++i)
     {
-        SpellEntry const * spell = sSpellStore.LookupEntry(i);
+        SpellEntry const* spell = sSpellStore.LookupEntry(i);
         if (spell && spell->GetCategory())
             sSpellCategoryStore[spell->GetCategory()].insert(i);
     }
@@ -458,7 +458,7 @@ void LoadDataStorages(const std::string& dataPath)
 
         SpellEntry const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
 
-        if (spellInfo && IsPassiveSpell(spellInfo->Id))
+        if (spellInfo && spellInfo->Attributes & SPELL_ATTR0_PASSIVE)
         {
             for (uint32 i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
             {
@@ -975,7 +975,6 @@ uint32 const* GetTalentTabPages(uint8 cls)
 
 // script support functions
  DataStorage <SoundEntriesEntry>  const* GetSoundEntriesStore()   { return &sSoundEntriesStore;   }
- DataStorage <SpellEntry>         const* GetSpellStore()          { return &sSpellStore;          }
  DataStorage <SpellRangeEntry>    const* GetSpellRangeStore()     { return &sSpellRangeStore;     }
  DataStorage <FactionEntry>       const* GetFactionStore()        { return &sFactionStore;        }
  DataStorage <CreatureDisplayInfoEntry> const* GetCreatureDisplayStore() { return &sCreatureDisplayInfoStore; }

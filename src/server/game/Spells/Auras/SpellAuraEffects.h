@@ -33,7 +33,7 @@ typedef void(AuraEffect::*pAuraEffectHandler)(AuraApplication const* aurApp, uin
 class AuraEffect
 {
     friend void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 *baseAmount);
-    friend Aura * Unit::_TryStackingOrRefreshingExistingAura(SpellEntry const* newAura, uint8 effMask, Unit* caster, int32* baseAmount, Item* castItem, uint64 casterGUID);
+    friend Aura * Unit::_TryStackingOrRefreshingExistingAura(SpellInfo const* newAura, uint8 effMask, Unit* caster, int32* baseAmount, Item* castItem, uint64 casterGUID);
     friend Aura::~Aura();
     private:
         ~AuraEffect();
@@ -46,15 +46,15 @@ class AuraEffect
         void GetApplicationList(std::list<AuraApplication*> & applicationList) const;
         SpellModifier* GetSpellModifier() const { return m_spellmod; }
 
-        SpellEntry const* GetSpellProto() const { return m_spellProto; }
-        uint32 GetId() const { return m_spellProto->Id; }
+        SpellInfo const* GetSpellInfo() const { return m_spellInfo; }
+        uint32 GetId() const { return m_spellInfo->Id; }
         uint32 GetEffIndex() const { return m_effIndex; }
         int32 GetBaseAmount() const { return m_baseAmount; }
         int32 GetAmplitude() const { return m_amplitude; }
 
-        int32 GetMiscValueB() const { return m_spellProto->GetEffectMiscValueB(m_effIndex); }
-        int32 GetMiscValue() const { return m_spellProto->GetEffectMiscValue(m_effIndex); }
-        AuraType GetAuraType() const { return (AuraType)m_spellProto->GetEffectApplyAuraNameByIndex(m_effIndex); }
+        int32 GetMiscValueB() const { return m_spellInfo->Effects[m_effIndex].MiscValueB; }
+        int32 GetMiscValue() const { return m_spellInfo->Effects[m_effIndex].MiscValue; }
+        AuraType GetAuraType() const { return (AuraType)m_spellInfo->Effects[m_effIndex].ApplyAuraName; }
         int32 GetAmount() const { return m_amount; }
         void SetAmount(int32 amount) { m_amount = amount; m_canBeRecalculated = false;}
 
@@ -82,7 +82,7 @@ class AuraEffect
 
         bool IsPeriodic() const { return m_isPeriodic; }
         void SetPeriodic(bool isPeriodic) { m_isPeriodic = isPeriodic; }
-        bool IsAffectedOnSpell(SpellEntry const *spell) const;
+        bool IsAffectedOnSpell(SpellInfo const *spell) const;
 
         void SendTickImmune(Unit* target, Unit *caster) const;
         void PeriodicTick(AuraApplication * aurApp, Unit* caster) const;
@@ -96,7 +96,7 @@ class AuraEffect
     private:
         Aura * const m_base;
 
-        SpellEntry const* const m_spellProto;
+        SpellInfo const* const m_spellInfo;
         uint8 const m_effIndex;
         int32 const m_baseAmount;
 
@@ -311,17 +311,17 @@ namespace Trillium
             AbsorbAuraOrderPred() { }
             bool operator() (AuraEffect * aurEffA, AuraEffect * aurEffB) const
             {
-                SpellEntry const* spellProtoA = aurEffA->GetSpellProto();
-                SpellEntry const* spellProtoB = aurEffB->GetSpellProto();
+                SpellInfo const* spellProtoA = aurEffA->GetSpellInfo();
+                SpellInfo const* spellProtoB = aurEffB->GetSpellInfo();
 
                 // Wards
-                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
-                    (spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
-                    if (spellProtoA->GetCategory() == 56)
+                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_MAGE) ||
+                    (spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK))
+                    if (spellProtoA->Category == 56)
                         return true;
-                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
-                    (spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
-                    if (spellProtoB->GetCategory() == 56)
+                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_MAGE) ||
+                    (spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK))
+                    if (spellProtoB->Category == 56)
                         return false;
 
                 // Sacred Shield
@@ -343,16 +343,16 @@ namespace Trillium
                     return false;
 
                 // Ice Barrier
-                if (spellProtoA->GetCategory() == 471)
+                if (spellProtoA->Category == 471)
                     return true;
-                if (spellProtoB->GetCategory() == 471)
+                if (spellProtoB->Category == 471)
                     return false;
 
                 // Sacrifice
-                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
                     (spellProtoA->SpellIconID == 693))
                     return true;
-                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
                     (spellProtoB->SpellIconID == 693))
                     return false;
 

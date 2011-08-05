@@ -96,7 +96,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        /*void SpellHit(Unit* caster, const SpellEntry *spell)
+        /*void SpellHit(Unit* caster, const SpellInfo *spell)
         {
             //we have no way of telling the Creature was hit by spell -> got aura applied after 10-12 seconds
             //then no way for the mobs to actually stop the shutdown as intended.
@@ -778,7 +778,7 @@ public:
                 PlayerGUID = who->GetGUID();
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry * /*spell*/)
+        void SpellHit(Unit* /*caster*/, const SpellInfo * /*spell*/)
         {
             DoCast(me, SPELL_DE_MATERIALIZE);
         }

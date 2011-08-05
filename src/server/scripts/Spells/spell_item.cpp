@@ -46,9 +46,9 @@ public:
     public:
         spell_item_trigger_spell_SpellScript(uint32 triggeredSpellId) : SpellScript(), _triggeredSpellId(triggeredSpellId) { }
 
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(_triggeredSpellId))
+            if (!sSpellMgr->GetSpellInfo(_triggeredSpellId))
                 return false;
             return true;
         }
@@ -91,10 +91,10 @@ public:
     {
         PrepareSpellScript(spell_item_deviate_fish_SpellScript)
     public:
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             for (uint32 spellId = SPELL_SLEEPY; spellId <= SPELL_HEALTHY_SPIRIT; ++spellId)
-                if (!sSpellStore.LookupEntry(spellId))
+                if (!sSpellMgr->GetSpellInfo(spellId))
                     return false;
             return true;
         }
@@ -139,13 +139,13 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_flask_of_the_north_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_FLASK_OF_THE_NORTH_SP))
+            if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_THE_NORTH_SP))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_FLASK_OF_THE_NORTH_AP))
+            if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_THE_NORTH_AP))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_FLASK_OF_THE_NORTH_STR))
+            if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_THE_NORTH_STR))
                 return false;
             return true;
         }
@@ -215,11 +215,11 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_gnomish_death_ray_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_GNOMISH_DEATH_RAY_SELF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_SELF))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_GNOMISH_DEATH_RAY_TARGET))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET))
                 return false;
             return true;
         }
@@ -268,17 +268,17 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_make_a_wish_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_MR_PINCHYS_BLESSING))
+            if (!sSpellMgr->GetSpellInfo(SPELL_MR_PINCHYS_BLESSING))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_SUMMON_MIGHTY_MR_PINCHY))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_MIGHTY_MR_PINCHY))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_SUMMON_FURIOUS_MR_PINCHY))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_FURIOUS_MR_PINCHY))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_TINY_MAGICAL_CRAWDAD))
+            if (!sSpellMgr->GetSpellInfo(SPELL_TINY_MAGICAL_CRAWDAD))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_MR_PINCHYS_GIFT))
+            if (!sSpellMgr->GetSpellInfo(SPELL_MR_PINCHYS_GIFT))
                 return false;
             return true;
         }
@@ -385,13 +385,13 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_net_o_matic_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_NET_O_MATIC_TRIGGERED1))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NET_O_MATIC_TRIGGERED1))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_NET_O_MATIC_TRIGGERED2))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NET_O_MATIC_TRIGGERED2))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_NET_O_MATIC_TRIGGERED3))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NET_O_MATIC_TRIGGERED3))
                 return false;
             return true;
         }
@@ -441,13 +441,13 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_noggenfogger_elixir_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED1))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED1))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED2))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED2))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED3))
+            if (!sSpellMgr->GetSpellInfo(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED3))
                 return false;
             return true;
         }
@@ -499,10 +499,10 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_savory_deviate_delight_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             for (uint32 spellId = SPELL_FLIP_OUT_MALE; spellId <= SPELL_YAAARRRR_FEMALE; ++spellId)
-                if (!sSpellStore.LookupEntry(spellId))
+                if (!sSpellMgr->GetSpellInfo(spellId))
                     return false;
             return true;
         }
@@ -557,19 +557,19 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_six_demon_bag_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_FROSTBOLT))
+            if (!sSpellMgr->GetSpellInfo(SPELL_FROSTBOLT))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_POLYMORPH))
+            if (!sSpellMgr->GetSpellInfo(SPELL_POLYMORPH))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_SUMMON_FELHOUND_MINION))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_FELHOUND_MINION))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_FIREBALL))
+            if (!sSpellMgr->GetSpellInfo(SPELL_FIREBALL))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_CHAIN_LIGHTNING))
+            if (!sSpellMgr->GetSpellInfo(SPELL_CHAIN_LIGHTNING))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_ENVELOPING_WINDS))
+            if (!sSpellMgr->GetSpellInfo(SPELL_ENVELOPING_WINDS))
                 return false;
             return true;
         }
@@ -636,13 +636,13 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_underbelly_elixir_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_UNDERBELLY_ELIXIR_TRIGGERED1))
+            if (!sSpellMgr->GetSpellInfo(SPELL_UNDERBELLY_ELIXIR_TRIGGERED1))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_UNDERBELLY_ELIXIR_TRIGGERED2))
+            if (!sSpellMgr->GetSpellInfo(SPELL_UNDERBELLY_ELIXIR_TRIGGERED2))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_UNDERBELLY_ELIXIR_TRIGGERED3))
+            if (!sSpellMgr->GetSpellInfo(SPELL_UNDERBELLY_ELIXIR_TRIGGERED3))
                 return false;
             return true;
         }
@@ -692,13 +692,13 @@ public:
         PrepareAuraScript(spell_item_shadowmourne_AuraScript)
         spell_item_shadowmourne_AuraScript() : AuraScript() { }
 
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(SPELL_SHADOWMOURNE_VISUAL_LOW))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SHADOWMOURNE_VISUAL_LOW))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_SHADOWMOURNE_VISUAL_HIGH))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SHADOWMOURNE_VISUAL_HIGH))
                 return false;
-            if (!sSpellStore.LookupEntry(SPELL_SHADOWMOURNE_CHAOS_BANE_BUFF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_SHADOWMOURNE_CHAOS_BANE_BUFF))
                 return false;
             return true;
         }
@@ -759,13 +759,13 @@ class spell_item_red_rider_air_rifle : public SpellScriptLoader
         {
             PrepareSpellScript(spell_item_red_rider_air_rifle_SpellScript);
 
-            bool Validate(SpellEntry const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/)
             {
-                if (!sSpellStore.LookupEntry(SPELL_AIR_RIFLE_HOLD_VISUAL))
+                if (!sSpellMgr->GetSpellInfo(SPELL_AIR_RIFLE_HOLD_VISUAL))
                     return false;
-                if (!sSpellStore.LookupEntry(SPELL_AIR_RIFLE_SHOOT))
+                if (!sSpellMgr->GetSpellInfo(SPELL_AIR_RIFLE_SHOOT))
                     return false;
-                if (!sSpellStore.LookupEntry(SPELL_AIR_RIFLE_SHOOT_SELF))
+                if (!sSpellMgr->GetSpellInfo(SPELL_AIR_RIFLE_SHOOT_SELF))
                     return false;
                 return true;
             }
@@ -980,13 +980,13 @@ class spell_item_vanquished_clutches : public SpellScriptLoader
         {
             PrepareSpellScript(spell_item_vanquished_clutches_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
-                if (!sSpellStore.LookupEntry(SPELL_CRUSHER))
+                if (!sSpellMgr->GetSpellInfo(SPELL_CRUSHER))
                     return false;
-                if (!sSpellStore.LookupEntry(SPELL_CONSTRICTOR))
+                if (!sSpellMgr->GetSpellInfo(SPELL_CONSTRICTOR))
                     return false;
-                if (!sSpellStore.LookupEntry(SPELL_CORRUPTOR))
+                if (!sSpellMgr->GetSpellInfo(SPELL_CORRUPTOR))
                     return false;
                 return true;
             }
@@ -1036,9 +1036,9 @@ class spell_item_ashbringer : public SpellScriptLoader
         class spell_item_ashbringer_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_item_ashbringer_SpellScript)
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
-                if (!sSpellStore.LookupEntry(SPELL_ASHBRINGER))
+                if (!sSpellMgr->GetSpellInfo(SPELL_ASHBRINGER))
                     return false;
                 return true;
             }

@@ -341,10 +341,10 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
         // not accept if spell can't be casted now (cheating)
         if (uint32 my_spell_id = my_trade->GetSpell())
         {
-            SpellEntry const* spellEntry = sSpellStore.LookupEntry(my_spell_id);
+            SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(my_spell_id);
             Item* castItem = my_trade->GetSpellCastItem();
 
-            if (!spellEntry || !his_trade->GetItem(TRADE_SLOT_NONTRADED) ||
+            if (!SpellInfo || !his_trade->GetItem(TRADE_SLOT_NONTRADED) ||
                 (my_trade->HasSpellCastItem() && !castItem))
             {
                 clearAcceptTradeMode(my_trade, his_trade);
@@ -354,7 +354,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
                 return;
             }
 
-            my_spell = new Spell(_player, spellEntry, true);
+            my_spell = new Spell(_player, SpellInfo, true);
             my_spell->m_CastItem = castItem;
             my_targets.SetTradeItemTarget(_player);
             my_spell->m_targets = my_targets;
@@ -376,10 +376,10 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
         // not accept if spell can't be casted now (cheating)
         if (uint32 his_spell_id = his_trade->GetSpell())
         {
-            SpellEntry const* spellEntry = sSpellStore.LookupEntry(his_spell_id);
+            SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(his_spell_id);
             Item* castItem = his_trade->GetSpellCastItem();
 
-            if (!spellEntry || !my_trade->GetItem(TRADE_SLOT_NONTRADED) || (his_trade->HasSpellCastItem() && !castItem))
+            if (!SpellInfo || !my_trade->GetItem(TRADE_SLOT_NONTRADED) || (his_trade->HasSpellCastItem() && !castItem))
             {
                 delete my_spell;
                 his_trade->SetSpell(0);
@@ -389,7 +389,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
                 return;
             }
 
-            his_spell = new Spell(trader, spellEntry, true);
+            his_spell = new Spell(trader, SpellInfo, true);
             his_spell->m_CastItem = castItem;
             his_targets.SetTradeItemTarget(trader);
             his_spell->m_targets = his_targets;

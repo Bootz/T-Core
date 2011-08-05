@@ -77,13 +77,13 @@ public:
 
         // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
         uint32 spell = handler->extractSpellIdFromLink((char*)args);
-        if (!spell || !sSpellStore.LookupEntry(spell))
+        if (!spell || !sSpellMgr->GetSpellInfo(spell))
             return false;
 
         char const* allStr = strtok(NULL, " ");
         bool allRanks = allStr ? (strncmp(allStr, "all", strlen(allStr)) == 0) : false;
 
-        SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell);
         if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer()))
         {
             handler->PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spell);
@@ -115,13 +115,13 @@ public:
 
     static bool HandleLearnAllGMCommand(ChatHandler* handler, const char* /*args*/)
     {
-        for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i)
+        for (uint32 i = 0; i < sSpellMgr->GetSpellInfoStoreSize(); ++i)
         {
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(i);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(i);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
-            if (!sSpellMgr->IsSkillTypeSpell(i, SKILL_INTERNAL))
+            if (!spellInfo->IsAbilityOfSkillType(SKILL_INTERNAL))
                 continue;
 
             handler->GetSession()->GetPlayer()->learnSpell(i, false);
@@ -151,12 +151,12 @@ public:
             if (!entry)
                 continue;
 
-            SpellEntry const *spellInfo = sSpellStore.LookupEntry(entry->spellId);
+            SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(entry->spellId);
             if (!spellInfo)
                 continue;
 
             // skip server-side/triggered spells
-            if (spellInfo->GetSpellLevel() == 0)
+            if (spellInfo->SpellLevel == 0)
                 continue;
 
             // skip wrong class/race skills
@@ -164,7 +164,7 @@ public:
                 continue;
 
             // skip other spell families
-            if (spellInfo->GetSpellFamilyName() != family)
+            if (spellInfo->SpellFamilyName != family)
                 continue;
 
             // skip spells with first rank learned as talent (and all talents then also)
@@ -215,7 +215,7 @@ public:
             if (!spellId)                                        // ??? none spells in talent
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
@@ -294,7 +294,7 @@ public:
             if (!spellid)                                        // ??? none spells in talent
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellid);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellid);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
@@ -453,7 +453,7 @@ public:
             if (skillLine->classmask && (skillLine->classmask & classmask) == 0)
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(skillLine->spellId);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player, false))
                 continue;
 

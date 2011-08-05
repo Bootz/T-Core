@@ -213,16 +213,16 @@ struct TSpellSummary
 
 void ScriptMgr::FillSpellSummary()
 {
-    SpellSummary = new TSpellSummary[GetSpellStore()->GetNumRows()];
+    SpellSummary = new TSpellSummary[sSpellMgr->GetSpellInfoStoreSize()];
 
-    SpellEntry const* pTempSpell;
+    SpellInfo const* pTempSpell;
 
-    for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i)
+    for (uint32 i = 0; i < sSpellMgr->GetSpellInfoStoreSize(); ++i)
     {
         SpellSummary[i].Effects = 0;
         SpellSummary[i].Targets = 0;
 
-        pTempSpell = GetSpellStore()->LookupEntry(i);
+        pTempSpell = sSpellMgr->GetSpellInfo(i);
         //This spell doesn't exist
         if (!pTempSpell)
             continue;
@@ -230,67 +230,67 @@ void ScriptMgr::FillSpellSummary()
         for (uint32 j = 0; j < MAX_SPELL_EFFECTS; ++j)
         {
             //Spell targets self
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SELF-1);
 
             //Spell targets a single enemy
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DST_TARGET_ENEMY)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ENEMY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DST_TARGET_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_ENEMY-1);
 
             //Spell targets AoE at enemy
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_SRC ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_DST ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DEST_DYNOBJ_ENEMY)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_AREA_ENEMY_SRC ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_AREA_ENEMY_DST ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DEST_DYNOBJ_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_ENEMY-1);
 
             //Spell targets an enemy
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ENEMY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DST_TARGET_ENEMY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_SRC ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_AREA_ENEMY_DST ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_DEST_DYNOBJ_ENEMY)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ENEMY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DST_TARGET_ENEMY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_AREA_ENEMY_SRC ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_AREA_ENEMY_DST ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_DEST_DYNOBJ_ENEMY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_ENEMY-1);
 
             //Spell targets a single friend(or self)
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_PARTY)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_PARTY)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_SINGLE_FRIEND-1);
 
             //Spell targets aoe friends
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY_PARTY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_PARTY_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY_PARTY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_AOE_FRIEND-1);
 
             //Spell targets any friend(or self)
-            if (pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_PARTY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_PARTY_CASTER ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_UNIT_TARGET_ALLY_PARTY ||
-                pTempSpell->GetEffectImplicitTargetAByIndex(j) == TARGET_SRC_CASTER)
+            if (pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_PARTY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_PARTY_CASTER ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY_PARTY ||
+                pTempSpell->Effects[j].TargetA.GetTarget() == TARGET_SRC_CASTER)
                 SpellSummary[i].Targets |= 1 << (SELECT_TARGET_ANY_FRIEND-1);
 
             //Make sure that this spell includes a damage effect
-            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_SCHOOL_DAMAGE ||
-                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_INSTAKILL ||
-                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE ||
-                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEALTH_LEECH)
+            if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_SCHOOL_DAMAGE ||
+                pTempSpell->Effects[j].Effect == SPELL_EFFECT_INSTAKILL ||
+                pTempSpell->Effects[j].Effect == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE ||
+                pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEALTH_LEECH)
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_DAMAGE-1);
 
             //Make sure that this spell includes a healing effect (or an apply aura with a periodic heal)
-            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL ||
-                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL_MAX_HEALTH ||
-                pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_HEAL_MECHANICAL ||
-                (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA  && pTempSpell->GetEffectApplyAuraNameByIndex(j) == 8))
+            if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL ||
+                pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL_MAX_HEALTH ||
+                pTempSpell->Effects[j].Effect == SPELL_EFFECT_HEAL_MECHANICAL ||
+                (pTempSpell->Effects[j].Effect == SPELL_EFFECT_APPLY_AURA  && pTempSpell->Effects[j].ApplyAuraName == 8))
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_HEALING-1);
 
             //Make sure that this spell applies an aura
-            if (pTempSpell->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_APPLY_AURA)
+            if (pTempSpell->Effects[j].Effect == SPELL_EFFECT_APPLY_AURA)
                 SpellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA-1);
         }
     }

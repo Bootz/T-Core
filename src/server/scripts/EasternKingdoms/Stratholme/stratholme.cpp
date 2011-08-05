@@ -144,7 +144,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void SpellHit(Unit* caster, const SpellEntry *spell)
+        void SpellHit(Unit* caster, const SpellInfo *spell)
         {
             if (caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -220,7 +220,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void SpellHit(Unit* /*caster*/, const SpellEntry *spell)
+        void SpellHit(Unit* /*caster*/, const SpellInfo *spell)
         {
             if (!Tagged && spell->Id == SPELL_EGAN_BLASTER)
                 Tagged = true;

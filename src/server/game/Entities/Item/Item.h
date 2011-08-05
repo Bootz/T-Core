@@ -28,7 +28,7 @@
 #include "ItemPrototype.h"
 #include "DatabaseEnv.h"
 
-struct SpellEntry;
+class SpellInfo;
 class Bag;
 class Unit;
 
@@ -36,7 +36,7 @@ struct ItemSetEffect
 {
     uint32 setid;
     uint32 item_count;
-    SpellEntry const *spells[8];
+    SpellInfo const *spells[8];
 };
 
 enum InventoryResult
@@ -270,7 +270,7 @@ class Item : public Object
         bool HasEnchantRequiredSkill(const Player *pPlayer) const;
         uint32 GetEnchantRequiredLevel() const;
 
-        bool IsFitToSpellRequirements(SpellEntry const* spellInfo) const;
+        bool IsFitToSpellRequirements(SpellInfo const* spellInfo) const;
         bool IsTargetValidForItemUse(Unit* pUnitTarget);
         bool IsLimitedToAnotherMapOrZone(uint32 cur_mapId, uint32 cur_zoneId) const;
         bool GemsFitSockets() const;

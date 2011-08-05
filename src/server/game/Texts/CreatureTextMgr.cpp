@@ -324,7 +324,7 @@ void CreatureTextMgr::SendChatPacket(WorldPacket* data, WorldObject* source, Cha
         {
             if (range == TEXT_RANGE_NORMAL)//ignores team and gmOnly
             {
-                Player* player = sObjectMgr->GetPlayer(whisperGuid);
+                Player* player = ObjectAccessor::FindPlayer(whisperGuid);
                 if (!player || !player->GetSession())
                     return;
                 player->GetSession()->SendPacket(data);

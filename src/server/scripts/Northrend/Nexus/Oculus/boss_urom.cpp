@@ -295,7 +295,7 @@ public:
             me->DeleteThreatList();
         }
 
-        void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell)
+        void SpellHit(Unit* /*pCaster*/, const SpellInfo* pSpell)
         {
             switch(pSpell->Id)
             {

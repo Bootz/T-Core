@@ -116,7 +116,7 @@ public:
         PlayerGUID = 0;
         }
 
-        void SpellHit(Unit* caster, const SpellEntry* spell)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
         {
             if (!caster)
                 return;

@@ -61,7 +61,7 @@ public:
         {
             if (me->GetEntry() == NPC_CENARION_HOLD_INFANTRY)
                 DoScriptText(RAND(SAY_GUARD_SIL_AGGRO1, SAY_GUARD_SIL_AGGRO2, SAY_GUARD_SIL_AGGRO3), me, who);
-            if (SpellEntry const* spell = me->reachWithSpellAttack(who))
+            if (SpellInfo const* spell = me->reachWithSpellAttack(who))
                 DoCast(who, spell->Id);
         }
 
@@ -79,7 +79,7 @@ public:
                 if (buffTimer <= diff)
                 {
                     //Find a spell that targets friendly and applies an aura (these are generally buffs)
-                    SpellEntry const *info = SelectSpell(me, 0, 0, SELECT_TARGET_ANY_FRIEND, 0, 0, 0, 0, SELECT_EFFECT_AURA);
+                    SpellInfo const *info = SelectSpell(me, 0, 0, SELECT_TARGET_ANY_FRIEND, 0, 0, 0, 0, SELECT_EFFECT_AURA);
 
                     if (info && !globalCooldown)
                     {
@@ -107,7 +107,7 @@ public:
                 if (me->IsWithinMeleeRange(me->getVictim()))
                 {
                     bool healing = false;
-                    SpellEntry const *info = NULL;
+                    SpellInfo const *info = NULL;
 
                     //Select a healing spell if less than 30% hp
                     if (me->HealthBelowPct(30))
@@ -143,7 +143,7 @@ public:
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
                     bool healing = false;
-                    SpellEntry const *info = NULL;
+                    SpellInfo const *info = NULL;
 
                     //Select a healing spell if less than 30% hp ONLY 33% of the time
                     if (me->HealthBelowPct(30) && 33 > urand(0, 99))
