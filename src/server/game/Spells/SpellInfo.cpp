@@ -796,7 +796,7 @@ bool SpellInfo::CanBeUsedInCombat() const
 
 bool SpellInfo::IsPositive() const
 {
-    return AttributesCu & SPELL_ATTR0_CU_NEGATIVE;
+    return !(AttributesCu & SPELL_ATTR0_CU_NEGATIVE);
 }
 
 bool SpellInfo::IsPositiveEffect(uint8 effIndex) const
