@@ -28,7 +28,7 @@ inline void appendPathSeparator(std::string& s)
 {
     if (!s.empty())
         if ((s.at(s.length() - 1) != '/') && (s.at(s.length() - 1) != '\\'))
-            s.append("/");
+            s.push_back('/');
 }
 
 inline int makedir(const char *path, mode_t mode)

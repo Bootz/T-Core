@@ -1113,7 +1113,7 @@ void World::LoadConfigSettings(bool reload)
         dataPath = "./";
 
     if (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\')
-        dataPath.append("/");
+        dataPath.push_back('/');
 
     if (reload)
     {
