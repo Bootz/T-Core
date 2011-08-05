@@ -1362,6 +1362,5 @@ class ObjectMgr
 
 // scripting access functions
 bool LoadTrilliumStrings(char const* table, int32 start_value = MAX_CREATURE_AI_TEXT_STRING_ID, int32 end_value = std::numeric_limits<int32>::min());
-uint32 GetScriptId(const char *name);
 
 #endif

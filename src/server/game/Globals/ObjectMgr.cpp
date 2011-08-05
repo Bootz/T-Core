@@ -8665,11 +8665,6 @@ bool LoadTrilliumStrings(char const* table, int32 start_value, int32 end_value)
     return sObjectMgr->LoadTrilliumStrings(table, start_value, end_value);
 }
 
-uint32 GetScriptId(const char *name)
-{
-    return sObjectMgr->GetScriptId(name);
-}
-
 CreatureBaseStats const* ObjectMgr::GetCreatureBaseStats(uint8 level, uint8 unitClass)
 {
     CreatureBaseStatsMap::const_iterator it = m_creatureBaseStatsMap.find(MAKE_PAIR16(level, unitClass));
