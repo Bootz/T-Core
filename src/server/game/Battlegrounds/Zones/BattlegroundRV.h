@@ -104,12 +104,9 @@ class BattlegroundRVScore : public BattlegroundScore
 
 class BattlegroundRV : public Battleground
 {
-    friend class BattlegroundMgr;
-
     public:
         BattlegroundRV();
         ~BattlegroundRV();
-        void Update(uint32 diff);
 
         /* inherited from BattlegroundClass */
         virtual void AddPlayer(Player *plr);
@@ -127,6 +124,8 @@ class BattlegroundRV : public Battleground
     private:
         uint32 Timer;
         uint32 State;
+
+        virtual void PostUpdateImpl(uint32 diff);
 
     protected:
         uint32 getTimer() { return Timer; };

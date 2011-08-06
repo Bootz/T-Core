@@ -281,7 +281,7 @@ void BattlegroundSA::StartShips()
     ShipsStarted = true;
 }
 
-void BattlegroundSA::Update(uint32 diff)
+void BattlegroundSA::PostUpdateImpl(uint32 diff)
 {
     if (InitSecondRound)
     {
