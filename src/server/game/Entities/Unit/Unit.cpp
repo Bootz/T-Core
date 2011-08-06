@@ -893,7 +893,12 @@ void Unit::CastStop(uint32 except_spellid)
             InterruptSpell(CurrentSpellTypes(i), false);
 }
 
-void Unit::CastSpell(Unit* Victim, uint32 spellId, bool triggered, Item* castItem, AuraEffect const* triggeredByAura, uint64 originalCaster)
+void Unit::CastSpell(Unit* victim, uint32 spellId, bool triggered, Item* castItem, AuraEffect const* triggeredByAura, uint64 originalCaster)
+{
+    CastSpell(victim, spellId, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, castItem, triggeredByAura, originalCaster);
+}
+
+void Unit::CastSpell(Unit* victim, uint32 spellId, TriggerCastFlags triggerFlags /*= TRIGGER_NONE*/, Item* castItem /*= NULL*/, AuraEffect const* triggeredByAura /*= NULL*/, uint64 originalCaster /*= 0*/)
 {
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
 
@@ -903,10 +908,15 @@ void Unit::CastSpell(Unit* Victim, uint32 spellId, bool triggered, Item* castIte
         return;
     }
 
-    CastSpell(Victim, spellInfo, triggered, castItem, triggeredByAura, originalCaster);
+    CastSpell(victim, spellInfo, triggerFlags, castItem, triggeredByAura, originalCaster);
 }
 
-void Unit::CastSpell(Unit* Victim, SpellInfo const* spellInfo, bool triggered, Item* castItem, AuraEffect const* triggeredByAura, uint64 originalCaster)
+void Unit::CastSpell(Unit* victim, SpellInfo const *spellInfo, bool triggered, Item *castItem/*= NULL*/, AuraEffect const* triggeredByAura /*= NULL*/, uint64 originalCaster /*= 0*/)
+{
+    CastSpell(victim, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, castItem, triggeredByAura, originalCaster);
+}
+
+void Unit::CastSpell(Unit* Victim, SpellInfo const* spellInfo, TriggerCastFlags triggerFlags, Item* castItem, AuraEffect const* triggeredByAura, uint64 originalCaster)
 {
     if (!spellInfo)
     {
@@ -927,7 +937,7 @@ void Unit::CastSpell(Unit* Victim, SpellInfo const* spellInfo, bool triggered, I
     if (!originalCaster && triggeredByAura)
         originalCaster = triggeredByAura->GetCasterGUID();
 
-    Spell* spell = new Spell(this, spellInfo, triggered, originalCaster);
+    Spell* spell = new Spell(this, spellInfo, triggerFlags, originalCaster);
 
     spell->m_CastItem = castItem;
     spell->prepare(&targets, triggeredByAura);
@@ -967,7 +977,7 @@ void Unit::CastCustomSpell(uint32 spellId, CustomSpellValues const& value, Unit*
     if (!originalCaster && triggeredByAura)
         originalCaster = triggeredByAura->GetCasterGUID();
 
-    Spell* spell = new Spell(this, spellInfo, triggered, originalCaster);
+    Spell* spell = new Spell(this, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, originalCaster);
 
     if (castItem)
     {
@@ -998,7 +1008,7 @@ void Unit::CastSpell(float x, float y, float z, uint32 spellId, bool triggered, 
     if (!originalCaster && triggeredByAura)
         originalCaster = triggeredByAura->GetCasterGUID();
 
-    Spell* spell = new Spell(this, spellInfo, triggered, originalCaster);
+    Spell* spell = new Spell(this, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, originalCaster);
 
     SpellCastTargets targets;
     targets.SetDst(x, y, z, GetOrientation());
@@ -1028,7 +1038,7 @@ void Unit::CastSpell(GameObject *go, uint32 spellId, bool triggered, Item* castI
     if (!originalCaster && triggeredByAura)
         originalCaster = triggeredByAura->GetCasterGUID();
 
-    Spell* spell = new Spell(this, spellInfo, triggered, originalCaster);
+    Spell* spell = new Spell(this, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, originalCaster);
 
     SpellCastTargets targets;
     targets.SetGOTarget(go);
@@ -2943,7 +2953,7 @@ void Unit::_UpdateAutoRepeatSpell()
         }
 
         // we want to shoot
-        Spell* spell = new Spell(this, m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo, true);
+        Spell* spell = new Spell(this, m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo, TRIGGERED_FULL_MASK);
         spell->prepare(&(m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_targets));
 
         // all went good, reset attack

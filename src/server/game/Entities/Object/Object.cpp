@@ -2671,7 +2671,7 @@ void WorldObject::DestroyForNearbyPlayers()
         return;
 
     std::list<Player*> targets;
-    Trillium::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange());
+    Trillium::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
     Trillium::PlayerListSearcher<Trillium::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
