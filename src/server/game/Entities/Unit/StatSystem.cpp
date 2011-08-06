@@ -811,16 +811,6 @@ void Player::UpdateManaRegen()
     // Apply PCT bonus from SPELL_AURA_MOD_POWER_REGEN_PERCENT aura on spirit base regen
     power_regen *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_POWER_REGEN_PERCENT, POWER_MANA);
 
-    // Mana regen from SPELL_AURA_MOD_POWER_REGEN aura
-    float power_regen_mp5 = (GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, POWER_MANA) + m_baseManaRegen) / 5.0f;
-
-    // Get bonus from SPELL_AURA_MOD_MANA_REGEN_FROM_STAT aura
-    AuraEffectList const& regenAura = GetAuraEffectsByType(SPELL_AURA_MOD_MANA_REGEN_FROM_STAT);
-    for (AuraEffectList::const_iterator i = regenAura.begin(); i != regenAura.end(); ++i)
-    {
-        power_regen_mp5 += GetStat(Stats((*i)->GetMiscValue())) * (*i)->GetAmount() / 500.0f;
-    }
-
     // Set regen rate in cast state apply only on spirit based regen
     int32 modManaRegenInterrupt = GetTotalAuraModifier(SPELL_AURA_MOD_MANA_REGEN_INTERRUPT);
     if (modManaRegenInterrupt > 100)
@@ -1184,7 +1174,6 @@ void Guardian::UpdateArmor()
 
     value  = GetModifierValue(unitMod, BASE_VALUE);
     value *= GetModifierValue(unitMod, BASE_PCT);
-    value += GetStat(STAT_AGILITY) * 2.0f;
     value += GetModifierValue(unitMod, TOTAL_VALUE) + bonus_armor;
     value *= GetModifierValue(unitMod, TOTAL_PCT);
 
