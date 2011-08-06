@@ -603,7 +603,7 @@ enum Opcodes
     SMSG_PERIODICAURALOG                             = 0x0A2A3, // 14333
     SMSG_SPELLDAMAGESHIELD                           = 0x076EE, // 14333
     SMSG_SPELLNONMELEEDAMAGELOG                      = 0x0B2AE, // 14333
-    CMSG_LEARN_TALENT                                = 0x06AAB, // 14333
+    CMSG_LEARN_TALENT                                = 0x06AAB, // 4.2.0:14333
     SMSG_RESURRECT_FAILED                            = 0x100FF, //
     CMSG_TOGGLE_PVP                                  = 0x0BA6F, // 14333
     SMSG_ZONE_UNDER_ATTACK                           = 0x0FE72, // 14333
@@ -776,7 +776,7 @@ enum Opcodes
     SMSG_MINIGAME_MOVE_FAILED                        = 0x1014D, //
     SMSG_RAID_INSTANCE_MESSAGE                       = 0x06677, // 14333
     SMSG_COMPRESSED_MOVES                            = 0x0662F, // 14333
-    CMSG_GUILD_INFO_TEXT                             = 0x1014D, //
+    CMSG_GUILD_INFO_TEXT                             = 0x1014E, //
     SMSG_CHAT_RESTRICTED                             = 0x07667, // 14333
     SMSG_SPLINE_SET_RUN_SPEED                        = 0x0C321, // 14333
     SMSG_SPLINE_SET_RUN_BACK_SPEED                   = 0x05741, // 14333

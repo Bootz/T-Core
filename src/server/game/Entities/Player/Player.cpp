@@ -1946,7 +1946,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
                 break;
         }
 
-        *data << uint32(db2Item ? db2Item->DisplayId : 0);
+        *data << uint32(db2Item ? db2Item->DisplayId : proto->DisplayInfoID);
         *data << uint32(enchant ? enchant->aura_id : 0);
         *data << uint8(proto->InventoryType);
     }
