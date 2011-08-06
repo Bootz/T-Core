@@ -25,6 +25,7 @@
 #include "PoolMgr.h"
 #include "Group.h"
 #include "icecrown_citadel.h"
+#include "SpellInfo.h"
 
 enum ScriptTexts
 {

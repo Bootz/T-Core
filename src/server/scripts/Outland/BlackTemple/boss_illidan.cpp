@@ -1629,7 +1629,7 @@ public:
 
         void HandleChannelSequence()
         {
-            Unit* Channel = NULL, *Spirit[2];
+            Unit* Channel = NULL, *Spirit[2] = { NULL, NULL };
             if (ChannelCount <= 5)
             {
                 Channel = Unit::GetUnit((*me), ChannelGUID);

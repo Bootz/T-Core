@@ -24,6 +24,7 @@
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"
 #include "ulduar.h"
+#include "Vehicle.h"
 
 enum Yells
 {
