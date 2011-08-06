@@ -603,7 +603,7 @@ enum Opcodes
     SMSG_PERIODICAURALOG                             = 0x0A2A3, // 14333
     SMSG_SPELLDAMAGESHIELD                           = 0x076EE, // 14333
     SMSG_SPELLNONMELEEDAMAGELOG                      = 0x0B2AE, // 14333
-    CMSG_LEARN_TALENT                                = 0x100FE, //
+    CMSG_LEARN_TALENT                                = 0x06AAB, // 14333
     SMSG_RESURRECT_FAILED                            = 0x100FF, //
     CMSG_TOGGLE_PVP                                  = 0x0BA6F, // 14333
     SMSG_ZONE_UNDER_ATTACK                           = 0x0FE72, // 14333
