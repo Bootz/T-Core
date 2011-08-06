@@ -391,7 +391,6 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritBaseStore, storagesPath, "gtChanceToSpellCritBase.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritStore,    storagesPath, "gtChanceToSpellCrit.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, gtOCTHpPerStaminaStore,           storagesPath, "gtOCTHpPerStamina.dbc");
-    //LoadData(dbcCount, availableDbcLocales, bad_dbc_files, sGtOCTRegenMPStore,           storagesPath, "gtOCTRegenMP.dbc");       -- not used currently
     LoadData(availableDbcLocales, bad_dbc_files, sGtRegenMPPerSptStore,        storagesPath, "gtRegenMPPerSpt.dbc");
 
     LoadData(availableDbcLocales, bad_dbc_files, sHolidaysStore,               storagesPath, "Holidays.dbc");
@@ -403,6 +402,22 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sItemRandomPropertiesStore,   storagesPath, "ItemRandomProperties.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sItemRandomSuffixStore,       storagesPath, "ItemRandomSuffix.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sItemSetStore,                storagesPath, "ItemSet.dbc");
+
+    /*########################################################################################################################
+    ###################################         Weapon and other Damages      ################################################
+    ########################################################################################################################*/
+
+    LoadData(availableDbcLocales, bad_dbc_files,sItemArmorQualityStore,           storagesPath,"ItemArmorQuality.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemArmorShieldStore,            storagesPath,"ItemArmorShield.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemArmorTotalStore,             storagesPath,"ItemArmorTotal.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageAmmoStore,             storagesPath,"ItemDamageAmmo.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageOneHandStore,          storagesPath,"ItemDamageOneHand.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageOneHandCasterStore,    storagesPath,"ItemDamageOneHandCaster.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageRangedStore,           storagesPath,"ItemDamageRanged.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageThrownStore,           storagesPath,"ItemDamageThrown.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageTwoHandStore,          storagesPath,"ItemDamageTwoHand.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageTwoHandCasterStore,    storagesPath,"ItemDamageTwoHandCaster.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files,sItemDamageWandStore,             storagesPath,"ItemDamageWand.dbc");
 
     LoadData(availableDbcLocales, bad_dbc_files, sLFGDungeonStore,             storagesPath, "LFGDungeons.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sLockStore,                   storagesPath, "Lock.dbc");
