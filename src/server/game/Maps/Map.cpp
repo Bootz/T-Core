@@ -518,7 +518,7 @@ void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<Trillium::Ob
     }
 }
 
-void Map::Update(const uint32 &t_diff)
+void Map::Update(const uint32 t_diff)
 {
     /// update worldsessions for existing players
     for (m_mapRefIter = m_mapRefManager.begin(); m_mapRefIter != m_mapRefManager.end(); ++m_mapRefIter)
@@ -599,7 +599,7 @@ struct ResetNotifier
     void Visit(PlayerMapType &m) { resetNotify<Player>(m);}
 };
 
-void Map::ProcessRelocationNotifies(const uint32 & diff)
+void Map::ProcessRelocationNotifies(const uint32 diff)
 {
     for (GridRefManager<NGridType>::iterator i = GridRefManager<NGridType>::begin(); i != GridRefManager<NGridType>::end(); ++i)
     {
@@ -935,7 +935,7 @@ bool Map::CreatureRespawnRelocation(Creature *c)
         return false;
 }
 
-bool Map::UnloadGrid(const uint32 &x, const uint32 &y, bool unloadAll)
+bool Map::UnloadGrid(const uint32 x, const uint32 y, bool unloadAll)
 {
     NGridType *grid = getNGrid(x, y);
     ASSERT(grid != NULL);
@@ -2394,7 +2394,7 @@ bool InstanceMap::Add(Player* player)
     return true;
 }
 
-void InstanceMap::Update(const uint32& t_diff)
+void InstanceMap::Update(const uint32 t_diff)
 {
     Map::Update(t_diff);
 

@@ -279,8 +279,9 @@ int RASocket::subnegotiate()
 
     const size_t recv_size = message_block.space();
 
+    // Wait a maximum of 1000ms for negotiation packet - not all telnet clients may send it
     const ssize_t n = peer().recv(message_block.wr_ptr(),
-        recv_size);
+        recv_size, &ACE_Time_Value(1));
 
     if (n <= 0)
         return int(n);
@@ -334,11 +335,8 @@ int RASocket::subnegotiate()
 
 int RASocket::svc(void)
 {
-    if (subnegotiate() == -1)
-    {
-        sLogMgr->WriteLn(RA_LOG, "Subnegotiation failed!");
-        return -1;
-    }
+    //! Subnegotiation may differ per client - do not react on it
+    subnegotiate();
 
     if (send("Authentication required\r\n") == -1)
         return -1;

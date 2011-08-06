@@ -2849,7 +2849,7 @@ void SmartScript::SetData(uint32 id, uint32 value)
 {
 }
 
-void SmartScript::SetGUID(const uint64& guid, int32 id)
+void SmartScript::SetGUID(const uint64 guid, int32 id)
 {
 }
 

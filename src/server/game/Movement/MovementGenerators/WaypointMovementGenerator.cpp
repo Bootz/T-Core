@@ -130,14 +130,14 @@ void WaypointMovementGenerator<Player>::InitTraveller(Player & /*unit*/, const W
 
 template<class T>
 bool
-WaypointMovementGenerator<T>::Update(T & /*unit*/, const uint32 & /*diff*/)
+WaypointMovementGenerator<T>::Update(T & /*unit*/, const uint32 /*diff*/)
 {
     return false;
 }
 
 template<>
 bool
-WaypointMovementGenerator<Creature>::Update(Creature &unit, const uint32 &diff)
+WaypointMovementGenerator<Creature>::Update(Creature &unit, const uint32 diff)
 {
     if (!&unit)
         return true;
@@ -229,7 +229,7 @@ WaypointMovementGenerator<Creature>::Update(Creature &unit, const uint32 &diff)
 }
 
 template void WaypointMovementGenerator<Player>::Initialize(Player &);
-template bool WaypointMovementGenerator<Player>::Update(Player &, const uint32 &);
+template bool WaypointMovementGenerator<Player>::Update(Player &, const uint32);
 template void WaypointMovementGenerator<Player>::MovementInform(Player &);
 
 //----------------------------------------------------//
@@ -274,7 +274,7 @@ void FlightPathMovementGenerator::Finalize(Player & player)
 
 }
 
-bool FlightPathMovementGenerator::Update(Player &player, const uint32 &diff)
+bool FlightPathMovementGenerator::Update(Player &player, const uint32 diff)
 {
     if (MovementInProgress())
     {
