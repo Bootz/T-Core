@@ -388,7 +388,7 @@ enum TriggerCastFlags
     TRIGGERED_NONE                                  = 0x00000000,   //! Not triggered
     TRIGGERED_IGNORE_GCD                            = 0x00000001,   //! Will ignore GCD
     TRIGGERED_IGNORE_SPELL_AND_CATEGORY_CD          = 0x00000002,   //! Will ignore Spell and Category cooldowns
-    TRIGGERED_IGNORE_POWER_AND_REAGENT_COST         = 0x00000004,   //! Will ignore power and reagent cost 
+    TRIGGERED_IGNORE_POWER_AND_REAGENT_COST         = 0x00000004,   //! Will ignore power and reagent cost
     TRIGGERED_IGNORE_CAST_ITEM                      = 0x00000008,   //! Will not take away cast item or update related achievement criteria
     TRIGGERED_IGNORE_AURA_SCALING                   = 0x00000010,   //! Will ignore aura scaling
     TRIGGERED_IGNORE_CAST_IN_PROGRESS               = 0x00000020,   //! Will not check if a current cast is in progress
@@ -403,7 +403,7 @@ enum TriggerCastFlags
     TRIGGERED_IGNORE_TARGET_DETECTABILITY           = 0x00004000,   //! Will ignore canSeeOrDetect
     TRIGGERED_IGNORE_LOS                            = 0x00008000,   //! Will ignore LOS to target
     TRIGGERED_IGNORE_CASTER_AURAS                   = 0x00010000,   //! Will ignore caster aura restrictions or requirements
-    TRIGGERED_DISALLOW_PROC_EVENTS                  = 0x00020000,   //! Allows proc events from triggere spell
+    TRIGGERED_DISALLOW_PROC_EVENTS                  = 0x00020000,   //! Disallows proc events from triggered spell (default)
     TRIGGERED_DONT_REPORT_CAST_ERROR                = 0x00040000,   //! Will return SPELL_FAILED_DONT_REPORT in CheckCast functions
     TRIGGERED_FULL_MASK                             = 0xFFFFFFFF,
 };

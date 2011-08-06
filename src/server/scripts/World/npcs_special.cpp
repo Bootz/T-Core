@@ -1894,8 +1894,8 @@ public:
         void InitializeAI()
         {
             CasterAI::InitializeAI();
-            Unit* owner = me->GetOwner();
-            if (!owner)
+            uint64 owner_guid = me->GetOwnerGUID();
+            if (!owner_guid)
                 return;
             // Not needed to be despawned now
             despawnTimer = 0;
@@ -1905,7 +1905,7 @@ public:
             Trillium::UnitListSearcher<Trillium::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
             me->VisitNearbyObject(30, searcher);
             for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
-                if ((*iter)->GetAura(49206, owner->GetGUID()))
+                if ((*iter)->GetAura(49206, owner_guid))
                 {
                     me->Attack((*iter), false);
                     break;
