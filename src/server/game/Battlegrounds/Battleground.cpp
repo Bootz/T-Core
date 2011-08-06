@@ -233,6 +233,9 @@ Battleground::~Battleground()
 
 void Battleground::Update(uint32 diff)
 {
+    if (!PreUpdateImpl(diff))
+        return;
+
     if (!GetPlayersSize())
     {
         //BG is empty
@@ -289,6 +292,8 @@ void Battleground::Update(uint32 diff)
     // Update start time and reset stats timer
     m_StartTime += diff;
     m_ResetStatTimer += diff;
+
+    PostUpdateImpl(diff);
 }
 
 inline void Battleground::_ProcessOfflineQueue()
