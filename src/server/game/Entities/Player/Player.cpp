@@ -1923,6 +1923,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
         uint32 visualbase = slot * 2;
         uint32 itemId = GetUInt32ValueFromArray(equipment, visualbase);
         ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemId);
+        ItemEntry const *db2Item = sItemStore.LookupEntry(itemId); // Use Item.db2.DisplayID for Char Enum
         if (!proto)
         {
             *data << uint32(0);
@@ -1945,7 +1946,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
                 break;
         }
 
-        *data << uint32(proto->DisplayInfoID);
+        *data << uint32(db2Item ? db2Item->DisplayId : 0);
         *data << uint32(enchant ? enchant->aura_id : 0);
         *data << uint8(proto->InventoryType);
     }
