@@ -358,6 +358,7 @@ class Spell
         void EffectEnergizePct(SpellEffectEntry const* effect);
         void EffectTriggerSpellWithValue(SpellEffectEntry const* effect);
         void EffectTriggerRitualOfSummoning(SpellEffectEntry const* effect);
+        void EffectSummonRaFFriend(SpellEffectEntry const* effect);
         void EffectKillCreditPersonal(SpellEffectEntry const* effect);
         void EffectKillCredit(SpellEffectEntry const* effect);
         void EffectQuestFail(SpellEffectEntry const* effect);

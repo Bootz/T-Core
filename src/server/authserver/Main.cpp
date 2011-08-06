@@ -205,6 +205,8 @@ extern int main(int argc, char **argv)
     }
 #endif
 
+    sLog->outString("%s (authserver-daemon) ready...", _FULLVERSION);
+
     // maximum counter for next ping
     uint32 numLoops = (sConfig->GetIntDefault("MaxPingTime", 30) * (MINUTE * 1000000 / 100000));
     uint32 loopCounter = 0;

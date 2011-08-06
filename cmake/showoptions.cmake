@@ -10,9 +10,10 @@
 
 # output generic information about the core and buildtype chosen
 message("")
-message("* TrilliumENCORE commithash : ${rev_hash_str}")
+message("* TrilliumEMU rev. hash  : ${rev_hash}")
+message("* TrilliumEMU rev. date  : ${rev_date}")
 if( UNIX )
-  message("* Build binaries in      : ${CMAKE_BUILD_TYPE} mode")
+  message("* TrilliumEMU buildtype  : ${CMAKE_BUILD_TYPE}")
 endif()
 message("")
 

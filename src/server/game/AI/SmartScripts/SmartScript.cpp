@@ -35,6 +35,7 @@
 #include "SmartScript.h"
 #include "SmartAI.h"
 #include "Group.h"
+#include "Vehicle.h"
 
 SmartScript::SmartScript()
 {

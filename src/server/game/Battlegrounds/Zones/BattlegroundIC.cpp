@@ -88,7 +88,7 @@ void BattlegroundIC::SendTransportInit(Player* player)
     player->GetSession()->SendPacket(&packet);
 }
 
-void BattlegroundIC::DoAction(uint32 action, uint64 const var)
+void BattlegroundIC::DoAction(uint32 action, uint64 var)
 {
     if (action != ACTION_TELEPORT_PLAYER_TO_TRANSPORT)
         return;
@@ -111,9 +111,8 @@ void BattlegroundIC::DoAction(uint32 action, uint64 const var)
     plr->TeleportTo(GetMapId(), TeleportToTransportPosition.GetPositionX(), TeleportToTransportPosition.GetPositionY(), TeleportToTransportPosition.GetPositionZ(), TeleportToTransportPosition.GetOrientation(), TELE_TO_NOT_LEAVE_TRANSPORT);
 }
 
-void BattlegroundIC::Update(uint32 diff)
+void BattlegroundIC::PostUpdateImpl(uint32 diff)
 {
-    Battleground::Update(diff);
 
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -409,7 +408,7 @@ bool BattlegroundIC::SetupBattleground()
     }
 
     //Send transport init packet to all player in map
-    for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end();itr++)
+    for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
     {
         if (Player* player = ObjectAccessor::FindPlayer(itr->first))
             SendTransportInit(player);

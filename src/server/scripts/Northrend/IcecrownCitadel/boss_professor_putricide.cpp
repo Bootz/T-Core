@@ -26,6 +26,7 @@
 #include "Group.h"
 #include "Spell.h"
 #include "icecrown_citadel.h"
+#include "Vehicle.h"
 
 enum ScriptTexts
 {

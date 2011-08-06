@@ -975,7 +975,10 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
 
     SetUInt32Value(PLAYER_BYTES, (createInfo->Skin | (createInfo->Face << 8) | (createInfo->HairStyle << 16) | (createInfo->HairColor << 24)));
-    SetUInt32Value(PLAYER_BYTES_2, (createInfo->FacialHair | (0x00 << 8) | (0x00 << 16) | (0x02 << 24)));
+    SetUInt32Value(PLAYER_BYTES_2, (createInfo->FacialHair |
+                                   (0x00 << 8) |
+                                   (0x00 << 16) |
+                                   (((GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NOT_RAF_LINKED) << 24)));
     SetByteValue(PLAYER_BYTES_3, 0, createInfo->Gender);
     SetByteValue(PLAYER_BYTES_3, 3, 0);                     // BattlefieldArenaFaction (0 or 1)
 
@@ -3078,6 +3081,16 @@ void Player::GiveLevel(uint8 level)
 
     GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL);
 
+    // Refer-A-Friend
+    if (GetSession()->GetRecruiterId())
+        if (level < sWorld->getIntConfig(CONFIG_MAX_RECRUIT_A_FRIEND_BONUS_PLAYER_LEVEL))
+            if (level % 2 == 0) {
+                m_grantableLevels++;
+
+                if (!HasByteFlag(PLAYER_FIELD_BYTES, 1, 0x01))
+                    SetByteFlag(PLAYER_FIELD_BYTES, 1, 0x01);
+            }
+
     sScriptMgr->OnPlayerLevelChanged(this, oldLevel);
 }
 
@@ -5064,6 +5077,9 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
         RemoveAurasDueToSpell(20584);                       // speed bonuses
     RemoveAurasDueToSpell(8326);                            // SPELL_AURA_GHOST
 
+    if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
+        SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_REFER_A_FRIEND);
+
     setDeathState(ALIVE);
 
     SetMovement(MOVE_LAND_WALK);
@@ -5072,7 +5088,7 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
     m_deathTimer = 0;
 
     // set health/powers (0- will be set in caller)
-    if (restore_percent>0.0f)
+    if (restore_percent > 0.0f)
     {
         SetHealth(uint32(GetMaxHealth()*restore_percent));
         SetPower(POWER_MANA, uint32(GetMaxPower(POWER_MANA)*restore_percent));
@@ -14040,8 +14056,8 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                 uint32 idxEntry = MAKE_PAIR32(menuId, itr->second.OptionIndex);
                 if (GossipMenuItemsLocale const *no = sObjectMgr->GetGossipMenuItemsLocale(idxEntry))
                 {
-                    sObjectMgr->GetLocaleString(no->OptionText, locale, strOptionText);
-                    sObjectMgr->GetLocaleString(no->BoxText, locale, strBoxText);
+                    ObjectMgr::GetLocaleString(no->OptionText, locale, strOptionText);
+                    ObjectMgr::GetLocaleString(no->BoxText, locale, strBoxText);
                 }
             }
 
@@ -14403,7 +14419,7 @@ void Player::SendPreparedQuest(uint64 guid)
                     int loc_idx = GetSession()->GetSessionDbLocaleIndex();
                     if (loc_idx >= 0)
                         if (NpcTextLocale const *nl = sObjectMgr->GetNpcTextLocale(textid))
-                            sObjectMgr->GetLocaleString(nl->Text_0[0], loc_idx, title);
+                            ObjectMgr::GetLocaleString(nl->Text_0[0], loc_idx, title);
                 }
                 else
                 {
@@ -14412,7 +14428,7 @@ void Player::SendPreparedQuest(uint64 guid)
                     int loc_idx = GetSession()->GetSessionDbLocaleIndex();
                     if (loc_idx >= 0)
                         if (NpcTextLocale const *nl = sObjectMgr->GetNpcTextLocale(textid))
-                            sObjectMgr->GetLocaleString(nl->Text_1[0], loc_idx, title);
+                            ObjectMgr::GetLocaleString(nl->Text_1[0], loc_idx, title);
                 }
             }
         }
@@ -16110,7 +16126,7 @@ void Player::SendQuestConfirmAccept(const Quest* pQuest, Player* pReceiver)
         int loc_idx = pReceiver->GetSession()->GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
             if (const QuestLocale* pLocale = sObjectMgr->GetQuestLocale(pQuest->GetQuestId()))
-                sObjectMgr->GetLocaleString(pLocale->Title, loc_idx, strTitle);
+                ObjectMgr::GetLocaleString(pLocale->Title, loc_idx, strTitle);
 
         WorldPacket data(SMSG_QUEST_CONFIRM_ACCEPT, (4 + strTitle.size() + 8));
         data << uint32(pQuest->GetQuestId());
@@ -16347,8 +16363,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     //"totalKills, todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, health, "
     // 46      47      48      49      50      51           52         53          54             55
     //"power1, power2, power3, power4, power5, instance_id, speccount, activespec, exploredZones, equipmentCache,
-    // 56           57                 58
-    //"knownTitles, achievementPoints, actionBars FROM characters WHERE guid = '%u'", guid);
+    // 56           57                 58          59
+    //"knownTitles, achievementPoints, actionBars, grantableLevels FROM characters WHERE guid = '%u'", guid);
     PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
     if (!result)
@@ -16927,17 +16943,6 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
                 break;
         }
 
-        /*switch(sWorld->getIntConfig(CONFIG_GM_ACCEPT_TICKETS))
-        {
-            default:
-            case 0:                        break;           // disable
-            case 1: SetAcceptTicket(true); break;           // enable
-            case 2:                                         // save state
-            if (extraflags & PLAYER_EXTRA_GM_ACCEPT_TICKETS)
-                SetAcceptTicket(true);
-            break;
-        }*/
-
         switch (sWorld->getIntConfig(CONFIG_GM_CHAT))
         {
             default:
@@ -16960,6 +16965,14 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
                 break;
         }
     }
+
+    // RaF stuff.
+    m_grantableLevels = fields[59].GetUInt32();
+    if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
+        SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_REFER_A_FRIEND);
+
+    if (m_grantableLevels > 0)
+        SetByteValue(PLAYER_FIELD_BYTES, 1, 0x01);
 
     _LoadDeclinedNames(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADDECLINEDNAMES));
 
@@ -18178,7 +18191,7 @@ void Player::SaveToDB()
         "trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, "
         "death_expire_time, taxi_path, totalKills, todayKills, yesterdayKills, chosenTitle, "
         "watchedFaction, drunk, health, power1, power2, power3, power4, power5, latency, "
-        "speccount, activespec, exploredZones, equipmentCache, knownTitles, achievementPoints, actionBars) VALUES ("
+        "speccount, activespec, exploredZones, equipmentCache, knownTitles, achievementPoints, actionBars, grantableLevels) VALUES ("
         << GetGUIDLow() << ','
         << GetSession()->GetAccountId() << ", '"
         << sql_name << "', "
@@ -18294,6 +18307,8 @@ void Player::SaveToDB()
     ss << uint32(m_achievementMgr.GetAchievementPoints());
     ss << ',';
     ss << uint32(GetByteValue(PLAYER_FIELD_BYTES, 2));
+    ss << ",";
+    ss << uint32(m_grantableLevels);
     ss << ")";
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
@@ -19827,10 +19842,12 @@ void Player::SetRestBonus (float rest_bonus_new)
         m_rest_bonus = rest_bonus_new;
 
     // update data for client
-    if (m_rest_bonus>10)
-        SetByteValue(PLAYER_BYTES_2, 3, 0x01);              // Set Reststate = Rested
+    if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
+        SetByteValue(PLAYER_BYTES_2, 3, REST_STATE_RAF_LINKED);
+    else if (m_rest_bonus > 10)
+        SetByteValue(PLAYER_BYTES_2, 3, REST_STATE_RESTED);              // Set Reststate = Rested
     else if (m_rest_bonus <= 1)
-        SetByteValue(PLAYER_BYTES_2, 3, 0x02);              // Set Reststate = Normal
+        SetByteValue(PLAYER_BYTES_2, 3, REST_STATE_NOT_RAF_LINKED);              // Set Reststate = Normal
 
     //RestTickUpdate
     SetUInt32Value(PLAYER_REST_STATE_EXPERIENCE, uint32(m_rest_bonus));

@@ -54,6 +54,8 @@ struct GameEventQuestToEventConditionNum
     float num;
 };
 
+typedef std::map<uint32 /*condition id*/, GameEventFinishCondition> GameEventConditionMap;
+
 struct GameEventData
 {
     GameEventData() : start(1), end(0), nextstart(0), occurence(0), length(0), holiday_id(HOLIDAY_NONE), state(GAMEEVENT_NORMAL) {}
@@ -64,7 +66,7 @@ struct GameEventData
     uint32 length;          // length of the event (minutes) after finishing all conditions
     HolidayIds holiday_id;
     GameEventState state;   // state of the game event, these are saved into the game_event table on change!
-    std::map<uint32 /*condition id*/, GameEventFinishCondition> conditions;  // conditions to finish
+    GameEventConditionMap conditions;  // conditions to finish
     std::set<uint16 /*gameevent id*/> prerequisite_events;  // events that must be completed before starting this event
     std::string description;
 
@@ -94,10 +96,12 @@ class Creature;
 class GameEventMgr
 {
     friend class ACE_Singleton<GameEventMgr, ACE_Null_Mutex>;
-    GameEventMgr();
-    public:
+
+    private:
+        GameEventMgr();
         ~GameEventMgr() {};
 
+    public:
         typedef std::set<uint16> ActiveEvents;
         typedef std::vector<GameEventData> GameEventDataMap;
         ActiveEvents const& GetActiveEventList() const { return m_ActiveEvents; }
@@ -137,7 +141,7 @@ class GameEventMgr
         bool hasGameObjectQuestActiveEventExcept(uint32 quest_id, uint16 event_id);
         bool hasCreatureActiveEventExcept(uint32 creature_guid, uint16 event_id);
         bool hasGameObjectActiveEventExcept(uint32 go_guid, uint16 event_id);
-protected:
+
         typedef std::list<uint32> GuidList;
         typedef std::list<uint32> IdList;
         typedef std::vector<GuidList> GameEventGuidMap;

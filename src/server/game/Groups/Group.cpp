@@ -1815,12 +1815,12 @@ bool Group::IsCreated() const
     return GetMembersCount() > 0;
 }
 
-const uint64 Group::GetLeaderGUID() const
+uint64 Group::GetLeaderGUID() const
 {
     return m_leaderGuid;
 }
 
-const uint64 Group::GetGUID() const
+uint64 Group::GetGUID() const
 {
     return m_guid;
 }
@@ -1840,7 +1840,7 @@ LootMethod Group::GetLootMethod() const
     return m_lootMethod;
 }
 
-const uint64 Group::GetLooterGuid() const
+uint64 Group::GetLooterGuid() const
 {
     return m_looterGuid;
 }

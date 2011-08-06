@@ -38,11 +38,6 @@ BattlegroundRB::~BattlegroundRB()
 
 }
 
-void BattlegroundRB::Update(uint32 diff)
-{
-    Battleground::Update(diff);
-}
-
 void BattlegroundRB::StartingEventCloseDoors()
 {
 }

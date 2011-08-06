@@ -65,10 +65,8 @@ BattlegroundWS::~BattlegroundWS()
 {
 }
 
-void BattlegroundWS::Update(uint32 diff)
+void BattlegroundWS::PostUpdateImpl(uint32 diff)
 {
-    Battleground::Update(diff);
-
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
         if (GetStartTime() >= 25*MINUTE*IN_MILLISECONDS)
@@ -259,8 +257,7 @@ void BattlegroundWS::RespawnFlagAfterDrop(uint32 team)
 
     PlaySoundToAll(BG_WS_SOUND_FLAGS_RESPAWNED);
 
-    GameObject *obj = GetBgMap()->GetGameObject(GetDroppedFlagGUID(team));
-    if (obj)
+    if (GameObject *obj = GetBgMap()->GetGameObject(GetDroppedFlagGUID(team)))
         obj->Delete();
     else
         sLog->outError("unknown droped flag bg, guid: %u", GUID_LOPART(GetDroppedFlagGUID(team)));
