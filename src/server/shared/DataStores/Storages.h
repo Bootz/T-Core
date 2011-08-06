@@ -69,10 +69,18 @@ class DataStorage
 {
     typedef std::list<char*> StringPoolList;
     public:
-        explicit DataStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
+        explicit DataStorage(const char *f) :
+            fmt(f), nCount(0), fieldCount(0), dataTable(NULL)
+        {
+            indexTable.asT = NULL;
+        }
+ 
         ~DataStorage() { Clear(); }
 
-        T const* LookupEntry(uint32 id) const { return (id>=nCount)?NULL:indexTable[id]; }
+        T const* LookupEntry(uint32 id) const
+        {
+            return (id >= nCount) ? NULL : indexTable.asT[id];
+        }
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
@@ -80,7 +88,7 @@ class DataStorage
         bool LoadDB2Storage(char const* fn, SqlDbc* sql)
         {
             StorageLoader db2;
-            // Check if load was sucessful, only then continue
+            // Check if load was successful, only then continue
             if (!db2.LoadDB2Storage(fn, fmt))
                 return false;
 
@@ -91,22 +99,22 @@ class DataStorage
             fieldCount = db2.GetCols();
 
             // load raw non-string data
-            m_dataTable = (T*)db2.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
+            dataTable = (T*)db2.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
             // create string holders for loaded string fields
-            m_stringPoolList.push_back(db2.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+            stringPoolList.push_back(db2.AutoProduceStringsArrayHolders(fmt, (char*)dataTable));
 
             // load strings from db2 data
-            m_stringPoolList.push_back(db2.AutoProduceStrings(fmt,(char*)m_dataTable));
+            stringPoolList.push_back(db2.AutoProduceStrings(fmt, (char*)dataTable));
 
             // error in db2 file at loading if NULL
-            return indexTable!=NULL;
+            return indexTable.asT != NULL;
         }
 
         bool LoadDBCStorage(char const* fn, SqlDbc* sql)
         {
             StorageLoader dbc;
-            // Check if load was sucessful, only then continue
+            // Check if load was successful, only then continue
             if (!dbc.LoadDBCStorage(fn, fmt))
                 return false;
 
@@ -120,7 +128,7 @@ class DataStorage
                 std::string query = "SELECT * FROM " + sql->sqlTableName;
                 if (sql->indexPos >= 0)
                     query +=" ORDER BY " + *sql->indexName + " DESC";
-                query += ";";
+                query += ';';
 
                 result = WorldDatabase.Query(query.c_str());
                 if (result)
@@ -143,18 +151,18 @@ class DataStorage
             fieldCount = dbc.GetCols();
 
             // load raw non-string data
-            m_dataTable = (T*)dbc.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
+            dataTable = (T*)dbc.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
             // create string holders for loaded string fields
-            m_stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt,(char*)m_dataTable));
+            stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt,(char*)dataTable));
 
             // load strings from dbc data
-            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt,(char*)m_dataTable));
+            stringPoolList.push_back(dbc.AutoProduceStrings(fmt,(char*)dataTable));
 
             // Insert sql data into arrays
             if (result)
             {
-                if (indexTable)
+                if (indexTable.asT)
                 {
                     uint32 offset = 0;
                     uint32 rowIndex = dbc.GetNumRows();
@@ -166,15 +174,15 @@ class DataStorage
                         if(sql->indexPos >= 0)
                         {
                             uint32 id = fields[sql->sqlIndexPos].GetUInt32();
-                            if (indexTable[id])
+                            if (indexTable.asT[id])
                             {
                                 sLog->outError("Index %d already exists in dbc:'%s'", id, sql->sqlTableName.c_str());
                                 return false;
                             }
-                            indexTable[id]=(T*)&sqlDataTable[offset];
+                            indexTable.asT[id]=(T*)&sqlDataTable[offset];
                         }
                         else
-                            indexTable[rowIndex]=(T*)&sqlDataTable[offset];
+                            indexTable.asT[rowIndex]=(T*)&sqlDataTable[offset];
                         uint32 columnNumber = 0;
                         uint32 sqlColumnNumber = 0;
 
@@ -199,7 +207,7 @@ class DataStorage
                                         break;
                                     case FT_STRING:
                                         // Beginning of the pool - empty string
-                                        *((char**)(&sqlDataTable[offset]))=m_stringPoolList.back();
+                                        *((char**)(&sqlDataTable[offset]))=stringPoolList.back();
                                         offset+=sizeof(char*);
                                         break;
                                 }
@@ -252,13 +260,13 @@ class DataStorage
             }
 
             // error in dbc file at loading if NULL
-            return indexTable!=NULL;
+            return indexTable.asT != NULL;
         }
 
         bool LoadStringsFrom(char const* fn)
         {
             // DBC must be already loaded using Load
-            if(!indexTable)
+            if (!indexTable.asT)
                 return false;
 
             StorageLoader dbc;
@@ -266,25 +274,25 @@ class DataStorage
             if(!dbc.LoadDBCStorage(fn, fmt))
                 return false;
 
-            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
+            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
             return true;
         }
 
         void Clear()
         {
-            if (!indexTable)
+            if (!indexTable.asT)
                 return;
 
-            delete[] ((char*)indexTable);
-            indexTable = NULL;
-            delete[] ((char*)m_dataTable);
-            m_dataTable = NULL;
+            delete[] ((char*)indexTable.asT);
+            indexTable.asT = NULL;
+            delete[] ((char*)dataTable);
+            dataTable = NULL;
 
-            while(!m_stringPoolList.empty())
+            while(!stringPoolList.empty())
             {
-                delete[] m_stringPoolList.front();
-                m_stringPoolList.pop_front();
+                delete[] stringPoolList.front();
+                stringPoolList.pop_front();
             }
             nCount = 0;
         }
@@ -295,9 +303,16 @@ class DataStorage
         char const* fmt;
         uint32 nCount;
         uint32 fieldCount;
-        T** indexTable;
-        T* m_dataTable;
-        StringPoolList m_stringPoolList;
+
+        union
+        {
+            T** asT;
+            char** asChar;
+        }
+        indexTable;
+
+        T* dataTable;
+        StringPoolList stringPoolList;
 };
 
 #endif
