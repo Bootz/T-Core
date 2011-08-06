@@ -1249,8 +1249,8 @@ void World::SetInitialWorldSettings()
     LoadDataStorages(m_dataPath);
     //DetectDBCLang();
 
-    //sLog->outString("Loading spell dbc data corrections...");
-    //sSpellMgr->LoadDbcDataCorrections();
+    sLog->outString("Loading spell dbc data corrections...");
+    sSpellMgr->LoadDbcDataCorrections();
 
     sLog->outString("Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
