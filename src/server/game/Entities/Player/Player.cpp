@@ -1930,7 +1930,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
             *data << uint32(0);
             *data << uint8(0);
             continue;
-       }
+        }
 
         SpellItemEnchantmentEntry const *enchant = NULL;
         uint32 enchants = GetUInt32ValueFromArray(equipment, visualbase + 1);
