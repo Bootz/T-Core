@@ -23,8 +23,15 @@ TODO-List for TrilliumEMU Developer #
 // Database Developer:
 1. Fixed all startup errors.
 2. Implemented more Cataclysm Content.
+3. Haltbarkeit: Stoff-, Leder- und Kettenrüstung haben jetzt soviele Haltbarkeitspunkte wie Plattenrüstung. // item_template.MaxDurability pls look at there
 
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
 
 If you Fix anything from this List remove The Line or add a FINISH!
+
+This Notes need to be fixxed
+
+Patch 4.0.1
+GEGENSTÄNDE
+Abhärtung verringert nicht mehr die Chance des Spielers, von einem Gegner kritisch getroffen zu werden. // Implemented

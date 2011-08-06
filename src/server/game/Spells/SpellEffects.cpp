@@ -2080,10 +2080,8 @@ void Spell::EffectPowerDrain(SpellEffectEntry const* effect)
     // add spell damage bonus
     damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, uint32(damage), SPELL_DIRECT_DAMAGE);
 
-    // resilience reduce mana draining effect at spell crit damage reduction (added in 2.4)
+    // resilience reduce mana draining effect at spell crit damage reduction (added in 2.4) // deleted in Cataclysm
     int32 power = damage;
-    if (powerType == POWER_MANA)
-        power -= unitTarget->GetSpellCritDamageReduction(power);
 
     int32 newDamage = -(unitTarget->ModifyPower(powerType, -int32(power)));
 
@@ -2141,10 +2139,7 @@ void Spell::EffectPowerBurn(SpellEffectEntry const* effect)
     }
 
     int32 power = damage;
-    // resilience reduce mana draining effect at spell crit damage reduction (added in 2.4)
-    if (powerType == POWER_MANA)
-        power -= unitTarget->GetSpellCritDamageReduction(power);
-
+    // resilience reduce mana draining effect at spell crit damage reduction (added in 2.4) // deleted with Cataclysm
     int32 newDamage = -(unitTarget->ModifyPower(powerType, -power));
 
     // NO - Not a typo - EffectPowerBurn uses effect value multiplier - not effect damage multiplier
