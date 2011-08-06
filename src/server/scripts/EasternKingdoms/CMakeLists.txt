@@ -185,6 +185,18 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Karazhan/karazhan.h
   EasternKingdoms/Gilneas/gilneas.cpp
   EasternKingdoms/Gilneas/gilneas_quest.cpp
+  EasternKingdoms/BaradinHold/instance_baradinhold.cpp
+  EasternKingdoms/BaradinHold/boss_argaloth.cpp
+  EasternKingdoms/BaradinHold/boss_occu'thar.cpp
+  EasternKingdoms/BaradinHold/baradin_hold.h
+  EasternKingdoms/BastionOfTwilight/instance_bastion_of_twilight.cpp
+  EasternKingdoms/BastionOfTwilight/boss_assembly_of_ascendents.cpp
+  EasternKingdoms/BastionOfTwilight/boss_halfus_wyrmbreaker.cpp
+  EasternKingdoms/BastionOfTwilight/boss_theralion_and_valiona.cpp
+  EasternKingdoms/BastionOfTwilight/boss_cho'gall.cpp
+  EasternKingdoms/BastionOfTwilight/boss_sinestra.cpp
+  EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h
+  
 )
 
 message("  -> Prepared: Eastern Kingdoms")
