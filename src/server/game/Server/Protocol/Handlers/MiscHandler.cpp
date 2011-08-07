@@ -506,9 +506,9 @@ void WorldSession::HandleStandStateChangeOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleContactListOpcode(WorldPacket & recv_data)
 {
-    uint32 unk;
-    recv_data >> unk;
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_CONTACT_LIST - Unk: %d", unk);
+    uint32 mask;
+    recv_data >> mask;
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_CONTACT_LIST - Unk: %d", mask);
     _player->GetSocial()->SendSocialList(_player);
 }
 
