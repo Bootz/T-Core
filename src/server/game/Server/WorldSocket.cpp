@@ -871,8 +871,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     id = fields[0].GetUInt32();
-    if (security > SEC_LEVEL_5)                        // prevent invalid security settings in DB
-    security = SEC_LEVEL_5;
 
     K.SetHexStr (fields[1].GetCString());
 
