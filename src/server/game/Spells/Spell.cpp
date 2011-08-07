@@ -55,6 +55,7 @@
 #include "DisableMgr.h"
 #include "SpellScript.h"
 #include "InstanceScript.h"
+#include "SpellInfo.h"
 
 extern pEffect SpellEffects[TOTAL_SPELL_EFFECTS];
 
@@ -538,7 +539,9 @@ m_caster(caster), m_spellValue(new SpellValue(m_spellInfo))
 
     m_channelTargetEffectMask = 0;
 
-    m_canReflect = m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !(m_spellInfo->Attributes & SPELL_ATTR0_ABILITY) 
+    // Determine if spell can be reflected back to the caster
+    // Patch 1.2 notes: Spell Reflection no longer reflects abilities
+    m_canReflect = m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !(m_spellInfo->Attributes & SPELL_ATTR0_ABILITY)
         && !(m_spellInfo->AttributesEx & SPELL_ATTR1_CANT_BE_REFLECTED) && !(m_spellInfo->Attributes & SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY)
         && !m_spellInfo->IsPassive() && !m_spellInfo->IsPositive();
 
@@ -2429,7 +2432,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                     break;
             }
 
-            CallScriptAfterUnitTargetSelectHandlers(unitList, (SpellEffectEntry*)m_spellInfo->Effects[i].IsEffect());
+            //CallScriptAfterUnitTargetSelectHandlers(unitList, SpellEffectEntry*);
 
             for (std::list<Unit*>::iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
                 AddUnitTarget(*itr, i);
@@ -2788,7 +2791,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                 Trillium::RandomResizeList(unitList, maxTargets);
             }
 
-            CallScriptAfterUnitTargetSelectHandlers(unitList, (SpellEffectEntry*)m_spellInfo->Effects[i].IsEffect());
+            //CallScriptAfterUnitTargetSelectHandlers(unitList, SpellEffectEntry*);
 
             for (std::list<Unit*>::iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
                 AddUnitTarget(*itr, i);
@@ -3440,7 +3443,7 @@ void Spell::_handle_immediate_phase()
             bool positive = true;
             for (uint8 i = 0; i< MAX_SPELL_EFFECTS; ++i)
                 // If at least one effect negative spell is negative hit
-                if (m_effectMask & (1<<i) && !m_spellInfo->IsPositive())
+                if (m_effectMask & (1<<i) && !m_spellInfo->IsPositiveEffect(i))
                 {
                     positive = false;
                     break;
@@ -4775,58 +4778,23 @@ SpellCastResult Spell::CheckCast(bool strict)
                 else
                     return SPELL_FAILED_BAD_TARGETS;
             }
-        }
+            // Must be behind the target
+            if ((m_spellInfo->AttributesCu & SPELL_ATTR0_CU_REQ_CASTER_BEHIND_TARGET) && target->HasInArc(static_cast<float>(M_PI), m_caster))
+                return SPELL_FAILED_NOT_BEHIND;
 
-        // who can give me an example to show what is the use of this
-        // even if we need check, check by effect rather than whole spell, otherwise 57108, 57143 are broken
-        /*
-        // TODO: this check can be applied and for player to prevent cheating when IsPositiveSpell will return always correct result.
-        // check target for pet/charmed casts (not self targeted), self targeted cast used for area effects and etc
-        if (non_caster_target && m_caster->GetTypeId() == TYPEID_UNIT && m_caster->GetCharmerOrOwnerGUID())
-        {
-            // check correctness positive/negative cast target (pet cast real check and cheating check)
-            if (IsPositiveSpell(m_spellInfo->Id))
-            {
-                                                     //dispel positivity is dependant on target, don't check it
-                if (m_caster->IsHostileTo(target) && !IsDispel(m_spellInfo))
-                    return SPELL_FAILED_BAD_TARGETS;
-            }
-            else
-            {
-                if (m_caster->IsFriendlyTo(target))
-                    return SPELL_FAILED_BAD_TARGETS;
-            }
+            // Target must be facing you
+            if ((m_spellInfo->AttributesCu & SPELL_ATTR0_CU_REQ_TARGET_FACING_CASTER) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
+                return SPELL_FAILED_NOT_INFRONT;
+
+            // Target must not be in combat
+            if (m_spellInfo->AttributesEx & SPELL_ATTR1_NOT_IN_COMBAT_TARGET && target->isInCombat())
+                return SPELL_FAILED_TARGET_AFFECTING_COMBAT;
         }
-        */
 
         if (target)
             if (m_spellInfo->IsPositive())
                 if (target->IsImmunedToSpell(m_spellInfo))
                     return SPELL_FAILED_TARGET_AURASTATE;
-
-        //Must be behind the target.
-        if (m_spellInfo->AttributesEx2 == SPELL_ATTR2_UNK20 && m_spellInfo->AttributesEx & SPELL_ATTR1_MELEE_COMBAT_START && target->HasInArc(static_cast<float>(M_PI), m_caster)
-            //Exclusion for Pounce: Facing Limitation was removed in 2.0.1, but it still uses the same, old Ex-Flags
-            && (!(m_spellInfo->SpellFamilyName == SPELLFAMILY_DRUID && m_spellInfo->SpellFamilyFlags.IsEqual(0x20000, 0, 0)))
-            //Mutilate no longer requires you be behind the target as of patch 3.0.3
-            && (!(m_spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE && m_spellInfo->SpellFamilyFlags[1] & 0x200000))
-            //Exclusion for Throw: Facing limitation was added in 3.2.x, but that shouldn't be
-            && (!(m_spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE && m_spellInfo->SpellFamilyFlags[0] & 0x00000001)))
-        {
-            SendInterrupted(2);
-            return SPELL_FAILED_NOT_BEHIND;
-        }
-
-        // Target must be facing you.
-        if ((m_spellInfo->Attributes == (SPELL_ATTR0_ABILITY | SPELL_ATTR0_NOT_SHAPESHIFT | SPELL_ATTR0_DONT_AFFECT_SHEATH_STATE | SPELL_ATTR0_STOP_ATTACK_TARGET)) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
-        {
-            SendInterrupted(2);
-            return SPELL_FAILED_NOT_INFRONT;
-        }
-
-        // check if target is in combat
-        if (non_caster_target && (m_spellInfo->AttributesEx & SPELL_ATTR1_NOT_IN_COMBAT_TARGET) && target->isInCombat())
-            return SPELL_FAILED_TARGET_AFFECTING_COMBAT;
     }
 
     // Spell casted only on battleground
@@ -4838,7 +4806,7 @@ SpellCastResult Spell::CheckCast(bool strict)
     // - with greater than 10 min CD without SPELL_ATTR4_USABLE_IN_ARENA flag
     // - with SPELL_ATTR4_NOT_USABLE_IN_ARENA flag
     if ((m_spellInfo->AttributesEx4 & SPELL_ATTR4_NOT_USABLE_IN_ARENA) ||
-        (m_spellInfo->RecoveryTime > 10 * MINUTE * IN_MILLISECONDS && !(m_spellInfo->AttributesEx4 & SPELL_ATTR4_USABLE_IN_ARENA)))
+        (m_spellInfo->GetRecoveryTime() > 10 * MINUTE * IN_MILLISECONDS && !(m_spellInfo->AttributesEx4 & SPELL_ATTR4_USABLE_IN_ARENA)))
         if (MapEntry const* mapEntry = sMapStore.LookupEntry(m_caster->GetMapId()))
             if (mapEntry->IsBattleArena())
                 return SPELL_FAILED_NOT_IN_ARENA;
@@ -5559,24 +5527,45 @@ SpellCastResult Spell::CheckCasterAuras() const
             else if (m_spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MECHANIC_IMMUNITY)
                 mechanic_immune |= 1 << uint32(m_spellInfo->Effects[i].MiscValue);
             else if (m_spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_DISPEL_IMMUNITY)
-                dispel_immune |= m_spellInfo->GetDispelMask(DispelType(m_spellInfo->Effects[i].MiscValue));
+                dispel_immune |= SpellInfo::GetDispelMask(DispelType(m_spellInfo->Effects[i].MiscValue));
         }
         // immune movement impairment and loss of control
         if (m_spellInfo->Id == 42292 || m_spellInfo->Id == 59752)
             mechanic_immune = IMMUNE_TO_MOVEMENT_IMPAIRMENT_AND_LOSS_CONTROL_MASK;
     }
 
+    bool usableInStun = m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_STUNNED;
+
     // Glyph of Pain Suppression
-    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PRIEST && m_spellInfo->SpellIconID == 2178)
-        if (m_caster->HasAuraEffect(63248, 0))      // no SpellFamilyFlags or SpellIconID to identify this
-            mechanic_immune = 1 << MECHANIC_STUN;   // "immune" to stun only for this cast
+    // there is no other way to handle it
+    if (m_spellInfo->Id == 33206 && !m_caster->HasAura(63248))
+        usableInStun = false;
 
     // Check whether the cast should be prevented by any state you might have.
     SpellCastResult prevented_reason = SPELL_CAST_OK;
     // Have to check if there is a stun aura. Otherwise will have problems with ghost aura apply while logging out
     uint32 unitflag = m_caster->GetUInt32Value(UNIT_FIELD_FLAGS);     // Get unit state
-    if (unitflag & UNIT_FLAG_STUNNED && !(m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_STUNNED))
-        prevented_reason = SPELL_FAILED_STUNNED;
+    if (unitflag & UNIT_FLAG_STUNNED)
+    {
+        // spell is usable while stunned, check if caster has only mechanic stun auras, another stun types must prevent cast spell
+        if (usableInStun)
+        {
+            bool foundNotStun = false;
+            Unit::AuraEffectList const& stunAuras = m_caster->GetAuraEffectsByType(SPELL_AURA_MOD_STUN);
+            for (Unit::AuraEffectList::const_iterator i = stunAuras.begin(); i != stunAuras.end(); ++i)
+            {
+                if (!((*i)->GetSpellInfo()->GetAllEffectsMechanicMask() & (1<<MECHANIC_STUN)))
+                {
+                    foundNotStun = true;
+                    break;
+                }
+            }
+            if (foundNotStun)
+                prevented_reason = SPELL_FAILED_STUNNED;
+        }
+        else
+            prevented_reason = SPELL_FAILED_STUNNED;
+    }
     else if (unitflag & UNIT_FLAG_CONFUSED && !(m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_CONFUSED))
         prevented_reason = SPELL_FAILED_CONFUSED;
     else if (unitflag & UNIT_FLAG_FLEEING && !(m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_FEARED))
@@ -5606,14 +5595,14 @@ SpellCastResult Spell::CheckCasterAuras() const
 
                 //Make a second check for spell failed so the right SPELL_FAILED message is returned.
                 //That is needed when your casting is prevented by multiple states and you are only immune to some of them.
-                for (uint8 i=0; i<MAX_SPELL_EFFECTS; ++i)
+                for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                 {
-                    if (AuraEffect * part = aura->GetEffect(i))
+                    if (AuraEffect* part = aura->GetEffect(i))
                     {
-                        switch(part->GetAuraType())
+                        switch (part->GetAuraType())
                         {
                             case SPELL_AURA_MOD_STUN:
-                                if (!(m_spellInfo->AttributesEx5 & SPELL_ATTR5_USABLE_WHILE_STUNNED))
+                                if (!usableInStun || !(auraInfo->GetAllEffectsMechanicMask() & (1<<MECHANIC_STUN)))
                                     return SPELL_FAILED_STUNNED;
                                 break;
                             case SPELL_AURA_MOD_CONFUSE:
@@ -6679,11 +6668,8 @@ bool Spell::IsValidSingleTargetSpell(Unit const* target) const
     }
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (!IsValidSingleTargetEffect(target, Targets(m_spellInfo->Effects[i].TargetA.GetTarget())))
+        if (!IsValidSingleTargetEffect(target, m_spellInfo->Effects[i].TargetA.GetTarget()))
             return false;
-        // Need to check B?
-        //if (!IsValidSingleTargetEffect(m_spellInfo->Effects[i].TargetA, target)
-        //    return false;
     }
     return true;
 }
@@ -6752,7 +6738,7 @@ int32 Spell::CalculateDamageDone(Unit *unit, const uint32 effectMask, float * mu
                 case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
                 case SPELL_EFFECT_NORMALIZED_WEAPON_DMG:
                 case SPELL_EFFECT_WEAPON_PERCENT_DAMAGE:
-                    SpellDamageWeaponDmg((SpellEffectEntry*)m_spellInfo->Effects[i].Effect);
+                    SpellDamageWeaponDmg((SpellEffectEntry*)i);
                     break;
                 case SPELL_EFFECT_HEAL:
                     SpellDamageHeal((SpellEffectEntry*)i);
