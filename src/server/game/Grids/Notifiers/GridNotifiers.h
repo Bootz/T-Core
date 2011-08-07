@@ -835,6 +835,7 @@ namespace Trillium
                 return u->isAlive()
                     && i_funit->IsWithinDistInMap(u, i_range)
                     && !i_funit->IsFriendlyTo(u)
+                    && i_funit->canAttack(u)
                     && u->GetCreatureType() != CREATURE_TYPE_CRITTER
                     && i_funit->canSeeOrDetect(u);
             }

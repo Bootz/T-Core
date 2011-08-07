@@ -29,6 +29,7 @@
 #include "Item.h"
 #include "UpdateData.h"
 #include "ObjectAccessor.h"
+#include "SpellInfo.h"
 
 void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data)
 {

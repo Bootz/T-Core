@@ -33,6 +33,7 @@
 #include "Pet.h"
 #include "World.h"
 #include "Group.h"
+#include "SpellInfo.h"
 
 void WorldSession::HandleDismissCritter(WorldPacket &recv_data)
 {
