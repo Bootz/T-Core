@@ -87,7 +87,7 @@ void WorldSession::SendAuctionCommandResult(uint32 auctionId, uint32 Action, uin
 //this function sends notification, if bidder is online
 void WorldSession::SendAuctionBidderNotification(uint32 location, uint32 auctionId, uint64 bidder, uint32 bidSum, uint32 diff, uint32 item_template)
 {
-    WorldPacket data(SMSG_AUCTION_BIDDER_NOTIFICATION, (8*4));
+    WorldPacket data(SMSG_AUCTION_BIDDER_NOTIFICATION, 4 + 4 + 8 + 4 + 4 + 4 + 4);
     data << uint32(location);
     data << uint32(auctionId);
     data << uint64(bidder);
