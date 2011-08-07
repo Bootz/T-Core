@@ -24559,8 +24559,11 @@ void Player::RefundItem(Item *item)
 
     uint32 moneyRefund = item->GetPaidMoney();  // item-> will be invalidated in DestroyItem
 
+    // Save all relevant data to DB to prevent desynchronisation exploits
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+
     // Delete any references to the refund data
-    item->SetNotRefundable(this);
+    item->SetNotRefundable(this, true, &trans);
 
     // Destroy item
     DestroyItem(item->GetBagSlot(), item->GetSlot(), true);

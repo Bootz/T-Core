@@ -492,9 +492,9 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM_IN_SLOT");
     uint64 vendorguid, bagguid;
     uint32 item, slot, count;
-    uint8 bagslot;
+    uint8 bagslot, unk;
 
-    recv_data >> vendorguid >> item  >> slot >> bagguid >> bagslot >> count;
+    recv_data >> vendorguid >> item  >> slot >> bagguid >> bagslot >> count >> unk;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)
@@ -505,7 +505,7 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     uint8 bag = NULL_BAG;                                   // init for case invalid bagGUID
 
     // find bag slot by bag guid
-    if (bagguid == _player->GetGUID())
+    if (bagguid == _player->GetGUID() || bagguid == 0)
         bag = INVENTORY_SLOT_BAG_0;
     else
     {
@@ -533,10 +533,11 @@ void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
     uint64 vendorguid;
+    uint8 unk, unk2;
     uint32 item, slot, count;
-    uint8 unk1;
+    uint64 unk1;
 
-    recv_data >> vendorguid >> item >> slot >> count >> unk1;
+    recv_data >> vendorguid >> item >> slot >> count >> unk >> unk1 >> unk2;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)
@@ -584,7 +585,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     VendorItemData const* items = vendor->GetVendorItems();
     if (!items)
     {
-        WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1);
+        WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1 + 2);
         data << uint64(vendorGuid);
         data << uint8(0);                                   // count == 0, next will be error code
         data << uint8(0);                                   // "Vendor has no inventory"
@@ -595,7 +596,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     uint8 itemCount = items->GetItemCount();
     uint8 count = 0;
 
-    WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + itemCount * 8 * 4);
+    WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + itemCount * 9 * 4 + 1 * itemCount + 2);
     data << uint64(vendorGuid);
 
     size_t countPos = data.wpos();
@@ -623,10 +624,14 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
 
                 ++count;
 
+                if (count == MAX_VENDOR_ITEMS)
+                    break; // client can only display 15 pages
+
                 // reputation discount
                 int32 price = item->IsGoldRequired(itemTemplate) ? uint32(floor(itemTemplate->BuyPrice * discountMod)) : 0;
 
                 data << uint32(slot + 1);       // client expects counting to start at 1
+                data << uint32(1);                          // unk 4.0.1
                 data << uint32(item->item);
                 data << uint32(itemTemplate->DisplayInfoID);
                 data << int32(leftInStock);
@@ -634,6 +639,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 data << uint32(itemTemplate->MaxDurability);
                 data << uint32(itemTemplate->BuyCount);
                 data << uint32(item->ExtendedCost);
+                data << uint8(0);                           // unk 4.0.1
             }
         }
     }
