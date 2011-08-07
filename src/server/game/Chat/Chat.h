@@ -387,6 +387,9 @@ class CliHandler : public ChatHandler
         bool isAvailable(ChatCommand const& cmd) const;
         void SendSysMessage(const char *str);
         std::string GetNameLink() const;
+        bool needReportToTarget(Player* chr) const;
+        LocaleConstant GetSessionDbcLocale() const;
+        int GetSessionDbLocaleIndex() const;
 
     private:
         void* m_callbackArg;

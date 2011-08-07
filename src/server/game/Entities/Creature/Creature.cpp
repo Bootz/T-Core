@@ -1699,8 +1699,9 @@ SpellInfo const *Creature::reachWithSpellAttack(Unit *pVictim)
 
         if (spellInfo->ManaCost > GetPower(POWER_MANA))
             continue;
-        float range = spellInfo->GetMaxRange(false);
-        float minrange = spellInfo->GetMinRange(false);
+
+        float range = spellInfo->GetMaxRange(true);
+        float minrange = spellInfo->GetMinRange(true);
         float dist = GetDistance(pVictim);
         if (dist > range || dist < minrange)
             continue;

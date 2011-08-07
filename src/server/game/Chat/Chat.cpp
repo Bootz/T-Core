@@ -1549,6 +1549,11 @@ std::string CliHandler::GetNameLink() const
     return GetTrilliumString(LANG_CONSOLE_COMMAND);
 }
 
+bool CliHandler::needReportToTarget(Player* /*chr*/) const
+{
+    return true;
+}
+
 bool ChatHandler::GetPlayerGroupAndGUIDByName(const char* cname, Player* &plr, Group* &group, uint64 &guid, bool offline)
 {
     plr  = NULL;
@@ -1591,4 +1596,14 @@ bool ChatHandler::GetPlayerGroupAndGUIDByName(const char* cname, Player* &plr, G
     }
 
     return true;
+}
+
+LocaleConstant CliHandler::GetSessionDbcLocale() const
+{
+    return sWorld->GetDefaultDbcLocale();
+}
+
+int CliHandler::GetSessionDbLocaleIndex() const
+{
+    return sObjectMgr->GetDBCLocaleIndex();
 }

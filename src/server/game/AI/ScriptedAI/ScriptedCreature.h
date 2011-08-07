@@ -19,8 +19,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SC_CREATURE_H
-#define SC_CREATURE_H
+#ifndef SCRIPTEDCREATURE_H_
+#define SCRIPTEDCREATURE_H_
 
 #include "Creature.h"
 #include "CreatureAI.h"
@@ -273,7 +273,7 @@ class BossAI : public ScriptedAI
         // to override UpdateAI
         // note: You must re-schedule the event within this method if the event
         // is supposed to run more than once
-        virtual void ExecuteEvent(uint32 const eventId) { }
+        virtual void ExecuteEvent(uint32 const /*eventId*/) { }
 
         void Reset() { _Reset(); }
         void EnterCombat(Unit* /*who*/) { _EnterCombat(); }

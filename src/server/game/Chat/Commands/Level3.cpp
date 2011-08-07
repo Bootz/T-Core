@@ -4511,7 +4511,7 @@ bool ChatHandler::HandleFreezeCommand(const char *args)
     {
         name = TargetName;
         normalizePlayerName(name);
-        player = sObjectAccessor->FindPlayerByName(name.c_str()); //get player by name
+        player = sObjectAccessor->FindPlayerByName(name.c_str());
     }
 
     if (!player)
@@ -4576,7 +4576,7 @@ bool ChatHandler::HandleUnFreezeCommand(const char *args)
     {
         name = TargetName;
         normalizePlayerName(name);
-        player = sObjectAccessor->FindPlayerByName(name.c_str()); //get player by name
+        player = sObjectAccessor->FindPlayerByName(name.c_str());
     }
 
     //effect

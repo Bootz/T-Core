@@ -824,7 +824,7 @@ bool GameObject::hasInvolvedQuest(uint32 quest_id) const
 bool GameObject::IsTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
-    GameObjectTemplate const * gInfo = GetGOInfo();
+    GameObjectTemplate const* gInfo = GetGOInfo();
     if (!gInfo)
         return false;
     return gInfo->type == GAMEOBJECT_TYPE_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT;
@@ -842,7 +842,7 @@ bool GameObject::IsDestructableBuilding() const
 bool GameObject::IsDynTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
-    GameObjectTemplate const * gInfo = GetGOInfo();
+    GameObjectTemplate const* gInfo = GetGOInfo();
     if (!gInfo)
         return false;
     return gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT || (gInfo->type == GAMEOBJECT_TYPE_TRANSPORT && !gInfo->transport.pause);
