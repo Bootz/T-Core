@@ -968,7 +968,7 @@ void ObjectMgr::LoadCreatureAddons()
     sLog->outString();
 }
 
-CreatureAddon const * ObjectMgr::GetCreatureAddon(uint32 lowguid)
+CreatureAddon const* ObjectMgr::GetCreatureAddon(uint32 lowguid)
 {
     CreatureAddonContainer::const_iterator itr = CreatureAddonStore.find(lowguid);
     if (itr != CreatureAddonStore.end())
@@ -4771,8 +4771,8 @@ void ObjectMgr::LoadSpellScriptNames()
             spellId = -spellId;
         }
 
-        SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(spellId);
-        if (!SpellInfo)
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+        if (!spellInfo)
         {
             sLog->outErrorDb("Scriptname:`%s` spell (spell_id:%d) does not exist in `Spell.dbc`.", scriptName, fields[0].GetInt32());
             continue;
@@ -4785,14 +4785,14 @@ void ObjectMgr::LoadSpellScriptNames()
                 sLog->outErrorDb("Scriptname:`%s` spell (spell_id:%d) is not first rank of spell.", scriptName, fields[0].GetInt32());
                 continue;
             }
-            while(spellId)
+            while(spellInfo)
             {
-                mSpellScripts.insert(SpellScriptsMap::value_type(spellId, GetScriptId(scriptName)));
-                spellId = sSpellMgr->GetNextSpellInChain(spellId);
+                mSpellScripts.insert(SpellScriptsMap::value_type(spellInfo->Id, GetScriptId(scriptName)));
+                spellInfo = sSpellMgr->GetSpellInfo(spellInfo->Id)->GetNextRankSpell();
             }
         }
         else
-            mSpellScripts.insert(SpellScriptsMap::value_type(spellId, GetScriptId(scriptName)));
+            mSpellScripts.insert(SpellScriptsMap::value_type(spellInfo->Id, GetScriptId(scriptName)));
         ++count;
     }
     while (result->NextRow());
@@ -4816,7 +4816,7 @@ void ObjectMgr::ValidateSpellScripts()
 
     for (SpellScriptsMap::iterator itr = mSpellScripts.begin(); itr != mSpellScripts.end();)
     {
-        SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(itr->first);
+        SpellInfo const* spellEntry = sSpellMgr->GetSpellInfo(itr->first);
         std::vector<std::pair<SpellScriptLoader *, SpellScriptsMap::iterator> > SpellScriptLoaders;
         sScriptMgr->CreateSpellScriptLoaders(itr->first, SpellScriptLoaders);
         itr = mSpellScripts.upper_bound(itr->first);
@@ -4833,17 +4833,17 @@ void ObjectMgr::ValidateSpellScripts()
             }
             if (spellScript)
             {
-                spellScript->_Init(&sitr->first->GetName(), SpellInfo->Id);
+                spellScript->_Init(&sitr->first->GetName(), spellEntry->Id);
                 spellScript->_Register();
-                if (!spellScript->_Validate(SpellInfo))
+                if (!spellScript->_Validate(spellEntry))
                     valid = false;
                 delete spellScript;
             }
             if (auraScript)
             {
-                auraScript->_Init(&sitr->first->GetName(), SpellInfo->Id);
+                auraScript->_Init(&sitr->first->GetName(), spellEntry->Id);
                 auraScript->_Register();
-                if (!auraScript->_Validate(SpellInfo))
+                if (!auraScript->_Validate(spellEntry))
                     valid = false;
                 delete auraScript;
             }
@@ -6579,7 +6579,7 @@ std::string ObjectMgr::GeneratePetName(uint32 entry)
     if (list0.empty() || list1.empty())
     {
         CreatureTemplate const *cinfo = GetCreatureTemplate(entry);
-        char const* petname = GetPetName(cinfo->family, sWorld->GetDefaultDbcLocale());
+        const char* petname = GetPetName(cinfo->family, sWorld->GetDefaultDbcLocale());
         if (!petname)
             return cinfo->Name;
 
