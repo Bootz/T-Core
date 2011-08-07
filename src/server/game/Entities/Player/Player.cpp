@@ -6076,8 +6076,8 @@ bool Player::UpdateCraftSkill(uint32 spellid)
             uint32 SkillValue = GetPureSkillValue(_spell_idx->second->skillId);
 
             // Alchemy Discoveries here
-            SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(spellid);
-            if (SpellInfo && SpellInfo->Mechanic == MECHANIC_DISCOVERY)
+            SpellInfo const* spellEntry = sSpellMgr->GetSpellInfo(spellid);
+            if (spellEntry && spellEntry->Mechanic == MECHANIC_DISCOVERY)
             {
                 if (uint32 discoveredSpell = GetSkillDiscoverySpell(_spell_idx->second->skillId, spellid, this))
                     learnSpell(discoveredSpell, false);
@@ -13469,8 +13469,8 @@ void Player::ApplyEnchantment(Item *item, EnchantmentSlot slot, bool apply, bool
     if (!ignore_condition && pEnchant->EnchantmentCondition && !EnchantmentFitsRequirements(pEnchant->EnchantmentCondition, -1))
         return;
 
-    //if (pEnchant->requiredLevel > getLevel())
-    //    return;
+    if (pEnchant->requiredLevel > getLevel())
+        return;
 
     if (pEnchant->requiredSkill > 0 && pEnchant->requiredSkillValue > GetSkillValue(pEnchant->requiredSkill))
         return;
@@ -17105,7 +17105,9 @@ void Player::_LoadAuras(PreparedQueryResult result, uint32 timediff)
             // prevent wrong values of remaincharges
             if (spellInfo->ProcCharges)
             {
-                if (remaincharges <= 0 || remaincharges > spellInfo->ProcCharges)
+                // we have no control over the order of applying auras and modifiers allow auras
+                // to have more charges than value in SpellInfo
+                if (remaincharges <= 0/* || remaincharges > spellproto->procCharges*/)
                     remaincharges = spellInfo->ProcCharges;
             }
             else
@@ -18233,8 +18235,8 @@ void Player::SaveToDB()
 
     ss << uint32(m_cinematic) << ',';
 
-    ss << m_Played_time[PLAYED_TIME_TOTAL] << ", ";
-    ss << m_Played_time[PLAYED_TIME_LEVEL] << ", ";
+    ss << m_Played_time[PLAYED_TIME_TOTAL] << ',';
+    ss << m_Played_time[PLAYED_TIME_LEVEL] << ',';
 
     ss << finiteAlways(m_rest_bonus) << ',';
     ss << uint32(time(NULL)) << ',';
@@ -18275,7 +18277,7 @@ void Player::SaveToDB()
     ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ',';
 
     ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ',';
-    //drunk
+
     ss << (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ',';
 
     ss << GetHealth();
@@ -18310,7 +18312,7 @@ void Player::SaveToDB()
     ss << uint32(GetByteValue(PLAYER_FIELD_BYTES, 2));
     ss << ",";
     ss << uint32(m_grantableLevels);
-    ss << ")";
+    ss << ')';
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -20587,7 +20589,7 @@ void Player::AddSpellAndCategoryCooldowns(SpellInfo const* spellInfo, uint32 ite
     if (rec < 0 && catrec < 0)
     {
         cat = spellInfo->Category;
-        rec = spellInfo->GetRecoveryTime();
+        rec = spellInfo->RecoveryTime;
         catrec = spellInfo->CategoryRecoveryTime;
     }
 
@@ -23683,8 +23685,8 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
 
 void Player::AddKnownCurrency(uint32 itemId)
 {
-    if (CurrencyTypesEntry const* ctEntry = sCurrencyTypesStore.LookupEntry(itemId))
-        SetFlag64(0, (1LL << (ctEntry->ID-1)));
+    //if (CurrencyTypesEntry const* ctEntry = sCurrencyTypesStore.LookupEntry(itemId))
+    //    SetFlag64(0, (1LL << (ctEntry->ID-1)));
 }
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint32 opcode)
