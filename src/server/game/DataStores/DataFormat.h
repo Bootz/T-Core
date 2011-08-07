@@ -135,6 +135,7 @@ const char SpellShapeshiftFormfmt[]="nxxiixiiixxiiiiiiiixx";
 const char SummonPropertiesfmt[] = "niiiii";
 const char TalentEntryfmt[]="niiiiiiiiixxixxxxxx";
 const char TalentTabEntryfmt[]="nxxiiixxxxx";
+const char TalentTreeSpellsfmt[]="niix";
 const char TaxiNodesEntryfmt[]="nifffsiixxx";
 const char TaxiPathEntryfmt[]="niii";
 const char TaxiPathNodeEntryfmt[]="diiifffiiii";

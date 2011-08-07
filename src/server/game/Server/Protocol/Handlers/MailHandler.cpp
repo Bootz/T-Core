@@ -498,10 +498,8 @@ void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
 {
     uint64 mailbox;
     uint32 mailId;
-    uint64 amount;
     recv_data >> mailbox;
     recv_data >> mailId;
-    recv_data >> amount; // not implemented
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
         return;
@@ -597,10 +595,10 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
                 break;
         }
 
-        data << uint64((*itr)->COD);                         // COD
+        data << uint32((*itr)->COD);                         // COD
         data << uint32(0);                                   // probably changed in 3.3.3
         data << uint32((*itr)->stationery);                  // stationery (Stationery.dbc)
-        data << uint64((*itr)->money);                       // Gold
+        data << uint32((*itr)->money);                       // Gold
         data << uint32((*itr)->checked);                    // flags
         data << float(((*itr)->expire_time-time(NULL))/DAY); // Time
         data << uint32((*itr)->mailTemplateId);              // mail template (MailTemplate.dbc)

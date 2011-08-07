@@ -249,6 +249,7 @@ CREATE TABLE `characters` (
   `knownTitles` longtext,
   `achievementPoints` smallint(5) unsigned NOT NULL DEFAULT '0',
   `actionBars` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `grantableLevels` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `guildId` int(10) unsigned NOT NULL DEFAULT '0',
   `deleteInfos_Account` int(10) unsigned DEFAULT NULL,
   `deleteInfos_Name` varchar(12) DEFAULT NULL,
@@ -526,6 +527,9 @@ CREATE TABLE `character_glyphs` (
   `glyph4` smallint(5) unsigned DEFAULT '0',
   `glyph5` smallint(5) unsigned DEFAULT '0',
   `glyph6` smallint(5) unsigned DEFAULT '0',
+  `glyph7` smallint(5) unsigned DEFAULT '0',
+  `glyph8` smallint(5) unsigned DEFAULT '0',
+  `glyph9` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`guid`,`spec`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -566,6 +570,13 @@ CREATE TABLE `character_instance` (
 -- ----------------------------
 -- Records of character_instance
 -- ----------------------------
+
+CREATE TABLE `character_talentbranchspec` (
+	`guid` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`talentSpec` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`talentBranchSpec` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`guid`, `talentSpec`)
+);
 
 -- ----------------------------
 -- Table structure for `character_inventory`

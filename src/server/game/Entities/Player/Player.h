@@ -371,6 +371,40 @@ struct EnchantDuration
 typedef std::list<EnchantDuration> EnchantDurationList;
 typedef std::list<Item*> ItemDurationList;
 
+enum BranchSpec
+{
+    DEATH_KNIGHT_BLOOD   = 398,
+    DEATH_KNIGHT_FROST   = 399,
+    DEATH_KNIGHT_UNHOLY  = 400,
+    DRUID_BALANCE        = 752,
+    DRUID_FERAL_COMBAT   = 750,
+    DRUID_RESTORATION    = 748,
+    HUNTER_BEAST_MASTERY = 811,
+    HUNTER_MARKMANSHIP   = 807,
+    HUNTER_SURVIVAL      = 809,
+    MAGE_ARCANE          = 799,
+    MAGE_FIRE            = 851,
+    MAGE_FROST           = 823,
+    PALADIN_HOLY         = 831,
+    PALADIN_PROTECTION   = 839,
+    PALADIN_RETRIBUTION  = 855,
+    PRIEST_DISCIPLINE    = 760,
+    PRIEST_HOLY          = 813,
+    PRIEST_SHADOW        = 759,
+    ROGUE_ASSASINATION   = 182,
+    ROGUE_COMBAT         = 181,
+    ROGUE_SUBTLETY       = 183,
+    SHAMAN_ELEMENTAL     = 261,
+    SHAMAN_ENCHANCEMENT  = 263,
+    SHAMAN_RESTORATION   = 262,
+    WARLOCK_AFFLICTION   = 871,
+    WARLOCK_DEMONOLOGY   = 867,
+    WARLOCK_DESTRUCTION  = 865,
+    WARRIOR_ARMS         = 746,
+    WARRIOR_FURY         = 815,
+    WARRIOR_PROTECTION   = 845
+};
+
 enum PlayerMovementType
 {
     MOVE_ROOT       = 1,
@@ -821,15 +855,16 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADEQUIPMENTSETS        = 20,
     PLAYER_LOGIN_QUERY_LOADBGDATA               = 21,
     PLAYER_LOGIN_QUERY_LOADGLYPHS               = 22,
-    PLAYER_LOGIN_QUERY_LOADTALENTS              = 23,
-    PLAYER_LOGIN_QUERY_LOADACCOUNTDATA          = 24,
-    PLAYER_LOGIN_QUERY_LOADSKILLS               = 25,
-    PLAYER_LOGIN_QUERY_LOADWEKLYQUESTSTATUS     = 26,
-    PLAYER_LOGIN_QUERY_LOADRANDOMBG             = 27,
-    PLAYER_LOGIN_QUERY_LOADBANNED               = 28,
-    PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 29,
-    PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 30,
-    PLAYER_LOGIN_QUERY_LOADCURRENCY             = 31,
+    PLAYER_LOGIN_QUERY_LOADBRANCHSPECS          = 23,
+    PLAYER_LOGIN_QUERY_LOADTALENTS              = 24,
+    PLAYER_LOGIN_QUERY_LOADACCOUNTDATA          = 25,
+    PLAYER_LOGIN_QUERY_LOADSKILLS               = 26,
+    PLAYER_LOGIN_QUERY_LOADWEKLYQUESTSTATUS     = 27,
+    PLAYER_LOGIN_QUERY_LOADRANDOMBG             = 28,
+    PLAYER_LOGIN_QUERY_LOADBANNED               = 29,
+    PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 30,
+    PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 31,
+    PLAYER_LOGIN_QUERY_LOADCURRENCY             = 32,
     MAX_PLAYER_LOGIN_QUERY,
 };
 
@@ -1683,9 +1718,11 @@ class Player : public Unit, public GridObject<Player>
         void BuildPlayerTalentsInfoData(WorldPacket *data);
         void BuildPetTalentsInfoData(WorldPacket *data);
         void SendTalentsInfoData(bool pet);
-        void LearnTalent(uint32 talentId, uint32 talentRank);
+        void LearnTalent(uint32 talentId, uint32 talentRank, bool learn);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
+        void SetTalentBranchSpec(uint32 branchspec, uint8 spec) { m_branchSpec[spec] = branchspec; }
+        uint32 TalentBranchSpec(uint8 spec) { return m_branchSpec[spec]; }
         bool AddTalent(uint32 spell, uint8 spec, bool learning);
         bool HasTalent(uint32 spell_id, uint8 spec) const;
 
@@ -2556,6 +2593,7 @@ class Player : public Unit, public GridObject<Player>
         void _LoadBGData(PreparedQueryResult result);
         void _LoadGlyphs(PreparedQueryResult result);
         void _LoadCurrency(PreparedQueryResult result);
+        void _LoadTalentBranchSpecs(PreparedQueryResult result);
         void _LoadTalents(PreparedQueryResult result);
         void _LoadInstanceTimeRestrictions(PreparedQueryResult result);
 
@@ -2575,6 +2613,7 @@ class Player : public Unit, public GridObject<Player>
         void _SaveEquipmentSets(SQLTransaction& trans);
         void _SaveBGData(SQLTransaction& trans);
         void _SaveGlyphs(SQLTransaction& trans);
+        void _SaveTalentBranchSpecs(SQLTransaction& trans);
         void _SaveTalents(SQLTransaction& trans);
         void _SaveStats(SQLTransaction& trans);
         void _SaveCurrency(SQLTransaction& trans);
@@ -2644,8 +2683,9 @@ class Player : public Unit, public GridObject<Player>
 
         uint8 m_activeSpec;
         uint8 m_specsCount;
-
+        uint32 m_branchSpec[MAX_TALENT_SPECS];
         uint32 m_freeTalentPoints;
+
 
         uint32 m_Glyphs[MAX_TALENT_SPECS][MAX_GLYPH_SLOT_INDEX];
 
