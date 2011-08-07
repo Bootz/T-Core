@@ -1158,12 +1158,12 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
 {
     int32 internal_event_id = mGameEvent.size() + event_id - 1;
 
-    /*if (internal_event_id < 0 || internal_event_id >= int32(mGameEventCreatureGuids.size()))
+    if (internal_event_id < 0 || internal_event_id >= int32(mGameEventCreatureGuids.size()))
     {
         sLog->outError("GameEventMgr::GameEventSpawn attempt access to out of range mGameEventCreatureGuids element %i (size: " SIZEFMTD ")",
             internal_event_id, mGameEventCreatureGuids.size());
         return;
-    }*/
+    }
 
     for (GuidList::iterator itr = mGameEventCreatureGuids[internal_event_id].begin(); itr != mGameEventCreatureGuids[internal_event_id].end(); ++itr)
     {

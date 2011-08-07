@@ -63,7 +63,7 @@ _SpellScript::EffectHook::EffectHook(uint8 _effIndex)
     effIndex = _effIndex;
 }
 
-uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellInfo const* SpellInfo)
+uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellInfo const* spellEntry)
 {
     uint8 mask = 0;
     if ((effIndex == EFFECT_ALL) || (effIndex == EFFECT_FIRST_FOUND))
@@ -72,21 +72,21 @@ uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellInfo const* SpellInf
         {
             if ((effIndex == EFFECT_FIRST_FOUND) && mask)
                 return mask;
-            if (CheckEffect(SpellInfo, i))
+            if (CheckEffect(spellEntry, i))
                 mask |= (uint8)1<<i;
         }
     }
     else
     {
-        if (CheckEffect(SpellInfo, effIndex))
+        if (CheckEffect(spellEntry, effIndex))
             mask |= (uint8)1<<effIndex;
     }
     return mask;
 }
 
-bool _SpellScript::EffectHook::IsEffectAffected(SpellInfo const* SpellInfo, uint8 effIndex)
+bool _SpellScript::EffectHook::IsEffectAffected(SpellInfo const* spellEntry, uint8 effIndex)
 {
-    return GetAffectedEffectsMask(SpellInfo) & 1<<effIndex;
+    return GetAffectedEffectsMask(spellEntry) & 1<<effIndex;
 }
 
 std::string _SpellScript::EffectHook::EffIndexToString()
@@ -172,9 +172,9 @@ std::string SpellScript::EffectHandler::ToString()
     return "Index: " + EffIndexToString() + " Name: " +_SpellScript::EffectNameCheck::ToString();
 }
 
-bool SpellScript::EffectHandler::CheckEffect(SpellInfo const* SpellInfo, uint8 effIndex)
+bool SpellScript::EffectHandler::CheckEffect(SpellInfo const* spellEntry, uint8 effIndex)
 {
-    return _SpellScript::EffectNameCheck::Check(SpellInfo, effIndex);
+    return _SpellScript::EffectNameCheck::Check(spellEntry, effIndex);
 }
 
 void SpellScript::EffectHandler::Call(SpellScript* spellScript, SpellEffIndex effIndex)
@@ -557,9 +557,9 @@ AuraScript::EffectBase::EffectBase(uint8 _effIndex, uint16 _effName)
 {
 }
 
-bool AuraScript::EffectBase::CheckEffect(SpellInfo const* SpellInfo, uint8 effIndex)
+bool AuraScript::EffectBase::CheckEffect(SpellInfo const* spellEntry, uint8 effIndex)
 {
-    return _SpellScript::EffectAuraNameCheck::Check(SpellInfo, effIndex);
+    return _SpellScript::EffectAuraNameCheck::Check(spellEntry, effIndex);
 }
 
 std::string AuraScript::EffectBase::ToString()
