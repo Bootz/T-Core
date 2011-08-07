@@ -41,11 +41,11 @@ class spell_dru_glyph_of_starfire : public SpellScriptLoader
         {
             PrepareSpellScript(spell_dru_glyph_of_starfire_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
-                if (!sSpellStore.LookupEntry(DRUID_INCREASED_MOONFIRE_DURATION))
+                if (!sSpellMgr->GetSpellInfo(DRUID_INCREASED_MOONFIRE_DURATION))
                     return false;
-                if (!sSpellStore.LookupEntry(DRUID_NATURES_SPLENDOR))
+                if (!sSpellMgr->GetSpellInfo(DRUID_NATURES_SPLENDOR))
                     return false;
                 return true;
             }
@@ -59,7 +59,7 @@ class spell_dru_glyph_of_starfire : public SpellScriptLoader
                         Aura* aura = aurEff->GetBase();
 
                         uint32 countMin = aura->GetMaxDuration();
-                        uint32 countMax = GetSpellMaxDuration(aura->GetSpellProto()) + 9000;
+                        uint32 countMax = aura->GetSpellInfo()->GetMaxDuration() + 9000;
                         if (caster->HasAura(DRUID_INCREASED_MOONFIRE_DURATION))
                             countMax += 3000;
                         if (caster->HasAura(DRUID_NATURES_SPLENDOR))
@@ -99,7 +99,7 @@ class spell_dru_moonkin_form_passive : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = GetSpellInfo()->Effects[EFFECT_0].CalcValue(GetCaster());
                 return true;
             }
 
@@ -143,7 +143,7 @@ class spell_dru_primal_tenacity : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1, GetCaster());
+                absorbPct = GetSpellInfo()->Effects[EFFECT_1].CalcValue(GetCaster());
                 return true;
             }
 
@@ -187,7 +187,7 @@ class spell_dru_savage_defense : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = GetSpellInfo()->Effects[EFFECT_0].CalcValue(GetCaster());
                 return true;
             }
 

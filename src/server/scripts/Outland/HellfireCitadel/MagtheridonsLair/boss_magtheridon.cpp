@@ -120,7 +120,7 @@ class mob_abyssal : public CreatureScript
                 FireBlast_Timer = 6000;
             }
 
-            void SpellHit(Unit*, const SpellEntry *spell)
+            void SpellHit(Unit*, const SpellInfo *spell)
             {
                 if (trigger == 2 && spell->Id == SPELL_BLAZE_TARGET)
                 {
@@ -216,21 +216,6 @@ class boss_magtheridon : public CreatureScript
                 pInstance = creature->GetInstanceScript();
                 me->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 10);
                 me->SetFloatValue(UNIT_FIELD_COMBATREACH, 10);
-
-                //TODO: rewrite this to decent code
-                //// target 7, random target with certain entry spell, need core fix
-                //SpellEntry *TempSpell;
-                //TempSpell = GET_SPELL(SPELL_BLAZE_TARGET);
-                //if (TempSpell && TempSpell->GetEffectImplicitTargetAByIndex(0) != 6)
-                //{
-                //    TempSpell->EffectImplicitTargetA[0] = 6;
-                //    TempSpell->EffectImplicitTargetB[0] = 0;
-                //}
-                //TempSpell = GET_SPELL(SPELL_QUAKE_TRIGGER);
-                //if (TempSpell && TempSpell->EffectTriggerSpell[0] != SPELL_QUAKE_KNOCKBACK)
-                //{
-                //    TempSpell->EffectTriggerSpell[0] = SPELL_QUAKE_KNOCKBACK;
-                //}
             }
 
             CubeMap Cube;

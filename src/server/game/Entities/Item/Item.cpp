@@ -28,6 +28,7 @@
 #include "SpellMgr.h"
 #include "ScriptMgr.h"
 #include "ConditionMgr.h"
+#include "SpellInfo.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -96,7 +97,7 @@ void AddItemsSetItem(Player* player, Item* item)
         {
             if (!eff->spells[y])                             // free slot
             {
-                SpellEntry const* spellInfo = sSpellStore.LookupEntry(set->spells[x]);
+                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(set->spells[x]);
                 if (!spellInfo)
                 {
                     sLog->outError("WORLD: unknown spell id %u in items set %u effects", set->spells[x], setid);
@@ -458,7 +459,7 @@ void Item::SaveToDB(SQLTransaction& trans)
 
             std::ostringstream ssSpells;
             for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
-                ssSpells << GetSpellCharges(i) << " ";
+                ssSpells << GetSpellCharges(i) << ' ';
             stmt->setString(++index, ssSpells.str());
 
             stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_FLAGS));
@@ -466,9 +467,9 @@ void Item::SaveToDB(SQLTransaction& trans)
             std::ostringstream ssEnchants;
             for (uint8 i = 0; i < MAX_ENCHANTMENT_SLOT; ++i)
             {
-                ssEnchants << GetEnchantmentId(EnchantmentSlot(i)) << " ";
-                ssEnchants << GetEnchantmentDuration(EnchantmentSlot(i)) << " ";
-                ssEnchants << GetEnchantmentCharges(EnchantmentSlot(i)) << " ";
+                ssEnchants << GetEnchantmentId(EnchantmentSlot(i)) << ' ';
+                ssEnchants << GetEnchantmentDuration(EnchantmentSlot(i)) << ' ';
+                ssEnchants << GetEnchantmentCharges(EnchantmentSlot(i)) << ' ';
             }
             stmt->setString(++index, ssEnchants.str());
 
@@ -632,7 +633,7 @@ ItemTemplate const *Item::GetTemplate() const
 
 Player* Item::GetOwner()const
 {
-    return sObjectMgr->GetPlayer(GetOwnerGUID());
+    return ObjectAccessor::FindPlayer(GetOwnerGUID());
 }
 
 uint32 Item::GetSkill()
@@ -962,36 +963,36 @@ InventoryResult Item::CanBeMergedPartlyWith(ItemTemplate const* proto) const
     return EQUIP_ERR_OK;
 }
 
-bool Item::IsFitToSpellRequirements(SpellEntry const* spellInfo) const
+bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
 {
     ItemTemplate const* proto = GetTemplate();
 
-    if (spellInfo->GetEquippedItemClass() != -1)                 // -1 == any item class
+    if (spellInfo->EquippedItemClass != -1)                 // -1 == any item class
     {
         // Special case - accept vellum for armor/weapon requirements
-        if ((spellInfo->GetEquippedItemClass() == ITEM_CLASS_ARMOR && proto->IsArmorVellum())
-            ||(spellInfo->GetEquippedItemClass() == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
-            if (sSpellMgr->IsSkillTypeSpell(spellInfo->Id, SKILL_ENCHANTING)) // only for enchanting spells
+        if ((spellInfo->EquippedItemClass == ITEM_CLASS_ARMOR && proto->IsArmorVellum())
+            ||(spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
+            if (spellInfo->IsAbilityOfSkillType(SKILL_ENCHANTING)) // only for enchanting spells
                 return true;
 
-        if (spellInfo->GetEquippedItemClass() != int32(proto->Class))
+        if (spellInfo->EquippedItemClass != int32(proto->Class))
             return false;                                   //  wrong item class
 
-        if (spellInfo->GetEquippedItemSubClassMask() != 0)        // 0 == any subclass
+        if (spellInfo->EquippedItemSubClassMask != 0)        // 0 == any subclass
         {
-            if ((spellInfo->GetEquippedItemSubClassMask() & (1 << proto->SubClass)) == 0)
+            if ((spellInfo->EquippedItemSubClassMask & (1 << proto->SubClass)) == 0)
                 return false;                               // subclass not present in mask
         }
     }
 
-    if (spellInfo->GetEquippedItemInventoryTypeMask() != 0)       // 0 == any inventory type
+    if (spellInfo->EquippedItemInventoryTypeMask != 0)       // 0 == any inventory type
     {
         // Special case - accept weapon type for main and offhand requirements
         if (proto->InventoryType == INVTYPE_WEAPON &&
-            (spellInfo->GetEquippedItemInventoryTypeMask() & (1 << INVTYPE_WEAPONMAINHAND) ||
-            spellInfo->GetEquippedItemInventoryTypeMask() & (1 << INVTYPE_WEAPONOFFHAND)))
+            (spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONMAINHAND) ||
+            spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONOFFHAND)))
             return true;
-        else if ((spellInfo->GetEquippedItemInventoryTypeMask() & (1 << proto->InventoryType)) == 0)
+        else if ((spellInfo->EquippedItemInventoryTypeMask & (1 << proto->InventoryType)) == 0)
             return false;                                   // inventory type not present in mask
     }
 

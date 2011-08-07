@@ -247,7 +247,7 @@ std::string InstanceScript::GetBossSaveData()
 {
     std::ostringstream saveStream;
     for (std::vector<BossInfo>::iterator i = bosses.begin(); i != bosses.end(); ++i)
-        saveStream << (uint32)i->state << " ";
+        saveStream << (uint32)i->state << ' ';
     return saveStream.str();
 }
 

@@ -708,7 +708,7 @@ Log.Arena.FlushBytes = 1024
 #    SqlDriver log
 #    Description: Used to log operations and queries performed via SQL database driver.
 
-Log.SqlDriver.Enabled = 1
+Log.SqlDriver.Enabled = 0
 Log.SqlDriver.File = SqlDriver.log
 Log.SqlDriver.SplitDate = 0
 Log.SqlDriver.Console = 1

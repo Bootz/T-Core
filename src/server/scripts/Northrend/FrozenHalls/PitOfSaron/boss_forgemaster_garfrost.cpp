@@ -93,7 +93,7 @@ class boss_garfrost : public CreatureScript
 
             void InitializeAI()
             {
-                if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != GetScriptId(PoSScriptName))
+                if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(PoSScriptName))
                     me->IsAIEnabled = false;
                 else if (!me->isDead())
                     Reset();
@@ -169,7 +169,7 @@ class boss_garfrost : public CreatureScript
                 events.ScheduleEvent(EVENT_RESUME_ATTACK, 5000);
             }
 
-            void SpellHitTarget(Unit* target, const SpellEntry* spell)
+            void SpellHitTarget(Unit* target, const SpellInfo* spell)
             {
                 if (spell->Id == SPELL_PERMAFROST_HELPER)
                 {

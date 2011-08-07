@@ -26,6 +26,7 @@
 #include "Util.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
+#include "SpellInfo.h"
 #include "Group.h"
 
 static Rates const qualityToRate[MAX_ITEM_QUALITY] = {
@@ -818,6 +819,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
 
     size_t count_pos = b.wpos();                            // pos of item count byte
     b << uint8(0);                                          // item count placeholder
+    b << uint8(0);
 
     switch (lv.permission)
     {
@@ -1746,14 +1748,14 @@ void LoadLootTemplates_Spell()
     uint32 count = LootTemplates_Spell.LoadAndCollectLootIds(ids_set);
 
     // remove real entries and check existence loot
-    for (uint32 spell_id = 1; spell_id < sSpellStore.GetNumRows(); ++spell_id)
+    for (uint32 spell_id = 1; spell_id < sSpellMgr->GetSpellInfoStoreSize(); ++spell_id)
     {
-        SpellEntry const* spellInfo = sSpellStore.LookupEntry (spell_id);
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell_id);
         if (!spellInfo)
             continue;
 
         // possible cases
-        if (!IsLootCraftingSpell(spellInfo))
+        if (!spellInfo->IsLootCrafting())
             continue;
 
         if (ids_set.find(spell_id) == ids_set.end())

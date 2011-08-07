@@ -33,12 +33,9 @@ class BattlegroundRBScore : public BattlegroundScore
 
 class BattlegroundRB : public Battleground
 {
-    friend class BattlegroundMgr;
-
     public:
         BattlegroundRB();
         ~BattlegroundRB();
-        void Update(uint32 diff);
 
         virtual void AddPlayer(Player *plr);
         virtual void StartingEventCloseDoors();

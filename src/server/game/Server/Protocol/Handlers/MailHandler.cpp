@@ -116,7 +116,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
         return;
     }
 
-    Player *receive = sObjectMgr->GetPlayer(rc);
+    Player *receive = ObjectAccessor::FindPlayer(rc);
 
     uint32 rc_team = 0;
     uint8 mails_count = 0;                                  //do not allow to send to one player more than 100 mails
@@ -440,7 +440,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
         if (m->COD > 0)                                     //if there is COD, take COD money from player and send them to sender by mail
         {
             uint64 sender_guid = MAKE_NEW_GUID(m->sender, 0, HIGHGUID_PLAYER);
-            Player *receive = sObjectMgr->GetPlayer(sender_guid);
+            Player *receive = ObjectAccessor::FindPlayer(sender_guid);
 
             uint32 sender_accId = 0;
 
@@ -498,8 +498,10 @@ void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
 {
     uint64 mailbox;
     uint32 mailId;
+    uint64 amount;
     recv_data >> mailbox;
     recv_data >> mailId;
+    recv_data >> amount; // not implemented
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
         return;
@@ -595,10 +597,10 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
                 break;
         }
 
-        data << uint32((*itr)->COD);                         // COD
+        data << uint64((*itr)->COD);                         // COD
         data << uint32(0);                                   // probably changed in 3.3.3
         data << uint32((*itr)->stationery);                  // stationery (Stationery.dbc)
-        data << uint32((*itr)->money);                       // Gold
+        data << uint64((*itr)->money);                       // Gold
         data << uint32((*itr)->checked);                    // flags
         data << float(((*itr)->expire_time-time(NULL))/DAY); // Time
         data << uint32((*itr)->mailTemplateId);              // mail template (MailTemplate.dbc)

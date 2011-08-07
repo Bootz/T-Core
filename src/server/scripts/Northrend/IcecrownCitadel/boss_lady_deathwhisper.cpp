@@ -25,6 +25,7 @@
 #include "PoolMgr.h"
 #include "Group.h"
 #include "icecrown_citadel.h"
+#include "SpellInfo.h"
 
 enum ScriptTexts
 {
@@ -552,7 +553,7 @@ class boss_lady_deathwhisper : public CreatureScript
                     summon->AI()->DoCast(summon, SPELL_TELEPORT_VISUAL);
             }
 
-            void SetGUID(uint64 const& guid, int32 id/* = 0*/)
+            void SetGUID(uint64 const guid, int32 id/* = 0*/)
             {
                 if (id != GUID_CULTIST)
                     return;
@@ -576,7 +577,7 @@ class boss_lady_deathwhisper : public CreatureScript
                 DoCast(cultist, SPELL_DARK_MARTYRDOM_T);
             }
 
-            void SpellHitTarget(Unit* target, SpellEntry const* spell)
+            void SpellHitTarget(Unit* target, SpellInfo const* spell)
             {
                 if (spell->Id == SPELL_DARK_MARTYRDOM_T)
                 {
@@ -652,7 +653,7 @@ class npc_cult_fanatic : public CreatureScript
                     Events.ScheduleEvent(EVENT_CULTIST_DARK_MARTYRDOM, urand(18000, 32000));
             }
 
-            void SpellHit(Unit* /*caster*/, SpellEntry const* spell)
+            void SpellHit(Unit* /*caster*/, SpellInfo const* spell)
             {
                 if (spell->Id == SPELL_DARK_TRANSFORMATION)
                     me->UpdateEntry(NPC_DEFORMED_FANATIC);
@@ -730,7 +731,7 @@ class npc_cult_adherent : public CreatureScript
                     Events.ScheduleEvent(EVENT_CULTIST_DARK_MARTYRDOM, urand(18000, 32000));
             }
 
-            void SpellHit(Unit* /*caster*/, SpellEntry const* spell)
+            void SpellHit(Unit* /*caster*/, SpellInfo const* spell)
             {
                 if (spell->Id == SPELL_DARK_EMPOWERMENT)
                     me->UpdateEntry(NPC_EMPOWERED_ADHERENT);
@@ -814,7 +815,7 @@ class npc_vengeful_shade : public CreatureScript
                 me->AddAura(SPELL_VENGEFUL_BLAST_PASSIVE, me);
             }
 
-            void SpellHitTarget(Unit* /*target*/, SpellEntry const* spell)
+            void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell)
             {
                 switch (spell->Id)
                 {

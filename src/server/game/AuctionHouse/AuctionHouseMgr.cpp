@@ -98,7 +98,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction, SQLTransaction& 
 
     uint32 bidder_accId = 0;
     uint64 bidder_guid = MAKE_NEW_GUID(auction->bidder, 0, HIGHGUID_PLAYER);
-    Player *bidder = sObjectMgr->GetPlayer(bidder_guid);
+    Player *bidder = ObjectAccessor::FindPlayer(bidder_guid);
     // data for gm.log
     if (sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
     {
@@ -143,7 +143,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction, SQLTransaction& 
         std::ostringstream msgAuctionWonBody;
         msgAuctionWonBody.width(16);
         msgAuctionWonBody << std::right << std::hex << auction->owner;
-        msgAuctionWonBody << std::dec << ":" << auction->bid << ":" << auction->buyout;
+        msgAuctionWonBody << std::dec << ':' << auction->bid << ':' << auction->buyout;
         sLog->outDebug(LOG_FILTER_AUCTIONHOUSE, "AuctionWon body string : %s", msgAuctionWonBody.str().c_str());
 
         // set owner to bidder (to prevent delete item with sender char deleting)
@@ -169,7 +169,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction, SQLTransaction& 
 void AuctionHouseMgr::SendAuctionSalePendingMail(AuctionEntry * auction, SQLTransaction& trans)
 {
     uint64 owner_guid = MAKE_NEW_GUID(auction->owner, 0, HIGHGUID_PLAYER);
-    Player *owner = sObjectMgr->GetPlayer(owner_guid);
+    Player *owner = ObjectAccessor::FindPlayer(owner_guid);
     uint32 owner_accId = sObjectMgr->GetPlayerAccountIdByGUID(owner_guid);
     // owner exist (online or offline)
     if (owner || owner_accId)
@@ -184,8 +184,8 @@ void AuctionHouseMgr::SendAuctionSalePendingMail(AuctionEntry * auction, SQLTran
 
         msgAuctionSalePendingBody.width(16);
         msgAuctionSalePendingBody << std::right << std::hex << auction->bidder;
-        msgAuctionSalePendingBody << std::dec << ":" << auction->bid << ":" << auction->buyout;
-        msgAuctionSalePendingBody << ":" << auction->deposit << ":" << auctionCut << ":0:";
+        msgAuctionSalePendingBody << std::dec << ':' << auction->bid << ':' << auction->buyout;
+        msgAuctionSalePendingBody << ':' << auction->deposit << ':' << auctionCut << ":0:";
         msgAuctionSalePendingBody << secsToTimeBitFields(distrTime);
 
         sLog->outDebug(LOG_FILTER_AUCTIONHOUSE, "AuctionSalePending body string : %s", msgAuctionSalePendingBody.str().c_str());
@@ -199,7 +199,7 @@ void AuctionHouseMgr::SendAuctionSalePendingMail(AuctionEntry * auction, SQLTran
 void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction, SQLTransaction& trans)
 {
     uint64 owner_guid = MAKE_NEW_GUID(auction->owner, 0, HIGHGUID_PLAYER);
-    Player *owner = sObjectMgr->GetPlayer(owner_guid);
+    Player *owner = ObjectAccessor::FindPlayer(owner_guid);
     uint32 owner_accId = sObjectMgr->GetPlayerAccountIdByGUID(owner_guid);
     // owner exist
     if (owner || owner_accId)
@@ -212,8 +212,8 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction, SQLTrans
 
         auctionSuccessfulBody.width(16);
         auctionSuccessfulBody << std::right << std::hex << auction->bidder;
-        auctionSuccessfulBody << std::dec << ":" << auction->bid << ":" << auction->buyout;
-        auctionSuccessfulBody << ":" << auction->deposit << ":" << auctionCut;
+        auctionSuccessfulBody << std::dec << ':' << auction->bid << ':' << auction->buyout;
+        auctionSuccessfulBody << ':' << auction->deposit << ':' << auctionCut;
 
         sLog->outDebug(LOG_FILTER_AUCTIONHOUSE, "AuctionSuccessful body string : %s", auctionSuccessfulBody.str().c_str());
 
@@ -242,7 +242,7 @@ void AuctionHouseMgr::SendAuctionExpiredMail(AuctionEntry * auction, SQLTransact
         return;
 
     uint64 owner_guid = MAKE_NEW_GUID(auction->owner, 0, HIGHGUID_PLAYER);
-    Player *owner = sObjectMgr->GetPlayer(owner_guid);
+    Player *owner = ObjectAccessor::FindPlayer(owner_guid);
     uint32 owner_accId = sObjectMgr->GetPlayerAccountIdByGUID(owner_guid);
     // owner exist
     if (owner || owner_accId)
@@ -263,7 +263,7 @@ void AuctionHouseMgr::SendAuctionExpiredMail(AuctionEntry * auction, SQLTransact
 void AuctionHouseMgr::SendAuctionOutbiddedMail(AuctionEntry *auction, uint32 newPrice, Player* newBidder, SQLTransaction& trans)
 {
     uint64 oldBidder_guid = MAKE_NEW_GUID(auction->bidder, 0, HIGHGUID_PLAYER);
-    Player *oldBidder = sObjectMgr->GetPlayer(oldBidder_guid);
+    Player *oldBidder = ObjectAccessor::FindPlayer(oldBidder_guid);
 
     uint32 oldBidder_accId = 0;
     if (!oldBidder)
@@ -288,7 +288,7 @@ void AuctionHouseMgr::SendAuctionOutbiddedMail(AuctionEntry *auction, uint32 new
 void AuctionHouseMgr::SendAuctionCancelledToBidderMail(AuctionEntry* auction, SQLTransaction& trans)
 {
     uint64 bidder_guid = MAKE_NEW_GUID(auction->bidder, 0, HIGHGUID_PLAYER);
-    Player *bidder = sObjectMgr->GetPlayer(bidder_guid);
+    Player *bidder = ObjectAccessor::FindPlayer(bidder_guid);
 
     uint32 bidder_accId = 0;
     if (!bidder)
@@ -605,7 +605,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
             // local name
             if (loc_idx >= 0)
                 if (ItemLocale const *il = sObjectMgr->GetItemLocale(proto->ItemId))
-                    sObjectMgr->GetLocaleString(il->Name, loc_idx, name);
+                    ObjectMgr::GetLocaleString(il->Name, loc_idx, name);
 
             // DO NOT use GetItemEnchantMod(proto->RandomProperty) as it may return a result
             //  that matches the search but it may not equal item->GetItemRandomPropertyId()
@@ -627,18 +627,10 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
                     // dbc local name
                     if (temp)
                     {
-                        if (locdbc_idx >= 0)
-                        {
-                            // Append the suffix (ie: of the Monkey) to the name using localization
-                            name += " ";
-                            name += temp[locdbc_idx];
-                        }
-                        else
-                        {
-                            // Invalid localization? Append the suffix using default enUS
-                            name += " ";
-                            name += temp[LOCALE_enUS];
-                        }
+                        // Append the suffix (ie: of the Monkey) to the name using localization
+                        // or default enUS if localization is invalid
+                        name += ' ';
+                        name += temp[locdbc_idx >= 0 ? locdbc_idx : LOCALE_enUS];
                     }
                 }
             }

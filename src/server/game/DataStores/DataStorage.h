@@ -164,9 +164,9 @@ extern PetFamilySpellsStore                      sPetFamilySpellsStore;
 extern DataStorage <SpellRadiusEntry>             sSpellRadiusStore;
 extern DataStorage <SpellRangeEntry>              sSpellRangeStore;
 extern DataStorage <SpellRuneCostEntry>           sSpellRuneCostStore;
+extern DataStorage <SpellEntry>                   sSpellStore;
 extern DataStorage <SpellShapeshiftEntry>         sSpellShapeshiftStore;
 extern DataStorage <SpellShapeshiftFormEntry>     sSpellShapeshiftFormStore;
-extern DataStorage <SpellEntry>                   sSpellStore;
 extern DataStorage <SpellAuraOptionsEntry>        sSpellAuraOptionsStore;
 extern DataStorage <SpellAuraRestrictionsEntry>   sSpellAuraRestrictionsStore;
 extern DataStorage <SpellCastingRequirementsEntry> sSpellCastingRequirementsStore;
@@ -212,7 +212,6 @@ void LoadDataStorages(const std::string& dataPath);
 
 // script support functions
 DataStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
-DataStorage <SpellEntry>                 const* GetSpellStore();
 DataStorage <SpellRangeEntry>            const* GetSpellRangeStore();
 DataStorage <FactionEntry>               const* GetFactionStore();
 DataStorage <ItemEntry>                  const* GetItemDisplayStore();

@@ -50,8 +50,6 @@ enum BattlegroundRVObjectTypes
 */
     BG_RV_OBJECT_ELEVATOR_1,
     BG_RV_OBJECT_ELEVATOR_2,
-    BG_RV_OBJECT_FENCE_1,
-    BG_RV_OBJECT_FENCE_2,
     BG_RV_OBJECT_MAX,
 };
 
@@ -66,8 +64,6 @@ enum BattlegroundRVObjects
     BG_RV_OBJECT_TYPE_FIREDOOR_1                 = 192388,
     BG_RV_OBJECT_TYPE_PULLEY_1                   = 192389,
     BG_RV_OBJECT_TYPE_PULLEY_2                   = 192390,
-    BG_RV_OBJECT_TYPE_FENCE_1                    = 192391,
-    BG_RV_OBJECT_TYPE_FENCE_2                    = 192392,
     BG_RV_OBJECT_TYPE_GEAR_1                     = 192393,
     BG_RV_OBJECT_TYPE_GEAR_2                     = 192394,
     BG_RV_OBJECT_TYPE_ELEVATOR_1                 = 194582,
@@ -108,12 +104,9 @@ class BattlegroundRVScore : public BattlegroundScore
 
 class BattlegroundRV : public Battleground
 {
-    friend class BattlegroundMgr;
-
     public:
         BattlegroundRV();
         ~BattlegroundRV();
-        void Update(uint32 diff);
 
         /* inherited from BattlegroundClass */
         virtual void AddPlayer(Player *plr);
@@ -131,6 +124,8 @@ class BattlegroundRV : public Battleground
     private:
         uint32 Timer;
         uint32 State;
+
+        virtual void PostUpdateImpl(uint32 diff);
 
     protected:
         uint32 getTimer() { return Timer; };

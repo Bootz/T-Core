@@ -31,7 +31,7 @@ struct ItemLocale;
 struct ItemTemplate;
 struct ItemRandomSuffixEntry;
 struct ItemRandomPropertiesEntry;
-struct SpellEntry;
+class SpellInfo;
 struct AchievementEntry;
 struct GlyphPropertiesEntry;
 class Quest;
@@ -97,7 +97,7 @@ public:
     virtual bool ValidateName(char* buffer, const char* context);
 
 protected:
-    SpellEntry const* _spell;
+    SpellInfo const* _spell;
 };
 
 // AchievementChatLink - link to quest

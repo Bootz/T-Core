@@ -25,6 +25,7 @@
 #include "BattlegroundWS.h"
 #include "BattlegroundIC.h"
 #include "BattlegroundSA.h"
+#include "Vehicle.h"
 
 class achievement_storm_glory : public AchievementCriteriaScript
 {

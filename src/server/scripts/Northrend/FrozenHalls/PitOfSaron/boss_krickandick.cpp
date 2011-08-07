@@ -147,7 +147,7 @@ class boss_ick : public CreatureScript
 
             void InitializeAI()
             {
-                if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != GetScriptId(PoSScriptName))
+                if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(PoSScriptName))
                     me->IsAIEnabled = false;
                 else if (!me->isDead())
                     Reset();
@@ -301,7 +301,7 @@ class boss_krick : public CreatureScript
 
             void InitializeAI()
             {
-                if (!_instanceScript || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != GetScriptId(PoSScriptName))
+                if (!_instanceScript || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(PoSScriptName))
                     me->IsAIEnabled = false;
                 else if (!me->isDead())
                     Reset();

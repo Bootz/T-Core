@@ -35,6 +35,7 @@
 #include "SmartScript.h"
 #include "SmartAI.h"
 #include "Group.h"
+#include "Vehicle.h"
 
 SmartScript::SmartScript()
 {
@@ -78,7 +79,7 @@ void SmartScript::OnReset()
     mLastInvoker = 0;
 }
 
-void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellEntry* spell, GameObject* gob)
+void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellInfo* spell, GameObject* gob)
 {
     if (e == SMART_EVENT_AGGRO)
     {
@@ -107,7 +108,7 @@ void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint3
     }
 }
 
-void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellEntry* spell, GameObject* gob)
+void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellInfo* spell, GameObject* gob)
 {
     //calc random
     if (e.GetEventType() != SMART_EVENT_LINK && e.event.event_chance < 100 && e.event.event_chance)
@@ -2168,7 +2169,7 @@ ObjectList* SmartScript::GetWorldObjectsInDist(float dist)
     return targets;
 }
 
-void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellEntry* spell, GameObject* gob)
+void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, uint32 var1, bool bvar, const SpellInfo* spell, GameObject* gob)
 {
     if (!e.active && e.GetEventType() != SMART_EVENT_LINK)
         return;
@@ -2849,7 +2850,7 @@ void SmartScript::SetData(uint32 id, uint32 value)
 {
 }
 
-void SmartScript::SetGUID(const uint64& guid, int32 id)
+void SmartScript::SetGUID(const uint64 guid, int32 id)
 {
 }
 
