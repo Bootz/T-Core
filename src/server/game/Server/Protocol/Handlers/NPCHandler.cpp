@@ -107,10 +107,10 @@ void WorldSession::SendShowBank(uint64 guid)
 void WorldSession::HandleTrainerListOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 unk1, unk2;
+    uint32 spellId, unk;
 
     recv_data >> guid;
-    recv_data >> unk1 >> unk2;
+    recv_data >> spellId >> unk;
     SendTrainerList(guid);
 }
 
@@ -158,7 +158,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
     WorldPacket data(SMSG_TRAINER_LIST, 8+4+4+trainer_spells->spellList.size()*38 + strTitle.size()+1);
     data << guid;
     data << uint32(trainer_spells->trainerType);
-    data << uint32(0xF);
+    data << uint32(0x0F);
 
     size_t count_pos = data.wpos();
     data << uint32(trainer_spells->spellList.size());
@@ -193,6 +193,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
         data << uint8(tSpell->reqLevel);
         data << uint32(tSpell->reqSkill);
         data << uint32(tSpell->reqSkillValue);
+        data << uint32(0); // unk 4.0.1
         data << uint32(0) << uint32(0) << uint32(0) << uint32(0);
 
         //prev + req or req + 0
