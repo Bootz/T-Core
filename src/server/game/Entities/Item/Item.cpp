@@ -299,14 +299,12 @@ uint32 ItemTemplate::GetArmor() const
     return uint32(floor(iaq->Value[Quality] * iatMult * alMult + 0.5f));
 }
 
-float ItemTemplate::getDPS() const
+ItemDamageEntry const * ItemTemplate::FindItemDamageEntry() const
 {
-    float damage = 0.0f;
-
     if (Class == ITEM_CLASS_WEAPON)
     {
         if (Quality >= ITEM_QUALITY_HEIRLOOM)                // heirlooms have it's own dbc...
-            return damage;
+            return NULL;
 
         ItemDamageEntry const* id = NULL;
 
@@ -353,13 +351,11 @@ float ItemTemplate::getDPS() const
                 break;
         }
 
-        if (!id)
-            return damage;
-
-        return id->Value[Quality];
+        if (id)
+            return id;
     }
 
-    return damage;
+    return NULL;
 }
 
 Item::Item()
@@ -598,6 +594,15 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
     }
 
     return true;
+}
+
+float ItemTemplate::getDPS() const
+{
+    ItemDamageEntry const* id = FindItemDamageEntry();
+    if (id)
+        return id->Value[Quality];
+
+    return 0.0f;
 }
 
 /*static*/

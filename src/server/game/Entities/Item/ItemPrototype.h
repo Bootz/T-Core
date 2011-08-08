@@ -732,6 +732,7 @@ struct ItemTemplate
     }
 
     uint32 GetArmor() const;
+    ItemDamageEntry const* FindItemDamageEntry() const;
     float GetMinDamage() const { return floor(getDPS() * float(Delay) / 1000.0f * 0.8f + 0.5f); }
     float GetMaxDamage() const { return floor(getDPS() * float(Delay) / 1000.0f * 1.2f + 0.5f); }
 
