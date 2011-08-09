@@ -20,6 +20,7 @@ TODO-List for TrilliumEMU Developer #
 12. Fix The New Power System
 13. Fix Damage
 14. Fix Player Createhelth (my hunter lvl 85 nonequip has 265k life)
+15. Need to revise HoR now WIP
 
 // Database Developer:
 1. Fixed all startup errors.
