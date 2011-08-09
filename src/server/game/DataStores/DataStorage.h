@@ -187,6 +187,7 @@ extern DataStorage <SpellTotemsEntry>             sSpellTotemsStore;
 extern DataStorage <SummonPropertiesEntry>        sSummonPropertiesStore;
 extern DataStorage <TalentEntry>                  sTalentStore;
 extern DataStorage <TalentTabEntry>               sTalentTabStore;
+extern DataStorage <TalentTreePrimarySpells>      sTalentTreePrimarySpells;
 extern DataStorage <TaxiNodesEntry>               sTaxiNodesStore;
 extern DataStorage <TaxiPathEntry>                sTaxiPathStore;
 extern TaxiMask                                  sTaxiNodesMask;

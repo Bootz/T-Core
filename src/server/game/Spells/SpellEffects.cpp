@@ -431,10 +431,13 @@ void Spell::SpellDamageSchoolDmg(SpellEffectEntry const* effect)
                         damage = unitTarget->CountPctFromMaxHealth(50);
                         break;
                     }
-                    // Tympanic Tantrum
-                    case 62775:
+                    case 29142: // Eyesore Blaster
+                    case 35139: // Throw Boom's Doom
+                    case 55269: // Deathly Stare
+                    case 56578: // Rapid-Fire Harpoon
+                    case 62775: // Tympanic Tantrum
                     {
-                        damage = unitTarget->CountPctFromMaxHealth(10);
+                        damage = unitTarget->CountPctFromMaxHealth(damage);
                         break;
                     }
                     // Gargoyle Strike
@@ -724,7 +727,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffectEntry const* effect)
         m_damage += damage;
 
         // Start combat. Needed since new cata systems
-        m_originalCaster->CombatStart(unitTarget, true);
+        //m_originalCaster->CombatStart(unitTarget, true);
     }
 }
 
@@ -1732,7 +1735,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
                 // remove all harmful spells on you...
                 SpellInfo const* spell = iter->second->GetBase()->GetSpellInfo();
                 if ((spell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC // only affect magic spells
-                    || ((1<<spell->Dispel) & dispelMask))
+                    || ((spell->GetDispelMask()) & dispelMask))
                     // ignore positive and passive auras
                     && !iter->second->IsPositive() && !iter->second->GetBase()->IsPassive())
                 {
@@ -2063,7 +2066,7 @@ void Spell::EffectUnlearnSpecialization(SpellEffectEntry const* effect)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    Player *_player = (Player*)unitTarget;
+    Player* _player = unitTarget->ToPlayer();
     uint32 spellToUnlearn = effect->EffectTriggerSpell;
 
     _player->removeSpell(spellToUnlearn);
@@ -2489,11 +2492,9 @@ void Spell::EffectPersistentAA(SpellEffectEntry const* effect)
 {
     if (!m_spellAura)
     {
-        float radius = m_spellInfo->Effects[effect->EffectIndex].CalcRadius(m_caster);
-        if (Player* modOwner = m_originalCaster->GetSpellModOwner())
-            modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RADIUS, radius);
-
         Unit* caster = m_caster->GetEntry() == WORLD_TRIGGER ? m_originalCaster : m_caster;
+        float radius = m_spellInfo->Effects[effect->EffectIndex].CalcRadius(caster);
+
         // Caster not in world, might be spell triggered from aura removal
         if (!caster->IsInWorld())
             return;
@@ -3007,7 +3008,7 @@ void Spell::EffectSummonType(SpellEffectEntry const* effect)
                     summon->SelectLevel(summon->GetCreatureInfo());       // some summoned creaters have different from 1 DB data for level/hp
                     summon->SetUInt32Value(UNIT_NPC_FLAGS, summon->GetCreatureInfo()->npcflag);
 
-                    summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE | UNIT_FLAG_PASSIVE);
 
                     summon->AI()->EnterEvadeMode();
                     break;
@@ -3132,7 +3133,7 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
         if (aura->IsPassive())
             continue;
 
-        if ((1<<aura->GetSpellInfo()->Dispel) & dispelMask)
+        if ((aura->GetSpellInfo()->GetDispelMask()) & dispelMask)
         {
             if (aura->GetSpellInfo()->Dispel == DISPEL_MAGIC)
             {
@@ -5871,6 +5872,10 @@ void Spell::EffectReputation(SpellEffectEntry const* effect)
         rep_change = int32((float)rep_change * repData->spell_rate);
     }
 
+    // Bonus from spells that increase reputation gain
+    float bonus = rep_change * _player->GetTotalAuraModifier(SPELL_AURA_MOD_REPUTATION_GAIN) / 100.0; // 10%
+    rep_change += (int32)bonus;
+
     _player->GetReputationMgr().ModifyReputation(factionEntry, rep_change);
 }
 
@@ -6512,7 +6517,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffectEntry const* effect)
         if (!aurApp)
             continue;
 
-        if ((1<<aura->GetSpellInfo()->Dispel) & dispelMask)
+        if ((aura->GetSpellInfo()->GetDispelMask()) & dispelMask)
         {
             // Need check for passive? this
             if (!aurApp->IsPositive() || aura->IsPassive() || aura->GetSpellInfo()->AttributesEx4 & SPELL_ATTR4_NOT_STEALABLE)

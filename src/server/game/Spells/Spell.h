@@ -459,7 +459,6 @@ class Spell
         void HandleThreatSpells();
 
         SpellInfo const* const m_spellInfo;
-        SpellInterruptsEntry const* m_spellInterrupts;
         Item* m_CastItem;
         uint64 m_castItemGUID;
         uint8 m_cast_count;

@@ -1,1 +1,0 @@
-INSERT INTO game_tele (id, position_x, position_y, position_z, orientation, map, name) VALUES (1726, -541.213, 317.15, 115.495, 5.89406, 720, "FirelandsRaid");

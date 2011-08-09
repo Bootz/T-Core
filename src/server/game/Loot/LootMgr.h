@@ -405,7 +405,7 @@ inline void LoadLootTables()
     LoadLootTemplates_Skinning();
     LoadLootTemplates_Disenchant();
     LoadLootTemplates_Prospecting();
-    //LoadLootTemplates_Spell();
+    LoadLootTemplates_Spell();
 
     LoadLootTemplates_Reference();
 }

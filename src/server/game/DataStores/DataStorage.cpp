@@ -198,6 +198,7 @@ DataStorage <SummonPropertiesEntry> sSummonPropertiesStore(SummonPropertiesfmt);
 DataStorage <TalentEntry> sTalentStore(TalentEntryfmt);
 TalentSpellPosMap sTalentSpellPosMap;
 DataStorage <TalentTabEntry> sTalentTabStore(TalentTabEntryfmt);
+DataStorage <TalentTreePrimarySpells> sTalentTreePrimarySpells(TalentTreeSpellsfmt);
 
 // store absolute bit position for first rank for talent inspect
 static uint32 sTalentTabPages[MAX_CLASSES][3];
@@ -404,7 +405,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sItemSetStore,                storagesPath, "ItemSet.dbc");
 
     /*########################################################################################################################
-    ###################################         Weapon and other Damages      ################################################
+    ###################################           Weapon and Armor            ################################################
     ########################################################################################################################*/
 
     LoadData(availableDbcLocales, bad_dbc_files,sItemArmorQualityStore,           storagesPath,"ItemArmorQuality.dbc");
@@ -418,6 +419,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files,sItemDamageTwoHandStore,          storagesPath,"ItemDamageTwoHand.dbc");
     LoadData(availableDbcLocales, bad_dbc_files,sItemDamageTwoHandCasterStore,    storagesPath,"ItemDamageTwoHandCaster.dbc");
     LoadData(availableDbcLocales, bad_dbc_files,sItemDamageWandStore,             storagesPath,"ItemDamageWand.dbc");
+
 
     LoadData(availableDbcLocales, bad_dbc_files, sLFGDungeonStore,             storagesPath, "LFGDungeons.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sLockStore,                   storagesPath, "Lock.dbc");
@@ -530,8 +532,6 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,        storagesPath, "SpellShapeshiftForm.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSummonPropertiesStore,       storagesPath, "SummonProperties.dbc");
 
-    LoadData(availableDbcLocales, bad_dbc_files, sTalentStore,                 storagesPath, "Talent.dbc");
-
     // Create Spelldifficulty searcher
     for (uint32 i = 0; i < sSpellDifficultyStore.GetNumRows(); ++i)
     {
@@ -569,7 +569,9 @@ void LoadDataStorages(const std::string& dataPath)
                 sTalentSpellPosMap[talentInfo->RankID[j]] = TalentSpellPos(i, j);
     }
 
+    LoadData(availableDbcLocales, bad_dbc_files, sTalentStore,                 storagesPath, "Talent.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sTalentTabStore,              storagesPath, "TalentTab.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sTalentTreePrimarySpells,     storagesPath, "TalentTreePrimarySpells.dbc");
 
     // prepare fast data access to bit pos of talent ranks for use at inspecting
     {
@@ -588,7 +590,7 @@ void LoadDataStorages(const std::string& dataPath)
             uint32 cls = 1;
             for (uint32 m=1; !(m & talentTabInfo->ClassMask) && cls < MAX_CLASSES; m <<= 1, ++cls) {}
 
-            sTalentTabPages[cls][talentTabInfo->tabpage]=talentTabId;
+            sTalentTabPages[cls][talentTabInfo->tabpage] = talentTabId;
         }
     }
 
@@ -745,10 +747,10 @@ char const* GetPetName(uint32 petfamily, uint32 dbclang)
 {
     if (!petfamily)
         return NULL;
-    CreatureFamilyEntry const *pet_family = sCreatureFamilyStore.LookupEntry(petfamily);
+    CreatureFamilyEntry const* pet_family = sCreatureFamilyStore.LookupEntry(petfamily);
     if (!pet_family)
         return NULL;
-    return pet_family->Name[dbclang]?pet_family->Name[dbclang]:NULL;
+    return pet_family->Name[dbclang] ? pet_family->Name[dbclang] : NULL;
 }
 
 TalentSpellPos const* GetTalentSpellPos(uint32 spellId)

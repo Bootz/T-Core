@@ -1,1 +1,0 @@
-ALTER TABLE `npc_trainer` DROP `KillCredit`;

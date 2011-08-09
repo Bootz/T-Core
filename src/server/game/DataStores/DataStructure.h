@@ -2108,6 +2108,14 @@ struct TalentTabEntry
     //uint32 spellIds[2];                                   // 9-10 passive mastery bonus spells?
 };
 
+struct TalentTreePrimarySpells
+{
+    uint32 ID;          // 0
+    uint32 TalentTab;   // 1
+    uint32 Spell;       // 2
+    //uint32 unk;       // 3    useless and unused (Instant 0)
+};
+
 struct TaxiNodesEntry
 {
     uint32    ID;                                           // 0        m_ID

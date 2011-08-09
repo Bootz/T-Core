@@ -114,7 +114,7 @@ class _SpellScript
         virtual void Register() = 0;
         // Function called on server startup, if returns false script won't be used in core
         // use for: dbc/template data presence/correctness checks
-        virtual bool Validate(SpellInfo const* /*SpellInfo*/) { return true; }
+        virtual bool Validate(SpellInfo const* /*spellEntry*/) { return true; }
         // Function called when script is created, if returns false script will be unloaded afterwards
         // use for: initializing local script variables (DO NOT USE CONSTRUCTOR FOR THIS PURPOSE!)
         virtual bool Load() { return true; }
@@ -323,6 +323,9 @@ class SpellScript : public _SpellScript
 
         // Creates item. Calls Spell::DoCreateItem method.
         void CreateItem(uint32 effIndex, uint32 itemId);
+
+        // Returns SpellInfo from the spell that triggered the current one
+        SpellInfo const* GetTriggeringSpell();
 
         // finishes spellcast prematurely with selected error message
         void FinishCast(SpellCastResult result);

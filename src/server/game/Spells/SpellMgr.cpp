@@ -808,7 +808,7 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const* spellPr
             // spellFamilyName is Ok need check for spellFamilyMask if present
             if (spellProcEvent->spellFamilyMask)
             {
-                if ((spellProcEvent->spellFamilyMask & procSpell->SpellFamilyFlags) == 0)
+                if (!(spellProcEvent->spellFamilyMask & procSpell->SpellFamilyFlags))
                     return false;
                 hasFamilyMask = true;
                 // Some spells are not considered as active even with have spellfamilyflags
@@ -1770,8 +1770,8 @@ void SpellMgr::LoadSpellProcs()
             spellId = -spellId;
         }
 
-        SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(spellId);
-        if (!SpellInfo)
+        SpellInfo const* spellEntry = GetSpellInfo(spellId);
+        if (!spellEntry)
         {
             sLog->outErrorDb("Spell %u listed in `spell_proc` does not exist", spellId);
             continue;
@@ -1815,11 +1815,11 @@ void SpellMgr::LoadSpellProcs()
 
             // take defaults from dbcs
             if (!procEntry.typeMask)
-                procEntry.typeMask = SpellInfo->ProcFlags;
+                procEntry.typeMask = spellEntry->ProcFlags;
             if (!procEntry.charges)
-                procEntry.charges = SpellInfo->ProcCharges;
+                procEntry.charges = spellEntry->ProcCharges;
             if (!procEntry.chance && !procEntry.ratePerMinute)
-                procEntry.chance = float(SpellInfo->ProcChance);
+                procEntry.chance = float(spellEntry->ProcChance);
 
             // validate data
             if (procEntry.schoolMask & ~SPELL_SCHOOL_MASK_ALL)
@@ -1869,8 +1869,8 @@ void SpellMgr::LoadSpellProcs()
 
             if (allRanks)
             {
-                spellId = sSpellMgr->GetNextSpellInChain(spellId);
-                SpellInfo = sSpellMgr->GetSpellInfo(spellId);
+                spellId = GetNextSpellInChain(spellId);
+                spellEntry = GetSpellInfo(spellId);
             }
             else
                 break;
@@ -2334,15 +2334,15 @@ void SpellMgr::LoadPetDefaultSpells()
     // different summon spells
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
     {
-        SpellInfo const* SpellInfo = sSpellMgr->GetSpellInfo(i);
-        if (!SpellInfo)
+        SpellInfo const* spellEntry = GetSpellInfo(i);
+        if (!spellEntry)
             continue;
 
         for (uint8 k = 0; k < MAX_SPELL_EFFECTS; ++k)
         {
-            if (SpellInfo->Effects[k].Effect == SPELL_EFFECT_SUMMON || SpellInfo->Effects[k].Effect == SPELL_EFFECT_SUMMON_PET)
+            if (spellEntry->Effects[k].Effect == SPELL_EFFECT_SUMMON || spellEntry->Effects[k].Effect == SPELL_EFFECT_SUMMON_PET)
             {
-                uint32 creature_id = SpellInfo->Effects[k].MiscValue;
+                uint32 creature_id = spellEntry->Effects[k].MiscValue;
                 CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(creature_id);
                 if (!cInfo)
                     continue;
@@ -3312,6 +3312,12 @@ void SpellMgr::LoadDbcDataCorrections()
         case 72674: // Mutated Strength (Professor Putricide)
         case 72675: // Mutated Strength (Professor Putricide)
             spellEffect->Effect = 0;
+            break;
+        case 72454: // Mutated Plague (Professor Putricide)
+        case 72464: // Mutated Plague (Professor Putricide)
+        case 72506: // Mutated Plague (Professor Putricide)
+        case 72507: // Mutated Plague (Professor Putricide)
+            spellEffect->EffectRadiusIndex = 28;   // 50000yd
             break;
         case 70911: // Unbound Plague (Professor Putricide)
         case 72854: // Unbound Plague (Professor Putricide)

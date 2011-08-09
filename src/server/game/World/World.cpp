@@ -405,7 +405,7 @@ void World::LoadConfigSettings(bool reload)
 
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerAmountLimit(sConfig->GetIntDefault("PlayerLimit", 100));
-    SetMotd(sConfig->GetStringDefault("Motd", "Welcome to a Singularity Core Server."));
+    SetMotd(sConfig->GetStringDefault("Motd", "Welcome to a Trillium Server."));
 
     ///- Read ticket system setting from the config file
     m_bool_configs[CONFIG_ALLOW_TICKETS] = sConfig->GetBoolDefault("AllowTickets", true);
@@ -1461,7 +1461,7 @@ void World::SetInitialWorldSettings()
     sSpellMgr->LoadEnchantCustomAttr();
 
     sLog->outString("Loading linked spells...");
-    //sSpellMgr->LoadSpellLinked();
+    sSpellMgr->LoadSpellLinked();
 
     sLog->outString("Loading Player Create Data...");
     sObjectMgr->LoadPlayerInfo();
@@ -2048,7 +2048,7 @@ namespace Trillium
             explicit WorldWorldTextBuilder(int32 textId, va_list* args = NULL) : i_textId(textId), i_args(args) {}
             void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
             {
-                char const* text = sObjectMgr->GetTrilliumString(i_textId, loc_idx);
+                const char* text = sObjectMgr->GetTrilliumString(i_textId, loc_idx);
 
                 if (i_args)
                 {

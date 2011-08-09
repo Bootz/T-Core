@@ -1622,6 +1622,9 @@ bool Battleground::AddSpiritGuide(uint32 type, float x, float y, float z, float 
 
 void Battleground::SendMessageToAll(int32 entry, ChatMsg type, Player const* source)
 {
+    if (!entry)
+        return;
+
     Trillium::BattlegroundChatBuilder bg_builder(type, entry, source);
     Trillium::LocalizedPacketDo<Trillium::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);

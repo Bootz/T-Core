@@ -299,14 +299,12 @@ uint32 ItemTemplate::GetArmor() const
     return uint32(floor(iaq->Value[Quality] * iatMult * alMult + 0.5f));
 }
 
-float ItemTemplate::getDPS() const
+ItemDamageEntry const * ItemTemplate::FindItemDamageEntry() const
 {
-    float damage = 0.0f;
-
     if (Class == ITEM_CLASS_WEAPON)
     {
         if (Quality >= ITEM_QUALITY_HEIRLOOM)                // heirlooms have it's own dbc...
-            return damage;
+            return NULL;
 
         ItemDamageEntry const* id = NULL;
 
@@ -353,13 +351,11 @@ float ItemTemplate::getDPS() const
                 break;
         }
 
-        if (!id)
-            return damage;
-
-        return id->Value[Quality];
+        if (id)
+            return id;
     }
 
-    return damage;
+    return NULL;
 }
 
 Item::Item()
@@ -598,6 +594,15 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
     }
 
     return true;
+}
+
+float ItemTemplate::getDPS() const
+{
+    ItemDamageEntry const* id = FindItemDamageEntry();
+    if (id)
+        return id->Value[Quality];
+
+    return 0.0f;
 }
 
 /*static*/
@@ -925,12 +930,12 @@ uint32 Item::GetEnchantRequiredLevel() const
 
   uint32 level = 0;
 
-  //// Check all enchants for required level
-  //for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
-  //  if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
-  //    if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
-  //  if (enchantEntry->requiredLevel > level)
-  //    level = enchantEntry->requiredLevel;
+  // Check all enchants for required level
+  for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
+    if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
+      if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
+    if (enchantEntry->requiredLevel > level)
+      level = enchantEntry->requiredLevel;
 
   return level;
 }
@@ -1259,12 +1264,13 @@ void Item::SaveRefundDataToDB()
     CharacterDatabase.CommitTransaction(trans);
 }
 
-void Item::DeleteRefundDataFromDB()
+void Item::DeleteRefundDataFromDB(SQLTransaction* trans)
 {
-    CharacterDatabase.PExecute("DELETE FROM item_refund_instance WHERE item_guid = '%u'", GetGUIDLow());
+    if (trans && !trans->null())
+        (*trans)->PAppend("DELETE FROM item_refund_instance WHERE item_guid = '%u'", GetGUIDLow());
 }
 
-void Item::SetNotRefundable(Player *owner, bool changestate)
+void Item::SetNotRefundable(Player *owner, bool changestate /*=true*/, SQLTransaction* trans /*=NULL*/)
 {
     if (!HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_REFUNDABLE))
         return;
@@ -1273,11 +1279,11 @@ void Item::SetNotRefundable(Player *owner, bool changestate)
     // Following is not applicable in the trading procedure
     if (changestate)
         SetState(ITEM_CHANGED, owner);
-
+     
     SetRefundRecipient(0);
     SetPaidMoney(0);
     SetPaidExtendedCost(0);
-    DeleteRefundDataFromDB();
+    DeleteRefundDataFromDB(trans);
 
     owner->DeleteRefundReference(GetGUIDLow());
 }

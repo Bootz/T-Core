@@ -29,6 +29,7 @@
 #include "ScriptMgr.h"
 #include "CreatureAI.h"
 #include "ZoneScript.h"
+#include "SpellMgr.h"
 #include "SpellInfo.h"
 
 Vehicle::Vehicle(Unit* unit, VehicleEntry const* vehInfo, uint32 creatureEntry) : _me(unit), _vehicleInfo(vehInfo), _usableSeatNum(0), _creatureEntry(creatureEntry)
