@@ -290,7 +290,7 @@ void WorldSession::HandleCharEnum(QueryResult result)
         do
         {
             uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.",guidlow,GetAccountId());
+            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
             Player::BuildEnumData(result, &data);
         }
         while (result->NextRow());

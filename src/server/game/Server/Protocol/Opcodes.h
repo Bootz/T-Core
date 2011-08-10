@@ -53,7 +53,7 @@ enum Opcodes
     CMSG_CHAR_CREATE                                 = 0x02A22, // 4.2.0:14333
     CMSG_CHAR_ENUM                                   = 0x01091, // 14333
     CMSG_CHAR_DELETE                                 = 0x06E32, // 14333
-    SMSG_CHAR_CREATE                                 = 0x03EFA, // 14333
+    SMSG_CHAR_CREATE                                 = 0x03E36, // 4.2.0:14333
     SMSG_CHAR_ENUM                                   = 0x0C727, // 14333
     SMSG_CHAR_DELETE                                 = 0x03E36, // 14333
     CMSG_PLAYER_LOGIN                                = 0x010D1, // 14333
