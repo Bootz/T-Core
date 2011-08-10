@@ -504,9 +504,9 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellCooldownsStore,      storagesPath,"SpellCooldowns.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellEffectStore,         storagesPath,"SpellEffect.dbc");
 
-    for(uint32 i = 1; i < sSpellEffectStore.GetNumRows(); ++i)
+    for (uint32 i = 1; i < sSpellEffectStore.GetNumRows(); ++i)
     {
-        if(SpellEffectEntry const *spellEffect = sSpellEffectStore.LookupEntry(i))
+        if (SpellEffectEntry const *spellEffect = sSpellEffectStore.LookupEntry(i))
             sSpellEffectMap[spellEffect->EffectSpellId].effects[spellEffect->EffectIndex] = spellEffect;
     }
  
@@ -515,6 +515,12 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellLevelsStore,         storagesPath,"SpellLevels.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellPowerStore,          storagesPath,"SpellPower.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellReagentsStore,       storagesPath,"SpellReagents.dbc");
+
+    //for (uint32 i = 1; i < sSpellReagentsStore.GetNumRows(); ++i)
+    //{
+    //    if (SpellReagentsEntry const *spellReagent = sSpellReagentsStore.LookupEntry(i))
+    //        sSpellReagentMap[spellReagent->Id].reagents[spellEffect->EffectIndex] = spellReagent;
+    //}
     LoadData(availableDbcLocales, bad_dbc_files, sSpellScalingStore,        storagesPath,"SpellScaling.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,     storagesPath,"SpellShapeshift.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellTargetRestrictionsStore, storagesPath,"SpellTargetRestrictions.dbc");
@@ -765,7 +771,7 @@ TalentSpellPos const* GetTalentSpellPos(uint32 spellId)
 SpellEffectEntry const* GetSpellEffectEntry(uint32 spellId, uint32 effect)
 {
     SpellEffectMap::const_iterator itr = sSpellEffectMap.find(spellId);
-    if(itr == sSpellEffectMap.end())
+    if (itr == sSpellEffectMap.end())
         return NULL;
 
     return itr->second.effects[effect];

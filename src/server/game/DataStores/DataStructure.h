@@ -1747,23 +1747,6 @@ struct SpellReagentsEntry
     uint32    ReagentCount[MAX_SPELL_REAGENTS];             // 3         m_reagentCount
 };
 
-struct SpellReagent
-{
-    SpellReagent()
-    {
-        reagents[0] = NULL;
-        reagents[1] = NULL;
-        reagents[2] = NULL;
-        reagents[3] = NULL;
-        reagents[4] = NULL;
-        reagents[5] = NULL;
-        reagents[6] = NULL;
-        reagents[7] = NULL;
-    }
-    SpellReagentsEntry const* reagents[MAX_SPELL_REAGENTS];
-};
-typedef std::map<uint32, SpellReagent> SpellReagentMap;
-
 // SpellScaling.dbc
 struct SpellScalingEntry
 {
@@ -2396,10 +2379,27 @@ struct SpellEffect
         effects[1] = NULL;
         effects[2] = NULL;
     }
-    SpellEffectEntry const* effects[3];
+    SpellEffectEntry const* effects[MAX_SPELL_EFFECTS];
 };
 
 typedef std::map<uint32, SpellEffect> SpellEffectMap;
+
+struct SpellReagent
+{
+    SpellReagent()
+    {
+        reagents[0] = NULL;
+        reagents[1] = NULL;
+        reagents[2] = NULL;
+        reagents[3] = NULL;
+        reagents[4] = NULL;
+        reagents[5] = NULL;
+        reagents[6] = NULL;
+        reagents[7] = NULL;
+    }
+    SpellReagentsEntry const* reagents[MAX_SPELL_REAGENTS];
+};
+typedef std::map<uint32, SpellReagent> SpellReagentMap;
 
 struct TaxiPathBySourceAndDestination
 {
