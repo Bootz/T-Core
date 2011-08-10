@@ -188,7 +188,7 @@ public:
     static bool HandleAccountOnlineListCommand(ChatHandler* handler, const char* /*args*/)
     {
         ///- Get the list of accounts ID logged to the realm
-        QueryResult resultDB = CharacterDatabase.Query("SELECT name, account, map, zone FROM characters WHERE online > 0");
+        QueryResult resultDB = CharacterDatabase.PQuery("SELECT name, account, map, zone FROM characters WHERE online = %d", realmID);
         if (!resultDB)
         {
             handler->SendSysMessage(LANG_ACCOUNT_LIST_EMPTY);
