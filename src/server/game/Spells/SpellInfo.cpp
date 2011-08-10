@@ -550,10 +550,8 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
         SpellVisual[i] = spellEntry->SpellVisual[i];
     SpellIconID = spellEntry->SpellIconID;
     ActiveIconID = spellEntry->activeIconID;
-    for (uint8 i = 0; i < 16; ++i)
-        SpellName = spellEntry->SpellName;
-    for (uint8 i = 0; i < 16; ++i)
-        Rank = spellEntry->Rank;
+    SpellName = spellEntry->SpellName;
+    Rank = spellEntry->Rank;
     MaxAffectedTargets = spellEntry->GetMaxAffectedTargets();
     SpellFamilyName = spellEntry->GetSpellFamilyName();
     SpellFamilyFlags = spellEntry->GetSpellFamilyFlags();

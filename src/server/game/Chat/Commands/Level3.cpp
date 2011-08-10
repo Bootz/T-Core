@@ -1009,26 +1009,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
         if (spellInfo)
         {
             int loc = GetSessionDbcLocale();
-            std::string name = spellInfo->SpellName[loc];
-            if (name.empty())
-                continue;
-
-            if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = spellInfo->SpellName[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+            DBCString name = spellInfo->SpellName;
 
             if (loc < TOTAL_LOCALES)
             {
