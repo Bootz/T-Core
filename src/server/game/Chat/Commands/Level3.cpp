@@ -1000,7 +1000,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
 
     bool found = false;
     uint32 count = 0;
-    uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+    uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS) ? sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS) : 100;
 
     // Search in Spell.dbc
     for (uint32 id = 0; id < sSpellMgr->GetSpellInfoStoreSize(); id++)

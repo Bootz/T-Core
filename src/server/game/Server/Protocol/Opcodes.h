@@ -427,7 +427,7 @@ enum Opcodes
     SMSG_QUESTGIVER_QUEST_FAILED                     = 0x0E6FE, // 14480
     CMSG_QUESTLOG_SWAP_QUEST                         = 0x100B5, //
     CMSG_QUESTLOG_REMOVE_QUEST                       = 0x03A3F, // 4.2.0:14480
-    SMSG_QUESTLOG_FULL                               = 0x0726F, // 14480
+    SMSG_QUESTLOG_FULL                               = 0x100B6, //
     SMSG_QUESTUPDATE_FAILED                          = 0x0EAB7, // 14480
     SMSG_QUESTUPDATE_FAILEDTIMER                     = 0x0BAF7, // 14480
     SMSG_QUESTUPDATE_COMPLETE                        = 0x03A73, // 14480
@@ -443,8 +443,8 @@ enum Opcodes
     CMSG_BUY_ITEM                                    = 0x0626A, // 4.2.0:14480
     SMSG_BUY_ITEM                                    = 0x100B9, //
     SMSG_BUY_FAILED                                  = 0x100BA, //
-    CMSG_TAXICLEARALLNODES                           = 0x100BB, // Never used
-    CMSG_TAXIENABLEALLNODES                          = 0x100BC, // Never used
+    CMSG_TAXICLEARALLNODES                           = 0x100BB, // Unused
+    CMSG_TAXIENABLEALLNODES                          = 0x100BC, // Unused
     CMSG_TAXISHOWNODES                               = 0x0AA77, // 14480
     SMSG_SHOWTAXINODES                               = 0x0AA7F, // 14480
     CMSG_TAXINODE_STATUS_QUERY                       = 0x06622, // 4.2.0:14480
@@ -1026,7 +1026,7 @@ enum Opcodes
     SMSG_USERLIST_REMOVE                             = 0x0E2E6, // 14480
     SMSG_USERLIST_UPDATE                             = 0x0BAE7, // 14480
     CMSG_CLEAR_CHANNEL_WATCH                         = 0x03EA2, // 14480
-    SMSG_INSPECT_TALENT                              = 0x101E1, //
+    SMSG_INSPECT_TALENT                              = 0x0EAF7, // 4.2.0:14480
     SMSG_GOGOGO_OBSOLETE                             = 0x101E2, //
     SMSG_ECHO_PARTY_SQUELCH                          = 0x101E3, //
     CMSG_SET_TITLE_SUFFIX                            = 0x101E4, //

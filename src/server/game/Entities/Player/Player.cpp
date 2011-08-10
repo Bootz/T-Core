@@ -14132,7 +14132,9 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
         return;
 
     int32 cost = int32(item->BoxMoney);
-    if (!HasEnoughMoney(cost))
+    int32 dualSpecCost = 100000;
+    bool dualSpec = false;
+    if (!HasEnoughMoney(cost) || !HasEnoughMoney(dualSpecCost))
     {
         SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
         PlayerTalkClass->SendCloseGossip();
@@ -14178,6 +14180,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
         case GOSSIP_OPTION_LEARNDUALSPEC:
             if (GetSpecsCount() == 1 && getLevel() >= sWorld->getIntConfig(CONFIG_MIN_DUALSPEC_LEVEL))
             {
+                dualSpec = true; // Use for Money modify
                 // Cast spells that teach dual spec
                 // Both are also ImplicitTarget self and must be cast by player
                 CastSpell(this, 63680, true, NULL, NULL, GetGUID());
@@ -14235,7 +14238,12 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
         }
     }
 
-    ModifyMoney(-cost);
+    if (dualSpec)
+    {
+        ModifyMoney(-dualSpecCost);
+    }
+    else
+        ModifyMoney(-cost);
 }
 
 uint32 Player::GetGossipTextId(WorldObject* source)
