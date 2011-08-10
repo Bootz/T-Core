@@ -3101,12 +3101,8 @@ void Player::InitTalentForLevel()
     // talents base at level diff (talents = level - 9 but some can be used already)
     if (level < 10)
     {
-        // Remove all talent points
-        if (m_usedTalentCount > 0)                           // Free any used talents
-        {
             resetTalents(true);
             SetFreeTalentPoints(0);
-        }
     }
     else
     {
@@ -4396,18 +4392,6 @@ bool Player::resetTalents(bool no_cost)
         }
     }
 
-    RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
-
-    for (uint32 j = 0; j < sTalentTreePrimarySpells.GetNumRows(); ++j)
-    {
-        TalentTreePrimarySpells const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(j);
-		
-        if (talentTreeInfo->TalentTab != TalentBranchSpec(m_activeSpec) || !talentTreeInfo)
-            continue;
-		
-        removeSpell(talentTreeInfo->Spell, true);
-    }
-
     for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
     {
         TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
@@ -4443,6 +4427,20 @@ bool Player::resetTalents(bool no_cost)
         }
     }
 
+    RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
+
+    for (uint32 j = 0; j < sTalentTreePrimarySpells.GetNumRows(); ++j)
+    {
+        TalentTreePrimarySpells const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(j);
+		
+        if (talentTreeInfo->TalentTab != TalentBranchSpec(m_activeSpec) || !talentTreeInfo)
+            continue;
+		
+        removeSpell(talentTreeInfo->Spell, true);
+    }
+
+    m_branchSpec[m_activeSpec] = 0;
+
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     _SaveTalents(trans);
     _SaveSpells(trans);
@@ -4460,15 +4458,6 @@ bool Player::resetTalents(bool no_cost)
         m_resetTalentsCost = cost;
         m_resetTalentsTime = time(NULL);
     }
-
-    /* when prev line will dropped use next line
-    if (Pet* pet = GetPet())
-    {
-        if (pet->getPetType() == HUNTER_PET && !pet->GetCreatureInfo()->isTameable(CanTameExoticPets()))
-            RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
-    }
-    */
-
     return true;
 }
 
