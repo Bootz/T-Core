@@ -50,12 +50,12 @@ enum Opcodes
     SMSG_PETGODMODE                                  = 0x072FA, // 14480
     SMSG_GODMODE                                     = 0x076E7, // 14480
     SMSG_DESTRUCTIBLE_BUILDING_DAMAGE                = 0x0BA6E, // 14480
-    CMSG_CHAR_CREATE                                 = 0x02A22, // 4.2.0:14480
-    CMSG_CHAR_ENUM                                   = 0x01091, // 14480
-    CMSG_CHAR_DELETE                                 = 0x06E32, // 14480
-    SMSG_CHAR_CREATE                                 = 0x03E36, // 4.2.0:14480
-    SMSG_CHAR_ENUM                                   = 0x0C727, // 14480
-    SMSG_CHAR_DELETE                                 = 0x03E36, // 14480
+    CMSG_CHAR_CREATE                                 = 0x02A22, // 4.2.0a:14480
+    CMSG_CHAR_ENUM                                   = 0x01091, // 4.2.0a:14480
+    CMSG_CHAR_DELETE                                 = 0x06E32, // 4.2.0a:14480
+    SMSG_CHAR_CREATE                                 = 0x03E36, // 4.2.0a:14480
+    SMSG_CHAR_ENUM                                   = 0x0C727, // 4.2.0a:14480
+    SMSG_CHAR_DELETE                                 = 0x03EFA, // 14480
     CMSG_PLAYER_LOGIN                                = 0x010D1, // 14480
     SMSG_NEW_WORLD                                   = 0x00F01, // 14480
     SMSG_TRANSFER_PENDING                            = 0x026EA, // 14480
@@ -1316,7 +1316,6 @@ enum Opcodes
     SMSG_CUF_PROFILES_LOAD                           = 0x0CF23, // 14480
     CMSG_REQUEST_CEMETERY_LIST                       = 0x098E8, // 14480
     SMSG_REQUEST_CEMETERY_LIST_RESPONSE              = 0x09701, // 14480
-
 };
 
 /// Player state
