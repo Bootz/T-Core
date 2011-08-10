@@ -1247,7 +1247,7 @@ void World::SetInitialWorldSettings()
     ///- Load the DBC files
     sLog->outString("Initialize data stores...");
     LoadDataStorages(m_dataPath);
-    //DetectDBCLang();
+    DetectDBCLang();
 
     sLog->outString("Loading spell dbc data corrections...");
     sSpellMgr->LoadDbcDataCorrections();
@@ -1746,9 +1746,9 @@ void World::DetectDBCLang()
     std::string availableLocalsStr;
 
     uint8 default_locale = TOTAL_LOCALES;
-    for (uint8 i = default_locale-1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
+    for (uint8 i = default_locale - 1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
     {
-        if (strlen(race->name[i]) > 0)                     // check by race names
+        if ((race->name) > 0)                     // check by race names
         {
             default_locale = i;
             m_availableDbcLocaleMask |= (1 << i);
