@@ -798,8 +798,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
         for (uint8 g = 0; g < MAX_GLYPH_SLOT_INDEX; ++g)
             m_Glyphs[i][g] = 0;
 
-        m_branchSpec[i] = 0;
         m_talents[i] = new PlayerTalentMap();
+        m_branchSpec[i] = 0;
     }
 
     for (uint8 i = 0; i < BASEMOD_END; ++i)
@@ -14895,9 +14895,6 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_QUEST_REWARD, uint32(moneyRew));
     }
 
-    // honor reward
-    if (uint32 honor = pQuest->CalculateHonorGain(getLevel()))
-        RewardHonor(NULL, 0, honor);
 
     // title reward
     if (pQuest->GetCharTitleId())
@@ -24332,9 +24329,11 @@ void Player::ActivateSpec(uint8 spec)
     _SaveActions(trans);
     CharacterDatabase.CommitTransaction(trans);
 
+    UnsummonPetTemporaryIfAny();
+
     // TO-DO: We need more research to know what happens with warlock's reagent
     if (Pet* pet = GetPet())
-        RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
+        RemovePet(pet, PET_SAVE_NOT_IN_SLOT, true);
 
     ClearComboPointHolders();
     ClearAllReactives();
@@ -24384,15 +24383,15 @@ void Player::ActivateSpec(uint8 spec)
             //    plrTalent->second->state = PLAYERSPELL_REMOVED;
         }
     }
-
-    for (uint32 h = 0; h < sTalentTreePrimarySpells.GetNumRows(); ++h)
+    
+    for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
-        TalentTreePrimarySpells const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(h);
-		
-        if (!talentTreeInfo || talentTreeInfo->TalentTab != TalentBranchSpec(m_activeSpec))
+        TalentTreePrimarySpells const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
+        
+        if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(m_activeSpec))
             continue;
-		
-        removeSpell(talentTreeInfo->Spell, true);
+        
+        removeSpell(talentInfo->Spell, true);
     }
 
     // set glyphs
@@ -24436,16 +24435,16 @@ void Player::ActivateSpec(uint8 spec)
         }
     }
 
-    for (uint32 h = 0; h < sTalentTreePrimarySpells.GetNumRows(); ++h)
+    for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
-        TalentTreePrimarySpells const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(h);
-		
-        if (!talentTreeInfo || talentTreeInfo->TalentTab != TalentBranchSpec(spec))
+        TalentTreePrimarySpells const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
+        
+        if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(spec))
             continue;
-		
-        learnSpell(talentTreeInfo->Spell, true);
+        
+        learnSpell(talentInfo->Spell, false);
     }
-
+    
     // set glyphs
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
     {
