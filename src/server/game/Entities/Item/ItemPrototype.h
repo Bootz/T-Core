@@ -565,13 +565,6 @@ inline uint8 ItemSubClassToDurabilityMultiplierId(uint32 ItemClass, uint32 ItemS
 #pragma pack(push, 1)
 #endif
 
-struct _Damage
-{
-    float   DamageMin;
-    float   DamageMax;
-    uint32  DamageType;                                     // id from Resistances.dbc
-};
-
 struct _ItemStat
 {
     uint32  ItemStatType;
