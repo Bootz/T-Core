@@ -12,12 +12,14 @@ TODO-List for TrilliumEMU Developer #
 4.  Implemented a new Creature Formations System.
 5.  Fixed the Group System.
 6.  Fixed the Guild System.
-7. Implemented the new Battlegrounds.
-8. Fixed the Packets for Battlegrounds.
-9. Implemented Wintergrasp Battlefield.
+7.  Implemented the new Battlegrounds.
+8.  Fixed the Packets for Battlegrounds.
+9.  Implemented Wintergrasp Battlefield.
 10. Update the rest of Opcodes to 4.2.0.
 11. Fix The New Power System
 12. Need to revise HoR now WIP
+13. Fix trainers.
+14. Fix Vendors.
 
 // Database Developer:
 1. Fixed all startup errors.
