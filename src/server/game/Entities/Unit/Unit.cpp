@@ -16410,7 +16410,7 @@ void Unit::SetAuraStack(uint32 spellId, Unit* target, uint32 stack)
 
 void Unit::SendPlaySpellVisual(uint32 id)
 {
-    WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 8 + 4);
+    WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 12);
     data << uint64(GetGUID());
     data << uint32(id); // SpellVisualKit.dbc index
     SendMessageToSet(&data, false);
@@ -16418,7 +16418,7 @@ void Unit::SendPlaySpellVisual(uint32 id)
 
 void Unit::SendPlaySpellImpact(uint64 guid, uint32 id)
 {
-    WorldPacket data(SMSG_PLAY_SPELL_IMPACT, 8 + 4);
+    WorldPacket data(SMSG_PLAY_SPELL_IMPACT, 12);
     data << uint64(guid); // target
     data << uint32(id); // SpellVisualKit.dbc index
     SendMessageToSet(&data, false);
