@@ -38,9 +38,12 @@ bool AddonHandler::BuildAddonPacket()
     data << uint8(0xC7);
     data << uint8(0x34);
     data << uint8(0xC6);
+
     for(int i = 0; i < 6; i++)
         data << uint8(0x00);
+
     data << uint8(0x02);
     data << uint8(0x02);
+
     return true;
 }
