@@ -22824,27 +22824,29 @@ uint32 Player::GetBarberShopCost(uint8 newhairstyle, uint8 newhaircolor, uint8 n
 
 void Player::InitGlyphsForLevel()
 {
-    for (uint32 i = 0; i < sGlyphSlotStore.GetNumRows(); ++i)
-        if (GlyphSlotEntry const* gs = sGlyphSlotStore.LookupEntry(i))
-            if (gs->Order)
-                SetGlyphSlot(gs->Order - 1, gs->Id);
-
     uint8 level = getLevel();
-    uint32 value = 0;
+    if (level < 25)
+        return;
 
-    // 0x3F = 0x01 | 0x02 | 0x04 | 0x08 | 0x10 | 0x20 for 80 level
-    if (level >= 15)
-        value |= (0x01 | 0x02);
-    if (level >= 30)
-        value |= 0x08;
-    if (level >= 50)
-        value |= 0x04;
-    if (level >= 70)
-        value |= 0x10;
-    if (level >= 80)
-        value |= 0x20;
+    uint32 mask = 0;
+    uint8 order = level / 25 - 1;
+    uint32 counter = 0;
 
-    SetUInt32Value(PLAYER_GLYPHS_ENABLED, value);
+    for (uint32 i = 0; i < sGlyphSlotStore.GetNumRows(); ++i)
+        if (GlyphSlotEntry const * gs = sGlyphSlotStore.LookupEntry(i))
+        {
+            if (gs->Order <= order)
+                mask |= (1 << uint8(counter)); // Set the appropriate bit
+
+            SetGlyphSlot(counter++, gs->Id);
+        }
+
+    SetUInt32Value(PLAYER_GLYPHS_ENABLED, mask);
+
+    if (level >= 81 && !HasSpell(90647))
+        learnSpell(90647, false);
+    else if (!HasSpell(89964))
+        learnSpell(89964, false);
 }
 
 bool Player::isTotalImmune()
