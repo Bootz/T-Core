@@ -71,7 +71,6 @@ bool preciseVectorData = false;
 
 // Constants
 
-//static const char * szWorkDirMaps = ".\\Maps";
 const char * szWorkDirWmo = "./Buildings";
 
 // Local testing functions
@@ -126,8 +125,6 @@ int ExtractWmo()
     char   szLocalFile[1024] = "";
     bool success=true;
 
-    //const char* ParsArchiveNames[] = {"patch-2.MPQ", "patch.MPQ", "common.MPQ", "expansion.MPQ"};
-
     for (ArchiveSet::const_iterator ar_itr = gOpenArchives.begin(); ar_itr != gOpenArchives.end() && success; ++ar_itr)
     {
         vector<string> filelist;
@@ -177,7 +174,6 @@ int ExtractWmo()
                         }
                         froot->ConvertToVMAPRootWmo(output);
                         int Wmo_nVertices = 0;
-                        //printf("root has %d groups\n", froot->nGroups);
                         if(froot->nGroups !=0)
                         {
                             for (uint32 i=0; i<froot->nGroups; ++i)
@@ -187,7 +183,6 @@ int ExtractWmo()
                                 temp[fname->length()-4] = 0;
                                 char groupFileName[1024];
                                 sprintf(groupFileName,"%s_%03d.wmo",temp, i);
-                                //printf("Trying to open groupfile %s\n",groupFileName);
                                 string s = groupFileName;
                                 WMOGroup * fgroup = new WMOGroup(s);
                                 if(!fgroup->open())
@@ -247,7 +242,6 @@ void ParsMapFiles()
                 {
                     if (ADTFile *ADT = WDT.GetMap(x,y))
                     {
-                        //sprintf(id_filename,"%02u %02u %03u",x,y,map_ids[i].id);//!!!!!!!!!
                         ADT->init(map_ids[i].id, x, y);
                         delete ADT;
                     }
@@ -303,7 +297,6 @@ bool scan_patches(char* scanmatch, std::vector<std::string>& pArchiveNames)
 #endif
         {
             fclose(h);
-            //matches.push_back(path);
             pArchiveNames.push_back(path);
         }
     }
@@ -360,18 +353,18 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
     }
 
     // open expansion and common files
-	pArchiveNames.push_back(input_path + string("world.MPQ")); 
-	pArchiveNames.push_back(input_path + string("art.MPQ")); 
-	pArchiveNames.push_back(input_path + string("expansion1.MPQ")); 
-	pArchiveNames.push_back(input_path + string("expansion2.MPQ")); 
-	pArchiveNames.push_back(input_path + string("expansion3.MPQ")); 
+    pArchiveNames.push_back(input_path + string("world.MPQ")); 
+    pArchiveNames.push_back(input_path + string("art.MPQ")); 
+    pArchiveNames.push_back(input_path + string("expansion1.MPQ")); 
+    pArchiveNames.push_back(input_path + string("expansion2.MPQ")); 
+    pArchiveNames.push_back(input_path + string("expansion3.MPQ")); 
 		 
-	//mh is this useless? the extractor crash if this active! 
-	//pArchiveNames.push_back(input_path + string("wow-update-13164.MPQ")); 
-	//pArchiveNames.push_back(input_path + string("wow-update-13205.MPQ")); 
-	//pArchiveNames.push_back(input_path + string("wow-update-13287.MPQ")); 
-	//pArchiveNames.push_back(input_path + string("wow-update-13329.MPQ"));
-	//pArchiveNames.push_back(input_path + string("wow-update-13596.MPQ"));
+    //mh is this useless? the extractor crash if this active! 
+    //pArchiveNames.push_back(input_path + string("wow-update-13164.MPQ")); 
+    //pArchiveNames.push_back(input_path + string("wow-update-13205.MPQ")); 
+    //pArchiveNames.push_back(input_path + string("wow-update-13287.MPQ")); 
+    //pArchiveNames.push_back(input_path + string("wow-update-13329.MPQ"));
+    //pArchiveNames.push_back(input_path + string("wow-update-13596.MPQ"));
 
     // now, scan for the patch levels in the core dir
     printf("Scanning patch levels from data directory.\n");
