@@ -657,15 +657,9 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     // rewarded honor points. Multiply with 10 to satisfy client
     data << 10 * Trillium::Honor::hk_honor_at_level(_session->GetPlayer()->getLevel(), quest->GetRewHonorMultiplier());
     data << float(0);                                       // unk, honor multiplier?
-    data << uint32(0x08);                                   // unused by client?
-    data << uint32(quest->GetRewSpell());                   // reward spell, this spell will display (icon) (casted if RewSpellCast == 0)
-    data << int32(quest->GetRewSpellCast());                // casted spell
-    data << uint32(0);                                      // unknown
-    data << uint32(quest->GetBonusTalents());               // bonus talents
-    data << uint32(quest->GetRewArenaPoints());             // arena points
-    data << uint32(0);             // 4.0.1
-    data << uint32(0);             // 4.0.1
-    data << uint32(0);                 // 4.0.1
+    data << uint32(0);                                      // 4.0.1
+    data << uint32(0);                                      // 4.0.1
+    data << uint32(0);                                      // 4.0.1
 
     for (uint32 i = 0; i < QUEST_REPUTATIONS_COUNT; ++i)    // reward factions ids
         data << uint32(quest->RewRepFaction[i]);
