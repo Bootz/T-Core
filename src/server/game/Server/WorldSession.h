@@ -899,6 +899,7 @@ class WorldSession
         void HandleUpdateProjectilePosition(WorldPacket& recvPacket);
 
         void HandleViolenceLevelOpcode(WorldPacket& recvPacket);
+        void HandleSendCemetryListResponse(WorldPacket& recvPacket);
 
     private:
         void InitializeQueryCallbackParameters();
