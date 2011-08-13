@@ -291,6 +291,7 @@ void LoadDataStorages(const std::string& dataPath)
 
     //DB2 Files
     LoadData(availableDbcLocales, bad_dbc_files, sItemStore,                   storagesPath, "Item.db2");
+    LoadData(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,       storagesPath, "ItemExtendedCost.db2");
 
     for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
     {
@@ -309,8 +310,6 @@ void LoadDataStorages(const std::string& dataPath)
             const_cast<ItemEntry*>(itemEntry)->SubClass = 0;
         }
     }
-
-    LoadData(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,       storagesPath, "ItemExtendedCost.db2");
 
     //DBC Files
     LoadData(availableDbcLocales, bad_dbc_files, sAreaStore,                   storagesPath, "AreaTable.dbc");
