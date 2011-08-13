@@ -616,7 +616,7 @@ Log.Socket.FlushBytes = -1
 #    DbErrors log
 #    Description: Used for logging database errors.
 
-Log.DbErrors.Enabled = 1
+Log.DbErrors.Enabled = 0
 Log.DbErrors.File = DbErrors_%Y-%m-%d_%H-%M-%S.log
 Log.DbErrors.SplitDate = 0
 Log.DbErrors.Append = 0
@@ -628,7 +628,7 @@ Log.DbErrors.Console = 1
 #                 customization, login, logout and, potentially, dumps. Has additional settings
 #                 Log.Char.Dump.* which can modify behaviour of character dumps.
 
-Log.Char.Enabled = 1
+Log.Char.Enabled = 0
 Log.Char.File = Char_%Y-%m-%d.log
 Log.Char.TimestampFmt = "%H:%M:%S"
 Log.Char.FlushBytes = 1024
@@ -668,7 +668,7 @@ Log.Char.Dump.Directory = ""
 #                 Log path should have $a placeholder which is replaced by account ID, if
 #                 Log.GM.PerAccount setting is set to true.
 
-Log.GM.Enabled = 1
+Log.GM.Enabled = 0
 Log.GM.File = GM_$a.log
 Log.GM.SplitDate = 0
 Log.GM.Console = 1
@@ -685,7 +685,7 @@ Log.GM.PerAccount = 0
 #    RA log
 #    Description: Used to log connections and commands performed via Remote Access.
 
-Log.RA.Enabled = 1
+Log.RA.Enabled = 0
 Log.RA.File = RA.log
 Log.RA.SplitDate = 0
 
@@ -698,7 +698,7 @@ Log.RA.SplitDate = 0
 #                 matches (guid, name, team, IP, healing/damage done, killing blows)
 #                 set Log.Level to 1.
 
-Log.Arena.Enabled = 1
+Log.Arena.Enabled = 0
 Log.Arena.File = Arena.log
 Log.Arena.Level = 1
 Log.Arena.SplitDate = 0
@@ -732,7 +732,7 @@ Log.SqlDeveloper.SplitDate = 0
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
 
-Log.Chat.Enable = 1
+Log.Chat.Enable = 0
 
 #
 #    Log.Chat.Ignore.Unprintable
@@ -748,7 +748,7 @@ Log.Chat.Ignore.Unprintable = 1
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
 
-Log.Chat.Lexics.Enable = 1
+Log.Chat.Lexics.Enable = 0
 
 #
 #    Log.Chat.Lexics.Cut.Enable
@@ -839,49 +839,49 @@ Log.Chat.Lexics.Action.Duration = 0
 #        Default:     1 - (Cut)
 #                     0 - (Do not cut)
 
-Log.Chat.Enabled = 1
+Log.Chat.Enabled = 0
 Log.Chat.File = "chat/Main_%Y-%m-%d.log"
 Log.Chat.TimestampFmt = "%H:%M:%S"
 Log.Chat.FlushBytes = 1024
 Log.Chat.Lexics.Cut = 1
 
-Log.Party.Enabled = 1
+Log.Party.Enabled = 0
 Log.Party.File = "chat/Party_%Y-%m-%d.log"
 Log.Party.TimestampFmt = "%H:%M:%S"
 Log.Party.FlushBytes = 1024
 Log.Party.Lexics.Cut = 1
 
-Log.Guild.Enabled = 1
+Log.Guild.Enabled = 0
 Log.Guild.File = "chat/Guild_%Y-%m-%d.log"
 Log.Guild.TimestampFmt = "%H:%M:%S"
 Log.Guild.FlushBytes = 1024
 Log.Guild.Lexics.Cut = 1
 
-Log.Whisper.Enabled = 1
+Log.Whisper.Enabled = 0
 Log.Whisper.File = "chat/Whisper_%Y-%m-%d.log"
 Log.Whisper.TimestampFmt = "%H:%M:%S"
 Log.Whisper.FlushBytes = 1024
 Log.Whisper.Lexics.Cut = 1
 
-Log.Channel.Enabled = 1
+Log.Channel.Enabled = 0
 Log.Channel.File = "chat/Channel_%Y-%m-%d.log"
 Log.Channel.TimestampFmt = "%H:%M:%S"
 Log.Channel.FlushBytes = 1024
 Log.Channel.Lexics.Cut = 1
 
-Log.Raid.Enabled = 1
+Log.Raid.Enabled = 0
 Log.Raid.File = "chat/Raid_%Y-%m-%d.log"
 Log.Raid.TimestampFmt = "%H:%M:%S"
 Log.Raid.FlushBytes = 1024
 Log.Raid.Lexics.Cut = 1
 
-Log.BattleGround.Enabled = 1
+Log.BattleGround.Enabled = 0
 Log.BattleGround.File = "chat/Bg_%Y-%m-%d.log"
 Log.BattleGround.TimestampFmt = "%H:%M:%S"
 Log.BattleGround.FlushBytes = 1024
 Log.BattleGround.Lexics.Cut = 1
 
-Log.Lexics.Innormative.Enabled = 1
+Log.Lexics.Innormative.Enabled = 0
 Log.Lexics.Innormative.File = "lexics/Innormative_%Y-%m-%d.log"
 Log.Lexics.Innormative.TimestampFmt = "%H:%M:%S"
 
