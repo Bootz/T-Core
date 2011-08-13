@@ -299,7 +299,6 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
             return;
         }
     }
-    Battleground::Update(diff);
     TotalTime += diff;
 
     if (Status == BG_SA_WARMUP )

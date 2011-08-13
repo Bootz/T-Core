@@ -33,7 +33,8 @@ void InitOpcodes()
 {
 
 #define DEFINE_OPCODE_HANDLER(opcode, status, processing, handler)                              \
-    if (opcode < NUM_OPCODE_HANDLERS) {                                                         \
+    if (opcode < NUM_OPCODE_HANDLERS)                                                           \
+    {                                                                                           \
         if (opcodeTable[opcode] != NULL)                                                        \
         {                                                                                       \
             sLog->outError("Tried to override handler of %s with %s (opcode %u)",               \

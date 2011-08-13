@@ -576,6 +576,11 @@ class Battleground
         void RewardXPAtKill(Player* killer, Player* victim);
         bool CanAwardArenaPoints() const { return m_LevelMin >= BG_AWARD_ARENA_POINTS_MIN_LEVEL; }
 
+        // Arena team ids by team
+        uint32 m_ArenaTeamIds[BG_TEAMS_COUNT];
+
+        int32 m_ArenaTeamRatingChanges[BG_TEAMS_COUNT];
+        uint32 m_ArenaTeamMMR[BG_TEAMS_COUNT];
     protected:
         // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground
         void EndNow();
@@ -680,12 +685,6 @@ class Battleground
 
         // Players count by team
         uint32 m_PlayersCount[BG_TEAMS_COUNT];
-
-        // Arena team ids by team
-        uint32 m_ArenaTeamIds[BG_TEAMS_COUNT];
-
-        int32 m_ArenaTeamRatingChanges[BG_TEAMS_COUNT];
-        uint32 m_ArenaTeamMMR[BG_TEAMS_COUNT];
 
         // Limits
         uint32 m_LevelMin;

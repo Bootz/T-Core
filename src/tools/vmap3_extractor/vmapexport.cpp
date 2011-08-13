@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2011 TrilliumENCORE <http://www.trilliumemu.org/>
+ * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
+ *
+ * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

@@ -843,6 +843,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 
     m_lastFallTime = 0;
     m_lastFallZ = 0;
+    
+    m_grantableLevels = 0;
 
     m_ControlledByPlayer = true;
     m_isWorldObject = true;
@@ -3086,7 +3088,7 @@ void Player::GiveLevel(uint8 level)
     if (GetSession()->GetRecruiterId())
         if (level < sWorld->getIntConfig(CONFIG_MAX_RECRUIT_A_FRIEND_BONUS_PLAYER_LEVEL))
             if (level % 2 == 0) {
-                m_grantableLevels++;
+                ++m_grantableLevels;
 
                 if (!HasByteFlag(PLAYER_FIELD_BYTES, 1, 0x01))
                     SetByteFlag(PLAYER_FIELD_BYTES, 1, 0x01);
@@ -3101,8 +3103,8 @@ void Player::InitTalentForLevel()
     // talents base at level diff (talents = level - 9 but some can be used already)
     if (level < 10)
     {
-            resetTalents(true);
-            SetFreeTalentPoints(0);
+        resetTalents(true);
+        SetFreeTalentPoints(0);
     }
     else
     {
@@ -14593,7 +14595,7 @@ bool Player::CanCompleteQuest(uint32 quest_id)
                 return false;
 
             uint32 repFacId2 = qInfo->GetRepObjectiveFaction2();
-            if (repFacId2 && GetReputationMgr().GetReputation(repFacId) < qInfo->GetRepObjectiveValue2())
+            if (repFacId2 && GetReputationMgr().GetReputation(repFacId2) < qInfo->GetRepObjectiveValue2())
                 return false;
 
             return true;
@@ -23167,20 +23169,21 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
 
 uint32 Player::CalculateTalentsPoints() const
 {
-    uint32 base_talent = 0;
-    if (getLevel() >= 10 && getLevel() <= 81)
-        base_talent = (((getLevel() - 10 + 1) - (((getLevel() - 10 + 1) % 2) == 1 ? 1 : 0))/2) + 1;
-    else
-        base_talent = getLevel() - 44;
+    uint8 level = GetUInt32Value(UNIT_FIELD_LEVEL);
+    uint32 talent_points = (level < 10 ? 0 : ((level - 9) / 2) + 1);
+    if (level == 82 || level == 83)
+        talent_points += 1;
+    else if (level >= 84)
+        talent_points += 2;
 
     if (getClass() != CLASS_DEATH_KNIGHT || GetMapId() != 609)
-        return uint32(base_talent * sWorld->getRate(RATE_TALENT));
+        return uint32(talent_points * sWorld->getRate(RATE_TALENT));
 
     uint32 talentPointsForLevel = getLevel() < 56 ? 0 : getLevel() - 55;
     talentPointsForLevel += m_questRewardTalentCount;
 
-    if (talentPointsForLevel > base_talent)
-        talentPointsForLevel = base_talent;
+    if (talentPointsForLevel > talent_points)
+        talentPointsForLevel = talent_points;
 
     return uint32(talentPointsForLevel * sWorld->getRate(RATE_TALENT));
 }
