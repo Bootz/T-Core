@@ -291,7 +291,7 @@ enum Opcodes
     CMSG_AUTOEQUIP_ITEM                              = 0x0B2F6, // 14480
     CMSG_AUTOSTORE_BAG_ITEM                          = 0x07E6A, // 14480
     CMSG_SWAP_ITEM                                   = 0x03ABB, // 14480
-    CMSG_SWAP_INV_ITEM                               = 0x1008B, //
+    CMSG_SWAP_INV_ITEM                               = 0x0E66A, // 14480
     CMSG_SPLIT_ITEM                                  = 0x06E67, // 14480
     CMSG_AUTOEQUIP_ITEM_SLOT                         = 0x0BE72, // 14480
     OBSOLETE_DROP_ITEM                               = 0x1008E, //
@@ -772,7 +772,7 @@ enum Opcodes
     SMSG_PLAY_TIME_WARNING                           = 0x0EAE6, // 14480
     SMSG_MINIGAME_SETUP                              = 0x0F277, // 14480
     SMSG_MINIGAME_STATE                              = 0x1014B, //
-    CMSG_MINIGAME_MOVE                               = 0x1014C, //
+    CMSG_MINIGAME_MOVE                               = 0x0BABB, // 14480
     SMSG_MINIGAME_MOVE_FAILED                        = 0x1014D, //
     SMSG_RAID_INSTANCE_MESSAGE                       = 0x06677, // 14480
     SMSG_COMPRESSED_MOVES                            = 0x0662F, // 14480
