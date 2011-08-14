@@ -7,19 +7,19 @@ TODO-List for TrilliumEMU Developer #
 
 // Core Developer:
 1.  Fixed the Talentswitch.
-2.  Implemented the branch spec switch.
-3.  Implemented a New Terrain System.
-4.  Implemented a new Creature Formations System.
+2.  Implement the branch spec switch.
+3.  Implement a New Terrain System.
+4.  Implement a new Creature Formations System.
 5.  Fixed the Group System.
 6.  Fixed the Guild System.
-7.  Implemented the new Battlegrounds.
+7.  Implement the new Battlegrounds.
 8.  Fixed the Packets for Battlegrounds.
-9.  Implemented Wintergrasp Battlefield.
+9.  Implement Wintergrasp Battlefield.
 10. Update the rest of Opcodes to 4.2.0.
 11. Fix The New Power System
 12. Need to revise HoR now WIP
-13. Fix trainers.
-14. Fix Vendors.
+13. Fix the trainer bug, if you click "train me" nothing happens
+14. Fix the Vendor. show not the items.
 
 // Database Developer:
 1. Fixed all startup errors.
