@@ -63,7 +63,7 @@ enum Opcodes
     SMSG_CHARACTER_LOGIN_FAILED                      = 0x0B2E3, // 4.2.0a:14480
     SMSG_LOGIN_SETTIMESPEED                          = 0x0766F, // 4.2.0a:14480
     SMSG_GAMETIME_UPDATE                             = 0x06AFE, // 4.2.0a:14480
-    CMSG_GAMETIME_SET                                = 0x0F2AB, // 4.2.0a:14480
+    CMSG_GAMETIME_SET                                = 0x10008, //
     SMSG_GAMETIME_SET                                = 0x0B26F, // 4.2.0a:14480
     CMSG_GAMESPEED_SET                               = 0x10009, // 
     SMSG_GAMESPEED_SET                               = 0x0AAB2, // 4.2.0a:14480
@@ -427,7 +427,7 @@ enum Opcodes
     SMSG_QUESTGIVER_QUEST_FAILED                     = 0x0E6FE, // 14480
     CMSG_QUESTLOG_SWAP_QUEST                         = 0x100B5, //
     CMSG_QUESTLOG_REMOVE_QUEST                       = 0x03A3F, // 4.2.0:14480
-    SMSG_QUESTLOG_FULL                               = 0x0E263, // 4.2.0:14480
+    SMSG_QUESTLOG_FULL                               = 0x0726F, // 4.2.0:14480
     SMSG_QUESTUPDATE_FAILED                          = 0x0EAB7, // 14480
     SMSG_QUESTUPDATE_FAILEDTIMER                     = 0x0BAF7, // 14480
     SMSG_QUESTUPDATE_COMPLETE                        = 0x03A73, // 14480
