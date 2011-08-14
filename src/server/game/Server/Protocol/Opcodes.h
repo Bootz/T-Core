@@ -160,7 +160,7 @@ enum Opcodes
     CMSG_MESSAGECHAT_OFFICER                         = 0x05911, // 14480
     CMSG_MESSAGECHAT_AFK                             = 0x01191, // 14480
     CMSG_MESSAGECHAT_DND                             = 0x01B31, // 14480
-    CMSG_MESSAGECHAT_EMOTE                           = 0x07EB6, // 14480
+    CMSG_MESSAGECHAT_EMOTE                           = 0x10030, //
     CMSG_MESSAGECHAT_PARTY                           = 0x05931, // 14480
     CMSG_MESSAGECHAT_PARTY_LEADER                    = 0x10031, //
     CMSG_MESSAGECHAT_RAID                            = 0x05311, // 14480
@@ -282,7 +282,7 @@ enum Opcodes
     CMSG_STANDSTATECHANGE                            = 0x032EA, // 14480
     CMSG_EMOTE                                       = 0x0B6AF, // 14480
     SMSG_EMOTE                                       = 0x076FE, // 14480
-    CMSG_TEXT_EMOTE                                  = 0x10084, //
+    CMSG_TEXT_EMOTE                                  = 0x07EB6, // 4.2.0:14480
     SMSG_TEXT_EMOTE                                  = 0x026EF, // 14480
     CMSG_AUTOEQUIP_GROUND_ITEM                       = 0x10085, //
     CMSG_AUTOSTORE_GROUND_ITEM                       = 0x10086, //
