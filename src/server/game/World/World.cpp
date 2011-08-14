@@ -1231,11 +1231,7 @@ void World::SetInitialWorldSettings()
     //No SQL injection as values are treated as integers
 
     // not send custom type REALM_FFA_PVP to realm list
-    uint32 server_type;
-    if (IsFFAPvPRealm())
-        server_type = REALM_TYPE_PVP;
-    else
-        server_type = getIntConfig(CONFIG_GAME_TYPE);
+    uint32 server_type = IsFFAPvPRealm() ? REALM_TYPE_PVP : getIntConfig(CONFIG_GAME_TYPE);
     uint32 realm_zone = getIntConfig(CONFIG_REALM_ZONE);
     LoginDatabase.PExecute("UPDATE realmlist SET icon = %u, timezone = %u WHERE id = '%d'", server_type, realm_zone, realmID);
 
