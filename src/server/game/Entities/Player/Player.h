@@ -155,6 +155,8 @@ typedef std::list<SpellModifier*> SpellModList;
 typedef UNORDERED_MAP<uint32, PlayerCurrency> PlayerCurrenciesMap;
 #define PLAYER_CURRENCY_PRECISION   100
 
+typedef std::list<uint64> WhisperListContainer;
+
 struct SpellCooldown
 {
     time_t end;
@@ -2530,7 +2532,13 @@ class Player : public Unit, public GridObject<Player>
         float GetAverageItemLevel();
         bool isDebugAreaTriggers;
 
+        void ClearWhisperWhiteList() { WhisperList.clear(); }
+        void AddWhisperWhiteList(uint64 guid) { WhisperList.push_back(guid); }
+        bool IsInWhisperWhiteList(uint64 guid);
+
     protected:
+        // Gamemaster whisper whitelist
+        WhisperListContainer WhisperList;
         uint32 m_regenTimerCount;
         float m_powerFraction[MAX_POWERS];
         uint32 m_contestedPvPTimer;

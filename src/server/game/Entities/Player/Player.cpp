@@ -24767,6 +24767,15 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
     }
 }
 
+bool Player::IsInWhisperWhiteList(uint64 guid)
+{
+    for (WhisperListContainer::const_iterator itr = WhisperList.begin(); itr != WhisperList.end(); ++itr)
+    {
+        if (*itr == guid)
+            return true;
+    }
+    return false;
+}
 
 void Player::SetInGuild(uint32 GuildId)
 {
