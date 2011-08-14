@@ -159,7 +159,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     WorldPacket data(SMSG_TRAINER_LIST, 8 + 4 + 4 + trainer_spells->spellList.size() * 38 + strTitle.size() + 1);
     data << guid;
     data << uint32(trainer_spells->trainerType);
-    data << uint32(0xF);
+    data << uint32(1);
 
     size_t count_pos = data.wpos();
     data << uint32(trainer_spells->spellList.size());
@@ -171,10 +171,6 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     for (TrainerSpellMap::const_iterator itr = trainer_spells->spellList.begin(); itr != trainer_spells->spellList.end(); ++itr)
     {
         TrainerSpell const* tSpell = &itr->second;
-
-        bool valid = true;
-        if (!valid)
-            continue;
 
         TrainerSpellState state = _player->GetTrainerSpellState(tSpell);
 
@@ -188,40 +184,6 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
         data << uint32(0);
         data << uint32(0);
         data << uint32(0);
-
-        //prev + req or req + 0
-        uint8 maxReq = 0;
-
-        for (uint8 i = 0; i < MAX_SPELL_EFFECTS ; ++i)
-        {
-            if (!tSpell->learnedSpell[i])
-                continue;
-
-            if (uint32 prevSpellId = sSpellMgr->GetPrevSpellInChain(tSpell->learnedSpell[i]))
-            {
-                data << uint32(prevSpellId);
-                ++maxReq;
-            }
-
-            if (maxReq == 3)
-                break;
-
-            SpellsRequiringSpellMapBounds spellsRequired = sSpellMgr->GetSpellsRequiredForSpellBounds(tSpell->learnedSpell[i]);
-            for (SpellsRequiringSpellMap::const_iterator itr2 = spellsRequired.first; itr2 != spellsRequired.second && maxReq < 3; ++itr2)
-            {
-                data << uint32(itr2->second);
-                ++maxReq;
-            }
-
-            if (maxReq == 3)
-                break;
-        }
-
-        while (maxReq < 3)
-        {
-            data << uint32(0);
-            ++maxReq;
-        }
 
         ++count;
     }

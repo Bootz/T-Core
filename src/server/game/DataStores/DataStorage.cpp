@@ -779,7 +779,7 @@ SpellEffectEntry const* GetSpellEffectEntry(uint32 spellId, uint32 effect)
 SpellReagentsEntry const* GetSpellReagentEntry(uint32 spellId, uint8 reagent)
 {
     SpellReagentMap::const_iterator itr = sSpellReagentMap.find(spellId);
-    if(itr == sSpellReagentMap.end())
+    if (itr == sSpellReagentMap.end())
         return NULL;
 
     return itr->second.reagents[reagent];
