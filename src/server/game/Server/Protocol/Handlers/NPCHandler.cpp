@@ -159,7 +159,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     WorldPacket data(SMSG_TRAINER_LIST, 8 + 4 + 4 + trainer_spells->spellList.size() * 38 + strTitle.size() + 1);
     data << guid;
     data << uint32(trainer_spells->trainerType);
-    data << uint32(1);
+    data << uint32(91);
 
     size_t count_pos = data.wpos();
     data << uint32(trainer_spells->spellList.size());
@@ -197,8 +197,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
 void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 unk = 0;
-    uint32 spellId = 0;
+    uint32 spellId, unk = 0, result = ERR_TRAINER_OK;
 
     recv_data >> guid >> unk >> spellId;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_TRAINER_BUY_SPELL NpcGUID=%u, learn spell id is: %u", uint32(GUID_LOPART(guid)), spellId);
@@ -236,21 +235,26 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 
     // check money requirement
     if (!_player->HasEnoughMoney(nSpellCost))
-        return;
+        result = ERR_TRAINER_NOT_ENOUGH_MONEY;
+
+    if (result == ERR_TRAINER_OK)
+    {
+        _player->ModifyMoney(-int32(nSpellCost));
 
     unit->SendPlaySpellVisual(179); // 53 SpellCastDirected
     unit->SendPlaySpellImpact(_player->GetGUID(), 362); // 113 EmoteSalute
 
-    // learn explicitly or cast explicitly
-    if (trainer_spell->IsCastable())
-        _player->CastSpell(_player, trainer_spell->spell, true);
-    else
-        _player->learnSpell(spellId, false);
+        // learn explicitly or cast explicitly
+        if (trainer_spell->IsCastable())
+            _player->CastSpell(_player, trainer_spell->spell, true);
+        else
+            _player->learnSpell(spellId, false);
+    }
 
     WorldPacket data(SMSG_TRAINER_BUY_RESULT, 16);
     data << uint64(guid);
     data << uint32(spellId);                                // should be same as in packet from client
-    data << uint32(ERR_TRAINER_OK);
+    data << uint32(result);
     SendPacket(&data);
 }
 
