@@ -662,12 +662,6 @@ void ObjectMgr::CheckCreatureTemplate(CreatureTemplate const* cInfo)
             continue;
         }
 
-        if (cInfo->trainer_id != difficultyInfo->trainer_id)
-        {
-            sLog->outErrorDb("Creature (Entry: %u) have wrong trainer_id %u", cInfo->Entry, diff + 1, cInfo->DifficultyEntry[diff]);
-            continue;
-        }
-
         if (cInfo->trainer_class != difficultyInfo->trainer_class)
         {
             sLog->outErrorDb("Creature (Entry: %u) has different `trainer_class` in difficulty %u mode (Entry: %u).", cInfo->Entry, diff + 1, cInfo->DifficultyEntry[diff]);
@@ -904,6 +898,12 @@ void ObjectMgr::CheckCreatureTemplate(CreatureTemplate const* cInfo)
     }
 
     const_cast<CreatureTemplate*>(cInfo)->dmg_multiplier *= Creature::_GetDamageMod(cInfo->rank);
+
+    if (uint32 trainer_id = cInfo->trainer_id)
+    {
+        sLog->outErrorDb("Creature (Entry: %u) have wrong trainer_id %u", cInfo->Entry, trainer_id);
+        const_cast<CreatureTemplate*>(cInfo)->trainer_id = 0;
+    }
 }
 
 void ObjectMgr::LoadCreatureAddons()
