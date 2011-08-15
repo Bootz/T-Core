@@ -43,7 +43,7 @@ enum Opcodes
     */
 
     CMSG_WORLD_TELEPORT                              = 0x00080, // 14480
-    CMSG_TELEPORT_TO_UNIT                            = 0x10001, //
+    CMSG_TELEPORT_TO_UNIT                            = 0x0E62B, // 4.2.0:14480
     SMSG_CHECK_FOR_BOTS                              = 0x10002, //
     CMSG_BOT_DETECTED2                               = 0x10003, //
     SMSG_FORCEACTIONSHOW                             = 0x07AEA, // 14480
@@ -1113,7 +1113,7 @@ enum Opcodes
     SMSG_CALENDAR_SEND_NUM_PENDING                   = 0x03623, // 14480
     CMSG_SAVE_DANCE                                  = 0x10214, //
     SMSG_NOTIFY_DANCE                                = 0x02632, // 14480
-    CMSG_PLAY_DANCE                                  = 0x0323B, // 14480
+    CMSG_PLAY_DANCE                                  = 0x0323B, // 4.2.0:14480
     SMSG_PLAY_DANCE                                  = 0x032B3, // 14480
     CMSG_LOAD_DANCES                                 = 0x10215, //
     CMSG_STOP_DANCE                                  = 0x02EF3, // 14480
@@ -1155,7 +1155,7 @@ enum Opcodes
     CMSG_SET_CRITERIA_CHEAT                          = 0x10232, //
     SMSG_CALENDAR_UPDATE_INVITE_LIST3                = 0x03A32, // 14480
     CMSG_UNITANIMTIER_CHEAT                          = 0x10234, //
-    CMSG_CHAR_CUSTOMIZE                              = 0x02A66, // 14480
+    CMSG_CHAR_CUSTOMIZE                              = 0x02A66, // 4.2.0:14480
     SMSG_CHAR_CUSTOMIZE                              = 0x02E7F, // 14480
     SMSG_PET_RENAMEABLE                              = 0x02E3F, // 14480
     CMSG_REQUEST_VEHICLE_EXIT                        = 0x10237, //
