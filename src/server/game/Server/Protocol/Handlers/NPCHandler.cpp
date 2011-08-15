@@ -140,9 +140,9 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     if (!unit->isCanTrainingOf(_player, true))
         return;
 
-    CreatureTemplate const *ci = unit->GetCreatureInfo();
+    CreatureTemplate const *creatureInfo = unit->GetCreatureInfo();
 
-    if (!ci)
+    if (!creatureInfo)
     {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendTrainerList - (GUID: %u) NO CREATUREINFO!", GUID_LOPART(guid));
         return;
@@ -159,7 +159,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     WorldPacket data(SMSG_TRAINER_LIST, 8 + 4 + 4 + trainer_spells->spellList.size() * 38 + strTitle.size() + 1);
     data << guid;
     data << uint32(trainer_spells->trainerType);
-    data << uint32(trainer_spells->trainerId);             // trainerID? each trainer have his own id..
+    data << uint32(creatureInfo->trainer_id);             // Get TrainerID from creature_template.
 
     size_t count_pos = data.wpos();
     data << uint32(trainer_spells->spellList.size());
@@ -197,9 +197,10 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
 void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 spellId, unk = 0, result = ERR_TRAINER_OK;
+    uint32 trainerId;
+    uint32 spellId, result = ERR_TRAINER_OK;
 
-    recv_data >> guid >> unk >> spellId;
+    recv_data >> guid >> trainerId >> spellId;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_TRAINER_BUY_SPELL NpcGUID=%u, learn spell id is: %u", uint32(GUID_LOPART(guid)), spellId);
 
     Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_TRAINER);

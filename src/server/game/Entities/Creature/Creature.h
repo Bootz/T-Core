@@ -116,6 +116,7 @@ struct CreatureTemplate
     uint32  unit_flags;                                     // enum UnitFlags mask values
     uint32  dynamicflags;
     uint32  family;                                         // enum CreatureFamily values (optional)
+    uint32  trainer_id;
     uint32  trainer_type;
     uint32  trainer_spell;
     uint32  trainer_class;
