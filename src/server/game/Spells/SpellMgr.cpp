@@ -3086,7 +3086,7 @@ void SpellMgr::LoadDbcDataCorrections()
             spellAuOpt->procCharges = 1;
             break;
         case 44544: // Fingers of Frost
-            spellEffect->EffectSpellClassMaskA[0] = flag96(685904631, 1151048, 0);
+            spellEffect->EffectSpellClassMask[0] = flag96(685904631, 1151048, 0);
             break;
         case 74396: // Fingers of Frost visual buff
             spellAuOpt->procCharges = 2;
@@ -3101,7 +3101,7 @@ void SpellMgr::LoadDbcDataCorrections()
         case 47204:
         case 47205:
             // add corruption to affected spells
-            spellEffect->EffectSpellClassMaskA[1] |= 2;
+            spellEffect->EffectSpellClassMask[1] |= 2;
             break;
         case 49305: // Teleport to Boss 1 DND
         case 64981: // Summon Random Vanquished Tentacle
@@ -3185,7 +3185,7 @@ void SpellMgr::LoadDbcDataCorrections()
         case 53244: // Marked for Death (Rank 3)
         case 53245: // Marked for Death (Rank 4)
         case 53246: // Marked for Death (Rank 5)
-            spellEffect->EffectSpellClassMaskA[0] = flag96(423937, 276955137, 2049);
+            spellEffect->EffectSpellClassMask[0] = flag96(423937, 276955137, 2049);
             break;
         case 70728: // Exploit Weakness
         case 70840: // Devious Minds
@@ -3200,7 +3200,7 @@ void SpellMgr::LoadDbcDataCorrections()
                     // this is done because another spell also uses the same SpellFamilyFlags as Icy Touch
                     // SpellFamilyFlags[0] & 0x00000040 in SPELLFAMILY_DEATHKNIGHT is currently unused (3.3.5a)
                     // this needs research on modifier applying rules, does not seem to be in Attributes fields
-            spellEffect->EffectSpellClassMaskA[0] = flag96(0x00000040, 0x00000000, 0x00000000);
+            spellEffect->EffectSpellClassMask[0] = flag96(0x00000040, 0x00000000, 0x00000000);
             break;
         case 19970: // Entangling Roots (Rank 6) -- Nature's Grasp Proc
         case 19971: // Entangling Roots (Rank 5) -- Nature's Grasp Proc
@@ -3382,7 +3382,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case SPELLFAMILY_PALADIN:
                 // Seals of the Pure should affect Seal of Righteousness
                 if (spellInfo->SpellIconID == 25 && spellInfo->Attributes & SPELL_ATTR0_PASSIVE)
-                    spellEffect->EffectSpellClassMaskA[0] |= 0x20000000;
+                    spellEffect->EffectSpellClassMask[0] |= 0x20000000;
                 else
                     break;
                 break;

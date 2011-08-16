@@ -1670,9 +1670,9 @@ struct SpellEffectEntry
     int32     EffectMiscValueB;                             // 13        m_effectMiscValueB
     float     EffectPointsPerComboPoint;                    // 14        m_effectPointsPerCombo
     uint32    EffectRadiusIndex;                            // 15        m_effectRadiusIndex - spellradius.dbc
-    //uint32   EffectRadiusMaxIndex;                        // 16        4.0.0
+    uint32    EffectRadiusMaxIndex;                         // 16        4.0.0
     float     EffectRealPointsPerLevel;                     // 17        m_effectRealPointsPerLevel
-    uint32    EffectSpellClassMaskA[3];                     // 18        m_effectSpellClassMaskA, effect 0
+    flag96    EffectSpellClassMask;                         // 18        m_effectSpellClassMaskA, effect 0
     uint32    EffectTriggerSpell;                           // 19        m_effectTriggerSpell
     uint32    EffectImplicitTargetA;                        // 20        m_implicitTargetA
     uint32    EffectImplicitTargetB;                        // 21        m_implicitTargetB
@@ -1804,7 +1804,7 @@ struct SpellEntry
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
     uint32    AttributesEx7;                                // 8        m_attributesExG
-    // uint32 someFlags;                                    // 9        4.0.0
+    uint32    AttributesEx8;                                // 9        m_attributesExH
     // uint32 unk_400_1;                                    // 10       4.0.0
     // uint32 unk_420_1                                     // 11       4.2.0
     uint32    CastingTimeIndex;                             // 12       m_castingTimeIndex
