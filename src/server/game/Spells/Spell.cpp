@@ -3823,7 +3823,7 @@ void Spell::SendSpellStart()
     if (castFlags & CAST_FLAG_IMMUNITY)
     {
         data << uint32(0);
-        data << uint32(0);
+        data << uint8(0);
     }
 
     m_caster->SendMessageToSet(&data, true);
