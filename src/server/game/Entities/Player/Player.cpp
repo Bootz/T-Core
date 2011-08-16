@@ -4090,7 +4090,7 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     // activate lesser rank in spellbook/action bar, and cast it if need
     bool prev_activate = false;
 
-    if (uint32 prev_id = sSpellMgr->GetPrevSpellInChain (spell_id))
+    if (uint32 prev_id = sSpellMgr->GetPrevSpellInChain(spell_id))
     {
         SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spell_id);
 
@@ -4226,9 +4226,9 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
         next = itr;
         ++next;
         SpellInfo const* entry = sSpellMgr->GetSpellInfo(itr->first);
-        // check if SpellInfo is present and if the cooldown is less or equal to 10 min
+        // check if spellentry is present and if the cooldown is less or equal to 10 min
         if (entry &&
-            entry->GetRecoveryTime() <= 10 * MINUTE * IN_MILLISECONDS &&
+            entry->RecoveryTime <= 10 * MINUTE * IN_MILLISECONDS &&
             entry->CategoryRecoveryTime <= 10 * MINUTE * IN_MILLISECONDS)
         {
             // remove & notify

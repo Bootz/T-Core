@@ -26,9 +26,9 @@
 #include "DatabaseEnv.h"
 #include "ItemEnchantmentMgr.h"
 #include "SpellMgr.h"
+#include "SpellInfo.h"
 #include "ScriptMgr.h"
 #include "ConditionMgr.h"
-#include "SpellInfo.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {

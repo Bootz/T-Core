@@ -1410,16 +1410,16 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
                 // or              "id - [faction] [no reputation]" format
                 std::ostringstream ss;
                 if (m_session)
-                    ss << id << " - |cffffffff|Hfaction:" << id << "|h[" << name << " " << localeNames[loc] << "]|h|r";
+                    ss << id << " - |cffffffff|Hfaction:" << id << "|h[" << name << ' ' << localeNames[loc] << "]|h|r";
                 else
-                    ss << id << " - " << name << " " << localeNames[loc];
+                    ss << id << " - " << name << ' ' << localeNames[loc];
 
                 if (repState)                               // and then target != NULL also
                 {
                     uint32 index = target->GetReputationMgr().GetReputationRankStrIndex(factionEntry);
                     std::string rankName = GetTrilliumString(index);
 
-                    ss << " " << rankName << "|h|r (" << target->GetReputationMgr().GetReputation(factionEntry) << ")";
+                    ss << ' ' << rankName << "|h|r (" << target->GetReputationMgr().GetReputation(factionEntry) << ')';
 
                     if (repState->Flags & FACTION_FLAG_VISIBLE)
                         ss << GetTrilliumString(LANG_FACTION_VISIBLE);
