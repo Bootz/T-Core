@@ -56,7 +56,7 @@ enum Gender
 // Race value is index in ChrRaces.dbc
 enum Races
 {
-    RACE_NONE           = 0,
+    //RACE_NONE           = 0,
     RACE_HUMAN          = 1,
     RACE_ORC            = 2,
     RACE_DWARF          = 3,
