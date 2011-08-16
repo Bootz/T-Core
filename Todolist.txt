@@ -20,6 +20,10 @@ TODO-List for TrilliumEMU Developer #
 12. Need to revise HoR now WIP
 13. Fix the trainer bug, if you click "train me" nothing happens
 14. Fix the vendor, they dont show any items
+15. Implement new Transport System.
+16. Implement special spawn system.
+17. fix spells casting
+18. Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
 
 // Database Developer:
 1. Fixed all startup errors.
