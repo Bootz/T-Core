@@ -2349,7 +2349,7 @@ enum CreatureEliteType
     CREATURE_UNKNOWN               = 5                      // found in 2.2.3 for 2 mobs
 };
 
-// values based at Holidays.dbc
+// Holidays.dbc 4.20a 14480
 enum HolidayIds
 {
     HOLIDAY_NONE                     = 0,
@@ -2378,13 +2378,19 @@ enum HolidayIds
     HOLIDAY_WOTLK_LAUNCH             = 406,
     HOLIDAY_DAY_OF_DEAD              = 409,
     HOLIDAY_CALL_TO_ARMS_IC          = 420,
-    HOLIDAY_KALU_AK_FISHING_DERBY    = 424
+    HOLIDAY_423                      = 423, // Rename
+    HOLIDAY_KALU_AK_FISHING_DERBY    = 424,
+    HOLIDAY_CALL_TO_ARMS_GILNEAS     = 435,
+    HOLIDAY_CALL_TO_ARMS_TWINPEAKS   = 436,
+    HOLIDAY_442                      = 442, // Rename
+    HOLIDAY_443                      = 443, // Rename
+    HOLIDAY_467                      = 467  // Rename
 };
 
-// values based at QuestInfo.dbc
+// QuestInfo.dbc 4.20a 14480
 enum QuestTypes
 {
-    QUEST_TYPE_ELITE               = 1,
+    QUEST_TYPE_GROUP               = 1,
     QUEST_TYPE_LIFE                = 21,
     QUEST_TYPE_PVP                 = 41,
     QUEST_TYPE_RAID                = 62,
@@ -2397,16 +2403,16 @@ enum QuestTypes
     QUEST_TYPE_RAID_25             = 89
 };
 
-// values based at QuestSort.dbc
+// QuestSort.dbc 4.20a 14480
 enum QuestSort
 {
-    QUEST_SORT_EPIC                = 1,
-    QUEST_SORT_WAILING_CAVERNS_OLD = 21,
+    QUEST_SORT_GROUP               = 1,
+    QUEST_SORT_HALLOW_END          = 21,
     QUEST_SORT_SEASONAL            = 22,
-    QUEST_SORT_UNDERCITY_OLD       = 23,
+    QUEST_SORT_CATACLYSM           = 23,
     QUEST_SORT_HERBALISM           = 24,
     QUEST_SORT_BATTLEGROUNDS       = 25,
-    QUEST_SORT_ULDAMN_OLD          = 41,
+    QUEST_SORT_DAY_OF_THE_DEAD     = 41,
     QUEST_SORT_WARLOCK             = 61,
     QUEST_SORT_WARRIOR             = 81,
     QUEST_SORT_SHAMAN              = 82,
@@ -2419,7 +2425,7 @@ enum QuestSort
     QUEST_SORT_LEATHERWORKING      = 182,
     QUEST_SORT_ENGINERING          = 201,
     QUEST_SORT_TREASURE_MAP        = 221,
-    QUEST_SORT_SUNKEN_TEMPLE_OLD   = 241,
+    QUEST_SORT_TOURNAMENT          = 241,
     QUEST_SORT_HUNTER              = 261,
     QUEST_SORT_PRIEST              = 262,
     QUEST_SORT_DRUID               = 263,
@@ -2438,7 +2444,14 @@ enum QuestSort
     QUEST_SORT_INSCRIPTION         = 371,
     QUEST_SORT_DEATH_KNIGHT        = 372,
     QUEST_SORT_JEWELCRAFTING       = 373,
-    QUEST_SORT_ARCHAEOLOGY         = 374
+    QUEST_SORT_NOBLEGARDEN         = 374,
+    QUEST_SORT_PILGRIM_BOUNTY      = 375,
+    QUEST_SORT_LOVE_IS_IN_THE_AIR  = 376,
+    QUEST_SORT_ARCHAEOLOGY         = 377,
+    QUEST_SORT_CHILDREN_WEEK       = 378,
+    QUEST_SORT_FIRELANDS_INVASION  = 379,
+    QUEST_SORT_THE_ZANDALARI       = 380,
+    QUEST_SORT_ELEMENTAL_BONDS     = 381
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -2908,6 +2921,23 @@ enum EventId
     EVENT_FALL_GROUND       = 1002,
     EVENT_CHARGE            = 1003,
 };
+
+/*
+enum CopCodes // 4.20a 14480 Do not delete
+{
+    COP_NONE             = 0,
+    COP_INIT             = 1,
+    COP_CONNECT          = 2,
+    COP_AUTHENTICATE     = 3,
+    COP_CREATE_ACCOUNT   = 4,
+    COP_CREATE_CHARACTER = 5,
+    COP_GET_CHARACTERS   = 6,
+    COP_DELETE_CHARACTER = 7,
+    COP_LOGIN_CHARACTER  = 8,
+    COP_GET_REALMS       = 9,
+    COP_WAIT_QUEUE       = 10,
+};
+*/
 
 enum ResponseCodes
 {
