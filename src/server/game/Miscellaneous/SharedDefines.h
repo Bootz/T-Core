@@ -3210,4 +3210,11 @@ enum RemoveMethod
 // that it not have expansion installed and reject
 #define MAX_EXPANSION 3
 
+enum TalentFailed // 4.20a 14480 Move to the correct file
+{
+    ERR_TALENT_FAILED_UNKNOWN = 1,
+    ERR_TALENT_FAILED_NOT_ENOUGH_TALENTS_IN_PRIMARY_TREE = 2,
+    ERR_TALENT_FAILED_NO_PRIMARY_TREE_SELECTED = 3,
+};
+
 #endif

@@ -88,12 +88,12 @@ enum PetTalk
     PET_TALK_ATTACK         = 1
 };
 
-enum PetNameInvalidReason
+enum PetNameInvalidReason // 4.20a 14480
 {
     // custom, not send
     PET_NAME_SUCCESS                                        = 0,
 
-    PET_NAME_INVALID                                        = 1,
+    PET_NAME_INVALID                                        = 1, // default
     PET_NAME_NO_NAME                                        = 2,
     PET_NAME_TOO_SHORT                                      = 3,
     PET_NAME_TOO_LONG                                       = 4,

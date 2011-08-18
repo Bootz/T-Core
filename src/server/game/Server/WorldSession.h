@@ -91,7 +91,7 @@ enum PartyOperation
     PARTY_OP_SWAP = 4
 };
 
-enum PartyResult
+enum PartyResult // 4.20a 14480
 {
     ERR_PARTY_RESULT_OK                 = 0,
     ERR_BAD_PLAYER_NAME_S               = 1,
@@ -105,7 +105,7 @@ enum PartyResult
     ERR_IGNORING_YOU_S                  = 9,
     ERR_LFG_PENDING                     = 12,
     ERR_INVITE_RESTRICTED               = 13,
-    ERR_GROUP_SWAP_FAILED               = 14,               // if (PartyOperation == PARTY_OP_SWAP) ERR_GROUP_SWAP_FAILED else ERR_INVITE_IN_COMBAT
+    ERR_GROUP_SWAP_FAILED               = 14, // if (PartyOperation == PARTY_OP_SWAP) ERR_GROUP_SWAP_FAILED else ERR_INVITE_IN_COMBAT
     ERR_INVITE_UNKNOWN_REALM            = 15,
     ERR_INVITE_NO_PARTY_SERVER          = 16,
     ERR_INVITE_PARTY_BUSY               = 17,
@@ -118,13 +118,17 @@ enum PartyResult
     ERR_PARTY_LFG_BOOT_NOT_ELIGIBLE_S   = 24,
     ERR_RAID_DISALLOWED_BY_LEVEL        = 25,
     ERR_PARTY_LFG_BOOT_IN_COMBAT        = 26,
-    ERR_VOTE_KICK_REASON_NEEDED         = 27,
+    ERR_VOTE_KICK_REASON_NEEDED         = 27, // Rename this 420a
     ERR_PARTY_LFG_BOOT_DUNGEON_COMPLETE = 28,
     ERR_PARTY_LFG_BOOT_LOOT_ROLLS       = 29,
-    ERR_PARTY_LFG_TELEPORT_IN_COMBAT    = 30
+    ERR_PARTY_LFG_TELEPORT_IN_COMBAT    = 30,
+    ERR_PARTY_ALREADY_IN_BATTLEGROUND_QUEUE = 31,
+    ERR_PARTY_CONFIRMING_BATTLEGROUND_QUEUE = 32,
+    ERR_CROSS_REALM_RAID_INVITE = 33,
+    ERR_RAID_DISALLOWED_BY_CROSS_REALM = 34,
 };
 
-enum ChatRestrictionType
+enum ChatRestrictionType // 4.20a 14480
 {
     ERR_CHAT_RESTRICTED = 0,
     ERR_CHAT_THROTTLED  = 1,
