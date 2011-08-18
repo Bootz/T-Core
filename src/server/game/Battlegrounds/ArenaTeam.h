@@ -36,7 +36,7 @@ enum ArenaTeamCommandTypes
     ERR_ARENA_TEAM_FOUNDER_S                = 0x0E
 };
 
-enum ArenaTeamCommandErrors
+enum ArenaTeamCommandErrors // 4.20a 14480
 {
     ERR_ARENA_TEAM_INTERNAL                 = 0x01,
     ERR_ALREADY_IN_ARENA_TEAM               = 0x02,
@@ -45,7 +45,7 @@ enum ArenaTeamCommandErrors
     ERR_ALREADY_INVITED_TO_ARENA_TEAM_S     = 0x05,
     ERR_ARENA_TEAM_NAME_INVALID             = 0x06,
     ERR_ARENA_TEAM_NAME_EXISTS_S            = 0x07,
-    ERR_ARENA_TEAM_LEADER_LEAVE_S           = 0x08,
+    ERR_ARENA_TEAM_LEADER_LEAVE_S           = 0x08, // if ((a1 + 116) == 3 ) ERR_ARENA_TEAM_LEADER_LEAVE_S else ERR_ARENA_TEAM_PERMISSIONS
     ERR_ARENA_TEAM_PERMISSIONS              = 0x08,
     ERR_ARENA_TEAM_PLAYER_NOT_IN_TEAM       = 0x09,
     ERR_ARENA_TEAM_PLAYER_NOT_IN_TEAM_SS    = 0x0A,
@@ -56,7 +56,8 @@ enum ArenaTeamCommandErrors
     ERR_ARENA_TEAM_TARGET_TOO_HIGH_S        = 0x16,
     ERR_ARENA_TEAM_TOO_MANY_MEMBERS_S       = 0x17,
     ERR_ARENA_TEAM_NOT_FOUND                = 0x1B,
-    ERR_ARENA_TEAMS_LOCKED                  = 0x1E
+    ERR_ARENA_TEAMS_LOCKED                  = 0x1E,
+    ERR_ARENA_TEAM_TOO_MANY_CREATE          = 0x21,
 };
 
 enum ArenaTeamEvents
