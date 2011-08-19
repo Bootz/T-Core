@@ -13656,6 +13656,9 @@ void Unit::SetPower(Powers power, uint32 val)
 
     SetStatInt32Value(UNIT_FIELD_POWER1 + power, val);
 
+    if (!IsInWorld())
+        return;
+
     WorldPacket data(SMSG_POWER_UPDATE);
     data.append(GetPackGUID());
 	data << uint32(1);
