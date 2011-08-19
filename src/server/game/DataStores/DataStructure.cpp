@@ -23,116 +23,124 @@
 #include "DataStructure.h"
 #include "DataStorage.h"
 
-int32 SpellEntry::GetEffectBasePoints(uint32 eff) const
+uint32 SpellEntry::GetSpellEffectIdByIndex(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectBasePoints();
-    return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->Effect : 0;
 }
 
-uint32 SpellEntry::GetEffectItemType(uint32 eff) const
+float SpellEntry::GetEffectValueMultiplier(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectItemType();
-    return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectValueMultiplier : 0;
 }
 
-uint32 SpellEntry::GetEffectTriggerSpell(uint32 eff) const
+uint32 SpellEntry::GetEffectApplyAuraName(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectTriggerSpell();
-    return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectApplyAuraName : 0;
 }
 
-uint32 SpellEntry::GetEffectAmplitude(uint32 eff) const
+uint32 SpellEntry::GetEffectAmplitude(uint32 index) const
 {
-   if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-       return effectEntry->GetEffectAmplitude();
-   return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectAmplitude : 0;
 }
 
-int32 SpellEntry::GetEffectMiscValue(uint32 eff) const
+int32 SpellEntry::GetEffectBasePoints(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectMiscValue();
-   return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectBasePoints : 0;
 }
 
-int32 SpellEntry::GetEffectMiscValueB(uint32 eff) const
+float SpellEntry::GetEffectBonusMultiplier(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectMiscValueB();
-   return 0;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectBonusMultiplier : 0;
 }
 
-uint32 SpellEntry::GetEffectChainTarget(uint32 eff) const
+float SpellEntry::GetEffectDamageMultiplier(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectChainTarget();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectDamageMultiplier : 0;
 }
 
-int32 SpellEntry::GetEffectDieSides(uint32 eff) const
+uint32 SpellEntry::GetEffectChainTarget(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectDieSides();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectChainTarget : 0;
 }
 
-float SpellEntry::GetEffectPointsPerComboPoint(uint32 eff) const
+int32 SpellEntry::GetEffectDieSides(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectPointsPerComboPoint();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectDieSides : 0;
 }
 
-float SpellEntry::GetEffectRealPointsPerLevel(uint32 eff) const
+uint32 SpellEntry::GetEffectItemType(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectRealPointsPerLevel();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectItemType : 0;
 }
 
-uint32 SpellEntry::GetEffectRadiusIndex(uint32 eff) const
+uint32 SpellEntry::GetEffectMechanic(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectRadiusIndex();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectMechanic : 0;
 }
 
-float SpellEntry::GetEffectDamageMultiplier(uint32 eff) const
+int32 SpellEntry::GetEffectMiscValue(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectDamageMultiplier();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectMiscValue : 0;
 }
 
-float SpellEntry::GetEffectBonusMultiplier(uint32 eff) const
+int32 SpellEntry::GetEffectMiscValueB(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectBonusMultiplier();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectMiscValueB : 0;
 }
 
-uint32 SpellEntry::GetEffectMechanic(uint32 eff) const
+float SpellEntry::GetEffectPointsPerComboPoint(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectMechanic();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectPointsPerComboPoint : 0;
 }
 
-float SpellEntry::GetEffectValueMultiplier(uint32 eff) const
+int32 SpellEntry::GetEffectRadiusIndex(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectValueMultiplier();
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectRadiusIndex : 0;
 }
 
-uint32 SpellEntry::GetEffectSpellClassMask(uint32 eff) const
+float SpellEntry::GetEffectRealPointsPerLevel(uint32 index) const
 {
-    if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->EffectSpellClassMask[0];
-    return NULL;
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectRealPointsPerLevel : 0;
+}
+
+flag96 SpellEntry::GetEffectSpellClassMask(uint32 index) const
+{
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectSpellClassMask : flag96(0);
+}
+
+uint32 SpellEntry::GetEffectTriggerSpell(uint32 index) const
+{
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectTriggerSpell : 0;
+}
+
+uint32 SpellEntry::GetEffectImplicitTargetA(uint32 index) const
+{
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectImplicitTargetA : 0;
+}
+
+uint32 SpellEntry::GetEffectImplicitTargetB(uint32 index) const
+{
+    SpellEffectEntry const* effect = GetSpellEffect(index);
+    return effect ? effect->EffectImplicitTargetB : 0;
 }
 
 SpellAuraOptionsEntry const* SpellEntry::GetSpellAuraOptions() const
@@ -467,42 +475,7 @@ uint32 SpellEntry::GetFacingCasterFlags() const
     SpellCastingRequirementsEntry const* castReq = GetSpellCastingRequirements();
     return castReq ? castReq->FacingCasterFlags : -1;
 }
-//SpellEffectEntry
-uint32 SpellEntry::GetSpellEffectIdByIndex(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->Effect : NULL;
-}
 
-uint32 SpellEntry::GetSpellEffectMechanic(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->EffectMechanic : NULL;
-}
-
-uint32 SpellEntry::GetSpellEffectBasePoints(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->EffectBasePoints : NULL;
-}
-
-uint32 SpellEntry::GetEffectImplicitTargetAByIndex(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->EffectImplicitTargetA : NULL;
-}
-
-uint32 SpellEntry::GetEffectImplicitTargetBByIndex(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->EffectImplicitTargetB : NULL;
-}
-
-uint32 SpellEntry::GetEffectApplyAuraNameByIndex(uint32 index) const
-{
-    SpellEffectEntry const* effect = GetSpellEffect(index);
-    return effect ? effect->EffectApplyAuraName : 0;
-}
 //SpellShapeshiftEntry
 uint32 SpellEntry::GetStances() const
 {

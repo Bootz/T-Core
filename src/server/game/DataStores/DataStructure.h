@@ -1679,23 +1679,6 @@ struct SpellEffectEntry
     uint32    EffectSpellId;                                // 22        new 4.0.0
     uint32    EffectIndex;                                  // 23        new 4.0.0
     //uint32  Unk0                                          // 24        4.2.0
-
-    // helpers
-    uint32 GetEffectMechanic() const { return EffectMechanic; }
-    int32  GetEffectBasePoints() const { return EffectBasePoints; }
-    uint32 GetEffectItemType() const { return EffectItemType; }
-    uint32 GetEffectTriggerSpell() const { return EffectTriggerSpell; }
-    uint32 GetEffectAmplitude() const { return EffectAmplitude; }
-    int32 GetEffectMiscValue() const { return EffectMiscValue; }
-    int32 GetEffectMiscValueB() const { return EffectMiscValueB; }
-    uint32 GetEffectChainTarget() const { return EffectChainTarget; }
-    int32 GetEffectDieSides() const { return EffectDieSides; }
-    float GetEffectPointsPerComboPoint() const { return EffectPointsPerComboPoint; }
-    float GetEffectRealPointsPerLevel() const { return EffectRealPointsPerLevel; }
-    uint32 GetEffectRadiusIndex() const { return EffectRadiusIndex; }
-    float GetEffectDamageMultiplier() const { return EffectDamageMultiplier; }
-    float GetEffectValueMultiplier() const { return EffectValueMultiplier; }
-    float GetEffectBonusMultiplier() const { return EffectBonusMultiplier; }
 };
 
 // SpellEquippedItems.dbc
@@ -1843,23 +1826,27 @@ struct SpellEntry
     uint32 SpellTotemsId;                                   // 46       SpellTotems.dbc
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
-    int32 GetEffectBasePoints(uint32 eff) const;
-    //SpellEffectEntry
-    uint32 GetEffectItemType(uint32 eff) const;
-    uint32 GetEffectTriggerSpell(uint32 eff) const;
-    uint32 GetEffectAmplitude(uint32 eff) const;
-    int32 GetEffectMiscValue(uint32 eff) const;
-    int32 GetEffectMiscValueB(uint32 eff) const;
-    uint32 GetEffectChainTarget(uint32 eff) const;
-    int32 GetEffectDieSides(uint32 eff) const;
-    float GetEffectPointsPerComboPoint(uint32 eff) const;
-    float GetEffectRealPointsPerLevel(uint32 eff) const;
-    uint32 GetEffectRadiusIndex(uint32 eff) const;
-    float GetEffectDamageMultiplier(uint32 eff) const;
-    float GetEffectBonusMultiplier(uint32 eff) const;
-    uint32 GetEffectMechanic(uint32 eff) const;
-    float GetEffectValueMultiplier(uint32 eff) const;
-    uint32 GetEffectSpellClassMask(uint32 eff) const;
+    // SpellEffectEntry
+    uint32 GetSpellEffectIdByIndex(uint32 index) const;
+    float GetEffectValueMultiplier(uint32 index) const;
+    uint32 GetEffectApplyAuraName(uint32 index) const;
+    uint32 GetEffectAmplitude(uint32 index) const;
+    int32 GetEffectBasePoints(uint32 index) const;
+    float GetEffectBonusMultiplier(uint32 index) const;
+    float GetEffectDamageMultiplier(uint32 index) const;
+    uint32 GetEffectChainTarget(uint32 index) const;
+    int32 GetEffectDieSides(uint32 index) const;
+    uint32 GetEffectItemType(uint32 index) const;
+    uint32 GetEffectMechanic(uint32 index) const;
+    int32 GetEffectMiscValue(uint32 index) const;
+    int32 GetEffectMiscValueB(uint32 index) const;
+    float GetEffectPointsPerComboPoint(uint32 index) const;
+    int32 GetEffectRadiusIndex(uint32 index) const;
+    float GetEffectRealPointsPerLevel(uint32 index) const;
+    flag96 GetEffectSpellClassMask(uint32 index) const;
+    uint32 GetEffectTriggerSpell(uint32 index) const;
+    uint32 GetEffectImplicitTargetA(uint32 index) const;
+    uint32 GetEffectImplicitTargetB(uint32 index) const;
 
     // struct access functions
     SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
@@ -1904,12 +1891,7 @@ struct SpellEntry
     uint32 GetMaxLevel() const;
     uint32 GetManaPerSecond() const;
     uint32 GetRequiresSpellFocus() const;
-    uint32 GetSpellEffectIdByIndex(uint32 index) const;
-    uint32 GetSpellEffectMechanic(uint32 index) const;
-    uint32 GetSpellEffectBasePoints(uint32 index) const;    
     uint32 GetAuraInterruptFlags() const;
-    uint32 GetEffectImplicitTargetAByIndex(uint32 index) const;
-    uint32 GetEffectImplicitTargetBByIndex(uint32 index) const;
     int32 GetAreaGroupId() const;
     uint32 GetFacingCasterFlags() const;
     uint32 GetBaseLevel() const;
@@ -1921,7 +1903,6 @@ struct SpellEntry
     uint32 GetChannelInterruptFlags() const;
     uint32 GetManaCostPerLevel() const;
     uint32 GetTargets() const;
-    uint32 GetEffectApplyAuraNameByIndex(uint32 index) const;
     //SpellAuraRestrictionsEntry
     uint32 GetTargetAuraSpell() const;
     uint32 GetTargetAuraState() const;

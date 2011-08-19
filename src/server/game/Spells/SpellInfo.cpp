@@ -230,7 +230,7 @@ SpellEffectInfo::SpellEffectInfo(SpellEntry const* spellEntry, SpellInfo const* 
     _spellInfo = spellInfo;
     _effIndex = effIndex;
     Effect = spellEntry->GetSpellEffectIdByIndex(effIndex);
-    ApplyAuraName = spellEntry->GetEffectApplyAuraNameByIndex(effIndex);
+    ApplyAuraName = spellEntry->GetEffectApplyAuraName(effIndex);
     Amplitude = spellEntry->GetEffectAmplitude(effIndex);
     DieSides = spellEntry->GetEffectDieSides(effIndex);
     RealPointsPerLevel = spellEntry->GetEffectRealPointsPerLevel(effIndex);
@@ -242,8 +242,8 @@ SpellEffectInfo::SpellEffectInfo(SpellEntry const* spellEntry, SpellInfo const* 
     MiscValue = spellEntry->GetEffectMiscValue(effIndex);
     MiscValueB = spellEntry->GetEffectMiscValueB(effIndex);
     Mechanic = Mechanics(spellEntry->GetEffectMechanic(effIndex));
-    TargetA = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetAByIndex(effIndex));
-    TargetB = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetBByIndex(effIndex));
+    TargetA = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetA(effIndex));
+    TargetB = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetB(effIndex));
     RadiusEntry = spellEntry->GetEffectRadiusIndex(effIndex) ? sSpellRadiusStore.LookupEntry(spellEntry->GetEffectRadiusIndex(effIndex)) : NULL;
     ChainTarget = spellEntry->GetEffectChainTarget(effIndex);
     ItemType = spellEntry->GetEffectItemType(effIndex);
