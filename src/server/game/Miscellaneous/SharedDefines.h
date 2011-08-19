@@ -563,6 +563,7 @@ enum SpellAttr7
 #define MAX_TALENT_SPEC         1
 #define MIN_TALENT_SPECS        1
 #define MAX_TALENT_SPECS        2
+#define MAX_TALENT_TABS         3
 #define MAX_GLYPH_SLOT_INDEX    9
 
 // Custom values
