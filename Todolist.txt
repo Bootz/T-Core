@@ -6,29 +6,26 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Fixed the Talentswitch.
-2.  Implement the branch spec switch.
-3.  Implement a New Terrain System.
-4.  Implement a new Creature Formations System.
-5.  Fixed the Group System.
-6.  Fixed the Guild System.
-7.  Implement the new Battlegrounds.
-8.  Fixed the Packets for Battlegrounds.
-9.  Implement Wintergrasp Battlefield.
-10. Update the rest of Opcodes to 4.2.0.
-11. Fix The New Power System
-12. Need to revise HoR now WIP
-13. Fix the trainer bug, if you click "train me" nothing happens
-14. Fix the vendor, they dont show any items
+1. Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
+2. fix spells casting
+3. Fix the trainer bug, if you click "train me" nothing happens
+4. Fix the vendor, they dont show any items
+5. Update the rest of Opcodes to 4.2.0.
+6. Fix The New Power System
+7.  Implement a New Terrain System.
+8.  Implement a new Creature Formations System.
+9.  Fixed the Group System.
+10.  Fixed the Guild System.
+11.  Implement the new Battlegrounds.
+12.  Fixed the Packets for Battlegrounds.
+13.  Implement Wintergrasp Battlefield.
+14. Need to revise HoR now WIP
 15. Implement new Transport System.
 16. Implement special spawn system.
-17. fix spells casting
-18. Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
 
 // Database Developer:
 1. Fixed all startup errors.
 2. Implemented more Cataclysm Content.
-3. Haltbarkeit: Stoff-, Leder- und Kettenrüstung haben jetzt soviele Haltbarkeitspunkte wie Plattenrüstung. // item_template.MaxDurability pls look at there
 
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
