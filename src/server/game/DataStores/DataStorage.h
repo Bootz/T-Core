@@ -65,7 +65,7 @@ typedef std::map<uint32/*pair32(map, diff)*/, MapDifficulty> MapDifficultyMap;
 MapDifficulty const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty);
 MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty);
 
-uint32 const* [MAX_TALENT_TABS] GetTalentTabPages(uint8 cls);
+uint32 const* /*[MAX_TALENT_TABS]*/ GetTalentTabPages(uint8 cls);
 
 PvPDifficultyEntry const* GetBattlegroundBracketByLevel(uint32 mapid, uint32 level);
 PvPDifficultyEntry const* GetBattlegroundBracketById(uint32 mapid, BattlegroundBracketId id);
@@ -187,7 +187,7 @@ extern DataStorage <SpellTotemsEntry>             sSpellTotemsStore;
 extern DataStorage <SummonPropertiesEntry>        sSummonPropertiesStore;
 extern DataStorage <TalentEntry>                  sTalentStore;
 extern DataStorage <TalentTabEntry>               sTalentTabStore;
-extern DataStorage <TalentTreePrimarySpells>      sTalentTreePrimarySpells;
+extern DataStorage <TalentTreePrimarySpellsEntry>      sTalentTreePrimarySpells;
 extern DataStorage <TaxiNodesEntry>               sTaxiNodesStore;
 extern DataStorage <TaxiPathEntry>                sTaxiPathStore;
 extern TaxiMask                                  sTaxiNodesMask;
@@ -197,7 +197,6 @@ extern TaxiMask                                  sAllianceTaxiNodesMask;
 extern TaxiMask                                  sDeathKnightTaxiNodesMask;
 extern TaxiPathSetBySource                       sTaxiPathSetBySource;
 extern TaxiPathNodesByPath                       sTaxiPathNodesByPath;
-//extern DataStorage <TeamContributionPointsEntry>  sTeamContributionPointsStore; not added yet
 extern DataStorage <TotemCategoryEntry>           sTotemCategoryStore;
 extern DataStorage <VehicleEntry>                 sVehicleStore;
 extern DataStorage <VehicleSeatEntry>             sVehicleSeatStore;

@@ -800,6 +800,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 
         m_talents[i] = new PlayerTalentMap();
         m_branchSpec[i] = 0;
+        
+        m_freeTalentPoints = 0;
     }
 
     for (uint8 i = 0; i < BASEMOD_END; ++i)
@@ -18203,7 +18205,8 @@ void Player::SaveToDB()
         "trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, "
         "death_expire_time, taxi_path, totalKills, todayKills, yesterdayKills, chosenTitle, "
         "watchedFaction, drunk, health, power1, power2, power3, power4, power5, latency, "
-        "speccount, activespec, exploredZones, equipmentCache, knownTitles, achievementPoints, actionBars, grantableLevels) VALUES ("
+        "speccount, activespec, exploredZones, equipmentCache, knownTitles, achievementPoints, "
+        "actionBars, grantableLevels) VALUES ("
         << GetGUIDLow() << ','
         << GetSession()->GetAccountId() << ", '"
         << sql_name << "', "
@@ -20369,6 +20372,9 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         return false;
     }
 
+    if (count == pProto->BuyCount)
+        count = 1;
+
     // check current item amount if it limited
     if (crItem->maxcount != 0)
     {
@@ -21370,7 +21376,7 @@ void Player::SetGroup(Group* group, int8 subgroup)
 void Player::SendInitialPacketsBeforeAddToMap()
 {
     /// Pass 'this' as argument because we're not stored in ObjectAccessor yet
-    GetSocial()->SendSocialList(this);
+    GetSocial()->SendSocialList(this, SOCIAL_FLAG_FRIEND | SOCIAL_FLAG_IGNORED | SOCIAL_FLAG_MUTED);
 
     // guild bank list wtf?
 
@@ -23444,7 +23450,7 @@ void Player::CompletedAchievement(AchievementEntry const* entry)
     GetAchievementMgr().CompletedAchievement(entry);
 }
 
-void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn)
+void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn /*= true*/)
 {
     uint32 CurTalentPoints = GetFreeTalentPoints();
 
@@ -23466,13 +23472,13 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn)
 
     if (talentTabInfo->TalentTabID != TalentBranchSpec(m_activeSpec) && learn)
     {
-        uint32 pointInBS = 0;
+        uint32 pointInBS = (m_talentSpec[m_activeSpec] >> (talentTabInfo->tabpage*8)) & 0xFF;
         for (PlayerTalentMap::iterator itr = m_talents[m_activeSpec]->begin(); itr != m_talents[m_activeSpec]->end(); itr++)
         {
             for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
             {
                 const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
-                if(thisTalent) 
+                if (thisTalent) 
                 {
                     int thisrank = -1; // Set to -1 because of for () 
 
@@ -23504,7 +23510,7 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn)
                 }
             }
         }
-        if(pointInBS < 31)
+        if (pointInBS < 31)
             return;
     }
 
@@ -23597,6 +23603,8 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn)
     // learn! (other talent ranks will unlearned at learning)
     learnSpell(spellid, false);
     AddTalent(spellid, m_activeSpec, true);
+
+    m_talentSpec[m_activeSpec] += 1 << (talentTabInfo->tabpage*8);
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, m_activeSpec);
 
@@ -23803,6 +23811,9 @@ bool Player::canSeeSpellClickOn(Creature const *c) const
 
 void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
 {
+    for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+        m_talentSpec[i] = 0;
+
     *data << uint32(GetFreeTalentPoints());                 // unspentTalentPoints
     *data << uint8(m_specsCount);                           // talent group count (0, 1 or 2)
     *data << uint8(m_activeSpec);                           // talent group index (0 or 1)
@@ -23836,6 +23847,8 @@ void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
                     // skip another tab talents
                     if (talentInfo->TalentTab != talentTabId)
                         continue;
+
+                    m_talentSpec[specIdx] += ((talentInfo.currentRank+1) << i*8); // 8 bits per tab, higher 8 bits are free
 
                     // find max talent rank (0~4)
                     int8 curtalent_maxrank = -1;
@@ -24220,12 +24233,10 @@ void Player::_SaveGlyphs(SQLTransaction& trans)
 
 void Player::_SaveTalentBranchSpecs(SQLTransaction& trans)
 {
-    trans->PAppend("DELETE FROM character_talentbranchspec WHERE guid='%u'",GetGUIDLow());
+    trans->PAppend("DELETE FROM character_talentbranchspec WHERE guid='%u'", GetGUIDLow());
     for (uint8 spec = 0; spec < m_specsCount; ++spec)
-    {
         trans->PAppend("INSERT INTO character_talentbranchspec VALUES('%u', '%u', '%u')",
 					   GetGUIDLow(), spec, TalentBranchSpec(spec));
-    }
 }
 
 void Player::_LoadTalentBranchSpecs(PreparedQueryResult result)
