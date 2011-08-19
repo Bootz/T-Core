@@ -501,6 +501,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     AttributesEx5 = spellEntry->AttributesEx5;
     AttributesEx6 = spellEntry->AttributesEx6;
     AttributesEx7 = spellEntry->AttributesEx7;
+    AttributesEx8 = spellEntry->AttributesEx8;
     AttributesCu = 0;
     Stances = spellEntry->GetStances();
     StancesNot = spellEntry->GetStancesNot();
