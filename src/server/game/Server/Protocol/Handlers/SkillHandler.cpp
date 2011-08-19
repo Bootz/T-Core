@@ -70,7 +70,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
             _player->SetTalentBranchSpec(specID, _player->m_activeSpec);
             for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
             {
-                TalentTreePrimarySpells const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
+                TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
                 
                 if (!talentInfo || talentInfo->TalentTab != specID)
                     continue;

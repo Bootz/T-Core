@@ -4435,7 +4435,7 @@ bool Player::resetTalents(bool no_cost)
 
     for (uint32 j = 0; j < sTalentTreePrimarySpells.GetNumRows(); ++j)
     {
-        TalentTreePrimarySpells const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(j);
+        TalentTreePrimarySpellsEntry const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(j);
 		
         if (talentTreeInfo->TalentTab != TalentBranchSpec(m_activeSpec) || !talentTreeInfo)
             continue;
@@ -23848,7 +23848,7 @@ void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
                     if (talentInfo->TalentTab != talentTabId)
                         continue;
 
-                    m_talentSpec[specIdx] += ((talentInfo.currentRank+1) << i*8); // 8 bits per tab, higher 8 bits are free
+                    m_talentSpec[specIdx] += ((i+1) << i*8); // 8 bits per tab, higher 8 bits are free
 
                     // find max talent rank (0~4)
                     int8 curtalent_maxrank = -1;
@@ -24401,7 +24401,7 @@ void Player::ActivateSpec(uint8 spec)
     
     for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
-        TalentTreePrimarySpells const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
+        TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
         
         if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(m_activeSpec))
             continue;
@@ -24452,7 +24452,7 @@ void Player::ActivateSpec(uint8 spec)
 
     for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
-        TalentTreePrimarySpells const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
+        TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
         
         if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(spec))
             continue;
