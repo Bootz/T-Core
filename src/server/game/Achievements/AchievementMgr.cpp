@@ -470,7 +470,6 @@ void AchievementMgr::DeleteFromDB(uint32 lowguid)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM character_achievement WHERE guid = %u", lowguid);
     trans->PAppend("DELETE FROM character_achievement_progress WHERE guid = %u", lowguid);
-    trans->PAppend("UPDATE characters SET achievementPoints = 0 WHERE guid = %u",lowguid);
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -525,7 +524,6 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
         bool need_execute_ins = false;
         std::ostringstream ssdel;
         std::ostringstream ssins;
-        std::ostringstream ss;
         for (CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         {
             if (!iter->second.changed)
@@ -578,12 +576,6 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
             if (need_execute_ins)
                 trans->Append(ssins.str().c_str());
         }
-        // Save the AchievementPoints
-        if (m_achievementPoints)
-        {
-            ss << "UPDATE characters SET achievementPoints=" << m_achievementPoints << " WHERE guid = " << GetPlayer()->GetGUIDLow();
-            trans->Append(ss.str().c_str());
-        }
     }
 }
 
@@ -598,10 +590,12 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
             Field* fields = achievementResult->Fetch();
             uint32 achievementid = fields[0].GetUInt16();
 
-            const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievementid);
             // don't must happen: cleanup at server startup in sAchievementMgr->LoadCompletedAchievements()
+            AchievementEntry const* achievement = sAchievementStore.LookupEntry(achievementid);
             if (!achievement)
                 continue;
+
+            m_achievementPoints += achievement->points;
 
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
@@ -613,9 +607,6 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
                     if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(titleId))
                         if (!GetPlayer()->HasTitle(titleEntry))
                             GetPlayer()->SetTitle(titleEntry);
-
-            if (const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievementid))
-                m_achievementPoints += achievement->points;
 
         } while (achievementResult->NextRow());
     }
@@ -2101,6 +2092,7 @@ void AchievementMgr::SendAllAchievementData() const
     // 2 is flag count, 8 is bits in byte
     uint32 flagBytesCount = uint32(ceil(float(criterias) * 2.0f / 8.0f));
 
+    // since we don't know the exact size of the packed GUIDs this is just an approximation
     WorldPacket data(SMSG_ALL_ACHIEVEMENT_DATA, 4 + criterias*(8+4+4+8) + 8 + 4 + achievements*(4+4+4) + flagBytesCount);
 
     data << uint32(achievements);
@@ -2120,7 +2112,7 @@ void AchievementMgr::SendAllAchievementData() const
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         data << uint32(secsToTimeBitFields(iter->second.date));
     for(uint32 i = 0; i < criterias; ++i)
-        data << GetPlayer()->GetGUID();
+        data.append(GetPlayer()->GetPackGUID());
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         data << uint32(now - iter->second.date);
 
@@ -2143,20 +2135,22 @@ void AchievementMgr::SendRespondInspectAchievements(Player* player) const
     // 2 is flag count, 8 is bits in byte
     uint32 flagBytesCount = uint32(ceil(float(criterias) * 2.0f / 8.0f));
 
+    // since we don't know the exact size of the packed GUIDs this is just an approximation
     WorldPacket data(SMSG_RESPOND_INSPECT_ACHIEVEMENTS, 4 + criterias*(8+4+4+8) + 8 + 4 + achievements*(4+4+4) + flagBytesCount);
+
     data << uint32(criterias);
 
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         data << uint64(iter->second.counter);
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         data << uint32(iter->second.date);
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         data << uint32(iter->first);
 
-    data << GetPlayer()->GetGUID();
+    data.append(GetPlayer()->GetPackGUID());
 
     for(uint32 i = 0; i < criterias; ++i)
-        data << GetPlayer()->GetGUID();
+        data.append(GetPlayer()->GetPackGUID());
 
     data << uint32(achievements);
 
