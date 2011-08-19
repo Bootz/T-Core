@@ -28,7 +28,7 @@
 
 class WorldSession;
 
-enum ArenaTeamCommandTypes
+enum ArenaTeamCommandTypes // 4.20a 14480
 {
     ERR_ARENA_TEAM_CREATE_S                 = 0x00,
     ERR_ARENA_TEAM_INVITE_SS                = 0x01,
@@ -57,7 +57,7 @@ enum ArenaTeamCommandErrors // 4.20a 14480
     ERR_ARENA_TEAM_TOO_MANY_MEMBERS_S       = 0x17,
     ERR_ARENA_TEAM_NOT_FOUND                = 0x1B,
     ERR_ARENA_TEAMS_LOCKED                  = 0x1E,
-    ERR_ARENA_TEAM_TOO_MANY_CREATE          = 0x21,
+    ERR_ARENA_TEAM_TOO_MANY_CREATE          = 0x21
 };
 
 enum ArenaTeamEvents

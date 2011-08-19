@@ -134,15 +134,15 @@ enum InventoryResult
 
 enum BuyResult  // 4.20a 14480
 {
-    BUY_ERR_CANT_FIND_ITEM                      = 0,  // ERR_ITEM_NOT_FOUND        - default
-    BUY_ERR_ITEM_ALREADY_SOLD                   = 1,  // ERR_VENDOR_SOLD_OUT       - 1u  = 7u
-    BUY_ERR_NOT_ENOUGHT_MONEY                   = 2,  // ERR_NOT_ENOUGH_MONEY      - 2u
-    BUY_ERR_SELLER_DONT_LIKE_YOU                = 4,  // ERR_VENDOR_HATES_YOU      - 4u
-    BUY_ERR_DISTANCE_TOO_FAR                    = 5,  // ERR_VENDOR_TOO_FAR        - 5u
-    BUY_ERR_ITEM_SOLD_OUT                       = 7,  // ERR_VENDOR_SOLD_OUT       - 7u  = 1u
-    BUY_ERR_CANT_CARRY_MORE                     = 8,  // ERR_ITEM_MAX_COUNT        - 8u
-    BUY_ERR_RANK_REQUIRE                        = 11, // ERR_CANT_EQUIP_RANK       - 0xBu(11u)
-    BUY_ERR_REPUTATION_REQUIRE                  = 12  // ERR_CANT_EQUIP_REPUTATION - 0xCu(12u)
+    BUY_ERR_ITEM_NOT_FOUND                      = 0,
+    BUY_ERR_ITEM_ALREADY_SOLD                   = 1, // BUY_ERR_ITEM_ALREADY_SOLD = BUY_ERR_ITEM_SOLD_OUT in client
+    BUY_ERR_NOT_ENOUGHT_MONEY                   = 2,
+    BUY_ERR_VENDOR_HATES_YOU                    = 4,
+    BUY_ERR_DISTANCE_TOO_FAR                    = 5,
+    BUY_ERR_ITEM_SOLD_OUT                       = 7,
+    BUY_ERR_ITEM_MAX_COUNT                      = 8,
+    BUY_ERR_CANT_EQUIP_RANK                     = 11,
+    BUY_ERR_CANT_EQUIP_REPUTATION               = 12
 };
 
 enum SellResult
