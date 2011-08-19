@@ -6,19 +6,19 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1. Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
-2. fix spells casting
-3. Fix the trainer bug, if you click "train me" nothing happens
-4. Fix the vendor, they dont show any items
-5. Update the rest of Opcodes to 4.2.0.
-6. Fix The New Power System
+1.  Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
+2.  fix spells casting
+3.  Fix the trainer bug, if you click "train me" nothing happens
+4.  Fix the vendor, they dont show any items
+5.  Update the rest of Opcodes to 4.2.0.
+6.  Fix The New Power System
 7.  Implement a New Terrain System.
 8.  Implement a new Creature Formations System.
 9.  Fixed the Group System.
-10.  Fixed the Guild System.
-11.  Implement the new Battlegrounds.
-12.  Fixed the Packets for Battlegrounds.
-13.  Implement Wintergrasp Battlefield.
+10. Fixed the Guild System.
+11. Implement the new Battlegrounds.
+12. Fixed the Packets for Battlegrounds.
+13. Implement Wintergrasp Battlefield.
 14. Need to revise HoR now WIP
 15. Implement new Transport System.
 16. Implement special spawn system.
