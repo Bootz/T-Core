@@ -2091,7 +2091,7 @@ struct TalentTabEntry
     //uint32 spellIds[2];                                   // 9-10 passive mastery bonus spells?
 };
 
-struct TalentTreePrimarySpells
+struct TalentTreePrimarySpellsEntry
 {
     uint32 ID;          // 0
     uint32 TalentTab;   // 1

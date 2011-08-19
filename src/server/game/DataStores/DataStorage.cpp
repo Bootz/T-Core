@@ -198,7 +198,7 @@ DataStorage <SummonPropertiesEntry> sSummonPropertiesStore(SummonPropertiesfmt);
 DataStorage <TalentEntry> sTalentStore(TalentEntryfmt);
 TalentSpellPosMap sTalentSpellPosMap;
 DataStorage <TalentTabEntry> sTalentTabStore(TalentTabEntryfmt);
-DataStorage <TalentTreePrimarySpells> sTalentTreePrimarySpells(TalentTreeSpellsfmt);
+DataStorage <TalentTreePrimarySpellsEntry> sTalentTreePrimarySpells(TalentTreeSpellsfmt);
 
 // store absolute bit position for first rank for talent inspect
 static uint32 sTalentTabPages[MAX_CLASSES][3];

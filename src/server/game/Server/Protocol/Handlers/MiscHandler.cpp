@@ -509,7 +509,7 @@ void WorldSession::HandleContactListOpcode(WorldPacket & recv_data)
     uint32 mask;
     recv_data >> mask;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_CONTACT_LIST - Unk: %d", mask);
-    _player->GetSocial()->SendSocialList(_player);
+    _player->GetSocial()->SendSocialList(_player, mask);
 }
 
 void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)

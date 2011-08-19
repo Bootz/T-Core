@@ -127,7 +127,7 @@ class PlayerSocial
         void RemoveFromSocialList(uint32 friend_guid, bool ignore);
         void SetFriendNote(uint32 friend_guid, std::string note);
         // Packet send's
-        void SendSocialList(Player* plr);
+        void SendSocialList(Player* player, uint32 mask);
         // Misc
         bool HasFriend(uint32 friend_guid);
         bool HasIgnore(uint32 ignore_guid);
