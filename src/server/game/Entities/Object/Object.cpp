@@ -228,7 +228,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
 
 void Object::SendUpdateToPlayer(Player* player)
 {
-    // send create update to playe
+    // send create update to player
     UpdateData upd(player->GetMapId());
     WorldPacket packet;
 
