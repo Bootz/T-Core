@@ -24731,6 +24731,10 @@ void Player::RefundItem(Item *item)
     // Grant back money
     if (moneyRefund)
         ModifyMoney(moneyRefund);
+
+    SaveInventoryAndGoldToDB(trans);
+
+    CharacterDatabase.CommitTransaction(trans);
 }
 
 void Player::SetRandomWinner(bool isWinner)
