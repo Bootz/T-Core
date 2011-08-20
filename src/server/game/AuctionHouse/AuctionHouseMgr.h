@@ -34,7 +34,7 @@ class WorldPacket;
 
 #define MIN_AUCTION_TIME (12*HOUR)
 
-enum AuctionError
+enum AuctionError // Remove this when new Auction works :P
 {
     AUCTION_OK = 0,
     AUCTION_INTERNAL_ERROR = 2,
@@ -42,6 +42,21 @@ enum AuctionError
     AUCTION_ITEM_NOT_FOUND = 4,
     CANNOT_BID_YOUR_AUCTION_ERROR = 10
 };
+
+/*
+enum AuctionError420a // 4.20a 14480
+{
+    ERR_AUCTION_REMOVED        = 1,
+    ERR_AUCTION_BID_PLACED     = 2,
+    ERR_NOT_ENOUGH_MONEY       = 3,
+    ERR_ITEM_NOT_FOUND         = 4,
+    ERR_AUCTION_HIGHER_BID     = 5,
+    ERR_AUCTION_BID_INCREMENT  = 7,
+    ERR_AUCTION_BID_OWN        = 10,
+    ERR_RESTRICTED_ACCOUNT     = 13,
+    ERR_AUCTION_DATABASE_ERROR = 14 // default
+};
+*/
 
 enum AuctionAction
 {

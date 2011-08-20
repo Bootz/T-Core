@@ -2693,6 +2693,7 @@ enum SkillCategory
     SKILL_CATEGORY_GENERIC       = 12
 };
 
+// TotemCategory.dbc 4.20a 14480
 enum TotemCategory
 {
     TC_SKINNING_SKIFE_OLD          = 1,
@@ -2725,8 +2726,10 @@ enum TotemCategory
     TC_HAMMER_PICK                 = 167,
     TC_BLADED_PICKAXE              = 168,
     TC_FLINT_AND_TINDER            = 169,
-    TC_RUNED_COBALT_ROD            = 189,
-    TC_RUNED_TITANIUM_ROD          = 190
+    TC_RUNED_COBALT_ROD            = 189, // not ues
+    TC_RUNED_TITANIUM_ROD          = 190,
+    TC_RUNED_ELEMENTIUM_ROD        = 209,
+    TC_HIGH_POWERED_BOLT_GUN       = 210
 };
 
 enum UnitDynFlags
@@ -3076,37 +3079,31 @@ enum BanReturn
     BAN_NOTFOUND
 };
 
-// indexes of BattlemasterList.dbc
+// BattlemasterList.dbc 4.20a 14480
 enum BattlegroundTypeId
 {
     BATTLEGROUND_TYPE_NONE     = 0,
-    BATTLEGROUND_AV            = 1,
-    BATTLEGROUND_WS            = 2,
-    BATTLEGROUND_AB            = 3,
-    BATTLEGROUND_NA            = 4,
-    BATTLEGROUND_BE            = 5,
-    BATTLEGROUND_AA            = 6,
-    BATTLEGROUND_EY            = 7,
-    BATTLEGROUND_RL            = 8,
-    BATTLEGROUND_SA            = 9,
-    BATTLEGROUND_DS            = 10,
-    BATTLEGROUND_RV            = 11,
-    BATTLEGROUND_IC            = 30,
-    BATTLEGROUND_RB            = 32,                        // Random Battleground
-    BATTLEGROUND_RA_BG         = 100,                       // Rated Battleground
-    BATTLEGROUND_RA_BG1        = 101,                       // Rated Battleground
-    BATTLEGROUND_RA_BG2        = 102,                       // Rated Battleground
-    BATTLEGROUND_TP            = 108,                       // Twin Peaks
-    BATTLEGROUND_BG            = 120,                       // The Battle for Gilneas
-    BATTLEGROUND_ICD           = 441,                       // Icecrown Citadel
-    BATTLEGROUND_RS            = 443,                       // The Ruby Sanctum
-    BATTLEGROUND_FL            = 522,                       // Firelands
-    BATTLEGROUND_FL2           = 523,                       // Firelands Terrain 2
-    BATTLEGROUND_TFW           = 530,                       // Throne of the Four Winds
-    BATTLEGROUND_BD            = 531,                       // Blackwing Descent
-    BATTLEGROUND_BT            = 532,                       // The Bastion of Twilight
-    BATTLEGROUND_BH            = 533,                       // Baradin Hold
-    BATTLEGROUND_RA_ES         = 656                        // Rated Eye of the Storm
+    BATTLEGROUND_AV            = 1,   // Alterac Valley
+    BATTLEGROUND_WS            = 2,   // Warsong Gulch
+    BATTLEGROUND_AB            = 3,   // Arathi Basin
+    BATTLEGROUND_NA            = 4,   // Nagrand Arena
+    BATTLEGROUND_BE            = 5,   // Blade Edge Arena
+    BATTLEGROUND_AA            = 6,   // All Arenas
+    BATTLEGROUND_EY            = 7,   // Eye of the Storm
+    BATTLEGROUND_RL            = 8,   // Ruins of Lordaeron
+    BATTLEGROUND_SA            = 9,   // Strand of the Ancients
+    BATTLEGROUND_DS            = 10,  // Dalaran Sewers
+    BATTLEGROUND_RV            = 11,  // The Ring of Valor
+    BATTLEGROUND_IC            = 30,  // Isle of Conquest
+    BATTLEGROUND_RB            = 32,  // Random Battleground
+    BATTLEGROUND_RA_BG         = 100, // Rated Battleground
+    BATTLEGROUND_RA_BG1        = 101, // Rated Battleground
+    BATTLEGROUND_RA_BG2        = 102, // Rated Battleground
+    BATTLEGROUND_TP            = 108, // Twin Peaks
+    BATTLEGROUND_BG            = 120, // The Battle for Gilneas
+    BATTLEGROUND_ICD           = 441, // Icecrown Citadel
+    BATTLEGROUND_RS            = 443, // The Ruby Sanctum
+    BATTLEGROUND_RA_ES         = 656  // Rated Eye of the Storm
 };
 
 #define MAX_BATTLEGROUND_TYPE_ID 657
