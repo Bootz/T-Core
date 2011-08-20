@@ -40,7 +40,7 @@ enum CastTarget
 
 struct SimpleAI : public ScriptedAI
 {
-    SimpleAI(Creature *c);// : ScriptedAI(c);
+    SimpleAI(Creature* c);// : ScriptedAI(c);
 
     void Reset();
 
@@ -48,7 +48,7 @@ struct SimpleAI : public ScriptedAI
 
     void KilledUnit(Unit* /*victim*/);
 
-    void DamageTaken(Unit* killer, uint32 &damage);
+    void DamageTaken(Unit* killer, uint32& damage);
 
     void UpdateAI(const uint32 diff);
 

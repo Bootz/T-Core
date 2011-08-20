@@ -1478,7 +1478,7 @@ void SpellMgr::LoadSpellTargetPositions()
         bool found = false;
         for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         {
-            if (spellInfo->Effects[i].TargetA.GetTarget() == TARGET_DST_DB || spellInfo->Effects[i].TargetB.GetTarget() == TARGET_DST_DB)
+            if (spellInfo->Effects[i].TargetA.GetTarget() == TARGET_DEST_DB || spellInfo->Effects[i].TargetB.GetTarget() == TARGET_DEST_DB)
             {
                 // additional requirements
                 if (spellInfo->Effects[i].Effect == SPELL_EFFECT_BIND && spellInfo->Effects[i].MiscValue)
@@ -1497,7 +1497,7 @@ void SpellMgr::LoadSpellTargetPositions()
         }
         if (!found)
         {
-            sLog->outErrorDb("Spell (Id: %u) listed in `spell_target_position` does not have target TARGET_DST_DB (17).", Spell_ID);
+            sLog->outErrorDb("Spell (Id: %u) listed in `spell_target_position` does not have target TARGET_DEST_DB (17).", Spell_ID);
             continue;
         }
 
@@ -1519,7 +1519,7 @@ void SpellMgr::LoadSpellTargetPositions()
         {
             switch (spellInfo->Effects[j].TargetA)
             {
-                case TARGET_DST_DB:
+                case TARGET_DEST_DB:
                     found = true;
                     break;
             }
@@ -1527,7 +1527,7 @@ void SpellMgr::LoadSpellTargetPositions()
                 break;
             switch (spellInfo->Effects[j].TargetB)
             {
-                case TARGET_DST_DB:
+                case TARGET_DEST_DB:
                     found = true;
                     break;
             }
@@ -2966,11 +2966,11 @@ void SpellMgr::LoadDbcDataCorrections()
         case 62136: // Energize Cores
         case 54069: // Energize Cores
         case 56251: // Energize Cores
-            spellEffect->EffectImplicitTargetA = TARGET_UNIT_AREA_ENTRY_SRC;
+            spellEffect->EffectImplicitTargetA = TARGET_UNIT_SRC_AREA_ENTRY;
             break;
         case 50785: // Energize Cores
         case 59372: // Energize Cores
-            spellEffect->EffectImplicitTargetA = TARGET_UNIT_AREA_ENEMY_SRC;
+            spellEffect->EffectImplicitTargetA = TARGET_UNIT_SRC_AREA_ENTRY;
             break;
         case 3286:  // Bind
             spellEffect->EffectImplicitTargetA = TARGET_UNIT_TARGET_ENEMY;
@@ -2996,11 +2996,11 @@ void SpellMgr::LoadDbcDataCorrections()
         case 16007: // Draco-Incarcinatrix 900
             // was 46, but effect is aura effect
             spellEffect->EffectImplicitTargetA = TARGET_UNIT_NEARBY_ENTRY;
-            spellEffect->EffectImplicitTargetB = TARGET_DST_NEARBY_ENTRY;
+            spellEffect->EffectImplicitTargetB = TARGET_DEST_NEARBY_ENTRY;
             break;
         case 59725: // Improved Spell Reflection - aoe aura
             // Target entry seems to be wrong for this spell :/
-            spellEffect->EffectImplicitTargetA = TARGET_UNIT_PARTY_CASTER;
+            spellEffect->EffectImplicitTargetA = TARGET_UNIT_CASTER_AREA_PARTY;
             spellEffect->EffectRadiusIndex = 45;
             break;
         case 44978: case 45001: case 45002: // Wild Magic
@@ -3025,8 +3025,8 @@ void SpellMgr::LoadDbcDataCorrections()
         case 52479: // Gift of the Harvester
             spellTarget->MaxAffectedTargets = 1;
             // a trap always has dst = src?
-            spellEffect->EffectImplicitTargetA = TARGET_DST_CASTER;
-            spellEffect->EffectImplicitTargetA = TARGET_DST_CASTER;
+            spellEffect->EffectImplicitTargetA = TARGET_DEST_CASTER;
+            spellEffect->EffectImplicitTargetA = TARGET_DEST_CASTER;
             break;
         case 41376: // Spite
         case 39992: // Needle Spine
@@ -3162,8 +3162,8 @@ void SpellMgr::LoadDbcDataCorrections()
         // this is the only known exception, probably just wrong data
         case 29214: // Wrath of the Plaguebringer
         case 54836: // Wrath of the Plaguebringer
-            spellEffect->EffectImplicitTargetB = TARGET_UNIT_AREA_ALLY_SRC;
-            spellEffect->EffectImplicitTargetB = TARGET_UNIT_AREA_ALLY_SRC;
+            spellEffect->EffectImplicitTargetB = TARGET_UNIT_SRC_AREA_ALLY;
+            spellEffect->EffectImplicitTargetB = TARGET_UNIT_SRC_AREA_ALLY;
             break;
         case 31687: // Summon Water Elemental
             // 322-330 switch - effect changed to dummy, target entry not changed in client:(
@@ -3274,7 +3274,7 @@ void SpellMgr::LoadDbcDataCorrections()
         case 70859: // Upper Spire Teleport
         case 70860: // Frozen Throne Teleport
         case 70861: // Sindragosa's Lair Teleport
-            spellEffect->EffectImplicitTargetA = TARGET_DST_DB;
+            spellEffect->EffectImplicitTargetA = TARGET_DEST_DB;
             break;
         case 69055: // Saber Lash (Lord Marrowgar)
         case 70814: // Saber Lash (Lord Marrowgar)
@@ -3358,7 +3358,7 @@ void SpellMgr::LoadDbcDataCorrections()
             spellEffect->EffectRadiusIndex = 22;   // 200yd
             break;
         case 70598: // Sindragosa's Fury
-            spellEffect->EffectImplicitTargetA = TARGET_DST_CASTER;
+            spellEffect->EffectImplicitTargetA = TARGET_DEST_CASTER;
             break;
         case 69846: // Frost Bomb
             spellInfo->speed = 10;

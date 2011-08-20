@@ -30,13 +30,13 @@ struct TSpellSummary
 {
     uint8 Targets;                                          // set of enum SelectTarget
     uint8 Effects;                                          // set of enum SelectEffect
-} extern *SpellSummary;
+} extern* SpellSummary;
 
 void SummonList::DoZoneInCombat(uint32 entry)
 {
     for (iterator i = begin(); i != end();)
     {
-        Creature *summon = Unit::GetCreature(*me, *i);
+        Creature* summon = Unit::GetCreature(*me, *i);
         ++i;
         if (summon && summon->IsAIEnabled
             && (!entry || summon->GetEntry() == entry))
@@ -48,7 +48,7 @@ void SummonList::DoAction(uint32 entry, int32 info)
 {
     for (iterator i = begin(); i != end();)
     {
-        Creature *summon = Unit::GetCreature(*me, *i);
+        Creature* summon = Unit::GetCreature(*me, *i);
         ++i;
         if (summon && summon->IsAIEnabled
             && (!entry || summon->GetEntry() == entry))
@@ -60,7 +60,7 @@ void SummonList::DespawnEntry(uint32 entry)
 {
     for (iterator i = begin(); i != end();)
     {
-        Creature *summon = Unit::GetCreature(*me, *i);
+        Creature* summon = Unit::GetCreature(*me, *i);
         if (!summon)
             erase(i++);
         else if (summon->GetEntry() == entry)
@@ -78,7 +78,7 @@ void SummonList::DespawnAll()
 {
     while (!empty())
     {
-        Creature *summon = Unit::GetCreature(*me, *begin());
+        Creature* summon = Unit::GetCreature(*me, *begin());
         if (!summon)
             erase(begin());
         else
@@ -122,8 +122,8 @@ bool SummonList::HasEntry(uint32 entry)
     return false;
 }
 
-ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
-    me(pCreature),
+ScriptedAI::ScriptedAI(Creature* creature) : CreatureAI(creature),
+    me(creature),
     IsFleeing(false),
     _evadeCheckCooldown(2500),
     _isCombatMovementAllowed(true)
@@ -132,13 +132,13 @@ ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
     _difficulty = Difficulty(me->GetMap()->GetSpawnMode());
 }
 
-void ScriptedAI::AttackStartNoMove(Unit* pWho)
+void ScriptedAI::AttackStartNoMove(Unit* who)
 {
-    if (!pWho)
+    if (!who)
         return;
 
-    if (me->Attack(pWho, false))
-        DoStartNoMovement(pWho);
+    if (me->Attack(who, false))
+        DoStartNoMovement(who);
 }
 
 void ScriptedAI::UpdateAI(uint32 const /*diff*/)
@@ -158,15 +158,15 @@ void ScriptedAI::UpdateAI(uint32 const /*diff*/)
     }
 }
 
-void ScriptedAI::DoStartMovement(Unit* pVictim, float fDistance, float fAngle)
+void ScriptedAI::DoStartMovement(Unit* victim, float distance, float angle)
 {
-    if (pVictim)
-        me->GetMotionMaster()->MoveChase(pVictim, fDistance, fAngle);
+    if (victim)
+        me->GetMotionMaster()->MoveChase(victim, distance, angle);
 }
 
-void ScriptedAI::DoStartNoMovement(Unit* pVictim)
+void ScriptedAI::DoStartNoMovement(Unit* victim)
 {
-    if (!pVictim)
+    if (!victim)
         return;
 
     me->GetMotionMaster()->MoveIdle();
@@ -178,27 +178,27 @@ void ScriptedAI::DoStopAttack()
         me->AttackStop();
 }
 
-void ScriptedAI::DoCastSpell(Unit* pTarget, SpellInfo const* pSpellInfo, bool bTriggered)
+void ScriptedAI::DoCastSpell(Unit* target, SpellInfo const* spellInfo, bool triggered)
 {
-    if (!pTarget || me->IsNonMeleeSpellCasted(false))
+    if (!target || me->IsNonMeleeSpellCasted(false))
         return;
 
     me->StopMoving();
-    me->CastSpell(pTarget, pSpellInfo, bTriggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE);
+    me->CastSpell(target, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE);
 }
 
-void ScriptedAI::DoPlaySoundToSet(WorldObject* pSource, uint32 uiSoundId)
+void ScriptedAI::DoPlaySoundToSet(WorldObject* source, uint32 soundId)
 {
-    if (!pSource)
+    if (!source)
         return;
 
-    if (!GetSoundEntriesStore()->LookupEntry(uiSoundId))
+    if (!GetSoundEntriesStore()->LookupEntry(soundId))
     {
-        sLog->outError("TSCR: Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", uiSoundId, pSource->GetTypeId(), pSource->GetGUIDLow());
+        sLog->outError("TSCR: Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", soundId, source->GetTypeId(), source->GetGUIDLow());
         return;
     }
 
-    pSource->PlayDirectSound(uiSoundId);
+    source->PlayDirectSound(soundId);
 }
 
 Creature* ScriptedAI::DoSpawnCreature(uint32 entry, float offsetX, float offsetY, float offsetZ, float angle, uint32 type, uint32 despawntime)
@@ -465,14 +465,14 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
     if (me->IsInEvadeMode() || !me->getVictim())
         return false;
 
-    float fX = me->GetPositionX();
-    float fY = me->GetPositionY();
-    float fZ = me->GetPositionZ();
+    float x = me->GetPositionX();
+    float y = me->GetPositionY();
+    float z = me->GetPositionZ();
 
     switch(me->GetEntry())
     {
         case NPC_BROODLORD:                                         // broodlord (not move down stairs)
-            if (fZ > 448.60f)
+            if (z > 448.60f)
                 return false;
             break;
         case NPC_VOID_REAVER:                                         // void reaver (calculate from center of room)
@@ -480,11 +480,11 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
                 return false;
             break;
         case NPC_JAN_ALAI:                                         // jan'alai (calculate by Z)
-            if (fZ > 12.0f)
+            if (z > 12.0f)
                 return false;
             break;
         case NPC_SARTHARION:                                         // sartharion (calculate box)
-            if (fX > 3218.86f && fX < 3275.69f && fY < 572.40f && fY > 484.68f)
+            if (x > 3218.86f && x < 3275.69f && y < 572.40f && y > 484.68f)
                 return false;
             break;
         default:

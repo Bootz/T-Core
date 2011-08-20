@@ -1948,7 +1948,7 @@ void Spell::EffectTeleportUnits(SpellEffectEntry const* /*effect*/)
     else if (unitTarget->GetTypeId() == TYPEID_PLAYER)
         unitTarget->ToPlayer()->TeleportTo(mapid, x, y, z, orientation, unitTarget == m_caster ? TELE_TO_SPELL : 0);
 
-    // post effects for TARGET_DST_DB
+    // post effects for TARGET_DEST_DB
     switch (m_spellInfo->Id)
     {
         // Dimensional Ripper - Everlook
@@ -5057,27 +5057,18 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                         m_caster->ToPlayer()->learnSpell(discoveredSpell, false);
                     return;
                 }
-                case 62428: // Load into Catapult
-                {
-                    if (Vehicle* seat = m_caster->GetVehicleKit())
-                        if (Unit* passenger = seat->GetPassenger(0))
-                            if (Unit* demolisher = m_caster->GetVehicleBase())
-                                passenger->CastSpell(demolisher, damage, true);
-                    return;
-                }
                 case 62482: // Grab Crate
                 {
                     if (unitTarget)
                     {
-                        if (Vehicle* seat = m_caster->GetVehicleKit())
+                        if (Unit* seat = m_caster->GetVehicleBase())
                         {
-                            if (Unit* passenger = seat->GetPassenger(1))
-                                if (Creature* oldContainer = passenger->ToCreature())
-                                    oldContainer->DisappearAndDie();
-
-                            // TODO: a hack, range = 11, should after some time cast, otherwise too far
-                            m_caster->CastSpell(seat->GetBase(), 62496, true);
-                            unitTarget->EnterVehicle(m_caster, 1);
+                            if (Unit* parent = seat->GetVehicleBase())
+                            {
+                                // TODO: a hack, range = 11, should after some time cast, otherwise too far
+                                m_caster->CastSpell(parent, 62496, true);
+                                unitTarget->CastSpell(parent, m_spellInfo->Effects[EFFECT_0].CalcValue());
+                            }
                         }
                     }
                     return;
@@ -6852,7 +6843,7 @@ void Spell::GetSummonPosition(uint32 i, Position &pos, float radius, uint32 coun
             //This is a workaround. Do not have time to write much about it
             switch (m_spellInfo->Effects[i].TargetA.GetTarget())
             {
-                case TARGET_MINION:
+                case TARGET_DEST_CASTER_SUMMON:
                 case TARGET_DEST_CASTER_RANDOM:
                     m_caster->GetNearPosition(pos, radius * (float)rand_norm(), (float)rand_norm()*static_cast<float>(2*M_PI));
                     break;
@@ -7028,7 +7019,7 @@ void Spell::EffectBind(SpellEffectEntry const* effect)
 
     uint32 area_id;
     WorldLocation loc;
-    if (m_spellInfo->Effects[effect->EffectIndex].TargetA.GetTarget() == TARGET_DST_DB || m_spellInfo->Effects[effect->EffectIndex].TargetB.GetTarget() == TARGET_DST_DB)
+    if (m_spellInfo->Effects[effect->Effect].TargetA.GetTarget() == TARGET_DEST_DB || m_spellInfo->Effects[effect->EffectIndex].TargetB.GetTarget() == TARGET_DEST_DB)
     {
         SpellTargetPosition const* st = sSpellMgr->GetSpellTargetPosition(m_spellInfo->Id);
         if (!st)

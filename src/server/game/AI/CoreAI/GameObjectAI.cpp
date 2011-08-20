@@ -29,4 +29,4 @@ int GameObjectAI::Permissible(const GameObject* go)
     return PERMIT_BASE_NO;
 }
 
-NullGameObjectAI::NullGameObjectAI(GameObject *g) : GameObjectAI(g) {}
+NullGameObjectAI::NullGameObjectAI(GameObject* g) : GameObjectAI(g) {}

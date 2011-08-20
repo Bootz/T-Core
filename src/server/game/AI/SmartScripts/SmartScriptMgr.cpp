@@ -286,7 +286,7 @@ bool SmartAIMgr::IsTargetValid(SmartScriptHolder const& e)
     return true;
 }
 
-bool SmartAIMgr::IsEventValid(SmartScriptHolder &e)
+bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
 {
     if (e.event.type >= SMART_EVENT_END)
     {
