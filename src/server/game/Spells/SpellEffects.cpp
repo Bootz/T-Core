@@ -816,10 +816,6 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     }
                     return;
                 }
-                case 20577:                                 // Cannibalize
-                    if (unitTarget)
-                        m_caster->CastSpell(m_caster, 20578, false, NULL);
-                    return;
                 case 23019:                                 // Crystal Prison Dummy DND
                 {
                     if (!unitTarget || !unitTarget->isAlive() || unitTarget->GetTypeId() != TYPEID_UNIT || unitTarget->ToCreature()->isPet())
@@ -3133,7 +3129,7 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
         if (aura->IsPassive())
             continue;
 
-        if ((aura->GetSpellInfo()->GetDispelMask()) & dispelMask)
+        if (aura->GetSpellInfo()->GetDispelMask() & dispelMask)
         {
             if (aura->GetSpellInfo()->Dispel == DISPEL_MAGIC)
             {
