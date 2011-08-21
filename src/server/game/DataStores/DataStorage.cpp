@@ -490,7 +490,7 @@ void LoadDataStorages(const std::string& dataPath)
                 if (skillLine->learnOnGetSkill != ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL)
                     continue;
 
-                sPetFamilySpellsStore[i].insert( spellInfo->Id);
+                sPetFamilySpellsStore[i].insert(spellInfo->Id);
             }
         }
     }
