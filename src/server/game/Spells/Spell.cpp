@@ -4432,22 +4432,23 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
     itemTarget = pItemTarget;
     gameObjTarget = pGOTarget;
 
-    uint8 eff = m_spellInfo->Effects[i].Effect;
-
-    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell: %u Effect : %u", m_spellInfo->Id, eff);
-
     //we do not need DamageMultiplier here.
     damage = CalculateDamage(i, NULL);
 
+    SpellEffectEntry const* effect = 0;
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
-    if (!SpellEffects)
+    if (effect)
     {
-        if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
+        if (!preventDefault && effect->Effect < TOTAL_SPELL_EFFECTS)
         {
-            (this->*SpellEffects[eff])((SpellEffectEntry*)i);
+            (this->*SpellEffects[effect->Effect])(effect);
         }
+        else
+            sLog->outError("WORLD: Spell %u Effect%d : %u > TOTAL_SPELL_EFFECTS", m_spellInfo->Id, i, effect->Effect);
     }
+    else
+        sLog->outError("WORLD: Spell %u has no effect at index %u", m_spellInfo->Id, i);
 }
 
 SpellCastResult Spell::CheckCast(bool strict)
