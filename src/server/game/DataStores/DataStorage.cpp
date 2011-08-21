@@ -624,10 +624,10 @@ void LoadDataStorages(const std::string& dataPath)
     {
         std::set<uint32> spellPaths;
         for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
-            if (SpellEntry const* sInfo = sSpellStore.LookupEntry (i))
+            if (SpellEffectEntry const* sInfo = sSpellEffectStore.LookupEntry(i))
                 for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
-                    if (sInfo->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_SEND_TAXI)
-                        spellPaths.insert(sInfo->GetEffectMiscValue(j));
+                    if (sInfo->Effect == SPELL_EFFECT_SEND_TAXI)
+                        spellPaths.insert(sInfo->EffectMiscValue);
 
         memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
         memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
