@@ -4436,6 +4436,9 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
     damage = CalculateDamage(i, NULL);
 
     SpellEffectEntry const* effect = 0;
+    if (!effect)
+        return;
+
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
     if (effect)
