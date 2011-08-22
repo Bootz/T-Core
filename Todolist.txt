@@ -13,10 +13,10 @@ TODO-List for TrilliumEMU Developer #
 5.  Fix The New Power System.
 6.  Implement a New Terrain System.
 7.  Implement a new Creature Formations System.
-8.  Fixed the Group System.
-9.  Fixed the Guild System.
+8.  Fix the Group System.
+9.  Fix the Guild System.
 10. Implement the new Battlegrounds.
-11. Fixed the Packets for Battlegrounds.
+11. Fix the Packets for Battlegrounds.
 12. Implement Wintergrasp Battlefield.
 13. Need to revise HoR now WIP.
 14. Implement new Transport System.
