@@ -1034,41 +1034,55 @@ struct GtChanceToMeleeCritEntry
 
 struct GtChanceToSpellCritBaseEntry
 {
+    //uint32 level;
     float    base;
 };
 
 struct GtChanceToSpellCritEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 struct GtOCTClassCombatRatingScalarEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 //struct GtOCTRegenHPEntry
 //{
+//    uint32 level;
 //    float    ratio;
 //};
 
 struct GtOCTRegenMPEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 //struct GtRegenHPPerSptEntry
 //{
+//    uint32 level;
 //    float    ratio;
 //};
 
-struct gtOCTHpPerStaminaEntry
+struct GtOCTHpPerStaminaEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 struct GtRegenMPPerSptEntry
 {
+    //uint32 level;
+    float    ratio;
+};
+
+struct GtSpellScalingEntry
+{
+    uint32   level;
     float    ratio;
 };
 

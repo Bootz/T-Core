@@ -105,8 +105,9 @@ DataStorage <GtChanceToSpellCritBaseEntry> sGtChanceToSpellCritBaseStore(GtChanc
 DataStorage <GtChanceToSpellCritEntry>     sGtChanceToSpellCritStore(GtChanceToSpellCritfmt);
 DataStorage <GtOCTClassCombatRatingScalarEntry> sGtOCTClassCombatRatingScalarStore(GtOCTClassCombatRatingScalarfmt);
 //DataStorage <GtOCTRegenMPEntry>            sGtOCTRegenMPStore(GtOCTRegenMPfmt);  -- not used currently
-DataStorage <gtOCTHpPerStaminaEntry>       gtOCTHpPerStaminaStore(gtOCTHpPerStaminafmt);
+DataStorage <GtOCTHpPerStaminaEntry>       sGtOCTHpPerStaminaStore(gtOCTHpPerStaminafmt);
 DataStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSptfmt);
+DataStorage <GtSpellScalingEntry>          sGtSpellScalingStore(GtSpellScalingfmt);
 
 DataStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
@@ -390,8 +391,9 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToMeleeCritStore,    storagesPath, "gtChanceToMeleeCrit.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritBaseStore, storagesPath, "gtChanceToSpellCritBase.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritStore,    storagesPath, "gtChanceToSpellCrit.dbc");
-    LoadData(availableDbcLocales, bad_dbc_files, gtOCTHpPerStaminaStore,           storagesPath, "gtOCTHpPerStamina.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sGtOCTHpPerStaminaStore,      storagesPath, "gtOCTHpPerStamina.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtRegenMPPerSptStore,        storagesPath, "gtRegenMPPerSpt.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sGtSpellScalingStore,         storagesPath, "gtSpellScaling.dbc");
 
     LoadData(availableDbcLocales, bad_dbc_files, sHolidaysStore,               storagesPath, "Holidays.dbc");
 

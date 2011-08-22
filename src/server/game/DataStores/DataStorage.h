@@ -112,11 +112,9 @@ extern DataStorage <GtChanceToMeleeCritEntry>     sGtChanceToMeleeCritStore;
 extern DataStorage <GtChanceToSpellCritBaseEntry> sGtChanceToSpellCritBaseStore;
 extern DataStorage <GtChanceToSpellCritEntry>     sGtChanceToSpellCritStore;
 extern DataStorage <GtOCTClassCombatRatingScalarEntry> sGtOCTClassCombatRatingScalarStore;
-//extern DataStorage <GtOCTRegenHPEntry>            sGtOCTRegenHPStore;
-//extern DataStorage <GtOCTRegenMPEntry>            sGtOCTRegenMPStore; -- not used currently
-//extern DataStorage <GtRegenHPPerSptEntry>         sGtRegenHPPerSptStore;
-extern DataStorage <gtOCTHpPerStaminaEntry>       gtOCTHpPerStaminaStore;
+extern DataStorage <GtOCTHpPerStaminaEntry>       sGtOCTHpPerStaminaStore;
 extern DataStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore;
+extern DataStorage <GtSpellScalingEntry>               sGtSpellScalingStore;
 extern DataStorage <HolidaysEntry>                sHolidaysStore;
 extern DataStorage <ItemArmorQualityEntry>        sItemArmorQualityStore;
 extern DataStorage <ItemArmorShieldEntry>         sItemArmorShieldStore;
