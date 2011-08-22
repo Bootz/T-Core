@@ -265,10 +265,8 @@ public:
         boss_kelthuzadAI(Creature* c) : BossAI(c, BOSS_KELTHUZAD), spawns(c)
         {
             uiFaction = me->getFaction();
-            instance = me->GetInstanceScript();
         }
 
-        InstanceScript* instance;
         uint32 Phase;
         uint32 uiGuardiansOfIcecrownTimer;
         uint32 uiFaction;
