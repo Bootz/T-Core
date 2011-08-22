@@ -352,11 +352,11 @@ public:
                     Creature* pUnit = Unit::GetCreature((*me), InnderDemon[i]);
                     if (pUnit && pUnit->isAlive())
                     {
-                        Unit* pUnit_pTarget = Unit::GetUnit(*pUnit, CAST_AI(mob_inner_demon::mob_inner_demonAI, pUnit->AI())->victimGUID);
-                        if (pUnit_pTarget && pUnit_pTarget->isAlive())
+                        Unit* unit_target = Unit::GetUnit(*pUnit, CAST_AI(mob_inner_demon::mob_inner_demonAI, pUnit->AI())->victimGUID);
+                        if (unit_target && unit_target->isAlive())
                         {
-                            pUnit->CastSpell(pUnit_pTarget, SPELL_CONSUMING_MADNESS, true);
-                            DoModifyThreatPercent(pUnit_pTarget, -100);
+                            pUnit->CastSpell(unit_target, SPELL_CONSUMING_MADNESS, true);
+                            DoModifyThreatPercent(unit_target, -100);
                         }
                     }
                 }
@@ -511,6 +511,7 @@ public:
                         if (tempTarget && tempTarget->GetTypeId() == TYPEID_PLAYER && tempTarget->GetGUID() != me->getVictim()->GetGUID() && TargetList.size()<5)
                             TargetList.push_back(tempTarget);
                     }
+                    //SpellInfo *spell = GET_SPELL(SPELL_INSIDIOUS_WHISPER);
                     for (std::vector<Unit* >::const_iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                     {
                         if ((*itr) && (*itr)->isAlive())

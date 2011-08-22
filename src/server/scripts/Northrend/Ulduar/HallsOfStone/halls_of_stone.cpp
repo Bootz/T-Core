@@ -404,11 +404,11 @@ public:
            }
          }
 
-        void JustSummoned(Creature* pSummoned)
+        void JustSummoned(Creature* summoned)
         {
-            lDwarfGUIDList.push_back(pSummoned->GetGUID());
-            pSummoned->AddThreat(me, 0.0f);
-            pSummoned->AI()->AttackStart(me);
+            lDwarfGUIDList.push_back(summoned->GetGUID());
+            summoned->AddThreat(me, 0.0f);
+            summoned->AI()->AttackStart(me);
         }
 
         void JumpToNextStep(uint32 uiTimer)

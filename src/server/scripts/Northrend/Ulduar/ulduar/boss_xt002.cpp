@@ -197,26 +197,15 @@ class boss_xt002 : public CreatureScript
             {
             }
 
-            // Achievement related
-            bool HealthRecovered;       // Did a scrapbot recover XT-002's health during the encounter?
-            bool HardMode;              // Are we in hard mode? Or: was the heart killed during phase 2?
-            bool GravityBombCasualty;   // Did someone die because of Gravity Bomb damage?
-
-            uint32 transferHealth;
-            bool enterHardMode;
-            
-
             void Reset()
             {
                 _Reset();
 
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                HealthRecovered = false;
-                GravityBombCasualty = false;
-                HardMode = false;
-
-                enterHardMode = false;
+                _healthRecovered = false;
+                _gravityBombCasualty = false;
+                _hardMode = false;
 
                 _phase = 1;
                 _heartExposed = 0;
@@ -370,7 +359,7 @@ class boss_xt002 : public CreatureScript
                 DoCast(SPELL_SUBMERGE);  // WIll make creature untargetable
                 me->AttackStop();
                 me->SetReactState(REACT_PASSIVE);
-                
+
                 Unit* heart = me->GetVehicleKit() ? me->GetVehicleKit()->GetPassenger(HEART_VEHICLE_SEAT) : NULL;
                 if (heart)
                 {
@@ -379,10 +368,8 @@ class boss_xt002 : public CreatureScript
                     heart->CastSpell(heart, SPELL_HEART_HEAL_TO_FULL, true);
                     heart->CastSpell(heart, SPELL_EXPOSED_HEART, false);    // Channeled
 
-                    //heart->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT | UNIT_FLAG_UNK_15 | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_29);
                     heart->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-            
-                }
+               }
 
                 events.CancelEvent(EVENT_SEARING_LIGHT);
                 events.CancelEvent(EVENT_GRAVITY_BOMB);
@@ -444,41 +431,41 @@ class boss_xt002 : public CreatureScript
  *///----------------------------------------------------
 class mob_xt002_heart : public CreatureScript
 {
-public:
-    mob_xt002_heart() : CreatureScript("mob_xt002_heart") { }
+    public:
+        mob_xt002_heart() : CreatureScript("mob_xt002_heart") { }
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new mob_xt002_heartAI(creature);
-    }
-
-    struct mob_xt002_heartAI : public ScriptedAI
-    {
-        mob_xt002_heartAI(Creature* creature) : ScriptedAI(creature)
+        CreatureAI* GetAI(Creature* creature) const
         {
-            m_pInstance = creature->GetInstanceScript();
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_STUNNED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-            me->SetReactState(REACT_PASSIVE);
+            return new mob_xt002_heartAI(creature);
         }
 
-        InstanceScript* m_pInstance;
-        uint32 _damageTaken;
-
-        void DamageTaken(Unit* /*pDone*/, uint32 &damage)
+        struct mob_xt002_heartAI : public ScriptedAI
         {
-            Creature* XT002 = me->GetCreature(*me, m_pInstance->GetData64(BOSS_XT002));
-            if (!XT002 || !XT002->AI())
-                return;
-
-            if (damage >= me->GetHealth())
+            mob_xt002_heartAI(Creature* creature) : ScriptedAI(creature)
             {
-                XT002->AI()->SetData(DATA_TRANSFERED_HEALTH, me->GetMaxHealth());
-                XT002->AI()->DoAction(ACTION_ENTER_HARD_MODE);
-                damage = 0;                
+                _instance = creature->GetInstanceScript();
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_STUNNED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
+                me->SetReactState(REACT_PASSIVE);
             }
-        }
-    };
 
+            void DamageTaken(Unit* /*pDone*/, uint32 &damage)
+            {
+                Creature* xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002));
+                if (!xt002 || !xt002->AI())
+                    return;
+
+                if (damage >= me->GetHealth())
+                {
+                    xt002->AI()->SetData(DATA_TRANSFERED_HEALTH, me->GetMaxHealth());
+                    xt002->AI()->DoAction(ACTION_ENTER_HARD_MODE);
+                    damage = 0;
+                }
+            }
+
+            private:
+                InstanceScript* _instance;
+                uint32 _damageTaken;
+        };
 };
 
 /*-------------------------------------------------------
@@ -545,76 +532,76 @@ class mob_scrapbot : public CreatureScript
  *///----------------------------------------------------
 class mob_pummeller : public CreatureScript
 {
-public:
-    mob_pummeller() : CreatureScript("mob_pummeller") { }
+    public:
+        mob_pummeller() : CreatureScript("mob_pummeller") { }
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new mob_pummellerAI(creature);
-    }
-
-    struct mob_pummellerAI : public ScriptedAI
-    {
-        mob_pummellerAI(Creature* creature) : ScriptedAI(creature)
+        CreatureAI* GetAI(Creature* creature) const
         {
-            Instance = creature->GetInstanceScript();
+            return new mob_pummellerAI(creature);
         }
 
-        InstanceScript* Instance;
-        uint32 uiArcingSmashTimer;
-        uint32 uiTrampleTimer;
-        uint32 uiUppercutTimer;
-
-        void Reset()
+        struct mob_pummellerAI : public ScriptedAI
         {
-            uiArcingSmashTimer = TIMER_ARCING_SMASH;
-            uiTrampleTimer = TIMER_TRAMPLE;
-            uiUppercutTimer = TIMER_UPPERCUT;
-
-            if (Creature* pXT002 = me->GetCreature(*me, Instance->GetData64(BOSS_XT002)))
+            mob_pummellerAI(Creature* creature) : ScriptedAI(creature)
             {
-                Position pos;
-                pXT002->GetPosition(&pos);
-                me->GetMotionMaster()->MovePoint(0, pos);
-            }
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            if (me->IsWithinMeleeRange(me->getVictim()))
-            {
-                if (uiArcingSmashTimer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_ARCING_SMASH);
-                    uiArcingSmashTimer = TIMER_ARCING_SMASH;
-                }
-                else
-                    uiArcingSmashTimer -= diff;
-
-                if (uiTrampleTimer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_TRAMPLE);
-                    uiTrampleTimer = TIMER_TRAMPLE;
-                }
-                else 
-                    uiTrampleTimer -= diff;
-
-                if (uiUppercutTimer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_UPPERCUT);
-                    uiUppercutTimer = TIMER_UPPERCUT;
-                } 
-                else
-                    uiUppercutTimer -= diff;
+                _instance = creature->GetInstanceScript();
             }
 
-            DoMeleeAttackIfReady();
-        }
-    };
+            void Reset()
+            {
+                _arcingSmashTimer = TIMER_ARCING_SMASH;
+                _trampleTimer = TIMER_TRAMPLE;
+                _uppercutTimer = TIMER_UPPERCUT;
 
+                if (Creature* xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
+                {
+                    Position pos;
+                    xt002->GetPosition(&pos);
+                    me->GetMotionMaster()->MovePoint(0, pos);
+                }
+            }
+
+            void UpdateAI(const uint32 diff)
+            {
+                if (!UpdateVictim())
+                    return;
+
+                if (me->IsWithinMeleeRange(me->getVictim()))
+                {
+                    if (_arcingSmashTimer <= diff)
+                    {
+                        DoCast(me->getVictim(), SPELL_ARCING_SMASH);
+                        _arcingSmashTimer = TIMER_ARCING_SMASH;
+                    }
+                    else
+                        _arcingSmashTimer -= diff;
+
+                    if (_trampleTimer <= diff)
+                    {
+                        DoCast(me->getVictim(), SPELL_TRAMPLE);
+                        _trampleTimer = TIMER_TRAMPLE;
+                    }
+                    else
+                        _trampleTimer -= diff;
+
+                    if (_uppercutTimer <= diff)
+                    {
+                        DoCast(me->getVictim(), SPELL_UPPERCUT);
+                        _uppercutTimer = TIMER_UPPERCUT;
+                    }
+                    else
+                        _uppercutTimer -= diff;
+                }
+
+                DoMeleeAttackIfReady();
+            }
+
+            private:
+                InstanceScript* _instance;
+                uint32 _arcingSmashTimer;
+                uint32 _trampleTimer;
+                uint32 _uppercutTimer;
+        };
 };
 
 /*-------------------------------------------------------
@@ -636,7 +623,7 @@ class BoomEvent : public BasicEvent
             // then EFFECT_1, etc - instead of applying each effect on target1, then target2, etc.
             // The above situation causes the visual for this spell to be bugged, so we remove the instakill
             // effect and implement a script hack for that.
-            
+
             _me->CastSpell(_me, SPELL_BOOM, false);
             return true;
         }
@@ -726,47 +713,45 @@ class mob_boombot : public CreatureScript
  *///----------------------------------------------------
 class mob_life_spark : public CreatureScript
 {
-public:
-    mob_life_spark() : CreatureScript("mob_life_spark") { }
+    public:
+        mob_life_spark() : CreatureScript("mob_life_spark") { }
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new mob_life_sparkAI(creature);
-    }
-
-    struct mob_life_sparkAI : public ScriptedAI
-    {
-        mob_life_sparkAI(Creature* creature) : ScriptedAI(creature)
-        {   
-            m_pInstance = creature->GetInstanceScript();
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new mob_life_sparkAI(creature);
         }
 
-        InstanceScript* m_pInstance;
-        uint32 uiShockTimer;
-
-        void Reset()
+        struct mob_life_sparkAI : public ScriptedAI
         {
-            DoCast(me, RAID_MODE(SPELL_STATIC_CHARGED_10, SPELL_STATIC_CHARGED_25));
-            uiShockTimer = 0; // first one is immediate.
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            if (uiShockTimer <= diff)
+            mob_life_sparkAI(Creature* creature) : ScriptedAI(creature)
             {
-                if (me->IsWithinMeleeRange(me->getVictim()))
-                {
-                    DoCast(me->getVictim(), SPELL_SHOCK);
-                    uiShockTimer = TIMER_SHOCK;
-                }
             }
-            else uiShockTimer -= diff;
-        }
-    };
 
+            void Reset()
+            {
+                DoCast(me, RAID_MODE(SPELL_STATIC_CHARGED_10, SPELL_STATIC_CHARGED_25));
+                _shockTimer = 0; // first one is immediate.
+            }
+
+            void UpdateAI(const uint32 diff)
+            {
+                if (!UpdateVictim())
+                    return;
+
+                if (_shockTimer <= diff)
+                {
+                    if (me->IsWithinMeleeRange(me->getVictim()))
+                    {
+                        DoCast(me->getVictim(), SPELL_SHOCK);
+                        _shockTimer = TIMER_SHOCK;
+                    }
+                }
+                else _shockTimer -= diff;
+            }
+
+            private:
+                uint32 _shockTimer;
+        };
 };
 
 class spell_xt002_searing_light_spawn_life_spark : public SpellScriptLoader

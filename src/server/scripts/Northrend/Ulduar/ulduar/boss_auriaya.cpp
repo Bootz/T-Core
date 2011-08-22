@@ -95,7 +95,7 @@ enum AuriayaYells
 enum AuriayaActions
 {
     ACTION_CRAZY_CAT_LADY                        = 0,
-    ACTION_RESPAWN_DEFENDER         
+    ACTION_RESPAWN_DEFENDER
 };
 
 #define SENTRY_NUMBER                            RAID_MODE<uint8>(2, 4)
@@ -126,7 +126,7 @@ class boss_auriaya : public CreatureScript
             {
                 _EnterCombat();
                 DoScriptText(SAY_AGGRO,me);
-                
+
                 events.ScheduleEvent(EVENT_SCREECH, urand(45000, 65000));
                 events.ScheduleEvent(EVENT_BLAST, urand(20000, 25000));
                 events.ScheduleEvent(EVENT_TERRIFYING, urand(20000, 30000));
@@ -152,7 +152,7 @@ class boss_auriaya : public CreatureScript
                 }
 
                 if (summoned->GetEntry() == NPC_FERAL_DEFENDER)
-                { 
+                {
                     if (!summoned->isInCombat() && me->getVictim())
                         summoned->AI()->AttackStart(me->getVictim());
                     summoned->SetAuraStack(SPELL_FERAL_ESSENCE, summoned, 9);
@@ -172,7 +172,7 @@ class boss_auriaya : public CreatureScript
                         --defenderLives;
                         if (!defenderLives)
                         {
-                            SetData(DATA_NINE_LIVES, 1); 
+                            SetData(DATA_NINE_LIVES, 1);
                             break;
                         }
                         events.ScheduleEvent(EVENT_RESPAWN_DEFENDER, 30000);

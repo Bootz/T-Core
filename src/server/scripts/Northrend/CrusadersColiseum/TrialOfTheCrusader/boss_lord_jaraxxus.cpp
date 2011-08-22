@@ -162,9 +162,9 @@ public:
                 m_pInstance->SetData(TYPE_JARAXXUS, DONE);
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void JustSummoned(Creature* summoned)
         {
-            Summons.Summon(pSummoned);
+            Summons.Summon(summoned);
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -303,55 +303,34 @@ public:
 
         SummonList Summons;
 
-        uint8 m_Count;
-        uint8 m_CountMax;
-        uint32 m_Timer;
-
         void Reset()
         {
             me->SetReactState(REACT_PASSIVE);
-            m_Count = 0;
+
             if (!IsHeroic())
-            {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                m_CountMax = 3;
-                m_Timer = 15*IN_MILLISECONDS;
-            }
             else
-            {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                m_CountMax = 0;
-                m_Timer = 0;
-            }
+
             Summons.DespawnAll();
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void IsSummonedBy(Unit* /*summoner*/)
         {
-            Summons.Summon(pSummoned);
-            pSummoned->SetCorpseDelay(0);
+            DoCast(SPELL_INFERNAL_ERUPTION_EFFECT);
+        }
+
+        void JustSummoned(Creature* summoned)
+        {
+            Summons.Summon(summoned);
+            // makes immediate corpse despawn of summoned Felflame Infernals
+            summoned->SetCorpseDelay(0);
         }
 
         void JustDied(Unit* /*killer*/)
         {
+            // used to despawn corpse immediately
             me->DespawnOrUnsummon();
-        }
-
-        void UpdateAI(const uint32 uiDiff)
-        {
-            if (m_Timer <= uiDiff)
-            {
-                if (m_CountMax && m_CountMax == m_Count)
-                    me->DespawnOrUnsummon();
-                else
-                {
-                    DoCast(SPELL_INFERNAL_ERUPTION);
-                    ++m_Count;
-                }
-                m_Timer = 5*IN_MILLISECONDS;
-            } else m_Timer -= uiDiff;
-
-            UpdateVictim();
         }
     };
 
@@ -433,49 +412,34 @@ public:
 
         SummonList Summons;
 
-        uint32 m_Timer;
-        uint8  m_Count;
-        uint8  m_CountMax;
-
         void Reset()
         {
             me->SetReactState(REACT_PASSIVE);
-            m_Timer = 10*IN_MILLISECONDS;
-            m_Count = 0;
+
             if (!IsHeroic())
-            {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                m_CountMax = 1;
-            }
             else
-            {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
-                m_CountMax = 0;
-            }
+
             Summons.DespawnAll();
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void IsSummonedBy(Unit* /*summoner*/)
         {
-            Summons.Summon(pSummoned);
-            pSummoned->SetCorpseDelay(0);
+            DoCast(SPELL_NETHER_PORTAL_EFFECT);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void JustSummoned(Creature* summoned)
         {
-            if (m_Timer <= uiDiff)
-            {
-                if (m_CountMax && m_CountMax == m_Count)
-                    me->DespawnOrUnsummon();
-                else
-                {
-                    DoCast(SPELL_NETHER_PORTAL);
-                    ++m_Count;
-                }
-                m_Timer = 15*IN_MILLISECONDS;
-            } else m_Timer -= uiDiff;
+            Summons.Summon(summoned);
+            // makes immediate corpse despawn of summoned Mistress of Pain
+            summoned->SetCorpseDelay(0);
+        }
 
-            UpdateVictim();
+        void JustDied(Unit* /*killer*/)
+        {
+            // used to despawn corpse immediately
+            me->DespawnOrUnsummon();
         }
     };
 

@@ -207,17 +207,17 @@ public:
             }
         }
 
-        void JustSummoned(Creature* pSummoned)
+        void JustSummoned(Creature* summoned)
         {
-            if (pSummoned->GetEntry() == NPC_MOLTEN_GOLEM)
+            if (summoned->GetEntry() == NPC_MOLTEN_GOLEM)
             {
-                m_lGolemGUIDList.push_back(pSummoned->GetGUID());
+                m_lGolemGUIDList.push_back(summoned->GetGUID());
 
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    pSummoned->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
+                    summoned->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
 
                 // Why healing when just summoned?
-                pSummoned->CastSpell(pSummoned, DUNGEON_MODE(SPELL_HEAT_N, SPELL_HEAT_H), false, NULL, NULL, me->GetGUID());
+                summoned->CastSpell(summoned, DUNGEON_MODE(SPELL_HEAT_N, SPELL_HEAT_H), false, NULL, NULL, me->GetGUID());
             }
         }
 
@@ -344,9 +344,9 @@ public:
 
                 case 5:
                     // 5 - Spawn the Golems
-                    if (Creature* pCreatureTarget = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
+                    if (Creature* creatureTarget = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
                         for (uint8 i = 0; i < MAX_GOLEM; ++i)
-                            me->CastSpell(pCreatureTarget, SPELL_SUMMON_MOLTEN_GOLEM, true);
+                            me->CastSpell(creatureTarget, SPELL_SUMMON_MOLTEN_GOLEM, true);
 
                     m_bIsStriking = true;
                     m_uiSummonPhase = 0;        // Reset back to Phase 0 for next time

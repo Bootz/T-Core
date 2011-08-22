@@ -873,10 +873,10 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
+            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
             {
                 std::string sText = (std::string(killer->GetName()) + " has defeated Yg.. Yggg-really big worm!");
-                pSummoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
+                summoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
             }
 
             if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
@@ -1047,14 +1047,14 @@ public:
         uint32 uiElementalSpellTimer;
 
         uint8 uiBossRandom;
-        uint32 uiSpellEntry;
+        uint32 uiSpellInfo;
 
         bool bAddAttack;
 
         void Reset()
         {
             uiBossRandom = 0;
-            uiSpellEntry = 0;
+            uiSpellInfo = 0;
             uiElementalSpellTimer = urand(5000, 8000);
 
             bAddAttack = false;
@@ -1163,8 +1163,8 @@ public:
 
             std::string sText = (std::string(killer->GetName()) + " is victorious once more!");
 
-            if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                pSummoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
+            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                summoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
         }
     };
 
