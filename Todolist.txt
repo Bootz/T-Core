@@ -6,19 +6,19 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Drop all Get Methods, look at DataStructure.cpp, drop this step by step.
-2.  Fix the trainer bug, if you click "train me" nothing happens
-3.  Fix the vendor, they dont show any items
+1.  added spell scaling
+2.  Fix the trainer bug, if you click "train me" nothing happens.
+3.  Fix the vendor, they dont show any items.
 4.  Update the rest of Opcodes to 4.2.0.
-5.  Fix The New Power System
+5.  Fix The New Power System.
 6.  Implement a New Terrain System.
 7.  Implement a new Creature Formations System.
 8.  Fixed the Group System.
-9. Fixed the Guild System.
+9.  Fixed the Guild System.
 10. Implement the new Battlegrounds.
 11. Fixed the Packets for Battlegrounds.
 12. Implement Wintergrasp Battlefield.
-13. Need to revise HoR now WIP
+13. Need to revise HoR now WIP.
 14. Implement new Transport System.
 15. Implement special spawn system.
 
@@ -29,4 +29,4 @@ TODO-List for TrilliumEMU Developer #
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
 
-If you Fix anything from this List remove The Line or add a FINISH!
+If you Fix anything from this List, remove it.
