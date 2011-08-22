@@ -1216,12 +1216,12 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             CAST_AI(SmartAI, me->AI())->SetRun(e.action.setRun.run ? true : false);
             break;
         }
-        case SMART_ACTION_SET_SWIMM:
+        case SMART_ACTION_SET_SWIM:
         {
             if (!IsSmart())
                 return;
 
-            CAST_AI(SmartAI, me->AI())->SetSwimm(e.action.setSwimm.swimm ? true : false);
+            CAST_AI(SmartAI, me->AI())->SetSwim(e.action.setSwim.swim ? true : false);
             break;
         }
         case SMART_ACTION_WP_START:
@@ -1950,9 +1950,9 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
             if (trigger)
             {
                 l->push_back(trigger);
-                if (Player* plr = trigger->ToPlayer())
-                    if (Group* pGroup = plr->GetGroup())
-                        for (GroupReference* groupRef = pGroup->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                if (Player* player = trigger->ToPlayer())
+                    if (Group* group = player->GetGroup())
+                        for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                             if (Player* member = groupRef->getSource())
                                 l->push_back(member);
             }
@@ -2267,10 +2267,10 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
             if (!me || !me->isInCombat())
                 return;
 
-            Unit* pUnit = DoSelectLowestHpFriendly((float)e.event.friendlyHealt.radius, e.event.friendlyHealt.hpDeficit);
-            if (!pUnit)
+            Unit* unit = DoSelectLowestHpFriendly((float)e.event.friendlyHealt.radius, e.event.friendlyHealt.hpDeficit);
+            if (!unit)
                 return;
-            ProcessAction(e, pUnit);
+            ProcessAction(e, unit);
             RecalcTimer(e, e.event.friendlyHealt.repeatMin, e.event.friendlyHealt.repeatMax);
             break;
         }
@@ -2730,7 +2730,7 @@ void SmartScript::FillScript(SmartAIEventList e, WorldObject* obj, AreaTriggerEn
     }
     for (SmartAIEventList::iterator i = e.begin(); i != e.end(); ++i)
     {
-        #ifndef TRILLIUM_DEBUG
+        #ifndef TRINITY_DEBUG
             if ((*i).event.event_flags & SMART_EVENT_FLAG_DEBUG_ONLY)
                 continue;
         #endif
@@ -2885,15 +2885,15 @@ Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
     cell.data.Part.reserved = ALL_DISTRICT;
     cell.SetNoCreate();
 
-    Unit* pUnit = NULL;
+    Unit* unit = NULL;
 
     Trillium::MostHPMissingInRange u_check(me, range, MinHPDiff);
-    Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange> searcher(me, pUnit, u_check);
+    Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange> searcher(me, unit, u_check);
 
     TypeContainerVisitor<Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
     cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, range);
-    return pUnit;
+    return unit;
 }
 
 void SmartScript::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
