@@ -6,9 +6,9 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  added spell scaling.
-2.  Fix the trainer bug, if you click "train me" nothing happens.
-3.  Fix the vendor, they dont show any items.
+1.  Add spell scaling.
+2.  Fix the Trainer bug, If you click "train me" nothing happens.
+3.  Fix the Vendors, they dont show any items.
 4.  Update the rest of Opcodes to 4.2.0.
 5.  Fix The New Power System.
 6.  Implement a New Terrain System.
@@ -23,10 +23,10 @@ TODO-List for TrilliumEMU Developer #
 15. Implement special spawn system.
 
 // Database Developer:
-1. Fixed all startup errors.
-2. Implemented more Cataclysm Content.
+1. Fix all startup errors.
+2. Implement more Cataclysm Content.
 
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
 
-If you Fix anything from this List, remove it.
+If you Fix anything from the List, remove it.
