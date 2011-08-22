@@ -132,7 +132,8 @@ void Object::_InitValues()
 
 void Object::_Create(uint32 guidlow, uint32 entry, HighGuid guidhigh)
 {
-    if (!m_uint32Values) _InitValues();
+    if (!m_uint32Values)
+        _InitValues();
 
     uint64 guid = MAKE_NEW_GUID(guidlow, entry, guidhigh);
     SetUInt64Value(OBJECT_FIELD_GUID, guid);
@@ -446,9 +447,7 @@ void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask 
         return;
 
     uint32 valuesCount = m_valuesCount;
-    if(GetTypeId() == TYPEID_PLAYER && target != this)
-        valuesCount = valuesCount = m_valuesCount;
-    if(GetTypeId() == TYPEID_PLAYER && target != this)
+    if (GetTypeId() == TYPEID_PLAYER && target != this)
         valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;;
 
     bool IsActivateToQuest = false;
@@ -747,15 +746,9 @@ void Object::_LoadIntoDataField(const char* data, uint32 startOffset, uint32 cou
 
     if (tokens.size() != count)
         return;
-
-    uint32 valuesCount = m_valuesCount;
-
-    Tokens::iterator iter;
-    uint32 index;
-    for (iter = tokens.begin(), index = 0; index < count; ++iter, ++index)
-    {
+ 
+    for (uint32 index = 0; index < count; ++index)
         m_uint32Values[startOffset + index] = atol(tokens[index]);
-    }
 }
 
 void Object::_SetUpdateBits(UpdateMask *updateMask, Player* target) const

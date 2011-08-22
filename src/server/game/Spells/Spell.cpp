@@ -5643,7 +5643,7 @@ SpellCastResult Spell::CheckItems()
     if (m_caster->GetTypeId() != TYPEID_PLAYER)
         return SPELL_CAST_OK;
 
-    Player* p_caster = (Player*)m_caster;    
+    Player* p_caster = m_caster->ToPlayer();
 
     if (!m_CastItem)
     {
