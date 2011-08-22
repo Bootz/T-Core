@@ -895,7 +895,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     ChainEntry = NULL;
 
     // SpellTotems
-    SpellTotemsEntry const* _totem  = spellEntry->GetSpellTotems();
+    SpellTotemsEntry const* _totem = spellEntry->GetSpellTotems();
 
     for (uint8 i = 0; i < 2; ++i)
         TotemCategory[i] = _totem ? _totem->TotemCategory[i] : 0;
