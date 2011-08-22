@@ -443,6 +443,19 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 basePoints = bp ? *bp : BasePoints;
     int32 randomPoints = int32(DieSides);
 
+    //float randomPoints_ScalingMultiplicator = 0.00f;
+    //if (caster && spellEntry && spellEntry->SpellScalingId)
+    //{
+    //    SpellScalingEntry const* spellScaling = sSpellScalingStore.LookupEntry(spellEntry->SpellScalingId);
+    //    uint32 casterLevel = caster->getLevel();
+    //    GtSpellScalingEntry const* gtScaling = sGtSpellScalingStore.LookupEntry(casterLevel);
+    //    if (spellScaling && gtScaling)
+    //    {
+    //        basePoints+= float(spellScaling->coefMultiplier[effIndex] * gtScaling->coef); 
+    //        randomPoints_ScalingMultiplicator = spellScaling->coefRandomMultiplier[effIndex];
+    //    }
+    //}
+ 
     // base amount modification based on spell lvl vs caster lvl
     if (caster)
     {
@@ -465,7 +478,10 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
             int32 randvalue = (randomPoints >= 1)
                 ? irand(1, randomPoints)
                 : irand(randomPoints, 1);
-
+            
+            //if (randomPoints_ScalingMultiplicator)
+            //    basePoints += irand(1, basePoints* (randomPoints_ScalingMultiplicator >= 1 ? randomPoints_ScalingMultiplicator : randomPoints_ScalingMultiplicator+1));
+ 
             basePoints += randvalue;
             break;
     }
