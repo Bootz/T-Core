@@ -213,56 +213,6 @@ class spell_mage_summon_water_elemental : public SpellScriptLoader
         }
 };
 
-// Frost Warding
-class spell_mage_frost_warding_trigger : public SpellScriptLoader
-{
-public:
-    spell_mage_frost_warding_trigger() : SpellScriptLoader("spell_mage_frost_warding_trigger") { }
-
-    class spell_mage_frost_warding_trigger_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_mage_frost_warding_trigger_AuraScript);
-
-        enum Spells
-        {
-            SPELL_MAGE_FROST_WARDING_TRIGGERED = 57776,
-            SPELL_MAGE_FROST_WARDING_R1 = 28332,
-        };
-
-        bool Validate(SpellInfo const* /*SpellInfo*/)
-        {
-            return sSpellMgr->GetSpellInfo(SPELL_MAGE_FROST_WARDING_TRIGGERED)
-                && sSpellMgr->GetSpellInfo(SPELL_MAGE_FROST_WARDING_R1);
-        }
-
-        void Absorb(AuraEffect * aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
-        {
-            Unit* target = GetTarget();
-            if (AuraEffect * talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_MAGE_FROST_WARDING_R1, EFFECT_0))
-            {
-                int32 chance = talentAurEff->GetSpellInfo()->Effects[EFFECT_1].CalcValue();
-
-                if (roll_chance_i(chance))
-                {
-                    absorbAmount = dmgInfo.GetDamage();
-                    int32 bp = absorbAmount;
-                    target->CastCustomSpell(target, SPELL_MAGE_FROST_WARDING_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
-                }
-            }
-        }
-
-        void Register()
-        {
-             OnEffectAbsorb += AuraEffectAbsorbFn(spell_mage_frost_warding_trigger_AuraScript::Absorb, EFFECT_0);
-        }
-    };
-
-    AuraScript *GetAuraScript() const
-    {
-        return new spell_mage_frost_warding_trigger_AuraScript();
-    }
-};
-
 class spell_mage_incanters_absorbtion_base_AuraScript : public AuraScript
 {
 public:
@@ -287,28 +237,6 @@ public:
             int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
             target->CastCustomSpell(target, SPELL_MAGE_INCANTERS_ABSORBTION_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
         }
-    }
-};
-
-// Incanter's Absorption
-class spell_mage_incanters_absorbtion_absorb : public SpellScriptLoader
-{
-public:
-    spell_mage_incanters_absorbtion_absorb() : SpellScriptLoader("spell_mage_incanters_absorbtion_absorb") { }
-
-    class spell_mage_incanters_absorbtion_absorb_AuraScript : public spell_mage_incanters_absorbtion_base_AuraScript
-    {
-        PrepareAuraScript(spell_mage_incanters_absorbtion_absorb_AuraScript);
-
-        void Register()
-        {
-             AfterEffectAbsorb += AuraEffectAbsorbFn(spell_mage_incanters_absorbtion_absorb_AuraScript::Trigger, EFFECT_0);
-        }
-    };
-
-    AuraScript *GetAuraScript() const
-    {
-        return new spell_mage_incanters_absorbtion_absorb_AuraScript();
     }
 };
 
@@ -338,8 +266,6 @@ void AddSC_mage_spell_scripts()
 {
     new spell_mage_blast_wave;
     new spell_mage_cold_snap;
-    new spell_mage_frost_warding_trigger();
-    new spell_mage_incanters_absorbtion_absorb();
     new spell_mage_incanters_absorbtion_manashield();
     new spell_mage_polymorph_cast_visual;
     new spell_mage_summon_water_elemental;
