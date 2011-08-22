@@ -877,6 +877,14 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         Effects[i] = SpellEffectInfo(spellEntry, this, i);
     ChainEntry = NULL;
+
+    // SpellTotems
+    SpellTotemsEntry const* _totem  = spellEntry->GetSpellTotems();
+
+    for (uint8 i = 0; i < 2; ++i)
+        TotemCategory[i] = _totem ? _totem->TotemCategory[i] : 0;
+    for (uint8 i = 0; i < 2; ++i)
+        Totem[i] = _totem ? _totem->Totem[i] : 0;
 }
 
 bool SpellInfo::HasEffect(SpellEffects effect) const
