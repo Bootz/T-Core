@@ -289,21 +289,4 @@ uint32 SpellEntry::GetTargetAuraStateNot() const
     SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
     return aura ? aura->TargetAuraStateNot : 0;
 }
-//SpellCastingRequirementsEntry
-uint32 SpellEntry::GetRequiresSpellFocus() const
-{
-    SpellCastingRequirementsEntry const* castReq = GetSpellCastingRequirements();
-    return castReq ? castReq->RequiresSpellFocus : 0;
-}
 
-int32 SpellEntry::GetAreaGroupId() const
-{
-    SpellCastingRequirementsEntry const* castReq = GetSpellCastingRequirements();
-    return castReq ? castReq->AreaGroupId : -1;
-}
-
-uint32 SpellEntry::GetFacingCasterFlags() const
-{
-    SpellCastingRequirementsEntry const* castReq = GetSpellCastingRequirements();
-    return castReq ? castReq->FacingCasterFlags : -1;
-}

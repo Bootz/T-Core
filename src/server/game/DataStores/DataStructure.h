@@ -1874,10 +1874,7 @@ struct SpellEntry
     uint32 GetProcChance() const;
     uint32 GetMaxLevel() const;
     uint32 GetManaPerSecond() const;
-    uint32 GetRequiresSpellFocus() const;
     uint32 GetAuraInterruptFlags() const;
-    int32 GetAreaGroupId() const;
-    uint32 GetFacingCasterFlags() const;
     uint32 GetBaseLevel() const;
     uint32 GetInterruptFlags() const;
     uint32 GetTargetCreatureType() const;    

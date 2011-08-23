@@ -848,8 +848,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
 
     Targets = spellEntry->GetTargets();
     TargetCreatureType = spellEntry->GetTargetCreatureType();
-    RequiresSpellFocus = spellEntry->GetRequiresSpellFocus();
-    FacingCasterFlags = spellEntry->GetFacingCasterFlags();
+
+    // SpellCastingRequirementsEntry
+    SpellCastingRequirementsEntry const* _castreq = spellEntry->GetSpellCastingRequirements();
+    RequiresSpellFocus = _castreq ? _castreq->RequiresSpellFocus : 0;
+    FacingCasterFlags = _castreq ? _castreq->FacingCasterFlags : -1;
+    AreaGroupId = _castreq ? _castreq->AreaGroupId : -1;
+
     CasterAuraState = spellEntry->GetCasterAuraState();
     TargetAuraState = spellEntry->GetTargetAuraState();
     CasterAuraStateNot = spellEntry->GetCasterAuraStateNot();
@@ -915,7 +920,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
 
     DmgClass = spellEntry->GetDmgClass();
     PreventionType = spellEntry->GetPreventionType();
-    AreaGroupId  = spellEntry->GetAreaGroupId();
     SchoolMask = spellEntry->SchoolMask;
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         Effects[i] = SpellEffectInfo(spellEntry, this, i);
