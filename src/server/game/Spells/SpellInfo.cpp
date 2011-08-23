@@ -848,10 +848,14 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     ExcludeCasterAuraSpell = spellEntry->GetExcludeCasterAuraSpell();
     ExcludeTargetAuraSpell = spellEntry->GetExcludeTargetAuraSpell();
     CastTimeEntry = spellEntry->CastingTimeIndex ? sSpellCastTimesStore.LookupEntry(spellEntry->CastingTimeIndex) : NULL;
-    RecoveryTime = spellEntry->GetRecoveryTime();
-    CategoryRecoveryTime = spellEntry->GetCategoryRecoveryTime();
+
+    // SpellCooldownsEntry
+    SpellCooldownsEntry const* _cooldowns = spellEntry->GetSpellCooldowns();
+    RecoveryTime = _cooldowns ? _cooldowns->RecoveryTime : 0;
+    CategoryRecoveryTime = _cooldowns ? _cooldowns->CategoryRecoveryTime : 0;
+    StartRecoveryTime = _cooldowns ? _cooldowns->StartRecoveryTime : 0;
+
     StartRecoveryCategory = spellEntry->GetStartRecoveryCategory();
-    StartRecoveryTime = spellEntry->GetStartRecoveryTime();
     InterruptFlags = spellEntry->GetInterruptFlags();
     AuraInterruptFlags = spellEntry->GetAuraInterruptFlags();
     ChannelInterruptFlags = spellEntry->GetChannelInterruptFlags();

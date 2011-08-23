@@ -223,24 +223,6 @@ SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
 }
 
-//SpellCooldownsEntry
-uint32 SpellEntry::GetRecoveryTime() const
-{
-    SpellCooldownsEntry const* cd = GetSpellCooldowns();
-    return cd ? cd->RecoveryTime : 0;
-}
-
-uint32 SpellEntry::GetStartRecoveryTime() const
-{
-    SpellCooldownsEntry const* cd = GetSpellCooldowns();
-    return cd ? cd->StartRecoveryTime : 0;
-}
-
-uint32 SpellEntry::GetCategoryRecoveryTime() const
-{
-    SpellCooldownsEntry const* cd = GetSpellCooldowns();
-    return cd ? cd->CategoryRecoveryTime : 0;
-}
 //SpellEquippedItemsEntry
 int32 SpellEntry::GetEquippedItemInventoryTypeMask() const
 {

@@ -1884,10 +1884,7 @@ struct SpellEntry
     uint32 GetManaCost() const;
     uint32 GetPreventionType() const;
     uint32 GetCategory() const;
-    uint32 GetStartRecoveryTime() const;
     uint32 GetMechanic() const;
-    uint32 GetRecoveryTime() const;
-    uint32 GetCategoryRecoveryTime() const;
     uint32 GetStartRecoveryCategory() const;
     uint32 GetSpellLevel() const;
     int32 GetEquippedItemClass() const;
