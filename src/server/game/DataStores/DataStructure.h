@@ -1855,7 +1855,6 @@ struct SpellEntry
     SpellReagentsEntry const* GetSpellReagents() const;
     SpellScalingEntry const* GetSpellScaling() const;
     SpellShapeshiftEntry const* GetSpellShapeshift() const;
-    SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
     SpellTotemsEntry const* GetSpellTotems() const;
 };
 

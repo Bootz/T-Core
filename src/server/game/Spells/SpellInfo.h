@@ -352,10 +352,27 @@ public:
     uint32 PreventionType;
     int32  AreaGroupId;
     uint32 SchoolMask;
+    uint32 SpellDifficultyId;
+    uint32 SpellScalingId;
+    uint32 SpellAuraOptionsId;
+    uint32 SpellAuraRestrictionsId;
+    uint32 SpellCastingRequirementsId;
+    uint32 SpellCategoriesId;
+    uint32 SpellClassOptionsId;
+    uint32 SpellCooldownsId;
+    uint32 SpellEquippedItemsId;
+    uint32 SpellInterruptsId;
+    uint32 SpellLevelsId;
+    uint32 SpellPowerId;
+    uint32 SpellReagentsId;
+    uint32 SpellShapeshiftId;
+    uint32 SpellTargetRestrictionsId;
+    uint32 SpellTotemsId;
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
     SpellChainNode const* ChainEntry;
 
     SpellInfo(SpellEntry const* spellEntry);
+    SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
 
     bool HasEffect(SpellEffects effect) const;
     bool HasAura(AuraType aura) const;

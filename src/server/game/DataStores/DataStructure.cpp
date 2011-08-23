@@ -93,11 +93,6 @@ SpellShapeshiftEntry const* SpellEntry::GetSpellShapeshift() const
     return SpellShapeshiftId ? sSpellShapeshiftStore.LookupEntry(SpellShapeshiftId) : NULL;
 }
 
-SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() const
-{
-    return SpellTargetRestrictionsId ? sSpellTargetRestrictionsStore.LookupEntry(SpellTargetRestrictionsId) : NULL;
-}
-
 SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
 {
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;

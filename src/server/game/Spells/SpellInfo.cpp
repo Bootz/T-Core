@@ -854,7 +854,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     StancesNot = _shapeshift ? _shapeshift->StancesNot : 0;
 
     // SpellTargetRestrictionsEntry
-    SpellTargetRestrictionsEntry const* _target = spellEntry->GetSpellTargetRestrictions();
+    SpellTargetRestrictionsEntry const* _target = GetSpellTargetRestrictions();
     Targets = _target ? _target->Targets : 0;
     TargetCreatureType = _target ? _target->TargetCreatureType : 0;
     MaxAffectedTargets = _target ? _target->MaxAffectedTargets : 0;
@@ -951,6 +951,23 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
         TotemCategory[i] = _totem ? _totem->TotemCategory[i] : 0;
     for (uint8 i = 0; i < 2; ++i)
         Totem[i] = _totem ? _totem->Totem[i] : 0;
+
+    //SpellDifficultyId;
+    //SpellScalingId;
+    //SpellAuraOptionsId;
+    //SpellAuraRestrictionsId;
+    //SpellCastingRequirementsId;
+    //SpellCategoriesId;
+    //SpellClassOptionsId;
+    //SpellCooldownsId;
+    //SpellEquippedItemsId;
+    //SpellInterruptsId;
+    //SpellLevelsId;
+    //SpellPowerId;
+    //SpellReagentsId;
+    //SpellShapeshiftId;
+    SpellTargetRestrictionsId = spellEntry->SpellTargetRestrictionsId;
+    //SpellTotemsId;
 }
 
 bool SpellInfo::HasEffect(SpellEffects effect) const
@@ -2446,4 +2463,9 @@ bool SpellInfo::_IsPositiveTarget(uint32 targetA, uint32 targetB)
     if (targetB)
         return _IsPositiveTarget(targetB, 0);
     return true;
+}
+
+SpellTargetRestrictionsEntry const* SpellInfo::GetSpellTargetRestrictions() const
+{
+    return SpellTargetRestrictionsId ? sSpellTargetRestrictionsStore.LookupEntry(SpellTargetRestrictionsId) : NULL;
 }
