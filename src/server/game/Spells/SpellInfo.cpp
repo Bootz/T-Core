@@ -883,15 +883,24 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     CategoryRecoveryTime = _cooldowns ? _cooldowns->CategoryRecoveryTime : 0;
     StartRecoveryTime = _cooldowns ? _cooldowns->StartRecoveryTime : 0;
 
-    InterruptFlags = spellEntry->GetInterruptFlags();
-    AuraInterruptFlags = spellEntry->GetAuraInterruptFlags();
-    ChannelInterruptFlags = spellEntry->GetChannelInterruptFlags();
-    ProcFlags = spellEntry->GetProcFlags();
-    ProcChance = spellEntry->GetProcChance();
-    ProcCharges = spellEntry->GetProcCharges();
-    MaxLevel = spellEntry->GetMaxLevel();
-    BaseLevel = spellEntry->GetBaseLevel();
-    SpellLevel = spellEntry->GetSpellLevel();
+    // SpellInterruptsEntry
+    SpellInterruptsEntry const* _interrupt = spellEntry->GetSpellInterrupts();
+    InterruptFlags = _interrupt ? _interrupt->InterruptFlags : 0;
+    AuraInterruptFlags = _interrupt ? _interrupt->AuraInterruptFlags : 0;
+    ChannelInterruptFlags = _interrupt ? _interrupt->ChannelInterruptFlags : 0;
+
+    // SpellAuraOptionsEntry
+    SpellAuraOptionsEntry const* _options = spellEntry->GetSpellAuraOptions();
+    ProcFlags = _options ? _options->procFlags : 0;
+    ProcChance = _options ? _options->procChance : 0;
+    ProcCharges = _options ? _options->procCharges : 0;
+    StackAmount = _options ? _options->StackAmount : 0;
+
+    SpellLevelsEntry const* _levels = spellEntry->GetSpellLevels();
+    MaxLevel = _levels ? _levels->maxLevel : 0;
+    BaseLevel = _levels ? _levels->baseLevel : 0;
+    SpellLevel = _levels ? _levels->spellLevel : 0;
+
     DurationEntry = spellEntry->DurationIndex ? sSpellDurationStore.LookupEntry(spellEntry->DurationIndex) : NULL;
     PowerType = spellEntry->powerType;
 
@@ -904,7 +913,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     RuneCostID = spellEntry->runeCostID;
     RangeEntry = spellEntry->rangeIndex ? sSpellRangeStore.LookupEntry(spellEntry->rangeIndex) : NULL;
     Speed = spellEntry->speed;
-    StackAmount = spellEntry->GetStackAmount();
 
     // SpellReagentsEntry
     SpellReagentsEntry const* _reagents = spellEntry->GetSpellReagents();

@@ -1857,18 +1857,6 @@ struct SpellEntry
     SpellShapeshiftEntry const* GetSpellShapeshift() const;
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
     SpellTotemsEntry const* GetSpellTotems() const;
-
-    // single fields
-    uint32 GetSpellLevel() const;
-    uint32 GetStackAmount() const;
-    uint32 GetProcCharges() const;
-    uint32 GetProcChance() const;
-    uint32 GetMaxLevel() const;
-    uint32 GetAuraInterruptFlags() const;
-    uint32 GetBaseLevel() const;
-    uint32 GetInterruptFlags() const;
-    uint32 GetProcFlags() const;
-    uint32 GetChannelInterruptFlags() const;
 };
 
 typedef std::set<uint32> SpellCategorySet;
