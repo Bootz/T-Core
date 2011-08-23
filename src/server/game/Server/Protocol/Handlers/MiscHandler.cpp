@@ -1671,12 +1671,3 @@ void WorldSession::HandleSendCemetryListResponse(WorldPacket& recvPacket)
 
     // TODO Implement it.
 }
-
-void WorldSession::HandleStartQuest(WorldPacket& recv_data)
-{
-    uint32 guid, questid;
-
-    recv_data >> guid >> questid;
-
-    // TODO Implement it.
-}
