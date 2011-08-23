@@ -1860,13 +1860,7 @@ struct SpellEntry
 
     // single fields
     uint32 GetManaCost() const;
-    uint32 GetPreventionType() const;
-    uint32 GetCategory() const;
-    uint32 GetMechanic() const;
-    uint32 GetStartRecoveryCategory() const;
     uint32 GetSpellLevel() const;
-    uint32 GetDmgClass() const;
-    uint32 GetDispel() const;
     uint32 GetStackAmount() const;
     uint32 GetManaCostPercentage() const;
     uint32 GetProcCharges() const;

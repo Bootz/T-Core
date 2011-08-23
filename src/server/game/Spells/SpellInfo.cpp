@@ -827,9 +827,16 @@ SpellEffectInfo::StaticData  SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
 SpellInfo::SpellInfo(SpellEntry const* spellEntry)
 {
     Id = spellEntry->Id;
-    Category = spellEntry->GetCategory();
-    Dispel = spellEntry->GetDispel();
-    Mechanic = spellEntry->GetMechanic();
+
+    // SpellCategoriesEntry
+    SpellCategoriesEntry const* _categorie = spellEntry->GetSpellCategories();
+    Category = _categorie ? _categorie->Category : 0;
+    Dispel = _categorie ? _categorie->Dispel : 0;
+    Mechanic = _categorie ? _categorie->Mechanic : 0;
+    StartRecoveryCategory = _categorie ? _categorie->StartRecoveryCategory : 0;
+    DmgClass = _categorie ? _categorie->DmgClass : 0;
+    PreventionType = _categorie ? _categorie->PreventionType : 0;
+
     Attributes = spellEntry->Attributes;
     AttributesEx = spellEntry->AttributesEx;
     AttributesEx2 = spellEntry->AttributesEx2;
@@ -874,7 +881,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     CategoryRecoveryTime = _cooldowns ? _cooldowns->CategoryRecoveryTime : 0;
     StartRecoveryTime = _cooldowns ? _cooldowns->StartRecoveryTime : 0;
 
-    StartRecoveryCategory = spellEntry->GetStartRecoveryCategory();
     InterruptFlags = spellEntry->GetInterruptFlags();
     AuraInterruptFlags = spellEntry->GetAuraInterruptFlags();
     ChannelInterruptFlags = spellEntry->GetChannelInterruptFlags();
@@ -920,8 +926,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellFamilyName = _class ? _class->SpellFamilyName : 0;
     SpellFamilyFlags = _class ? _class->SpellFamilyFlags : 0;
 
-    DmgClass = spellEntry->GetDmgClass();
-    PreventionType = spellEntry->GetPreventionType();
     SchoolMask = spellEntry->SchoolMask;
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         Effects[i] = SpellEffectInfo(spellEntry, this, i);
@@ -929,7 +933,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
 
     // SpellTotemsEntry
     SpellTotemsEntry const* _totem = spellEntry->GetSpellTotems();
-
     for (uint8 i = 0; i < 2; ++i)
         TotemCategory[i] = _totem ? _totem->TotemCategory[i] : 0;
     for (uint8 i = 0; i < 2; ++i)

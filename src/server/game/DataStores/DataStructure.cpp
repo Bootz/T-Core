@@ -103,42 +103,6 @@ SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
 }
 
-//SpellCategoriesEntry
-uint32 SpellEntry::GetPreventionType() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->PreventionType : 0;
-}
-
-uint32 SpellEntry::GetCategory() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Category : 0;
-}
-
-uint32 SpellEntry::GetMechanic() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Mechanic : 0;
-}
-
-uint32 SpellEntry::GetStartRecoveryCategory() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->StartRecoveryCategory : 0;
-}
-
-uint32 SpellEntry::GetDmgClass() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->DmgClass : 0;
-}
-
-uint32 SpellEntry::GetDispel() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Dispel : 0;
-}
 //SpellPowerEntry
 uint32 SpellEntry::GetManaCostPerLevel() const
 {
