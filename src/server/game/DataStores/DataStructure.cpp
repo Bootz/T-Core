@@ -103,30 +103,6 @@ SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
 }
 
-//SpellPowerEntry
-uint32 SpellEntry::GetManaCostPerLevel() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaCostPerlevel : 0;
-}
-
-uint32 SpellEntry::GetManaCost() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaCost : 0;
-}
-
-uint32 SpellEntry::GetManaCostPercentage() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->ManaCostPercentage : 0;
-}
-
-uint32 SpellEntry::GetManaPerSecond() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaPerSecond : 0;
-}
 //SpellAuraOptionsEntry
 uint32 SpellEntry::GetProcFlags() const
 {
@@ -187,53 +163,3 @@ uint32 SpellEntry::GetSpellLevel() const
     SpellLevelsEntry const* levels = GetSpellLevels();
     return levels ? levels->spellLevel : 0;
 }
-
-//SpellAuraRestrictionsEntry
-uint32 SpellEntry::GetCasterAuraSpell() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->casterAuraSpell : 0;
-}
-
-uint32 SpellEntry::GetCasterAuraState() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->CasterAuraState : 0;
-}
-
-uint32 SpellEntry::GetCasterAuraStateNot() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->CasterAuraStateNot : 0;
-}
-
-uint32 SpellEntry::GetTargetAuraState() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->TargetAuraState : 0;
-}
-
-uint32 SpellEntry::GetTargetAuraSpell() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->targetAuraSpell : 0;
-}
-
-uint32 SpellEntry::GetExcludeTargetAuraSpell() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->excludeTargetAuraSpell : 0;
-}
-
-uint32 SpellEntry::GetExcludeCasterAuraSpell() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->excludeCasterAuraSpell : 0;
-}
-
-uint32 SpellEntry::GetTargetAuraStateNot() const
-{
-    SpellAuraRestrictionsEntry const* aura = GetSpellAuraRestrictions();
-    return aura ? aura->TargetAuraStateNot : 0;
-}
-

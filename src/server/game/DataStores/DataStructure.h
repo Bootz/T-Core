@@ -1859,29 +1859,16 @@ struct SpellEntry
     SpellTotemsEntry const* GetSpellTotems() const;
 
     // single fields
-    uint32 GetManaCost() const;
     uint32 GetSpellLevel() const;
     uint32 GetStackAmount() const;
-    uint32 GetManaCostPercentage() const;
     uint32 GetProcCharges() const;
     uint32 GetProcChance() const;
     uint32 GetMaxLevel() const;
-    uint32 GetManaPerSecond() const;
     uint32 GetAuraInterruptFlags() const;
     uint32 GetBaseLevel() const;
     uint32 GetInterruptFlags() const;
     uint32 GetProcFlags() const;
     uint32 GetChannelInterruptFlags() const;
-    uint32 GetManaCostPerLevel() const;
-    //SpellAuraRestrictionsEntry
-    uint32 GetTargetAuraSpell() const;
-    uint32 GetTargetAuraState() const;
-    uint32 GetCasterAuraSpell() const;
-    uint32 GetCasterAuraState() const;
-    uint32 GetCasterAuraStateNot() const;
-    uint32 GetExcludeTargetAuraSpell() const;
-    uint32 GetExcludeCasterAuraSpell() const;
-    uint32 GetTargetAuraStateNot() const;
 };
 
 typedef std::set<uint32> SpellCategorySet;

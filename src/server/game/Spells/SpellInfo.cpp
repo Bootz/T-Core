@@ -865,14 +865,16 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     FacingCasterFlags = _castreq ? _castreq->FacingCasterFlags : -1;
     AreaGroupId = _castreq ? _castreq->AreaGroupId : -1;
 
-    CasterAuraState = spellEntry->GetCasterAuraState();
-    TargetAuraState = spellEntry->GetTargetAuraState();
-    CasterAuraStateNot = spellEntry->GetCasterAuraStateNot();
-    TargetAuraStateNot = spellEntry->GetTargetAuraStateNot();
-    CasterAuraSpell = spellEntry->GetCasterAuraSpell();
-    TargetAuraSpell = spellEntry->GetTargetAuraSpell();
-    ExcludeCasterAuraSpell = spellEntry->GetExcludeCasterAuraSpell();
-    ExcludeTargetAuraSpell = spellEntry->GetExcludeTargetAuraSpell();
+    // SpellAuraRestrictionsEntry
+    SpellAuraRestrictionsEntry const* _aura = spellEntry->GetSpellAuraRestrictions();
+    CasterAuraState = _aura ? _aura->CasterAuraState : 0;
+    TargetAuraState = _aura ? _aura->TargetAuraState : 0;
+    CasterAuraStateNot = _aura ? _aura->CasterAuraStateNot : 0;
+    TargetAuraStateNot = _aura ? _aura->TargetAuraStateNot : 0;
+    CasterAuraSpell = _aura ? _aura->casterAuraSpell : 0;
+    TargetAuraSpell = _aura ? _aura->targetAuraSpell : 0;
+    ExcludeCasterAuraSpell = _aura ? _aura->excludeCasterAuraSpell : 0;
+    ExcludeTargetAuraSpell = _aura ? _aura->excludeTargetAuraSpell : 0;
     CastTimeEntry = spellEntry->CastingTimeIndex ? sSpellCastTimesStore.LookupEntry(spellEntry->CastingTimeIndex) : NULL;
 
     // SpellCooldownsEntry
@@ -892,9 +894,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellLevel = spellEntry->GetSpellLevel();
     DurationEntry = spellEntry->DurationIndex ? sSpellDurationStore.LookupEntry(spellEntry->DurationIndex) : NULL;
     PowerType = spellEntry->powerType;
-    ManaCost = spellEntry->GetManaCost();
-    ManaPerSecond = spellEntry->GetManaPerSecond();
-    ManaCostPercentage = spellEntry->GetManaCostPercentage();
+
+    // SpellPowerEntry
+    SpellPowerEntry const* _power = spellEntry->GetSpellPower();
+    ManaCost = _power ? _power->manaCost : 0;
+    ManaPerSecond = _power ? _power->manaPerSecond : 0;
+    ManaCostPercentage = _power ? _power->ManaCostPercentage : 0;
+
     RuneCostID = spellEntry->runeCostID;
     RangeEntry = spellEntry->rangeIndex ? sSpellRangeStore.LookupEntry(spellEntry->rangeIndex) : NULL;
     Speed = spellEntry->speed;
@@ -924,7 +930,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     // SpellClassOptionsEntry
     SpellClassOptionsEntry const* _class = spellEntry->GetSpellClassOptions();
     SpellFamilyName = _class ? _class->SpellFamilyName : 0;
-    SpellFamilyFlags = _class ? _class->SpellFamilyFlags : 0;
+    SpellFamilyFlags = _class ? _class->SpellFamilyFlags : flag96(0);
 
     SchoolMask = spellEntry->SchoolMask;
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
