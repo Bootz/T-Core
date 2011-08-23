@@ -1841,21 +1841,7 @@ struct SpellEntry
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
     // struct access functions
-    SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
-    SpellAuraRestrictionsEntry const* GetSpellAuraRestrictions() const;
-    SpellCastingRequirementsEntry const* GetSpellCastingRequirements() const;
-    SpellCategoriesEntry const* GetSpellCategories() const;
-    SpellClassOptionsEntry const* GetSpellClassOptions() const;
-    SpellCooldownsEntry const* GetSpellCooldowns() const;
     SpellEffectEntry const* GetSpellEffect(uint32 eff) const;
-    SpellEquippedItemsEntry const* GetSpellEquippedItems() const;
-    SpellInterruptsEntry const* GetSpellInterrupts() const;
-    SpellLevelsEntry const* GetSpellLevels() const;
-    SpellPowerEntry const* GetSpellPower() const;
-    SpellReagentsEntry const* GetSpellReagents() const;
-    SpellScalingEntry const* GetSpellScaling() const;
-    SpellShapeshiftEntry const* GetSpellShapeshift() const;
-    SpellTotemsEntry const* GetSpellTotems() const;
 };
 
 typedef std::set<uint32> SpellCategorySet;

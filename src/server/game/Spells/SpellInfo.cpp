@@ -829,7 +829,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     Id = spellEntry->Id;
 
     // SpellCategoriesEntry
-    SpellCategoriesEntry const* _categorie = spellEntry->GetSpellCategories();
+    SpellCategoriesEntry const* _categorie = GetSpellCategories();
     Category = _categorie ? _categorie->Category : 0;
     Dispel = _categorie ? _categorie->Dispel : 0;
     Mechanic = _categorie ? _categorie->Mechanic : 0;
@@ -849,7 +849,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     AttributesCu = 0;
 
     // SpellShapeshiftEntry
-    SpellShapeshiftEntry const* _shapeshift = spellEntry->GetSpellShapeshift();
+    SpellShapeshiftEntry const* _shapeshift = GetSpellShapeshift();
     Stances = _shapeshift ? _shapeshift->Stances : 0;
     StancesNot = _shapeshift ? _shapeshift->StancesNot : 0;
 
@@ -860,13 +860,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     MaxAffectedTargets = _target ? _target->MaxAffectedTargets : 0;
 
     // SpellCastingRequirementsEntry
-    SpellCastingRequirementsEntry const* _castreq = spellEntry->GetSpellCastingRequirements();
+    SpellCastingRequirementsEntry const* _castreq = GetSpellCastingRequirements();
     RequiresSpellFocus = _castreq ? _castreq->RequiresSpellFocus : 0;
     FacingCasterFlags = _castreq ? _castreq->FacingCasterFlags : -1;
     AreaGroupId = _castreq ? _castreq->AreaGroupId : -1;
 
     // SpellAuraRestrictionsEntry
-    SpellAuraRestrictionsEntry const* _aura = spellEntry->GetSpellAuraRestrictions();
+    SpellAuraRestrictionsEntry const* _aura = GetSpellAuraRestrictions();
     CasterAuraState = _aura ? _aura->CasterAuraState : 0;
     TargetAuraState = _aura ? _aura->TargetAuraState : 0;
     CasterAuraStateNot = _aura ? _aura->CasterAuraStateNot : 0;
@@ -878,25 +878,25 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     CastTimeEntry = spellEntry->CastingTimeIndex ? sSpellCastTimesStore.LookupEntry(spellEntry->CastingTimeIndex) : NULL;
 
     // SpellCooldownsEntry
-    SpellCooldownsEntry const* _cooldowns = spellEntry->GetSpellCooldowns();
+    SpellCooldownsEntry const* _cooldowns = GetSpellCooldowns();
     RecoveryTime = _cooldowns ? _cooldowns->RecoveryTime : 0;
     CategoryRecoveryTime = _cooldowns ? _cooldowns->CategoryRecoveryTime : 0;
     StartRecoveryTime = _cooldowns ? _cooldowns->StartRecoveryTime : 0;
 
     // SpellInterruptsEntry
-    SpellInterruptsEntry const* _interrupt = spellEntry->GetSpellInterrupts();
+    SpellInterruptsEntry const* _interrupt = GetSpellInterrupts();
     InterruptFlags = _interrupt ? _interrupt->InterruptFlags : 0;
     AuraInterruptFlags = _interrupt ? _interrupt->AuraInterruptFlags : 0;
     ChannelInterruptFlags = _interrupt ? _interrupt->ChannelInterruptFlags : 0;
 
     // SpellAuraOptionsEntry
-    SpellAuraOptionsEntry const* _options = spellEntry->GetSpellAuraOptions();
+    SpellAuraOptionsEntry const* _options = GetSpellAuraOptions();
     ProcFlags = _options ? _options->procFlags : 0;
     ProcChance = _options ? _options->procChance : 0;
     ProcCharges = _options ? _options->procCharges : 0;
     StackAmount = _options ? _options->StackAmount : 0;
 
-    SpellLevelsEntry const* _levels = spellEntry->GetSpellLevels();
+    SpellLevelsEntry const* _levels = GetSpellLevels();
     MaxLevel = _levels ? _levels->maxLevel : 0;
     BaseLevel = _levels ? _levels->baseLevel : 0;
     SpellLevel = _levels ? _levels->spellLevel : 0;
@@ -905,7 +905,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     PowerType = spellEntry->powerType;
 
     // SpellPowerEntry
-    SpellPowerEntry const* _power = spellEntry->GetSpellPower();
+    SpellPowerEntry const* _power = GetSpellPower();
     ManaCost = _power ? _power->manaCost : 0;
     ManaPerSecond = _power ? _power->manaPerSecond : 0;
     ManaCostPercentage = _power ? _power->ManaCostPercentage : 0;
@@ -915,13 +915,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     Speed = spellEntry->speed;
 
     // SpellReagentsEntry
-    SpellReagentsEntry const* _reagents = spellEntry->GetSpellReagents();
+    SpellReagentsEntry const* _reagents = GetSpellReagents();
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         Reagent[i] = _reagents ? _reagents->Reagent[i] : 0;
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         ReagentCount[i] = _reagents ? _reagents->ReagentCount[i] : 0;
 
-    if (SpellEquippedItemsEntry const* _equipped = spellEntry->GetSpellEquippedItems())
+    if (SpellEquippedItemsEntry const* _equipped = GetSpellEquippedItems())
     {
         EquippedItemClass = _equipped->EquippedItemClass;
         EquippedItemSubClassMask = _equipped->EquippedItemSubClassMask;
@@ -936,7 +936,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     Rank = spellEntry->Rank;
 
     // SpellClassOptionsEntry
-    SpellClassOptionsEntry const* _class = spellEntry->GetSpellClassOptions();
+    SpellClassOptionsEntry const* _class = GetSpellClassOptions();
     SpellFamilyName = _class ? _class->SpellFamilyName : 0;
     SpellFamilyFlags = _class ? _class->SpellFamilyFlags : flag96(0);
 
@@ -946,28 +946,28 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     ChainEntry = NULL;
 
     // SpellTotemsEntry
-    SpellTotemsEntry const* _totem = spellEntry->GetSpellTotems();
+    SpellTotemsEntry const* _totem = GetSpellTotems();
     for (uint8 i = 0; i < 2; ++i)
         TotemCategory[i] = _totem ? _totem->TotemCategory[i] : 0;
     for (uint8 i = 0; i < 2; ++i)
         Totem[i] = _totem ? _totem->Totem[i] : 0;
 
-    //SpellDifficultyId;
-    //SpellScalingId;
-    //SpellAuraOptionsId;
-    //SpellAuraRestrictionsId;
-    //SpellCastingRequirementsId;
-    //SpellCategoriesId;
-    //SpellClassOptionsId;
-    //SpellCooldownsId;
-    //SpellEquippedItemsId;
-    //SpellInterruptsId;
-    //SpellLevelsId;
-    //SpellPowerId;
-    //SpellReagentsId;
-    //SpellShapeshiftId;
+    SpellDifficultyId = spellEntry->SpellDifficultyId;
+    SpellScalingId = spellEntry->SpellScalingId;
+    SpellAuraOptionsId = spellEntry->SpellAuraOptionsId;
+    SpellAuraRestrictionsId = spellEntry->SpellAuraRestrictionsId;
+    SpellCastingRequirementsId = spellEntry->SpellCastingRequirementsId;
+    SpellCategoriesId = spellEntry->SpellCategoriesId;
+    SpellClassOptionsId = spellEntry->SpellClassOptionsId;
+    SpellCooldownsId = spellEntry->SpellCooldownsId;
+    SpellEquippedItemsId = spellEntry->SpellEquippedItemsId;
+    SpellInterruptsId = spellEntry->SpellInterruptsId;
+    SpellLevelsId = spellEntry->SpellLevelsId;
+    SpellPowerId = spellEntry->SpellPowerId;
+    SpellReagentsId = spellEntry->SpellReagentsId;
+    SpellShapeshiftId = spellEntry->SpellShapeshiftId;
     SpellTargetRestrictionsId = spellEntry->SpellTargetRestrictionsId;
-    //SpellTotemsId;
+    SpellTotemsId = spellEntry->SpellTotemsId;
 }
 
 bool SpellInfo::HasEffect(SpellEffects effect) const
@@ -2468,4 +2468,74 @@ bool SpellInfo::_IsPositiveTarget(uint32 targetA, uint32 targetB)
 SpellTargetRestrictionsEntry const* SpellInfo::GetSpellTargetRestrictions() const
 {
     return SpellTargetRestrictionsId ? sSpellTargetRestrictionsStore.LookupEntry(SpellTargetRestrictionsId) : NULL;
+}
+
+SpellEquippedItemsEntry const* SpellInfo::GetSpellEquippedItems() const
+{
+    return SpellEquippedItemsId ? sSpellEquippedItemsStore.LookupEntry(SpellEquippedItemsId) : NULL;
+}
+
+SpellInterruptsEntry const* SpellInfo::GetSpellInterrupts() const
+{
+    return SpellInterruptsId ? sSpellInterruptsStore.LookupEntry(SpellInterruptsId) : NULL;
+}
+
+SpellLevelsEntry const* SpellInfo::GetSpellLevels() const
+{
+    return SpellLevelsId ? sSpellLevelsStore.LookupEntry(SpellLevelsId) : NULL;
+}
+
+SpellPowerEntry const* SpellInfo::GetSpellPower() const
+{
+    return SpellPowerId ? sSpellPowerStore.LookupEntry(SpellPowerId) : NULL;
+}
+
+SpellReagentsEntry const* SpellInfo::GetSpellReagents() const
+{
+    return SpellReagentsId ? sSpellReagentsStore.LookupEntry(SpellReagentsId) : NULL;
+}
+
+SpellScalingEntry const* SpellInfo::GetSpellScaling() const
+{
+    return SpellScalingId ? sSpellScalingStore.LookupEntry(SpellScalingId) : NULL;
+}
+
+SpellShapeshiftEntry const* SpellInfo::GetSpellShapeshift() const
+{
+    return SpellShapeshiftId ? sSpellShapeshiftStore.LookupEntry(SpellShapeshiftId) : NULL;
+}
+
+SpellTotemsEntry const* SpellInfo::GetSpellTotems() const
+{
+    return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
+}
+
+SpellAuraOptionsEntry const* SpellInfo::GetSpellAuraOptions() const
+{
+    return SpellAuraOptionsId ? sSpellAuraOptionsStore.LookupEntry(SpellAuraOptionsId) : NULL;
+}
+
+SpellAuraRestrictionsEntry const* SpellInfo::GetSpellAuraRestrictions() const
+{
+    return SpellAuraRestrictionsId ? sSpellAuraRestrictionsStore.LookupEntry(SpellAuraRestrictionsId) : NULL;
+}
+
+SpellCastingRequirementsEntry const* SpellInfo::GetSpellCastingRequirements() const
+{
+    return SpellCastingRequirementsId ? sSpellCastingRequirementsStore.LookupEntry(SpellCastingRequirementsId) : NULL;
+}
+
+SpellCategoriesEntry const* SpellInfo::GetSpellCategories() const
+{
+    return SpellCategoriesId ? sSpellCategoriesStore.LookupEntry(SpellCategoriesId) : NULL;
+}
+
+SpellClassOptionsEntry const* SpellInfo::GetSpellClassOptions() const
+{
+    return SpellClassOptionsId ? sSpellClassOptionsStore.LookupEntry(SpellClassOptionsId) : NULL;
+}
+
+SpellCooldownsEntry const* SpellInfo::GetSpellCooldowns() const
+{
+    return SpellCooldownsId ? sSpellCooldownsStore.LookupEntry(SpellCooldownsId) : NULL;
 }

@@ -372,7 +372,23 @@ public:
     SpellChainNode const* ChainEntry;
 
     SpellInfo(SpellEntry const* spellEntry);
+
+    // struct access functions
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
+    SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
+    SpellAuraRestrictionsEntry const* GetSpellAuraRestrictions() const;
+    SpellCastingRequirementsEntry const* GetSpellCastingRequirements() const;
+    SpellCategoriesEntry const* GetSpellCategories() const;
+    SpellClassOptionsEntry const* GetSpellClassOptions() const;
+    SpellCooldownsEntry const* GetSpellCooldowns() const;
+    SpellEquippedItemsEntry const* GetSpellEquippedItems() const;
+    SpellInterruptsEntry const* GetSpellInterrupts() const;
+    SpellLevelsEntry const* GetSpellLevels() const;
+    SpellPowerEntry const* GetSpellPower() const;
+    SpellReagentsEntry const* GetSpellReagents() const;
+    SpellScalingEntry const* GetSpellScaling() const;
+    SpellShapeshiftEntry const* GetSpellShapeshift() const;
+    SpellTotemsEntry const* GetSpellTotems() const;
 
     bool HasEffect(SpellEffects effect) const;
     bool HasAura(AuraType aura) const;

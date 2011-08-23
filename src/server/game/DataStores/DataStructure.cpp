@@ -23,77 +23,8 @@
 #include "DataStructure.h"
 #include "DataStorage.h"
 
-SpellAuraOptionsEntry const* SpellEntry::GetSpellAuraOptions() const
-{
-    return SpellAuraOptionsId ? sSpellAuraOptionsStore.LookupEntry(SpellAuraOptionsId) : NULL;
-}
-
-SpellAuraRestrictionsEntry const* SpellEntry::GetSpellAuraRestrictions() const
-{
-    return SpellAuraRestrictionsId ? sSpellAuraRestrictionsStore.LookupEntry(SpellAuraRestrictionsId) : NULL;
-}
-
-SpellCastingRequirementsEntry const* SpellEntry::GetSpellCastingRequirements() const
-{
-    return SpellCastingRequirementsId ? sSpellCastingRequirementsStore.LookupEntry(SpellCastingRequirementsId) : NULL;
-}
-
-SpellCategoriesEntry const* SpellEntry::GetSpellCategories() const
-{
-    return SpellCategoriesId ? sSpellCategoriesStore.LookupEntry(SpellCategoriesId) : NULL;
-}
-
-SpellClassOptionsEntry const* SpellEntry::GetSpellClassOptions() const
-{
-    return SpellClassOptionsId ? sSpellClassOptionsStore.LookupEntry(SpellClassOptionsId) : NULL;
-}
-
-SpellCooldownsEntry const* SpellEntry::GetSpellCooldowns() const
-{
-    return SpellCooldownsId ? sSpellCooldownsStore.LookupEntry(SpellCooldownsId) : NULL;
-}
-
 SpellEffectEntry const* SpellEntry::GetSpellEffect(uint32 eff) const
 {
     return GetSpellEffectEntry(Id, eff);
 }
 
-SpellEquippedItemsEntry const* SpellEntry::GetSpellEquippedItems() const
-{
-    return SpellEquippedItemsId ? sSpellEquippedItemsStore.LookupEntry(SpellEquippedItemsId) : NULL;
-}
-
-SpellInterruptsEntry const* SpellEntry::GetSpellInterrupts() const
-{
-    return SpellInterruptsId ? sSpellInterruptsStore.LookupEntry(SpellInterruptsId) : NULL;
-}
-
-SpellLevelsEntry const* SpellEntry::GetSpellLevels() const
-{
-    return SpellLevelsId ? sSpellLevelsStore.LookupEntry(SpellLevelsId) : NULL;
-}
-
-SpellPowerEntry const* SpellEntry::GetSpellPower() const
-{
-    return SpellPowerId ? sSpellPowerStore.LookupEntry(SpellPowerId) : NULL;
-}
-
-SpellReagentsEntry const* SpellEntry::GetSpellReagents() const
-{
-    return SpellReagentsId ? sSpellReagentsStore.LookupEntry(SpellReagentsId) : NULL;
-}
-
-SpellScalingEntry const* SpellEntry::GetSpellScaling() const
-{
-    return SpellScalingId ? sSpellScalingStore.LookupEntry(SpellScalingId) : NULL;
-}
-
-SpellShapeshiftEntry const* SpellEntry::GetSpellShapeshift() const
-{
-    return SpellShapeshiftId ? sSpellShapeshiftStore.LookupEntry(SpellShapeshiftId) : NULL;
-}
-
-SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
-{
-    return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
-}
