@@ -35,7 +35,6 @@ char const* GetPetName(uint32 petfamily, uint32 dbclang);
 uint32 GetTalentSpellCost(uint32 spellId);
 TalentSpellPos const* GetTalentSpellPos(uint32 spellId);
 SpellEffectEntry const* GetSpellEffectEntry(uint32 spellId, uint32 effect);
-SpellReagentsEntry const* GetSpellReagentEntry(uint32 spellId, uint8 reagent);
 
 int32 GetAreaFlagByAreaID(uint32 area_id);                  // -1 if not found
 MapEntry const* GetMapEntry(uint32 map_id);

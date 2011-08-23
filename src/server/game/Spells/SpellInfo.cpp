@@ -880,7 +880,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     StackAmount = spellEntry->GetStackAmount();
 
     // SpellReagentsEntry
-    SpellReagentsEntry const* _reagents = spellEntry->GetSpellReagents(0);
+    SpellReagentsEntry const* _reagents = spellEntry->GetSpellReagents();
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         Reagent[i] = _reagents ? _reagents->Reagent[i] : 0;
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)

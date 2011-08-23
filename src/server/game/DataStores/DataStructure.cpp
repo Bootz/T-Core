@@ -198,9 +198,9 @@ SpellPowerEntry const* SpellEntry::GetSpellPower() const
     return SpellPowerId ? sSpellPowerStore.LookupEntry(SpellPowerId) : NULL;
 }
 
-SpellReagentsEntry const* SpellEntry::GetSpellReagents(uint8 eff) const
+SpellReagentsEntry const* SpellEntry::GetSpellReagents() const
 {
-    return GetSpellReagentEntry(Id, eff);
+    return SpellReagentsId ? sSpellReagentsStore.LookupEntry(SpellReagentsId) : NULL;
 }
 
 SpellScalingEntry const* SpellEntry::GetSpellScaling() const

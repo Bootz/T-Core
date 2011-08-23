@@ -771,15 +771,6 @@ SpellEffectEntry const* GetSpellEffectEntry(uint32 spellId, uint32 effect)
     return itr->second.effects[effect];
 }
 
-SpellReagentsEntry const* GetSpellReagentEntry(uint32 spellId, uint8 reagent)
-{
-    SpellReagentMap::const_iterator itr = sSpellReagentMap.find(spellId);
-    if (itr == sSpellReagentMap.end())
-        return NULL;
-
-    return itr->second.reagents[reagent];
-}
-
 uint32 GetTalentSpellCost(uint32 spellId)
 {
     if (TalentSpellPos const* pos = GetTalentSpellPos(spellId))
