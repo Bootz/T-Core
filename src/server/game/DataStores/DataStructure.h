@@ -1840,28 +1840,6 @@ struct SpellEntry
     uint32 SpellTotemsId;                                   // 46       SpellTotems.dbc
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
-    // SpellEffectEntry
-    uint32 GetSpellEffectIdByIndex(uint32 index) const;
-    float GetEffectValueMultiplier(uint32 index) const;
-    uint32 GetEffectApplyAuraName(uint32 index) const;
-    uint32 GetEffectAmplitude(uint32 index) const;
-    int32 GetEffectBasePoints(uint32 index) const;
-    float GetEffectBonusMultiplier(uint32 index) const;
-    float GetEffectDamageMultiplier(uint32 index) const;
-    uint32 GetEffectChainTarget(uint32 index) const;
-    int32 GetEffectDieSides(uint32 index) const;
-    uint32 GetEffectItemType(uint32 index) const;
-    uint32 GetEffectMechanic(uint32 index) const;
-    int32 GetEffectMiscValue(uint32 index) const;
-    int32 GetEffectMiscValueB(uint32 index) const;
-    float GetEffectPointsPerComboPoint(uint32 index) const;
-    int32 GetEffectRadiusIndex(uint32 index) const;
-    float GetEffectRealPointsPerLevel(uint32 index) const;
-    flag96 GetEffectSpellClassMask(uint32 index) const;
-    uint32 GetEffectTriggerSpell(uint32 index) const;
-    uint32 GetEffectImplicitTargetA(uint32 index) const;
-    uint32 GetEffectImplicitTargetB(uint32 index) const;
-
     // struct access functions
     SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
     SpellAuraRestrictionsEntry const* GetSpellAuraRestrictions() const;
