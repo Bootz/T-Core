@@ -878,10 +878,14 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     RangeEntry = spellEntry->rangeIndex ? sSpellRangeStore.LookupEntry(spellEntry->rangeIndex) : NULL;
     Speed = spellEntry->speed;
     StackAmount = spellEntry->GetStackAmount();
+
+    // SpellReagentsEntry
+    SpellReagentsEntry const* _reagents = spellEntry->GetSpellReagents(0);
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
-        Reagent[i] = spellEntry->GetReagent(i);
+        Reagent[i] = _reagents ? _reagents->Reagent[i] : 0;
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
-        ReagentCount[i] = spellEntry->GetReagentCount(i);
+        ReagentCount[i] = _reagents ? _reagents->ReagentCount[i] : 0;
+
     EquippedItemClass = spellEntry->GetEquippedItemClass();
     EquippedItemSubClassMask = spellEntry->GetEquippedItemSubClassMask();
     EquippedItemInventoryTypeMask = spellEntry->GetEquippedItemInventoryTypeMask();

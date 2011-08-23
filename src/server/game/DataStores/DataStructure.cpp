@@ -446,18 +446,3 @@ uint32 SpellEntry::GetFacingCasterFlags() const
     SpellCastingRequirementsEntry const* castReq = GetSpellCastingRequirements();
     return castReq ? castReq->FacingCasterFlags : -1;
 }
-
-//SpellReagentsEntry
-uint32 SpellEntry::GetReagent(uint8 reagents) const
-{
-    if (SpellReagentsEntry const* reagent = GetSpellReagents(reagents))
-        return reagent->Reagent[reagents];
-    return 0;
-}
-
-uint32 SpellEntry::GetReagentCount(uint8 reagents) const
-{
-    if (SpellReagentsEntry const* reagent = GetSpellReagents(reagents))
-        return reagent->ReagentCount[reagents];
-    return 0;
-}

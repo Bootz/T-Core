@@ -1919,9 +1919,6 @@ struct SpellEntry
     uint32 GetExcludeTargetAuraSpell() const;
     uint32 GetExcludeCasterAuraSpell() const;
     uint32 GetTargetAuraStateNot() const;
-    //SpellReagentsEntry
-    uint32 GetReagent(uint8 reagent) const;
-    uint32 GetReagentCount(uint8 reagent) const; 
 };
 
 typedef std::set<uint32> SpellCategorySet;
