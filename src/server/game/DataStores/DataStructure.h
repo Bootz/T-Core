@@ -1906,8 +1906,6 @@ struct SpellEntry
     uint32 GetBaseLevel() const;
     uint32 GetInterruptFlags() const;
     uint32 GetTargetCreatureType() const;    
-    uint32 GetStances() const;
-    uint32 GetStancesNot() const;
     uint32 GetProcFlags() const;
     uint32 GetChannelInterruptFlags() const;
     uint32 GetManaCostPerLevel() const;

@@ -447,18 +447,6 @@ uint32 SpellEntry::GetFacingCasterFlags() const
     return castReq ? castReq->FacingCasterFlags : -1;
 }
 
-//SpellShapeshiftEntry
-uint32 SpellEntry::GetStances() const
-{
-    SpellShapeshiftEntry const* ss = GetSpellShapeshift();
-    return ss ? ss->Stances : 0;
-}
-
-uint32 SpellEntry::GetStancesNot() const
-{
-    SpellShapeshiftEntry const* ss = GetSpellShapeshift();
-    return ss ? ss->StancesNot : 0;
-}
 //SpellReagentsEntry
 uint32 SpellEntry::GetReagent(uint8 reagents) const
 {

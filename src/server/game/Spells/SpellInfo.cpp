@@ -833,8 +833,12 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     AttributesEx7 = spellEntry->AttributesEx7;
     AttributesEx8 = spellEntry->AttributesEx8;
     AttributesCu = 0;
-    Stances = spellEntry->GetStances();
-    StancesNot = spellEntry->GetStancesNot();
+
+    // SpellShapeshiftEntry
+    SpellShapeshiftEntry const* _shapeshift = spellEntry->GetSpellShapeshift();
+    Stances = _shapeshift ? _shapeshift->Stances : 0;
+    StancesNot = _shapeshift ? _shapeshift->StancesNot : 0;
+
     Targets = spellEntry->GetTargets();
     TargetCreatureType = spellEntry->GetTargetCreatureType();
     RequiresSpellFocus = spellEntry->GetRequiresSpellFocus();
@@ -902,7 +906,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
         Effects[i] = SpellEffectInfo(spellEntry, this, i);
     ChainEntry = NULL;
 
-    // SpellTotems
+    // SpellTotemsEntry
     SpellTotemsEntry const* _totem = spellEntry->GetSpellTotems();
 
     for (uint8 i = 0; i < 2; ++i)
