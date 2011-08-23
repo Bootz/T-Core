@@ -223,24 +223,7 @@ uint32 SpellEntry::GetSpellLevel() const
     SpellLevelsEntry const* levels = GetSpellLevels();
     return levels ? levels->spellLevel : 0;
 }
-//SpellTargetRestrictionsEntry
-uint32 SpellEntry::GetTargets() const
-{
-    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
-    return target ? target->Targets : 0;
-}
 
-uint32 SpellEntry::GetTargetCreatureType() const
-{
-    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
-    return target ? target->TargetCreatureType : 0;
-}
-
-uint32 SpellEntry::GetMaxAffectedTargets() const
-{
-    SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
-    return target ? target->MaxAffectedTargets : 0;
-}
 //SpellAuraRestrictionsEntry
 uint32 SpellEntry::GetCasterAuraSpell() const
 {

@@ -1867,7 +1867,6 @@ struct SpellEntry
     uint32 GetSpellLevel() const;
     uint32 GetDmgClass() const;
     uint32 GetDispel() const;
-    uint32 GetMaxAffectedTargets() const;
     uint32 GetStackAmount() const;
     uint32 GetManaCostPercentage() const;
     uint32 GetProcCharges() const;
@@ -1877,11 +1876,9 @@ struct SpellEntry
     uint32 GetAuraInterruptFlags() const;
     uint32 GetBaseLevel() const;
     uint32 GetInterruptFlags() const;
-    uint32 GetTargetCreatureType() const;    
     uint32 GetProcFlags() const;
     uint32 GetChannelInterruptFlags() const;
     uint32 GetManaCostPerLevel() const;
-    uint32 GetTargets() const;
     //SpellAuraRestrictionsEntry
     uint32 GetTargetAuraSpell() const;
     uint32 GetTargetAuraState() const;

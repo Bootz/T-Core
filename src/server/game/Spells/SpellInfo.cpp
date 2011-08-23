@@ -846,8 +846,11 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     Stances = _shapeshift ? _shapeshift->Stances : 0;
     StancesNot = _shapeshift ? _shapeshift->StancesNot : 0;
 
-    Targets = spellEntry->GetTargets();
-    TargetCreatureType = spellEntry->GetTargetCreatureType();
+    // SpellTargetRestrictionsEntry
+    SpellTargetRestrictionsEntry const* _target = spellEntry->GetSpellTargetRestrictions();
+    Targets = _target ? _target->Targets : 0;
+    TargetCreatureType = _target ? _target->TargetCreatureType : 0;
+    MaxAffectedTargets = _target ? _target->MaxAffectedTargets : 0;
 
     // SpellCastingRequirementsEntry
     SpellCastingRequirementsEntry const* _castreq = spellEntry->GetSpellCastingRequirements();
@@ -911,7 +914,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     ActiveIconID = spellEntry->activeIconID;
     SpellName = spellEntry->SpellName;
     Rank = spellEntry->Rank;
-    MaxAffectedTargets = spellEntry->GetMaxAffectedTargets();
 
     // SpellClassOptionsEntry
     SpellClassOptionsEntry const* _class = spellEntry->GetSpellClassOptions();
