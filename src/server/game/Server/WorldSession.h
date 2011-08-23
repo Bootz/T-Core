@@ -905,6 +905,7 @@ class WorldSession
         void HandleMirrorImageDataRequest(WorldPacket & recv_data);
         void HandleAlterAppearance(WorldPacket& recv_data);
         void HandleRemoveGlyph(WorldPacket& recv_data);
+        void HandleStartQuest(WorldPacket& recv_data);
         void HandleCharCustomize(WorldPacket& recv_data);
         void HandleQueryInspectAchievements(WorldPacket& recv_data);
         void HandleEquipmentSetSave(WorldPacket& recv_data);

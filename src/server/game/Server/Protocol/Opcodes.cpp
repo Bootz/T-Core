@@ -1162,7 +1162,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_CONVERT_RUNE,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_RESYNC_RUNES,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_ADD_RUNE_POWER,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_START_QUEST,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( CMSG_START_QUEST,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleStartQuest                );
     DEFINE_OPCODE_HANDLER( CMSG_REMOVE_GLYPH,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRemoveGlyph               );
     DEFINE_OPCODE_HANDLER( CMSG_DUMP_OBJECTS,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_DUMP_OBJECTS_DATA,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
