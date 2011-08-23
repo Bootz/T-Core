@@ -884,8 +884,12 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellName = spellEntry->SpellName;
     Rank = spellEntry->Rank;
     MaxAffectedTargets = spellEntry->GetMaxAffectedTargets();
-    SpellFamilyName = spellEntry->GetSpellFamilyName();
-    SpellFamilyFlags = spellEntry->GetSpellFamilyFlags();
+
+    // SpellClassOptionsEntry
+    SpellClassOptionsEntry const* _class = spellEntry->GetSpellClassOptions();
+    SpellFamilyName = _class ? _class->SpellFamilyName : 0;
+    SpellFamilyFlags = _class ? _class->SpellFamilyFlags : 0;
+
     DmgClass = spellEntry->GetDmgClass();
     PreventionType = spellEntry->GetPreventionType();
     AreaGroupId  = spellEntry->GetAreaGroupId();

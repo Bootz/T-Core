@@ -1893,8 +1893,6 @@ struct SpellEntry
     int32 GetEquippedItemClass() const;
     int32 GetEquippedItemSubClassMask() const;
     int32 GetEquippedItemInventoryTypeMask() const;
-    uint32 GetSpellFamilyName() const;
-    flag96 GetSpellFamilyFlags() const;
     uint32 GetDmgClass() const;
     uint32 GetDispel() const;
     uint32 GetMaxAffectedTargets() const;
