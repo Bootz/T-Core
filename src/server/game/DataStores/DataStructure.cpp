@@ -103,25 +103,6 @@ SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
 }
 
-//SpellEquippedItemsEntry
-int32 SpellEntry::GetEquippedItemInventoryTypeMask() const
-{
-    SpellEquippedItemsEntry const* items = GetSpellEquippedItems();
-    return items ? items->EquippedItemInventoryTypeMask : -1;
-}
-
-int32 SpellEntry::GetEquippedItemSubClassMask() const
-{
-    SpellEquippedItemsEntry const* items = GetSpellEquippedItems();
-    return items ? items->EquippedItemSubClassMask : -1;
-}
-
-int32 SpellEntry::GetEquippedItemClass() const
-{
-    SpellEquippedItemsEntry const* items = GetSpellEquippedItems();
-    return items ? items->EquippedItemClass : -1;
-}
-
 //SpellCategoriesEntry
 uint32 SpellEntry::GetPreventionType() const
 {

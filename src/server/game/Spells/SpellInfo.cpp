@@ -893,9 +893,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         ReagentCount[i] = _reagents ? _reagents->ReagentCount[i] : 0;
 
-    EquippedItemClass = spellEntry->GetEquippedItemClass();
-    EquippedItemSubClassMask = spellEntry->GetEquippedItemSubClassMask();
-    EquippedItemInventoryTypeMask = spellEntry->GetEquippedItemInventoryTypeMask();
+    if (SpellEquippedItemsEntry const* _equipped = spellEntry->GetSpellEquippedItems())
+    {
+        EquippedItemClass = _equipped->EquippedItemClass;
+        EquippedItemSubClassMask = _equipped->EquippedItemSubClassMask;
+        EquippedItemInventoryTypeMask = _equipped->EquippedItemInventoryTypeMask;
+    }
+
     for (uint8 i = 0; i < 2; ++i)
         SpellVisual[i] = spellEntry->SpellVisual[i];
     SpellIconID = spellEntry->SpellIconID;
