@@ -6,7 +6,7 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  added spell scaling
+1.  added spell scaling.
 2.  Fix the trainer bug, if you click "train me" nothing happens.
 3.  Fix the vendor, they dont show any items.
 4.  Update the rest of Opcodes to 4.2.0.
