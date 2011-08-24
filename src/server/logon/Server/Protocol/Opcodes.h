@@ -889,7 +889,7 @@ enum Opcodes
     CMSG_LFG_SET_NEEDS                               = 0x1018D, //
     CMSG_LFG_SET_BOOT_VOTE                           = 0x0A6FB, // 14480
     SMSG_LFG_BOOT_PROPOSAL_UPDATE                    = 0x0F237, // 14480
-    CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x1018F, //
+    CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x0B6E3, // 14480
     SMSG_LFG_PLAYER_INFO                             = 0x0EABF, // 14480
     CMSG_LFG_TELEPORT                                = 0x0B673, // 14480
     CMSG_LFD_PARTY_LOCK_INFO_REQUEST                 = 0x0B2FE, // 14480

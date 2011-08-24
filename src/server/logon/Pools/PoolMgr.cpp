@@ -221,8 +221,6 @@ void PoolGroup<Creature>::Despawn1Object(uint32 guid)
 {
     if (CreatureData const* data = sObjectMgr->GetCreatureData(guid))
     {
-        sObjectMgr->RemoveCreatureFromGrid(guid, data);
-
         if (Creature* pCreature = ObjectAccessor::GetObjectInWorld(MAKE_NEW_GUID(guid, data->id, HIGHGUID_UNIT), (Creature*)NULL))
             pCreature->AddObjectToRemoveList();
     }
@@ -234,8 +232,6 @@ void PoolGroup<GameObject>::Despawn1Object(uint32 guid)
 {
     if (GameObjectData const* data = sObjectMgr->GetGOData(guid))
     {
-        sObjectMgr->RemoveGameobjectFromGrid(guid, data);
-
         if (GameObject* pGameobject = ObjectAccessor::GetObjectInWorld(MAKE_NEW_GUID(guid, data->id, HIGHGUID_GAMEOBJECT), (GameObject*)NULL))
             pGameobject->AddObjectToRemoveList();
     }
@@ -359,8 +355,6 @@ void PoolGroup<Creature>::Spawn1Object(PoolObject* obj)
 {
     if (CreatureData const* data = sObjectMgr->GetCreatureData(obj->guid))
     {
-        sObjectMgr->AddCreatureToGrid(obj->guid, data);
-
         // Spawn if necessary (loaded grids only)
         Map* map = const_cast<Map*>(sMapMgr->CreateBaseMap(data->mapid));
         // We use spawn coords to spawn
@@ -385,7 +379,6 @@ void PoolGroup<GameObject>::Spawn1Object(PoolObject* obj)
 {
     if (GameObjectData const* data = sObjectMgr->GetGOData(obj->guid))
     {
-        sObjectMgr->AddGameobjectToGrid(obj->guid, data);
         // Spawn if necessary (loaded grids only)
         // this base map checked as non-instanced and then only existed
         Map* map = const_cast<Map*>(sMapMgr->CreateBaseMap(data->mapid));

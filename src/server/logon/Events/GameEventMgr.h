@@ -127,8 +127,6 @@ class GameEventMgr
         void RemoveActiveEvent(uint16 event_id) { m_ActiveEvents.erase(event_id); }
         void ApplyNewEvent(uint16 event_id);
         void UnApplyEvent(uint16 event_id);
-        void GameEventSpawn(int16 event_id);
-        void GameEventUnspawn(int16 event_id);
         void ChangeEquipOrModel(int16 event_id, bool activate);
         void UpdateEventQuests(uint16 event_id, bool activate);
         void UpdateWorldStates(uint16 event_id, bool Activate);

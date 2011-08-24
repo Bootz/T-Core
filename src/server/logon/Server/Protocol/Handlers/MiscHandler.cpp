@@ -361,6 +361,10 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_LOGOUT_REQUEST Message, security - %u", GetSecurity());
 
+    //Sag der Node das wir raus gehen, sie hat dann ein paar sek. Zeit die Sachen zu packen
+    WorldPacket out(CMSG_LOGOUT_REQUEST);
+    SendPacketToNode(&out);
+
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
 

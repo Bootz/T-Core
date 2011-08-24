@@ -1569,38 +1569,6 @@ void ObjectMgr::LoadCreatures()
     sLog->outString();
 }
 
-void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
-{
-    uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
-    {
-        if (mask & 1)
-        {
-            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
-            uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
-
-            CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
-            cell_guids.creatures.insert(guid);
-        }
-    }
-}
-
-void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
-{
-    uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
-    {
-        if (mask & 1)
-        {
-            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
-            uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
-
-            CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
-            cell_guids.creatures.erase(guid);
-        }
-    }
-}
-
 uint32 ObjectMgr::AddGOData(uint32 entry, uint32 mapId, float x, float y, float z, float o, uint32 spawntimedelay, float rotation0, float rotation1, float rotation2, float rotation3)
 {
     GameObjectTemplate const* goinfo = GetGameObjectTemplate(entry);
@@ -1631,59 +1599,7 @@ uint32 ObjectMgr::AddGOData(uint32 entry, uint32 mapId, float x, float y, float 
     data.artKit         = goinfo->type == GAMEOBJECT_TYPE_CAPTURE_POINT ? 21 : 0;
     data.dbData = false;
 
-    AddGameobjectToGrid(guid, &data);
-
-    // Spawn if necessary (loaded grids only)
-    // We use spawn coords to spawn
-    if (!map->Instanceable() && map->IsLoaded(x, y))
-    {
-        GameObject *go = new GameObject;
-        if (!go->LoadFromDB(guid, map))
-        {
-            sLog->outError("AddGOData: cannot add gameobject entry %u to map", entry);
-            delete go;
-            return 0;
-        }
-        map->Add(go);
-    }
-
-    sLog->outDebug(LOG_FILTER_MAPS, "AddGOData: dbguid %u entry %u map %u x %f y %f z %f o %f", guid, entry, mapId, x, y, z, o);
-
     return guid;
-}
-
-bool ObjectMgr::MoveCreData(uint32 guid, uint32 mapId, Position pos)
-{
-    CreatureData& data = NewOrExistCreatureData(guid);
-    if (!data.id)
-        return false;
-
-    RemoveCreatureFromGrid(guid, &data);
-    if (data.posX == pos.GetPositionX() && data.posY == pos.GetPositionY() && data.posZ == pos.GetPositionZ())
-        return true;
-    data.posX = pos.GetPositionX();
-    data.posY = pos.GetPositionY();
-    data.posZ = pos.GetPositionZ();
-    data.orientation = pos.GetOrientation();
-    AddCreatureToGrid(guid, &data);
-
-    // Spawn if necessary (loaded grids only)
-    if (Map* map = const_cast<Map*>(sMapMgr->CreateBaseMap(mapId)))
-    {
-        // We use spawn coords to spawn
-        if (!map->Instanceable() && map->IsLoaded(data.posX, data.posY))
-        {
-            Creature *creature = new Creature;
-            if (!creature->LoadFromDB(guid, map))
-            {
-                sLog->outError("AddCreature: cannot add creature entry %u to map", guid);
-                delete creature;
-                return false;
-            }
-            map->Add(creature);
-        }
-    }
-    return true;
 }
 
 uint32 ObjectMgr::AddCreData(uint32 entry, uint32 /*team*/, uint32 mapId, float x, float y, float z, float o, uint32 spawntimedelay)
@@ -1717,25 +1633,6 @@ uint32 ObjectMgr::AddCreData(uint32 entry, uint32 /*team*/, uint32 mapId, float 
     data.npcflag = cInfo->npcflag;
     data.unit_flags = cInfo->unit_flags;
     data.dynamicflags = cInfo->dynamicflags;
-
-    AddCreatureToGrid(guid, &data);
-
-    // Spawn if necessary (loaded grids only)
-    if (Map* map = const_cast<Map*>(sMapMgr->CreateBaseMap(mapId)))
-    {
-        // We use spawn coords to spawn
-        if (!map->Instanceable() && !map->IsRemovalGrid(x, y))
-        {
-            Creature* creature = new Creature;
-            if (!creature->LoadFromDB(guid, map))
-            {
-                sLog->outError("AddCreature: cannot add creature entry %u to map", entry);
-                delete creature;
-                return 0;
-            }
-            map->Add(creature);
-        }
-    }
 
     return guid;
 }
@@ -1871,46 +1768,12 @@ void ObjectMgr::LoadGameobjects()
             data.phaseMask = 1;
         }
 
-        if (gameEvent == 0 && PoolId == 0)                      // if not this is to be managed by GameEvent System or Pool system
-            AddGameobjectToGrid(guid, &data);
         ++count;
 
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %lu gameobjects in %u ms", (unsigned long)mGameObjectDataMap.size(), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-}
-
-void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
-{
-    uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
-    {
-        if (mask & 1)
-        {
-            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
-            uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
-
-            CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
-            cell_guids.gameobjects.insert(guid);
-        }
-    }
-}
-
-void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data)
-{
-    uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
-    {
-        if (mask & 1)
-        {
-            CellPair cell_pair = Trillium::ComputeCellPair(data->posX, data->posY);
-            uint32 cell_id = (cell_pair.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
-
-            CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
-            cell_guids.gameobjects.erase(guid);
-        }
-    }
 }
 
 void ObjectMgr::LoadCreatureRespawnTimes()
@@ -7217,9 +7080,6 @@ void ObjectMgr::DeleteCreatureData(uint32 guid)
 {
     // remove mapid*cellid -> guid_set map
     CreatureData const* data = GetCreatureData(guid);
-    if (data)
-        RemoveCreatureFromGrid(guid, data);
-
     mCreatureDataMap.erase(guid);
 }
 
@@ -7302,9 +7162,6 @@ void ObjectMgr::DeleteGOData(uint32 guid)
 {
     // remove mapid*cellid -> guid_set map
     GameObjectData const* data = GetGOData(guid);
-    if (data)
-        RemoveGameobjectFromGrid(guid, data);
-
     mGameObjectDataMap.erase(guid);
 }
 
