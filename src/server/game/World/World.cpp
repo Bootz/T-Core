@@ -1233,8 +1233,7 @@ void World::SetInitialWorldSettings()
     // not send custom type REALM_FFA_PVP to realm list
     uint32 server_type = IsFFAPvPRealm() ? REALM_TYPE_PVP : getIntConfig(CONFIG_GAME_TYPE);
     uint32 realm_zone = getIntConfig(CONFIG_REALM_ZONE);
-    LoginDatabase.PExecute("UPDATE realmlist SET icon = %u, timezone = %u WHERE id = '%d'", server_type, realm_zone, realmID);
-
+    
     ///- Remove the bones (they should not exist in DB though) and old corpses after a restart
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CORPSES);
     stmt->setUInt32(0, 3 * DAY);
@@ -1637,8 +1636,8 @@ void World::SetInitialWorldSettings()
     sprintf(isoDate, "%04d-%02d-%02d %02d:%02d:%02d",
         local.tm_year+1900, local.tm_mon+1, local.tm_mday, local.tm_hour, local.tm_min, local.tm_sec);
 
-    LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime, revision) VALUES('%u', " UI64FMTD ", '%s', 0, '%s')",
-        realmID, uint64(m_startTime), isoDate, _FULLVERSION);
+    LogonDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime, revision) VALUES('%u', " UI64FMTD ", '%s', 0, '%s')",
+         nodeID, uint64(m_startTime), isoDate, _FULLVERSION);
 
     m_timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
@@ -1908,7 +1907,7 @@ void World::Update(uint32 diff)
         uint32 maxOnlinePlayers = GetMaxPlayerCount();
 
         m_timers[WUPDATE_UPTIME].Reset();
-        LoginDatabase.PExecute("UPDATE uptime SET uptime = %u, maxplayers = %u WHERE realmid = %u AND starttime = " UI64FMTD, tmpDiff, maxOnlinePlayers, realmID, uint64(m_startTime));
+        LogonDatabase.PExecute("UPDATE uptime SET uptime = %u, maxplayers = %u WHERE realmid = %u AND starttime = " UI64FMTD, tmpDiff, maxOnlinePlayers, nodeID, uint64(m_startTime));
     }
 
     /// <li> Clean logs table
@@ -2586,16 +2585,16 @@ void World::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)
         uint32 accountId = fields[0].GetUInt32();
         uint32 charCount = fields[1].GetUInt32();
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_REALMCHARACTERS);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGON_DEL_REALMCHARACTERS);
         stmt->setUInt32(0, accountId);
-        stmt->setUInt32(1, realmID);
-        LoginDatabase.Execute(stmt);
+        stmt->setUInt32(1, nodeID);
+        LogonDatabase.Execute(stmt);
 
-        stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_REALMCHARACTERS);
+        stmt = LoginDatabase.GetPreparedStatement(LOGON_ADD_REALMCHARACTERS);
         stmt->setUInt32(0, charCount);
         stmt->setUInt32(1, accountId);
-        stmt->setUInt32(2, realmID);
-        LoginDatabase.Execute(stmt);
+        stmt->setUInt32(2, nodeID);
+        LogonDatabase.Execute(stmt);
     }
 }
 
@@ -2681,7 +2680,7 @@ void World::ResetDailyQuests()
 
 void World::LoadDBAllowedSecurityLevel()
 {
-    QueryResult result = LoginDatabase.PQuery("SELECT allowedSecurityLevel from realmlist WHERE id = '%d'", realmID);
+    QueryResult result = LogonDatabase.PQuery("SELECT allowedSecurityLevel from nodelist WHERE id = '%d'", nodeID);
     if (result)
         SetPlayerSecurityLimit(AccountTypes(result->Fetch()->GetUInt16()));
 }

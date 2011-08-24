@@ -162,7 +162,7 @@ int Master::Run()
         return 1;
 
     // set server offline (not connectable)
-    LoginDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
+    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
 
     ///- Initialize the World
     sWorld->SetInitialWorldSettings();
@@ -273,7 +273,7 @@ int Master::Run()
     }
 
     // set node online (allow connecting now)
-    LoginDatabase.DirectPExecute("UPDATE nodelist SET Online = '1' WHERE Nodeid = '%d'", nodeID);
+    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '1' WHERE Nodeid = '%d'", nodeID);
 
     sLog->outString("%s (worldserver-daemon) ready...", _FULLVERSION);
     sWorldSocketMgr->Wait();
@@ -286,7 +286,7 @@ int Master::Run()
     }
 
     // set server offline
-    LoginDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
+    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
 
     // when the main thread closes the singletons get unloaded
     // since worldrunnable uses them, it will crash if unloaded after master
@@ -439,6 +439,30 @@ bool Master::_StartDB()
         return false;
     }
 
+    ///- Get logon database info from configuration file
+    dbstring = sConfig->GetStringDefault("LogonDatabaseInfo", "");
+    if (dbstring.empty())
+    {
+        sLog->outError("Logon database not specified in configuration file");
+        return false;
+    }
+
+    async_threads = sConfig->GetIntDefault("LogonDatabase.WorkerThreads", 1);
+    if (async_threads < 1 || async_threads > 32)
+    {
+        sLog->outError("Logon database: invalid number of worker threads specified. "
+            "Please pick a value between 1 and 32.");
+        return false;
+    }
+
+    synch_threads = sConfig->GetIntDefault("LogonDatabase.SynchThreads", 1);
+    ///- Initialise the login database
+    if (!LogonDatabase.Open(dbstring, async_threads, synch_threads))
+    {
+        sLog->outError("Cannot connect to logon database %s", dbstring.c_str());
+        return false;
+    }
+
     ///- Get the node Id from the configuration file
     nodeID = sConfig->GetIntDefault("NodeID", 0);
     if (!nodeID)
@@ -447,6 +471,15 @@ bool Master::_StartDB()
         return false;
     }
     sLog->outString("Node running as node ID %d", nodeID);
+
+    ///- Get the realm Id from the configuration file
+    realmID = sConfig->GetIntDefault("RealmID", 0);
+    if (!realmID)
+    {
+        sLog->outError("Realm ID not defined in configuration file");
+        return false;
+    }
+    sLog->outString("Node running for realm ID %d", realmID);
 
     ///- Initialize the DB logging system
     sLogMgr->ResetLogDb();

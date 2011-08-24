@@ -104,7 +104,6 @@ isRecruiter(isARecruiter)
         m_Address = sock->GetRemoteAddress();
         sock->AddReference();
         ResetTimeOutTime();
-        LoginDatabase.PExecute("UPDATE account SET online = %d WHERE id = %u;", realmID,  GetAccountId());
     }
 
     InitializeQueryCallbackParameters();
@@ -129,8 +128,6 @@ WorldSession::~WorldSession()
     WorldPacket* packet = NULL;
     while (_recvQueue.next(packet))
         delete packet;
-
-    LoginDatabase.PExecute("UPDATE account SET online = 0 WHERE id = %u;", GetAccountId());
 }
 
 void WorldSession::SizeError(WorldPacket const &packet, uint32 size) const

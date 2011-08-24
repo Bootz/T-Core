@@ -1648,6 +1648,7 @@ void World::SetInitialWorldSettings()
 
     m_timers[WUPDATE_PINGDB].SetInterval(getIntConfig(CONFIG_DB_PING_INTERVAL)*MINUTE*IN_MILLISECONDS);    // Mysql ping time in minutes
 
+    m_timers[WUPDATE_REFRESH].SetInterval((MINUTE * IN_MILLISECONDS) / 2);
     //to set mailtimer to return mails every day between 4 and 5 am
     //mailtimer is increased when updating auctions
     //one second is 1000 -(tested on win system)
@@ -1872,6 +1873,13 @@ void World::Update(uint32 diff)
 
     if (m_gameTime > m_NextRandomBGReset)
         ResetRandomBG();
+
+    //Refresh the online stat our Nodes (30s)
+    if (m_timers[WUPDATE_REFRESH].Passed())
+    {
+        m_timers[WUPDATE_REFRESH].Reset();
+        sNodeSocketMgr->RefreshOnlineStat();
+    }
 
     /// <ul><li> Handle auctions when the timer has passed
 /*    if (m_timers[WUPDATE_AUCTIONS].Passed())

@@ -1561,10 +1561,6 @@ void ObjectMgr::LoadCreatures()
             data.phaseMask = 1;
         }
 
-        // Add to grid if not managed by the game event or pool system
-        if (gameEvent == 0 && PoolId == 0)
-            AddCreatureToGrid(guid, &data);
-
         ++count;
 
     } while (result->NextRow());

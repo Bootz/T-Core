@@ -25,4 +25,8 @@ void LogonDatabaseConnection::DoPrepareStatements()
 {
     if (!m_reconnecting)
         m_stmts.resize(MAX_LOGONDATABASE_STATEMENTS);
+
+    PREPARE_STATEMENT(LOGON_DEL_REALMCHARACTERS, "DELETE FROM nodecharacters WHERE acctid = ? AND realmid = ?", CONNECTION_ASYNC)
+    PREPARE_STATEMENT(LOGON_ADD_REALMCHARACTERS, "INSERT INTO nodecharacters (numchars, acctid, realmid) VALUES (?, ?, ?)", CONNECTION_ASYNC)
+
 }

@@ -35,8 +35,8 @@
 #include "Master.h"
 
 #ifndef _TRILLIUM_CORE_CONFIG
-//# define _TRILLIUM_CORE_CONFIG  "logonserver.conf"
-# define _TRILLIUM_CORE_CONFIG "E:/C++Projekte/SingleCore/Trillium/win/bin/Debug/logonserver.conf"
+# define _TRILLIUM_CORE_CONFIG  "logonserver.conf"
+//# define _TRILLIUM_CORE_CONFIG "E:/C++Projekte/SingleCore/Trillium/win/bin/Debug/logonserver.conf"
 #endif //_TRILLIUM_CORE_CONFIG
 
 #ifdef _WIN32

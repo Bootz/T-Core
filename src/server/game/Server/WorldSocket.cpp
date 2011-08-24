@@ -794,7 +794,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // Read the content of the packet
-    recvPacket >> account;                        // for now no use
+    recvPacket >> account;
     recvPacket >> id;
 
     // Get the account information from the realmd database

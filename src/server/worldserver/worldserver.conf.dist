@@ -50,6 +50,14 @@
 #        Important:   RealmID must match the realmlist inside the realmd database.
 #        Default:     1
 
+RealmID = 1
+
+#
+#    NodeID
+#        Description: ID of the Node using this config.
+#        Important:   NodeD must match the nodelist inside the node database.
+#        Default:     1
+
 NodeID = 1
 
 #
@@ -73,38 +81,46 @@ DataDir = "."
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
 #        Default:     "127.0.0.1;3306;trillium;trillium;auth"       - (LoginDatabaseInfo)
+#                     "127.0.0.1;3306;trillium;trillium;logon"      - (LogonDatabaseInfo)
 #                     "127.0.0.1;3306;trillium;trillium;world"      - (WorldDatabaseInfo)
 #                     "127.0.0.1;3306;trillium;trillium;characters" - (CharacterDatabaseInfo)
 
 LoginDatabaseInfo     = "127.0.0.1;3306;trillium;trillium;auth"
+LogonDatabaseInfo     = "127.0.0.1;3306;trillium;trillium;logon"
 WorldDatabaseInfo     = "127.0.0.1;3306;trillium;trillium;world"
 CharacterDatabaseInfo = "127.0.0.1;3306;trillium;trillium;characters"
 
 #
 #    LoginDatabase.WorkerThreads
+#    LogonDatabase.WorkerThreads
 #    WorldDatabase.WorkerThreads
 #    CharacterDatabase.WorkerThreads
 #        Description: The amount of worker threads spawned to handle asynchronous (delayed) MySQL
 #                     statements. Each worker thread is mirrored with its own connection to the
 #                     MySQL server and their own thread on the MySQL server.
 #        Default:     1 - (LoginDatabase.WorkerThreads)
+#                     1 - (LogonDatabase.WorkerThreads)
 #                     1 - (WorldDatabase.WorkerThreads)
 #                     1 - (CharacterDatabase.WorkerThreads)
 
 LoginDatabase.WorkerThreads     = 1
+LogonDatabase.WorkerThreads     = 1
 WorldDatabase.WorkerThreads     = 1
 CharacterDatabase.WorkerThreads = 1
 
 #
 #    LoginDatabase.SynchThreads
+#    LogonDatabase.SynchThreads
 #    WorldDatabase.SynchThreads
 #    CharacterDatabase.SynchThreads
 #        Description: The amount of MySQL connections spawned to handle.
 #        Default:     1 - (LoginDatabase.WorkerThreads)
+#                     1 - (LogonDatabase.WorkerThreads)
 #                     1 - (WorldDatabase.WorkerThreads)
 #                     2 - (CharacterDatabase.WorkerThreads)
 
 LoginDatabase.SynchThreads     = 1
+LogonDatabase.SynchThreads     = 1
 WorldDatabase.SynchThreads     = 1
 CharacterDatabase.SynchThreads = 2
 
@@ -120,7 +136,7 @@ MaxPingTime = 30
 #        Description: TCP port to reach the world server.
 #        Default:     8085
 
-WorldServerPort = 8085
+WorldServerPort = 8099
 
 #
 #    BindIP

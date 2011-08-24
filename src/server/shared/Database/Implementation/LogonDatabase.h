@@ -45,7 +45,8 @@ enum LogonDatabaseStatements
         When updating more than one field, consider looking at the calling function
         name for a suiting suffix.
     */
-
+    LOGON_DEL_REALMCHARACTERS,
+    LOGON_ADD_REALMCHARACTERS,
     MAX_LOGONDATABASE_STATEMENTS,
 };
 
