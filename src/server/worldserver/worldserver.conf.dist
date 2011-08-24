@@ -50,7 +50,7 @@
 #        Important:   RealmID must match the realmlist inside the realmd database.
 #        Default:     1
 
-RealmID = 1
+NodeID = 1
 
 #
 #    DataDir

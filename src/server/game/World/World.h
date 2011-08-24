@@ -812,7 +812,7 @@ class World
         ACE_Future_Set<PreparedQueryResult> m_realmCharCallbacks;
 };
 
-extern uint32 realmID;
+extern uint32 nodeID;
 
 #define sWorld ACE_Singleton<World, ACE_Null_Mutex>::instance()
 #endif

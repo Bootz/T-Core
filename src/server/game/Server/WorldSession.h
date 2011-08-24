@@ -406,13 +406,8 @@ class WorldSession
         void Handle_ServerSide(WorldPacket& recvPacket);    // sever side only, can't be accepted from client
         void Handle_Deprecated(WorldPacket& recvPacket);    // never used anymore by client
 
-        void HandleCharEnumOpcode(WorldPacket& recvPacket);
-        void HandleCharDeleteOpcode(WorldPacket& recvPacket);
-        void HandleCharCreateOpcode(WorldPacket& recvPacket);
-        void HandleCharCreateCallback(PreparedQueryResult result, CharacterCreateInfo* createInfo);
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
         void HandleWorldLoginOpcode(WorldPacket& recvPacket);
-        void HandleCharEnum(QueryResult result);
         void HandlePlayerLogin(LoginQueryHolder * holder);
         void HandleCharFactionOrRaceChange(WorldPacket& recv_data);
 
@@ -926,7 +921,6 @@ class WorldSession
         void ProcessQueryCallbacks();
 
         ACE_Future_Set<QueryResult> _nameQueryCallbacks;
-        QueryResultFuture _charEnumCallback;
         QueryResultFuture _addIgnoreCallback;
         QueryResultFuture _stablePetCallback;
         QueryCallback<QueryResult, std::string> _charRenameCallback;
@@ -934,7 +928,6 @@ class WorldSession
         QueryCallback<QueryResult, uint32> _unstablePetCallback;
         QueryCallback<QueryResult, uint32> _stableSwapCallback;
         QueryCallback<QueryResult, uint64> _sendStabledPetCallback;
-        QueryCallback<PreparedQueryResult, CharacterCreateInfo*> _charCreateCallback;
         QueryResultHolderFuture _charLoginCallback;
 
     private:
@@ -944,16 +937,6 @@ class WorldSession
         // logging helper
         void LogUnexpectedOpcode(WorldPacket* packet, const char* status, const char *reason);
         void LogUnprocessedTail(WorldPacket* packet);
-
-        // EnumData helpers
-        bool CharCanLogin(uint32 lowGUID)
-        {
-            return _allowedCharsToLogin.find(lowGUID) != _allowedCharsToLogin.end();
-        }
-
-        // this stores the GUIDs of the characters who can login
-        // characters who failed on Player::BuildEnumData shouldn't login
-        std::set<uint32> _allowedCharsToLogin;
 
         uint32 m_GUIDLow;                                   // set loggined or recently logout player (while m_playerRecentlyLogout set)
         Player *_player;

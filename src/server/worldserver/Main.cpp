@@ -55,8 +55,9 @@ int m_ServiceStatus = -1;
 WorldDatabaseWorkerPool WorldDatabase;                      ///< Accessor to the world database
 CharacterDatabaseWorkerPool CharacterDatabase;              ///< Accessor to the character database
 LoginDatabaseWorkerPool LoginDatabase;                      ///< Accessor to the realm/login database
+LogonDatabaseWorkerPool LogonDatabase;                      ///< Accessor to the login database
 
-uint32 realmID;                                             ///< Id of the realm
+uint32 nodeID;                                              ///< Id of the realm
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
