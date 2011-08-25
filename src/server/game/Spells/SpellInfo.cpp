@@ -862,7 +862,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     // SpellCastingRequirementsEntry
     SpellCastingRequirementsEntry const* _castreq = GetSpellCastingRequirements();
     RequiresSpellFocus = _castreq ? _castreq->RequiresSpellFocus : 0;
-    FacingCasterFlags = _castreq ? _castreq->FacingCasterFlags : -1;
+    FacingCasterFlags = _castreq ? _castreq->FacingCasterFlags : 0;
     AreaGroupId = _castreq ? _castreq->AreaGroupId : -1;
 
     // SpellAuraRestrictionsEntry
