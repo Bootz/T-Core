@@ -921,12 +921,11 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     for (uint8 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         ReagentCount[i] = _reagents ? _reagents->ReagentCount[i] : 0;
 
-    if (SpellEquippedItemsEntry const* _equipped = GetSpellEquippedItems())
-    {
-        EquippedItemClass = _equipped->EquippedItemClass;
-        EquippedItemSubClassMask = _equipped->EquippedItemSubClassMask;
-        EquippedItemInventoryTypeMask = _equipped->EquippedItemInventoryTypeMask;
-    }
+    // SpellEquippedItemsEntry
+    SpellEquippedItemsEntry const* _equipped = GetSpellEquippedItems();
+    EquippedItemClass = _equipped ? _equipped->EquippedItemClass : -1;
+    EquippedItemSubClassMask = _equipped ?_equipped->EquippedItemSubClassMask : -1;
+    EquippedItemInventoryTypeMask = _equipped ? _equipped->EquippedItemInventoryTypeMask : -1;
 
     for (uint8 i = 0; i < 2; ++i)
         SpellVisual[i] = spellEntry->SpellVisual[i];
