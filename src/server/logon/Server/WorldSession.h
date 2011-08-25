@@ -941,6 +941,13 @@ class WorldSession
         void HandleViolenceLevelOpcode(WorldPacket& recvPacket);
         void HandleSendCemetryListResponse(WorldPacket& recvPacket);
 
+        //Handler for incomming Paket from Node
+    public:
+        void Handle_SMSG_TransferPending(WorldPacket& recvPacket);
+        //void Handle_SMSG_ACHIEVEMENT_DELETED(WorldPacket& recvPacket);
+        //void Handle_SMSG_CRITERIA_DELETED(WorldPacket& recvPacket);
+        void Handle_SMSG_LOGOUT_COMPLETE(WorldPacket& recvPacket);
+
     private:
         void InitializeQueryCallbackParameters();
         void ProcessQueryCallbacks();
@@ -982,6 +989,9 @@ class WorldSession
         NodeSocket *m_NodeSocket;
         uint32 m_NodeID;
         bool m_redirected;
+        bool m_new_node;                                    // Called when changing Node to wait for LogoutMsg
+        uint32 m_new_map;                                   // TEMPORÄR
+
 
         std::string m_Address;
 

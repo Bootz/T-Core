@@ -164,7 +164,7 @@ int WorldSocket::SendPacket (const WorldPacket& pct)
     // Dump outgoing packet.
     _LogPacket(pct, true);
 
-    sLog->outString ("CLIENT_OUT: SOCKET: %uLENGTH: %u OPCODE: %s (0x%.4X) DATA:",
+    sLog->outString("CLIENT_OUT: SOCKET: %uLENGTH: %u OPCODE: %s (0x%.4X) DATA:",
         (uint32) get_handle(), pct.size(), LookupOpcodeName (pct.GetOpcode()), pct.GetOpcode());
 
     // Create a copy of the original packet; this is to avoid issues if a hook modifies it.
@@ -686,7 +686,7 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
 
     // Dump received packet.
     _LogPacket(*new_pct, false);
-    sLog->outString ("CLIENT_IN: SOCKET: %u LENGTH: %u OPCODE: %s (0x%.4X) DATA: ",
+    sLog->outString("CLIENT_IN: SOCKET: %u LENGTH: %u OPCODE: %s (0x%.4X) DATA: ",
             (uint32) get_handle(), new_pct->size(), LookupOpcodeName (new_pct->GetOpcode()), new_pct->GetOpcode());
     try
     {
