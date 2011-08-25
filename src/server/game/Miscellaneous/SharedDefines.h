@@ -667,12 +667,13 @@ enum Team
     TEAM_OTHER               = 0,                         // if ReputationListId > 0 && Flags != FACTION_FLAG_TEAM_HEADER
 };
 
-enum SpellEffects
+enum SpellEffects // 4.20a 14480
 {
+    SPELL_EFFECT_0                                  = 0,
     SPELL_EFFECT_INSTAKILL                          = 1,
     SPELL_EFFECT_SCHOOL_DAMAGE                      = 2,
     SPELL_EFFECT_DUMMY                              = 3,
-    SPELL_EFFECT_PORTAL_TELEPORT                    = 4,
+    SPELL_EFFECT_PORTAL_TELEPORT                    = 4,  // not found in 420a 14480
     SPELL_EFFECT_TELEPORT_UNITS                     = 5,
     SPELL_EFFECT_APPLY_AURA                         = 6,
     SPELL_EFFECT_ENVIRONMENTAL_DAMAGE               = 7,
@@ -681,9 +682,9 @@ enum SpellEffects
     SPELL_EFFECT_HEAL                               = 10,
     SPELL_EFFECT_BIND                               = 11,
     SPELL_EFFECT_PORTAL                             = 12,
-    SPELL_EFFECT_RITUAL_BASE                        = 13,
-    SPELL_EFFECT_RITUAL_SPECIALIZE                  = 14,
-    SPELL_EFFECT_RITUAL_ACTIVATE_PORTAL             = 15,
+    SPELL_EFFECT_RITUAL_BASE                        = 13, // not found in 420a 14480
+    SPELL_EFFECT_RITUAL_SPECIALIZE                  = 14, // not found in 420a 14480
+    SPELL_EFFECT_RITUAL_ACTIVATE_PORTAL             = 15, // not found in 420a 14480
     SPELL_EFFECT_QUEST_COMPLETE                     = 16,
     SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL             = 17,
     SPELL_EFFECT_RESURRECT                          = 18,
@@ -719,8 +720,8 @@ enum SpellEffects
     SPELL_EFFECT_STEALTH                            = 48,
     SPELL_EFFECT_DETECT                             = 49,
     SPELL_EFFECT_TRANS_DOOR                         = 50,
-    SPELL_EFFECT_FORCE_CRITICAL_HIT                 = 51,
-    SPELL_EFFECT_GUARANTEE_HIT                      = 52,
+    SPELL_EFFECT_FORCE_CRITICAL_HIT                 = 51, // not found in 420a 14480
+    SPELL_EFFECT_GUARANTEE_HIT                      = 52, // not found in 420a 14480
     SPELL_EFFECT_ENCHANT_ITEM                       = 53,
     SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY             = 54,
     SPELL_EFFECT_TAMECREATURE                       = 55,
@@ -790,7 +791,7 @@ enum SpellEffects
     SPELL_EFFECT_APPLY_AREA_AURA_PET                = 119,
     SPELL_EFFECT_TELEPORT_GRAVEYARD                 = 120,
     SPELL_EFFECT_NORMALIZED_WEAPON_DMG              = 121,
-    SPELL_EFFECT_122                                = 122,
+    SPELL_EFFECT_122                                = 122, // not found in 420a 14480
     SPELL_EFFECT_SEND_TAXI                          = 123,
     SPELL_EFFECT_PULL_TOWARDS                       = 124,
     SPELL_EFFECT_MODIFY_THREAT_PERCENT              = 125,
@@ -831,7 +832,7 @@ enum SpellEffects
     SPELL_EFFECT_160                                = 160,
     SPELL_EFFECT_TALENT_SPEC_COUNT                  = 161,
     SPELL_EFFECT_TALENT_SPEC_SELECT                 = 162,
-    SPELL_EFFECT_163                                = 163,
+    SPELL_EFFECT_163                                = 163, // not found in 420a 14480
     SPELL_EFFECT_REMOVE_AURA                        = 164,
     SPELL_EFFECT_165                                = 165,
     SPELL_EFFECT_166                                = 166,
@@ -843,7 +844,9 @@ enum SpellEffects
     SPELL_EFFECT_172                                = 172,
     SPELL_EFFECT_173                                = 173,
     SPELL_EFFECT_174                                = 174,
-    TOTAL_SPELL_EFFECTS                             = 175
+    SPELL_EFFECT_176                                = 176,
+    SPELL_EFFECT_177                                = 177,
+    TOTAL_SPELL_EFFECTS                             = 178
 };
 
 enum SpellCastResult // 4.20a 14480
