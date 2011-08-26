@@ -554,6 +554,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 randomPoints = int32(DieSides);
 
     float maxPoints = 0.00f;
+    float comboPointScaling = 0.00f;
     if (caster)
     {
         SpellScaling values(_spellInfo, caster->getLevel());
@@ -561,19 +562,19 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
         {
             basePoints = values.min[_effIndex];
             maxPoints = values.max[_effIndex];
+            comboPointScaling = values.pts[_effIndex];
         }
-    }
- 
-    // base amount modification based on spell lvl vs caster lvl
-    if (caster)
-    {
-        int32 level = int32(caster->getLevel());
-        if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
-            level = int32(_spellInfo->MaxLevel);
-        else if (level < int32(_spellInfo->BaseLevel))
-            level = int32(_spellInfo->BaseLevel);
-        level -= int32(_spellInfo->SpellLevel);
-        basePoints += int32(level * basePointsPerLevel);
+        // base amount modification based on spell lvl vs caster lvl
+        else
+        {
+            int32 level = int32(caster->getLevel());
+            if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
+                level = int32(_spellInfo->MaxLevel);
+            else if (level < int32(_spellInfo->BaseLevel))
+                level = int32(_spellInfo->BaseLevel);
+            level -= int32(_spellInfo->SpellLevel);
+            basePoints += int32(level * basePointsPerLevel);
+        }
     }
 
     if (maxPoints != 0.00f)
@@ -604,9 +605,18 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     {
         // bonus amount from combo points
         if (caster->m_movedPlayer)
+        {
             if (uint8 comboPoints = caster->m_movedPlayer->GetComboPoints())
+            {
                 if (float comboDamage = PointsPerComboPoint)
-                    value += comboDamage * comboPoints;
+                {
+                    if (comboPointScaling != 0.00f)
+                        comboDamage = comboPointScaling;
+
+                    value += int32(comboDamage * comboPoints);
+                }
+            }
+        }
 
         value = caster->ApplyEffectModifiers(_spellInfo, _effIndex, value);
 
