@@ -34,7 +34,7 @@ struct SpellScaling
     float max[3];
     float pts[3];
     
-    uint32 cast;
+    int32 cast;
  
     bool canScale;
     SpellScaling(SpellInfo const* spellInfo, uint8 level)
@@ -58,8 +58,8 @@ struct SpellScaling
         float CoefBase = spellInfo->CoefBase;
         uint8 CoefBaseLevel = spellInfo->CoefLevelBase;
 
-        uint32 castTimeMin = spellInfo->castTimeMin;
-        uint32 castTimeMax = spellInfo->castTimeMax;
+        int32 castTimeMin = spellInfo->castTimeMin;
+        int32 castTimeMax = spellInfo->castTimeMax;
         uint8 castScalingMaxLevel = spellInfo->castScalingMaxLevel;
 
         int8 class_ = spellInfo->playerClass;
@@ -95,7 +95,6 @@ struct SpellScaling
             avg[effIndex] = std::max(ceil(mult), roundf(avg[effIndex]));
         }
         
-        cast = roundf(cast / 10) / 100;
         canScale = true;
     }
 };

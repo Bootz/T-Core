@@ -2145,11 +2145,20 @@ int32 SpellInfo::GetMaxDuration() const
 
 uint32 SpellInfo::CalcCastTime(Unit* caster, Spell* spell) const
 {
-    // not all spells have cast time index and this is all is pasiive abilities
+    // not all spells have cast time index and this is all is passive abilities
     if (!CastTimeEntry)
         return 0;
 
     int32 castTime = CastTimeEntry->CastTime;
+
+    if (caster)
+    {
+        SpellScaling values(spell->GetSpellInfo(), spell->GetCaster()->getLevel());
+        if (values.canScale)
+        {
+            castTime = values.cast;
+        }
+    }
 
     if (caster)
         caster->ModSpellCastTime(this, castTime, spell);
