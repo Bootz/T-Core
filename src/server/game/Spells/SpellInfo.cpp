@@ -554,11 +554,14 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 randomPoints = int32(DieSides);
 
     float maxPoints = 0.00f;
-    if (caster && _spellInfo && _spellInfo->SpellScalingId)
+    if (caster)
     {
         SpellScaling values(_spellInfo, caster->getLevel());
-        basePoints = values.min[_effIndex];
-        maxPoints = values.max[_effIndex];
+        if (values.canScale)
+        {
+            basePoints = values.min[_effIndex];
+            maxPoints = values.max[_effIndex];
+        }
     }
  
     // base amount modification based on spell lvl vs caster lvl
@@ -573,7 +576,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
         basePoints += int32(level * basePointsPerLevel);
     }
 
-    if (maxPoints)
+    if (maxPoints != 0.00f)
         basePoints = irand(basePoints, maxPoints);
     else
     {
