@@ -213,8 +213,8 @@ enum Opcodes
     MSG_MOVE_START_PITCH_UP                          = 0x1004A, //
     MSG_MOVE_START_PITCH_DOWN                        = 0x1004B, //
     MSG_MOVE_STOP_PITCH                              = 0x1004C, //
-    MSG_MOVE_SET_RUN_MODE                            = 0x1004D, //
-    MSG_MOVE_SET_WALK_MODE                           = 0x1004E, //
+    MSG_MOVE_SET_RUN_MODE                            = 0x038CB, // 4.2.0:14480
+    MSG_MOVE_SET_WALK_MODE                           = 0x088E9, // 4.2.0:14480
     MSG_MOVE_TOGGLE_LOGGING                          = 0x1004F, //
     MSG_MOVE_TELEPORT                                = 0x10050, //
     MSG_MOVE_TELEPORT_CHEAT                          = 0x10051, //
