@@ -1083,7 +1083,7 @@ struct GtRegenMPPerSptEntry
 struct GtSpellScalingEntry
 {
     uint32   level;
-    float    ratio;
+    float    coef;
 };
 
 /* no used

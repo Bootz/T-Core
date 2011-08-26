@@ -19,6 +19,7 @@
 #include "SpellMgr.h"
 #include "Spell.h"
 #include "DataStorage.h"
+#include "SpellScaling.h"
 
 uint32 GetTargetFlagMask(SpellTargetObjectTypes objType)
 {
@@ -552,18 +553,13 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 basePoints = bp ? *bp : BasePoints;
     int32 randomPoints = int32(DieSides);
 
-    //float randomPoints_ScalingMultiplicator = 0.00f;
-    //if (caster && spellEntry && spellEntry->SpellScalingId)
-    //{
-    //    SpellScalingEntry const* spellScaling = sSpellScalingStore.LookupEntry(spellEntry->SpellScalingId);
-    //    uint32 casterLevel = caster->getLevel();
-    //    GtSpellScalingEntry const* gtScaling = sGtSpellScalingStore.LookupEntry(casterLevel);
-    //    if (spellScaling && gtScaling)
-    //    {
-    //        basePoints+= float(spellScaling->coefMultiplier[effIndex] * gtScaling->coef); 
-    //        randomPoints_ScalingMultiplicator = spellScaling->coefRandomMultiplier[effIndex];
-    //    }
-    //}
+    float maxPoints = 0.00f;
+    if (caster && _spellInfo && _spellInfo->SpellScalingId)
+    {
+        SpellScaling values(_spellInfo, caster->getLevel());
+        basePoints = values.min[_effIndex];
+        maxPoints = values.max[_effIndex];
+    }
  
     // base amount modification based on spell lvl vs caster lvl
     if (caster)
@@ -577,22 +573,25 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
         basePoints += int32(level * basePointsPerLevel);
     }
 
-    // roll in a range <1;EffectDieSides> as of patch 3.3.3
-    switch (randomPoints)
+    if (maxPoints)
+        basePoints = irand(basePoints, maxPoints);
+    else
     {
-        case 0: break;
-        case 1: basePoints += 1; break;                     // range 1..1
-        default:
-            // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
-            int32 randvalue = (randomPoints >= 1)
-                ? irand(1, randomPoints)
-                : irand(randomPoints, 1);
-            
-            //if (randomPoints_ScalingMultiplicator)
-            //    basePoints += irand(1, basePoints* (randomPoints_ScalingMultiplicator >= 1 ? randomPoints_ScalingMultiplicator : randomPoints_ScalingMultiplicator+1));
- 
-            basePoints += randvalue;
-            break;
+        // not sure for Cataclysm.
+        // roll in a range <1;EffectDieSides> as of patch 3.3.3
+        switch (randomPoints)
+        {
+            case 0: break;
+            case 1: basePoints += 1; break;                     // range 1..1
+            default:
+                // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
+                int32 randvalue = (randomPoints >= 1)
+                    ? irand(1, randomPoints)
+                    : irand(randomPoints, 1);
+           
+                basePoints += randvalue;
+                break;
+        }
     }
 
     float value = float(basePoints);
