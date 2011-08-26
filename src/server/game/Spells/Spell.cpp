@@ -1838,7 +1838,7 @@ void Spell::SearchGOAreaTarget(std::list<GameObject*> &TagGOMap, float radius, S
     m_caster->GetMap()->VisitGrid(pos->m_positionX, pos->m_positionY, radius, searcher);
 }
 
-WorldObject* Spell::SearchNearbyTarget(float range, SpellTargets TargetType, SpellEffectEntry const *effect)
+WorldObject* Spell::SearchNearbyTarget(float range, SpellTargets TargetType, SpellEffIndex effIndex)
 {
     switch(TargetType)
     {
@@ -1849,9 +1849,9 @@ WorldObject* Spell::SearchNearbyTarget(float range, SpellTargets TargetType, Spe
             {
                 sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell (ID: %u) (caster Entry: %u) does not have record in `conditions` for spell script target (ConditionSourceType 13)", m_spellInfo->Id, m_caster->GetEntry());
                 if (m_spellInfo->IsPositive())
-                    return SearchNearbyTarget(range, SPELL_TARGETS_ALLY, effect);
+                    return SearchNearbyTarget(range, SPELL_TARGETS_ALLY, effIndex);
                 else
-                    return SearchNearbyTarget(range, SPELL_TARGETS_ENEMY, effect);
+                    return SearchNearbyTarget(range, SPELL_TARGETS_ENEMY, effIndex);
             }
 
             Creature* creatureScriptTarget = NULL;
@@ -1861,7 +1861,7 @@ WorldObject* Spell::SearchNearbyTarget(float range, SpellTargets TargetType, Spe
             {
                 if ((*i_spellST)->mConditionType != CONDITION_SPELL_SCRIPT_TARGET)
                     continue;
-                if ((*i_spellST)->mConditionValue3 && !((*i_spellST)->mConditionValue3 & (1 << uint64(effect))))
+                if ((*i_spellST)->mConditionValue3 && !((*i_spellST)->mConditionValue3 & (1 << uint32(effIndex))))
                     continue;
                 switch((*i_spellST)->mConditionValue1)
                 {
@@ -2061,7 +2061,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                 case TARGET_UNIT_NEARBY_ENEMY:
                     range = m_spellInfo->GetMaxRange(false);
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
-                    target = SearchNearbyTarget(range, SPELL_TARGETS_ENEMY, (SpellEffectEntry*)i);
+                    target = SearchNearbyTarget(range, SPELL_TARGETS_ENEMY, SpellEffIndex(i));
                     break;
                 case TARGET_UNIT_NEARBY_ALLY:
                 case TARGET_UNIT_NEARBY_PARTY: // TODO: fix party/raid targets
@@ -2069,13 +2069,13 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                     range = m_spellInfo->GetMaxRange(true);
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
 
-                    target = SearchNearbyTarget(range, SPELL_TARGETS_ALLY, (SpellEffectEntry*)i);
+                    target = SearchNearbyTarget(range, SPELL_TARGETS_ALLY, SpellEffIndex(i));
                     break;
                 case TARGET_UNIT_NEARBY_ENTRY:
                 case TARGET_GAMEOBJECT_NEARBY_ENTRY:
                     range = m_spellInfo->GetMaxRange(m_spellInfo->IsPositive());
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
-                    target = SearchNearbyTarget(range, SPELL_TARGETS_ENTRY, (SpellEffectEntry*)i);
+                    target = SearchNearbyTarget(range, SPELL_TARGETS_ENTRY, SpellEffIndex(i));
                     break;
                 default:
                     break;
@@ -2280,7 +2280,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                     float range = m_spellInfo->GetMaxRange(m_spellInfo->IsPositive());
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
 
-                    if (WorldObject *target = SearchNearbyTarget(range, SPELL_TARGETS_ENTRY, (SpellEffectEntry*)i))
+                    if (WorldObject *target = SearchNearbyTarget(range, SPELL_TARGETS_ENTRY, SpellEffIndex(i)))
                         m_targets.SetDst(*target);
                     break;
                 }
@@ -4431,26 +4431,19 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOT
     itemTarget = pItemTarget;
     gameObjTarget = pGOTarget;
 
+    uint8 eff = m_spellInfo->Effects[i].Effect;
+
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell: %u Effect : %u", m_spellInfo->Id, eff);
+
     //we do not need DamageMultiplier here.
     damage = CalculateDamage(i, NULL);
 
-    SpellEffectEntry const* effect = 0;
-    if (!effect)
-        return;
-
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i);
 
-    if (effect)
+    if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
     {
-        if (!preventDefault && effect->Effect < TOTAL_SPELL_EFFECTS)
-        {
-            (this->*SpellEffects[effect->Effect])(effect);
-        }
-        else
-            sLog->outError("WORLD: Spell %u Effect%d : %u > TOTAL_SPELL_EFFECTS", m_spellInfo->Id, i, effect->Effect);
+        (this->*SpellEffects[eff])((SpellEffIndex)i);
     }
-    else
-        sLog->outError("WORLD: Spell %u has no effect at index %u", m_spellInfo->Id, i);
 }
 
 SpellCastResult Spell::CheckCast(bool strict)
@@ -6516,16 +6509,16 @@ int32 Spell::CalculateDamageDone(Unit *unit, const uint32 effectMask, float * mu
             switch(m_spellInfo->Effects[i].Effect)
             {
                 case SPELL_EFFECT_SCHOOL_DAMAGE:
-                    SpellDamageSchoolDmg((SpellEffectEntry*)i);
+                    SpellDamageSchoolDmg((SpellEffIndex)i);
                     break;
                 case SPELL_EFFECT_WEAPON_DAMAGE:
                 case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
                 case SPELL_EFFECT_NORMALIZED_WEAPON_DMG:
                 case SPELL_EFFECT_WEAPON_PERCENT_DAMAGE:
-                    SpellDamageWeaponDmg((SpellEffectEntry*)i);
+                    SpellDamageWeaponDmg((SpellEffIndex)i);
                     break;
                 case SPELL_EFFECT_HEAL:
-                    SpellDamageHeal((SpellEffectEntry*)i);
+                    SpellDamageHeal((SpellEffIndex)i);
                     break;
             }
 
@@ -6926,14 +6919,14 @@ void Spell::CallScriptAfterHitHandlers()
     }
 }
 
-void Spell::CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTargets, const SpellEffectEntry* effect)
+void Spell::CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTargets, SpellEffIndex effIndex)
 {
     for (std::list<SpellScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
     {
         (*scritr)->_PrepareScriptCall(SPELL_SCRIPT_HOOK_UNIT_TARGET_SELECT);
         std::list<SpellScript::UnitTargetHandler>::iterator hookItrEnd = (*scritr)->OnUnitTargetSelect.end(), hookItr = (*scritr)->OnUnitTargetSelect.begin();
         for (; hookItr != hookItrEnd ; ++hookItr)
-            if ((*hookItr).IsEffectAffected(m_spellInfo, effect->EffectIndex))
+            if ((*hookItr).IsEffectAffected(m_spellInfo, effIndex))
                 (*hookItr).Call(*scritr, unitTargets);
 
         (*scritr)->_FinishScriptCall();

@@ -361,35 +361,31 @@ SpellImplicitTargetInfo::StaticData  SpellImplicitTargetInfo::_data[TOTAL_SPELL_
 
 SpellEffectInfo::SpellEffectInfo(SpellEntry const* spellEntry, SpellInfo const* spellInfo, uint8 effIndex)
 {
+    SpellEffectEntry const* _effect = spellEntry->GetSpellEffect(effIndex);
+
     _spellInfo = spellInfo;
     _effIndex = effIndex;
 
-    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-    {
-        if (SpellEffectEntry const* _effect = spellEntry->GetSpellEffect(i))
-        {
-            Effect = _effect->Effect;
-            ApplyAuraName = _effect->EffectApplyAuraName;
-            Amplitude = _effect->EffectAmplitude;
-            DieSides = _effect->EffectDieSides;
-            RealPointsPerLevel = _effect->EffectRealPointsPerLevel;
-            BasePoints = _effect->EffectBasePoints;
-            PointsPerComboPoint = _effect->EffectPointsPerComboPoint;
-            ValueMultiplier = _effect->EffectValueMultiplier;
-            DamageMultiplier = _effect->EffectDamageMultiplier;
-            BonusMultiplier = _effect->EffectBonusMultiplier;
-            MiscValue = _effect->EffectMiscValue;
-            MiscValueB = _effect->EffectMiscValueB;
-            Mechanic = Mechanics(_effect->EffectMechanic);
-            TargetA = SpellImplicitTargetInfo(_effect->EffectImplicitTargetA);
-            TargetB = SpellImplicitTargetInfo(_effect->EffectImplicitTargetB);
-            RadiusEntry = _effect->EffectRadiusIndex ? sSpellRadiusStore.LookupEntry(_effect->EffectRadiusIndex) : NULL;
-            ChainTarget = _effect->EffectChainTarget;
-            ItemType = _effect->EffectItemType;
-            TriggerSpell = _effect->EffectTriggerSpell;
-            SpellClassMask = _effect->EffectSpellClassMask;
-        }
-    }
+    Effect = _effect ? _effect->Effect : 0;
+    ApplyAuraName = _effect ? _effect->EffectApplyAuraName : 0;
+    Amplitude = _effect ? _effect->EffectAmplitude : 0;
+    DieSides = _effect ? _effect->EffectDieSides : 0;
+    RealPointsPerLevel = _effect ? _effect->EffectRealPointsPerLevel : 0.0f;
+    BasePoints = _effect ? _effect->EffectBasePoints : 0;
+    PointsPerComboPoint = _effect ? _effect->EffectPointsPerComboPoint : 0.0f;
+    ValueMultiplier = _effect ? _effect->EffectValueMultiplier : 0.0f;
+    DamageMultiplier = _effect ? _effect->EffectDamageMultiplier : 0.0f;
+    BonusMultiplier = _effect ? _effect->EffectBonusMultiplier : 0.0f;
+    MiscValue = _effect ? _effect->EffectMiscValue : 0;
+    MiscValueB = _effect ? _effect->EffectMiscValueB : 0;
+    Mechanic = Mechanics(_effect ? _effect->EffectMechanic : 0);
+    TargetA = SpellImplicitTargetInfo(_effect ? _effect->EffectImplicitTargetA : 0);
+    TargetB = SpellImplicitTargetInfo(_effect ? _effect->EffectImplicitTargetB : 0);
+    RadiusEntry = _effect && _effect->EffectRadiusIndex ? sSpellRadiusStore.LookupEntry(_effect->EffectRadiusIndex) : NULL;
+    ChainTarget = _effect ? _effect->EffectChainTarget : 0;
+    ItemType = _effect ? _effect->EffectItemType : 0;
+    TriggerSpell = _effect ? _effect->EffectTriggerSpell : 0;
+    SpellClassMask = _effect ? _effect->EffectSpellClassMask : flag96(0);
 }
 
 bool SpellEffectInfo::IsEffect() const
