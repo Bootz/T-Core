@@ -23,8 +23,3 @@
 #include "DataStructure.h"
 #include "DataStorage.h"
 
-SpellEffectEntry const* SpellEntry::GetSpellEffect(uint32 eff) const
-{
-    return GetSpellEffectEntry(Id, eff);
-}
-
