@@ -1070,6 +1070,21 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellShapeshiftId = spellEntry->SpellShapeshiftId;
     SpellTargetRestrictionsId = spellEntry->SpellTargetRestrictionsId;
     SpellTotemsId = spellEntry->SpellTotemsId;
+
+    // SpellScalingEntry
+    SpellScalingEntry const* _scaling = GetSpellScaling();
+    castTimeMin = _scaling ? _scaling->castTimeMin : 0;
+    castTimeMax = _scaling ?_scaling->castTimeMax : 0;
+    castScalingMaxLevel = _scaling ? _scaling->castScalingMaxLevel : 0;
+    playerClass = _scaling ? _scaling->playerClass : 0;
+    for (uint8 i = 0; i < 3; ++i)
+    {
+        Multiplier[i] = _scaling ? _scaling->Multiplier[i] : 0;
+        RandomMultiplier[i] = _scaling ? _scaling->RandomMultiplier[i] : 0;
+        OtherMultiplier[i] = _scaling ? _scaling->OtherMultiplier[i] : 0;
+    }
+    CoefBase = _scaling ? _scaling->CoefBase : 0;
+    CoefLevelBase = _scaling ? _scaling->CoefLevelBase : 0;
 }
 
 bool SpellInfo::HasEffect(SpellEffects effect) const

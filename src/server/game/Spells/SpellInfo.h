@@ -402,6 +402,17 @@ public:
     uint32 SpellShapeshiftId;
     uint32 SpellTargetRestrictionsId;
     uint32 SpellTotemsId;
+    // SpellScalingEntry
+    int32  castTimeMin;
+    int32  castTimeMax;
+    uint32 castScalingMaxLevel;
+    uint32 playerClass;
+    float  Multiplier[3];
+    float  RandomMultiplier[3];
+    float  OtherMultiplier[3];
+    float  CoefBase;
+    uint32 CoefLevelBase;
+
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
     uint32 ExplicitTargetMask;
     SpellChainNode const* ChainEntry;
