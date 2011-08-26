@@ -52,10 +52,10 @@ enum SpellCastTargetFlags
     TARGET_FLAG_UNIT_ALLY       = 0x00000100,               // not sent, used to validate target (if ally)
     TARGET_FLAG_CORPSE_ENEMY    = 0x00000200,               // pguid
     TARGET_FLAG_UNIT_DEAD       = 0x00000400,               // not sent, used to validate target (if dead creature)
-    TARGET_FLAG_GAMEOBJECT      = 0x00000800,               // pguid, used with TARGET_GAMEOBJECT
+    TARGET_FLAG_GAMEOBJECT      = 0x00000800,               // pguid, used with TARGET_GAMEOBJECT_TARGET
     TARGET_FLAG_TRADE_ITEM      = 0x00001000,               // pguid
     TARGET_FLAG_STRING          = 0x00002000,               // string
-    TARGET_FLAG_GAMEOBJECT_ITEM = 0x00004000,               // not sent, used with TARGET_GAMEOBJECT_ITEM
+    TARGET_FLAG_GAMEOBJECT_ITEM = 0x00004000,               // not sent, used with TARGET_GAMEOBJECT_ITEM_TARGET
     TARGET_FLAG_CORPSE_ALLY     = 0x00008000,               // pguid
     TARGET_FLAG_UNIT_MINIPET    = 0x00010000,               // pguid, used to validate target (if non combat pet)
     TARGET_FLAG_GLYPH_SLOT      = 0x00020000,               // used in glyph spells
@@ -252,133 +252,133 @@ class Spell
     friend class SpellScript;
     public:
 
-        void EffectNULL(SpellEffectEntry const* effect);
-        void EffectUnused(SpellEffectEntry const* effect);
-        void EffectDistract(SpellEffectEntry const* effect);
-        void EffectPull(SpellEffectEntry const* effect);
-        void EffectSchoolDMG(SpellEffectEntry const* effect);
-        void EffectEnvirinmentalDMG(SpellEffectEntry const* effect);
-        void EffectInstaKill(SpellEffectEntry const* effect);
-        void EffectDummy(SpellEffectEntry const* effect);
-        void EffectTeleportUnits(SpellEffectEntry const* effect);
-        void EffectApplyAura(SpellEffectEntry const* effect);
-        void EffectSendEvent(SpellEffectEntry const* effect);
-        void EffectPowerBurn(SpellEffectEntry const* effect);
-        void EffectPowerDrain(SpellEffectEntry const* effect);
-        void EffectHeal(SpellEffectEntry const* effect);
-        void EffectBind(SpellEffectEntry const* effect);
-        void EffectHealthLeech(SpellEffectEntry const* effect);
-        void EffectQuestComplete(SpellEffectEntry const* effect);
-        void EffectCreateItem(SpellEffectEntry const* effect);
-        void EffectCreateItem2(SpellEffectEntry const* effect);
-        void EffectCreateRandomItem(SpellEffectEntry const* effect);
-        void EffectPersistentAA(SpellEffectEntry const* effect);
-        void EffectEnergize(SpellEffectEntry const* effect);
-        void EffectOpenLock(SpellEffectEntry const* effect);
-        void EffectSummonChangeItem(SpellEffectEntry const* effect);
-        void EffectProficiency(SpellEffectEntry const* effect);
-        void EffectApplyAreaAura(SpellEffectEntry const* effect);
-        void EffectSummonType(SpellEffectEntry const* effect);
-        void EffectLearnSpell(SpellEffectEntry const* effect);
-        void EffectDispel(SpellEffectEntry const* effect);
-        void EffectDualWield(SpellEffectEntry const* effect);
-        void EffectPickPocket(SpellEffectEntry const* effect);
-        void EffectAddFarsight(SpellEffectEntry const* effect);
-        void EffectUntrainTalents(SpellEffectEntry const* effect);
-        void EffectHealMechanical(SpellEffectEntry const* effect);
-        void EffectJump(SpellEffectEntry const* effect);
-        void EffectJumpDest(SpellEffectEntry const* effect);
-        void EffectLeapBack(SpellEffectEntry const* effect);
-        void EffectQuestClear(SpellEffectEntry const* effect);
-        void EffectTeleUnitsFaceCaster(SpellEffectEntry const* effect);
-        void EffectLearnSkill(SpellEffectEntry const* effect);
-        void EffectAddHonor(SpellEffectEntry const* effect);
-        void EffectTradeSkill(SpellEffectEntry const* effect);
-        void EffectEnchantItemPerm(SpellEffectEntry const* effect);
-        void EffectEnchantItemTmp(SpellEffectEntry const* effect);
-        void EffectTameCreature(SpellEffectEntry const* effect);
-        void EffectSummonPet(SpellEffectEntry const* effect);
-        void EffectLearnPetSpell(SpellEffectEntry const* effect);
-        void EffectWeaponDmg(SpellEffectEntry const* effect);
-        void EffectForceCast(SpellEffectEntry const* effect);
-        void EffectForceCastWithValue(SpellEffectEntry const* effect);
-        void EffectTriggerSpell(SpellEffectEntry const* effect);
-        void EffectTriggerMissileSpell(SpellEffectEntry const* effect);
-        void EffectThreat(SpellEffectEntry const* effect);
-        void EffectHealMaxHealth(SpellEffectEntry const* effect);
-        void EffectInterruptCast(SpellEffectEntry const* effect);
-        void EffectSummonObjectWild(SpellEffectEntry const* effect);
-        void EffectScriptEffect(SpellEffectEntry const* effect);
-        void EffectSanctuary(SpellEffectEntry const* effect);
-        void EffectAddComboPoints(SpellEffectEntry const* effect);
-        void EffectDuel(SpellEffectEntry const* effect);
-        void EffectStuck(SpellEffectEntry const* effect);
-        void EffectSummonPlayer(SpellEffectEntry const* effect);
-        void EffectActivateObject(SpellEffectEntry const* effect);
-        void EffectApplyGlyph(SpellEffectEntry const* effect);
-        void EffectEnchantHeldItem(SpellEffectEntry const* effect);
-        void EffectSummonObject(SpellEffectEntry const* effect);
-        void EffectResurrect(SpellEffectEntry const* effect);
-        void EffectParry(SpellEffectEntry const* effect);
-        void EffectBlock(SpellEffectEntry const* effect);
-        void EffectLeap(SpellEffectEntry const* effect);
-        void EffectTransmitted(SpellEffectEntry const* effect);
-        void EffectDisEnchant(SpellEffectEntry const* effect);
-        void EffectInebriate(SpellEffectEntry const* effect);
-        void EffectFeedPet(SpellEffectEntry const* effect);
-        void EffectDismissPet(SpellEffectEntry const* effect);
-        void EffectReputation(SpellEffectEntry const* effect);
-        void EffectForceDeselect(SpellEffectEntry const* effect);
-        void EffectSelfResurrect(SpellEffectEntry const* effect);
-        void EffectSkinning(SpellEffectEntry const* effect);
-        void EffectCharge(SpellEffectEntry const* effect);
-        void EffectChargeDest(SpellEffectEntry const* effect);
-        void EffectProspecting(SpellEffectEntry const* effect);
-        void EffectMilling(SpellEffectEntry const* effect);
-        void EffectRenamePet(SpellEffectEntry const* effect);
-        void EffectSendTaxi(SpellEffectEntry const* effect);
-        void EffectSummonCritter(SpellEffectEntry const* effect);
-        void EffectKnockBack(SpellEffectEntry const* effect);
-        void EffectPullTowards(SpellEffectEntry const* effect);
-        void EffectDispelMechanic(SpellEffectEntry const* effect);
-        void EffectSummonDeadPet(SpellEffectEntry const* effect);
-        void EffectDestroyAllTotems(SpellEffectEntry const* effect);
-        void EffectDurabilityDamage(SpellEffectEntry const* effect);
-        void EffectSkill(SpellEffectEntry const* effect);
-        void EffectTaunt(SpellEffectEntry const* effect);
-        void EffectDurabilityDamagePCT(SpellEffectEntry const* effect);
-        void EffectModifyThreatPercent(SpellEffectEntry const* effect);
-        void EffectResurrectNew(SpellEffectEntry const* effect);
-        void EffectAddExtraAttacks(SpellEffectEntry const* effect);
-        void EffectSpiritHeal(SpellEffectEntry const* effect);
-        void EffectSkinPlayerCorpse(SpellEffectEntry const* effect);
-        void EffectStealBeneficialBuff(SpellEffectEntry const* effect);
-        void EffectUnlearnSpecialization(SpellEffectEntry const* effect);
-        void EffectHealPct(SpellEffectEntry const* effect);
-        void EffectEnergizePct(SpellEffectEntry const* effect);
-        void EffectTriggerSpellWithValue(SpellEffectEntry const* effect);
-        void EffectTriggerRitualOfSummoning(SpellEffectEntry const* effect);
-        void EffectSummonRaFFriend(SpellEffectEntry const* effect);
-        void EffectKillCreditPersonal(SpellEffectEntry const* effect);
-        void EffectKillCredit(SpellEffectEntry const* effect);
-        void EffectQuestFail(SpellEffectEntry const* effect);
-        void EffectQuestStart(SpellEffectEntry const* effect);
-        void EffectRedirectThreat(SpellEffectEntry const* effect);
-        void EffectGameObjectDamage(SpellEffectEntry const* effect);
-        void EffectGameObjectRepair(SpellEffectEntry const* effect);
-        void EffectGameObjectSetDestructionState(SpellEffectEntry const* effect);
-        void EffectActivateRune(SpellEffectEntry const* effect);
-        void EffectCreateTamedPet(SpellEffectEntry const* effect);
-        void EffectDiscoverTaxi(SpellEffectEntry const* effect);
-        void EffectTitanGrip(SpellEffectEntry const* effect);
-        void EffectEnchantItemPrismatic(SpellEffectEntry const* effect);
-        void EffectPlayMusic(SpellEffectEntry const* effect);
-        void EffectSpecCount(SpellEffectEntry const* effect);
-        void EffectActivateSpec(SpellEffectEntry const* effect);
-        void EffectPlayerNotification(SpellEffectEntry const* effect);
-        void EffectRemoveAura(SpellEffectEntry const* effect);
-        void EffectCastButtons(SpellEffectEntry const* effect);
-        void EffectRechargeManaGem(SpellEffectEntry const* effect);
+        void EffectNULL(SpellEffIndex effIndex);
+        void EffectUnused(SpellEffIndex effIndex);
+        void EffectDistract(SpellEffIndex effIndex);
+        void EffectPull(SpellEffIndex effIndex);
+        void EffectSchoolDMG(SpellEffIndex effIndex);
+        void EffectEnvirinmentalDMG(SpellEffIndex effIndex);
+        void EffectInstaKill(SpellEffIndex effIndex);
+        void EffectDummy(SpellEffIndex effIndex);
+        void EffectTeleportUnits(SpellEffIndex effIndex);
+        void EffectApplyAura(SpellEffIndex effIndex);
+        void EffectSendEvent(SpellEffIndex effIndex);
+        void EffectPowerBurn(SpellEffIndex effIndex);
+        void EffectPowerDrain(SpellEffIndex effIndex);
+        void EffectHeal(SpellEffIndex effIndex);
+        void EffectBind(SpellEffIndex effIndex);
+        void EffectHealthLeech(SpellEffIndex effIndex);
+        void EffectQuestComplete(SpellEffIndex effIndex);
+        void EffectCreateItem(SpellEffIndex effIndex);
+        void EffectCreateItem2(SpellEffIndex effIndex);
+        void EffectCreateRandomItem(SpellEffIndex effIndex);
+        void EffectPersistentAA(SpellEffIndex effIndex);
+        void EffectEnergize(SpellEffIndex effIndex);
+        void EffectOpenLock(SpellEffIndex effIndex);
+        void EffectSummonChangeItem(SpellEffIndex effIndex);
+        void EffectProficiency(SpellEffIndex effIndex);
+        void EffectApplyAreaAura(SpellEffIndex effIndex);
+        void EffectSummonType(SpellEffIndex effIndex);
+        void EffectLearnSpell(SpellEffIndex effIndex);
+        void EffectDispel(SpellEffIndex effIndex);
+        void EffectDualWield(SpellEffIndex effIndex);
+        void EffectPickPocket(SpellEffIndex effIndex);
+        void EffectAddFarsight(SpellEffIndex effIndex);
+        void EffectUntrainTalents(SpellEffIndex effIndex);
+        void EffectHealMechanical(SpellEffIndex effIndex);
+        void EffectJump(SpellEffIndex effIndex);
+        void EffectJumpDest(SpellEffIndex effIndex);
+        void EffectLeapBack(SpellEffIndex effIndex);
+        void EffectQuestClear(SpellEffIndex effIndex);
+        void EffectTeleUnitsFaceCaster(SpellEffIndex effIndex);
+        void EffectLearnSkill(SpellEffIndex effIndex);
+        void EffectAddHonor(SpellEffIndex effIndex);
+        void EffectTradeSkill(SpellEffIndex effIndex);
+        void EffectEnchantItemPerm(SpellEffIndex effIndex);
+        void EffectEnchantItemTmp(SpellEffIndex effIndex);
+        void EffectTameCreature(SpellEffIndex effIndex);
+        void EffectSummonPet(SpellEffIndex effIndex);
+        void EffectLearnPetSpell(SpellEffIndex effIndex);
+        void EffectWeaponDmg(SpellEffIndex effIndex);
+        void EffectForceCast(SpellEffIndex effIndex);
+        void EffectForceCastWithValue(SpellEffIndex effIndex);
+        void EffectTriggerSpell(SpellEffIndex effIndex);
+        void EffectTriggerMissileSpell(SpellEffIndex effIndex);
+        void EffectThreat(SpellEffIndex effIndex);
+        void EffectHealMaxHealth(SpellEffIndex effIndex);
+        void EffectInterruptCast(SpellEffIndex effIndex);
+        void EffectSummonObjectWild(SpellEffIndex effIndex);
+        void EffectScriptEffect(SpellEffIndex effIndex);
+        void EffectSanctuary(SpellEffIndex effIndex);
+        void EffectAddComboPoints(SpellEffIndex effIndex);
+        void EffectDuel(SpellEffIndex effIndex);
+        void EffectStuck(SpellEffIndex effIndex);
+        void EffectSummonPlayer(SpellEffIndex effIndex);
+        void EffectActivateObject(SpellEffIndex effIndex);
+        void EffectApplyGlyph(SpellEffIndex effIndex);
+        void EffectEnchantHeldItem(SpellEffIndex effIndex);
+        void EffectSummonObject(SpellEffIndex effIndex);
+        void EffectResurrect(SpellEffIndex effIndex);
+        void EffectParry(SpellEffIndex effIndex);
+        void EffectBlock(SpellEffIndex effIndex);
+        void EffectLeap(SpellEffIndex effIndex);
+        void EffectTransmitted(SpellEffIndex effIndex);
+        void EffectDisEnchant(SpellEffIndex effIndex);
+        void EffectInebriate(SpellEffIndex effIndex);
+        void EffectFeedPet(SpellEffIndex effIndex);
+        void EffectDismissPet(SpellEffIndex effIndex);
+        void EffectReputation(SpellEffIndex effIndex);
+        void EffectForceDeselect(SpellEffIndex effIndex);
+        void EffectSelfResurrect(SpellEffIndex effIndex);
+        void EffectSkinning(SpellEffIndex effIndex);
+        void EffectCharge(SpellEffIndex effIndex);
+        void EffectChargeDest(SpellEffIndex effIndex);
+        void EffectProspecting(SpellEffIndex effIndex);
+        void EffectMilling(SpellEffIndex effIndex);
+        void EffectRenamePet(SpellEffIndex effIndex);
+        void EffectSendTaxi(SpellEffIndex effIndex);
+        void EffectSummonCritter(SpellEffIndex effIndex);
+        void EffectKnockBack(SpellEffIndex effIndex);
+        void EffectPullTowards(SpellEffIndex effIndex);
+        void EffectDispelMechanic(SpellEffIndex effIndex);
+        void EffectSummonDeadPet(SpellEffIndex effIndex);
+        void EffectDestroyAllTotems(SpellEffIndex effIndex);
+        void EffectDurabilityDamage(SpellEffIndex effIndex);
+        void EffectSkill(SpellEffIndex effIndex);
+        void EffectTaunt(SpellEffIndex effIndex);
+        void EffectDurabilityDamagePCT(SpellEffIndex effIndex);
+        void EffectModifyThreatPercent(SpellEffIndex effIndex);
+        void EffectResurrectNew(SpellEffIndex effIndex);
+        void EffectAddExtraAttacks(SpellEffIndex effIndex);
+        void EffectSpiritHeal(SpellEffIndex effIndex);
+        void EffectSkinPlayerCorpse(SpellEffIndex effIndex);
+        void EffectStealBeneficialBuff(SpellEffIndex effIndex);
+        void EffectUnlearnSpecialization(SpellEffIndex effIndex);
+        void EffectHealPct(SpellEffIndex effIndex);
+        void EffectEnergizePct(SpellEffIndex effIndex);
+        void EffectTriggerSpellWithValue(SpellEffIndex effIndex);
+        void EffectTriggerRitualOfSummoning(SpellEffIndex effIndex);
+        void EffectSummonRaFFriend(SpellEffIndex effIndex);
+        void EffectKillCreditPersonal(SpellEffIndex effIndex);
+        void EffectKillCredit(SpellEffIndex effIndex);
+        void EffectQuestFail(SpellEffIndex effIndex);
+        void EffectQuestStart(SpellEffIndex effIndex);
+        void EffectRedirectThreat(SpellEffIndex effIndex);
+        void EffectGameObjectDamage(SpellEffIndex effIndex);
+        void EffectGameObjectRepair(SpellEffIndex effIndex);
+        void EffectGameObjectSetDestructionState(SpellEffIndex effIndex);
+        void EffectActivateRune(SpellEffIndex effIndex);
+        void EffectCreateTamedPet(SpellEffIndex effIndex);
+        void EffectDiscoverTaxi(SpellEffIndex effIndex);
+        void EffectTitanGrip(SpellEffIndex effIndex);
+        void EffectEnchantItemPrismatic(SpellEffIndex effIndex);
+        void EffectPlayMusic(SpellEffIndex effIndex);
+        void EffectSpecCount(SpellEffIndex effIndex);
+        void EffectActivateSpec(SpellEffIndex effIndex);
+        void EffectPlayerNotification(SpellEffIndex effIndex);
+        void EffectRemoveAura(SpellEffIndex effIndex);
+        void EffectCastButtons(SpellEffIndex effIndex);
+        void EffectRechargeManaGem(SpellEffIndex effIndex);
 
         typedef std::set<Aura*> UsedSpellMods;
 
@@ -412,7 +412,7 @@ class Spell
         SpellCastResult CheckRuneCost(uint32 runeCostID);
         SpellCastResult CheckCasterAuras() const;
 
-        int32 CalculateDamage(uint8 i, Unit* target) { return m_caster->CalculateSpellDamage(target, m_spellInfo, i, &m_spellValue->EffectBasePoints[i]); }
+        int32 CalculateDamage(uint8 i, Unit const* target) const { return m_caster->CalculateSpellDamage(target, m_spellInfo, i, &m_spellValue->EffectBasePoints[i]); }
 
         bool HaveTargetsForEffect(uint8 effect) const;
         void Delayed();
@@ -429,7 +429,7 @@ class Spell
 
         template<typename T> WorldObject* FindCorpseUsing();
 
-        bool CheckTarget(Unit* target, uint32 eff);
+        bool CheckEffectTarget(Unit const* target, uint32 eff) const;
         bool CanAutoCast(Unit* target);
         void CheckSrc() { if (!m_targets.HasSrc()) m_targets.SetSrc(*m_caster); }
         void CheckDst() { if (!m_targets.HasDst()) m_targets.SetDst(*m_caster); }
@@ -489,7 +489,7 @@ class Spell
 
         bool IsNeedSendToClient() const;
 
-        CurrentSpellTypes GetCurrentContainer();
+        CurrentSpellTypes GetCurrentContainer() const;
 
         Unit* GetCaster() const { return m_caster; }
         Unit* GetOriginalCaster() const { return m_originalCaster; }
@@ -498,13 +498,11 @@ class Spell
 
         void UpdatePointers();                              // must be used at call Spell code after time delay (non triggered spell cast/update spell call/etc)
 
-        bool CheckTargetCreatureType(Unit* target) const;
-
         void CleanupTargetList();
 
         void SetSpellValue(SpellValueMod mod, int32 value);
     protected:
-        bool HasGlobalCooldown();
+        bool HasGlobalCooldown() const;
         void TriggerGlobalCooldown();
         void CancelGlobalCooldown();
 
@@ -614,8 +612,7 @@ class Spell
         };
         std::list<ItemTargetInfo> m_UniqueItemInfo;
 
-        void AddUnitTarget(Unit* target, uint32 effIndex);
-        void AddUnitTarget(uint64 unitGUID, uint32 effIndex);
+        void AddUnitTarget(Unit* target, uint32 effIndex, bool checkIfValid = true);
         void AddGOTarget(GameObject* target, uint32 effIndex);
         void AddGOTarget(uint64 goGUID, uint32 effIndex);
         void AddItemTarget(Item* target, uint32 effIndex);
@@ -628,15 +625,15 @@ class Spell
         void SearchAreaTarget(std::list<Unit*> &unitList, float radius, SpellNotifyPushType type, SpellTargets TargetType, uint32 entry = 0);
         void SearchGOAreaTarget(std::list<GameObject*> &gobjectList, float radius, SpellNotifyPushType type, SpellTargets TargetType, uint32 entry = 0);
         void SearchChainTarget(std::list<Unit*> &unitList, float radius, uint32 unMaxTargets, SpellTargets TargetType);
-        WorldObject* SearchNearbyTarget(float range, SpellTargets TargetType, SpellEffectEntry const* effect);
+        WorldObject* SearchNearbyTarget(float range, SpellTargets TargetType, SpellEffIndex effIndex);
         bool IsValidSingleTargetEffect(Unit const* target, Targets type) const;
         bool IsValidSingleTargetSpell(Unit const* target) const;
         bool IsValidDeadOrAliveTarget(Unit const* target) const;
         void CalculateDamageDoneForAllTargets();
         int32 CalculateDamageDone(Unit *unit, const uint32 effectMask, float *multiplier);
-        void SpellDamageSchoolDmg(SpellEffectEntry const* effect);
-        void SpellDamageWeaponDmg(SpellEffectEntry const* effect);
-        void SpellDamageHeal(SpellEffectEntry const* effect);
+        void SpellDamageSchoolDmg(SpellEffIndex effIndex);
+        void SpellDamageWeaponDmg(SpellEffIndex effIndex);
+        void SpellDamageHeal(SpellEffIndex effIndex);
 
         void PrepareTargetProcessing();
         void FinishTargetProcessing();
@@ -654,7 +651,7 @@ class Spell
         void CallScriptBeforeHitHandlers();
         void CallScriptOnHitHandlers();
         void CallScriptAfterHitHandlers();
-        void CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTargets, SpellEffectEntry const* effect);
+        void CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTargets, SpellEffIndex effIndex);
         std::list<SpellScript *> m_loadedScripts;
 
         bool CanExecuteTriggersOnHit(uint8 effMask) const;
@@ -706,7 +703,6 @@ namespace Trillium
         const Unit* const i_source;
         uint32 i_entry;
         const Position * const i_pos;
-        bool i_requireDeadTarget;
         SpellInfo const* i_spellProto;
 
         SpellNotifierCreatureAndPlayer(Unit *source, std::list<Unit*> &data, float radius, SpellNotifyPushType type,
@@ -719,13 +715,11 @@ namespace Trillium
 
         template<class T> inline void Visit(GridRefManager<T>& m)
         {
-            i_requireDeadTarget = i_spellProto ? bool(i_spellProto->AttributesEx3 & SPELL_ATTR3_REQUIRE_DEAD_TARGET) : false;
-
             for (typename GridRefManager<T>::iterator itr = m.begin(); itr != m.end(); ++itr)
             {
                 Unit* target = (Unit*)itr->getSource();
 
-                if (!i_source->canSeeOrDetect(target, true))
+                if (i_spellProto->CheckTarget(i_source, target, true) != SPELL_CAST_OK)
                     continue;
 
                 switch (i_TargetType)
@@ -733,7 +727,8 @@ namespace Trillium
                     case SPELL_TARGETS_ENEMY:
                         if (target->isTotem())
                             continue;
-                        if (!target->isAttackableByAOE(i_spellProto))
+                        // can't be checked in SpellInfo::CheckTarget - needs more research
+                        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE))
                             continue;
                         if (i_source->IsControlledByPlayer())
                         {
@@ -750,12 +745,6 @@ namespace Trillium
                         if (target->isTotem())
                             continue;
                         if (!i_source->IsFriendlyTo(target))
-                            continue;
-                        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
-                            continue;
-                        if (target->GetTypeId() == TYPEID_PLAYER && target->ToPlayer()->isGameMaster())
-                            continue;
-                        if (target->isAlive() == i_requireDeadTarget)
                             continue;
                         break;
                     case SPELL_TARGETS_ENTRY:
@@ -810,7 +799,7 @@ namespace Trillium
     #endif
 }
 
-typedef void(Spell::*pEffect)(SpellEffectEntry const* spellEffect);
+typedef void(Spell::*pEffect)(SpellEffIndex effIndex);
 
 class SpellEvent : public BasicEvent
 {

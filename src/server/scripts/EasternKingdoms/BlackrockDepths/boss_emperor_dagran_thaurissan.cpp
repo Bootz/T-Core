@@ -20,6 +20,7 @@
  */
 
 #include "ScriptPCH.h"
+#include "blackrock_depths.h"
 
 enum Yells
 {
@@ -45,8 +46,12 @@ public:
 
     struct boss_draganthaurissanAI : public ScriptedAI
     {
-        boss_draganthaurissanAI(Creature* c) : ScriptedAI(c) {}
+        boss_draganthaurissanAI(Creature* c) : ScriptedAI(c)
+        {
+            instance = me->GetInstanceScript();
+        }
 
+        InstanceScript* instance;
         uint32 HandOfThaurissan_Timer;
         uint32 AvatarOfFlame_Timer;
         //uint32 Counter;
@@ -67,6 +72,15 @@ public:
         void KilledUnit(Unit* /*victim*/)
         {
             DoScriptText(SAY_SLAY, me);
+        }
+
+        void JustDied(Unit* /*who*/)
+        {
+            if (Creature* Moira = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(DATA_MOIRA) : 0))
+            {
+                Moira->AI()->EnterEvadeMode();
+                Moira->setFaction(35);
+            }
         }
 
         void UpdateAI(const uint32 diff)

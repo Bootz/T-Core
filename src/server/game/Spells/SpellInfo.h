@@ -21,11 +21,13 @@
 #include "SharedDefines.h"
 
 class Unit;
+class Player;
 class Spell;
 class SpellInfo;
 struct SpellChainNode;
 struct SpellTargetPosition;
 struct SpellDurationEntry;
+struct SpellModifier;
 struct SpellRangeEntry;
 struct SpellRadiusEntry;
 struct SpellEntry;
@@ -39,6 +41,65 @@ enum SpellEffectTargetTypes
     SPELL_REQUIRE_ITEM,
     SPELL_REQUIRE_CASTER,
     SPELL_REQUIRE_GOBJECT,
+};
+
+enum SpellTargetSelectionCategories
+{
+    TARGET_SELECT_CATEGORY_NYI,
+    TARGET_SELECT_CATEGORY_DEFAULT,
+    TARGET_SELECT_CATEGORY_CHANNEL,
+    TARGET_SELECT_CATEGORY_NEARBY,
+    TARGET_SELECT_CATEGORY_CONE,
+    TARGET_SELECT_CATEGORY_AREA,
+};
+
+enum SpellTargetReferenceTypes
+{
+    TARGET_REFERENCE_TYPE_NONE,
+    TARGET_REFERENCE_TYPE_CASTER,
+    TARGET_REFERENCE_TYPE_TARGET,
+    TARGET_REFERENCE_TYPE_LAST,
+    TARGET_REFERENCE_TYPE_SRC,
+    TARGET_REFERENCE_TYPE_DEST,
+};
+
+enum SpellTargetObjectTypes
+{
+    TARGET_OBJECT_TYPE_NONE,
+    TARGET_OBJECT_TYPE_SRC,
+    TARGET_OBJECT_TYPE_DEST,
+    TARGET_OBJECT_TYPE_UNIT,
+    TARGET_OBJECT_TYPE_UNIT_AND_DEST,
+    TARGET_OBJECT_TYPE_GOBJ,
+    TARGET_OBJECT_TYPE_GOBJ_ITEM,
+    TARGET_OBJECT_TYPE_ITEM,
+    TARGET_OBJECT_TYPE_CORPSE,
+};
+
+enum SpellTargetSelectionCheckTypes
+{
+    TARGET_SELECT_CHECK_DEFAULT,
+    TARGET_SELECT_CHECK_ENTRY,
+    TARGET_SELECT_CHECK_ENEMY,
+    TARGET_SELECT_CHECK_ALLY,
+    TARGET_SELECT_CHECK_PARTY,
+    TARGET_SELECT_CHECK_RAID,
+    TARGET_SELECT_CHECK_PASSENGER,
+};
+
+enum SpellTargetDirectionTypes
+{
+    TARGET_DIR_NONE,
+    TARGET_DIR_FRONT,
+    TARGET_DIR_BACK,
+    TARGET_DIR_RIGHT,
+    TARGET_DIR_LEFT,
+    TARGET_DIR_FRONT_RIGHT,
+    TARGET_DIR_BACK_RIGHT,
+    TARGET_DIR_BACK_LEFT,
+    TARGET_DIR_FRONT_LEFT,
+    TARGET_DIR_RANDOM,
+    TARGET_DIR_ENTRY,
 };
 
 enum SpellSelectTargetTypes
@@ -98,7 +159,6 @@ enum SpellCustomAttributes
     SPELL_ATTR0_CU_DIRECT_DAMAGE    = 0x00000100,
     SPELL_ATTR0_CU_CHARGE           = 0x00000200,
     SPELL_ATTR0_CU_PICKPOCKET       = 0x00000400,
-    SPELL_ATTR0_CU_EXCLUDE_SELF     = 0x00000800,
     SPELL_ATTR0_CU_NEGATIVE_EFF0    = 0x00001000,
     SPELL_ATTR0_CU_NEGATIVE_EFF1    = 0x00002000,
     SPELL_ATTR0_CU_NEGATIVE_EFF2    = 0x00004000,
@@ -119,6 +179,12 @@ public:
 
     bool IsArea() const;
     SpellSelectTargetTypes GetType() const;
+    SpellTargetSelectionCategories GetSelectionCategory() const;
+    SpellTargetReferenceTypes GetReferenceType() const;
+    SpellTargetObjectTypes GetObjectType() const;
+    SpellTargetSelectionCheckTypes GetSelectionCheckType() const;
+    SpellTargetDirectionTypes GetDirectionType() const;
+    float CalcDirectionAngle() const;
 
     Targets GetTarget() const;
 
@@ -128,11 +194,19 @@ public:
 
 private:
     static bool InitStaticData();
-    static void InitAreaData();
     static void InitTypeData();
 
     static bool Init;
-    static bool Area[TOTAL_SPELL_TARGETS];
+
+    struct StaticData
+    {
+        SpellTargetObjectTypes ObjectType;    // type of object returned by target type
+        SpellTargetReferenceTypes ReferenceType; // defines which object is used as a reference when selecting target
+        SpellTargetSelectionCategories SelectionCategory;
+        SpellTargetSelectionCheckTypes SelectionCheckType; // defines selection criteria
+        SpellTargetDirectionTypes DirectionType; // direction for cone and dest targets
+    };
+    static StaticData _data[TOTAL_SPELL_TARGETS];
 };
 
 class SpellEffectInfo
@@ -184,12 +258,22 @@ public:
 
     SpellEffectTargetTypes GetRequiredTargetType() const;
 
+    SpellTargetObjectTypes GetImplicitTargetObjectType() const;
+    SpellTargetObjectTypes GetRequiredTargetObjectType() const;
+
 private:
     static bool InitStaticData();
     static void InitRequiredTargetTypeData();
 
     static bool Init;
     static SpellEffectTargetTypes RequiredTargetType[TOTAL_SPELL_EFFECTS];
+
+    struct StaticData
+    {
+        SpellTargetObjectTypes ImplicitObjectType; // defines if explicit target can be added to effect target list if there's no valid target type provided for effect
+        SpellTargetObjectTypes RequiredObjectType; // defines valid target object type for spell effect
+    };
+    static StaticData _data[TOTAL_SPELL_EFFECTS];
 };
 
 class SpellInfo
@@ -268,10 +352,43 @@ public:
     uint32 PreventionType;
     int32  AreaGroupId;
     uint32 SchoolMask;
+    uint32 SpellDifficultyId;
+    uint32 SpellScalingId;
+    uint32 SpellAuraOptionsId;
+    uint32 SpellAuraRestrictionsId;
+    uint32 SpellCastingRequirementsId;
+    uint32 SpellCategoriesId;
+    uint32 SpellClassOptionsId;
+    uint32 SpellCooldownsId;
+    uint32 SpellEquippedItemsId;
+    uint32 SpellInterruptsId;
+    uint32 SpellLevelsId;
+    uint32 SpellPowerId;
+    uint32 SpellReagentsId;
+    uint32 SpellShapeshiftId;
+    uint32 SpellTargetRestrictionsId;
+    uint32 SpellTotemsId;
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
     SpellChainNode const* ChainEntry;
 
     SpellInfo(SpellEntry const* spellEntry);
+
+    // struct access functions
+    SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
+    SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
+    SpellAuraRestrictionsEntry const* GetSpellAuraRestrictions() const;
+    SpellCastingRequirementsEntry const* GetSpellCastingRequirements() const;
+    SpellCategoriesEntry const* GetSpellCategories() const;
+    SpellClassOptionsEntry const* GetSpellClassOptions() const;
+    SpellCooldownsEntry const* GetSpellCooldowns() const;
+    SpellEquippedItemsEntry const* GetSpellEquippedItems() const;
+    SpellInterruptsEntry const* GetSpellInterrupts() const;
+    SpellLevelsEntry const* GetSpellLevels() const;
+    SpellPowerEntry const* GetSpellPower() const;
+    SpellReagentsEntry const* GetSpellReagents() const;
+    SpellScalingEntry const* GetSpellScaling() const;
+    SpellShapeshiftEntry const* GetSpellShapeshift() const;
+    SpellTotemsEntry const* GetSpellTotems() const;
 
     bool HasEffect(SpellEffects effect) const;
     bool HasAura(AuraType aura) const;
@@ -307,6 +424,7 @@ public:
     bool IsRangedWeaponSpell() const;
     bool IsAutoRepeatRangedSpell() const;
 
+    bool IsAffectedBySpellMods() const;
     bool IsAffectedBySpellMod(SpellModifier* mod) const;
 
     bool CanPierceImmuneAura(SpellInfo const* aura) const;
@@ -319,6 +437,8 @@ public:
 
     SpellCastResult CheckShapeshift(uint32 form) const;
     SpellCastResult CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player const* player = NULL) const;
+    SpellCastResult CheckTarget(Unit const* caster, Unit const* target, bool implicit = true) const;
+    bool CheckTargetCreatureType(Unit const* target) const;
 
     SpellSchoolMask GetSchoolMask() const;
     uint32 GetAllEffectsMechanicMask() const;

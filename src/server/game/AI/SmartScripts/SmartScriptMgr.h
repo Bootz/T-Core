@@ -424,7 +424,7 @@ enum SMART_ACTION
     SMART_ACTION_INSTALL_AI_TEMPLATE                = 58,     // AITemplateID
     SMART_ACTION_SET_RUN                            = 59,     // 0/1
     SMART_ACTION_SET_FLY                            = 60,     // 0/1
-    SMART_ACTION_SET_SWIMM                          = 61,     // 0/1
+    SMART_ACTION_SET_SWIM                           = 61,     // 0/1
     SMART_ACTION_TELEPORT                           = 62,     // mapID,
     SMART_ACTION_STORE_VARIABLE_DECIMAL             = 63,     // varID, number
     SMART_ACTION_STORE_TARGET_LIST                  = 64,     // varID,
@@ -758,8 +758,8 @@ struct SmartAction
 
         struct
         {
-            uint32 swimm;
-        } setSwimm;
+            uint32 swim;
+        } setSwim;
 
         struct
         {
@@ -1157,7 +1157,6 @@ struct SmartScriptHolder
         runOnce = false;
         link = 0;
         entryOrGuid = 0;
-        link = 0;
         event_id = 0;
         enableTimed = false;
     }
@@ -1240,7 +1239,7 @@ class SmartAIMgr
         //event stores
         SmartAIEventMap mEventMap[SMART_SCRIPT_TYPE_MAX];
 
-        bool IsEventValid(SmartScriptHolder &e);
+        bool IsEventValid(SmartScriptHolder& e);
         bool IsTargetValid(SmartScriptHolder const& e);
 
         /*inline bool IsTargetValid(SmartScriptHolder e, int32 target)

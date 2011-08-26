@@ -105,8 +105,9 @@ DataStorage <GtChanceToSpellCritBaseEntry> sGtChanceToSpellCritBaseStore(GtChanc
 DataStorage <GtChanceToSpellCritEntry>     sGtChanceToSpellCritStore(GtChanceToSpellCritfmt);
 DataStorage <GtOCTClassCombatRatingScalarEntry> sGtOCTClassCombatRatingScalarStore(GtOCTClassCombatRatingScalarfmt);
 //DataStorage <GtOCTRegenMPEntry>            sGtOCTRegenMPStore(GtOCTRegenMPfmt);  -- not used currently
-DataStorage <gtOCTHpPerStaminaEntry>       gtOCTHpPerStaminaStore(gtOCTHpPerStaminafmt);
+DataStorage <GtOCTHpPerStaminaEntry>       sGtOCTHpPerStaminaStore(gtOCTHpPerStaminafmt);
 DataStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSptfmt);
+DataStorage <GtSpellScalingEntry>          sGtSpellScalingStore(GtSpellScalingfmt);
 
 DataStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
@@ -390,8 +391,9 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToMeleeCritStore,    storagesPath, "gtChanceToMeleeCrit.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritBaseStore, storagesPath, "gtChanceToSpellCritBase.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtChanceToSpellCritStore,    storagesPath, "gtChanceToSpellCrit.dbc");
-    LoadData(availableDbcLocales, bad_dbc_files, gtOCTHpPerStaminaStore,           storagesPath, "gtOCTHpPerStamina.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sGtOCTHpPerStaminaStore,      storagesPath, "gtOCTHpPerStamina.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sGtRegenMPPerSptStore,        storagesPath, "gtRegenMPPerSpt.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sGtSpellScalingStore,         storagesPath, "gtSpellScaling.dbc");
 
     LoadData(availableDbcLocales, bad_dbc_files, sHolidaysStore,               storagesPath, "Holidays.dbc");
 
@@ -460,9 +462,9 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellStore,                  storagesPath, "Spell.dbc", &CustomSpellEntryfmt, &CustomSpellEntryIndex);
     for (uint32 i = 1; i < sSpellStore.GetNumRows(); ++i)
     {
-        SpellEntry const* spell = sSpellStore.LookupEntry(i);
-        if (spell && spell->GetCategory())
-            sSpellCategoryStore[spell->GetCategory()].insert(i);
+        SpellCategoriesEntry const* spell = sSpellCategoriesStore.LookupEntry(i);
+        if (spell && spell->Category)
+            sSpellCategoryStore[spell->Category].insert(i);
     }
 
     for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
@@ -478,19 +480,23 @@ void LoadDataStorages(const std::string& dataPath)
         {
             for (uint32 i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
             {
+                SpellLevelsEntry const* levels = sSpellLevelsStore.LookupEntry(i);
+                if (!levels)
+                    continue;
+
                 CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(i);
                 if (!cFamily)
                     continue;
 
                 if (skillLine->skillId != cFamily->skillLine[0] && skillLine->skillId != cFamily->skillLine[1])
                     continue;
-                if (spellInfo->GetSpellLevel())
+                if (levels->spellLevel)
                     continue;
 
                 if (skillLine->learnOnGetSkill != ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL)
                     continue;
 
-                sPetFamilySpellsStore[i].insert( spellInfo->Id);
+                sPetFamilySpellsStore[i].insert(spellInfo->Id);
             }
         }
     }
@@ -514,17 +520,10 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellLevelsStore,         storagesPath,"SpellLevels.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellPowerStore,          storagesPath,"SpellPower.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellReagentsStore,       storagesPath,"SpellReagents.dbc");
-
-    //for (uint32 i = 1; i < sSpellReagentsStore.GetNumRows(); ++i)
-    //{
-    //    if (SpellReagentsEntry const *spellReagent = sSpellReagentsStore.LookupEntry(i))
-    //        sSpellReagentMap[spellReagent->Id].reagents[spellEffect->EffectIndex] = spellReagent;
-    //}
     LoadData(availableDbcLocales, bad_dbc_files, sSpellScalingStore,        storagesPath,"SpellScaling.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,     storagesPath,"SpellShapeshift.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellTargetRestrictionsStore, storagesPath,"SpellTargetRestrictions.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellTotemsStore,         storagesPath,"SpellTotems.dbc");
-
     LoadData(availableDbcLocales, bad_dbc_files, sSpellCastTimesStore,         storagesPath, "SpellCastTimes.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,        storagesPath, "SpellDifficulty.dbc", &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex);
     LoadData(availableDbcLocales, bad_dbc_files, sSpellDurationStore,          storagesPath, "SpellDuration.dbc");
@@ -631,10 +630,10 @@ void LoadDataStorages(const std::string& dataPath)
     {
         std::set<uint32> spellPaths;
         for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
-            if (SpellEntry const* sInfo = sSpellStore.LookupEntry (i))
+            if (SpellEffectEntry const* sInfo = sSpellEffectStore.LookupEntry(i))
                 for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
-                    if (sInfo->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_SEND_TAXI)
-                        spellPaths.insert(sInfo->GetEffectMiscValue(j));
+                    if (sInfo->Effect == SPELL_EFFECT_SEND_TAXI)
+                        spellPaths.insert(sInfo->EffectMiscValue);
 
         memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
         memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
@@ -774,15 +773,6 @@ SpellEffectEntry const* GetSpellEffectEntry(uint32 spellId, uint32 effect)
         return NULL;
 
     return itr->second.effects[effect];
-}
-
-SpellReagentsEntry const* GetSpellReagentEntry(uint32 spellId, uint8 reagent)
-{
-    SpellReagentMap::const_iterator itr = sSpellReagentMap.find(spellId);
-    if (itr == sSpellReagentMap.end())
-        return NULL;
-
-    return itr->second.reagents[reagent];
 }
 
 uint32 GetTalentSpellCost(uint32 spellId)

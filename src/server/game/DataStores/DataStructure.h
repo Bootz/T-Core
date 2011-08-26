@@ -1034,41 +1034,55 @@ struct GtChanceToMeleeCritEntry
 
 struct GtChanceToSpellCritBaseEntry
 {
+    //uint32 level;
     float    base;
 };
 
 struct GtChanceToSpellCritEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 struct GtOCTClassCombatRatingScalarEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 //struct GtOCTRegenHPEntry
 //{
+//    uint32 level;
 //    float    ratio;
 //};
 
 struct GtOCTRegenMPEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 //struct GtRegenHPPerSptEntry
 //{
+//    uint32 level;
 //    float    ratio;
 //};
 
-struct gtOCTHpPerStaminaEntry
+struct GtOCTHpPerStaminaEntry
 {
+    //uint32 level;
     float    ratio;
 };
 
 struct GtRegenMPPerSptEntry
 {
+    //uint32 level;
+    float    ratio;
+};
+
+struct GtSpellScalingEntry
+{
+    uint32   level;
     float    ratio;
 };
 
@@ -1597,7 +1611,7 @@ struct SpellAuraOptionsEntry
 // SpellAuraRestrictions.dbc/
 struct SpellAuraRestrictionsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    CasterAuraState;                              // 1       m_casterAuraState
     uint32    TargetAuraState;                              // 2       m_targetAuraState
     uint32    CasterAuraStateNot;                           // 3       m_excludeCasterAuraState
@@ -1611,7 +1625,7 @@ struct SpellAuraRestrictionsEntry
 // SpellCastingRequirements.dbc
 struct SpellCastingRequirementsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    FacingCasterFlags;                            // 1       m_facingCasterFlags
     //uint32    MinFactionId;                               // 2      m_minFactionID not used
     //uint32    MinReputation;                              // 3      m_minReputation not used
@@ -1623,7 +1637,7 @@ struct SpellCastingRequirementsEntry
 // SpellCategories.dbc
 struct SpellCategoriesEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    Category;                                     // 1       m_category
     uint32    DmgClass;                                     // 2       m_defenseType
     uint32    Dispel;                                       // 3       m_dispelType
@@ -1635,7 +1649,7 @@ struct SpellCategoriesEntry
 // SpellClassOptions.dbc
 struct SpellClassOptionsEntry
 {
-    //uint32    Id;                                         // 0        m_ID
+    uint32    Id;                                         // 0        m_ID
     //uint32    modalNextSpell;                             // 1        m_modalNextSpell not used
     flag96    SpellFamilyFlags;                             // 2-4
     uint32    SpellFamilyName;                              // 5        m_spellClassSet
@@ -1645,7 +1659,7 @@ struct SpellClassOptionsEntry
 // SpellCooldowns.dbc
 struct SpellCooldownsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    CategoryRecoveryTime;                         // 1        m_categoryRecoveryTime
     uint32    RecoveryTime;                                 // 2        m_recoveryTime
     uint32    StartRecoveryTime;                            // 3        m_startRecoveryTime
@@ -1654,7 +1668,7 @@ struct SpellCooldownsEntry
 // SpellEffect.dbc
 struct SpellEffectEntry
 {
-    //uint32    Id;                                           // 0         m_ID
+    uint32    Id;                                           // 0         m_ID
     uint32    Effect;                                       // 1         m_effect
     float     EffectValueMultiplier;                        // 2         m_effectAmplitude
     uint32    EffectApplyAuraName;                          // 3         m_effectAura
@@ -1672,36 +1686,19 @@ struct SpellEffectEntry
     uint32    EffectRadiusIndex;                            // 15        m_effectRadiusIndex - spellradius.dbc
     uint32    EffectRadiusMaxIndex;                         // 16        4.0.0
     float     EffectRealPointsPerLevel;                     // 17        m_effectRealPointsPerLevel
-    flag96    EffectSpellClassMask;                         // 18        m_effectSpellClassMaskA, effect 0
-    uint32    EffectTriggerSpell;                           // 19        m_effectTriggerSpell
-    uint32    EffectImplicitTargetA;                        // 20        m_implicitTargetA
-    uint32    EffectImplicitTargetB;                        // 21        m_implicitTargetB
-    uint32    EffectSpellId;                                // 22        new 4.0.0
-    uint32    EffectIndex;                                  // 23        new 4.0.0
-    //uint32  Unk0                                          // 24        4.2.0
-
-    // helpers
-    uint32 GetEffectMechanic() const { return EffectMechanic; }
-    int32  GetEffectBasePoints() const { return EffectBasePoints; }
-    uint32 GetEffectItemType() const { return EffectItemType; }
-    uint32 GetEffectTriggerSpell() const { return EffectTriggerSpell; }
-    uint32 GetEffectAmplitude() const { return EffectAmplitude; }
-    int32 GetEffectMiscValue() const { return EffectMiscValue; }
-    int32 GetEffectMiscValueB() const { return EffectMiscValueB; }
-    uint32 GetEffectChainTarget() const { return EffectChainTarget; }
-    int32 GetEffectDieSides() const { return EffectDieSides; }
-    float GetEffectPointsPerComboPoint() const { return EffectPointsPerComboPoint; }
-    float GetEffectRealPointsPerLevel() const { return EffectRealPointsPerLevel; }
-    uint32 GetEffectRadiusIndex() const { return EffectRadiusIndex; }
-    float GetEffectDamageMultiplier() const { return EffectDamageMultiplier; }
-    float GetEffectValueMultiplier() const { return EffectValueMultiplier; }
-    float GetEffectBonusMultiplier() const { return EffectBonusMultiplier; }
+    flag96    EffectSpellClassMask;                         // 18 19 20  m_effectSpellClassMask1(2/3), effect 0
+    uint32    EffectTriggerSpell;                           // 21        m_effectTriggerSpell
+    uint32    EffectImplicitTargetA;                        // 22        m_implicitTargetA
+    uint32    EffectImplicitTargetB;                        // 23        m_implicitTargetB
+    uint32    EffectSpellId;                                // 24        new 4.0.0
+    uint32    EffectIndex;                                  // 25        new 4.0.0
+    //uint32  Unk0                                          // 26        4.2.0
 };
 
 // SpellEquippedItems.dbc
 struct SpellEquippedItemsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     int32     EquippedItemClass;                            // 1         m_equippedItemClass (value)
     int32     EquippedItemInventoryTypeMask;                // 2         m_equippedItemInvTypes (mask)
     int32     EquippedItemSubClassMask;                     // 3         m_equippedItemSubclass (mask)
@@ -1710,7 +1707,7 @@ struct SpellEquippedItemsEntry
 // SpellInterrupts.dbc
 struct SpellInterruptsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    AuraInterruptFlags;                           // 1         m_auraInterruptFlags
     //uint32                                                // 2         4.0.0
     uint32    ChannelInterruptFlags;                        // 3         m_channelInterruptFlags
@@ -1721,7 +1718,7 @@ struct SpellInterruptsEntry
 // SpellLevels.dbc
 struct SpellLevelsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    baseLevel;                                    // 1         m_baseLevel
     uint32    maxLevel;                                     // 2         m_maxLevel
     uint32    spellLevel;                                   // 3         m_spellLevel
@@ -1730,7 +1727,7 @@ struct SpellLevelsEntry
 // SpellPower.dbc
 struct SpellPowerEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    manaCost;                                     // 1         m_manaCost
     uint32    manaCostPerlevel;                             // 2         m_manaCostPerLevel
     uint32    ManaCostPercentage;                           // 3         m_manaCostPct
@@ -1742,7 +1739,7 @@ struct SpellPowerEntry
 // SpellReagents.dbc
 struct SpellReagentsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     int32     Reagent[MAX_SPELL_REAGENTS];                  // 1         m_reagent
     uint32    ReagentCount[MAX_SPELL_REAGENTS];             // 3         m_reagentCount
 };
@@ -1750,7 +1747,7 @@ struct SpellReagentsEntry
 // SpellScaling.dbc
 struct SpellScalingEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    castTimeMin;                                  // 1
     uint32    castTimeMax;                                  // 2
     uint32    castScalingMaxLevel;                          // 3
@@ -1776,7 +1773,7 @@ struct SpellShapeshiftEntry
 // SpellTargetRestrictions.dbc
 struct SpellTargetRestrictionsEntry
 {
-    //uint32    Id;                                         // 0 m_ID
+    uint32    Id;                                         // 0 m_ID
 	//uint32    Unk1                                        // 1 4.2.0 (nevim co toe)
     uint32    MaxAffectedTargets;                           // 2 m_maxTargets
     uint32    MaxTargetLevel;                               // 3 m_maxTargetLevel
@@ -1787,7 +1784,7 @@ struct SpellTargetRestrictionsEntry
 // SpellTotems.dbc
 struct SpellTotemsEntry
 {
-    //uint32    Id;                                           // 0        m_ID
+    uint32    Id;                                           // 0        m_ID
     uint32    TotemCategory[2];                               // 1        m_requiredTotemCategoryID
     uint32    Totem[2];                                       // 2        m_totem
 };
@@ -1843,97 +1840,8 @@ struct SpellEntry
     uint32 SpellTotemsId;                                   // 46       SpellTotems.dbc
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
-    int32 GetEffectBasePoints(uint32 eff) const;
-    //SpellEffectEntry
-    uint32 GetEffectItemType(uint32 eff) const;
-    uint32 GetEffectTriggerSpell(uint32 eff) const;
-    uint32 GetEffectAmplitude(uint32 eff) const;
-    int32 GetEffectMiscValue(uint32 eff) const;
-    int32 GetEffectMiscValueB(uint32 eff) const;
-    uint32 GetEffectChainTarget(uint32 eff) const;
-    int32 GetEffectDieSides(uint32 eff) const;
-    float GetEffectPointsPerComboPoint(uint32 eff) const;
-    float GetEffectRealPointsPerLevel(uint32 eff) const;
-    uint32 GetEffectRadiusIndex(uint32 eff) const;
-    float GetEffectDamageMultiplier(uint32 eff) const;
-    float GetEffectBonusMultiplier(uint32 eff) const;
-    uint32 GetEffectMechanic(uint32 eff) const;
-    float GetEffectValueMultiplier(uint32 eff) const;
-    uint32 GetEffectSpellClassMask(uint32 eff) const;
-
     // struct access functions
-    SpellAuraOptionsEntry const* GetSpellAuraOptions() const;
-    SpellAuraRestrictionsEntry const* GetSpellAuraRestrictions() const;
-    SpellCastingRequirementsEntry const* GetSpellCastingRequirements() const;
-    SpellCategoriesEntry const* GetSpellCategories() const;
-    SpellClassOptionsEntry const* GetSpellClassOptions() const;
-    SpellCooldownsEntry const* GetSpellCooldowns() const;
     SpellEffectEntry const* GetSpellEffect(uint32 eff) const;
-    SpellEquippedItemsEntry const* GetSpellEquippedItems() const;
-    SpellInterruptsEntry const* GetSpellInterrupts() const;
-    SpellLevelsEntry const* GetSpellLevels() const;
-    SpellPowerEntry const* GetSpellPower() const;
-    SpellReagentsEntry const* GetSpellReagents(uint8 reagent) const;
-    SpellScalingEntry const* GetSpellScaling() const;
-    SpellShapeshiftEntry const* GetSpellShapeshift() const;
-    SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
-    SpellTotemsEntry const* GetSpellTotems() const;
-
-    // single fields
-    uint32 GetManaCost() const;
-    uint32 GetPreventionType() const;
-    uint32 GetCategory() const;
-    uint32 GetStartRecoveryTime() const;
-    uint32 GetMechanic() const;
-    uint32 GetRecoveryTime() const;
-    uint32 GetCategoryRecoveryTime() const;
-    uint32 GetStartRecoveryCategory() const;
-    uint32 GetSpellLevel() const;
-    int32 GetEquippedItemClass() const;
-    int32 GetEquippedItemSubClassMask() const;
-    int32 GetEquippedItemInventoryTypeMask() const;
-    uint32 GetSpellFamilyName() const;
-    flag96 GetSpellFamilyFlags() const;
-    uint32 GetDmgClass() const;
-    uint32 GetDispel() const;
-    uint32 GetMaxAffectedTargets() const;
-    uint32 GetStackAmount() const;
-    uint32 GetManaCostPercentage() const;
-    uint32 GetProcCharges() const;
-    uint32 GetProcChance() const;
-    uint32 GetMaxLevel() const;
-    uint32 GetManaPerSecond() const;
-    uint32 GetRequiresSpellFocus() const;
-    uint32 GetSpellEffectIdByIndex(uint32 index) const;
-    uint32 GetSpellEffectMechanic(uint32 index) const;
-    uint32 GetSpellEffectBasePoints(uint32 index) const;    
-    uint32 GetAuraInterruptFlags() const;
-    uint32 GetEffectImplicitTargetAByIndex(uint32 index) const;
-    uint32 GetEffectImplicitTargetBByIndex(uint32 index) const;
-    int32 GetAreaGroupId() const;
-    uint32 GetFacingCasterFlags() const;
-    uint32 GetBaseLevel() const;
-    uint32 GetInterruptFlags() const;
-    uint32 GetTargetCreatureType() const;    
-    uint32 GetStances() const;
-    uint32 GetStancesNot() const;
-    uint32 GetProcFlags() const;
-    uint32 GetChannelInterruptFlags() const;
-    uint32 GetManaCostPerLevel() const;
-    uint32 GetTargets() const;
-    uint32 GetEffectApplyAuraNameByIndex(uint32 index) const;
-    //SpellAuraRestrictionsEntry
-    uint32 GetTargetAuraSpell() const;
-    uint32 GetTargetAuraState() const;
-    uint32 GetCasterAuraSpell() const;
-    uint32 GetCasterAuraState() const;
-    uint32 GetCasterAuraStateNot() const;
-    uint32 GetExcludeTargetAuraSpell() const;
-    uint32 GetExcludeCasterAuraSpell() const;
-    uint32 GetTargetAuraStateNot() const;
-    //SpellReagentsEntry
-    uint32 GetReagent(uint8 reagent) const;
-    uint32 GetReagentCount(uint8 reagent) const; 
 };
 
 typedef std::set<uint32> SpellCategorySet;

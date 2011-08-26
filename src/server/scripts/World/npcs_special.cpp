@@ -146,17 +146,17 @@ public:
 
         Creature* SummonGuard()
         {
-            Creature* pSummoned = me->SummonCreature(m_pSpawnAssoc->m_uiSpawnedCreatureEntry, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+            Creature* summoned = me->SummonCreature(m_pSpawnAssoc->m_uiSpawnedCreatureEntry, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
 
-            if (pSummoned)
-                m_uiSpawnedGUID = pSummoned->GetGUID();
+            if (summoned)
+                m_uiSpawnedGUID = summoned->GetGUID();
             else
             {
                 sLog->outErrorDb("TCSR: npc_air_force_bots: wasn't able to spawn Creature %u", m_pSpawnAssoc->m_uiSpawnedCreatureEntry);
                 m_pSpawnAssoc = NULL;
             }
 
-            return pSummoned;
+            return summoned;
         }
 
         Creature* GetSummonedGuard()
@@ -176,10 +176,10 @@ public:
 
             if (who->isTargetableForAttack() && me->IsHostileTo(who))
             {
-                Player* pPlayerTarget = who->GetTypeId() == TYPEID_PLAYER ? CAST_PLR(who) : NULL;
+                Player* playerTarget = who->GetTypeId() == TYPEID_PLAYER ? CAST_PLR(who) : NULL;
 
                 // airforce guards only spawn for players
-                if (!pPlayerTarget)
+                if (!playerTarget)
                     return;
 
                 Creature* pLastSpawnedGuard = m_uiSpawnedGUID == 0 ? NULL : GetSummonedGuard();
@@ -237,7 +237,7 @@ public:
                             return;
 
                         // ROOFTOP only triggers if the player is on the ground
-                        if (!pPlayerTarget->IsFlying())
+                        if (!playerTarget->IsFlying())
                         {
                             if (!pLastSpawnedGuard->getVictim())
                                 pLastSpawnedGuard->AI()->AttackStart(who);

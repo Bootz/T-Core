@@ -244,7 +244,7 @@ public:
     go_tablet_of_the_seven() : GameObjectScript("go_tablet_of_the_seven") { }
 
     //TODO: use gossip option ("Transcript the Tablet") instead, if Trillium adds support.
-    bool OnGossipHello(Player *player, GameObject *pGO)
+    bool OnGossipHello(Player* player, GameObject* pGO)
     {
         if (pGO->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER)
             return true;

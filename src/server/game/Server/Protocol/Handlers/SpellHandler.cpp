@@ -333,7 +333,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 {
     uint32 spellId, glyphIndex;
     uint8  castCount, castFlags;
-    recvPacket >> castCount >> spellId >> castFlags >> glyphIndex;
+    recvPacket >> castCount >> spellId >> glyphIndex >> castFlags;
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: got cast spell packet, castCount: %u, spellId: %u, castFlags: %u, data length = %u", castCount, spellId, castFlags, (uint32)recvPacket.size());
 
@@ -543,6 +543,9 @@ void WorldSession::HandleTotemDestroyed(WorldPacket& recvPacket)
 void WorldSession::HandleSelfResOpcode(WorldPacket & /*recv_data*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_SELF_RES");                  // empty opcode
+
+    if (_player->HasAuraType(SPELL_AURA_PREVENT_RESSURECTION))
+        return; // silent return, client should display error by itself and not send this opcode
 
     if (_player->GetUInt32Value(PLAYER_SELF_RES_SPELL))
     {

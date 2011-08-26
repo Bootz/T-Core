@@ -1300,8 +1300,8 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bArthasInPosition = true;
+                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->bArthasInPosition = true;
         }
     };
 
@@ -1332,8 +1332,8 @@ public:
             me->AddUnitState(UNIT_STAT_STUNNED);
             me->CastSpell(me, SPELL_STUN, true);
             if (me->isSummon())
-                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bArlosInPosition = true;
+                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->bArlosInPosition = true;
         }
     };
 
@@ -1389,8 +1389,8 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(pSummoner)->AI())->bTalbotInPosition = true;
+                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->bTalbotInPosition = true;
         }
 
         void UpdateAI(const uint32 uiDiff)
@@ -1500,16 +1500,16 @@ public:
                 me->CastSpell(me, SPELL_STUN, true);
 
                 if (me->isSummon())
-                    if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                        CAST_AI(npc_thassarian::npc_thassarianAI, pSummoner->GetAI())->bLeryssaInPosition = true;
+                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                        CAST_AI(npc_thassarian::npc_thassarianAI, summoner->GetAI())->bLeryssaInPosition = true;
                 bDone = true;
             }
             else
             {
                 me->SetStandState(UNIT_STAND_STATE_SIT);
                 if (me->isSummon())
-                    if (Unit* pSummoner = me->ToTempSummon()->GetSummoner())
-                    pSummoner->SetStandState(UNIT_STAND_STATE_SIT);
+                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    summoner->SetStandState(UNIT_STAND_STATE_SIT);
                 uiPhaseTimer = 1500;
                 Phase = 1;
             }

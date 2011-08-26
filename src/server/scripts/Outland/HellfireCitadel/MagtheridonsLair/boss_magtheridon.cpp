@@ -68,7 +68,7 @@ enum eSpells
     SPELL_CLEAVE               = 30619,
     SPELL_QUAKE_TRIGGER        = 30657, //must be cast with 30561 as the proc spell
     SPELL_QUAKE_KNOCKBACK      = 30571,
-    SPELL_BLAZE_TARGET         = 30541, //core bug, does not support target 7
+    SPELL_BLAZE_TARGET         = 30541,
     SPELL_BLAZE_TRAP           = 30542,
     SPELL_DEBRIS_KNOCKDOWN     = 36449,
     SPELL_DEBRIS_VISUAL        = 30632,
