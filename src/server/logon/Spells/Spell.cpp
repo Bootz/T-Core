@@ -3690,10 +3690,6 @@ void Spell::finish(bool ok)
         m_caster->ToPlayer()->RemoveSpellMods(this);
         m_caster->ToPlayer()->SetSpellModTakingSpell(this, false);
     }
-
-    // Stop Attack for some spells
-    if (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET)
-        m_caster->AttackStop();
 }
 
 void Spell::SendCastResult(SpellCastResult result)

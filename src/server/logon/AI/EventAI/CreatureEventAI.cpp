@@ -582,7 +582,6 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                     if (action.combat_movement.melee)
                     {
                         me->AddUnitState(UNIT_STAT_MELEE_ATTACKING);
-                        me->SendMeleeAttackStart(victim);
                     }
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == IDLE_MOTION_TYPE)
                         me->GetMotionMaster()->MoveChase(victim, m_AttackDistance, m_AttackAngle); // Targeted movement generator will start melee automatically, no need to send it explicitly
@@ -596,7 +595,6 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                     if (action.combat_movement.melee && victim)
                     {
                         me->ClearUnitState(UNIT_STAT_MELEE_ATTACKING);
-                        me->SendMeleeAttackStop(victim);
                     }
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == TARGETED_MOTION_TYPE)
                         me->GetMotionMaster()->MoveIdle();
@@ -1003,22 +1001,7 @@ void CreatureEventAI::EnterCombat(Unit *enemy)
 }
 
 void CreatureEventAI::AttackStart(Unit *who)
-{
-    if (!who)
-        return;
-
-    if (me->Attack(who, m_MeleeEnabled))
-    {
-        if (m_CombatMovementEnabled)
-        {
-            me->GetMotionMaster()->MoveChase(who, m_AttackDistance, m_AttackAngle);
-        }
-        else
-        {
-            me->GetMotionMaster()->MoveIdle();
-        }
-    }
-}
+{}
 
 void CreatureEventAI::MoveInLineOfSight(Unit *who)
 {
@@ -1127,10 +1110,6 @@ void CreatureEventAI::UpdateAI(const uint32 diff)
             m_EventUpdateTime -= diff;
         }
     }
-
-    //Melee Auto-Attack
-    if (Combat && m_MeleeEnabled)
-        DoMeleeAttackIfReady();
 }
 
 inline uint32 CreatureEventAI::GetRandActionParam(uint32 rnd, uint32 param1, uint32 param2, uint32 param3)

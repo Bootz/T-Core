@@ -651,7 +651,6 @@ bool ChatHandler::HandleCombatStopCommand(const char* args)
     if (HasLowerSecurity(target, 0))
         return false;
 
-    target->CombatStop();
     target->getHostileRefManager().deleteReferences();
     return true;
 }

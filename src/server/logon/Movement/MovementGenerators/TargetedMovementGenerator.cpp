@@ -232,8 +232,6 @@ TargetedMovementGenerator<T>::Update(T &owner, const uint32 time_diff)
             owner.SetInFront(i_target.getTarget());
 
             owner.StopMoving();
-            if (owner.IsWithinMeleeRange(i_target.getTarget()) && !owner.HasUnitState(UNIT_STAT_FOLLOW))
-                owner.Attack(i_target.getTarget(), true);
         }
     }
 

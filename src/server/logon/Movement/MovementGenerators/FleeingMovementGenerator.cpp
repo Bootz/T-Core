@@ -416,14 +416,6 @@ void TimedFleeingMovementGenerator::Finalize(Unit &owner)
 {
     owner.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING);
     owner.ClearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_ROAMING);
-    if (Unit* victim = owner.getVictim())
-    {
-        if (owner.isAlive())
-        {
-            owner.AttackStop();
-            owner.ToCreature()->AI()->AttackStart(victim);
-        }
-    }
 }
 
 bool TimedFleeingMovementGenerator::Update(Unit & owner, const uint32 time_diff)

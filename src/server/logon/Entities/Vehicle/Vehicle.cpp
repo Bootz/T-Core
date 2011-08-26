@@ -457,7 +457,6 @@ void Vehicle::Dismiss()
     sLog->outDebug(LOG_FILTER_VEHICLES, "Vehicle::Dismiss Entry: %u, GuidLow %u", _creatureEntry, _me->GetGUIDLow());
     Uninstall();
     _me->DestroyForNearbyPlayers();
-    _me->CombatStop();
     _me->AddObjectToRemoveList();
 }
 

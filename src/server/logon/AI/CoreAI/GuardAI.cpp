@@ -84,7 +84,6 @@ void GuardAI::EnterEvadeMode()
         i_state = STATE_NORMAL;
 
         i_victimGuid = 0;
-        me->CombatStop(true);
         me->DeleteThreatList();
         return;
     }
@@ -115,7 +114,6 @@ void GuardAI::EnterEvadeMode()
     me->RemoveAllAuras();
     me->DeleteThreatList();
     i_victimGuid = 0;
-    me->CombatStop(true);
     i_state = STATE_NORMAL;
 
     // Remove TargetedMovementGenerator from MotionMaster stack list, and add HomeMovementGenerator instead
@@ -124,22 +122,7 @@ void GuardAI::EnterEvadeMode()
 }
 
 void GuardAI::UpdateAI(const uint32 /*diff*/)
-{
-    // update i_victimGuid if me->getVictim() !=0 and changed
-    if (!UpdateVictim())
-        return;
-
-    i_victimGuid = me->getVictim()->GetGUID();
-
-    if (me->isAttackReady())
-    {
-        if (me->IsWithinMeleeRange(me->getVictim()))
-        {
-            me->AttackerStateUpdate(me->getVictim());
-            me->resetAttackTimer();
-        }
-    }
-}
+{}
 
 void GuardAI::JustDied(Unit* killer)
 {

@@ -4092,7 +4092,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffectEntry const* effect)
             spell_bonus = int32(spell_bonus * weapon_total_pct);
     }
 
-    int32 weaponDamage = m_caster->CalculateDamage(m_attackType, normalized, true);
+    int32 weaponDamage = 0;
 
     // Sequence is important
     for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
@@ -5309,13 +5309,6 @@ void Spell::EffectSanctuary(SpellEffectEntry const* /*effect*/)
     unitTarget->getHostileRefManager().UpdateVisibility();
 
     Unit::AttackerSet const& attackers = unitTarget->getAttackers();
-    for (Unit::AttackerSet::const_iterator itr = attackers.begin(); itr != attackers.end();)
-    {
-        if (!(*itr)->canSeeOrDetect(unitTarget))
-            (*(itr++))->AttackStop();
-        else
-            ++itr;
-    }
 
     unitTarget->m_lastSanctuaryTime = getMSTime();
 
@@ -5948,9 +5941,6 @@ void Spell::EffectCharge(SpellEffectEntry const* /*effect*/)
     target->GetContactPoint(m_caster, x, y, z);
     m_caster->GetMotionMaster()->MoveCharge(x, y, z);
 
-    // not all charge effects used in negative spells
-    if (!m_spellInfo->IsPositive() && m_caster->GetTypeId() == TYPEID_PLAYER)
-        m_caster->Attack(target, true);
 }
 
 void Spell::EffectChargeDest(SpellEffectEntry const* /*effect*/)

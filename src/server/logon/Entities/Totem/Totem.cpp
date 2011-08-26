@@ -99,7 +99,6 @@ void Totem::InitSummon()
 
 void Totem::UnSummon()
 {
-    CombatStop();
     RemoveAurasDueToSpell(GetSpell());
 
     // clear owner's totem slot

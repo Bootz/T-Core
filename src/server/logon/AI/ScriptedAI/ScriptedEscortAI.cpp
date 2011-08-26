@@ -36,19 +36,7 @@ npc_escortAI::npc_escortAI(Creature* creature) : ScriptedAI(creature),
 {}
 
 void npc_escortAI::AttackStart(Unit* who)
-{
-    if (!who)
-        return;
-
-    if (me->Attack(who, true))
-    {
-        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
-            me->GetMotionMaster()->MovementExpired();
-
-        if (IsCombatMovementAllowed())
-            me->GetMotionMaster()->MoveChase(who);
-    }
-}
+{}
 
 //see followerAI
 bool npc_escortAI::AssistPlayerInCombat(Unit* who)
@@ -167,7 +155,6 @@ void npc_escortAI::EnterEvadeMode()
 {
     me->RemoveAllAuras();
     me->DeleteThreatList();
-    me->CombatStop(true);
     me->SetLootRecipient(NULL);
 
     if (HasEscortState(STATE_ESCORT_ESCORTING))
@@ -290,12 +277,7 @@ void npc_escortAI::UpdateAI(uint32 const diff)
 }
 
 void npc_escortAI::UpdateEscortAI(uint32 const /*diff*/)
-{
-    if (!UpdateVictim())
-        return;
-
-    DoMeleeAttackIfReady();
-}
+{}
 
 void npc_escortAI::MovementInform(uint32 moveType, uint32 pointId)
 {

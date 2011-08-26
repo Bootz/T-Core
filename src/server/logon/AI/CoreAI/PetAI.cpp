@@ -71,13 +71,10 @@ void PetAI::_stopAttack()
         sLog->outStaticDebug("Creature stoped attacking cuz his dead [guid=%u]", me->GetGUIDLow());
         me->GetMotionMaster()->Clear();
         me->GetMotionMaster()->MoveIdle();
-        me->CombatStop();
         me->getHostileRefManager().deleteReferences();
 
         return;
     }
-
-    me->AttackStop();
     me->GetCharmInfo()->SetIsCommandAttack(false);
     HandleReturnMovement();
 }
@@ -105,8 +102,6 @@ void PetAI::UpdateAI(const uint32 diff)
             return;
         }
         targetHasCC = _CheckTargetCC(me->getVictim());
-
-        DoMeleeAttackIfReady();
     }
     else if (owner && me->GetCharmInfo()) //no victim
     {
@@ -289,7 +284,6 @@ void PetAI::KilledUnit(Unit* victim)
     // regen gets stuck. Also resets attack command.
     // Can't use _stopAttack() because that activates movement handlers and ignores
     // next target selection
-    me->AttackStop();
     me->GetCharmInfo()->SetIsCommandAttack(false);
 
     Unit *nextTarget = SelectNextTarget();
@@ -381,35 +375,7 @@ void PetAI::HandleReturnMovement()
 }
 
 void PetAI::DoAttack(Unit* target, bool chase)
-{
-    // Handles attack with or without chase and also resets all
-    // PetAI flags for next update / creature kill
-
-    // me->GetCharmInfo()->SetIsCommandAttack(false);
-
-    // The following conditions are true if chase == true
-    // (Follow && (Aggressive || Defensive))
-    // ((Stay || Follow) && (Passive && player clicked attack))
-
-    if (chase)
-    {
-        if (me->Attack(target, true))
-        {
-            me->GetCharmInfo()->SetIsAtStay(false);
-            me->GetCharmInfo()->SetIsFollowing(false);
-            me->GetCharmInfo()->SetIsReturning(false);
-            me->GetMotionMaster()->Clear();
-            me->GetMotionMaster()->MoveChase(target);
-        }
-    }
-    else // (Stay && ((Aggressive || Defensive) && In Melee Range)))
-    {
-        me->GetCharmInfo()->SetIsAtStay(true);
-        me->GetCharmInfo()->SetIsFollowing(false);
-        me->GetCharmInfo()->SetIsReturning(false);
-        me->Attack(target, true);
-    }
-}
+{}
 
 void PetAI::MovementInform(uint32 moveType, uint32 data)
 {

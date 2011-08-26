@@ -915,7 +915,6 @@ bool Map::CreatureRespawnRelocation(Creature *c)
     CellPair resp_val = Trillium::ComputeCellPair(resp_x, resp_y);
     Cell resp_cell(resp_val);
 
-    c->CombatStop();
     c->GetMotionMaster()->Clear();
 
     #ifdef TRILLIUM_DEBUG

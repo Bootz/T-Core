@@ -50,9 +50,7 @@ TotemAI::MoveInLineOfSight(Unit *)
 }
 
 void TotemAI::EnterEvadeMode()
-{
-    me->CombatStop(true);
-}
+{}
 
 void
 TotemAI::UpdateAI(const uint32 /*diff*/)

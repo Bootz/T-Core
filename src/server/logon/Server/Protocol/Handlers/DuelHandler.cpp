@@ -57,29 +57,4 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 }
 
 void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
-{
-    //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: Received CMSG_DUEL_CANCELLED");
-
-    // no duel requested
-    if (!GetPlayer()->duel)
-        return;
-
-    // player surrendered in a duel using /forfeit
-    if (GetPlayer()->duel->startTime != 0)
-    {
-        GetPlayer()->CombatStopWithPets(true);
-        if (GetPlayer()->duel->opponent)
-            GetPlayer()->duel->opponent->CombatStopWithPets(true);
-
-        GetPlayer()->CastSpell(GetPlayer(), 7267, true);    // beg
-        GetPlayer()->DuelComplete(DUEL_WON);
-        return;
-    }
-
-    // player either discarded the duel using the "discard button"
-    // or used "/forfeit" before countdown reached 0
-    uint64 guid;
-    recvPacket >> guid;
-
-    GetPlayer()->DuelComplete(DUEL_INTERRUPTED);
-}
+{}

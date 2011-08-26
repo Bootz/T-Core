@@ -28,40 +28,10 @@
 #include "ObjectDefines.h"
 
 void WorldSession::HandleAttackSwingOpcode(WorldPacket & recv_data)
-{
-    uint64 guid;
-    recv_data >> guid;
-
-    sLog->outStaticDebug("WORLD: Recvd CMSG_ATTACKSWING Message guidlow:%u guidhigh:%u", GUID_LOPART(guid), GUID_HIPART(guid));
-
-    Unit *pEnemy = ObjectAccessor::GetUnit(*_player, guid);
-
-    if (!pEnemy)
-    {
-        if (!IS_UNIT_GUID(guid))
-            sLog->outError("WORLD: Object %u (TypeID: %u) isn't player, pet or creature", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
-        else
-            sLog->outError("WORLD: Enemy %s %u not found", GetLogNameForGuid(guid), GUID_LOPART(guid));
-
-        // stop attack state at client
-        SendAttackStop(NULL);
-        return;
-    }
-
-    if (!_player->canAttack(pEnemy))
-    {
-        // stop attack state at client
-        SendAttackStop(pEnemy);
-        return;
-    }
-
-    _player->Attack(pEnemy, true);
-}
+{}
 
 void WorldSession::HandleAttackStopOpcode(WorldPacket & /*recv_data*/)
-{
-    GetPlayer()->AttackStop();
-}
+{}
 
 void WorldSession::HandleSetSheathedOpcode(WorldPacket & recv_data)
 {

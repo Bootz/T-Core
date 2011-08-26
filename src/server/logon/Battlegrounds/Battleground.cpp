@@ -796,7 +796,6 @@ void Battleground::EndBattleground(uint32 winner)
         else
         {
             //needed cause else in av some creatures will kill the players at the end
-            plr->CombatStop();
             plr->getHostileRefManager().deleteReferences();
         }
 
@@ -847,7 +846,6 @@ void Battleground::EndBattleground(uint32 winner)
         }
 
         plr->ResetAllPowers();
-        plr->CombatStopWithPets(true);
 
         BlockMovement(plr);
 

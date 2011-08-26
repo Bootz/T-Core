@@ -377,9 +377,6 @@ void SmartAI::UpdateAI(const uint32 diff)
 
     if (!UpdateVictim())
         return;
-
-    if (mCanAutoAttack)
-        DoMeleeAttackIfReady();
 }
 
 bool SmartAI::IsEscortInvokerInRange()
@@ -442,7 +439,6 @@ void SmartAI::EnterEvadeMode()
 
     me->RemoveAllAuras();
     me->DeleteThreatList();
-    me->CombatStop(true);
     me->LoadCreaturesAddon();
     me->SetLootRecipient(NULL);
     me->ResetPlayerDamageReq();
@@ -596,19 +592,7 @@ void SmartAI::JustSummoned(Creature* creature)
 }
 
 void SmartAI::AttackStart(Unit* who)
-{
-    if (who && me->Attack(who, true))
-    {
-        SetRun(mRun);
-        if (me->GetMotionMaster()->GetMotionSlotType(MOTION_SLOT_ACTIVE) == POINT_MOTION_TYPE)
-            me->GetMotionMaster()->MovementExpired();
-
-        if (mCanCombatMove)
-            me->GetMotionMaster()->MoveChase(who);
-
-        me->GetPosition(&mLastOOCPos);
-    }
-}
+{}
 
 void SmartAI::SpellHit(Unit* pUnit, const SpellInfo* pSpell)
 {

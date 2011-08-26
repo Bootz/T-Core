@@ -301,7 +301,7 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket & recv_data)
 
     if (!sScriptMgr->OnGossipHello(_player, unit))
     {
-//        _player->TalkedToCreature(unit->GetEntry(), unit->GetGUID());
+        //_player->TalkedToCreature(unit->GetEntry(), unit->GetGUID());
         _player->PrepareGossipMenu(unit, unit->GetCreatureInfo()->GossipMenuId, true);
         _player->SendPreparedGossip(unit);
     }

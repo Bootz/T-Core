@@ -133,30 +133,10 @@ ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
 }
 
 void ScriptedAI::AttackStartNoMove(Unit* pWho)
-{
-    if (!pWho)
-        return;
-
-    if (me->Attack(pWho, false))
-        DoStartNoMovement(pWho);
-}
+{}
 
 void ScriptedAI::UpdateAI(uint32 const /*diff*/)
-{
-    //Check if we have a current target
-    if (!UpdateVictim())
-        return;
-
-    if (me->isAttackReady())
-    {
-        //If we are within range melee the target
-        if (me->IsWithinMeleeRange(me->getVictim()))
-        {
-            me->AttackerStateUpdate(me->getVictim());
-            me->resetAttackTimer();
-        }
-    }
-}
+{}
 
 void ScriptedAI::DoStartMovement(Unit* pVictim, float fDistance, float fAngle)
 {
@@ -173,10 +153,7 @@ void ScriptedAI::DoStartNoMovement(Unit* pVictim)
 }
 
 void ScriptedAI::DoStopAttack()
-{
-    if (me->getVictim())
-        me->AttackStop();
-}
+{}
 
 void ScriptedAI::DoCastSpell(Unit* pTarget, SpellInfo const* pSpellInfo, bool bTriggered)
 {
@@ -497,13 +474,7 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
 }
 
 void Scripted_NoMovementAI::AttackStart(Unit* target)
-{
-    if (!target)
-        return;
-
-    if (me->Attack(target, true))
-        DoStartNoMovement(target);
-}
+{}
 
 // BossAI - for instanced bosses
 
@@ -638,8 +609,6 @@ void BossAI::UpdateAI(uint32 const diff)
 
     while (uint32 eventId = events.ExecuteEvent())
         ExecuteEvent(eventId);
-
-    DoMeleeAttackIfReady();
 }
 
 // WorldBossAI - for non-instanced bosses
@@ -697,8 +666,6 @@ void WorldBossAI::UpdateAI(uint32 const diff)
 
     while (uint32 eventId = events.ExecuteEvent())
         ExecuteEvent(eventId);
-
-    DoMeleeAttackIfReady();
 }
 
 // SD2 grid searchers.

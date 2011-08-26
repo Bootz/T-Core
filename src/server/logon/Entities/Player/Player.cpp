@@ -1614,8 +1614,6 @@ void Player::Update(uint32 p_time)
                         if (getAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                             setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
 
-                    // do attack
-                    AttackerStateUpdate(pVictim, BASE_ATTACK);
                     resetAttackTimer(BASE_ATTACK);
                 }
             }
@@ -1633,7 +1631,6 @@ void Player::Update(uint32 p_time)
                         setAttackTimer(BASE_ATTACK, ATTACK_DISPLAY_DELAY);
 
                     // do attack
-                    AttackerStateUpdate(pVictim, OFF_ATTACK);
                     resetAttackTimer(OFF_ATTACK);
                 }
             }
@@ -2166,9 +2163,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
                 UnsummonPetTemporaryIfAny();
         }
 
-        if (!(options & TELE_TO_NOT_LEAVE_COMBAT))
-            CombatStop();
-
         // this will be used instead of the current location in SaveToDB
         m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
         SetFallInformation(0, z);
@@ -2221,8 +2215,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             }
 
             SetSelection(0);
-
-            CombatStop();
 
             ResetContestedPvP();
 
@@ -2804,7 +2796,6 @@ void Player::SetGameMaster(bool on)
         ResetContestedPvP();
 
         getHostileRefManager().setOnlineOfflineState(false);
-        CombatStopWithPets();
 
         SetPhaseMask(uint32(PHASEMASK_ANYWHERE), false);    // see and visible in all phases
         m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, GetSession()->GetSecurity());
@@ -7319,7 +7310,6 @@ void Player::UpdateArea(uint32 newArea)
     {
         SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_SANCTUARY);
         pvpInfo.inNoPvPArea = true;
-        CombatStopWithPets();
     }
     else
         RemoveByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_SANCTUARY);
@@ -7478,39 +7468,6 @@ void Player::DuelComplete(DuelCompleteType type)
     }
 
     sScriptMgr->OnPlayerDuelEnd(duel->opponent, this, type);
-
-    switch (type)
-    {
-        case DUEL_FLED:
-            // if initiator and opponent are on the same team
-            // or initiator and opponent are not PvP enabled, forcibly stop attacking
-            if (duel->initiator->GetTeam() == duel->opponent->GetTeam())
-            {
-                duel->initiator->AttackStop();
-                duel->opponent->AttackStop();
-            }
-            else
-            {
-                if (!duel->initiator->IsPvP())
-                    duel->initiator->AttackStop();
-                if (!duel->opponent->IsPvP())
-                    duel->opponent->AttackStop();
-            }
-            break;
-        case DUEL_WON:
-            GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOSE_DUEL, 1);
-            if (duel->opponent)
-            {
-                 duel->opponent->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_DUEL, 1);
-
-                //Credit for quest Death's Challenge
-                if (getClass() == CLASS_DEATH_KNIGHT && duel->opponent->GetQuestStatus(12733) == QUEST_STATUS_INCOMPLETE)
-                    duel->opponent->CastSpell(duel->opponent, 52994, true);
-            }
-            break;
-        default:
-            break;
-    }
 
     // Victory emote spell
     if (type != DUEL_INTERRUPTED && duel->opponent)
@@ -19162,8 +19119,6 @@ void Player::RemovePet(Pet* pet, PetSaveMode mode, bool returnreagent)
     if (!pet || pet->GetOwnerGUID() != GetGUID())
         return;
 
-    pet->CombatStop();
-
     if (returnreagent)
     {
         switch(pet->GetEntry())
@@ -19943,9 +19898,6 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     }
 
     // Prepare to flight start now
-
-    // stop combat at start taxi flight if any
-    CombatStop();
 
     StopCastingCharm();
     StopCastingBindSight();
@@ -21139,8 +21091,6 @@ void Player::SendInitialVisiblePackets(Unit* target)
     {
         if (target->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
             target->SendMonsterMoveWithSpeedToCurrentDestination(this);
-        if (target->HasUnitState(UNIT_STAT_MELEE_ATTACKING) && target->getVictim())
-            target->SendMeleeAttackStart(target->getVictim());
     }
 }
 
@@ -22931,7 +22881,6 @@ void Player::UpdateCharmedAI()
             return;
 
         GetMotionMaster()->MoveChase(target);
-        Attack(target, true);
     }
 }
 

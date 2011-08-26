@@ -45,23 +45,7 @@ FollowerAI::FollowerAI(Creature* pCreature) : ScriptedAI(pCreature),
 {}
 
 void FollowerAI::AttackStart(Unit* pWho)
-{
-    if (!pWho)
-        return;
-
-    if (me->Attack(pWho, true))
-    {
-        me->AddThreat(pWho, 0.0f);
-        me->SetInCombatWith(pWho);
-        pWho->SetInCombatWith(me);
-
-        if (me->HasUnitState(UNIT_STAT_FOLLOW))
-            me->ClearUnitState(UNIT_STAT_FOLLOW);
-
-        if (IsCombatMovementAllowed())
-            me->GetMotionMaster()->MoveChase(pWho);
-    }
-}
+{}
 
 //This part provides assistance to a player that are attacked by pWho, even if out of normal aggro range
 //It will cause me to attack pWho that are attacking _any_ player (which has been confirmed may happen also on offi)
@@ -177,7 +161,6 @@ void FollowerAI::EnterEvadeMode()
 {
     me->RemoveAllAuras();
     me->DeleteThreatList();
-    me->CombatStop(true);
     me->SetLootRecipient(NULL);
 
     if (HasFollowState(STATE_FOLLOW_INPROGRESS))
@@ -263,12 +246,7 @@ void FollowerAI::UpdateAI(const uint32 uiDiff)
 }
 
 void FollowerAI::UpdateFollowerAI(const uint32 /*uiDiff*/)
-{
-    if (!UpdateVictim())
-        return;
-
-    DoMeleeAttackIfReady();
-}
+{}
 
 void FollowerAI::MovementInform(uint32 uiMotionType, uint32 uiPointId)
 {

@@ -277,7 +277,5 @@ void SimpleAI::UpdateAI(const uint32 diff)
         } else Spell_Timer[i] -= diff;
 
     }
-
-    DoMeleeAttackIfReady();
 }
 

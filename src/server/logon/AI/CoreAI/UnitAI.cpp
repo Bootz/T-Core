@@ -29,42 +29,10 @@
 #include "CreatureAIImpl.h"
 
 void UnitAI::AttackStart(Unit* victim)
-{
-    if (victim && me->Attack(victim, true))
-        me->GetMotionMaster()->MoveChase(victim);
-}
+{}
 
 void UnitAI::AttackStartCaster(Unit* victim, float dist)
-{
-    if (victim && me->Attack(victim, false))
-        me->GetMotionMaster()->MoveChase(victim, dist);
-}
-
-void UnitAI::DoMeleeAttackIfReady()
-{
-    if (me->HasUnitState(UNIT_STAT_CASTING))
-        return;
-
-    //Make sure our attack is ready and we aren't currently casting before checking distance
-    if (me->isAttackReady())
-    {
-        //If we are within range melee the target
-        if (me->IsWithinMeleeRange(me->getVictim()))
-        {
-            me->AttackerStateUpdate(me->getVictim());
-            me->resetAttackTimer();
-        }
-    }
-    if (me->haveOffhandWeapon() && me->isAttackReady(OFF_ATTACK))
-    {
-        //If we are within range melee the target
-        if (me->IsWithinMeleeRange(me->getVictim()))
-        {
-            me->AttackerStateUpdate(me->getVictim(), OFF_ATTACK);
-            me->resetAttackTimer(OFF_ATTACK);
-        }
-    }
-}
+{}
 
 bool UnitAI::DoSpellAttackIfReady(uint32 spell)
 {

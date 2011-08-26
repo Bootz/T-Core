@@ -588,7 +588,6 @@ inline bool CreatureAI::_EnterEvadeMode()
 
     // sometimes bosses stuck in combat?
     me->DeleteThreatList();
-    me->CombatStop(true);
     me->LoadCreaturesAddon();
     me->SetLootRecipient(NULL);
     me->ResetPlayerDamageReq();

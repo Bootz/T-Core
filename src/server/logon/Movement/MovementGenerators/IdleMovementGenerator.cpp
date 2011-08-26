@@ -48,8 +48,6 @@ void RotateMovementGenerator::Initialize(Unit& owner)
         owner.SetInFront(owner.getVictim());
 
     owner.AddUnitState(UNIT_STAT_ROTATING);
-
-    owner.AttackStop();
 }
 
 bool RotateMovementGenerator::Update(Unit& owner, const uint32 diff)

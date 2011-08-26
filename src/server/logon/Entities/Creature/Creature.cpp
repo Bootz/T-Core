@@ -2386,7 +2386,6 @@ const char* Creature::GetNameForLocaleIdx(LocaleConstant loc_idx) const
 void Creature::FarTeleportTo(Map* map, float X, float Y, float Z, float O)
 {
     InterruptNonMeleeSpells(true);
-    CombatStop();
     ClearComboPointHolders();
     DeleteThreatList();
     GetMotionMaster()->Clear(false);

@@ -325,7 +325,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_CANCEL_CAST,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleCancelCastOpcode          );
     DEFINE_OPCODE_HANDLER( SMSG_CAST_FAILED,                             STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_SPELL_START,                             STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( SMSG_SPELL_GO,                                STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( SMSG_SPELL_GO,                                STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NO_NODE, &WorldSession::Handle_ServerSide               ); //CHG
     DEFINE_OPCODE_HANDLER( SMSG_SPELL_FAILURE,                           STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_SPELL_COOLDOWN,                          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_COOLDOWN_EVENT,                          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
@@ -402,11 +402,11 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_GOSSIP_SELECT_OPTION,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleGossipSelectOptionOpcode  );
     DEFINE_OPCODE_HANDLER( SMSG_GOSSIP_MESSAGE,                          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_GOSSIP_COMPLETE,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_NPC_TEXT_QUERY,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleNpcTextQueryOpcode        );
-    DEFINE_OPCODE_HANDLER( SMSG_NPC_TEXT_UPDATE,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( CMSG_NPC_TEXT_QUERY,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleNpcTextQueryOpcode        );
+    DEFINE_OPCODE_HANDLER( SMSG_NPC_TEXT_UPDATE,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               ); //CHG
     DEFINE_OPCODE_HANDLER( SMSG_NPC_WONT_TALK,                           STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_QUESTGIVER_STATUS_QUERY,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleQuestgiverStatusQueryOpcode);
-    DEFINE_OPCODE_HANDLER( SMSG_QUESTGIVER_STATUS,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( CMSG_QUESTGIVER_STATUS_QUERY,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleQuestgiverStatusQueryOpcode);
+    DEFINE_OPCODE_HANDLER( SMSG_QUESTGIVER_STATUS,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               ); //CHG
     DEFINE_OPCODE_HANDLER( CMSG_QUESTGIVER_HELLO,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleQuestgiverHelloOpcode     );
     DEFINE_OPCODE_HANDLER( SMSG_QUESTGIVER_QUEST_LIST,                   STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_QUESTGIVER_QUERY_QUEST,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleQuestgiverQueryQuestOpcode);
@@ -442,11 +442,11 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_BUY_FAILED,                              STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_TAXICLEARALLNODES,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_TAXIENABLEALLNODES,                      STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( CMSG_TAXISHOWNODES,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleTaxiQueryAvailableNodes   );
-    DEFINE_OPCODE_HANDLER( SMSG_SHOWTAXINODES,                           STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide                  );
-    DEFINE_OPCODE_HANDLER( CMSG_TAXINODE_STATUS_QUERY,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleTaxiNodeStatusQueryOpcode );
-    DEFINE_OPCODE_HANDLER( SMSG_TAXINODE_STATUS,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_TAXIQUERYAVAILABLENODES,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleTaxiQueryAvailableNodes   );
+    DEFINE_OPCODE_HANDLER( CMSG_TAXISHOWNODES,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_NODE,      ROUTE_NULL,    &WorldSession::HandleTaxiQueryAvailableNodes   ); 
+    DEFINE_OPCODE_HANDLER( SMSG_SHOWTAXINODES,                           STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               ); 
+    DEFINE_OPCODE_HANDLER( CMSG_TAXINODE_STATUS_QUERY,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleTaxiNodeStatusQueryOpcode ); 
+    DEFINE_OPCODE_HANDLER( SMSG_TAXINODE_STATUS,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               ); 
+    DEFINE_OPCODE_HANDLER( CMSG_TAXIQUERYAVAILABLENODES,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleTaxiQueryAvailableNodes   ); 
     DEFINE_OPCODE_HANDLER( CMSG_ACTIVATETAXI,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleActivateTaxiOpcode        );
     DEFINE_OPCODE_HANDLER( SMSG_ACTIVATETAXIREPLY,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_NEW_TAXI_PATH,                           STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
@@ -476,7 +476,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_FISH_NOT_HOOKED,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_FISH_ESCAPED,                            STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_BUG,                                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleBugOpcode                 );
-    DEFINE_OPCODE_HANDLER( SMSG_NOTIFICATION,                            STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( SMSG_NOTIFICATION,                            STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NO_NODE, &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_PLAYED_TIME,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandlePlayedTime                );
     DEFINE_OPCODE_HANDLER( SMSG_PLAYED_TIME,                             STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_QUERY_TIME,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleQueryTimeOpcode           );
@@ -538,7 +538,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_GMTICKET_CREATE,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_GMTICKET_UPDATETEXT,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleGMTicketUpdateOpcode      );
     DEFINE_OPCODE_HANDLER( SMSG_GMTICKET_UPDATETEXT,                     STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( SMSG_ACCOUNT_DATA_TIMES,                      STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_ALWAYS,  &WorldSession::Handle_ServerSide               ); //CHG
+    DEFINE_OPCODE_HANDLER( SMSG_ACCOUNT_DATA_TIMES,                      STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_NULL,      ROUTE_ALWAYS,  &WorldSession::Handle_ServerSide               ); //CHG
     DEFINE_OPCODE_HANDLER( CMSG_REQUEST_ACCOUNT_DATA,                    STATUS_AUTHED,   PROCESS_THREADUNSAFE,  ROUTE_BOTH,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleRequestAccountData        ); //CHG
     DEFINE_OPCODE_HANDLER( CMSG_UPDATE_ACCOUNT_DATA,                     STATUS_AUTHED,   PROCESS_THREADUNSAFE,  ROUTE_BOTH,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleUpdateAccountData         ); //CHG
     DEFINE_OPCODE_HANDLER( SMSG_UPDATE_ACCOUNT_DATA,                     STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_ALWAYS,  &WorldSession::Handle_ServerSide               ); //CHG
@@ -677,7 +677,7 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_LOOT_ROLL,                               STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_LOOT_MASTER_GIVE,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleLootMasterGiveOpcode      );
     DEFINE_OPCODE_HANDLER( SMSG_LOOT_MASTER_LIST,                        STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( SMSG_SET_FORCED_REACTIONS,                    STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( SMSG_SET_FORCED_REACTIONS,                    STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_CLIENT,    ROUTE_NO_NODE, &WorldSession::Handle_ServerSide               ); //CHG
     DEFINE_OPCODE_HANDLER( SMSG_SPELL_FAILED_OTHER,                      STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_GAMEOBJECT_RESET_STATE,                  STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_REPAIR_ITEM,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleRepairItemOpcode          );
@@ -1249,11 +1249,11 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_GMRESPONSE_STATUS_UPDATE,                STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_WORLD_STATE_UI_TIMER_UPDATE,             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleWorldStateUITimerUpdate   );
     DEFINE_OPCODE_HANDLER( SMSG_WORLD_STATE_UI_TIMER_UPDATE,             STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_CHAR_RACE_CHANGE,                        STATUS_AUTHED,   PROCESS_THREADUNSAFE, ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleCharFactionOrRaceChange   );
+    DEFINE_OPCODE_HANDLER( CMSG_CHAR_RACE_CHANGE,                        STATUS_AUTHED,   PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleCharFactionOrRaceChange   );
     DEFINE_OPCODE_HANDLER( SMSG_TALENTS_INVOLUNTARILY_RESET,             STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_UNKNOWN_1276,                            STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_LOOT_SLOT_CHANGED,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_READY_FOR_ACCOUNT_DATA_TIMES,            STATUS_AUTHED,   PROCESS_THREADUNSAFE,  ROUTE_BOTH,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::HandleReadyForAccountDataTimes  ); //CHG
+    DEFINE_OPCODE_HANDLER( CMSG_READY_FOR_ACCOUNT_DATA_TIMES,            STATUS_AUTHED,   PROCESS_THREADUNSAFE,  ROUTE_BOTH,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleReadyForAccountDataTimes  ); //CHG
     DEFINE_OPCODE_HANDLER( CMSG_QUERY_QUESTS_COMPLETED,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleQueryQuestsCompleted      );
     DEFINE_OPCODE_HANDLER( SMSG_QUERY_QUESTS_COMPLETED_RESPONSE,         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_GM_REPORT_LAG,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleReportLag                 );
@@ -1282,13 +1282,13 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_VIOLENCE_LEVEL,                          STATUS_UNHANDLED,PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( MSG_CHECK_CONNECTION,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_EarlyProccess            );
+    DEFINE_OPCODE_HANDLER( MSG_CHECK_CONNECTION,                         STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NULL,    ROUTE_NULL,      ROUTE_NULL,    &WorldSession::Handle_EarlyProccess            );
     DEFINE_OPCODE_HANDLER( SMSG_COMPRESSED_CHAR_ENUM,                    STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( CMSG_UNREGISTER_ALL_ADDON_PREFIXES,           STATUS_UNHANDLED,PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_REQUEST_CATEGORY_COOLDOWNS,              STATUS_UNHANDLED,PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( CMSG_CUF_PROFILES_SAVE,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_CUF_PROFILES_LOAD,                       STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_REQUEST_CEMETERY_LIST,                   STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( SMSG_REQUEST_CEMETERY_LIST_RESPONSE,          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleSendCemetryListResponse   );
+    DEFINE_OPCODE_HANDLER( CMSG_REQUEST_CEMETERY_LIST,                   STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::HandleSendCemetryListResponse   );
+    DEFINE_OPCODE_HANDLER( SMSG_REQUEST_CEMETERY_LIST_RESPONSE,          STATUS_NEVER,    PROCESS_INPLACE,       ROUTE_NODE,    ROUTE_CLIENT,    ROUTE_NULL,    &WorldSession::Handle_ServerSide               );
 #undef DEFINE_OPCODE_HANDLER
 }
