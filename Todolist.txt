@@ -6,20 +6,20 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Change core to use cluster system.
-2.  Fix the Vendors, they dont show any items.
-3.  Update the rest of Opcodes to 4.2.0.
-4.  Fix The New Power System.
-5.  Implement a New Terrain System.
-6.  Implement a new Creature Formations System.
-7.  Fix the Group System.
-8.  Fix the Guild System.
-9.  Implement the new Battlegrounds.
-10. Fix the Packets for Battlegrounds.
-11. Implement Wintergrasp Battlefield.
-12. Need to revise HoR now WIP.
-13. Implement new Transport System.
-14. Implement special spawn system.
+1.  Fix the Vendors, they dont show any items.
+2.  Update the rest of Opcodes to 4.2.0.
+3.  Fix The New Power System.
+4.  Implement a New Terrain System.
+5.  Implement a new Creature Formations System.
+6.  Fix the Group System.
+9.  Fix the Guild System.
+8.  Implement the new Battlegrounds.
+9.  Fix the Packets for Battlegrounds.
+10. Implement Wintergrasp Battlefield.
+11. Need to revise HoR now WIP.
+12. Implement new Transport System.
+13. Implement special spawn system.
+14.  Change core to use cluster system. Started in cluster branch.
 
 // Database Developer:
 1. Fix all startup errors.
