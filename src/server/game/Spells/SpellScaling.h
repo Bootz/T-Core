@@ -26,6 +26,8 @@
 #include <cmath>
 #include <set>
 
+class SpellInfo;
+
 struct SpellScaling
 {
     uint8 level;
