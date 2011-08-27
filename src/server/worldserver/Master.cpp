@@ -162,7 +162,7 @@ int Master::Run()
         return 1;
 
     // set server offline (not connectable)
-    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
+    LoginDatabase.DirectPExecute("UPDATE realmlist SET color = (color & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
 
     ///- Initialize the World
     sWorld->SetInitialWorldSettings();
@@ -272,8 +272,8 @@ int Master::Run()
         // go down and shutdown the server
     }
 
-    // set node online (allow connecting now)
-    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '1' WHERE Nodeid = '%d'", nodeID);
+    // set server online (allow connecting now)
+    LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color & ~%u, population = 0 WHERE id = '%u'", REALM_FLAG_INVALID, realmID);
 
     sLog->outString("%s (worldserver-daemon) ready...", _FULLVERSION);
     sWorldSocketMgr->Wait();
@@ -286,7 +286,7 @@ int Master::Run()
     }
 
     // set server offline
-    LogonDatabase.DirectPExecute("UPDATE nodelist SET Online = '0' WHERE Nodeid = '%d'", nodeID);
+    LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realmID);
 
     // when the main thread closes the singletons get unloaded
     // since worldrunnable uses them, it will crash if unloaded after master
@@ -439,39 +439,6 @@ bool Master::_StartDB()
         return false;
     }
 
-    ///- Get logon database info from configuration file
-    dbstring = sConfig->GetStringDefault("LogonDatabaseInfo", "");
-    if (dbstring.empty())
-    {
-        sLog->outError("Logon database not specified in configuration file");
-        return false;
-    }
-
-    async_threads = sConfig->GetIntDefault("LogonDatabase.WorkerThreads", 1);
-    if (async_threads < 1 || async_threads > 32)
-    {
-        sLog->outError("Logon database: invalid number of worker threads specified. "
-            "Please pick a value between 1 and 32.");
-        return false;
-    }
-
-    synch_threads = sConfig->GetIntDefault("LogonDatabase.SynchThreads", 1);
-    ///- Initialise the login database
-    if (!LogonDatabase.Open(dbstring, async_threads, synch_threads))
-    {
-        sLog->outError("Cannot connect to logon database %s", dbstring.c_str());
-        return false;
-    }
-
-    ///- Get the node Id from the configuration file
-    nodeID = sConfig->GetIntDefault("NodeID", 0);
-    if (!nodeID)
-    {
-        sLog->outError("Node ID not defined in configuration file");
-        return false;
-    }
-    sLog->outString("Node running as node ID %d", nodeID);
-
     ///- Get the realm Id from the configuration file
     realmID = sConfig->GetIntDefault("RealmID", 0);
     if (!realmID)
@@ -479,11 +446,11 @@ bool Master::_StartDB()
         sLog->outError("Realm ID not defined in configuration file");
         return false;
     }
-    sLog->outString("Node running for realm ID %d", realmID);
+    sLog->outString("Realm running as realm ID %d", realmID);
 
     ///- Initialize the DB logging system
     sLogMgr->ResetLogDb();
-    sLogMgr->SetRealmId(nodeID);
+    sLogMgr->SetRealmId(realmID);
 
     ///- Clean the database before starting
     clearOnlineAccounts();
@@ -510,6 +477,13 @@ void Master::_StopDB()
 /// Clear 'online' status for all accounts with characters in this realm
 void Master::clearOnlineAccounts()
 {
+    // Cleanup online status for characters hosted at current realm
+    LoginDatabase.DirectPExecute(
+        "UPDATE account SET online = 0 WHERE online = %d "
+        "AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = '%d')", realmID, realmID);
+
+    CharacterDatabase.DirectExecute("UPDATE characters SET online = 0 WHERE online <> 0");
+
     // Battleground instance ids reset at server restart
     CharacterDatabase.DirectExecute(CharacterDatabase.GetPreparedStatement(CHAR_RESET_PLAYERS_BGDATA));
 }

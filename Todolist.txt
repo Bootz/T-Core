@@ -6,7 +6,7 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Change core to use cluster system. logon lib and game need cleanup.
+1.  Change core to use cluster system.
 2.  Fix the Vendors, they dont show any items.
 3.  Update the rest of Opcodes to 4.2.0.
 4.  Fix The New Power System.
