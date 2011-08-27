@@ -108,10 +108,10 @@ void WorldSession::SendShowBank(uint64 guid)
 void WorldSession::HandleTrainerListOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 spellId, unk;
+    uint32 spellId, trainerID;
 
     recv_data >> guid;
-    recv_data >> spellId >> unk;
+    recv_data >> spellId >> trainerID;
     SendTrainerList(guid);
 }
 
@@ -242,8 +242,8 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
     {
         _player->ModifyMoney(-int32(nSpellCost));
 
-    unit->SendPlaySpellVisual(179); // 53 SpellCastDirected
-    unit->SendPlaySpellImpact(_player->GetGUID(), 362); // 113 EmoteSalute
+        unit->SendPlaySpellVisual(179); // 53 SpellCastDirected
+        unit->SendPlaySpellImpact(_player->GetGUID(), 362); // 113 EmoteSalute
 
         // learn explicitly or cast explicitly
         if (trainer_spell->IsCastable())
