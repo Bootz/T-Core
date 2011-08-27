@@ -87,6 +87,7 @@ extern DataStorage <CharStartOutfitEntry>         sCharStartOutfitStore;
 extern DataStorage <CharTitlesEntry>              sCharTitlesStore;
 extern DataStorage <ChrClassesEntry>              sChrClassesStore;
 extern DataStorage <ChrRacesEntry>                sChrRacesStore;
+extern DataStorage <ChrPowerTypesEntry>           sChrPowerTypesStore;
 extern DataStorage <CinematicSequencesEntry>      sCinematicSequencesStore;
 extern DataStorage <CreatureDisplayInfoEntry>     sCreatureDisplayInfoStore;
 extern DataStorage <CreatureFamilyEntry>          sCreatureFamilyStore;

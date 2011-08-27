@@ -171,8 +171,21 @@ bool Player::UpdateAllStats()
     UpdateMaxHealth();
     UpdateSpellPower();
 
-    for (uint8 i = POWER_MANA; i < MAX_POWERS; ++i)
-        UpdateMaxPower(Powers(i));
+    for (uint32 i = 0; i <= sChrPowerTypesStore.GetNumRows(); i++)
+    {
+        ChrPowerTypesEntry const* cEntry = sChrPowerTypesStore.LookupEntry(i);
+
+        if (!cEntry)
+            continue;
+
+        if (getClass() != cEntry->classId)
+            continue;
+
+        if (cEntry->power == 10)
+            continue;
+
+        SetMaxPower(Powers(cEntry->power),  uint32(GetCreatePowers(Powers(cEntry->power))));
+    }
 
     UpdateAllRatings();
     UpdateAllCritPercentages();
@@ -883,8 +896,21 @@ bool Creature::UpdateAllStats()
     UpdateAttackPowerAndDamage();
     UpdateAttackPowerAndDamage(true);
 
-    for (uint8 i = POWER_MANA; i < MAX_POWERS; ++i)
-        UpdateMaxPower(Powers(i));
+    for (uint32 i = 0; i <= sChrPowerTypesStore.GetNumRows(); i++)
+    {
+        ChrPowerTypesEntry const* cEntry = sChrPowerTypesStore.LookupEntry(i);
+
+        if (!cEntry)
+            continue;
+
+        if (getClass() != cEntry->classId)
+            continue;
+
+        if (cEntry->power == 10)
+            continue;
+
+        SetMaxPower(Powers(cEntry->power),  uint32(GetCreatePowers(Powers(cEntry->power))));
+    }
 
     for (int8 i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
         UpdateResistances(i);
@@ -1137,8 +1163,21 @@ bool Guardian::UpdateAllStats()
     for (uint8 i = STAT_STRENGTH; i < MAX_STATS; ++i)
         UpdateStats(Stats(i));
 
-    for (uint8 i = POWER_MANA; i < MAX_POWERS; ++i)
-        UpdateMaxPower(Powers(i));
+    for (uint32 i = 0; i <= sChrPowerTypesStore.GetNumRows(); i++)
+    {
+        ChrPowerTypesEntry const* cEntry = sChrPowerTypesStore.LookupEntry(i);
+
+        if (!cEntry)
+            continue;
+
+        if (getClass() != cEntry->classId)
+            continue;
+
+        if (cEntry->power == 10)
+            continue;
+
+        SetMaxPower(Powers(cEntry->power),  uint32(GetCreatePowers(Powers(cEntry->power))));
+    }
 
     for (uint8 i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
         UpdateResistances(i);

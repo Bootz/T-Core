@@ -2596,7 +2596,7 @@ void Player::Regenerate(Powers power)
     if (m_regenTimerCount >= 2000)
         SetPower(power, curValue);
     else
-        UpdateUInt32Value(UNIT_FIELD_POWER1 + power, curValue);
+        UpdateUInt32Value(UNIT_FIELD_POWER1 + GetPowerIndexByClass(power, getClass()), curValue);
 }
 
 void Player::RegenerateHealth()
@@ -3257,8 +3257,21 @@ void Player::InitStatsForLevel(bool reapplyMods)
     InitDataForForm(reapplyMods);
 
     // save new stats
-    for (uint8 i = POWER_MANA; i < MAX_POWERS; ++i)
-        SetMaxPower(Powers(i),  uint32(GetCreatePowers(Powers(i))));
+    for (uint32 i = 0; i <= sChrPowerTypesStore.GetNumRows(); i++)
+    {
+        ChrPowerTypesEntry const* cEntry = sChrPowerTypesStore.LookupEntry(i);
+
+        if (!cEntry)
+            continue;
+
+        if (getClass() != cEntry->classId)
+            continue;
+
+        if (cEntry->power == 10)
+            continue;
+
+        SetMaxPower(Powers(cEntry->power),  uint32(GetCreatePowers(Powers(cEntry->power))));
+    }
 
     SetMaxHealth(classInfo.basehealth);                     // stamina bonus will applied later
 
@@ -16927,11 +16940,6 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     // restore remembered power/health values (but not more max values)
     uint32 savedHealth = fields[45].GetUInt32();
     SetHealth(savedHealth > GetMaxHealth() ? GetMaxHealth() : savedHealth);
-    for (uint8 i = 0; i < MAX_POWERS; ++i)
-    {
-        uint32 savedPower = fields[46+i].GetUInt32();
-        SetPower(Powers(i), savedPower > GetMaxPower(Powers(i)) ? GetMaxPower(Powers(i)) : savedPower);
-    }
 
     sLog->outDebug(LOG_FILTER_PLAYER_LOADING, "The value of player %s after load item and aura is: ", m_name.c_str());
     outDebugValues();

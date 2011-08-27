@@ -72,6 +72,7 @@ DataStorage <CharTitlesEntry> sCharTitlesStore(CharTitlesEntryfmt);
 DataStorage <ChatChannelsEntry> sChatChannelsStore(ChatChannelsEntryfmt);
 DataStorage <ChrClassesEntry> sChrClassesStore(ChrClassesEntryfmt);
 DataStorage <ChrRacesEntry> sChrRacesStore(ChrRacesEntryfmt);
+DataStorage <ChrPowerTypesEntry> sChrPowerTypesStore(ChrClassesXPowerTypesfmt);
 DataStorage <CinematicSequencesEntry> sCinematicSequencesStore(CinematicSequencesEntryfmt);
 DataStorage <CreatureDisplayInfoEntry> sCreatureDisplayInfoStore(CreatureDisplayInfofmt);
 DataStorage <CreatureFamilyEntry> sCreatureFamilyStore(CreatureFamilyfmt);
@@ -344,6 +345,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sChatChannelsStore,           storagesPath, "ChatChannels.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sChrClassesStore,             storagesPath, "ChrClasses.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sChrRacesStore,               storagesPath, "ChrRaces.dbc");
+    LoadData(availableDbcLocales, bad_dbc_files, sChrPowerTypesStore,          storagesPath, "ChrClassesXPowerTypes.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sCinematicSequencesStore,     storagesPath, "CinematicSequences.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sCreatureDisplayInfoStore,    storagesPath, "CreatureDisplayInfo.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sCreatureFamilyStore,         storagesPath, "CreatureFamily.dbc");
