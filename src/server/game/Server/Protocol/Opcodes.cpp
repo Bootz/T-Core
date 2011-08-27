@@ -53,9 +53,9 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_PETGODMODE,                              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_GODMODE,                                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_DESTRUCTIBLE_BUILDING_DAMAGE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( CMSG_CHAR_CREATE,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleCharCreateOpcode          );
-    DEFINE_OPCODE_HANDLER( CMSG_CHAR_ENUM,                               STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleCharEnumOpcode            );
-    DEFINE_OPCODE_HANDLER( CMSG_CHAR_DELETE,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleCharDeleteOpcode          );
+    DEFINE_OPCODE_HANDLER( CMSG_CHAR_CREATE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( CMSG_CHAR_ENUM,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( CMSG_CHAR_DELETE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_CHAR_CREATE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_CHAR_ENUM,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_CHAR_DELETE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

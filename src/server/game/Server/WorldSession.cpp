@@ -104,7 +104,6 @@ isRecruiter(isARecruiter)
         m_Address = sock->GetRemoteAddress();
         sock->AddReference();
         ResetTimeOutTime();
-        LoginDatabase.PExecute("UPDATE account SET online = %d WHERE id = %u;", realmID,  GetAccountId());
     }
 
     InitializeQueryCallbackParameters();
@@ -129,8 +128,6 @@ WorldSession::~WorldSession()
     WorldPacket* packet = NULL;
     while (_recvQueue.next(packet))
         delete packet;
-
-    LoginDatabase.PExecute("UPDATE account SET online = 0 WHERE id = %u;", GetAccountId());
 }
 
 void WorldSession::SizeError(WorldPacket const &packet, uint32 size) const
@@ -192,6 +189,8 @@ void WorldSession::SendPacket(WorldPacket const *packet)
         sendLastPacketBytes = packet->wpos();               // wpos is real written size
     }
 #endif                                                      // !TRILLIUM_DEBUG
+    if (packet->GetOpcode() > NUM_OPCODE_HANDLERS)
+        return;
 
     if (m_Socket->SendPacket (*packet) == -1)
         m_Socket->CloseSocket ();
@@ -876,7 +875,6 @@ void WorldSession::InitializeQueryCallbackParameters()
 {
     // Callback parameters that have pointers in them should be properly
     // initialized to NULL here.
-    _charCreateCallback.SetParam(NULL);
 }
 
 void WorldSession::ProcessQueryCallbacks()
@@ -899,21 +897,6 @@ void WorldSession::ProcessQueryCallbacks()
         }
     }
 
-    //! HandleCharEnumOpcode
-    if (_charEnumCallback.ready())
-    {
-        _charEnumCallback.get(result);
-        HandleCharEnum(result);
-        _charEnumCallback.cancel();
-    }
-
-    if (_charCreateCallback.IsReady())
-    {
-        PreparedQueryResult pResult;
-        _charCreateCallback.GetResult(pResult);
-        HandleCharCreateCallback(pResult, _charCreateCallback.GetParam());
-        // Don't call FreeResult() here, the callback handler will do that depending on the events in the callback chain
-    }
     //! HandlePlayerLoginOpcode
     if (_charLoginCallback.ready())
     {

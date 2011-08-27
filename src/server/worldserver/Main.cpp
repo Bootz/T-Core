@@ -36,6 +36,7 @@
 
 #ifndef _TRILLIUM_CORE_CONFIG
 # define _TRILLIUM_CORE_CONFIG  "worldserver.conf"
+//# define _TRILLIUM_CORE_CONFIG  "E:/C++Projekte/SingleCore/Trillium/win/bin/RelWithDebInfo/worldserver.conf"
 #endif //_TRILLIUM_CORE_CONFIG
 
 #ifdef _WIN32
@@ -55,8 +56,10 @@ int m_ServiceStatus = -1;
 WorldDatabaseWorkerPool WorldDatabase;                      ///< Accessor to the world database
 CharacterDatabaseWorkerPool CharacterDatabase;              ///< Accessor to the character database
 LoginDatabaseWorkerPool LoginDatabase;                      ///< Accessor to the realm/login database
+LogonDatabaseWorkerPool LogonDatabase;                      ///< Accessor to the login database
 
-uint32 realmID;                                             ///< Id of the realm
+uint32 nodeID;                                              ///< Id of the realm
+uint32 realmID;  
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)

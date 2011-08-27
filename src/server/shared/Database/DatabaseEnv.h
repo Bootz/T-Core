@@ -38,12 +38,14 @@
 #define _OFFSET_         "LIMIT %d, 1"
 
 #include "Implementation/LoginDatabase.h"
+#include "Implementation/LogonDatabase.h"
 #include "Implementation/CharacterDatabase.h"
 #include "Implementation/WorldDatabase.h"
 
 extern WorldDatabaseWorkerPool WorldDatabase;
 extern CharacterDatabaseWorkerPool CharacterDatabase;
 extern LoginDatabaseWorkerPool LoginDatabase;
+extern LogonDatabaseWorkerPool LogonDatabase;
 
 #endif
 
