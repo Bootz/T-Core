@@ -20,6 +20,7 @@
  */
 
 #include "Common.h"
+#include "Define.h"
 #include "SpellInfo.h"
 #include <map>
 #include <cmath>
