@@ -6,7 +6,7 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Fix the Trainer bug, If you click "train me" nothing happens.
+1.  Change core to use cluster system.
 2.  Fix the Vendors, they dont show any items.
 3.  Update the rest of Opcodes to 4.2.0.
 4.  Fix The New Power System.
@@ -14,7 +14,7 @@ TODO-List for TrilliumEMU Developer #
 6.  Implement a new Creature Formations System.
 7.  Fix the Group System.
 8.  Fix the Guild System.
-9. Implement the new Battlegrounds.
+9.  Implement the new Battlegrounds.
 10. Fix the Packets for Battlegrounds.
 11. Implement Wintergrasp Battlefield.
 12. Need to revise HoR now WIP.
