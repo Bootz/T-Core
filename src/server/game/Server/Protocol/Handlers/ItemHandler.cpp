@@ -587,9 +587,13 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     if (!items)
     {
         WorldPacket data(SMSG_LIST_INVENTORY, 1 + 4 + 1 + 2);
-        data << uint8(0);                                   // count == 0, next will be error code
-        data << uint32(0);
+        data << uint8(items);                                   // count == 0, next will be error code
+        data << uint8(0);
         data << uint8(0);                                   // "Vendor has no inventory"
+        data << uint8(0);
+        data << uint8(0);
+        data << uint8(0);
+        data << uint8(0);
         SendPacket(&data);
         return;
     }
