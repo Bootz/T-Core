@@ -128,7 +128,7 @@ int Master::Run()
     BigNumber seed1;
     seed1.SetRand(16 * 8);
 
-    sLog->outString("%s (worldserver-daemon)", _FULLVERSION);
+    sLog->outString("%s (logonserver-daemon)", _FULLVERSION);
     sLog->outString("<Ctrl-C> to stop.\n");
 
     sLog->outString("===========================================================" );
@@ -140,12 +140,12 @@ int Master::Run()
 
 #ifdef USE_SFMT_FOR_RNG
     sLog->outString("\n");
-    sLog->outString("SFMT has been enabled as the random number generator, if worldserver");
+    sLog->outString("SFMT has been enabled as the random number generator, if logonserver");
     sLog->outString("freezes or crashes randomly, first, try disabling SFMT in CMAKE configuration");
     sLog->outString("\n");
 #endif //USE_SFMT_FOR_RNG
 
-    /// worldserver PID file creation
+    /// logonserver PID file creation
     std::string pidfile = sConfig->GetStringDefault("PidFile", "");
     if (!pidfile.empty())
     {
@@ -175,7 +175,7 @@ int Master::Run()
     WorldServerSignalHandler SignalBREAK;
     #endif /* _WIN32 */
 
-    // Register worldserver's signal handlers
+    // Register logonserver's signal handlers
     ACE_Sig_Handler Handler;
     Handler.register_handler(SIGINT, &SignalINT);
     Handler.register_handler(SIGTERM, &SignalTERM);
@@ -237,9 +237,9 @@ int Master::Run()
         if (Prio)
         {
             if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-                sLog->outString("worldserver process priority class set to HIGH");
+                sLog->outString("logonserver process priority class set to HIGH");
             else
-                sLog->outError("Can't set worldserver process priority class.");
+                sLog->outError("Can't set logonserver process priority class.");
             sLog->outString("");
         }
     }
@@ -278,7 +278,7 @@ int Master::Run()
     // set server online (allow connecting now)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color & ~%u, population = 0 WHERE id = '%u'", REALM_FLAG_INVALID, realmID);
 
-    sLog->outString("%s (worldserver-daemon) ready...", _FULLVERSION);
+    sLog->outString("%s (logonserver-daemon) ready...", _FULLVERSION);
     sWorldSocketMgr->Wait();
 
     if (soap_thread)
@@ -442,8 +442,7 @@ bool Master::_StartDB()
         return false;
     }
 
-
-        ///- Get login database info from configuration file
+    ///- Get login database info from configuration file
     dbstring = sConfig->GetStringDefault("LogonDatabaseInfo", "");
     if (dbstring.empty())
     {
@@ -466,7 +465,6 @@ bool Master::_StartDB()
         sLog->outError("Cannot connect to login database %s", dbstring.c_str());
         return false;
     }
-
 
     ///- Get the realm Id from the configuration file
     realmID = sConfig->GetIntDefault("RealmID", 0);
