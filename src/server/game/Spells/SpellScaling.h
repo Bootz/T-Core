@@ -23,6 +23,7 @@
 #include "SpellInfo.h"
 #include <map>
 #include <cmath>
+#include <set>
 
 struct SpellScaling
 {
@@ -66,7 +67,7 @@ struct SpellScaling
 
         float gtCoef = GetGtSpellScalingValue(class_, level);
 
-        gtCoef *= (std::min(level, CoefBaseLevel) + ( CoefBase * std::max(0, level - CoefBaseLevel))) / level;
+        gtCoef *= (std::min(level, CoefBaseLevel) + (CoefBase * std::max(0, level - CoefBaseLevel))) / level;
 
         // Cast time
         cast = 0;
