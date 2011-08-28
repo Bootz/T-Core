@@ -2237,7 +2237,7 @@ enum TrainerType                                            // this is important
 
 #define MAX_TRAINER_TYPE 4
 
-// CreatureType.dbc
+// CreatureType.dbc  4.20a 14480
 enum CreatureType
 {
     CREATURE_TYPE_BEAST            = 1,
@@ -2729,7 +2729,7 @@ enum TotemCategory
     TC_HAMMER_PICK                 = 167,
     TC_BLADED_PICKAXE              = 168,
     TC_FLINT_AND_TINDER            = 169,
-    TC_RUNED_COBALT_ROD            = 189, // not ues
+    TC_RUNED_COBALT_ROD            = 189, // not use
     TC_RUNED_TITANIUM_ROD          = 190,
     TC_RUNED_ELEMENTIUM_ROD        = 209,
     TC_HIGH_POWERED_BOLT_GUN       = 210
@@ -2929,23 +2929,6 @@ enum EventId
     EVENT_FALL_GROUND       = 1002,
     EVENT_CHARGE            = 1003,
 };
-
-/*
-enum CopCodes // 4.20a 14480 Do not delete
-{
-    COP_NONE             = 0,
-    COP_INIT             = 1,
-    COP_CONNECT          = 2,
-    COP_AUTHENTICATE     = 3,
-    COP_CREATE_ACCOUNT   = 4,
-    COP_CREATE_CHARACTER = 5,
-    COP_GET_CHARACTERS   = 6,
-    COP_DELETE_CHARACTER = 7,
-    COP_LOGIN_CHARACTER  = 8,
-    COP_GET_REALMS       = 9,
-    COP_WAIT_QUEUE       = 10,
-};
-*/
 
 enum ResponseCodes
 {
@@ -3211,12 +3194,5 @@ enum RemoveMethod
 // because if client receive unsupported expansion level it think
 // that it not have expansion installed and reject
 #define MAX_EXPANSION 3
-
-enum TalentFailed // 4.20a 14480 Move to the correct file
-{
-    ERR_TALENT_FAILED_UNKNOWN = 1,
-    ERR_TALENT_FAILED_NOT_ENOUGH_TALENTS_IN_PRIMARY_TREE = 2,
-    ERR_TALENT_FAILED_NO_PRIMARY_TREE_SELECTED = 3,
-};
 
 #endif
