@@ -555,7 +555,7 @@ namespace Trillium
             uint32        i_emote_num;
             Unit const*   i_target;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 
 void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 {

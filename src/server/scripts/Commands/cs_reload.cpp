@@ -144,7 +144,7 @@ public:
             { "spell_target_position",        SEC_ADMINISTRATOR, true,  &HandleReloadSpellTargetPositionCommand,        "", NULL },
             { "spell_threats",                SEC_ADMINISTRATOR, true,  &HandleReloadSpellThreatsCommand,               "", NULL },
             { "spell_group_stack_rules",      SEC_ADMINISTRATOR, true,  &HandleReloadSpellGroupStackRulesCommand,       "", NULL },
-            { "trinity_string",               SEC_ADMINISTRATOR, true,  &HandleReloadTrilliumStringCommand,              "", NULL },
+            { "trillium_string",              SEC_ADMINISTRATOR, true,  &HandleReloadTrilliumStringCommand,              "", NULL },
             { "waypoint_scripts",             SEC_ADMINISTRATOR, true,  &HandleReloadWpScriptsCommand,                  "", NULL },
             { "vehicle_accessory",            SEC_ADMINISTRATOR, true,  &HandleReloadVehicleAccessoryCommand,           "", NULL },
             { "vehicle_template_accessory",   SEC_ADMINISTRATOR, true,  &HandleReloadVehicleTemplateAccessoryCommand,   "", NULL },
@@ -709,9 +709,9 @@ public:
 
     static bool HandleReloadTrilliumStringCommand(ChatHandler* handler, const char* /*args*/)
     {
-        sLog->outString("Re-Loading trinity_string Table!");
+        sLog->outString("Re-Loading trillium_string Table!");
         sObjectMgr->LoadTrilliumStrings();
-        handler->SendGlobalGMSysMessage("DB table `trinity_string` reloaded.");
+        handler->SendGlobalGMSysMessage("DB table `trillium_string` reloaded.");
         return true;
     }
 

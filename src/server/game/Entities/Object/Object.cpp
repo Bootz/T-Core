@@ -1845,7 +1845,7 @@ namespace Trillium
             uint32 i_language;
             uint64 i_targetGUID;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Trillium
 
 void WorldObject::MonsterSay(const char* text, uint32 language, uint64 TargetGuid)
 {

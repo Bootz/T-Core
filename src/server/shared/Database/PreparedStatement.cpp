@@ -72,9 +72,10 @@ void PreparedStatement::BindParameters()
                 break;
         }
     }
-
+    #ifdef _DEBUG
     if (i < m_stmt->m_paramCount)
         sLogMgr->WriteLn(SQLDRIVER_LOG, "[WARNING]: BindParameters() for statement %u did not bind all allocated parameters", m_index);
+    #endif
 }
 
 //- Bind to buffer

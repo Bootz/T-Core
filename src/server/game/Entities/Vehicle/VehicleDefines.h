@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_VEHICLEDEFINES_H
-#define __TRINITY_VEHICLEDEFINES_H
+#ifndef __TRILLIUM_VEHICLEDEFINES_H
+#define __TRILLIUM_VEHICLEDEFINES_H
 
 #include "Define.h"
 struct VehicleSeatEntry;

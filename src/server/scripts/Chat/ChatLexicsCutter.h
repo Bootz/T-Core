@@ -19,8 +19,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHATLEXICSCUTTER_H
-#define TRINITY_CHATLEXICSCUTTER_H
+#ifndef TRILLIUM_CHATLEXICSCUTTER_H
+#define TRILLIUM_CHATLEXICSCUTTER_H
 
 typedef std::vector <std::string> LC_AnalogVector;
 typedef std::map <std::string, LC_AnalogVector> LC_AnalogMap;
