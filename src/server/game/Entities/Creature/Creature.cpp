@@ -1746,6 +1746,8 @@ SpellInfo const *Creature::reachWithSpellCure(Unit *pVictim)
         float range = spellInfo->GetMaxRange(true);
         float minrange = spellInfo->GetMinRange(true);
         float dist = GetDistance(pVictim);
+        //if (!isInFront(pVictim, range) && spellInfo->AttributesEx)
+        //    continue;
         if (dist > range || dist < minrange)
             continue;
         if (spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED))

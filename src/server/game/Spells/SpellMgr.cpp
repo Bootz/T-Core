@@ -272,7 +272,7 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
 {
     if (!IsDiminishingReturnsGroupDurationLimited(group))
         return 0;
- 
+
     // Explicit diminishing duration
     switch (spellproto->SpellFamilyName)
     {
@@ -424,6 +424,7 @@ bool SpellMgr::IsSpellValid(SpellInfo const *spellInfo, Player *pl, bool msg)
             }
         }
     }
+
     if (need_check_reagents)
     {
         for (uint8 j = 0; j < MAX_SPELL_REAGENTS; ++j)
@@ -441,7 +442,7 @@ bool SpellMgr::IsSpellValid(SpellInfo const *spellInfo, Player *pl, bool msg)
             }
         }
     }
- 
+
     return true;
 }
 
@@ -593,7 +594,6 @@ bool SpellMgr::IsSpellRequiringSpell(uint32 spellid, uint32 req_spellid) const
         if (itr->second == spellid)
             return true;
     }
-
     return false;
 }
 
@@ -892,7 +892,6 @@ bool SpellMgr::CanSpellTriggerProcOnEvent(SpellProcEntry const& procEntry, ProcE
     // proc type doesn't match
     if (!(eventInfo.GetTypeMask() & procEntry.typeMask))
         return false;
-
 
     // check XP or honor target requirement
     if (procEntry.attributesMask & PROC_ATTR_REQ_EXP_OR_HONOR)

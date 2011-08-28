@@ -2159,7 +2159,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
     if (target->getClass() == CLASS_DRUID)
     {
         // Dash
-        if (AuraEffect* aurEff =target->GetAuraEffect(SPELL_AURA_MOD_INCREASE_SPEED, SPELLFAMILY_DRUID, 0, 0, 0x8))
+        if (AuraEffect* aurEff = target->GetAuraEffect(SPELL_AURA_MOD_INCREASE_SPEED, SPELLFAMILY_DRUID, 0, 0, 0x8))
             aurEff->RecalculateAmount();
 
         // Disarm handling
@@ -3453,6 +3453,7 @@ void AuraEffect::HandleModMechanicImmunity(AuraApplication const* aurApp, uint8 
                 | (1 << MECHANIC_SAPPED) | (1 << MECHANIC_HORROR)
                 | (1 << MECHANIC_POLYMORPH) | (1 << MECHANIC_DISORIENTED)
                 | (1 << MECHANIC_FREEZE) | (1 << MECHANIC_TURN);
+
             target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, MECHANIC_SNARE, apply);
             target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, MECHANIC_ROOT, apply);
             target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, MECHANIC_FEAR, apply);
@@ -5267,7 +5268,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     uint64 guid = caster->m_SummonSlot[3];
                     if (guid)
                     {
-                        Creature *totem = caster->GetMap()->GetCreature(guid);
+                        Creature* totem = caster->GetMap()->GetCreature(guid);
                         if (totem && totem->isTotem())
                             caster->ToPlayer()->CastSpell(totem, 6277, true);
                     }
@@ -5283,9 +5284,11 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
             //    break;
             break;
         case SPELLFAMILY_DEATHKNIGHT:
+        {
             //if (!(mode & AURA_EFFECT_HANDLE_REAL))
             //    break;
             break;
+        }
     }
 }
 
@@ -6277,7 +6280,7 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
                 {
                     caster->CastSpell(caster, 43836, true, 0, this);
                     // Glyph of Drain Soul - chance to create an additional Soul Shard
-                    if (AuraEffect *aur = caster->GetAuraEffect(58070, 0))
+                    if (AuraEffect* aur = caster->GetAuraEffect(58070, 0))
                         if (roll_chance_i(aur->GetMiscValue()))
                             caster->CastSpell(caster, 58068, true, 0, aur);
                 }
@@ -6334,7 +6337,6 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
     caster->ProcDamageAndSpell(target, procAttacker, procVictim, procEx, damage, BASE_ATTACK, GetSpellInfo());
 
     caster->DealDamage(target, damage, &cleanDamage, DOT, GetSpellInfo()->GetSchoolMask(), GetSpellInfo(), true);
-
 }
 
 void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) const
@@ -6396,6 +6398,7 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     int32 new_damage = caster->DealDamage(target, damage, &cleanDamage, DOT, GetSpellInfo()->GetSchoolMask(), GetSpellInfo(), false);
 
     float gainMultiplier = GetSpellInfo()->Effects[GetEffIndex()].CalcValueMultiplier(caster);
+
     uint32 heal = uint32(caster->SpellHealingBonus(caster, GetSpellInfo(), uint32(new_damage * gainMultiplier), DOT, GetBase()->GetStackAmount()));
 
     int32 gain = caster->HealBySpell(caster, GetSpellInfo(), heal);

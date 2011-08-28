@@ -164,6 +164,7 @@ class SpellCastTargets
 
     private:
         uint32 m_targetMask;
+
         // objects (can be used at spell creating and after Update at casting)
         WorldObject* m_objectTarget;
         Item* m_itemTarget;

@@ -362,7 +362,7 @@ bool Unit::haveOffhandWeapon() const
 void Unit::SendMonsterMoveWithSpeedToCurrentDestination(Player* player)
 {
     float x, y, z;
-    if (!IsStopped() && GetMotionMaster()->GetDestination(x, y, z))
+    if (GetMotionMaster()->GetDestination(x, y, z))
         SendMonsterMoveWithSpeed(x, y, z, 0, player);
 }
 
@@ -1513,7 +1513,6 @@ bool Unit::IsDamageReducedByArmor(SpellSchoolMask schoolMask, SpellInfo const* s
     // only physical spells damage gets reduced by armor
     if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
         return false;
-
     if (spellInfo)
     {
         // there are spells with no specific attribute but they have "ignores armor" in tooltip
@@ -2291,7 +2290,7 @@ bool Unit::isSpellBlocked(Unit* victim, SpellInfo const* spellProto, WeaponAttac
                 return false;
 
         float blockChance = victim->GetUnitBlockChance();
-        blockChance += (int32(GetWeaponSkillValue(attackType)) - int32(victim->GetMaxSkillValueForLevel()))*0.04f;
+        blockChance += (int32(GetWeaponSkillValue(attackType)) - int32(victim->GetMaxSkillValueForLevel())) * 0.04f;
         if (roll_chance_f(blockChance))
             return true;
     }
@@ -6445,25 +6444,26 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // King of the Jungle
             else if (dummySpell->SpellIconID == 2850)
             {
-				switch (effIndex)
-				{
-				    case EFFECT_0:                                          // Effect 0 - mod damage while having Enrage
-					    if (!(procSpell->SpellFamilyFlags[0] & 0x00080000))
-                            return false;
-                        triggered_spell_id = 51185;
-                        basepoints0 = triggerAmount;
-                        target = this;
-                        break;
-				    case EFFECT_1:                                          // Effect 1 - Tiger's Fury restore energy
-					    if (!(procSpell->SpellFamilyFlags[2] & 0x00000800))
-                            return false;
-                        triggered_spell_id = 51178;
-                        basepoints0 = triggerAmount;
-                        target = this;
-                        break;
-				    default:
-					    break;
-				}
+                // Effect 0 - mod damage while having Enrage
+                if (effIndex == 0)
+                {
+                    if (!(procSpell->SpellFamilyFlags[0] & 0x00080000))
+                        return false;
+                    triggered_spell_id = 51185;
+                    basepoints0 = triggerAmount;
+                    target = this;
+                    break;
+                }
+                // Effect 1 - Tiger's Fury restore energy
+                else if (effIndex == 1)
+                {
+                    if (!(procSpell->SpellFamilyFlags[2] & 0x00000800))
+                        return false;
+                    triggered_spell_id = 51178;
+                    basepoints0 = triggerAmount;
+                    target = this;
+                    break;
+                }
             }
             break;
         }
@@ -6612,7 +6612,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         case SPELLFAMILY_PALADIN:
         {
             // Seal of Righteousness - melee proc dummy (addition ${$MWS*(0.022*$AP+0.044*$SPH)} damage)
-            if (dummySpell->SpellFamilyFlags[0]&0x8000000)
+            if (dummySpell->SpellFamilyFlags[0] & 0x8000000)
             {
                 if (effIndex != 0)
                     return false;
@@ -7680,7 +7680,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         else
                             continue;
                         // Found spell is last in chain - do not need to look more
-                        // Optimization for most common case
+                        // Optimisation for most common case
                         if (chain && chain->last->Id == itr->first)
                             break;
                     }
@@ -10664,9 +10664,9 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                     AddPctN(DoneTotalMod, aurEff->GetAmount());
 
             // Sigil of the Vengeful Heart
-           if (spellProto->SpellFamilyFlags[0] & 0x2000)
-               if (AuraEffect* aurEff = GetAuraEffect(64962, EFFECT_1))
-                   AddPctN(DoneTotal, aurEff->GetAmount());
+            if (spellProto->SpellFamilyFlags[0] & 0x2000)
+                if (AuraEffect* aurEff = GetAuraEffect(64962, EFFECT_1))
+                    AddPctN(DoneTotal, aurEff->GetAmount());
 
             // Glacier Rot
             if (spellProto->SpellFamilyFlags[0] & 0x2 || spellProto->SpellFamilyFlags[1] & 0x6)
@@ -11845,7 +11845,6 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
 
     // ..taken
     TakenTotalMod *= victim->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, GetMeleeDamageSchoolMask());
-
 
     // From caster spells
     AuraEffectList const& mOwnerTaken = victim->GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_FROM_CASTER);
@@ -15319,7 +15318,6 @@ bool Unit::HandleAuraRaidProcFromCharge(AuraEffect* triggeredByAura)
         if (Unit* caster = triggeredByAura->GetCaster())
         {
             float radius = triggeredByAura->GetSpellInfo()->Effects[triggeredByAura->GetEffIndex()].CalcRadius(caster);
-
             if (Unit* target= GetNextRandomRaidMemberOrPet(radius))
             {
                 CastSpell(target, spellProto, true, NULL, triggeredByAura, caster_guid);

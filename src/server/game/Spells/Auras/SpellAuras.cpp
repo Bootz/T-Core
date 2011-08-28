@@ -340,7 +340,7 @@ m_owner(owner), m_timeCla(0), m_updateTargetMapInterval(0),
 m_casterLevel(caster ? caster->getLevel() : m_spellInfo->SpellLevel), m_procCharges(0), m_stackAmount(1),
 m_isRemoved(false), m_isSingleTarget(false), m_isUsingCharges(false)
 {
-    if (m_spellInfo->ManaPerSecond)
+    if (m_spellInfo->ManaPerSecond || m_spellInfo->ManaPerSecondPerLevel)
         m_timeCla = 1 * IN_MILLISECONDS;
 
     m_maxDuration = CalcMaxDuration(caster);
@@ -655,14 +655,14 @@ void Aura::Update(uint32 diff, Unit* caster)
         if (m_duration < 0)
             m_duration = 0;
 
-        // handle manaPerSecond/
+        // handle manaPerSecond/manaPerSecondPerLevel
         if (m_timeCla)
         {
             if (m_timeCla > int32(diff))
                 m_timeCla -= diff;
             else if (caster)
             {
-                if (int32 manaPerSecond = m_spellInfo->ManaPerSecond)
+                if (int32 manaPerSecond = m_spellInfo->ManaPerSecond + m_spellInfo->ManaPerSecondPerLevel * caster->getLevel())
                 {
                     m_timeCla += 1000 - diff;
 
@@ -730,7 +730,7 @@ void Aura::RefreshDuration()
 {
     SetDuration(GetMaxDuration());
 
-    if (m_spellInfo->ManaPerSecond)
+    if (m_spellInfo->ManaPerSecond || m_spellInfo->ManaPerSecondPerLevel)
         m_timeCla = 1 * IN_MILLISECONDS;
 }
 
@@ -791,7 +791,7 @@ void Aura::SetStackAmount(uint8 stackAmount)
 {
     m_stackAmount = stackAmount;
     Unit* caster = GetCaster();
-    
+
     std::list<AuraApplication*> applications;
     GetApplicationList(applications);
 
@@ -818,7 +818,7 @@ bool Aura::ModStackAmount(int32 num, AuraRemoveMode removeMode)
     if ((num > 0) && (stackAmount > int32(m_spellInfo->StackAmount)))
     {
         // not stackable aura - set stack amount to 1
-        if(!m_spellInfo->StackAmount)
+        if (!m_spellInfo->StackAmount)
             stackAmount = 1;
         else
             stackAmount = m_spellInfo->StackAmount;
@@ -2236,7 +2236,7 @@ void Aura::CallScriptEffectAfterAbsorbHandlers(AuraEffect * aurEff, AuraApplicat
     }
 }
 
-void Aura::CallScriptEffectManaShieldHandlers(AuraEffect * aurEff, AuraApplication const * aurApp, DamageInfo & dmgInfo, uint32 & absorbAmount, bool & defaultPrevented)
+void Aura::CallScriptEffectManaShieldHandlers(AuraEffect * aurEff, AuraApplication const* aurApp, DamageInfo & dmgInfo, uint32 & absorbAmount, bool & /*defaultPrevented*/)
 {
     for (std::list<AuraScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
     {

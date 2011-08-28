@@ -1999,7 +1999,6 @@ class Unit : public WorldObject
         Unit* SelectMagnetTarget(Unit* victim, SpellInfo const *spellInfo = NULL);
         int32 SpellBaseDamageBonus(SpellSchoolMask schoolMask);
         int32 SpellBaseHealingBonus(SpellSchoolMask schoolMask);
-
         int32 SpellBaseDamageBonusForVictim(SpellSchoolMask schoolMask, Unit *pVictim);
         int32 SpellBaseHealingBonusForVictim(SpellSchoolMask schoolMask, Unit *pVictim);
         uint32 SpellDamageBonus(Unit *pVictim, SpellInfo const *spellProto, uint32 damage, DamageEffectType damagetype, uint32 stack = 1);
@@ -2333,7 +2332,6 @@ class Unit : public WorldObject
 
         bool isAlwaysDetectableFor(WorldObject const* seer) const;
     private:
-
         bool IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, bool active, SpellProcEventEntry const *& spellProcEvent);
         bool HandleDummyAuraProc(Unit *pVictim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         bool HandleHasteAuraProc(Unit *pVictim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);

@@ -1159,7 +1159,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     {
         uint8 farMask = 0;
         // create far target mask
-        for(uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             if (m_spellInfo->Effects[i].IsFarUnitTargetEffect())
                 if ((1 << i) & mask)
                     farMask |= (1 << i);
@@ -2112,10 +2112,10 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                 case TARGET_UNIT_TARGET_RAID:
                 case TARGET_UNIT_TARGET_PARTY:
                 case TARGET_UNIT_TARGET_MINIPET:
-					AddUnitTarget(target, i, false);
+                    AddUnitTarget(target, i, false);
                     break;
                 case TARGET_UNIT_TARGET_PASSENGER:
-					AddUnitTarget(target, i, false);
+                    AddUnitTarget(target, i, false);
                     break;
                 case TARGET_UNIT_LASTTARGET_AREA_PARTY:
                 case TARGET_UNIT_TARGET_AREA_RAID_CLASS:
@@ -2204,7 +2204,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
 
             float angle, dist;
 
-            float objSize = m_caster->GetObjectSize();            
+            float objSize = m_caster->GetObjectSize();
             if (cur.GetTarget() == TARGET_DEST_CASTER_SUMMON)
                 dist = 0.0f;
             else
@@ -2601,6 +2601,7 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                                 {
                                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
                                         m_caster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id, true);
+                                    SendCastResult(SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW);
                                     finish(false);
                                 }
                             }
@@ -2754,13 +2755,13 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                             ++itr;
                     }
                     break;
-                case SPELLFAMILY_DRUID:                    
+                case SPELLFAMILY_DRUID:
                     if (m_spellInfo->SpellFamilyFlags[1] == 0x04000000) // Wild Growth
                     {
                         maxSize = m_caster->HasAura(62970) ? 6 : 5; // Glyph of Wild Growth
                         power = POWER_HEALTH;
-                    }else
-                    if (m_spellInfo->SpellFamilyFlags[2] == 0x0100) // Starfall
+                    }
+                    else if (m_spellInfo->SpellFamilyFlags[2] == 0x0100) // Starfall
                     {
                         // Remove targets not in LoS or in stealth
                         for (std::list<Unit*>::iterator itr = unitList.begin() ; itr != unitList.end();)
@@ -3761,10 +3762,10 @@ void Spell::SendCastResult(Player* caster, SpellInfo const* spellInfo, uint8 cas
         case SPELL_FAILED_TOO_MANY_OF_ITEM:
         {
              uint32 item = 0;
-             for (int8 x=0;x < 3;x++)
+             for (int8 x = 0;x < 3; x++)
                  if (spellInfo->Effects[x].ItemType)
                      item = spellInfo->Effects[x].ItemType;
-             ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(item);
+             ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item);
              if (pProto && pProto->ItemLimitCategory)
                  data << uint32(pProto->ItemLimitCategory);
              break;
@@ -4391,7 +4392,7 @@ void Spell::TakeReagents()
     if (p_caster->CanNoReagentCast(m_spellInfo))
         return;
 
-    for (uint8 x = 0; x < MAX_SPELL_REAGENTS; ++x)
+    for (uint32 x = 0; x < MAX_SPELL_REAGENTS; ++x)
     {
         if (m_spellInfo->Reagent[x] <= 0)
             continue;
@@ -5109,6 +5110,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_EFFECT_LEAP_BACK:
             {
+                // Spell 781 (Disengage) requires player to be in combat
+                if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 781 && !m_caster->isInCombat())
+                    return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+
                 Unit* target = m_targets.GetUnitTarget();
                 if (m_caster == target && m_caster->HasUnitState(UNIT_STAT_ROOT))
                 {
@@ -6914,7 +6919,7 @@ bool Spell::CanExecuteTriggersOnHit(uint8 effMask) const
 
 void Spell::PrepareTriggersExecutedOnHit()
 {
-	// ToDo: Move to Scripts
+    // todo: move this to scripts
     if (m_spellInfo->SpellFamilyName)
     {
         SpellInfo const* excludeCasterSpellInfo = sSpellMgr->GetSpellInfo(m_spellInfo->ExcludeCasterAuraSpell);

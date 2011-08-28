@@ -473,25 +473,25 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
 
     switch(me->GetEntry())
     {
-    case NPC_BROODLORD:                                         // broodlord (not move down stairs)
-        if (z > 448.60f)
+        case NPC_BROODLORD:                                         // broodlord (not move down stairs)
+            if (z > 448.60f)
+                return false;
+            break;
+        case NPC_VOID_REAVER:                                         // void reaver (calculate from center of room)
+            if (me->GetDistance2d(432.59f, 371.93f) < 105.0f)
+                return false;
+            break;
+        case NPC_JAN_ALAI:                                         // jan'alai (calculate by Z)
+            if (z > 12.0f)
+                return false;
+            break;
+        case NPC_SARTHARION:                                         // sartharion (calculate box)
+            if (x > 3218.86f && x < 3275.69f && y < 572.40f && y > 484.68f)
+                return false;
+            break;
+        default:
+            sLog->outError("TSCR: EnterEvadeIfOutOfCombatArea used for creature entry %u, but does not have any definition.", me->GetEntry());
             return false;
-        break;
-    case NPC_VOID_REAVER:                                         // void reaver (calculate from center of room)
-        if (me->GetDistance2d(432.59f, 371.93f) < 105.0f)
-            return false;
-        break;
-    case NPC_JAN_ALAI:                                         // jan'alai (calculate by Z)
-        if (z > 12.0f)
-            return false;
-        break;
-    case NPC_SARTHARION:                                         // sartharion (calculate box)
-        if (x > 3218.86f && x < 3275.69f && y < 572.40f && y > 484.68f)
-            return false;
-        break;
-    default:
-        sLog->outError("TSCR: EnterEvadeIfOutOfCombatArea used for creature entry %u, but does not have any definition.", me->GetEntry());
-        return false;
     }
 
     EnterEvadeMode();
@@ -576,40 +576,40 @@ bool BossAI::CheckBoundary(Unit* who)
     {
         switch (itr->first)
         {
-        case BOUNDARY_N:
-            if (me->GetPositionX() > itr->second)
-                return false;
-            break;
-        case BOUNDARY_S:
-            if (me->GetPositionX() < itr->second)
-                return false;
-            break;
-        case BOUNDARY_E:
-            if (me->GetPositionY() < itr->second)
-                return false;
-            break;
-        case BOUNDARY_W:
-            if (me->GetPositionY() > itr->second)
-                return false;
-            break;
-        case BOUNDARY_NW:
-            if (me->GetPositionX() + me->GetPositionY() > itr->second)
-                return false;
-            break;
-        case BOUNDARY_SE:
-            if (me->GetPositionX() + me->GetPositionY() < itr->second)
-                return false;
-            break;
-        case BOUNDARY_NE:
-            if (me->GetPositionX() - me->GetPositionY() > itr->second)
-                return false;
-            break;
-        case BOUNDARY_SW:
-            if (me->GetPositionX() - me->GetPositionY() < itr->second)
-                return false;
-            break;
-        default:
-            break;
+            case BOUNDARY_N:
+                if (me->GetPositionX() > itr->second)
+                    return false;
+                break;
+            case BOUNDARY_S:
+                if (me->GetPositionX() < itr->second)
+                    return false;
+                break;
+            case BOUNDARY_E:
+                if (me->GetPositionY() < itr->second)
+                    return false;
+                break;
+            case BOUNDARY_W:
+                if (me->GetPositionY() > itr->second)
+                    return false;
+                break;
+            case BOUNDARY_NW:
+                if (me->GetPositionX() + me->GetPositionY() > itr->second)
+                    return false;
+                break;
+            case BOUNDARY_SE:
+                if (me->GetPositionX() + me->GetPositionY() < itr->second)
+                    return false;
+                break;
+            case BOUNDARY_NE:
+                if (me->GetPositionX() - me->GetPositionY() > itr->second)
+                    return false;
+                break;
+            case BOUNDARY_SW:
+                if (me->GetPositionX() - me->GetPositionY() < itr->second)
+                    return false;
+                break;
+            default:
+                break;
         }
     }
 
@@ -647,7 +647,7 @@ void BossAI::UpdateAI(uint32 const diff)
 // WorldBossAI - for non-instanced bosses
 
 WorldBossAI::WorldBossAI(Creature* creature) :
-ScriptedAI(creature),
+    ScriptedAI(creature),
     summons(creature)
 {
 }

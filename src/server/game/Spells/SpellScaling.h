@@ -32,14 +32,14 @@ struct SpellScaling
 {
     uint8 level;
     SpellInfo const* spellEntry;
-    
+
     float avg[3];
     float min[3];
     float max[3];
     float pts[3];
-    
+
     int32 cast;
- 
+
     bool canScale;
     SpellScaling(SpellInfo const* spellInfo, uint8 level)
     {
@@ -52,7 +52,7 @@ struct SpellScaling
         }
         cast = 0;
         canScale = false;
-        
+
         if (!spellInfo->SpellScalingId)
             return;
 
@@ -78,7 +78,7 @@ struct SpellScaling
             cast = castTimeMin + (((level - 1) * (castTimeMax-castTimeMin)) / (castScalingMaxLevel - 1));
         else
             cast = castTimeMin;
-        
+
         if (cast > castTimeMax)
             cast = castTimeMax;
 
@@ -88,17 +88,17 @@ struct SpellScaling
             float mult = spellInfo->Multiplier[effIndex];
             float randommult = spellInfo->RandomMultiplier[effIndex];
             float othermult = spellInfo->OtherMultiplier[effIndex];
-            
+
             avg[effIndex] = mult * gtCoef;
             if (castTimeMax > 0)
                 avg[effIndex] *= cast/castTimeMax;
-            
+
             min[effIndex] = roundf(avg[effIndex]) - std::floor(avg[effIndex] * randommult / 2);
             max[effIndex] = roundf(avg[effIndex]) + std::floor(avg[effIndex] * randommult / 2);
             pts[effIndex] = roundf(othermult * gtCoef);
             avg[effIndex] = std::max<float>(ceil(mult), roundf(avg[effIndex]));
         }
-        
+
         canScale = true;
     }
 };

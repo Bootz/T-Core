@@ -23,9 +23,11 @@
 #define _SPELLMGR_H
 
 // For static or at-server-startup loaded spell data
+
 #include <ace/Singleton.h>
 #include "Common.h"
 #include "SharedDefines.h"
+#include "Unit.h"
 
 class SpellInfo;
 class Player;
@@ -569,7 +571,6 @@ class SpellMgr
 
     // Accessors (const or static functions)
     public:
-
         // Spell correctess for client using
         static bool IsSpellValid(SpellInfo const* spellInfo, Player* pl = NULL, bool msg = true);
 
@@ -586,7 +587,6 @@ class SpellMgr
         uint32 GetNextSpellInChain(uint32 spell_id) const;
         uint32 GetPrevSpellInChain(uint32 spell_id) const;
         uint8 GetSpellRank(uint32 spell_id) const;
-
         // not strict check returns provided spell if rank not avalible
         uint32 GetSpellWithRank(uint32 spell_id, uint32 rank, bool strict = false) const;
 

@@ -830,14 +830,6 @@ bool GameObject::IsTransport() const
     return gInfo->type == GAMEOBJECT_TYPE_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT;
 }
 
-bool GameObject::IsDestructableBuilding() const
-{
-    GameObjectTemplate const * gInfo = GetGOInfo();
-    if (!gInfo) 
-        return false;
-    return gInfo->type == GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING;
-}
-
 // is Dynamic transport = non-stop Transport
 bool GameObject::IsDynTransport() const
 {
@@ -865,9 +857,6 @@ bool GameObject::isAlwaysVisibleFor(WorldObject const* seer) const
         return true;
 
     if (IsTransport())
-        return true;
-
-    if (IsDestructableBuilding())
         return true;
 
     return false;

@@ -1178,7 +1178,7 @@ inline Unit* CreatureEventAI::GetTargetByType(uint32 target, Unit* actionInvoker
     };
 }
 
-Unit* CreatureEventAI::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
+Unit* CreatureEventAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
     CellPair p(Trillium::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
@@ -1187,7 +1187,7 @@ Unit* CreatureEventAI::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
 
     Unit* unit = NULL;
 
-    Trillium::MostHPMissingInRange u_check(me, range, MinHPDiff);
+    Trillium::MostHPMissingInRange u_check(me, range, minHPDiff);
     Trillium::UnitLastSearcher<Trillium::MostHPMissingInRange> searcher(me, unit, u_check);
 
     /*
