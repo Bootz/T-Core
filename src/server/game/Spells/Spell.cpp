@@ -2144,7 +2144,6 @@ void Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                 case TARGET_UNIT_NEARBY_RAID:
                     range = m_spellInfo->GetMaxRange(true);
                     if (modOwner) modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, range, this);
-
                     target = SearchNearbyTarget(range, SPELL_TARGETS_ALLY, SpellEffIndex(i));
                     break;
                 case TARGET_UNIT_NEARBY_ENTRY:
@@ -5655,6 +5654,11 @@ SpellCastResult Spell::CheckItems()
         if (!proto)
             return SPELL_FAILED_ITEM_NOT_READY;
 
+        for (int i = 0; i < MAX_ITEM_SPELLS; ++i)
+            if (proto->Spells[i].SpellCharges)
+                if (m_CastItem->GetSpellCharges(i) == 0)
+                    return SPELL_FAILED_NO_CHARGES_REMAIN;
+
         // consumable cast item checks
         if (proto->Class == ITEM_CLASS_CONSUMABLE && m_targets.GetUnitTarget())
         {
@@ -5662,7 +5666,7 @@ SpellCastResult Spell::CheckItems()
             SpellCastResult failReason = SPELL_CAST_OK;
             for (int i = 0; i < MAX_SPELL_EFFECTS; i++)
             {
-                // skip check, pet not required like checks, and for TARGET_UNIT_PET m_targets.getUnitTarget() is not the real target but the caster
+                // skip check, pet not required like checks, and for TARGET_UNIT_PET m_targets.GetUnitTarget() is not the real target but the caster
                 if (m_spellInfo->Effects[i].TargetA.GetTarget() == TARGET_UNIT_PET)
                     continue;
 
