@@ -558,9 +558,9 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     if (caster)
     {
         SpellScaling values(_spellInfo, caster->getLevel());
-        if (values.canScale)
+        if (values.CanUseScale() && int32(values.min[_effIndex]) != 0)
         {
-            basePoints = values.min[_effIndex];
+            basePoints = int32(values.min[_effIndex]);
             maxPoints = values.max[_effIndex];
             comboPointScaling = values.pts[_effIndex];
         }
@@ -578,7 +578,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     }
 
     if (maxPoints != 0.00f)
-        basePoints = irand(basePoints, maxPoints);
+        basePoints = irand(basePoints, int32(maxPoints));
     else
     {
         // not sure for Cataclysm.
@@ -2208,10 +2208,8 @@ uint32 SpellInfo::CalcCastTime(Unit* caster, Spell* spell) const
     if (caster)
     {
         SpellScaling values(spell->GetSpellInfo(), spell->GetCaster()->getLevel());
-        if (values.canScale)
-        {
-            castTime = values.cast;
-        }
+        if (values.CanUseScale())
+            castTime = values.GetCastTime();
     }
 
     if (caster)

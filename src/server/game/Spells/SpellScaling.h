@@ -19,41 +19,55 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Common.h"
-#include "Define.h"
-#include "SpellInfo.h"
-#include <map>
-#include <cmath>
-#include <set>
+#ifndef _SPELLSCALING_H
+#define _SPELLSCALING_H
+
+#include "SharedDefines.h"
 
 class SpellInfo;
 
-struct SpellScaling
+class SpellScaling
 {
-    uint8 level;
-    SpellInfo const* spellEntry;
+    bool  _canScale;
+    int32 _castTime;
 
+public:
     float avg[3];
     float min[3];
     float max[3];
     float pts[3];
 
-    int32 cast;
+    bool  CanUseScale() { return _canScale; }
+    int32 GetCastTime() { return _castTime; }
 
-    bool canScale;
+    float GetGtSpellScalingValue(int8 classId, uint8 level)
+    {
+        classId = classId < 0 ? MAX_CLASSES : classId;
+
+        float _coef = -1.0f;
+        if (classId)
+        {
+            GtSpellScalingEntry const* spellscaling = sGtSpellScalingStore.LookupEntry((classId - 1) * 100 + level);
+            _coef = spellscaling ? spellscaling->coef : _coef;
+        }
+
+        return _coef;
+    }
+
     SpellScaling(SpellInfo const* spellInfo, uint8 level)
     {
+        _canScale = false;
+        _castTime = 0;
+
         for (uint8 i = 0; i < 3; i++)
         {
-            avg[i] = 0.f;
-            min[i] = 0.f;
-            max[i] = 0.f;
-            pts[i] = 0.f;
+            avg[i] = 0.0f;
+            min[i] = 0.0f;
+            max[i] = 0.0f;
+            pts[i] = 0.0f;
         }
-        cast = 0;
-        canScale = false;
 
-        if (!spellInfo->SpellScalingId)
+        if (!spellInfo || !spellInfo->SpellScalingId)
             return;
 
         if (!spellInfo->playerClass)
@@ -61,26 +75,23 @@ struct SpellScaling
 
         float CoefBase = spellInfo->CoefBase;
         uint8 CoefBaseLevel = spellInfo->CoefLevelBase;
-
         int32 castTimeMin = spellInfo->castTimeMin;
         int32 castTimeMax = spellInfo->castTimeMax;
         uint8 castScalingMaxLevel = spellInfo->castScalingMaxLevel;
 
-        int8 class_ = spellInfo->playerClass;
-
-        float gtCoef = GetGtSpellScalingValue(class_, level);
+        float gtCoef = GetGtSpellScalingValue(spellInfo->playerClass, level);
+        if (gtCoef == -1.0f)
+            return;
 
         gtCoef *= (std::min(level, CoefBaseLevel) + (CoefBase * std::max(0, level - CoefBaseLevel))) / level;
 
         // Cast time
-        cast = 0;
-        if (castTimeMax>0 && level > 1)
-            cast = castTimeMin + (((level - 1) * (castTimeMax-castTimeMin)) / (castScalingMaxLevel - 1));
+        if (castTimeMax > 0 && level > 1)
+            _castTime = castTimeMin + (((level - 1) * (castTimeMax - castTimeMin)) / (castScalingMaxLevel - 1));
         else
-            cast = castTimeMin;
+            _castTime = castTimeMin;
 
-        if (cast > castTimeMax)
-            cast = castTimeMax;
+        _castTime = _castTime > castTimeMax ? castTimeMax : _castTime;
 
         // Effects
         for (uint8 effIndex = 0; effIndex < 3; effIndex++)
@@ -91,14 +102,16 @@ struct SpellScaling
 
             avg[effIndex] = mult * gtCoef;
             if (castTimeMax > 0)
-                avg[effIndex] *= cast/castTimeMax;
+                avg[effIndex] *= float(_castTime)/float(castTimeMax);
 
             min[effIndex] = roundf(avg[effIndex]) - std::floor(avg[effIndex] * randommult / 2);
             max[effIndex] = roundf(avg[effIndex]) + std::floor(avg[effIndex] * randommult / 2);
             pts[effIndex] = roundf(othermult * gtCoef);
-            avg[effIndex] = std::max<float>(ceil(mult), roundf(avg[effIndex]));
+            avg[effIndex] = std::max((float)ceil(mult), roundf(avg[effIndex]));
         }
 
-        canScale = true;
+        _canScale = true;
     }
 };
+
+#endif // _SPELLSCALING_H
