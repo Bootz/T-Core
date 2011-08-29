@@ -2299,23 +2299,6 @@ struct SpellEffect
 
 typedef std::map<uint32, SpellEffect> SpellEffectMap;
 
-struct SpellReagent
-{
-    SpellReagent()
-    {
-        reagents[0] = NULL;
-        reagents[1] = NULL;
-        reagents[2] = NULL;
-        reagents[3] = NULL;
-        reagents[4] = NULL;
-        reagents[5] = NULL;
-        reagents[6] = NULL;
-        reagents[7] = NULL;
-    }
-    SpellReagentsEntry const* reagents[MAX_SPELL_REAGENTS];
-};
-typedef std::map<uint32, SpellReagent> SpellReagentMap;
-
 struct TaxiPathBySourceAndDestination
 {
     TaxiPathBySourceAndDestination() : ID(0), price(0) {}

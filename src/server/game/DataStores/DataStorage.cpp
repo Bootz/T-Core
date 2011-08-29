@@ -186,7 +186,6 @@ DataStorage <SpellTargetRestrictionsEntry> sSpellTargetRestrictionsStore(SpellTa
 DataStorage <SpellTotemsEntry> sSpellTotemsStore(SpellTotemsEntryfmt);
 
 SpellEffectMap sSpellEffectMap;
-SpellReagentMap sSpellReagentMap;
 
 DataStorage <SpellCastTimesEntry> sSpellCastTimesStore(SpellCastTimefmt);
 DataStorage <SpellDifficultyEntry> sSpellDifficultyStore(SpellDifficultyfmt);
