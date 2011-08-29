@@ -1091,12 +1091,16 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
         SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
     }
 
-    if (getPowerType() == POWER_RUNIC_POWER)
+    if (getPowerType() != POWER_MANA)                        // hide additional mana bar if we have no mana
     {
-        SetPower(POWER_RUNE, 8);
-        SetMaxPower(POWER_RUNE, 8);
-        SetPower(POWER_RUNIC_POWER, 0);
-        SetMaxPower(POWER_RUNIC_POWER, 1000);
+        SetPower(POWER_MANA, 0);
+        SetMaxPower(POWER_MANA, 0);
+    }
+
+    if (getPowerType() == POWER_HEALTH)
+    {
+        UpdateMaxPower(POWER_HEALTH);
+        SetPower(POWER_HEALTH, GetMaxPower(POWER_HEALTH));
     }
 
     // original spells
