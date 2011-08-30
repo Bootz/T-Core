@@ -198,7 +198,7 @@ enum Opcodes
     SMSG_ITEM_COOLDOWN                               = 0x0F6FE, // 14480
     CMSG_GAMEOBJ_USE                                 = 0x072BB, // 14480
     CMSG_DESTROY_ITEMS                               = 0x10046, //
-    SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x10047, // 
+    SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x0766E, // 14480
     CMSG_AREATRIGGER                                 = 0x062A6, // 14480
     MSG_MOVE_START_FORWARD                           = 0x018E1, // 4.2.0:14480
     MSG_MOVE_START_BACKWARD                          = 0x00863, // 14480
@@ -1163,7 +1163,7 @@ enum Opcodes
     CMSG_REQUEST_VEHICLE_PREV_SEAT                   = 0x10239, //
     CMSG_REQUEST_VEHICLE_NEXT_SEAT                   = 0x1023A, //
     CMSG_REQUEST_VEHICLE_SWITCH_SEAT                 = 0x1023B, //
-    CMSG_PET_LEARN_TALENT                            = 0x1023C, //
+    CMSG_PET_LEARN_TALENT                            = 0x0F2E2, // 14480
     CMSG_PET_UNLEARN_TALENTS                         = 0x1023D, //
     SMSG_SET_PHASE_SHIFT                             = 0x0DB05, // 14480
     SMSG_ALL_ACHIEVEMENT_DATA                        = 0x00B63, // 14480
@@ -1182,7 +1182,7 @@ enum Opcodes
     CMSG_REMOVE_GLYPH                                = 0x10248, //
     CMSG_DUMP_OBJECTS                                = 0x10249, //
     SMSG_DUMP_OBJECTS_DATA                           = 0x1024A, //
-    CMSG_DISMISS_CRITTER                             = 0x1024B, //
+    CMSG_DISMISS_CRITTER                             = 0x0BEBE, // 14480
     SMSG_NOTIFY_DEST_LOC_SPELL_CAST                  = 0x1024C, //
     CMSG_AUCTION_LIST_PENDING_SALES                  = 0x03EE7, // 14480
     SMSG_AUCTION_LIST_PENDING_SALES                  = 0x0367F, // 14480
@@ -1259,7 +1259,7 @@ enum Opcodes
     SMSG_GMRESPONSE_DB_ERROR                         = 0x0726A, // 14480
     SMSG_GMRESPONSE_RECEIVED                         = 0x0BA66, // 14480
     CMSG_GMRESPONSE_RESOLVE                          = 0x0363E, // 14480
-    SMSG_GMRESPONSE_STATUS_UPDATE                    = 0x10281, //
+    SMSG_GMRESPONSE_STATUS_UPDATE                    = 0x0F233, // 14480
     CMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x06222, // 4.2.0:14480
     SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x100B6, // 
     CMSG_CHAR_RACE_CHANGE                            = 0x0B276, // 4.2.0:14480
