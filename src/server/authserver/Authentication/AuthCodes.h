@@ -68,7 +68,7 @@ enum LoginResult
     LOGIN_LOCKED_ENFORCED                        = 0x10,
 };
 
-#define POST_CATA_ACCEPTED_CLIENT_BUILD            {14480, 14333, 13623, 0}
+#define POST_CATA_ACCEPTED_CLIENT_BUILD            {14545, 14480, 14333, 13623, 0}
 #define PRE_CATA_ACCEPTED_CLIENT_BUILD             {12340, 11723, 11403, 11159, 10571, 10505, 10146, 9947, 8606, 5875, 6005, 0}
 
 enum ExpansionFlags
