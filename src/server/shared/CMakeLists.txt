@@ -24,18 +24,6 @@ file(GLOB_RECURSE sources_Utilities Utilities/*.cpp Utilities/*.h)
 
 file(GLOB sources_localdir *.cpp *.h)
 
-source_group(Configuration FILES ${sources_Configuration})
-source_group(Cryptography FILES ${sources_Cryptography})
-source_group(Database FILES ${sources_Database})
-source_group(DataStores FILES ${sources_DataStores})
-source_group(Debugging FILES Errors.h)
-source_group(Dynamic FILES ${sources_Dynamic})
-source_group(Logging FILES ${sources_Logging})
-source_group(Packets FILES ${sources_Packets})
-source_group(Threading FILES ${sources_Threading})
-source_group(Utilities FILES ${sources_Utilities})
-source_group("" FILES ${sources_localdir})
-
 #
 # Build shared sourcelist
 #
