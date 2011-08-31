@@ -2111,12 +2111,12 @@ void ObjectMgr::LoadItemTemplates()
     QueryResult result = WorldDatabase.Query("SELECT entry, class, subclass, unk0, name, displayid, Quality, Flags, FlagsExtra, BuyCount, BuyPrice, SellPrice, InventoryType, "
     //                                              13              14           15          16             17               18                19              20
                                              "AllowableClass, AllowableRace, ItemLevel, RequiredLevel, RequiredSkill, RequiredSkillRank, requiredspell, requiredhonorrank, "
-    //                                              21                      22                       23               24        25          26             27         
-                                             "RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, maxcount, stackable, ContainerSlots,  stat_type1, "
-    //                                            28           29          30           31          32           33         34           35          36          37
-                                             "stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, "
-    //                                            38           39          40           41           42          43           44           45           46
-                                             "stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, "
+    //                                              21                      22                       23               24        25          26
+                                             "RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, maxcount, stackable, ContainerSlots, "
+    //                                            27           28           29          30           31           32          33           34           35           36
+                                             "stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5,  "
+    //                                            37           38           39          40           41           42          43           44           45           46
+                                             "stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, "
     //                                                   47                    48        49      50               51        52              53    
                                              "ScalingStatDistribution, ScalingStatValue, delay, RangedModRange, spellid_1, spelltrigger_1, spellcharges_1, "
     //                                           54               55               56              57                      58          59            60                                    
@@ -2151,7 +2151,6 @@ void ObjectMgr::LoadItemTemplates()
     {
         Field *fields = result->Fetch();
 
-		uint32 internStatCounter = 0;
         uint32 entry = fields[0].GetUInt32();
 
         ItemTemplate& itemTemplate = ItemTemplateStore[entry];
@@ -2186,14 +2185,8 @@ void ObjectMgr::LoadItemTemplates()
 
         for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
         {
-			++internStatCounter;
             itemTemplate.ItemStat[i].ItemStatType  = uint32(fields[27 + i*2].GetUInt8());
             itemTemplate.ItemStat[i].ItemStatValue = int32(fields[28 + i*2].GetInt16());
-			if (itemTemplate.ItemStat[i].ItemStatValue == 0)
-			{
-				itemTemplate.ItemStat[i].ItemStatType = 0;
-				i = MAX_ITEM_PROTO_STATS;
-			}
         }
 
         itemTemplate.ScalingStatDistribution = uint32(fields[47].GetUInt16());
@@ -2408,7 +2401,7 @@ void ObjectMgr::LoadItemTemplates()
             itemTemplate.ContainerSlots = MAX_BAG_SIZE;
         }
 
-        for (uint8 j = 0; j < internStatCounter; ++j)
+        for (uint8 j = 0; j < MAX_ITEM_PROTO_STATS; ++j)
         {
             // for ItemStatValue != 0
             if (itemTemplate.ItemStat[j].ItemStatValue && itemTemplate.ItemStat[j].ItemStatType >= MAX_ITEM_MOD)

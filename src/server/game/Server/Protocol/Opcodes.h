@@ -981,7 +981,7 @@ enum Opcodes
     SMSG_KICK_REASON                                 = 0x0AA36, // 14480
     MSG_RAID_READY_CHECK_FINISHED                    = 0x101C6, //
     CMSG_COMPLAIN                                    = 0x0EA63, // 14480
-    SMSG_COMPLAIN_RESULT                             = 0x101C7, //
+    SMSG_COMPLAIN_RESULT                             = 0x07E3E, // 14480
     SMSG_FEATURE_SYSTEM_STATUS                       = 0x01F61, // 14480
     CMSG_GM_SHOW_COMPLAINTS                          = 0x101C8, //
     CMSG_GM_UNSQUELCH                                = 0x101C9, //
