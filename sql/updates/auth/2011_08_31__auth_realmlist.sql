@@ -1,1 +1,0 @@
-UPDATE `realmlist` SET `gamebuild`=14545 WHERE `id`=1;
