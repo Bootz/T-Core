@@ -1164,8 +1164,8 @@ struct ItemSparseEntry
     uint32     ContainerSlots;                               // 20
     int32      ItemStatType[MAX_ITEM_PROTO_STATS];           // 21 - 30
     uint32     ItemStatValue[MAX_ITEM_PROTO_STATS];          // 31 - 40
-    int32      ItemUnkStatType[MAX_ITEM_PROTO_STATS];        // 41 - 50
-    uint32     ItemUnkStatValue[MAX_ITEM_PROTO_STATS];       // 51 - 60
+    //int32    ItemUnkStatType[MAX_ITEM_PROTO_STATS];        // 41 - 50
+    //int32    ItemUnkStatValue[MAX_ITEM_PROTO_STATS];       // 51 - 60
     uint32     ScalingStatDistribution;                      // 61
     uint32     DamageType;                                   // 62
     uint32     Delay;                                        // 63
@@ -1177,10 +1177,8 @@ struct ItemSparseEntry
     int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 85 - 89
     int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 90 - 94
     uint32     Bonding;                                      // 95
-    DBCString  Name1;                                        // 96
-    //DBCString  Name2;                                      // 97
-    //DBCString  Name3;                                      // 98
-    //DBCString  Name4;                                      // 99
+    DBCString  Name;                                         // 96
+    //DBCString  Name[3];                                    // 97 - 99
     DBCString  Description;                                  // 100
     uint32     PageText;                                     // 101
     uint32     LanguageID;                                   // 102
@@ -1206,8 +1204,8 @@ struct ItemSparseEntry
     uint32     ItemLimitCategory;                            // 126
     uint32     HolidayId;                                    // 127
     float      StatScalingFactor;                            // 128
-    //uint32                                                 // 129
-    //uint32                                                 // 130
+    //uint32   Unk1;                                         // 129
+    //uint32   Unk2;                                         // 130
 };
 
 struct ItemArmorQualityEntry
