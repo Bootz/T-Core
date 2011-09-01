@@ -42,6 +42,7 @@
 #endif
 
 typedef char const* const* DBCString;                       //char* DBCStrings[MAX_LOCALE];
+typedef char const* DBC2String;                             // use this and remove DBCString
 
 struct AchievementEntry
 {
@@ -1177,9 +1178,9 @@ struct ItemSparseEntry
     int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 85 - 89
     int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 90 - 94
     uint32     Bonding;                                      // 95
-    DBCString  Name;                                         // 96
+    DBC2String Name;                                         // 96
     //DBCString  Name[3];                                    // 97 - 99
-    DBCString  Description;                                  // 100
+    DBC2String Description;                                  // 100
     uint32     PageText;                                     // 101
     uint32     LanguageID;                                   // 102
     uint32     PageMaterial;                                 // 103
