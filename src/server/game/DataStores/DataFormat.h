@@ -146,5 +146,6 @@ const char PhaseEntryfmt[]="nsi";
 
 //DB2 Files
 const char Itemfmt[]="niiiiiii";
+const char ItemSparsefmt[]="niiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiisxxxsiiiiiiiiiiiiiiiiiiiiiiifiiixx";
 const char ItemExtendedCostEntryfmt[]="nxxiiiiiiiiiiiixiiiiiiiiiixxxxx";
 #endif

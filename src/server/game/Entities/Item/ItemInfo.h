@@ -28,14 +28,14 @@ class ItemInfo
 {
 public:
     // Item.db2
-    uint32   ItemId;
-    uint32   Class;
-    uint32   SubClass;
-    int32    Unk0;
-    int32    Material;
-    uint32   DisplayId;
-    uint32   InventoryType;
-    uint32   Sheath;
+    uint32 ItemId;
+    uint32 Class;
+    uint32 SubClass;
+    int32  Unk0;
+    int32  Material;
+    uint32 DisplayId;
+    uint32 InventoryType;
+    uint32 Sheath;
     // Item-sparse.db2
 
     // Functions

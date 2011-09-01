@@ -491,4 +491,9 @@ enum CurrencyTypes
     CURRENCY_TYPE_JUSTICE_POINTS                 = 395,
     CURRENCY_TYPE_VALOR_POINTS                   = 396,
 };
+
+#define MAX_ITEM_PROTO_SOCKETS 3
+#define MAX_ITEM_PROTO_SPELLS  5
+#define MAX_ITEM_PROTO_STATS  10
+
 #endif

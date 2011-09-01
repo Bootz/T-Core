@@ -113,6 +113,7 @@ DataStorage <GtSpellScalingEntry>          sGtSpellScalingStore(GtSpellScalingfm
 DataStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
 DataStorage <ItemEntry>                    sItemStore(Itemfmt);
+DataStorage <ItemSparseEntry>              sItemSparseStore(ItemSparsefmt);
 DataStorage <ItemArmorQualityEntry>        sItemArmorQualityStore(ItemArmorQualityfmt);
 DataStorage <ItemArmorShieldEntry>         sItemArmorShieldStore(ItemArmorShieldfmt);
 DataStorage <ItemArmorTotalEntry>          sItemArmorTotalStore(ItemArmorTotalfmt);
