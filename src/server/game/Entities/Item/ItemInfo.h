@@ -31,7 +31,7 @@ struct ItemSparseEntry;
 class ItemInfo
 {
 public:
-    // Item.db2
+    /* Item.db2 */
     uint32     ItemId;
     uint32     Class;
     uint32     SubClass;
@@ -40,7 +40,7 @@ public:
     uint32     DisplayId;
     uint32     InventoryType;
     uint32     Sheath;
-    // Item-sparse.db2
+    /* Item-sparse.db2 */
     uint32     Quality;
     uint32     Flags;
     uint32     Flags2;
@@ -100,6 +100,15 @@ public:
     uint32     ItemLimitCategory;
     uint32     HolidayId;
     float      StatScalingFactor;
+    /* item_template */
+    uint32     BuyCount;
+    uint32     Block;
+    uint32     RequiredDisenchantSkill;
+    uint32     ScriptId;
+    uint32     DisenchantID;
+    uint32     FoodType;
+    uint32     MinMoneyLoot;
+    uint32     MaxMoneyLoot;
 
     // Functions
     ItemInfo(ItemEntry const* itemEntry);

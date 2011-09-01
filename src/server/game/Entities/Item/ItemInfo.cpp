@@ -99,6 +99,17 @@ ItemInfo::ItemInfo(ItemEntry const* itemEntry)
     ItemLimitCategory = _item ? _item->ItemLimitCategory : 0;
     HolidayId = _item ? _item->HolidayId : 0;
     StatScalingFactor = _item ? _item->StatScalingFactor : 0;
+
+    // There are many items not in the ItemTemplate, so we need to check
+    ItemTemplate const* _proto = sObjectMgr->GetItemTemplate(ItemId);
+    BuyCount = _proto ? _proto->BuyCount : 0;
+    Block = _proto ? _proto->Block : 0;
+    RequiredDisenchantSkill = _proto ? _proto->RequiredDisenchantSkill : 0;
+    ScriptId = _proto ? _proto->ScriptId : 0;
+    DisenchantID = _proto ? _proto->DisenchantID : 0;
+    FoodType = _proto ? _proto->FoodType : 0;
+    MinMoneyLoot = _proto ? _proto->MinMoneyLoot : 0;
+    MaxMoneyLoot = _proto ? _proto->MaxMoneyLoot : 0;
 }
 
 ItemSparseEntry const* ItemInfo::GetItemSparse() const
