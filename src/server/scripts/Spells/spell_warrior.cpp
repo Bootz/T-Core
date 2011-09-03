@@ -41,7 +41,7 @@ class spell_warr_last_stand : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warr_last_stand_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(WARRIOR_SPELL_LAST_STAND_TRIGGERED))
                     return false;

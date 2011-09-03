@@ -82,6 +82,7 @@ class instance_ulduar : public InstanceMapScript
             // Miscellaneous
             uint32 TeamInInstance;
             uint32 HodirRareCacheData;
+            uint32 ColossusData;
             uint8 elderCount;
             bool conSpeedAtory;
 
@@ -121,6 +122,7 @@ class instance_ulduar : public InstanceMapScript
                 ArchivumDoorGUID                 = 0;
                 TeamInInstance                   = 0;
                 HodirRareCacheData               = 0;
+                ColossusData                     = 0;
                 elderCount                       = 0;
                 conSpeedAtory                    = false;
 
@@ -477,7 +479,7 @@ class instance_ulduar : public InstanceMapScript
                 switch (type)
                 {
                     case DATA_COLOSSUS:
-                        Encounter[DATA_COLOSSUS] = data;
+                        ColossusData = data;
                         if (data == 2)
                         {
                             if (Creature* Leviathan = instance->GetCreature(LeviathanGUID))
@@ -593,7 +595,7 @@ class instance_ulduar : public InstanceMapScript
                 switch (type)
                 {
                     case DATA_COLOSSUS:
-                        return Encounter[type];
+                        return ColossusData;
                     case DATA_HODIR_RARE_CACHE:
                         return HodirRareCacheData;
                     default:

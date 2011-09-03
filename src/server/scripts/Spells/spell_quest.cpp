@@ -98,7 +98,7 @@ public:
     class spell_q5206_test_fetid_skull_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q5206_test_fetid_skull_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_CREATE_RESONATING_SKULL))
                 return false;
@@ -153,24 +153,24 @@ public:
         {
             if (GetCastItem())
                 if (Player* pCaster = GetCaster()->ToPlayer())
-                    if (Creature* pCreatureTarget = GetHitCreature())
+                    if (Creature* creatureTarget = GetHitCreature())
                     {
                         uint32 uiNewEntry = 0;
                         switch (pCaster->GetTeam())
                         {
                             case HORDE:
-                                if (pCreatureTarget->GetEntry() == NPC_SICKLY_GAZELLE)
+                                if (creatureTarget->GetEntry() == NPC_SICKLY_GAZELLE)
                                     uiNewEntry = NPC_CURED_GAZELLE;
                                 break;
                             case ALLIANCE:
-                                if (pCreatureTarget->GetEntry() == NPC_SICKLY_DEER)
+                                if (creatureTarget->GetEntry() == NPC_SICKLY_DEER)
                                     uiNewEntry = NPC_CURED_DEER;
                                 break;
                         }
                         if (uiNewEntry)
                         {
-                            pCreatureTarget->UpdateEntry(uiNewEntry);
-                            pCreatureTarget->DespawnOrUnsummon(DESPAWN_TIME);
+                            creatureTarget->UpdateEntry(uiNewEntry);
+                            creatureTarget->DespawnOrUnsummon(DESPAWN_TIME);
                         }
                     }
         }
@@ -258,7 +258,7 @@ public:
     class spell_q11396_11399_scourging_crystal_controller_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q11396_11399_scourging_crystal_controller_SpellScript);
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3))
                 return false;
@@ -297,7 +297,7 @@ public:
     class spell_q11396_11399_scourging_crystal_controller_dummy_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q11396_11399_scourging_crystal_controller_dummy_SpellScript);
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3))
                 return false;
@@ -359,7 +359,7 @@ public:
     class spell_q11587_arcane_prisoner_rescue_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q11587_arcane_prisoner_rescue_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_ARCANE_PRISONER_MALE))
                 return false;
@@ -420,7 +420,7 @@ public:
     class spell_q11730_ultrasonic_screwdriver_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q11730_ultrasonic_screwdriver_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_SCAVENGEBOT_004A8))
                 return false;
@@ -504,17 +504,17 @@ public:
         PrepareSpellScript(spell_q12459_seeds_of_natures_wrath_SpellScript)
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* pCreatureTarget = GetHitCreature())
+            if (Creature* creatureTarget = GetHitCreature())
             {
                 uint32 uiNewEntry = 0;
-                switch (pCreatureTarget->GetEntry())
+                switch (creatureTarget->GetEntry())
                 {
                     case NPC_REANIMATED_FROSTWYRM:  uiNewEntry = NPC_WEAK_REANIMATED_FROSTWYRM; break;
                     case NPC_TURGID:                uiNewEntry = NPC_WEAK_TURGID;               break;
                     case NPC_DEATHGAZE:             uiNewEntry = NPC_WEAK_DEATHGAZE;            break;
                 }
                 if (uiNewEntry)
-                    pCreatureTarget->UpdateEntry(uiNewEntry);
+                    creatureTarget->UpdateEntry(uiNewEntry);
             }
         }
 
@@ -549,7 +549,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_q12634_despawn_fruit_tosser_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_BANANAS_FALL_TO_GROUND))
                 return false;
@@ -698,7 +698,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_q12937_relief_for_the_fallen_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_TRIGGER_AID_OF_THE_EARTHEN))
                 return false;
@@ -749,7 +749,7 @@ class spell_q10041_q10040_who_are_they : public SpellScriptLoader
         {
             PrepareSpellScript(spell_q10041_q10040_who_are_they_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_QUESTGIVER))
                     return false;

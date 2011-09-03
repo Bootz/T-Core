@@ -257,7 +257,7 @@ public:
                                 && pUnit->HasAura(SPELL_BROODAF_BRONZE)
                                 && pUnit->HasAura(SPELL_BROODAF_GREEN))
                             {
-                                //target->RemoveAllAuras();
+                                //pTarget->RemoveAllAuras();
                                 //DoCast(target, SPELL_CHROMATIC_MUT_1);
 
                                 //Chromatic mutation is causing issues

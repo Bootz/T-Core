@@ -317,7 +317,7 @@ public:
                     return;
                 }
 
-                //target->CastSpell(target, SPELL_VAPOR_SUMMON, true); need core support
+                //pTarget->CastSpell(target, SPELL_VAPOR_SUMMON, true); need core support
                 Creature* pVapor = me->SummonCreature(MOB_VAPOR, target->GetPositionX()-5+rand()%10, target->GetPositionY()-5+rand()%10, target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 9000);
                 if (pVapor)
                 {

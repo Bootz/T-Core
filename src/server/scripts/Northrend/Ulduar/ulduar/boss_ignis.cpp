@@ -435,7 +435,7 @@ class spell_ignis_slag_pot : public SpellScriptLoader
         {
             PrepareAuraScript(spell_ignis_slag_pot_AuraScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_SLAG_POT_DAMAGE))
                     return false;

@@ -102,7 +102,7 @@ class spell_dk_anti_magic_shell_self : public SpellScriptLoader
                 return true;
             }
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 return sSpellMgr->GetSpellInfo(DK_SPELL_RUNIC_POWER_ENERGIZE);
             }
@@ -159,7 +159,7 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
                 return true;
             }
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 return sSpellMgr->GetSpellInfo(DK_SPELL_ANTI_MAGIC_SHELL_TALENT);
             }
@@ -322,7 +322,7 @@ class spell_dk_scourge_strike : public SpellScriptLoader
         {
             PrepareSpellScript(spell_dk_scourge_strike_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(DK_SPELL_SCOURGE_STRIKE_TRIGGERED))
                     return false;
@@ -361,7 +361,7 @@ class spell_dk_blood_boil : public SpellScriptLoader
         {
             PrepareSpellScript(spell_dk_blood_boil_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(DK_SPELL_BLOOD_BOIL_TRIGGERED))
                     return false;
@@ -407,13 +407,13 @@ class spell_dk_will_of_the_necropolis : public SpellScriptLoader
         {
             PrepareAuraScript(spell_dk_will_of_the_necropolis_AuraScript);
 
-            bool Validate(SpellInfo const *SpellInfo)
+            bool Validate(SpellInfo const *spellEntry)
             {
                 // can't use other spell than will of the necropolis due to spell_ranks dependency
-                if (sSpellMgr->GetFirstSpellInChain(DK_SPELL_WILL_OF_THE_NECROPOLIS_AURA_R1) != sSpellMgr->GetFirstSpellInChain(SpellInfo->Id))
+                if (sSpellMgr->GetFirstSpellInChain(DK_SPELL_WILL_OF_THE_NECROPOLIS_AURA_R1) != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
                     return false;
 
-                uint8 rank = sSpellMgr->GetSpellRank(SpellInfo->Id);
+                uint8 rank = sSpellMgr->GetSpellRank(spellEntry->Id);
                 if (!sSpellMgr->GetSpellWithRank(DK_SPELL_WILL_OF_THE_NECROPOLIS_TALENT_R1, rank, true))
                     return false;
 

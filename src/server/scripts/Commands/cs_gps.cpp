@@ -125,7 +125,7 @@ public:
         return true;
     }
 
-    static bool HandleWPGPSCommand(ChatHandler* handler, const char *args)
+    static bool HandleWPGPSCommand(ChatHandler* handler, const char* /*args*/)
     {
         Player* player = handler->GetSession()->GetPlayer();
 

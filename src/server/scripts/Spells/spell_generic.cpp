@@ -233,7 +233,7 @@ class spell_gen_parachute : public SpellScriptLoader
         {
             PrepareAuraScript(spell_gen_parachute_AuraScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_PARACHUTE))
                     return false;
@@ -376,7 +376,7 @@ class spell_gen_leeching_swarm : public SpellScriptLoader
         {
             PrepareAuraScript(spell_gen_leeching_swarm_AuraScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_LEECHING_SWARM_DMG))
                     return false;
@@ -434,7 +434,7 @@ class spell_gen_trick : public SpellScriptLoader
         class spell_gen_trick_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_gen_trick_SpellScript);
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_PIRATE_COSTUME_MALE))
                     return false;
@@ -519,7 +519,7 @@ class spell_gen_trick_or_treat : public SpellScriptLoader
         {
             PrepareSpellScript(spell_gen_trick_or_treat_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_TRICK))
                     return false;
@@ -594,7 +594,7 @@ class spell_pvp_trinket_wotf_shared_cd : public SpellScriptLoader
         {
             PrepareSpellScript(spell_pvp_trinket_wotf_shared_cd_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER))
                     return false;
@@ -694,7 +694,7 @@ class spell_gen_divine_storm_cd_reset : public SpellScriptLoader
         {
             PrepareSpellScript(spell_gen_divine_storm_cd_reset_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_DIVINE_STORM))
                     return false;
@@ -914,7 +914,7 @@ class spell_generic_clone_weapon : public SpellScriptLoader
         class spell_generic_clone_weapon_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_generic_clone_weapon_SpellScript);
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_COPY_WEAPON))
                     return false;

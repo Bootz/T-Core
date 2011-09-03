@@ -27,6 +27,7 @@
 
 #include "ScriptPCH.h"
 #include "SpellAuraEffects.h"
+#include "GridNotifiers.h"
 
 enum PriestSpells
 {
@@ -50,7 +51,7 @@ class spell_pri_guardian_spirit : public SpellScriptLoader
 
             uint32 healPct;
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 return sSpellMgr->GetSpellInfo(PRIEST_SPELL_GUARDIAN_SPIRIT_HEAL) != NULL;
             }
@@ -134,7 +135,7 @@ class spell_pri_mind_sear : public SpellScriptLoader
 
             void FilterTargets(std::list<Unit*>& unitList)
             {
-                unitList.remove(GetTargetUnit());
+                unitList.remove_if(Trillium::ObjectGUIDCheck(GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)));
             }
 
             void Register()
@@ -188,15 +189,15 @@ class spell_pri_penance : public SpellScriptLoader
         {
             PrepareSpellScript(spell_pri_penance_SpellScript);
 
-            bool Validate(SpellInfo const* SpellInfo)
+            bool Validate(SpellInfo const* spellEntry)
             {
                 if (!sSpellMgr->GetSpellInfo(PRIEST_SPELL_PENANCE_R1))
                     return false;
                 // can't use other spell than this penance due to spell_ranks dependency
-                if (sSpellMgr->GetFirstSpellInChain(PRIEST_SPELL_PENANCE_R1) != sSpellMgr->GetFirstSpellInChain(SpellInfo->Id))
+                if (sSpellMgr->GetFirstSpellInChain(PRIEST_SPELL_PENANCE_R1) != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
                     return false;
 
-                uint8 rank = sSpellMgr->GetSpellRank(SpellInfo->Id);
+                uint8 rank = sSpellMgr->GetSpellRank(spellEntry->Id);
                 if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank, true))
                     return false;
                 if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank, true))
@@ -244,7 +245,7 @@ class spell_pri_reflective_shield_trigger : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pri_reflective_shield_trigger_AuraScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 return sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_TRIGGERED) && sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_R1);
             }

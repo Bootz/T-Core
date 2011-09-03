@@ -363,7 +363,7 @@ public:
                 return false;
 
             targets.sort(Trillium::ObjectDistanceOrderPred(me));
-            Unit *target = targets.front();
+            Unit* target = targets.front();
             if (target)
             {
                 if (!me->IsWithinDistInMap(target, me->GetAttackDistance(target)))

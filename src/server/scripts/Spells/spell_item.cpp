@@ -46,7 +46,7 @@ public:
     public:
         spell_item_trigger_spell_SpellScript(uint32 triggeredSpellId) : SpellScript(), _triggeredSpellId(triggeredSpellId) { }
 
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(_triggeredSpellId))
                 return false;
@@ -91,7 +91,7 @@ public:
     {
         PrepareSpellScript(spell_item_deviate_fish_SpellScript)
     public:
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             for (uint32 spellId = SPELL_SLEEPY; spellId <= SPELL_HEALTHY_SPIRIT; ++spellId)
                 if (!sSpellMgr->GetSpellInfo(spellId))
@@ -139,7 +139,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_flask_of_the_north_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_THE_NORTH_SP))
                 return false;
@@ -215,7 +215,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_gnomish_death_ray_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_SELF))
                 return false;
@@ -268,7 +268,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_make_a_wish_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_MR_PINCHYS_BLESSING))
                 return false;
@@ -385,7 +385,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_net_o_matic_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_NET_O_MATIC_TRIGGERED1))
                 return false;
@@ -441,7 +441,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_noggenfogger_elixir_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED1))
                 return false;
@@ -499,7 +499,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_savory_deviate_delight_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             for (uint32 spellId = SPELL_FLIP_OUT_MALE; spellId <= SPELL_YAAARRRR_FEMALE; ++spellId)
                 if (!sSpellMgr->GetSpellInfo(spellId))
@@ -557,7 +557,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_six_demon_bag_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_FROSTBOLT))
                 return false;
@@ -636,7 +636,7 @@ public:
     {
     public:
         PrepareSpellScript(spell_item_underbelly_elixir_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_UNDERBELLY_ELIXIR_TRIGGERED1))
                 return false;
@@ -692,7 +692,7 @@ public:
         PrepareAuraScript(spell_item_shadowmourne_AuraScript)
         spell_item_shadowmourne_AuraScript() : AuraScript() { }
 
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_SHADOWMOURNE_VISUAL_LOW))
                 return false;
@@ -980,7 +980,7 @@ class spell_item_vanquished_clutches : public SpellScriptLoader
         {
             PrepareSpellScript(spell_item_vanquished_clutches_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_CRUSHER))
                     return false;
@@ -1036,7 +1036,7 @@ class spell_item_ashbringer : public SpellScriptLoader
         class spell_item_ashbringer_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_item_ashbringer_SpellScript)
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_ASHBRINGER))
                     return false;
@@ -1092,7 +1092,7 @@ class spell_magic_eater_food : public SpellScriptLoader
         {
             PrepareAuraScript(spell_magic_eater_food_AuraScript);
 
-            void HandleTriggerSpell(AuraEffect const* aurEff)
+            void HandleTriggerSpell(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
                 Unit* target = GetTarget();

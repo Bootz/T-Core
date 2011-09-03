@@ -188,7 +188,7 @@ public:
     static bool HandleAccountOnlineListCommand(ChatHandler* handler, const char* /*args*/)
     {
         ///- Get the list of accounts ID logged to the realm
-        QueryResult resultDB = CharacterDatabase.PQuery("SELECT name, account, map, zone FROM characters WHERE online = %d", realmID);
+        QueryResult resultDB = CharacterDatabase.Query("SELECT name, account, map, zone FROM characters WHERE online > 0");
         if (!resultDB)
         {
             handler->SendSysMessage(LANG_ACCOUNT_LIST_EMPTY);
@@ -279,11 +279,7 @@ public:
             return false;
         }
 
-        std::string password_old = old_pass;
-        std::string password_new = new_pass;
-        std::string password_new_c = new_pass_c;
-
-        if (!sAccountMgr->CheckPassword(handler->GetSession()->GetAccountId(), password_old))
+        if (!sAccountMgr->CheckPassword(handler->GetSession()->GetAccountId(), std::string(old_pass)))
         {
             handler->SendSysMessage(LANG_COMMAND_WRONGOLDPASSWORD);
             handler->SetSentErrorMessage(true);
@@ -297,7 +293,7 @@ public:
             return false;
         }
 
-        AccountOpResult result = sAccountMgr->ChangePassword(handler->GetSession()->GetAccountId(), password_new);
+        AccountOpResult result = sAccountMgr->ChangePassword(handler->GetSession()->GetAccountId(), std::string(new_pass));
         switch(result)
         {
         case AOR_OK:

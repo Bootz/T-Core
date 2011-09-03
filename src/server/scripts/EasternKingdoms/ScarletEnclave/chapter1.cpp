@@ -301,7 +301,7 @@ public:
 
         uint64 prisonerGUID;
 
-        void SetGUID(const uint64 guid, int32 /*id*/)
+        void SetGUID(uint64 guid, int32 /*id*/)
         {
             if (!prisonerGUID)
                 prisonerGUID = guid;
@@ -887,7 +887,7 @@ public:
 
         uint64 minerGUID;
 
-        void SetGUID(const uint64 guid, int32 /*id*/)
+        void SetGUID(uint64 guid, int32 /*id*/)
         {
             minerGUID = guid;
         }

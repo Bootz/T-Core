@@ -164,7 +164,7 @@ public:
             targets.resize(5);
 
             //Aura each player in the targets list with Bloodboil. Aura code copied+pasted from Aura command in Level3.cpp
-            /*SpellInfo const *spellInfo = GetSpellStore()->LookupEntry(SPELL_BLOODBOIL);
+            /*SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(SPELL_BLOODBOIL);
             if (spellInfo)
             {
                 for (std::list<Unit* >::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
@@ -173,7 +173,7 @@ public:
                     if (!target) return;
                     for (uint32 i = 0; i<3; ++i)
                     {
-                        uint8 eff = spellInfo->GetSpellEffect(i);
+                        uint8 eff = spellInfo->Effect[i];
                         if (eff >= TOTAL_SPELL_EFFECTS)
                             continue;
 

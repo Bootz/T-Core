@@ -1205,7 +1205,7 @@ public:
 
         group_member                 = new FormationInfo;
         group_member->follow_angle   = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
-        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY()-creature->GetPositionY(), int(2)));
+        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY() - creature->GetPositionY(), int(2)));
         group_member->leaderGUID     = leaderGUID;
         group_member->groupAI        = 0;
 

@@ -322,7 +322,7 @@ class boss_rimefang : public CreatureScript
                     _EnterEvadeMode();
             }
 
-            void SetGUID(const uint64 guid, int32 type)
+            void SetGUID(uint64 guid, int32 type)
             {
                 if (type == GUID_HOARFROST)
                 {
@@ -388,7 +388,7 @@ class player_overlord_brandAI : public PlayerAI
             tyrannus = NULL;
         }
 
-        void SetGUID(const uint64 guid, int32 /*type*/)
+        void SetGUID(uint64 guid, int32 /*type*/)
         {
             tyrannus = ObjectAccessor::GetCreature(*me, guid);
             if (!tyrannus)

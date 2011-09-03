@@ -127,7 +127,7 @@ public:
     class spell_pal_blessing_of_faith_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_blessing_of_faith_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_BLESSING_OF_LOWER_CITY_DRUID))
                 return false;
@@ -179,16 +179,16 @@ public:
     class spell_pal_holy_shock_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_holy_shock_SpellScript)
-        bool Validate(SpellInfo const *SpellInfo)
+        bool Validate(SpellInfo const *spellEntry)
         {
             if (!sSpellMgr->GetSpellInfo(PALADIN_SPELL_HOLY_SHOCK_R1))
                 return false;
 
             // can't use other spell than holy shock due to spell_ranks dependency
-            if (sSpellMgr->GetFirstSpellInChain(PALADIN_SPELL_HOLY_SHOCK_R1) != sSpellMgr->GetFirstSpellInChain(SpellInfo->Id))
+            if (sSpellMgr->GetFirstSpellInChain(PALADIN_SPELL_HOLY_SHOCK_R1) != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
                 return false;
 
-            uint8 rank = sSpellMgr->GetSpellRank(SpellInfo->Id);
+            uint8 rank = sSpellMgr->GetSpellRank(spellEntry->Id);
             if (!sSpellMgr->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE, rank, true))
                 return false;
             if (!sSpellMgr->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_HEALING, rank, true))

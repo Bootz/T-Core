@@ -50,7 +50,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warl_demonic_empowerment_SpellScript);
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(WARLOCK_DEMONIC_EMPOWERMENT_SUCCUBUS))
                     return false;
@@ -123,7 +123,7 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 
             static uint32 const iTypes[8][3];
 
-            bool Validate(SpellInfo const* /*SpellInfo*/)
+            bool Validate(SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R1))
                     return false;

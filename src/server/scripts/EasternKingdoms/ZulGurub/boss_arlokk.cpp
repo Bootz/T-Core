@@ -107,7 +107,7 @@ class boss_arlokk : public CreatureScript
             void JustReachedHome()
             {
                 if (m_pInstance)
-                    m_pInstance->SetData(TYPE_ARLOKK, NOT_STARTED);
+                    m_pInstance->SetData(DATA_ARLOKK, NOT_STARTED);
 
                 //we should be summoned, so despawn
                 me->DespawnOrUnsummon();
@@ -121,7 +121,7 @@ class boss_arlokk : public CreatureScript
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
                 if (m_pInstance)
-                    m_pInstance->SetData(TYPE_ARLOKK, DONE);
+                    m_pInstance->SetData(DATA_ARLOKK, DONE);
             }
 
             void DoSummonPhanters()
@@ -133,10 +133,10 @@ class boss_arlokk : public CreatureScript
                 me->SummonCreature(NPC_ZULIAN_PROWLER, -11532.9970f, -1606.4840f, 41.2979f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
             }
 
-            void JustSummoned(Creature* pSummoned)
+            void JustSummoned(Creature* summoned)
             {
                 if (Unit* pMarkedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
-                    pSummoned->AI()->AttackStart(pMarkedTarget);
+                    summoned->AI()->AttackStart(pMarkedTarget);
 
                 ++m_uiSummonCount;
             }
@@ -269,10 +269,10 @@ class go_gong_of_bethekk : public GameObjectScript
         {
             if (InstanceScript* m_pInstance = pGo->GetInstanceScript())
             {
-                if (m_pInstance->GetData(TYPE_ARLOKK) == DONE || m_pInstance->GetData(TYPE_ARLOKK) == IN_PROGRESS)
+                if (m_pInstance->GetData(DATA_ARLOKK) == DONE || m_pInstance->GetData(DATA_ARLOKK) == IN_PROGRESS)
                     return true;
 
-                m_pInstance->SetData(TYPE_ARLOKK, IN_PROGRESS);
+                m_pInstance->SetData(DATA_ARLOKK, IN_PROGRESS);
                 return true;
             }
 

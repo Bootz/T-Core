@@ -2432,7 +2432,7 @@ public:
             uiEventPhase = 1;
         }
 
-        void SetGUID(const uint64 uiGuid, int32 /*iId*/)
+        void SetGUID(uint64 uiGuid, int32 /*iId*/)
         {
             uiPlayerGUID = uiGuid;
         }

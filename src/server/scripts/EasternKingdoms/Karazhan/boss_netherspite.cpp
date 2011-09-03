@@ -97,7 +97,7 @@ public:
         uint64 BeamerGUID[3]; // guid's of auxiliary beaming portals
         uint64 BeamTarget[3]; // guid's of portals' current targets
 
-        bool IsBetween(WorldObject* u1, WorldObject *target, WorldObject* u2) // the in-line checker
+        bool IsBetween(WorldObject* u1, WorldObject* target, WorldObject* u2) // the in-line checker
         {
             if (!u1 || !u2 || !target)
                 return false;

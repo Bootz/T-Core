@@ -12258,14 +12258,13 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
                     }
                     else if (slot == EQUIPMENT_SLOT_OFFHAND)
                         UpdateExpertise(OFF_ATTACK);
-                    // update armor penetration
+                    // update armor penetration - passive auras may need it
                     switch(slot)
                     {
                         case EQUIPMENT_SLOT_MAINHAND:
                         case EQUIPMENT_SLOT_OFFHAND:
                         case EQUIPMENT_SLOT_RANGED:
                             RecalculateRating(CR_ARMOR_PENETRATION);
-                            break;
                         default:
                             break;
                     }
@@ -19609,8 +19608,8 @@ void Player::SendRemoveControlBar()
 
 bool Player::IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell)
 {
-     if (!mod || !spellInfo)
-         return false;
+    if (!mod || !spellInfo)
+        return false;
 
     // Mod out of charges
     if (spell && mod->charges == -1 && spell->m_appliedMods.find(mod->ownerAura) == spell->m_appliedMods.end())
@@ -21163,19 +21162,23 @@ void Player::UpdateTriggerVisibility()
     if (m_clientGUIDs.empty())
         return;
 
+    if (!IsInWorld())
+        return;
+
     UpdateData udata(GetMapId());
     WorldPacket packet;
-    for (ClientGUIDs::iterator itr=m_clientGUIDs.begin(); itr != m_clientGUIDs.end(); ++itr)
+    for (ClientGUIDs::iterator itr = m_clientGUIDs.begin(); itr != m_clientGUIDs.end(); ++itr)
     {
         if (IS_CREATURE_GUID(*itr))
         {
-            Creature *obj = IsInWorld() ? GetMap()->GetCreature(*itr) : NULL;
-            if (!obj || !obj->isTrigger())
+            Creature *obj = GetMap()->GetCreature(*itr);
+            if (!obj || !(obj->isTrigger() || obj->HasAuraType(SPELL_AURA_TRANSFORM)))  // can transform into triggers
                 continue;
 
             obj->BuildCreateUpdateBlockForPlayer(&udata, this);
         }
     }
+
     udata.BuildPacket(&packet);
     GetSession()->SendPacket(&packet);
 }

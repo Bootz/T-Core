@@ -93,14 +93,14 @@ public:
     class spell_sha_fire_nova_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_sha_fire_nova_SpellScript)
-        bool Validate(SpellInfo const* SpellInfo)
+        bool Validate(SpellInfo const* spellEntry)
         {
             if (!sSpellMgr->GetSpellInfo(SHAMAN_SPELL_FIRE_NOVA_R1))
                 return false;
-            if (sSpellMgr->GetFirstSpellInChain(SHAMAN_SPELL_FIRE_NOVA_R1) != sSpellMgr->GetFirstSpellInChain(SpellInfo->Id))
+            if (sSpellMgr->GetFirstSpellInChain(SHAMAN_SPELL_FIRE_NOVA_R1) != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
                 return false;
 
-            uint8 rank = sSpellMgr->GetSpellRank(SpellInfo->Id);
+            uint8 rank = sSpellMgr->GetSpellRank(spellEntry->Id);
             if (!sSpellMgr->GetSpellWithRank(SHAMAN_SPELL_FIRE_NOVA_TRIGGERED_R1, rank, true))
                 return false;
             return true;
@@ -152,7 +152,7 @@ public:
     class spell_sha_mana_tide_totem_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_sha_mana_tide_totem_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SHAMAN_SPELL_GLYPH_OF_MANA_TIDE))
                 return false;
@@ -202,7 +202,7 @@ public:
     {
         PrepareAuraScript(spell_sha_earthbind_totem_AuraScript);
 
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SHAMAN_TOTEM_SPELL_EARTHBIND_TOTEM))
                 return false;

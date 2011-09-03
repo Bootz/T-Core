@@ -579,9 +579,7 @@ void WorldSession::HandlePetSetAction(WorldPacket & recv_data)
                         for (Unit::ControlList::iterator itr = GetPlayer()->m_Controlled.begin(); itr != GetPlayer()->m_Controlled.end(); ++itr)
                             if ((*itr)->GetEntry() == pet->GetEntry())
                                 (*itr)->GetCharmInfo()->ToggleCreatureAutocast(spellInfo, false);
-
                 }
-
             }
 
             charmInfo->SetActionBar(position[i], spell_id, ActiveStates(act_state));

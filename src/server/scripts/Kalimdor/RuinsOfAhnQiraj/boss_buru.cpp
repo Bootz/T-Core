@@ -19,6 +19,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* ScriptData
+SDName: Boss_Buru
+SD%Complete: 0
+SDComment: Place Holder
+SDCategory: Ruins of Ahn'Qiraj
+EndScriptData */
+
 #include "ScriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
 
@@ -29,42 +36,20 @@ enum Yells
 
 class boss_buru : public CreatureScript
 {
-public:
-    boss_buru() : CreatureScript("boss_buru") { }
+    public:
+        boss_buru() : CreatureScript("boss_buru") { }
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new boss_buruAI (creature);
-    }
-
-    struct boss_buruAI : public ScriptedAI
-    {
-        boss_buruAI(Creature *c) : ScriptedAI(c)
+        struct boss_buruAI : public ScriptedAI
         {
-            pInstance = c->GetInstanceScript();
-        }
+            boss_buruAI(Creature* creature) : ScriptedAI(creature)
+            {
+            }
+        };
 
-        InstanceScript *pInstance;
-
-        void Reset()
+        CreatureAI* GetAI(Creature* creature) const
         {
-            if (pInstance)
-                pInstance->SetData(DATA_BURU_EVENT, NOT_STARTED);
+            return new boss_buruAI(creature);
         }
-
-        void EnterCombat(Unit* /*who*/)
-        {
-            if (pInstance)
-                pInstance->SetData(DATA_BURU_EVENT, IN_PROGRESS);
-        }
-
-        void JustDied(Unit* /*killer*/)
-        {
-            if (pInstance)
-                pInstance->SetData(DATA_BURU_EVENT, DONE);
-        }
-    };
-
 };
 
 void AddSC_boss_buru()

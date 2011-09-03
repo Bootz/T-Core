@@ -84,5 +84,3 @@ void WorldSession::HandleAcceptGrantLevel(WorldPacket& recv_data)
 
     _player->GiveLevel(_player->getLevel() + 1);
 }
-
-

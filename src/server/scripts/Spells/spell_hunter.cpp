@@ -28,7 +28,6 @@
 #include "ScriptPCH.h"
 #include "SpellAuraEffects.h"
 #include "GridNotifiers.h"
-#include "SpellInfo.h"
 
 enum HunterSpells
 {
@@ -55,7 +54,7 @@ public:
     class spell_hun_chimera_shot_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
                 return false;
@@ -151,7 +150,7 @@ public:
     class spell_hun_invigoration_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_invigoration_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_INVIGORATION_TRIGGERED))
                 return false;
@@ -186,7 +185,7 @@ public:
     class spell_hun_last_stand_pet_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_last_stand_pet_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
                 return false;
@@ -389,10 +388,10 @@ public:
         void HandleUpdatePeriodic(AuraEffect * aurEff)
         {
             Unit* target = GetUnitOwner();
-            if (Player* pPlayerTarget = target->ToPlayer())
+            if (Player* playerTarget = target->ToPlayer())
             {
                 int32 baseAmount = aurEff->GetBaseAmount();
-                int32 amount = pPlayerTarget->isMoving() ?
+                int32 amount = playerTarget->isMoving() ?
                 target->CalculateSpellDamage(target, GetSpellInfo(), aurEff->GetEffIndex(), &baseAmount) :
                 aurEff->GetAmount() - 1;
                 aurEff->SetAmount(amount);
@@ -420,7 +419,7 @@ public:
     class spell_hun_pet_heart_of_the_phoenix_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_heart_of_the_phoenix_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED))
                 return false;
@@ -467,7 +466,7 @@ public:
     class spell_hun_pet_carrion_feeder_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_carrion_feeder_SpellScript)
-        bool Validate(SpellInfo const* /*SpellInfo*/)
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED))
                 return false;
