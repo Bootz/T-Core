@@ -16,10 +16,10 @@ TODO-List for TrilliumEMU Developer #
 8.  Fix Achievments.
 9.  Add new columns to quest_template.
 10. Research the Battleground Packets, some updates added to this packets.
-11.  Update the rest of Opcodes to 4.2.0.
-12.  Implement a New Terrain System.
-13.  Implement a new Creature Formations System.
-14.  Implement the new Battlegrounds.
+11. Update the rest of Opcodes to 4.2.0.
+12. Implement a New Terrain System.
+13. Implement a new Creature Formations System.
+14. Implement the new Battlegrounds.
 15. Need to revise HoR now WIP.
 16. Implement new Transport System.
 17. Implement special spawn system.
