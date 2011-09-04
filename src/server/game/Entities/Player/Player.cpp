@@ -2300,18 +2300,17 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             if (!GetSession()->PlayerLogout())
             {
                 WorldPacket data(SMSG_NEW_WORLD, (3 * 4) + 4 + 4);
+
                 if (m_transport)
-                {
                     data << m_movementInfo.t_pos.PositionXYZStream();
-                    data << uint32(mapid);
-                    data << m_movementInfo.t_pos.GetOrientation();
-                }
                 else
-                {
                     data << m_teleport_dest.PositionXYZStream();
-                    data << uint32(mapid);
+
+                data << uint32(mapid);
+                if (m_transport)
+                    data << m_movementInfo.t_pos.GetOrientation();
+                else
                     data << m_teleport_dest.GetOrientation();
-                }
 
                 GetSession()->SendPacket(&data);
                 SendSavedInstances();
