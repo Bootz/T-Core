@@ -1355,6 +1355,16 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             break;
                         target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                         break;
+                    case 1463: // Incanter's Absorption
+                    {						
+                        if (removeMode == AURA_REMOVE_BY_EXPIRE)
+                            break;						
+                        if (removeMode == AURA_REMOVE_BY_CANCEL)
+                            break;						
+                        if (caster->HasAura(44394) || caster->HasAura(44395))						
+                            caster->CastSpell(caster, 86261, true);
+                        break;						
+                    }						
                     case 74396: // Fingers of Frost
                         // Remove the IGNORE_AURASTATE aura
                         target->RemoveAurasDueToSpell(44544);
