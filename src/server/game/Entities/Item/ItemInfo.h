@@ -24,29 +24,52 @@
 
 #include "SharedDefines.h"
 
+class ItemInfoMgr;
 class ItemInfo;
 struct ItemEntry;
 struct ItemSparseEntry;
+
+class ItemInfoMgr
+{
+    friend class ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>;
+private:
+    ItemInfoMgr();
+    ~ItemInfoMgr();
+
+public:
+    typedef std::vector<ItemInfo*> ItemInfoMap;
+
+    ItemInfo const* GetItemInfo(uint32 ItemId) const { return ItemId < GetItemInfoStoreSize() ?  mItemInfoMap[ItemId] : NULL; }
+    uint32 GetItemInfoStoreSize() const { return mItemInfoMap.size(); }
+
+    void LoadItemInfo();
+    void UnloadItemInfoStore();
+
+private:
+    ItemInfoMap mItemInfoMap;
+};
+
+#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
 
 class ItemInfo
 {
 public:
     /* Item.db2 */
-    uint32     ItemId;
     uint32     Class;
     uint32     SubClass;
     int32      Unk0;
-    int32      Material;
+    //int32      Material;
     uint32     DisplayId;
-    uint32     InventoryType;
-    uint32     Sheath;
+    //uint32     InventoryType;
+    //uint32     Sheath;
     /* Item-sparse.db2 */
+    uint32     ItemId;
     uint32     Quality;
     uint32     Flags;
     uint32     Flags2;
     uint32     BuyPrice;
     uint32     SellPrice;
-    //uint32     InventoryType;
+    uint32     InventoryType;
     int32      AllowableClass;
     int32      AllowableRace;
     uint32     ItemLevel;
@@ -81,8 +104,8 @@ public:
     uint32     PageMaterial;
     uint32     StartQuest;
     uint32     LockID;
-    //int32      Material;
-    //uint32     Sheath;
+    int32      Material;
+    uint32     Sheath;
     uint32     RandomProperty;
     uint32     RandomSuffix;
     uint32     ItemSet;
@@ -111,8 +134,8 @@ public:
     uint32     MaxMoneyLoot;
 
     // Functions
-    ItemInfo(ItemEntry const* itemEntry);
-    ItemSparseEntry const* GetItemSparse() const;
+    ItemInfo(ItemSparseEntry const* itemSparse);
+    ItemEntry const* GetItemEntry() const;
 };
 
 #endif // _ITEMINFO_H

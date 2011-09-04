@@ -21,86 +21,129 @@
 
 #include "ItemInfo.h"
 
-ItemInfo::ItemInfo(ItemEntry const* itemEntry)
-{
-    ItemId = itemEntry->ID;
-    Class  = itemEntry->Class;
-    SubClass = itemEntry->SubClass;
-    Unk0 = itemEntry->Unk0;
-    Material = itemEntry->Material;
-    DisplayId = itemEntry->DisplayId;
-    InventoryType = itemEntry->InventoryType;
-    Sheath = itemEntry->Sheath;
+/* ItemInfoMgr */
 
-    // There are many items not in the Item-sparse.db2, so we need to check
-    ItemSparseEntry const* _item = GetItemSparse();
-    Quality = _item ? _item->Quality : 0;
-    Flags = _item ? _item->Flags : 0;
-    Flags2 = _item ? _item->Flags2 : 0;
-    BuyPrice = _item ? _item->BuyPrice : 0;
-    SellPrice = _item ? _item->SellPrice : 0;
-    AllowableClass = _item ? _item->AllowableClass : -1;
-    AllowableRace = _item ? _item->AllowableRace : -1;
-    ItemLevel = _item ? _item->ItemLevel : 0;
-    RequiredLevel = _item ? _item->RequiredLevel : 0;
-    RequiredSkill = _item ? _item->RequiredSkill : 0;
-    RequiredSkillRank = _item ? _item->RequiredSkillRank : 0;
-    RequiredSpell = _item ? _item->RequiredSpell : 0;
-    RequiredHonorRank = _item ? _item->RequiredHonorRank : 0;
-    RequiredCityRank = _item ? _item->RequiredCityRank : 0;
-    RequiredReputationFaction = _item ? _item->RequiredReputationFaction : 0;
-    RequiredReputationRank = _item ? _item->RequiredReputationRank : 0;
-    MaxCount = _item ? _item->MaxCount : 0;
-    Stackable = _item ? _item->Stackable : 0;
-    ContainerSlots = _item ? _item->ContainerSlots : 0;
+ItemInfoMgr::ItemInfoMgr()
+{
+
+}
+
+ItemInfoMgr::~ItemInfoMgr()
+{
+    UnloadItemInfoStore();
+}
+
+void ItemInfoMgr::UnloadItemInfoStore()
+{
+    for (uint32 i = 0; i < mItemInfoMap.size(); ++i)
+    {
+        if (mItemInfoMap[i])
+            delete mItemInfoMap[i];
+    }
+    mItemInfoMap.clear();
+}
+
+void ItemInfoMgr::LoadItemInfo()
+{
+    uint32 oldMSTime = getMSTime();
+
+    UnloadItemInfoStore();
+    mItemInfoMap.resize(sItemSparseStore.GetNumRows(), NULL);
+
+    for (uint32 i = 0; i < sItemSparseStore.GetNumRows(); ++i)
+    {
+        if (ItemSparseEntry const* _itemSparse = sItemSparseStore.LookupEntry(i))
+            mItemInfoMap[i] = new ItemInfo(_itemSparse);
+    }
+
+    sLog->outString(">> Loaded %u Items Info in %u ms", mItemInfoMap.size(), GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+}
+
+/* ItemInfo */
+
+ItemInfo::ItemInfo(ItemSparseEntry const* itemSparse)
+{
+    // Item.db2 including Blizzard test items, so we use the Item-sparse.db2 data
+    /* Item-sparse.db2 */
+    ItemId = itemSparse->ID;
+    Quality = itemSparse->Quality;
+    Flags = itemSparse->Flags;
+    Flags2 = itemSparse->Flags2;
+    BuyPrice = itemSparse->BuyPrice;
+    SellPrice = itemSparse->SellPrice;
+    InventoryType = itemSparse->InventoryType;
+    AllowableClass = itemSparse->AllowableClass;
+    AllowableRace = itemSparse->AllowableRace;
+    ItemLevel = itemSparse->ItemLevel;
+    RequiredLevel = itemSparse->RequiredLevel;
+    RequiredSkill = itemSparse->RequiredSkill;
+    RequiredSkillRank = itemSparse->RequiredSkillRank;
+    RequiredSpell = itemSparse->RequiredSpell;
+    RequiredHonorRank = itemSparse->RequiredHonorRank;
+    RequiredCityRank = itemSparse->RequiredCityRank;
+    RequiredReputationFaction = itemSparse->RequiredReputationFaction;
+    RequiredReputationRank = itemSparse->RequiredReputationRank;
+    MaxCount = itemSparse->MaxCount;
+    Stackable = itemSparse->Stackable;
+    ContainerSlots = itemSparse->ContainerSlots;
     for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; i++)
     {
-        ItemStatType[i] = _item ? _item->ItemStatType[i] : 0;
-        ItemStatValue[i] = _item ? _item->ItemStatValue[i] : 0;
+        ItemStatType[i] = itemSparse->ItemStatType[i];
+        ItemStatValue[i] = itemSparse->ItemStatValue[i];
     }
-    ScalingStatDistribution = _item ? _item->ScalingStatDistribution : 0;
-    DamageType = _item ? _item->DamageType : 0;
-    Delay = _item ? _item->Delay : 0;
-    RangedModRange = _item ? _item->RangedModRange : 0.0f;
+    ScalingStatDistribution = itemSparse->ScalingStatDistribution;
+    DamageType = itemSparse->DamageType;
+    Delay = itemSparse->Delay;
+    RangedModRange = itemSparse->RangedModRange;
     for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; i++)
     {
-         SpellId[i] = _item ? _item->SpellId[i] : 0;
-         SpellTrigger[i] = _item ? _item->SpellTrigger[i] : 0;
-         SpellCharges[i] = _item ? _item->SpellCharges[i] : 0;
-         SpellCooldown[i] = _item ? _item->SpellCooldown[i] : 0;
-         SpellCategory[i] = _item ? _item->SpellCategory[i] : 0;
-         SpellCategoryCooldown[i] = _item ? _item->SpellCategoryCooldown[i] : 0;
+         SpellId[i] = itemSparse->SpellId[i];
+         SpellTrigger[i] = itemSparse->SpellTrigger[i];
+         SpellCharges[i] = itemSparse->SpellCharges[i];
+         SpellCooldown[i] = itemSparse->SpellCooldown[i];
+         SpellCategory[i] = itemSparse->SpellCategory[i];
+         SpellCategoryCooldown[i] = itemSparse->SpellCategoryCooldown[i];
     }
-    Bonding = _item ? _item->Bonding : 0;
-    Name = _item ? _item->Name : "";
-    Description = _item ? _item->Description : "";
-    PageText = _item ? _item->PageText : 0;
-    LanguageID = _item ? _item->LanguageID : 0;
-    PageMaterial = _item ? _item->PageMaterial : 0;
-    StartQuest = _item ? _item->StartQuest : 0;
-    LockID = _item ? _item->LockID : 0;
-    RandomProperty = _item ? _item->RandomProperty : 0;
-    RandomSuffix = _item ? _item->RandomSuffix : 0;
-    ItemSet = _item ? _item->ItemSet : 0;
-    MaxDurability = _item ? _item->MaxDurability : 0;
-    Area = _item ? _item->Area : 0;
-    Map = _item ? _item->Map : 0;
-    BagFamily = _item ? _item->BagFamily : 0;
-    TotemCategory = _item ? _item->TotemCategory : 0;
+    Bonding = itemSparse->Bonding;
+    Name = itemSparse->Name;
+    Description = itemSparse->Description;
+    PageText = itemSparse->PageText;
+    LanguageID = itemSparse->LanguageID;
+    PageMaterial = itemSparse->PageMaterial;
+    StartQuest = itemSparse->StartQuest;
+    LockID = itemSparse->LockID;
+    Material = itemSparse->Material;
+    Sheath = itemSparse->Sheath;
+    RandomProperty = itemSparse->RandomProperty;
+    RandomSuffix = itemSparse->RandomSuffix;
+    ItemSet = itemSparse->ItemSet;
+    MaxDurability = itemSparse->MaxDurability;
+    Area = itemSparse->Area;
+    Map = itemSparse->Map;
+    BagFamily = itemSparse->BagFamily;
+    TotemCategory = itemSparse->TotemCategory;
     for (uint8 i = 0; i < MAX_ITEM_PROTO_SOCKETS; i++)
     {
-        Color[i] = _item ? _item->Color[i] : 0;
-        Content[i] = _item ? _item->Content[i] : 0;
+        Color[i] = itemSparse->Color[i];
+        Content[i] = itemSparse->Content[i];
     }
-    SocketBonus = _item ? _item->SocketBonus : 0;
-    GemProperties = _item ? _item->GemProperties : 0;
-    ArmorDamageModifier = _item ? _item->ArmorDamageModifier : 0.0f;
-    Duration = _item ? _item->Duration : 0;
-    ItemLimitCategory = _item ? _item->ItemLimitCategory : 0;
-    HolidayId = _item ? _item->HolidayId : 0;
-    StatScalingFactor = _item ? _item->StatScalingFactor : 0;
+    SocketBonus = itemSparse->SocketBonus;
+    GemProperties = itemSparse->GemProperties;
+    ArmorDamageModifier = itemSparse->ArmorDamageModifier;
+    Duration = itemSparse->Duration;
+    ItemLimitCategory = itemSparse->ItemLimitCategory;
+    HolidayId = itemSparse->HolidayId;
+    StatScalingFactor = itemSparse->StatScalingFactor;
 
-    // There are many items not in the ItemTemplate, so we need to check
+    /* Item.db2 */
+    ItemEntry const* _itemEntry = GetItemEntry();
+    Class  = _itemEntry ? _itemEntry->Class : 0;
+    SubClass = _itemEntry ? _itemEntry->SubClass : 0;
+    Unk0 = _itemEntry ? _itemEntry->Unk0 : 0;
+    DisplayId = _itemEntry ? _itemEntry->DisplayId : 0;
+
+     /* item_template */
     ItemTemplate const* _proto = sObjectMgr->GetItemTemplate(ItemId);
     BuyCount = _proto ? _proto->BuyCount : 0;
     Block = _proto ? _proto->Block : 0;
@@ -112,7 +155,7 @@ ItemInfo::ItemInfo(ItemEntry const* itemEntry)
     MaxMoneyLoot = _proto ? _proto->MaxMoneyLoot : 0;
 }
 
-ItemSparseEntry const* ItemInfo::GetItemSparse() const
+ItemEntry const* ItemInfo::GetItemEntry() const
 {
-    return ItemId ? sItemSparseStore.LookupEntry(ItemId) : NULL;
+    return ItemId ? sItemStore.LookupEntry(ItemId) : NULL;
 }
