@@ -286,9 +286,9 @@ class DataStorage
             if (!indexTable.asT)
                 return;
 
-            delete[] ((char*)indexTable.asT);
+            delete [] ((char*)indexTable.asT);
             indexTable.asT = NULL;
-            delete[] ((char*)dataTable);
+            delete [] ((char*)dataTable);
             dataTable = NULL;
 
             while (!stringPoolList.empty())
@@ -298,8 +298,6 @@ class DataStorage
             }
             nCount = 0;
         }
-        
-        void EraseEntry(uint32 id) { indexTable[id] = NULL; }
 
     private:
         char const* fmt;
