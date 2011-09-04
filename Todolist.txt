@@ -8,18 +8,18 @@ TODO-List for TrilliumEMU Developer #
 // Core Developer:
 1.  Fix the Vendors, they dont show any items.
 2.  Implement Wintergrasp Battlefield.
-3.  Fix pet stables
-4.  Begin to fix spells (only casting and damage works)
-5.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
-6.  Begin to fix guilds.
-7.  Begin to fix groups.
-8.  Fix Achievments.
-9.  Add new columns to quest_template.
-10. Research the Battleground Packets, some updates added to this packets.
-11. Update the rest of Opcodes to 4.2.0.
-12. Implement a New Terrain System.
-13. Implement a new Creature Formations System.
-14. Implement the new Battlegrounds.
+3.  Implement the new Battlegrounds.
+4.  Fix pet stables
+5.  Begin to fix spells (only casting and damage works)
+6.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
+7.  Begin to fix guilds.
+8.  Begin to fix groups.
+9.  Fix Achievments.
+10. Add new columns to quest_template.
+11. Research the Battleground Packets, some updates added to this packets.
+12. Update the rest of Opcodes to 4.2.0.
+13. Implement a New Terrain System.
+14. Implement a new Creature Formations System.
 15. Need to revise HoR now WIP.
 16. Implement new Transport System.
 17. Implement special spawn system.
