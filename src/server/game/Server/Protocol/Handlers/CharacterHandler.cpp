@@ -487,7 +487,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 {
     /** This is a series of callbacks executed consecutively as a result from the database becomes available.
         This is much more efficient than synchronous requests on packet handler, and much less DoS prone.
-        It also prevents data syncrhonisation errors.
+        It also prevents data synchronization errors.
     */
     switch (createInfo->Stage)
     {

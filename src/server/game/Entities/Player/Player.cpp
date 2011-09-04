@@ -1859,9 +1859,9 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
 
     Field *fields = result->Fetch();
 
+    uint32 guid = fields[0].GetUInt32();
     uint8 playerRace = fields[2].GetUInt8();
     uint8 playerClass = fields[3].GetUInt8();
-    uint32 guid = fields[0].GetUInt32();
     uint32 playerBytes = fields[5].GetUInt32();
     uint32 playerFlags = fields[14].GetUInt32();
     uint32 atLoginFlags = fields[15].GetUInt32();
@@ -1892,7 +1892,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
     if (uint8(guid >> 8) != 0)
         *data << uint8(guid >> 8);
 
-    *data << uint8(playerRace);                                // Race
+    *data << uint8(playerRace);                           // Race
 
     if (uint8(guid >> 24) != 0)
         *data << uint8(guid >> 24);
@@ -1915,7 +1915,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
     }
     else
         charFlags |= CHARACTER_FLAG_DECLINED;
-    *data << uint32(charFlags);                          // character flags
+    *data << uint32(charFlags);                           // character flags
 
     *data << uint32(petFamily);                           // Pet Family
     *data << uint8(playerBytes >> 16);                    // Hair style
