@@ -24,6 +24,7 @@
 #include "DatabaseWorkerPool.h"
 #include "Implementation/WorldDatabase.h"
 #include "DatabaseEnv.h"
+#include <vector>
 
 struct SqlDbc
 {
@@ -68,6 +69,7 @@ template<class T>
 class DataStorage
 {
     typedef std::list<char*> StringPoolList;
+    typedef std::vector<T*> DataTableEx;
     public:
         explicit DataStorage(const char *f) :
             fmt(f), nCount(0), fieldCount(0), dataTable(NULL)
@@ -84,6 +86,29 @@ class DataStorage
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
+
+        /// Copies the provided entry and stores it.
+        void AddEntry(uint32 id, const T* entry)
+        {
+            if (LookupEntry(id))
+                return;
+
+            if (id >= nCount)
+            {
+                // reallocate index table
+                char** tmpIdxTable = new char*[id+1];
+                memset(tmpIdxTable, 0, (id+1) * sizeof(char*));
+                memcpy(tmpIdxTable, (char*)indexTable, nCount * sizeof(char*));
+                delete[] ((char*)indexTable);
+                nCount = id + 1;
+                indexTable = (T**)tmpIdxTable;
+            }
+
+            T* entryDst = new T;
+            memcpy((char*)entryDst, (char*)entry, sizeof(T));
+            m_dataTableEx.push_back(entryDst);
+            indexTable[id] = entryDst;
+        }
 
         bool LoadDB2Storage(char const* fn, SqlDbc* sql)
         {
@@ -288,10 +313,13 @@ class DataStorage
             indexTable.asT = NULL;
             delete[] ((char*)dataTable);
             dataTable = NULL;
+            for (DataTableEx::const_iterator itr = m_dataTableEx.begin(); itr != m_dataTableEx.end(); ++itr)
+                delete *itr;
+            m_dataTableEx.clear();
 
-            while(!stringPoolList.empty())
+            while (!stringPoolList.empty())
             {
-                delete[] stringPoolList.front();
+                delete [] stringPoolList.front();
                 stringPoolList.pop_front();
             }
             nCount = 0;
@@ -303,6 +331,7 @@ class DataStorage
         char const* fmt;
         uint32 nCount;
         uint32 fieldCount;
+        uint32 recordSize;
 
         union
         {
@@ -312,6 +341,7 @@ class DataStorage
         indexTable;
 
         T* dataTable;
+        DataTableEx m_dataTableEx;
         StringPoolList stringPoolList;
 };
 

@@ -188,45 +188,46 @@ bool StorageLoader::LoadDB2Storage(const char* filename, const char* fmt)
 
     EndianConvert(build);
 
-    if (fread(&unk1, 4, 1, f) != 1)                               // Unknown WDB2
+    if (fread(&unk1, 4, 1, f) != 1)                                // Unknown WDB2
     {
         fclose(f);
         return false;
     }
-
     EndianConvert(unk1);
 
-    if (fread(&unk2, 4, 1, f) != 1)                               // Unknown WDB2
+    if (build > 12880)
     {
-        fclose(f);
-        return false;
+        if (fread(&unk2, 4, 1, f) != 1)                               // Unknown WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(unk2);
+
+        if (fread(&maxIndex, 4, 1, f) != 1)                           // MaxIndex WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(maxIndex);
+
+        if (fread(&locale, 4, 1, f) != 1)                             // Locales
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(locale);
+
+        if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(unk5);
+
+        if (maxIndex)
+            fseek(f, maxIndex * 6 - 48*3, SEEK_CUR);
     }
-
-    EndianConvert(unk2);
-
-    if (fread(&unk3, 4, 1, f) != 1)                               // Unknown WDB2
-    {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(unk3);
-
-    if (fread(&locale, 4, 1, f) != 1)                             // Locales
-    {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(locale);
-
-    if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
-    {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(unk5);
 
     fieldsOffset = new uint32[fieldCount];
     fieldsOffset[0] = 0;
