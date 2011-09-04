@@ -87,29 +87,6 @@ class DataStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        /// Copies the provided entry and stores it.
-        void AddEntry(uint32 id, const T* entry)
-        {
-            if (LookupEntry(id))
-                return;
-
-            if (id >= nCount)
-            {
-                // reallocate index table
-                char** tmpIdxTable = new char*[id+1];
-                memset(tmpIdxTable, 0, (id+1) * sizeof(char*));
-                memcpy(tmpIdxTable, (char*)indexTable, nCount * sizeof(char*));
-                delete[] ((char*)indexTable);
-                nCount = id + 1;
-                indexTable = (T**)tmpIdxTable;
-            }
-
-            T* entryDst = new T;
-            memcpy((char*)entryDst, (char*)entry, sizeof(T));
-            m_dataTableEx.push_back(entryDst);
-            indexTable[id] = entryDst;
-        }
-
         bool LoadDB2Storage(char const* fn, SqlDbc* sql)
         {
             StorageLoader db2;
@@ -309,13 +286,10 @@ class DataStorage
             if (!indexTable.asT)
                 return;
 
-            delete[] ((char*)indexTable.asT);
+            delete [] ((char*)indexTable.asT);
             indexTable.asT = NULL;
-            delete[] ((char*)dataTable);
+            delete [] ((char*)dataTable);
             dataTable = NULL;
-            for (DataTableEx::const_iterator itr = dataTableEx.begin(); itr != dataTableEx.end(); ++itr)
-                delete *itr;
-            dataTableEx.clear();
 
             while (!stringPoolList.empty())
             {
@@ -324,8 +298,6 @@ class DataStorage
             }
             nCount = 0;
         }
-        
-        void EraseEntry(uint32 id) { indexTable[id] = NULL; }
 
     private:
         char const* fmt;
