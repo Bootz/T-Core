@@ -396,7 +396,7 @@ enum Opcodes
     SMSG_PET_TAME_FAILURE                            = 0x03EB6, // 14480
     CMSG_PET_SET_ACTION                              = 0x02A6E, // 14480
     CMSG_PET_ACTION                                  = 0x07232, // 14480
-    CMSG_PET_ABANDON                                 = 0x100AF, //
+    CMSG_PET_ABANDON                                 = 0x072FE, // 14480
     CMSG_PET_RENAME                                  = 0x0BAEE, // 14480
     SMSG_PET_NAME_INVALID                            = 0x100B0, //
     SMSG_PET_SPELLS                                  = 0x066A3, // 14480
@@ -852,7 +852,7 @@ enum Opcodes
     CMSG_MOVE_SET_CAN_FLY_ACK                        = 0x10183, //
     CMSG_MOVE_SET_FLY                                = 0x10184, //
     CMSG_SOCKET_GEMS                                 = 0x026AB, // 14480
-    CMSG_ARENA_TEAM_CREATE                           = 0x10185, //
+    CMSG_ARENA_TEAM_CREATE                           = 0x01050, // 14480
     SMSG_ARENA_TEAM_COMMAND_RESULT                   = 0x08B45, // 14480
     CMSG_ARENA_TEAM_QUERY                            = 0x0F62E, // 4.2.0:14480
     SMSG_ARENA_TEAM_QUERY_RESPONSE                   = 0x0FE2F, // 14480
@@ -991,7 +991,7 @@ enum Opcodes
     CMSG_CHANNEL_UNSILENCE_ALL                       = 0x101CD, //
     CMSG_TARGET_CAST                                 = 0x101CE, //
     CMSG_TARGET_SCRIPT_CAST                          = 0x101CF, //
-    CMSG_CHANNEL_DISPLAY_LIST                        = 0x101D0, //
+    CMSG_CHANNEL_DISPLAY_LIST                        = 0x051B1, // 14480
     CMSG_SET_ACTIVE_VOICE_CHANNEL                    = 0x101D1, //
     CMSG_GET_CHANNEL_MEMBER_COUNT                    = 0x101D2, //
     SMSG_CHANNEL_MEMBER_COUNT                        = 0x0FAF7, // 14480
