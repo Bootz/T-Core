@@ -7,24 +7,35 @@ TODO-List for TrilliumEMU Developer #
 
 // Core Developer:
 1.  Fix the Vendors, they dont show any items.
-2.  Update the rest of Opcodes to 4.2.0.
-3.  Implement a New Terrain System.
-4.  Implement a new Creature Formations System.
-5.  Fix the Group System.
-6.  Fix the Guild System.
-7.  Implement the new Battlegrounds.
-8.  Fix the Packets for Battlegrounds.
-9.  Implement Wintergrasp Battlefield.
-10. Need to revise HoR now WIP.
-11. Implement new Transport System.
-12. Implement special spawn system.
-13. Change core to use cluster system. Started in cluster branch.
+2.  Implement Wintergrasp Battlefield.
+3.  Fix pet stables
+4.  Begin to fix spells (only casting and damage works)
+5.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
+6.  Begin to fix guilds.
+7.  Begin to fix groups.
+8.  Fix Achievments.
+9.  Add new columns to quest_template.
+10. Research the Battleground Packets, some updates added to this packets.
+11.  Update the rest of Opcodes to 4.2.0.
+12.  Implement a New Terrain System.
+13.  Implement a new Creature Formations System.
+14.  Implement the new Battlegrounds.
+15. Need to revise HoR now WIP.
+16. Implement new Transport System.
+17. Implement special spawn system.
 
 // Database Developer:
-1. Fix all startup errors.
-2. Implement more Cataclysm Content.
+1. Fix old spawns and duplicates from old WotLK
+2. Fix quests that doesnt work
+3. Fix creature_template from 4.1.0+ (level, faction)
+3. Add loot for missing creatures like cataclysm H dungeons
+4. Rewrite table creature_classlevelstats
+5. Rewrite exp/mindamage/maxmage based on unit_class + level formula
+6. Spawn all creatures not spawned from 4.1.0+
+7. Update WDBverified column with correct data
+8. Fix playercreateinfo for all races and classes.
 
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
 
-If you Fix anything from the List, remove it.
+If you Fix anything from this List, remove it.
