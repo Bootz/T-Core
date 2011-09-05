@@ -7071,7 +7071,17 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     target = this;				
                     triggered_spell_id = 82987;					
                     break;					
-                }							
+                }			
+                // Tidal Waves
+                case 51562:
+                case 51563:
+                case 51564:
+                {
+                    target = this;
+                    triggered_spell_id = 53390;
+                    break;
+                }
+			
                 // Windfury Weapon (Passive) 1-5 Ranks
                 case 33757:
                 {
@@ -8285,11 +8295,11 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     case 86304:
                     {
                         if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(11426))
-							return false;
+                            return false;
 		
                         CastSpell(this, 86347, true);
                         CastSpell(this, 11426, true);	
-						break;						
+                        break;						
                     }
                 }
                 break;				
