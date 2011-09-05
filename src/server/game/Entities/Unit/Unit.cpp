@@ -5740,16 +5740,13 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 11119:
                 case 11120:
                 case 12846:
-                case 12847:
-                case 12848:
+
                 {
                     switch (dummySpell->Id)
                     {
-                        case 11119: basepoints0 = int32(0.08f * damage); break;
-                        case 11120: basepoints0 = int32(0.16f * damage); break;
-                        case 12846: basepoints0 = int32(0.24f * damage); break;
-                        case 12847: basepoints0 = int32(0.32f * damage); break;
-                        case 12848: basepoints0 = int32(0.40f * damage); break;
+                        case 11119: basepoints0 = int32(0.13f * damage); break;
+                        case 11120: basepoints0 = int32(0.26f * damage); break;
+                        case 12846: basepoints0 = int32(0.4f * damage); break;
                         default:
                             sLog->outError("Unit::HandleDummyAuraProc: non handled spell id: %u (IG)", dummySpell->Id);
                             return false;
