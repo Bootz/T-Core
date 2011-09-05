@@ -4202,6 +4202,8 @@ void ObjectMgr::LoadQuests()
             mExclusiveQuestGroups.insert(std::pair<int32, uint32>(qinfo->ExclusiveGroup, qinfo->GetQuestId()));
         if (qinfo->LimitTime)
             qinfo->SetFlag(QUEST_TRILLIUM_FLAGS_TIMED);
+        if (qinfo->PlayersSlain)
+            qinfo->SetFlag(QUEST_TRILLIUM_FLAGS_PLAYER_KILL);
     }
 
     // check QUEST_TRILLIUM_FLAGS_EXPLORATION_OR_EVENT for spell with SPELL_EFFECT_QUEST_COMPLETE
