@@ -6233,7 +6233,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         case SPELLFAMILY_DRUID:
         {
             switch(dummySpell->Id)
-            {
+            {		
                 // Nature's Ward
                 case 33881:			
                 case 33882:
@@ -7063,6 +7063,15 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     triggered_spell_id = 28850;
                     break;
                 }
+                // Telluric Currents
+                case 82984:
+                case 82988:
+                {
+                    basepoints0 = triggerAmount * damage / 100;				
+                    target = this;				
+                    triggered_spell_id = 82987;					
+                    break;					
+                }							
                 // Windfury Weapon (Passive) 1-5 Ranks
                 case 33757:
                 {
@@ -8206,11 +8215,11 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     {
                         float stat = 0.0f;
                         // strength
-                        if (GetStat(STAT_STRENGTH) > stat) { trigger_spell_id = 60229;stat = GetStat(STAT_STRENGTH); }
+                        if (GetStat(STAT_STRENGTH) > stat) { trigger_spell_id = 60229; stat = GetStat(STAT_STRENGTH); }
                         // agility
-                        if (GetStat(STAT_AGILITY)  > stat) { trigger_spell_id = 60233;stat = GetStat(STAT_AGILITY);  }
+                        if (GetStat(STAT_AGILITY)  > stat) { trigger_spell_id = 60233; stat = GetStat(STAT_AGILITY);  }
                         // intellect
-                        if (GetStat(STAT_INTELLECT)> stat) { trigger_spell_id = 60234;stat = GetStat(STAT_INTELLECT);}
+                        if (GetStat(STAT_INTELLECT)> stat) { trigger_spell_id = 60234; stat = GetStat(STAT_INTELLECT);}
                         // spirit
                         if (GetStat(STAT_SPIRIT)   > stat) { trigger_spell_id = 60235;                               }
                         break;
@@ -8269,7 +8278,21 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             return false;
                     }
                 }
-                break;
+                switch (auraSpellInfo->Id)
+                {				
+                    // Reactive Barrier
+                    case 86303:
+                    case 86304:
+                    {
+                        if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(11426))
+							return false;
+		
+                        CastSpell(this, 86347, true);
+                        CastSpell(this, 11426, true);	
+						break;						
+                    }
+                }
+                break;				
             case SPELLFAMILY_WARRIOR:
                 if (auraSpellInfo->Id == 50421)             // Scent of Blood
                 {
