@@ -2259,6 +2259,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 10143 : 10144);
                                 break;
+							// Worgen
+							case RACE_WORGEN:
+								target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
+								break;
                             default:
                                 break;
                         }
@@ -2318,6 +2322,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 25038 : 25049);
                                 break;
+							// Worgen
+							case RACE_WORGEN:
+								target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
+								break;
                             default:
                                 break;
                         }
@@ -3283,7 +3291,7 @@ void AuraEffect::HandleAuraControlVehicle(AuraApplication const* aurApp, uint8 m
 /*********************************************************/
 /***                  MODIFY SPEED                     ***/
 /*********************************************************/
-void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
+void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))
         return;
@@ -3291,6 +3299,21 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8
     Unit* target = aurApp->GetTarget();
 
     target->UpdateSpeed(MOVE_RUN, true);
+	
+	if (apply)
+    {
+        switch (GetId())
+        {
+            case 68992: // Darkflight, worgen's sprint spell.
+            {
+                if (target->GetTypeId() == TYPEID_PLAYER)
+                    target->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 void AuraEffect::HandleAuraModIncreaseMountedSpeed(AuraApplication const* aurApp, uint8 mode, bool apply) const
