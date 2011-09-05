@@ -1222,6 +1222,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     m_caster->CastSpell(m_caster, 65156, true);
                     m_caster->CastSpell(m_caster, 96216, false);										
                 }
+            }
+            
                 return;
             // Slam
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_SLAM && m_spellInfo->SpellIconID == 559)
