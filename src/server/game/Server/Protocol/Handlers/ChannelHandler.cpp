@@ -31,8 +31,9 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
 
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint8>();
-
     recvPacket >> _channelId;
+    recvPacket >> _channelName;
+    recvPacket >> _password;
 
     if (_channelId)
     {
@@ -48,16 +49,13 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
             return;
     }
 
-    recvPacket >> _channelName;
-    recvPacket >> _password;
-
     if (_channelName.empty())
         return;
 
     if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
     {
         cMgr->team = _player->GetTeam();
-        if (Channel *chn = cMgr->GetJoinChannel(_channelName, _channelId))
+        if (Channel* chn = cMgr->GetJoinChannel(_channelName, _channelId))
             chn->Join(_player->GetGUID(), _password.c_str());
     }
 }
