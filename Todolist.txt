@@ -14,7 +14,7 @@ TODO-List for TrilliumEMU Developer #
 6.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
 7.  Begin to fix guilds.
 8.  Begin to fix groups.
-9.  Fix Achievments.
+9.  Fix Achievements.
 10. Add new columns to quest_template.
 11. Research the Battleground Packets, some updates added to this packets.
 12. Update the rest of Opcodes to 4.2.0.
