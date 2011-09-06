@@ -3014,6 +3014,12 @@ void SpellMgr::LoadDbcDataCorrections()
             case 2825:  // Bloodlust
                 spellAura->excludeCasterAuraSpell = 57724; // Sated
                 break;
+            case 80353:  // Time Warp
+                spellAura->excludeCasterAuraSpell = 80354; // Temporal Displacement
+                break;
+            case 90355:  // Ancient Hysteria
+                spellAura->excludeCasterAuraSpell = 95809; // Insanity
+                break;				
             case 20335: // Heart of the Crusader
             case 20336:
             case 20337:
