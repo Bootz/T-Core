@@ -1176,6 +1176,11 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                                 caster->CastSpell(caster, spellId, true);
                         }
                         break;
+                    case 64343: // Impact          				
+                    {
+                        // Reset cooldown on Fire Blast
+                        caster->ToPlayer()->RemoveSpellCooldown(2136, true);
+                    }						
                     case 44544: // Fingers of Frost
                     {
                         // See if we already have the indicator aura. If not, create one.
