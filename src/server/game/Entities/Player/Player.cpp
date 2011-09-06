@@ -5998,6 +5998,9 @@ void Player::UpdateRating(CombatRating cr)
                 UpdateExpertise(OFF_ATTACK);
             }
             break;
+        case CR_MASTERY:                                    // Implemented in Player::UpdateMastery
+            UpdateMastery();
+            break;			
         case CR_ARMOR_PENETRATION:
             if (affectStats)
                 UpdateArmorPenetration(amount);
@@ -7859,6 +7862,9 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
                 ApplyModInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE, -val, apply);
                 m_spellPenetrationItemMod += apply ? val : -val;
                 break;
+            case ITEM_MOD_MASTERY_RATING:
+                ApplyRatingMod(CR_MASTERY, int32(val), apply);
+                break;				
             // deprecated item mods
             case ITEM_MOD_SPELL_HEALING_DONE:
             case ITEM_MOD_SPELL_DAMAGE_DONE:
@@ -13820,6 +13826,9 @@ void Player::ApplyEnchantment(Item *item, EnchantmentSlot slot, bool apply, bool
                             HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(enchant_amount), apply);
                             sLog->outDebug(LOG_FILTER_PLAYER_ITEMS, "+ %u BLOCK_VALUE", enchant_amount);
                             break;
+                        case ITEM_MOD_MASTERY_RATING:
+                            ApplyRatingMod(CR_MASTERY, int32(enchant_amount), apply);
+                            break;							
                         case ITEM_MOD_SPELL_HEALING_DONE:   // deprecated
                         case ITEM_MOD_SPELL_DAMAGE_DONE:    // deprecated
                         default:
