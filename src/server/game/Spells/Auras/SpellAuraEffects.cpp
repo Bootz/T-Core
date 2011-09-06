@@ -373,8 +373,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandlePreventResurrection,                       //314 SPELL_AURA_PREVENT_RESSURECTION todo
     &AuraEffect::HandleNoImmediateEffect,                         //315 SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         //316 SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
-    &AuraEffect::HandleNULL,                                      //317
-    &AuraEffect::HandleNULL,                                      //318
+    &AuraEffect::HandleNULL,                                      //317 SPELL_AURA_MOD_SPELL_POWER_PCT
+    &AuraEffect::HandleNULL,                                      //318 SPELL_AURA_MASTERY
     &AuraEffect::HandleNULL,                                      //319
     &AuraEffect::HandleNULL,                                      //320
     &AuraEffect::HandleNULL,                                      //321
@@ -584,6 +584,27 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                         DoneActualBenefit = float(amount);
                         DoneActualBenefit *= caster->GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
                         amount = int32(DoneActualBenefit);
+                        +                        if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
+ 	597	
++                        {
+ 	598	
++                            if (caster->ToPlayer()->getClass() == CLASS_PALADIN)
+ 	599	
++                            {
+ 	600	
++                                if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_DISCIPLINE)
+ 	601	
++                                {
+ 	602	
++                                    int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
+ 	603	
++                                    amount += bp;
+ 	604	
++                                }
+ 	605	
++                            }
+ 	606	
++                        }
 
                         return amount;
                     }
