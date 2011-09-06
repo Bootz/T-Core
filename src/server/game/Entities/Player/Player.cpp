@@ -6794,7 +6794,7 @@ void Player::SendMovieStart(uint32 MovieId)
 
 bool Player::isInWorgenForm()
 {
-	return GetUInt32Value(UNIT_FIELD_FLAGS_2) & IN_WORGEN_FORM ? true : false;
+    return GetUInt32Value(UNIT_FIELD_FLAGS_2) & IN_WORGEN_FORM ? true : false;
 }
 
 void Player::setInHumanForm()

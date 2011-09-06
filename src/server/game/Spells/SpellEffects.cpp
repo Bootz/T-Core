@@ -464,8 +464,8 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                 else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
                     ApplyPctF(damage, m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
                 // Juggernaut - Intercept Share CD
-                else if (m_caster->HasAura(64976) && m_spellInfo->Id == 20253)                      
-                    m_caster->CastSpell(m_caster, 96215, false);					
+                else if (m_caster->HasAura(64976) && m_spellInfo->Id == 20253)
+                    m_caster->CastSpell(m_caster, 96215, false);
                 // Shockwave
                 else if (m_spellInfo->Id == 46968)
                 {
@@ -1220,11 +1220,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->HasAura(64976))
                 {
                     m_caster->CastSpell(m_caster, 65156, true);
-                    m_caster->CastSpell(m_caster, 96216, false);										
+                    m_caster->CastSpell(m_caster, 96216, false);
                 }
-            }
-            
                 return;
+            }
             // Slam
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_SLAM && m_spellInfo->SpellIconID == 559)
             {
