@@ -1203,9 +1203,9 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         // Reset cooldown on shield slam if needed
                         caster->ToPlayer()->RemoveSpellCooldown(23922, true);
                         break;
-                    }					
+                    }
                 }
-                break;					
+                break;
             case SPELLFAMILY_WARLOCK:
                 switch(GetId())
                 {
@@ -1222,7 +1222,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             case SPELLFAMILY_HUNTER:
                 if (!caster)
                     break;
-    				
+
                 switch(GetId())
                 {
                     case 1978: // Improved Serpent Sting
@@ -1231,20 +1231,20 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         {
                             int32 basepoints0 = aurEff->GetAmount() * GetEffect(0)->GetTotalTicks() * caster->SpellDamageBonus(target, GetSpellInfo(), GetEffect(0)->GetAmount(), DOT) / 100;
                             caster->CastCustomSpell(target, 83077, &basepoints0, NULL, NULL, true, NULL, GetEffect(0));
-                        }					
+                        }
                         break;
                     }
                     case 82925: // Master Marksman
-                    {    				
+                    {
                         if (target->GetTypeId() == TYPEID_PLAYER && GetStackAmount() == 5)
                         {
                             target->CastSpell(target, 82926, true);
                             target->RemoveAura(82925);
                         }
                         break;
-                    }				
-                }                    
-                break; 				
+                    }
+                }
+                break;
             case SPELLFAMILY_PRIEST:
                 if (!caster)
                     break;
@@ -1370,33 +1370,29 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                         break;
                     case 118: // Improved Polymorph
-                    {						
-                        if (removeMode == AURA_REMOVE_BY_EXPIRE)
+                    {
+                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
                             break;						
-                        if (removeMode == AURA_REMOVE_BY_CANCEL)
-                            break;
                         if (caster->HasAura(11210) && !target->HasAura(87515))
                         {
                             target->CastSpell(target, 83046, true);
                             caster->AddAura(87515, target); // Immune Marker
                         }
-                        else if (caster->HasAura(12592) && !target->HasAura(87515))						
+                        else if (caster->HasAura(12592) && !target->HasAura(87515))
                         {
                             target->CastSpell(target, 83047, true);
                             caster->AddAura(87515, target); // Immune Marker
                         }
-                        break;						
+                        break;
                     }
                     case 1463: // Incanter's Absorption
                     {						
-                        if (removeMode == AURA_REMOVE_BY_EXPIRE)
-                            break;						
-                        if (removeMode == AURA_REMOVE_BY_CANCEL)
-                            break;						
-                        if (caster->HasAura(44394) || caster->HasAura(44395))						
+                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
+                            break;
+                        if (caster->HasAura(44394) || caster->HasAura(44395))
                             caster->CastSpell(caster, 86261, true);
-                        break;						
-                    }						
+                        break;
+                    }
                     case 74396: // Fingers of Frost
                         // Remove the IGNORE_AURASTATE aura
                         target->RemoveAurasDueToSpell(44544);

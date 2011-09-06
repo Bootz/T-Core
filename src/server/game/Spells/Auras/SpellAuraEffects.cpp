@@ -2259,10 +2259,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 10143 : 10144);
                                 break;
-							// Worgen
-							case RACE_WORGEN:
-								target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
-								break;
+                            // Worgen
+                            case RACE_WORGEN:
+                                target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
+                                break;
                             default:
                                 break;
                         }
@@ -2322,10 +2322,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 25038 : 25049);
                                 break;
-							// Worgen
-							case RACE_WORGEN:
-								target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
-								break;
+                            // Worgen
+                            case RACE_WORGEN:
+                                target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
+                                break;
                             default:
                                 break;
                         }
@@ -3299,8 +3299,8 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8
     Unit* target = aurApp->GetTarget();
 
     target->UpdateSpeed(MOVE_RUN, true);
-	
-	if (apply)
+
+    if (apply)
     {
         switch (GetId())
         {
@@ -3310,6 +3310,7 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8
                     target->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
                 break;
             }
+
             default:
                 break;
         }
