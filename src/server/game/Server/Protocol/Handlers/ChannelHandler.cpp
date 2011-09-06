@@ -28,6 +28,7 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
 
     uint32 _channelId;
     std::string _password, _channelName;
+    ChatChannelsEntry const* channel;
 
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint8>();
@@ -36,15 +37,8 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
 
     if (_channelId)
     {
-        ChatChannelsEntry const* channel = sChatChannelsStore.LookupEntry(_channelId);
+        channel = sChatChannelsStore.LookupEntry(_channelId);
         if (!channel)
-            return;
-
-        AreaTableEntry const* current_zone = GetAreaEntryByAreaID(_player->GetZoneId());
-        if (!current_zone)
-            return;
-
-        if (!_player->CanJoinConstantChannelInZone(channel, current_zone))
             return;
     }
 
@@ -52,6 +46,13 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     recvPacket >> _password;
 
     if (_channelName.empty())
+        return;
+
+    AreaTableEntry const* current_zone = GetAreaEntryByAreaID(_player->GetZoneId());
+    if (!current_zone)
+        return;
+
+    if (!_player->CanJoinConstantChannelInZone(channel, current_zone))
         return;
 
     if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))

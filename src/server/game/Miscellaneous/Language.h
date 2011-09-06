@@ -945,7 +945,8 @@ enum TrilliumStrings
     LANG_GOINFO_NAME                    = 5027,
     LANG_GOINFO_LOOTID                  = 5028,
     LANG_COMMAND_LOOKUP_MAX_RESULTS     = 5029,
-    // Room for more Trillium strings      5030-9999
+    LANG_FLEE                           = 5030,
+    // Room for more Trillium strings      5031-9999
 
     // Level requirement notifications
     LANG_SAY_REQ                        = 6604,
