@@ -1269,7 +1269,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             {
                 for (uint8 effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
                     // If at least one effect negative spell is negative hit
-                    if (mask & (1 << effIndex) && !IsPositiveEffect(m_spellInfo->Id, effIndex))
+                    if (mask & (1<<effIndex) && !m_spellInfo->IsPositiveEffect(effIndex))
                     {
                         positive = false;
                         break;

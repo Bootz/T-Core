@@ -8857,11 +8857,11 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         }
         case 71761: // Deep Freeze Immunity State
         {
-            if (!pVictim->ToCreature())
+            if (!victim->ToCreature())
                 return false;
 
-            if (pVictim->ToCreature()->GetCreatureInfo()->MechanicImmuneMask & (1 << procSpell->EffectMechanic[EFFECT_0]))
-                target = pVictim;
+            if (victim->ToCreature()->GetCreatureInfo()->MechanicImmuneMask & (1 << procSpell->Effects[EFFECT_0].Mechanic))
+                target = victim;
             else
                 return false;
             break;
