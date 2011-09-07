@@ -63,7 +63,6 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
 void WorldSession::HandleLeaveChannel(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Opcode %u", recvPacket.GetOpcode());
-    //recvPacket.hexlike();
 
     uint32 _unk;
     std::string _channelName;

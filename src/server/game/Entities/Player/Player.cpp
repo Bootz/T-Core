@@ -19533,8 +19533,6 @@ void Player::PetSpellInitialize()
         data << uint32(cooldown);                           // category cooldown
     }
 
-    data.hexlike();
-
     GetSession()->SendPacket(&data);
 }
 
