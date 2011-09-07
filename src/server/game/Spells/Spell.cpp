@@ -1265,7 +1265,20 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     positive = false;
                     break;
                 }
-        }
+            if (mask)
+            {
+                for (uint8 effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
+                    // If at least one effect negative spell is negative hit
+                    if (mask & (1 << effIndex) && !IsPositiveEffect(m_spellInfo->Id, effIndex))
+                    {
+                        positive = false;
+                        break;
+                    }
+            }
+            else
+                // If there is no effect mask determine from spell proto
+                positive = IsPositiveSpell(m_spellInfo->Id);
+        }				
         switch (m_spellInfo->DmgClass)
         {
             case SPELL_DAMAGE_CLASS_MAGIC:
