@@ -202,7 +202,6 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
         }
 
         loot->gold = 0;
-        loot->NotifyMoneyRemoved();
     }
 }
 
