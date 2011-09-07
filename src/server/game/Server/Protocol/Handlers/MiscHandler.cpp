@@ -63,7 +63,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
     if (GetPlayer()->isAlive() || GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
         return;
 
-    if (GetPlayer()->HasAuraType(SPELL_AURA_PREVENT_RESSURECTION))
+    if (GetPlayer()->HasAuraType(SPELL_AURA_PREVENT_RESURRECTION))
         return; // silently return, client should display the error by itself
 
     // the world update order is sessions, players, creatures
@@ -952,7 +952,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket &recv_data)
 
     if (decompressedSize > 0xFFFF)
     {
-        recv_data.rpos(recv_data.wpos());                   // unnneded warning spam in this case
+        recv_data.rfinish();                   // unneeded warning spam in this case
         sLog->outError("UAD: Account data packet too big, size %u", decompressedSize);
         return;
     }
@@ -963,12 +963,12 @@ void WorldSession::HandleUpdateAccountData(WorldPacket &recv_data)
     uLongf realSize = decompressedSize;
     if (uncompress(const_cast<uint8*>(dest.contents()), &realSize, const_cast<uint8*>(recv_data.contents() + recv_data.rpos()), recv_data.size() - recv_data.rpos()) != Z_OK)
     {
-        recv_data.rpos(recv_data.wpos());                   // unnneded warning spam in this case
+        recv_data.rfinish();                   // unneeded warning spam in this case
         sLog->outError("UAD: Failed to decompress account data");
         return;
     }
 
-    recv_data.rpos(recv_data.wpos());                       // uncompress read (recv_data.size() - recv_data.rpos())
+    recv_data.rfinish();                       // uncompress read (recv_data.size() - recv_data.rpos())
 
     std::string adata;
     dest >> adata;
@@ -1084,19 +1084,19 @@ void WorldSession::HandleFeatherFallAck(WorldPacket &recv_data)
     sLog->outStaticDebug("WORLD: CMSG_MOVE_FEATHER_FALL_ACK");
 
     // no used
-    recv_data.rpos(recv_data.wpos());                       // prevent warnings spam
+    recv_data.rfinish();                       // prevent warnings spam
 }
 
 void WorldSession::HandleMoveUnRootAck(WorldPacket& recv_data)
 {
     // no used
-    recv_data.rpos(recv_data.wpos());                       // prevent warnings spam
+    recv_data.rfinish();                       // prevent warnings spam
 }
 
 void WorldSession::HandleMoveRootAck(WorldPacket& recv_data)
 {
     // no used
-    recv_data.rpos(recv_data.wpos());                       // prevent warnings spam
+    recv_data.rfinish();                       // prevent warnings spam
 }
 
 void WorldSession::HandleSetActionBarToggles(WorldPacket& recv_data)

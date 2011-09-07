@@ -184,6 +184,7 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
     if (!langDesc)
     {
         SendNotification(LANG_UNKNOWN_LANGUAGE);
+        recv_data.rfinish();
         return;
     }
     if (langDesc->skill_id != 0 && !sender->HasSkill(langDesc->skill_id))
@@ -202,6 +203,7 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
         if (!foundAura)
         {
             SendNotification(LANG_NOT_LEARNED_LANGUAGE);
+            recv_data.rfinish();
             return;
         }
     }
@@ -257,6 +259,7 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
         {
             std::string timeStr = secsToTimeString(m_muteTime - time(NULL));
             SendNotification(GetTrilliumString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+            recv_data.rfinish(); // Prevent warnings
             return;
         }
 
