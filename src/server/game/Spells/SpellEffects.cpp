@@ -563,7 +563,14 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                         AddPctN(back_damage, -aurEff->GetAmount());
 
                     if (back_damage < int32(unitTarget->GetHealth()))
+                    {
                         m_caster->CastCustomSpell(m_caster, 32409, &back_damage, 0, 0, true);
+                        if (unitTarget->HealthBelowPct(25) && m_caster->HasAura(55682) && !unitTarget->HasAura(95652)) // Glyph of Shadow Word: Death
+                        {
+                            m_caster->AddAura(95652, unitTarget); // Glyph of Shadow Word: Death - Marker
+                            m_caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
+                        }
+                    }						
                 }
                 // Improved Mind Blast (Mind Blast in shadow form bonus)
                 else if (m_caster->GetShapeshiftForm() == FORM_SHADOW && (m_spellInfo->SpellFamilyFlags[0] & 0x00002000))
@@ -1260,10 +1267,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 m_caster->SetPower(POWER_RAGE, uint32(newRage));
 
-                // Glyph of Execution bonus
-                if (AuraEffect * aurEff = m_caster->GetAuraEffect(58367, EFFECT_0))
-                    rageUsed += aurEff->GetAmount() * 10;
-
                 bp = damage + int32(rageUsed * m_spellInfo->Effects[effIndex].DamageMultiplier + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
                 break;
             }
@@ -1431,6 +1434,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
                         AddPctN(m_damage, damage);
                 }
+                // Improved Lava Lash				
+                if (AuraEffect const* ill = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 4780, 1))
+                // Searing Flames
+                if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))			
+                {		
+                    AddPctN(m_damage, sf->GetStackAmount() * ill->GetAmount());			
+                    unitTarget->RemoveAura(77661);
+                }			
                 return;
             }
             break;
