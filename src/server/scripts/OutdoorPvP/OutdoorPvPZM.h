@@ -172,8 +172,6 @@ class OutdoorPvPZM;
 
 class OPvPCapturePointZM_Beacon : public OPvPCapturePoint
 {
-    friend class OutdoorPvPZM;
-
     public:
 
         OPvPCapturePointZM_Beacon(OutdoorPvP * pvp, ZM_BeaconType type);
@@ -205,8 +203,6 @@ enum ZM_GraveYardState
 
 class OPvPCapturePointZM_GraveYard : public OPvPCapturePoint
 {
-    friend class OutdoorPvPZM;
-
     public:
 
         OPvPCapturePointZM_GraveYard(OutdoorPvP * pvp);
@@ -229,6 +225,8 @@ class OPvPCapturePointZM_GraveYard : public OPvPCapturePoint
 
         bool CanTalkTo(Player* player, Creature* c, GossipMenuItems const& gso);
 
+        uint32 GetGraveYardState() const;
+
     private:
 
         uint32 m_GraveYardState;
@@ -242,8 +240,6 @@ class OPvPCapturePointZM_GraveYard : public OPvPCapturePoint
 
 class OutdoorPvPZM : public OutdoorPvP
 {
-    friend class OPvPCapturePointZM_Beacon;
-
     public:
 
         OutdoorPvPZM();
@@ -260,6 +256,12 @@ class OutdoorPvPZM : public OutdoorPvP
         void SendRemoveWorldStates(Player* player);
 
         void HandleKillImpl(Player* player, Unit* killed);
+
+        uint32 GetAllianceTowersControlled() const;
+        void SetAllianceTowersControlled(uint32 count);
+
+        uint32 GetHordeTowersControlled() const;
+        void SetHordeTowersControlled(uint32 count);
 
     private:
 

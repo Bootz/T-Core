@@ -256,8 +256,6 @@ class OutdoorPvPNA;
 
 class OPvPCapturePointNA : public OPvPCapturePoint
 {
-    friend class OutdoorPvPNA;
-
     public:
 
         OPvPCapturePointNA(OutdoorPvP * pvp);
@@ -279,6 +277,7 @@ class OPvPCapturePointNA : public OPvPCapturePoint
         int32 HandleOpenGo(Player* player, uint64 guid);
 
         uint32 GetAliveGuardsCount();
+        uint32 GetControllingFaction() const;
 
     protected:
 
@@ -316,8 +315,6 @@ class OPvPCapturePointNA : public OPvPCapturePoint
 
 class OutdoorPvPNA : public OutdoorPvP
 {
-    friend class OPvPCapturePointNA;
-
     public:
 
         OutdoorPvPNA();
