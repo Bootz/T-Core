@@ -1931,7 +1931,7 @@ public:
     {
         npc_ebon_gargoyleAI(Creature* c) : CasterAI(c) {}
 
-        uint32 despawnTimer;
+        uint32 DespawnTimer;
 
         void InitializeAI()
         {
@@ -1940,7 +1940,7 @@ public:
             if (!owner_guid)
                 return;
             // Not needed to be despawned now
-            despawnTimer = 0;
+            DespawnTimer = 0;
             // Find victim of Summon Gargoyle spell
             std::list<Unit*> targets;
             Trillium::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 30);
