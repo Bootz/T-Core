@@ -8095,24 +8095,8 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
         }
         case SPELLFAMILY_MAGE:
         {
-            // Combustion
             switch (dummySpell->Id)
             {
-                case 11129:
-                {
-                    *handled = true;
-                    Unit* caster = triggeredByAura->GetCaster();
-                    if (!caster || !damage)
-                        return false;
-
-                    // last charge and crit
-                    if (triggeredByAura->GetCharges() <= 1 && (procEx & PROC_EX_CRITICAL_HIT))
-                        return true;                        // charge counting (will removed)
-
-                    CastSpell(this, 28682, true);
-
-                    return (procEx & PROC_EX_CRITICAL_HIT) ? true : false;
-                }
                 // Empowered Fire
                 case 31656:
                 case 31657:
@@ -11473,7 +11457,7 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
         if (spellProto->SpellFamilyFlags[2] & 0x80000000 && spellProto->SpellIconID == 329)
         {
             scripted = true;
-            DoneTotal += int32(GetMaxHealth() * 0.05f); // 20% of their total health (5% per tick)
+            DoneTotal += int32(victim->GetMaxHealth() * 0.05f); // 20% of their total health (5% per tick)
         }
         // Earthliving - 0.45% of normal hot coeff
         else if (spellProto->SpellFamilyName == SPELLFAMILY_SHAMAN && spellProto->SpellFamilyFlags[1] & 0x80000)
