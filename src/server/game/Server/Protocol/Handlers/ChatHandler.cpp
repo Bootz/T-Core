@@ -42,6 +42,7 @@
 #include "SpellAuraEffects.h"
 #include "Util.h"
 #include "ScriptMgr.h"
+#include "AccountMgr.h"
 #include "Config.h"
 
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg, uint32 lang)
@@ -53,10 +54,10 @@ bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg
             stripLineInvisibleChars(msg);
 
         if (!sConfig->GetBoolDefault("Log.Chat.Enable", true) &&     // To prevent double checking (if chat log is used, message is automatically validated)
-            sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) && GetSecurity() < SEC_MODERATOR &&
+            sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) && AccountMgr::IsPlayerAccount(GetSecurity()) &&
             !ChatHandler(this).isValidChatMessage(msg.c_str()))
         {
-            sLog->outError("Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName(),
+            sLog->outError("Player %s (GUID: %u) sent a chat message with an invalid link: %s", GetPlayer()->GetName(),
                     GetPlayer()->GetGUIDLow(), msg.c_str());
             if (sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_KICK))
                 KickPlayer();
@@ -307,24 +308,20 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
             }
 
             Player* receiver = sObjectAccessor->FindPlayerByName(channelOrWhisperName.c_str());
-            uint32 senderSecurity = GetSecurity();
-            uint32 receiverSecurity = receiver ? receiver->GetSession()->GetSecurity() : SEC_PLAYER;
-            if (!receiver || (senderSecurity == SEC_PLAYER && receiverSecurity > SEC_PLAYER && !receiver->isAcceptWhispers() && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
+            bool senderIsPlayer = AccountMgr::IsPlayerAccount(GetSecurity());
+            bool receiverIsPlayer = AccountMgr::IsPlayerAccount(receiver ? receiver->GetSession()->GetSecurity() : SEC_PLAYER);
+            if (!receiver || (senderIsPlayer && !receiverIsPlayer && !receiver->isAcceptWhispers() && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
             {
                 SendPlayerNotFoundNotice(channelOrWhisperName);
                 return;
             }
 
-            if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHAT) && senderSecurity == SEC_PLAYER && receiverSecurity == SEC_PLAYER)
-            {
-                uint32 senderFaction = GetPlayer()->GetTeam();
-                uint32 receiverFaction = receiver->GetTeam();
-                if (senderFaction != receiverFaction)
+            if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHAT) && senderIsPlayer && receiverIsPlayer)
+                if (GetPlayer()->GetTeam() != receiver->GetTeam())
                 {
                     SendWrongFactionNotice();
                     return;
                 }
-            }
 
             if (GetPlayer()->HasAura(1852) && !receiver->isGameMaster())
             {
@@ -333,7 +330,7 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
             }
 
             // If player is a Gamemaster and doesn't accept whisper, we auto-whitelist every player that the Gamemaster is talking to
-            if (senderSecurity > SEC_PLAYER && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
+            if (!senderIsPlayer && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
                 sender->AddWhisperWhiteList(receiver->GetGUID());
 
             GetPlayer()->Whisper(msg, lang, receiver->GetGUID());
@@ -458,10 +455,13 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
         } break;
         case CHAT_MSG_CHANNEL:
         {
-            if (_player->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
+            if (AccountMgr::IsPlayerAccount(GetSecurity()))
             {
-                SendNotification(GetTrilliumString(LANG_CHANNEL_REQ), sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
-                return;
+                if (_player->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
+                {
+                    SendNotification(GetTrilliumString(LANG_CHANNEL_REQ), sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
+                    return;
+                }
             }
 
             if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))

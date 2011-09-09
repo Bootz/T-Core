@@ -31,6 +31,7 @@
 #include "Language.h"
 #include "DataStorage.h"
 #include "Item.h"
+#include "AccountMgr.h"
 
 void WorldSession::HandleSendMail(WorldPacket & recv_data)
 {
@@ -164,7 +165,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
         }
     }
 
-    if (!accountBound && !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_MAIL) && pl->GetTeam() != rc_team && GetSecurity() == SEC_PLAYER)
+    if (!accountBound && !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_MAIL) && pl->GetTeam() != rc_team && AccountMgr::IsPlayerAccount(GetSecurity()))
     {
         pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_YOUR_TEAM);
         return;
@@ -250,7 +251,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
             for (uint8 i = 0; i < items_count; ++i)
             {
                 Item* item = items[i];
-                if (GetSecurity() > SEC_PLAYER && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
+                if (!AccountMgr::IsPlayerAccount(GetSecurity()) && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
                 {
                     sLogMgr->WriteGmCommand(GetAccountId(), "GM %s (Account: %u) mail item: %s (Entry: %u Count: %u) to player: %s (Account: %u)",
                         GetPlayerName(), GetAccountId(), item->GetTemplate()->Name1.c_str(), item->GetEntry(), item->GetCount(), receiver.c_str(), rc_account);
@@ -270,7 +271,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
             needItemDelay = pl->GetSession()->GetAccountId() != rc_account;
         }
 
-        if (money > 0 &&  GetSecurity() > SEC_PLAYER && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
+        if (money > 0 && !AccountMgr::IsPlayerAccount(GetSecurity()) && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
         {
             sLogMgr->WriteGmCommand(GetAccountId(), "GM %s (Account: %u) mail money: %u to player: %s (Account: %u)",
                 GetPlayerName(), GetAccountId(), money, receiver.c_str(), rc_account);
@@ -444,7 +445,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
 
             uint32 sender_accId = 0;
 
-            if (GetSecurity() > SEC_PLAYER && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
+            if (!AccountMgr::IsPlayerAccount(GetSecurity()) && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
             {
                 std::string sender_name;
                 if (receive)
