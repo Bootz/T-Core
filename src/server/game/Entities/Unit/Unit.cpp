@@ -8354,11 +8354,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 }
                 break;
             case SPELLFAMILY_WARRIOR:
-                if (auraSpellInfo->Id == 50421)             // Scent of Blood
+                switch (auraSpellInfo->Id)
                 {
-                    CastSpell(this, 50422, true);
-                    RemoveAuraFromStack(auraSpellInfo->Id);
-                    return false;
+                    case 80128: // Impending Victory
+                    case 80129:
+                        if (victim->HealthAbovePct(20))
+                            return false;
                 }
                 break;
             case SPELLFAMILY_WARLOCK:
@@ -8694,6 +8695,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             return false;
                     }
                 }
+                else if (auraSpellInfo->Id == 50421)             // Scent of Blood
+                {
+                    CastSpell(this, 50422, true);
+                    RemoveAuraFromStack(auraSpellInfo->Id);
+                    return false;
+                }				
                 // Blood Presence (Improved)
                 else if (auraSpellInfo->Id == 63611)
                 {
