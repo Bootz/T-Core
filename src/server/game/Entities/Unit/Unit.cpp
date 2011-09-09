@@ -1046,6 +1046,27 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 dama
     if (damage < 0)
         return;
 
+    if (spellInfo->AttributesEx4 & SPELL_ATTR4_UNK8)
+    {
+        Unit *pVictim = damageInfo->target;
+        if (!pVictim || !pVictim->isAlive())
+            return;
+
+        SpellSchoolMask damageSchoolMask = SpellSchoolMask(damageInfo->schoolMask);
+
+        // Calculate absorb resist
+        if (damage > 0)
+        {
+            CalcAbsorbResist(pVictim, damageSchoolMask, SPELL_DIRECT_DAMAGE, damage, &damageInfo->absorb, &damageInfo->resist, spellInfo);
+            damage -= damageInfo->absorb + damageInfo->resist;
+        }
+        else
+            damage = 0;
+
+        damageInfo->damage = damage;
+        return;
+    }
+	
     Unit* victim = damageInfo->target;
     if (!victim || !victim->isAlive())
         return;
@@ -8347,11 +8368,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 }
                 break;
             case SPELLFAMILY_WARRIOR:
-                if (auraSpellInfo->Id == 50421)             // Scent of Blood
+                switch (auraSpellInfo->Id)
                 {
-                    CastSpell(this, 50422, true);
-                    RemoveAuraFromStack(auraSpellInfo->Id);
-                    return false;
+                    case 80128: // Impending Victory
+                    case 80129:
+                        if (victim->HealthAbovePct(20))
+                            return false;
                 }
                 break;
             case SPELLFAMILY_WARLOCK:
@@ -8687,6 +8709,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             return false;
                     }
                 }
+                else if (auraSpellInfo->Id == 50421)             // Scent of Blood
+                {
+                    CastSpell(this, 50422, true);
+                    RemoveAuraFromStack(auraSpellInfo->Id);
+                    return false;
+                }				
                 // Blood Presence (Improved)
                 else if (auraSpellInfo->Id == 63611)
                 {
@@ -8930,7 +8958,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
-        // Auras which should proc on area aura source (caster in this case):
+        // Auras which should proc on area aura source (caster in this case):		
         // Turn the Tables
         case 52914:
         case 52915:
@@ -8951,6 +8979,55 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + cooldown);
             return true;
         }
+        case 92184: // Lead Plating
+        case 92233: // Tectonic Shift
+        case 92355: // Turn of the Worm
+        case 92235: // Turn of the Worm
+        case 90996: // Crescendo of Suffering
+        case 91002: // Crescendo of Suffering
+        case 75477: // Scale Nimbleness
+        case 75480: // Scaly Nimbleness
+        case 71633: // Thick Skin
+        case 71639: // Thick Skin
+            if (HealthBelowPct(34) || (!HealthBelowPctDamaged(35, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 30);
+                }
+            }
+        break;		
+        case 96945: // Loom of Fate
+        case 97129: // Loom of Fate
+            if (HealthBelowPct(34) || (!HealthBelowPctDamaged(35, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 60);
+                }
+            }
+        break;
+        // Die by the Sword
+        // Die by the Sword
+        case 85386:
+        case 86624:
+            if (HealthBelowPct(19) || (!HealthBelowPctDamaged(20, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);        
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 120);
+                }
+            }
+        break;		
         // Cast positive spell on enemy target
         case 7099:  // Curse of Mending
         case 39703: // Curse of Mending
@@ -11333,12 +11410,6 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
                 if (victim->HealthBelowPct(50))
                     AddPctN(DoneTotalMod, (*i)->GetAmount());
                 break;
-            case 7798: // Glyph of Regrowth
-            {
-                if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_HEAL, SPELLFAMILY_DRUID, 0x40, 0, 0))
-                    AddPctN(DoneTotalMod, (*i)->GetAmount());
-                break;
-            }
             case 8477: // Nourish Heal Boost
             {
                 int32 stepPercent = (*i)->GetAmount();
@@ -11416,11 +11487,7 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
         if (spellProto->SpellFamilyFlags[2] & 0x80000000 && spellProto->SpellIconID == 329)
         {
             scripted = true;
-            int32 apBonus = int32(std::max(GetTotalAttackPowerValue(BASE_ATTACK), GetTotalAttackPowerValue(RANGED_ATTACK)));
-            if (apBonus > DoneAdvertisedBenefit)
-                DoneTotal += int32(apBonus * 0.22f); // 22% of AP per tick
-            else
-                DoneTotal += int32(DoneAdvertisedBenefit * 0.377f); //37.7% of BH per tick
+            DoneTotal += int32(GetMaxHealth() * 0.05f); // 20% of their total health (5% per tick)
         }
         // Earthliving - 0.45% of normal hot coeff
         else if (spellProto->SpellFamilyName == SPELLFAMILY_SHAMAN && spellProto->SpellFamilyFlags[1] & 0x80000)
