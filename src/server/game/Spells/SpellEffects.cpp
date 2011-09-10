@@ -1225,6 +1225,18 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
             break;
         }
+        case SPELLFAMILY_PRIEST:
+        {   
+            switch (m_spellInfo->Id)
+            {
+                case 73325: // Leap of faith
+                {
+                    unitTarget->CastSpell(m_caster, 92832, false);
+                    break;
+                }
+            }
+        break;
+        }		
         case SPELLFAMILY_WARRIOR:
             // Charge
             if (m_spellInfo->SpellFamilyFlags & SPELLFAMILYFLAG_WARRIOR_CHARGE && m_spellInfo->SpellVisual[0] == 867)
