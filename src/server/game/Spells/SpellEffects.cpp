@@ -1430,7 +1430,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
                 {
-                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flametongue.
+                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flame tongue.
                     if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
                         AddPctN(m_damage, damage);
                 }
@@ -1439,7 +1439,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 // Searing Flames
                 if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))			
                 {		
-                    AddPctN(m_damage, sf->GetStackAmount() * ill->GetAmount());			
+                    AddPctN(m_damage, sf->GetAmount() * ill->GetAmount());	//Need check this again.		
                     unitTarget->RemoveAura(77661);
                 }			
                 return;
