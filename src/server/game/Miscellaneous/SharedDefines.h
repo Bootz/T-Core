@@ -559,6 +559,42 @@ enum SpellAttr7
     SPELL_ATTR7_UNK31                            = 0x80000000  // 31
 };
 
+enum SpellAttr8
+{
+    SPELL_ATTR8_TAUNT                            = 0x00000001, // 0
+    SPELL_ATTR8_WORGEN_TRANSFORMATION            = 0x00000002, // 1
+    SPELL_ATTR8_UNK2                             = 0x00000004, // 2 3 spells : 72221, 90960, 90961
+    SPELL_ATTR8_UNK3                             = 0x00000008, // 3 summoning and unsummoning spells?
+    SPELL_ATTR8_UNK4                             = 0x00000010, // 4 
+    SPELL_ATTR8_UNK5                             = 0x00000020, // 5
+    SPELL_ATTR8_UNK6                             = 0x00000040, // 6 2 spells: 56817 and 83569
+    SPELL_ATTR8_UNK7                             = 0x00000080, // 7 
+    SPELL_ATTR8_UNK8                             = 0x00000100, // 8 +stats.
+    SPELL_ATTR8_UNK9                             = 0x00000200, // 9 
+    SPELL_ATTR8_CHANGE_MODEL                     = 0x00000400, // 10
+    SPELL_ATTR8_UNK11                            = 0x00000800, // 11 one spell: 80224
+    SPELL_ATTR8_UNK12                            = 0x00001000, // 12 
+    SPELL_ATTR8_UNK13                            = 0x00002000, // 13
+    SPELL_ATTR8_UNK14                            = 0x00004000, // 14
+    SPELL_ATTR8_UNK15                            = 0x00008000, // 15 one spell: 76203
+    SPELL_ATTR8_UNK16                            = 0x00010000, // 16
+    SPELL_ATTR8_UNK17                            = 0x00020000, // 17
+    SPELL_ATTR8_UNK18                            = 0x00040000, // 18 spell with interactions?
+    SPELL_ATTR8_UNK19                            = 0x00080000, // 19 requires combo points?
+    SPELL_ATTR8_ARMOR_SPECIALIZATION             = 0x00100000, // 20 
+    SPELL_ATTR8_UNK21                            = 0x00200000, // 21
+    SPELL_ATTR8_UNK22                            = 0x00400000, // 22
+    SPELL_ATTR8_UNK23                            = 0x00800000, // 23 resurrection? soulstone?
+    SPELL_ATTR8_UNK24                            = 0x01000000, // 24 
+    SPELL_ATTR8_UNK25                            = 0x02000000, // 25
+    SPELL_ATTR8_RAID_MARKER                      = 0x04000000, // 26 raid marker. 6 spells in 4.0.3a
+    SPELL_ATTR8_UNK27                            = 0x08000000, // 27 throw?
+    SPELL_ATTR8_GUILD_PERKS                      = 0x10000000, // 28
+    SPELL_ATTR8_MASTERY                          = 0x20000000, // 29
+    SPELL_ATTR8_UNK30                            = 0x40000000, // 30 Not set in 4.0.3a
+    SPELL_ATTR8_UNK31                            = 0x80000000  // 31
+};
+
 #define MIN_TALENT_SPEC         0
 #define MAX_TALENT_SPEC         1
 #define MIN_TALENT_SPECS        1
