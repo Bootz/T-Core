@@ -1439,7 +1439,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 // Searing Flames
                 if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))			
                 {		
-                    AddPctN(m_damage, sf->GetAmount() * ill->GetAmount());	//Need check this again.		
+                    AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
                     unitTarget->RemoveAura(77661);
                 }			
                 return;
