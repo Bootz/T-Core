@@ -158,6 +158,9 @@ bool ChatHandler::HandleSummonCommand(const char* args)
 
         Map* pMap = m_session->GetPlayer()->GetMap();
 
+        if (target->GetVehicle())
+          target->ExitVehicle();
+
         if (pMap->IsBattlegroundOrArena())
         {
             // only allow if gm mode is on
