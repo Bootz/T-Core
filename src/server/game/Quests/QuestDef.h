@@ -44,6 +44,7 @@ class ObjectMgr;
 #define QUEST_REPUTATIONS_COUNT 5
 #define QUEST_EMOTE_COUNT 4
 #define QUEST_PVP_KILL_SLOT 0
+#define QUEST_CURRENCY_COUNT 4
 
 enum QuestFailedReasons
 {
@@ -282,6 +283,10 @@ class Quest
         uint32 DetailsEmoteDelay[QUEST_EMOTE_COUNT];
         uint32 OfferRewardEmote[QUEST_EMOTE_COUNT];
         uint32 OfferRewardEmoteDelay[QUEST_EMOTE_COUNT];
+        uint32 RewCurrencyId[QUEST_CURRENCY_COUNT];
+        uint32 RewCurrencyCount[QUEST_CURRENCY_COUNT];
+        uint32 ReqCurrencyId[QUEST_CURRENCY_COUNT];
+        uint32 ReqCurrencyCount[QUEST_CURRENCY_COUNT];
 
         uint32 GetReqItemsCount() const { return m_reqitemscount; }
         uint32 GetReqCreatureOrGOcount() const { return m_reqCreatureOrGOcount; }

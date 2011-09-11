@@ -551,14 +551,14 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
 
     for (uint32 i = 0; i < 4; ++i)
     {
-        data << uint32(0);
-        data << uint32(0);
+        data << uint32(quest->RewCurrencyId[i]);
+        data << uint32(quest->RewCurrencyCount[i]);
     }
 
     for (uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency required id and count
     {
-        data << uint32(0);
-        data << uint32(0);
+        data << uint32(quest->ReqCurrencyId[i]);
+        data << uint32(quest->ReqCurrencyCount[i]);
     }
 
     data << "";

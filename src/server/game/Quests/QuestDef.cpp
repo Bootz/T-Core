@@ -140,8 +140,20 @@ Quest::Quest(Field * questRecord)
     for (int i = 0; i < QUEST_EMOTE_COUNT; ++i)
         OfferRewardEmoteDelay[i] = questRecord[138+i].GetInt32();
 
-    QuestStartScript = questRecord[142].GetUInt32();
-    QuestCompleteScript = questRecord[143].GetUInt32();
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
+        RewCurrencyId[i] = questRecord[142 + 2 * i].GetUInt32();
+        RewCurrencyCount[i] = questRecord[142 + 2 * i + 1].GetUInt32();
+    }
+
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
+        ReqCurrencyId[i] = questRecord[149 + 2 * i].GetUInt32();
+        ReqCurrencyCount[i] = questRecord[149 + 2 * i + 1].GetUInt32();
+    }
+
+    QuestStartScript = questRecord[157].GetUInt32();
+    QuestCompleteScript = questRecord[158].GetUInt32();
 
     QuestFlags |= SpecialFlags << 20;
     if (QuestFlags & QUEST_TRILLIUM_FLAGS_AUTO_ACCEPT)
