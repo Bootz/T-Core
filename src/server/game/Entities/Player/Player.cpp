@@ -925,12 +925,61 @@ void Player::CleanupsBeforeDelete(bool finalCleanup)
             itr->second.save->RemovePlayer(this);
 }
 
-bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
+bool Player::GuidCheckForCreation(uint32 newguid)
+{
+    for (int i = 0; i < LastCharacter; ++i)
+        if (guids[i] == newguid)
+            return true;
+    return false;
+}
+
+bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo, uint32 accountId)
 {
     //FIXME: outfitId not used in player creating
     // TODO: need more checks against packet modifications
     // should check that skin, face, hair* are valid via DBC per race/class
     // also do it in Player::BuildEnumData, Player::LoadFromDB
+
+    if (accountId)
+    {
+        if (guidlow > 0 && guidlow < 512)
+        {
+            for (int i = 0; i < 1000; ++i)
+                if (guids[i])
+                    if (guids[i] != 0)
+                        guids[i] = 0; // Max 1000 characters for an account
+
+            LastCharacter = 0;
+            bool Pair = false;
+            QueryResult result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", accountId);
+            if (result)
+            {
+                do
+                {
+                    Field *fields = result->Fetch();
+                    guids[LastCharacter] = fields[0].GetUInt32();
+                    if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)
+                        guids[LastCharacter] = guids[LastCharacter]-256;
+                    ++LastCharacter;
+                }
+                while (result->NextRow());
+
+                for (int i = 0; i < LastCharacter; ++i)
+                    if (guids[i] == guidlow)
+                    {
+                        Pair = true;
+                        i = LastCharacter;
+                    }
+
+                if (Pair == true)
+                {
+                    do
+                        ++guidlow;
+                    while (GuidCheckForCreation(guidlow) == true);
+                }
+            }
+        }
+    }
 
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
 

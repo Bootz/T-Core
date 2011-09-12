@@ -338,6 +338,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                 "WHERE characters.account = '%u' ORDER BY characters.guid",
                 PET_SAVE_AS_CURRENT, GetAccountId()
             );
+                _accountIdForDeletion = GetAccountId();
 }
 
 void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
@@ -382,7 +383,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     ChrClassesEntry const* classEntry = sChrClassesStore.LookupEntry(class_);
     if (!classEntry)
     {
-        data << (uint8)CHAR_CREATE_FAILED;
+        data << uint8(CHAR_CREATE_FAILED);
         SendPacket(&data);
         sLog->outError("Class (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", class_, GetAccountId());
         return;
@@ -391,7 +392,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(race_);
     if (!raceEntry)
     {
-        data << (uint8)CHAR_CREATE_FAILED;
+        data << uint8(CHAR_CREATE_FAILED);
         SendPacket(&data);
         sLog->outError("Race (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", race_, GetAccountId());
         return;
@@ -400,7 +401,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating Expansion race without Expansion account
     if (raceEntry->expansion > Expansion())
     {
-        data << (uint8)CHAR_CREATE_EXPANSION;
+        data << uint8(CHAR_CREATE_EXPANSION);
         sLog->outError("Expansion %u account:[%d] tried to Create character with expansion %u race (%u)", Expansion(), GetAccountId(), raceEntry->expansion, race_);
         SendPacket(&data);
         return;
@@ -409,7 +410,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating Expansion class without Expansion account
     if (classEntry->expansion > Expansion())
     {
-        data << (uint8)CHAR_CREATE_EXPANSION_CLASS;
+        data << uint8(CHAR_CREATE_EXPANSION_CLASS);
         sLog->outError("Expansion %u account:[%d] tried to Create character with expansion %u class (%u)", Expansion(), GetAccountId(), classEntry->expansion, class_);
         SendPacket(&data);
         return;
@@ -437,7 +438,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating with invalid name
     if (!normalizePlayerName(name))
     {
-        data << (uint8)CHAR_NAME_NO_NAME;
+        data << uint8(CHAR_NAME_NO_NAME);
         SendPacket(&data);
         sLog->outError("Account:[%d] but tried to Create character with empty [name] ", GetAccountId());
         return;
@@ -454,7 +455,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
 
     if (AccountMgr::IsPlayerAccount(GetSecurity()) && sObjectMgr->IsReservedName(name))
     {
-        data << (uint8)CHAR_NAME_RESERVED;
+        data << uint8(CHAR_NAME_RESERVED);
         SendPacket(&data);
         return;
     }
@@ -463,7 +464,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     uint32 heroic_free_slots = sWorld->getIntConfig(CONFIG_HEROIC_CHARACTERS_PER_REALM);
     if (heroic_free_slots == 0 && AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT)
     {
-        data << (uint8)CHAR_CREATE_UNIQUE_CLASS_LIMIT;
+        data << uint8(CHAR_CREATE_UNIQUE_CLASS_LIMIT);
         SendPacket(&data);
         return;
     }
@@ -472,7 +473,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     uint32 req_level_for_heroic = sWorld->getIntConfig(CONFIG_CHARACTER_CREATING_MIN_LEVEL_FOR_HEROIC_CHARACTER);
     if (AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT && req_level_for_heroic > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
     {
-        data << (uint8)CHAR_CREATE_LEVEL_REQUIREMENT;
+        data << uint8(CHAR_CREATE_LEVEL_REQUIREMENT);
         SendPacket(&data);
         return;
     }
@@ -715,7 +716,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             }
 
             Player newChar(this);
-            if (!newChar.Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), createInfo))
+            if (!newChar.Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), createInfo, GetAccountId()))
             {
                 // Player not create (race/class/etc problem?)
                 newChar.CleanupsBeforeDelete();
@@ -774,9 +775,86 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
 {
-    uint64 guid;
-    recv_data >> guid;
-    guid ^= 1;  // 4.2 May need more changes for GUIDs > 255
+    uint64 guid = 0;
+    uint8 packetGuid, byte;
+
+    sLog->outStaticDebug("WORLD: Received Player Delete Message");
+    recv_data >> packetGuid;
+    recv_data >> byte;
+
+    uint32 realguids[1000]; // Max 1000 characters for an account
+    uint32 guids[1000]; // Max 1000 characters for an account
+    int LastCharacter = 0;
+    uint32 Pair = 0;
+    uint32 PairNumber = 0;
+
+    for (int i = 0; i < 2; ++i)
+    {
+        int number;
+        if (i == 0)
+            number = packetGuid;
+        else
+            number = byte;
+
+        if(number % 2 == 0)
+        {
+            if (i == 0)
+                ++packetGuid;
+            else
+            {
+                if (byte != 0)
+                    ++byte;
+            }
+        }
+        else
+        {
+            if (i == 0)
+                --packetGuid;
+            else
+                --byte;
+        }
+
+        if (i == 0)
+        {
+            if (byte == 0 && packetGuid != 0)
+            {
+                QueryResult charresult = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", GetAccountIdForCharDeletion());
+                if (!charresult)
+                    return;
+
+                do
+                {
+                    Field *fields = charresult->Fetch();
+                    realguids[LastCharacter] = fields[0].GetUInt32();
+                    guids[LastCharacter] = realguids[LastCharacter];
+                    if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)
+                        guids[LastCharacter] = guids[LastCharacter]-256;
+                    ++LastCharacter;
+                }
+                while (charresult->NextRow());
+
+                for (int i = 0; i < LastCharacter; ++i)
+                    if (guids[i] == packetGuid)
+                    {
+                        PairNumber = i;
+                        ++Pair;
+                    }
+            }
+        }
+    }
+
+    if (Pair == 1)
+        guid = realguids[PairNumber];
+    else
+    {
+        if (Pair == 0)
+            guid = (byte*256)+packetGuid;
+        else
+        {
+            sLog->outError("Can't delete anything, sorry!");
+            return;
+        }
+    }
 
     // can't delete loaded character
     if (ObjectAccessor::FindPlayer(guid))
