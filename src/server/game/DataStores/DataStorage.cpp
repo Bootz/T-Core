@@ -253,7 +253,7 @@ inline void LoadData(uint32& availableDbcLocales, StoreProblemList& errors, Data
     if (customFormat)
         sql = new SqlDbc(&filename, customFormat, customIndexName, storage.GetFormat());
 
-    if (storage.LoadDBCStorage(dataFilename.c_str(), sql) || storage.LoadDB2Storage(dataFilename.c_str(), sql))
+    if (storage.LoadStorage(dataFilename.c_str(), sql))
     {
         for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
         {

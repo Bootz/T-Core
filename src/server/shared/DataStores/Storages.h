@@ -87,37 +87,11 @@ class DataStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool LoadDB2Storage(char const* fn, SqlDbc* sql)
-        {
-            StorageLoader db2;
-            // Check if load was successful, only then continue
-            if (!db2.LoadDB2Storage(fn, fmt))
-                return false;
-
-            uint32 sqlRecordCount = 0;
-            uint32 sqlHighestIndex = 0;
-            char* sqlDataTable = 0;
-
-            fieldCount = db2.GetCols();
-
-            // load raw non-string data
-            dataTable = (T*)db2.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
-
-            // create string holders for loaded string fields
-            stringPoolList.push_back(db2.AutoProduceStringsArrayHolders(fmt, (char*)dataTable));
-
-            // load strings from db2 data
-            stringPoolList.push_back(db2.AutoProduceStrings(fmt, (char*)dataTable));
-
-            // error in db2 file at loading if NULL
-            return indexTable.asT != NULL;
-        }
-
-        bool LoadDBCStorage(char const* fn, SqlDbc* sql)
+        bool LoadStorage(char const* fn, SqlDbc* sql)
         {
             StorageLoader dbc;
             // Check if load was successful, only then continue
-            if (!dbc.LoadDBCStorage(fn, fmt))
+            if (!dbc.LoadDBCStorage(fn, fmt) && !dbc.LoadDB2Storage(fn, fmt))
                 return false;
 
             uint32 sqlRecordCount = 0;
