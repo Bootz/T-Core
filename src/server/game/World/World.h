@@ -502,6 +502,14 @@ struct CliCommandHolder
 
 typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
 
+struct GCharacters
+{
+    uint32 guid;
+    uint32 accountId;
+};
+
+typedef UNORDERED_MAP<uint32, GCharacters> CharactersMap;
+
 /// The World
 class World
 {
@@ -722,6 +730,15 @@ class World
 
         uint32 GetCleaningFlags() const { return m_CleaningFlags; }
         void   SetCleaningFlags(uint32 flags) { m_CleaningFlags = flags; }
+
+        void LoadCharacterCheck();
+        GCharacters const* GetCharactersForCheck(uint32 id) const
+        {
+            CharactersMap::const_iterator itr = mCharacters.find(id);
+            if (itr != mCharacters.end())
+                return &itr->second;
+            return NULL;
+        }
     protected:
         void _UpdateGameTime();
         // callback for UpdateRealmCharacters
@@ -733,6 +750,8 @@ class World
         void ResetDailyQuests();
         void ResetWeeklyQuests();
         void ResetRandomBG();
+
+        CharactersMap mCharacters;
     private:
         static volatile bool m_stopEvent;
         static uint8 m_ExitCode;

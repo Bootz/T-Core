@@ -981,6 +981,9 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo, uint32 acco
         }
     }
 
+    if (guidlow == 1 || guidlow == 254 || guidlow == 256 || guidlow == 257) // There will be no packet sending for these guids!
+        ++guidlow;
+
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
 
     m_name = createInfo->Name;
