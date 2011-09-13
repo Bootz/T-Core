@@ -9,7 +9,7 @@ TODO-List for TrilliumEMU Developer #
 1.  Fix the Vendors, they dont show any items.
 2.  Implement Wintergrasp Battlefield.
 3.  Implement the new Battlegrounds.
-4.  Fix pet stables
+4.  Fix pet stables -- Already started.
 5.  Begin to fix spells (only casting and damage works)
 6.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
 7.  Begin to fix guilds.
