@@ -1231,10 +1231,10 @@ enum Opcodes
     SMSG_ARENA_OPPONENT_UPDATE                       = 0x1026E, //
     SMSG_ARENA_TEAM_CHANGE_FAILED_QUEUED             = 0x0A22B, // 14480
     SMSG_MULTIPLE_PACKETS                            = 0x02A76, // 14480
-    SMSG_FORCE_UNK1_SPEED_CHANGE                     = 0x1026F, //
-    CMSG_FORCE_UNK1_SPEED_CHANGE_ACK                 = 0x10270, //
-    SMSG_FORCE_UNK2_SPEED_CHANGE                     = 0x10271, //
-    CMSG_FORCE_UNK2_SPEED_CHANGE_ACK                 = 0x10272, //
+    SMSG_MOVE_GRAVITY_DISABLE                        = 0x1026F,
+    CMSG_MOVE_GRAVITY_DISABLE_ACK                    = 0x10270,
+    SMSG_MOVE_GRAVITY_ENABLE                         = 0x10271,
+    CMSG_MOVE_GRAVITY_ENABLE_ACK                     = 0x10272,
     SMSG_MOVE_LEVITATING                             = 0x10273, //
     SMSG_SPLINE_MOVE_UNKNOWN_1235                    = 0x10274, //
     SMSG_SPLINE_MOVE_UNKNOWN_1236                    = 0x10275, //
