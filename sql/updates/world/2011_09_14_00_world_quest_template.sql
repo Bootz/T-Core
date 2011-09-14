@@ -1,0 +1,12 @@
+ALTER TABLE `quest_template` ADD (`RewSkillLineId` int(11) unsigned NOT NULL DEFAULT '0' AFTER `OfferRewardEmoteDelay4`,
+                                  `RewSkillPoints` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewSkillLineId`,
+                                  `RewRepMask` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewSkillPoints`,
+                                  `QuestGiverPortrait` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewRepMask`,
+                                  `QuestTurnInPortrait` int(11) unsigned NOT NULL DEFAULT '0' AFTER `QuestGiverPortrait`,
+                                  `QuestGiverPortraitText` text DEFAULT NULL AFTER `ReqCurrencyCount4`,
+                                  `QuestGiverPortraitUnk` text DEFAULT NULL AFTER `QuestGiverPortraitText`,
+                                  `QuestTurnInPortraitText` text DEFAULT NULL AFTER `QuestGiverPortraitUnk`,
+                                  `QuestTurnInPortraitUnk` text DEFAULT NULL AFTER `QuestTurnInPortraitText`,
+                                  `SoundAccept` int(11) unsigned NOT NULL DEFAULT '0' AFTER `QuestTurnInPortraitUnk`,
+                                  `SoundTurnIn` int(11) unsigned NOT NULL DEFAULT '0' AFTER `SoundAccept`,
+                                  `RequiredSpell` int(11) unsigned NOT NULL DEFAULT '0' AFTER `SoundTurnIn`);

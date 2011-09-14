@@ -223,6 +223,11 @@ class Quest
         uint32 GetPlayersSlain() const { return PlayersSlain; }
         uint32 GetBonusTalents() const { return BonusTalents; }
         int32  GetRewArenaPoints() const {return RewArenaPoints; }
+        uint32 GetRewSkillLineId() const { return RewSkillLineId; }
+        uint32 GetRewSkillPoints() const { return RewSkillPoints; }
+        uint32 GetRewRepMask() const { return RewRepMask; }
+        uint32 GetQuestGiverPortrait() const { return QuestGiverPortrait; }
+        uint32 GetQuestTurnInPortrait() const { return QuestTurnInPortait; }
         uint32 GetXPId() const { return XPId; }
         uint32 GetSrcItemId() const { return SrcItemId; }
         uint32 GetSrcItemCount() const { return SrcItemCount; }
@@ -249,6 +254,13 @@ class Quest
         uint32 GetPointOpt() const { return PointOpt; }
         uint32 GetIncompleteEmote() const { return IncompleteEmote; }
         uint32 GetCompleteEmote() const { return CompleteEmote; }
+        std::string GetQuestGiverPortraitText() const { return QuestGiverPortraitText; }
+        std::string GetQuestGiverPortraitUnk() const { return QuestGiverPortraitUnk; }
+        std::string GetQuestTurnInPortraitText() const { return QuestTurnInPortraitText; }
+        std::string GetQuestTurnInPortraitUnk() const { return QuestTurnInPortraitUnk; }
+        uint32 GetSoundAccept() const { return SoundAccept; }
+        uint32 GetSoundTurnIn() const { return SoundTurnIn; }
+        uint32 GetRequiredSpell() const { return RequiredSpell; }
         uint32 GetQuestStartScript() const { return QuestStartScript; }
         uint32 GetQuestCompleteScript() const { return QuestCompleteScript; }
         bool   IsRepeatable() const { return QuestFlags & QUEST_TRILLIUM_FLAGS_REPEATABLE; }
@@ -361,6 +373,18 @@ class Quest
         uint32 PointOpt;
         uint32 IncompleteEmote;
         uint32 CompleteEmote;
+        uint32 RewSkillLineId;
+        uint32 RewSkillPoints;
+        uint32 RewRepMask;
+        uint32 QuestGiverPortrait;
+        uint32 QuestTurnInPortrait;
+        std::string QuestGiverPortraitText;
+        std::string QuestGiverPortraitUnk;
+        std::string QuestTurnInPortraitText;
+        std::string QuestTurnInPortraitUnk;
+        uint32 SoundAccept;
+        uint32 SoundTurnIn;
+        uint32 RequiredSpell;
         uint32 QuestStartScript;
         uint32 QuestCompleteScript;
 };
