@@ -1215,10 +1215,10 @@ void InitOpcodes()
     DEFINE_OPCODE_HANDLER( SMSG_ARENA_OPPONENT_UPDATE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_ARENA_TEAM_CHANGE_FAILED_QUEUED,         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_MULTIPLE_PACKETS,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( SMSG_FORCE_UNK1_SPEED_CHANGE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_FORCE_UNK1_SPEED_CHANGE_ACK,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    DEFINE_OPCODE_HANDLER( SMSG_FORCE_UNK2_SPEED_CHANGE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    DEFINE_OPCODE_HANDLER( CMSG_FORCE_UNK2_SPEED_CHANGE_ACK,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( SMSG_MOVE_GRAVITY_DISABLE,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( CMSG_MOVE_GRAVITY_DISABLE_ACK,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    DEFINE_OPCODE_HANDLER( SMSG_MOVE_GRAVITY_ENABLE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    DEFINE_OPCODE_HANDLER( CMSG_MOVE_GRAVITY_ENABLE_ACK,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     DEFINE_OPCODE_HANDLER( SMSG_MOVE_LEVITATING,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_SPLINE_MOVE_UNKNOWN_1235,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     DEFINE_OPCODE_HANDLER( SMSG_SPLINE_MOVE_UNKNOWN_1236,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
