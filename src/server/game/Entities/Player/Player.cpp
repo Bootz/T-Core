@@ -1906,7 +1906,7 @@ void Player::setDeathState(DeathState s)
         SetUInt32Value(PLAYER_SELF_RES_SPELL, 0);
 }
 
-void Player::BuildEnumData(QueryResult result, WorldPacket* data)
+bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -2052,6 +2052,8 @@ void Player::BuildEnumData(QueryResult result, WorldPacket* data)
     uint32 playerBytes2 = fields[6].GetUInt32();
     *data << uint8(playerBytes2 & 0xFF);                  // facial hair
     *data << uint8(playerBytes);                          // skin
+
+    return false;
 }
 
 bool Player::ToggleAFK()
@@ -14176,7 +14178,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
             }
 
             menu->GetGossipMenu().AddMenuItem(itr->second.OptionIndex, itr->second.OptionIcon, strOptionText, 0, itr->second.OptionType, strBoxText, itr->second.BoxMoney, itr->second.BoxCoded);
-            menu->GetGossipMenu().AddGossipMenuItemData(itr->second.OptionIndex, itr->second.ActionMenuId, itr->second.ActionPoiId);
+            menu->GetGossipMenu().AddGossipMenuItemData(itr->second.OptionIndex, itr->second.ActionMenuId, itr->second.ActionPoiId, itr->second.ActionScriptId);
         }
     }
 }
@@ -14265,6 +14267,13 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
             if (menuItemData->GossipActionPoi)
                 PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
 
+            if (menuItemData->GossipActionScript)
+            {
+                if (source->GetTypeId() == TYPEID_UNIT)
+                    GetMap()->ScriptsStart(sGossipScripts, menuItemData->GossipActionScript, this, source);
+                else if (source->GetTypeId() == TYPEID_GAMEOBJECT)
+                    GetMap()->ScriptsStart(sGossipScripts, menuItemData->GossipActionScript, source, this);
+            }
             break;
         }
         case GOSSIP_OPTION_OUTDOORPVP:
@@ -17018,6 +17027,9 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     m_specsCount = fields[52].GetUInt8();
     m_activeSpec = fields[53].GetUInt8();
 
+    if (m_specsCount > 2) // Somehow patched client manages to bump this up.
+        m_specsCount = 1;
+
     // sanity check
     if (m_specsCount > MAX_TALENT_SPECS || m_activeSpec > MAX_TALENT_SPEC || m_specsCount < MIN_TALENT_SPECS)
     {
@@ -17153,6 +17165,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     _LoadDeclinedNames(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADDECLINEDNAMES));
 
+    m_achievementMgr.GetAchievementPoints();
     m_achievementMgr.CheckAllAchievementCriteria();
 
     _LoadEquipmentSets(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADEQUIPMENTSETS));
