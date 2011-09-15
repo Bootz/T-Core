@@ -54,6 +54,7 @@ class WorldPacket : public ByteBuffer
         {
             b = readBit() ? 1 : 0;
         }
+
         void ReadByteSeq(uint8& b)
         {
             if (b != 0)
@@ -64,6 +65,7 @@ class WorldPacket : public ByteBuffer
         {
             writeBit(b);
         }
+
         void WriteByteSeq(uint8 b)
         {
             if (b != 0)
