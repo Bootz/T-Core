@@ -356,7 +356,7 @@ public:
             OUT_LOAD_INST_DATA_COMPLETE;
         }
 
-        void ShiftPhase()
+        /*void ShiftPhase()
         {
             uiAscendantCouncilPhase++;
             if(uiAscendantCouncilPhase == 2)
@@ -372,7 +372,7 @@ public:
             {
 
             }
-        }
+        }*/
 
 		void Update(uint32 diff)
 		{
