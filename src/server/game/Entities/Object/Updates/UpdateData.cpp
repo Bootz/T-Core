@@ -78,5 +78,6 @@ void UpdateData::Clear()
     m_data.clear();
     m_outOfRangeGUIDs.clear();
     m_blockCount = 0;
+    m_map = 0;
 }
 
