@@ -306,17 +306,19 @@ public:
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
 
-				if(!instance->IsHeroic())
+				if (!instance->IsHeroic())
 				{
 					srand((unsigned)time(0));
 					if (!data5 == NULL)
 					{
 						uiRandomDragons[0] = data5;
 					} else uiRandomDragons[0] = rand() % 3 +1;
-					if(!data6 == NULL)
+					if (!data6 == NULL)
 					{
-						uiRandomDragons[1] = data6
-					} else {
+						uiRandomDragons[1] = data6;
+					}
+                    else
+                    {
 						switch (uiRandomDragons[0])
 						{
 							case RANDOM_DRAGON_STORM_RIDER:
@@ -324,13 +326,14 @@ public:
 								break;
 							case RANDOM_DRAGON_NETHER_SCION:
 								uiRandomDragons[1] = rand() % 1 + 2;
-								if(uiRandomDragons[1] == RANDOM_DRAGON_NETHER_SCION)
+								if (uiRandomDragons[1] == RANDOM_DRAGON_NETHER_SCION)
 								{
 									uiRandomNumber = rand() % 10 + 1;
 									if(uiRandomNumber <= 5)
 									{
 										uiRandomDragons[1] = RANDOM_DRAGON_STORM_RIDER;
-									} else uiRandomDragons[1] = RANDOM_DRAGON_SLATE_DRAKE;
+									}
+                                    else uiRandomDragons[1] = RANDOM_DRAGON_SLATE_DRAKE;
 								}
 								break;
 							case RANDOM_DRAGON_SLATE_DRAKE:
@@ -341,13 +344,16 @@ public:
 					if(!data7 == NULL)
 					{
 						uiRandomDragons[2] = data7;
-					} else {
+					}
+                    else
+                    {
 						uiRandomDragons[2] = rand() % 1 + 1;
 					}
-                    if(!data8 == 0)
+                    if (!data8 == 0)
                     {
 				        uiHalfusNormalTimer = data8;
-                    } else uiHalfusNormalTimer = 604800000;
+                    }
+                    else uiHalfusNormalTimer = 604800000;
 				}
 
             } 
