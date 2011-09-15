@@ -1544,6 +1544,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading GameTeleports...");
     sObjectMgr->LoadGameTele();
 
+    sLog->outString("Loading Gossip scripts...");
+    sObjectMgr->LoadGossipScripts();                             // must be before gossip menu options
+    
     sLog->outString("Loading Gossip menu...");
     sObjectMgr->LoadGossipMenu();
 
