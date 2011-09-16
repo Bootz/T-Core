@@ -3285,8 +3285,8 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 62584: // Lifebinder's Gift
             case 64185: // Lifebinder's Gift
-                spellInfo->EffectImplicitTargetB[1] = TARGET_UNIT_NEARBY_ENTRY;
-                spellInfo->EffectImplicitTargetB[2] = TARGET_UNIT_NEARBY_ENTRY;
+                spellEffect->EffectImplicitTargetB = TARGET_UNIT_NEARBY_ENTRY;
+                spellEffect->EffectImplicitTargetB = TARGET_UNIT_NEARBY_ENTRY;
                 break;                
             // ENDOF ULDUAR SPELLS
             //
