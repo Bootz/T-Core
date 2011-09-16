@@ -1,12 +1,12 @@
-ALTER TABLE `quest_template` ADD (`RewSkillLineId` int(11) unsigned NOT NULL DEFAULT '0' AFTER `OfferRewardEmoteDelay4`,
-                                  `RewSkillPoints` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewSkillLineId`,
-                                  `RewRepMask` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewSkillPoints`,
-                                  `QuestGiverPortrait` int(11) unsigned NOT NULL DEFAULT '0' AFTER `RewRepMask`,
-                                  `QuestTurnInPortrait` int(11) unsigned NOT NULL DEFAULT '0' AFTER `QuestGiverPortrait`,
-                                  `QuestGiverPortraitText` text DEFAULT NULL AFTER `ReqCurrencyCount4`,
-                                  `QuestGiverPortraitUnk` text DEFAULT NULL AFTER `QuestGiverPortraitText`,
-                                  `QuestTurnInPortraitText` text DEFAULT NULL AFTER `QuestGiverPortraitUnk`,
-                                  `QuestTurnInPortraitUnk` text DEFAULT NULL AFTER `QuestTurnInPortraitText`,
-                                  `SoundAccept` int(11) unsigned NOT NULL DEFAULT '0' AFTER `QuestTurnInPortraitUnk`,
-                                  `SoundTurnIn` int(11) unsigned NOT NULL DEFAULT '0' AFTER `SoundAccept`,
-                                  `RequiredSpell` int(11) unsigned NOT NULL DEFAULT '0' AFTER `SoundTurnIn`);
+ALTER TABLE `quest_template` ADD `RewSkillLineId` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `OfferRewardEmoteDelay4`;
+ALTER TABLE `quest_template` ADD `RewSkillPoints` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `RewSkillLineId`;
+ALTER TABLE `quest_template` ADD `RewRepMask` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `RewSkillPoints`;
+ALTER TABLE `quest_template` ADD `QuestGiverPortrait` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `RewRepMask`;
+ALTER TABLE `quest_template` ADD `QuestTurnInPortrait` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `QuestGiverPortrait`;
+ALTER TABLE `quest_template` ADD `QuestGiverPortraitText` TEXT DEFAULT NULL AFTER `ReqCurrencyCount4`;
+ALTER TABLE `quest_template` ADD `QuestGiverPortraitUnk` TEXT DEFAULT NULL AFTER `QuestGiverPortraitText`;
+ALTER TABLE `quest_template` ADD `QuestTurnInPortraitText` TEXT DEFAULT NULL AFTER `QuestGiverPortraitUnk`;
+ALTER TABLE `quest_template` ADD `QuestTurnInPortraitUnk` TEXT DEFAULT NULL AFTER `QuestTurnInPortraitText`;
+ALTER TABLE `quest_template` ADD `SoundAccept` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `QuestTurnInPortraitUnk`;
+ALTER TABLE `quest_template` ADD `SoundTurnIn` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `SoundAccept`;
+ALTER TABLE `quest_template` ADD `RequiredSpell` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `SoundTurnIn`;
