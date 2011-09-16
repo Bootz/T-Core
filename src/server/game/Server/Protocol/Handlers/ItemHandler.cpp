@@ -645,7 +645,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 data << uint32(itemTemplate->MaxDurability);
                 data << uint32(itemTemplate->BuyCount);
                 data << uint32(item->ExtendedCost);
-                data << uint32(0);                           // unk 4.0.1
+                data << uint8(0);                           // unk uint32 4.0.1 now 8
             }
         }
     }
