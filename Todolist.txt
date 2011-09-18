@@ -11,17 +11,14 @@ TODO-List for TrilliumEMU Developer #
 3.  Implement the new Battlegrounds.
 4.  Fix pet stables -- Already started.
 5.  Begin to fix spells (only casting and damage works)
-6.  rewrite Item System, so that we use item_sparse.db2 file and item.db2.
-7.  Begin to fix guilds.
-8.  Begin to fix groups.
-9.  Fix Achievements.
-10. Research the Battleground Packets, some updates added to this packets.
-11. Update the rest of Opcodes to 4.2.0.
-12. Implement a New Terrain System.
-13. Implement a new Creature Formations System.
-14. Need to revise HoR now WIP.
-15. Implement new Transport System.
-16. Implement special spawn system.
+6.  Begin to fix guilds.
+7.  Begin to fix groups.
+8.  Fix Achievements.
+9. Research the Battleground Packets, some updates added to this packets.
+10. Update the rest of Opcodes to 4.2.0.
+11. Implement a New Terrain System.
+12. Implement a new Creature Formations System.
+13. Implement new Transport System.
 
 // Database Developer:
 1. Fix old spawns and duplicates from old WotLK
