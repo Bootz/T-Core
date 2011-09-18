@@ -401,7 +401,7 @@ class Spell
 
         void InitExplicitTargets(SpellCastTargets const& targets);
         void SelectSpellTargets();
-        void SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur);
+        uint32 SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur);
         void SelectTrajTargets();
 
         template<typename T> WorldObject* FindCorpseUsing();
@@ -589,10 +589,10 @@ class Spell
         };
         std::list<ItemTargetInfo> m_UniqueItemInfo;
 
-        void AddUnitTarget(Unit* target, uint32 effIndex, bool checkIfValid = true);
-        void AddGOTarget(GameObject* target, uint32 effIndex);
-        void AddGOTarget(uint64 goGUID, uint32 effIndex);
-        void AddItemTarget(Item* target, uint32 effIndex);
+        void AddUnitTarget(Unit* target, uint32 effectMask, bool checkIfValid = true);
+        void AddGOTarget(GameObject* target, uint32 effectMask);
+        void AddGOTarget(uint64 goGUID, uint32 effectMask);
+        void AddItemTarget(Item* item, uint32 effectMask);
         void DoAllEffectOnTarget(TargetInfo *target);
         SpellMissInfo DoSpellHitOnUnit(Unit *unit, uint32 effectMask, bool scaleAura);
         void DoTriggersOnSpellHit(Unit *unit, uint8 effMask);
@@ -702,26 +702,13 @@ namespace Trillium
                     case SPELL_TARGETS_ENEMY:
                         if (target->isTotem())
                             continue;
-                        // can't be checked in SpellInfo::CheckTarget - needs more research
-                        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE))
+                        if (!i_source->_IsValidAttackTarget(target, i_spellProto))
                             continue;
-                        if (target->HasUnitState(UNIT_STAT_UNATTACKABLE))
-                            continue;
-                        if (i_source->IsControlledByPlayer())
-                        {
-                            if (i_source->IsFriendlyTo(target))
-                                continue;
-                        }
-                        else
-                        {
-                            if (!i_source->IsHostileTo(target))
-                                continue;
-                        }
                         break;
                     case SPELL_TARGETS_ALLY:
                         if (target->isTotem())
                             continue;
-                        if (!i_source->IsFriendlyTo(target))
+                        if (!i_source->_IsValidAssistTarget(target, i_spellProto))
                             continue;
                         break;
                     case SPELL_TARGETS_ENTRY:
