@@ -1203,11 +1203,11 @@ class spell_putricide_mutation_init : public SpellScriptLoader
             {
                 InstanceScript* instance = GetTargetUnit()->GetInstanceScript();
                 if (!instance)
-                    return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+                    return SPELL_CAST_OK;
 
                 Creature* professor = ObjectAccessor::GetCreature(*GetTargetUnit(), instance->GetData64(DATA_PROFESSOR_PUTRICIDE));
                 if (!professor)
-                    return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+                    return SPELL_CAST_OK;
 
                 if (professor->AI()->GetData(DATA_PHASE) == PHASE_COMBAT_3 || !professor->isAlive())
                 {
