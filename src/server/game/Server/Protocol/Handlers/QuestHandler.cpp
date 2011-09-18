@@ -601,8 +601,9 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
 void WorldSession::HandleQuestPushResult(WorldPacket& recvPacket)
 {
     uint64 guid;
+    uint32 QuestID;
     uint8 msg;
-    recvPacket >> guid >> msg;
+    recvPacket >> guid >> QuestID >> msg;
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_QUEST_PUSH_RESULT");
 
@@ -611,8 +612,9 @@ void WorldSession::HandleQuestPushResult(WorldPacket& recvPacket)
         Player *pPlayer = ObjectAccessor::FindPlayer(_player->GetDivider());
         if (pPlayer)
         {
-            WorldPacket data(MSG_QUEST_PUSH_RESULT, (8+1));
+            WorldPacket data(MSG_QUEST_PUSH_RESULT, 8 + 4 + 1);
             data << uint64(guid);
+            data << uint32(QuestID);
             data << uint8(msg);                             // valid values: 0-8
             pPlayer->GetSession()->SendPacket(&data);
             _player->SetDivider(0);
@@ -724,7 +726,7 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
 
     uint32 count = 0;
 
-    WorldPacket data(SMSG_QUESTGIVER_STATUS_MULTIPLE, 4 + 8 + 4);
+    WorldPacket data(SMSG_QUESTGIVER_STATUS_MULTIPLE, 16);
     data << uint32(count);                                  // placeholder
 
     for (Player::ClientGUIDs::const_iterator itr = _player->m_clientGUIDs.begin(); itr != _player->m_clientGUIDs.end(); ++itr)

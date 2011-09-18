@@ -3606,11 +3606,12 @@ void ObjectMgr::LoadQuests()
         "ReqCurrencyCount3, ReqCurrencyId4, ReqCurrencyCount4,"
     //   163                     164                    165
         "QuestGiverPortraitText, QuestGiverPortraitUnk, QuestTurnInPortraitText, "
-    //   166                    167          168
-        "QuestTurnInPortaitUnk, SoundAccept, SoundTurnIn,"
-    //   169          170
+    //   166                    167              168             169          170          171
+        "QuestTurnInPortraitUnk, QuestTargetMark, QuestStartType, SoundAccept, SoundTurnIn, RequiredSpell, "
+    //   172          173
         "StartScript, CompleteScript"
         " FROM quest_template");
+
     if (!result)
     {
         sLog->outErrorDb(">> Loaded 0 quests definitions. DB table `quest_template` is empty.");
