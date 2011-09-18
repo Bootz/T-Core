@@ -85,7 +85,7 @@ struct AuctionEntry
     uint32 GetHouseId() const { return auctionHouseEntry->houseId; }
     uint32 GetHouseFaction() const { return auctionHouseEntry->faction; }
     uint32 GetAuctionCut() const;
-    uint32 GetAuctionOutBid() const;
+    uint64 GetAuctionOutBid() const;
     bool BuildAuctionInfo(WorldPacket & data) const;
     void DeleteFromDB(SQLTransaction& trans) const;
     void SaveToDB(SQLTransaction& trans) const;

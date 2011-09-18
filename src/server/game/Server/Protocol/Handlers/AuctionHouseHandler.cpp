@@ -117,14 +117,16 @@ void WorldSession::SendAuctionOwnerNotification(AuctionEntry* auction)
 void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
 {
     uint64 auctioneer, item;
-    uint32 etime, bid, buyout, count;
-    recv_data >> auctioneer;
-    recv_data.read_skip<uint32>();                          // const 1?
-    recv_data >> item;
+    uint64 bid, buyout;
+    uint32 etime, count;
+    uint32 unk = 1;
+    recv_data >> auctioneer;                                // uint64
+    recv_data >> unk;                                       // 1
+    recv_data >> item;                                      // uint64
     recv_data >> count;                                     // 3.2.2, number of items being auctioned
-    recv_data >> bid;
-    recv_data >> buyout;
-    recv_data >> etime;
+    recv_data >> bid;                                       // uint64, 4.0.6
+    recv_data >> buyout;                                    // uint64, 4.0.6
+    recv_data >> etime;                                     // uint32
 
     Player *pl = GetPlayer();
 
@@ -225,12 +227,12 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     AH->item_guidlow = GUID_LOPART(item);
     AH->item_template = it->GetEntry();
     AH->owner = pl->GetGUIDLow();
-    AH->startbid = bid;
+    AH->startbid = (bid >> 32);
     AH->bidder = 0;
     AH->bid = 0;
-    AH->buyout = buyout;
+    AH->buyout = (buyout >> 32);
     AH->expire_time = time(NULL) + auction_time;
-    AH->deposit = deposit;
+    AH->deposit = (deposit >> 32);
     AH->auctionHouseEntry = auctionHouseEntry;
 
     sLog->outDetail("selling item %u to auctioneer %u with initial bid %u with buyout %u and with time %u (in sec) in auctionhouse %u", GUID_LOPART(item), AH->auctioneer, bid, buyout, auction_time, AH->GetHouseId());
@@ -256,9 +258,12 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 {
     uint64 auctioneer;
     uint32 auctionId;
+    uint32 priceTmp;
     uint64 price;
     recv_data >> auctioneer;
-    recv_data >> auctionId >> price;
+    recv_data >> auctionId >> priceTmp;
+
+    price = priceTmp;
 
     if (!auctionId || !price)
         return;                                             //check for cheaters
@@ -333,7 +338,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
             pl->ModifyMoney(-int32(price));
 
         auction->bidder = pl->GetGUIDLow();
-        auction->bid = price;
+        auction->bid = (price >> 32);
         GetPlayer()->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_AUCTION_BID, price);
 
         trans->PAppend("UPDATE auctionhouse SET buyguid = '%u', lastbid = '%u' WHERE id = '%u'", auction->bidder, auction->bid, auction->Id);

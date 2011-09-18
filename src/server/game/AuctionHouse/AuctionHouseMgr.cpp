@@ -675,13 +675,13 @@ bool AuctionEntry::BuildAuctionInfo(WorldPacket & data) const
     data << uint32(pItem->GetSpellCharges());               //item->charge FFFFFFF
     data << uint32(0);                                      //Unknown
     data << uint64(owner);                                  //Auction->owner
-    data << uint32(startbid);                               //Auction->startbid (not sure if useful)
-    data << uint32(bid ? GetAuctionOutBid() : 0);
+    data << uint64(startbid);                               //Auction->startbid (not sure if useful)
+    data << uint64(bid ? GetAuctionOutBid() : 0);
     //minimal outbid
-    data << uint32(buyout);                                 //auction->buyout
+    data << uint64(buyout);                                 //auction->buyout
     data << uint32((expire_time-time(NULL))*IN_MILLISECONDS);//time left
     data << uint64(bidder);                                 //auction->bidder current
-    data << uint32(bid);                                    //current bid
+    data << uint64(bid);                                    //current bid
     return true;
 }
 
@@ -692,9 +692,9 @@ uint32 AuctionEntry::GetAuctionCut() const
 }
 
 /// the sum of outbid is (1% from current bid)*5, if bid is very small, it is 1c
-uint32 AuctionEntry::GetAuctionOutBid() const
+uint64 AuctionEntry::GetAuctionOutBid() const
 {
-    uint32 outbid = CalculatePctN(bid, 5);
+    uint64 outbid = CalculatePctN(bid, 5);
     return outbid ? outbid : 1;
 }
 
