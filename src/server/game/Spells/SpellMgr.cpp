@@ -2865,6 +2865,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_SHARE_DAMAGE;
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_IGNORE_ARMOR;
                 break;
+            case 72293: // Mark of the Fallen Champion (Deathbringer Saurfang)
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
+                break;
             default:
                 break;
         }
@@ -3146,6 +3149,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellEffect->EffectMiscValue |= 1;
                 break;
+            case 18541: // Ritual of Doom Effect (temp hack, current targeting system requires implicit targets to be set. Was target_dest_caster)
             case 51904: // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
                 spellEffect->EffectImplicitTargetA = TARGET_UNIT_CASTER;
                 break;

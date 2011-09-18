@@ -40,6 +40,57 @@ enum WarlockSpells
     WARLOCK_IMPROVED_HEALTHSTONE_R2         = 18693,
 };
 
+class spell_warl_banish : public SpellScriptLoader
+{
+public:
+    spell_warl_banish() : SpellScriptLoader("spell_warl_banish") { }
+
+    class spell_warl_banish_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_banish_SpellScript);
+
+        bool Load()
+        {
+            _removed = false;
+            return true;
+        }
+
+        void HandleBanish()
+        {
+            if (Unit* target = GetHitUnit())
+            {
+                if (target->GetAuraEffect(SPELL_AURA_SCHOOL_IMMUNITY, SPELLFAMILY_WARLOCK, 0, 0x08000000, 0))
+                {
+                    //No need to remove old aura since its removed due to not stack by current Banish aura
+                    PreventHitDefaultEffect(EFFECT_0);
+                    PreventHitDefaultEffect(EFFECT_1);
+                    PreventHitDefaultEffect(EFFECT_2);
+                    _removed = true;
+                }
+            }
+        }
+
+        void RemoveAura()
+        {
+            if (_removed)
+                PreventHitAura();
+        }
+
+        void Register()
+        {
+            BeforeHit += SpellHitFn(spell_warl_banish_SpellScript::HandleBanish);
+            AfterHit += SpellHitFn(spell_warl_banish_SpellScript::RemoveAura);
+        }
+
+        bool _removed;
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_banish_SpellScript();
+    }
+};
+
 // 47193 Demonic Empowerment
 class spell_warl_demonic_empowerment : public SpellScriptLoader
 {

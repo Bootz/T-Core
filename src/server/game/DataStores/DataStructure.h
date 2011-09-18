@@ -914,6 +914,12 @@ struct FactionEntry
     DBCString name;                                         // 23       m_name_lang
     //DBCString     description;                            // 24       m_description_lang
     //uint32                                                // 25
+
+    // helpers
+    bool CanHaveReputation() const
+    {
+        return reputationListID >=0;
+    }
 };
 
 #define MAX_FACTION_RELATIONS 4

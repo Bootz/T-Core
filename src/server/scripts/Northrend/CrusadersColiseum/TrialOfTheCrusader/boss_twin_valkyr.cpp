@@ -644,7 +644,7 @@ public:
             else m_uiRangeCheckTimer -= uiDiff;
         }
 
-        void SpellHitTarget(Unit* who, const SpellInfo* spell)
+        void SpellHitTarget(Unit* who, const SpellInfo* /*spell*/)
         {
             if (who->HasAura(SPELL_DARK_ESSENCE_HELPER))
                 who->CastSpell(who, SPELL_POWERING_UP, true);
@@ -683,7 +683,7 @@ public:
             else m_uiRangeCheckTimer -= uiDiff;
         }
 
-        void SpellHitTarget(Unit* who, const SpellInfo* spell)
+        void SpellHitTarget(Unit* who, const SpellInfo* /*spell*/)
         {
             if (who->HasAura(SPELL_LIGHT_ESSENCE_HELPER))
                 who->CastSpell(who, SPELL_POWERING_UP, true);
@@ -817,7 +817,7 @@ class spell_power_of_the_twins : public SpellScriptLoader
                 return GetCaster()->GetTypeId() == TYPEID_UNIT;
             }
 
-            void HandleEffectApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 if (InstanceScript* instance = GetCaster()->GetInstanceScript())
                 {

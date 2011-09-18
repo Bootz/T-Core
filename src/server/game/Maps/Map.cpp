@@ -835,7 +835,16 @@ void Map::MoveAllCreaturesInMoveList()
                 #ifdef TRILLIUM_DEBUG
                     sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) cannot be move to unloaded respawn grid.", c->GetGUIDLow(), c->GetEntry());
                 #endif
-                AddObjectToRemoveList(c);
+                //AddObjectToRemoveList(Pet*) should only be called in Pet::Remove
+                //This may happen when a player just logs in and a pet moves to a nearby unloaded cell
+                //To avoid this, we can load nearby cells when player log in
+                //But this check is always needed to ensure safety
+                //TODO: pets will disappear if this is outside CreatureRespawnRelocation
+                //need to check why pet is frequently relocated to an unloaded cell
+                if (c->isPet())
+                    ((Pet*)c)->Remove(PET_SAVE_NOT_IN_SLOT, true);
+                else
+                    AddObjectToRemoveList(c);
             }
         }
 
@@ -928,8 +937,8 @@ bool Map::CreatureRespawnRelocation(Creature *c)
         c->UpdateObjectVisibility(false);
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 bool Map::UnloadGrid(const uint32 x, const uint32 y, bool unloadAll)
@@ -2355,7 +2364,7 @@ bool InstanceMap::Add(Player* player)
                             data << uint32(i_data ? i_data->GetCompletedEncounterMask() : 0);
                             data << uint8(0);
                             player->GetSession()->SendPacket(&data);
-                            player->SetPendingBind(mapSave, 60000);
+                            player->SetPendingBind(mapSave->GetInstanceId(), 60000);
                         }
                     }
                 }
