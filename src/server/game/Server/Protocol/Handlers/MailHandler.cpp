@@ -35,9 +35,9 @@
 
 void WorldSession::HandleSendMail(WorldPacket & recv_data)
 {
-    uint64 mailbox, unk3;
+    uint64 mailbox, unk3, money, COD;
     std::string receiver, subject, body;
-    uint32 unk1, unk2, money, COD;
+    uint32 unk1, unk2;
     uint8 unk4;
     recv_data >> mailbox;
     recv_data >> receiver;
@@ -295,8 +295,10 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 void WorldSession::HandleMailMarkAsRead(WorldPacket & recv_data)
 {
     uint64 mailbox;
+    uint64 unk;
     uint32 mailId;
     recv_data >> mailbox;
+    recv_data >> unk;            // 4.0.6
     recv_data >> mailId;
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
@@ -501,6 +503,7 @@ void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
     uint32 mailId;
     recv_data >> mailbox;
     recv_data >> mailId;
+    recv_data.read_skip<uint64>();                          //4.0.6a
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
         return;
@@ -596,7 +599,7 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
                 break;
         }
 
-        data << uint32((*itr)->COD);                         // COD
+        data << uint64((*itr)->COD);                         // COD
         data << uint32(0);                                   // probably changed in 3.3.3
         data << uint32((*itr)->stationery);                  // stationery (Stationery.dbc)
         data << uint32((*itr)->money);                       // Gold
@@ -625,9 +628,9 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
 			// Fixed goofy mail system bug with multiple items and gold
 			for (uint8 j = 0; j < 2; ++j)
             {
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
+                data << uint32(0);
+                data << uint32(0);
+                data << uint32(0);
  	        }
 			// can be negative
             data << int32((item ? item->GetItemRandomPropertyId() : 0));
