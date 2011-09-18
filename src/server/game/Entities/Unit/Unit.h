@@ -2428,7 +2428,7 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << GetPositionZ();
     data << uint32(getMSTime());
     data << uint8(0);
-    data << uint32((isInFlight()) ? (SPLINEFLAG_FLYING | SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
+    data << uint32(((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
     data << uint32(traveltime);
     data << uint32(pathSize);
 
