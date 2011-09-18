@@ -1190,11 +1190,8 @@ void MovementInfo::OutDebug()
         sLog->outString("pitch: %f", pitch);
 
     sLog->outString("fallTime: %u", fallTime);
-    if (flags & MOVEMENTFLAG_JUMPING)
+    if (flags & MOVEMENTFLAG_FALLING_SLOW)
         sLog->outString("j_zspeed: %f j_sinAngle: %f j_cosAngle: %f j_xyspeed: %f", j_zspeed, j_sinAngle, j_cosAngle, j_xyspeed);
-
-    if (flags & MOVEMENTFLAG_SPLINE_ELEVATION)
-        sLog->outString("splineElevation: %f", splineElevation);
 }
 
 WorldObject::WorldObject(): WorldLocation(),

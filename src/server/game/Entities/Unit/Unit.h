@@ -675,43 +675,43 @@ enum MovementFlags
     MOVEMENTFLAG_BACKWARD              = 0x00000002,
     MOVEMENTFLAG_STRAFE_LEFT           = 0x00000004,
     MOVEMENTFLAG_STRAFE_RIGHT          = 0x00000008,
-    MOVEMENTFLAG_LEFT                  = 0x00000010,
-    MOVEMENTFLAG_RIGHT                 = 0x00000020,
+    MOVEMENTFLAG_TURN_LEFT             = 0x00000010,
+    MOVEMENTFLAG_TURN_RIGHT            = 0x00000020,
     MOVEMENTFLAG_PITCH_UP              = 0x00000040,
     MOVEMENTFLAG_PITCH_DOWN            = 0x00000080,
-    MOVEMENTFLAG_WALKING               = 0x00000100,               // Walking
-    MOVEMENTFLAG_ONTRANSPORT           = 0x00000200,               // Used for flying on some creatures
-    MOVEMENTFLAG_LEVITATING            = 0x00000400,
-    MOVEMENTFLAG_ROOT                  = 0x00000800,               // Must not be set along with MOVEMENTFLAG_MASK_MOVING
-    MOVEMENTFLAG_JUMPING               = 0x00001000,
-    MOVEMENTFLAG_FALLING               = 0x00002000,               // damage dealt on that type of falling
-    MOVEMENTFLAG_PENDING_STOP          = 0x00004000,
-    MOVEMENTFLAG_PENDING_STRAFE_STOP   = 0x00008000,
-    MOVEMENTFLAG_PENDING_FORWARD       = 0x00010000,
-    MOVEMENTFLAG_PENDING_BACKWARD      = 0x00020000,
-    MOVEMENTFLAG_PENDING_STRAFE_LEFT   = 0x00040000,
-    MOVEMENTFLAG_PENDING_STRAFE_RIGHT  = 0x00080000,
-    MOVEMENTFLAG_PENDING_ROOT          = 0x00100000,
-    MOVEMENTFLAG_SWIMMING              = 0x00200000,               // appears with fly flag also
-    MOVEMENTFLAG_ASCENDING             = 0x00400000,               // press "space" when flying
-    MOVEMENTFLAG_DESCENDING            = 0x00800000,
-    MOVEMENTFLAG_CAN_FLY               = 0x01000000,               // can fly
-    MOVEMENTFLAG_FLYING                = 0x02000000,               // hover
-    MOVEMENTFLAG_SPLINE_ELEVATION      = 0x04000000,               // used for flight paths
-    MOVEMENTFLAG_SPLINE_ENABLED        = 0x08000000,               // used for flight paths
-    MOVEMENTFLAG_WATERWALKING          = 0x10000000,               // prevent unit from falling through water
-    MOVEMENTFLAG_FALLING_SLOW          = 0x20000000,               // active rogue safe fall spell (passive)
-    MOVEMENTFLAG_HOVER                 = 0x40000000,               // hover, cannot jump
+    MOVEMENTFLAG_WALKING               = 0x00000100,
+    MOVEMENTFLAG_LEVITATING            = 0x00000200,
+    MOVEMENTFLAG_ROOT                  = 0x00000400,
+    MOVEMENTFLAG_FALLING               = 0x00000800,
+    MOVEMENTFLAG_FALLING_FAR           = 0x00001000,
+    MOVEMENTFLAG_PENDING_STOP          = 0x00002000,
+    MOVEMENTFLAG_PENDING_STRAFE_STOP   = 0x00004000,
+    MOVEMENTFLAG_PENDING_FORWARD       = 0x00008000,
+    MOVEMENTFLAG_PENDING_BACKWARD      = 0x00010000,
+    MOVEMENTFLAG_PENDING_STRAFE_LEFT   = 0x00020000,
+    MOVEMENTFLAG_PENDING_STRAFE_RIGHT  = 0x00040000,
+    MOVEMENTFLAG_PENDING_ROOT          = 0x00080000,
+    MOVEMENTFLAG_SWIMMING              = 0x00100000,
+    MOVEMENTFLAG_ASCENDING             = 0x00200000,
+    MOVEMENTFLAG_DESCENDING            = 0x00400000,
+    MOVEMENTFLAG_CAN_FLY               = 0x00800000,
+    MOVEMENTFLAG_FLYING                = 0x01000000,
+    MOVEMENTFLAG_UNKNOWN               = 0x02000000,
+    MOVEMENTFLAG_WATERWALKING          = 0x04000000,
+    MOVEMENTFLAG_FALLING_SLOW          = 0x08000000,
+    MOVEMENTFLAG_HOVER                 = 0x10000000,
+    MOVEMENTFLAG_COLLISION_DISABLED    = 0x20000000,
+    MOVEMENTFLAG_ONTRANSPORT           = 0x40000000,
 
     // TODO: Check if PITCH_UP and PITCH_DOWN really belong here..
     MOVEMENTFLAG_MASK_MOVING =
         MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD | MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT |
-        MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN | MOVEMENTFLAG_JUMPING | MOVEMENTFLAG_FALLING | MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING |
-        MOVEMENTFLAG_SPLINE_ELEVATION,
+        MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN | MOVEMENTFLAG_FALLING | MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING,
 
     MOVEMENTFLAG_MASK_TURNING =
-        MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT,
+        MOVEMENTFLAG_TURN_LEFT | MOVEMENTFLAG_TURN_RIGHT,
 };
+
 enum MovementFlags2
 {
     MOVEMENTFLAG2_NONE                     = 0x00000000,
@@ -732,6 +732,7 @@ enum MovementFlags2
     MOVEMENTFLAG2_UNK15                    = 0x00004000,
     MOVEMENTFLAG2_UNK16                    = 0x00008000,
 };
+
 enum SplineFlags
 {
     SPLINEFLAG_NONE           = 0x00000000,
@@ -2426,7 +2427,7 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << GetPositionZ();
     data << uint32(getMSTime());
     data << uint8(0);
-    data << uint32(((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
+    data << uint32((isInFlight()) ? (SPLINEFLAG_FLYING | SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
     data << uint32(traveltime);
     data << uint32(pathSize);
 

@@ -15815,8 +15815,8 @@ void Unit::SetStunned(bool apply)
         // MOVEMENTFLAG_ROOT cannot be used in conjunction with MOVEMENTFLAG_MASK_MOVING (tested 3.3.5a)
         // this will freeze clients. That's why we remove MOVEMENTFLAG_MASK_MOVING before
         // setting MOVEMENTFLAG_ROOT
-        //RemoveUnitMovementFlag(MOVEMENTFLAG_MASK_MOVING);
-        //AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
+        RemoveUnitMovementFlag(MOVEMENTFLAG_MASK_MOVING);
+        AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
 
         // Creature specific
         if (GetTypeId() != TYPEID_PLAYER)
@@ -15848,7 +15848,7 @@ void Unit::SetStunned(bool apply)
             data << uint32(0);
             SendMessageToSet(&data, true);
 
-            /*RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);*/
+            RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
     }
 }
@@ -15863,8 +15863,8 @@ void Unit::SetRooted(bool apply)
         // MOVEMENTFLAG_ROOT cannot be used in conjunction with MOVEMENTFLAG_MASK_MOVING (tested 3.3.5a)
         // this will freeze clients. That's why we remove MOVEMENTFLAG_MASK_MOVING before
         // setting MOVEMENTFLAG_ROOT
-        //RemoveUnitMovementFlag(MOVEMENTFLAG_MASK_MOVING);
-        //AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
+        RemoveUnitMovementFlag(MOVEMENTFLAG_MASK_MOVING);
+        AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
@@ -15899,7 +15899,7 @@ void Unit::SetRooted(bool apply)
                 SendMessageToSet(&data, true);
             }
 
-            /*RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);*/
+            RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
     }
 }
@@ -17210,11 +17210,10 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
             break;
         case TYPEID_PLAYER:
             // remove unknown, unused etc flags for now
-            const_cast<Unit*>(this)->RemoveUnitMovementFlag(MOVEMENTFLAG_SPLINE_ENABLED);
             if (isInFlight())
             {
                 WPAssert(const_cast<Unit*>(this)->GetMotionMaster()->GetCurrentMovementGeneratorType() == FLIGHT_MOTION_TYPE);
-                const_cast<Unit*>(this)->AddUnitMovementFlag(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_SPLINE_ENABLED);
+                const_cast<Unit*>(this)->AddUnitMovementFlag(MOVEMENTFLAG_FORWARD);
             }
             break;
         default:
@@ -17235,9 +17234,9 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
                    || (m_movementInfo.flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
 
     if (data->writeBit(m_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_TURNING))
-        data->writeBit(GetUnitMovementFlags() & MOVEMENTFLAG_JUMPING);
+        data->writeBit(GetUnitMovementFlags() & MOVEMENTFLAG_FALLING_SLOW);
 
-    data->writeBit(GetUnitMovementFlags() & MOVEMENTFLAG_SPLINE_ELEVATION);
+    /*data->writeBit(GetUnitMovementFlags() & MOVEMENTFLAG_SPLINE_ELEVATION);*/
 
     // has spline data
     data->writeBit(0);
@@ -17282,7 +17281,7 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
         *data << (float)m_movementInfo.j_zspeed;
 
         // 0x00001000
-        if (GetUnitMovementFlags() & MOVEMENTFLAG_JUMPING)
+        if (GetUnitMovementFlags() & MOVEMENTFLAG_FALLING_SLOW)
         {
             *data << (float)m_movementInfo.j_sinAngle;
             *data << (float)m_movementInfo.j_cosAngle;
@@ -17291,7 +17290,7 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
     }
 
     // 0x04000000
-    if (GetUnitMovementFlags() & MOVEMENTFLAG_SPLINE_ELEVATION)
+    if (GetUnitMovementFlags() & MOVEMENTFLAG_UNKNOWN)
         *data << (float)m_movementInfo.splineElevation;
 }
 

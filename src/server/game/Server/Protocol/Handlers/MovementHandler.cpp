@@ -748,8 +748,8 @@ void WorldSession::WriteMovementInfo(WorldPacket &data, MovementInfo *mi)
         HavePitch = (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))) 
             || (mi->flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING),
         HaveFallData = mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING),
-        HaveFallDirection = mi->HasMovementFlag(MOVEMENTFLAG_JUMPING),
-        HaveSplineElevation = mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION),
+        HaveFallDirection = mi->HasMovementFlag(MOVEMENTFLAG_FALLING_SLOW),
+        HaveSplineElevation = mi->HasMovementFlag(MOVEMENTFLAG_UNKNOWN),
         HaveSpline = false;
 
     MovementStatusElements *sequence = GetMovementStatusElementsSequence(data.GetOpcode());
