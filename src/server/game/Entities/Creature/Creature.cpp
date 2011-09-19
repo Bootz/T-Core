@@ -654,7 +654,8 @@ void Creature::DoFleeToGetAssistance()
     if (!getVictim())
         return;
 
-    if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING))
+    //prevent Creatures from fleeing with special debuffs and in stuns
+    if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING) || HasAuraType(SPELL_AURA_MOD_STUN))
         return;
 
     float radius = sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
