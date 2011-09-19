@@ -17,8 +17,7 @@ TODO-List for TrilliumEMU Developer #
 9. Research the Battleground Packets, some updates added to this packets.
 10. Update the rest of Opcodes to 4.2.0.
 11. Implement a New Terrain System.
-12. Implement a new Creature Formations System.
-13. Implement new Transport System.
+12. Implement new Transport System.
 
 // Database Developer:
 1. Fix old spawns and duplicates from old WotLK
