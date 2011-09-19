@@ -28,6 +28,7 @@
 #define MAX_DESYNC 5.0f
 
 CreatureGroupInfoType   CreatureGroupMap;
+CreatureGroupDataType   CreatureGroupDataMap;
 
 void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature* member)
 {
@@ -70,7 +71,7 @@ void CreatureGroupManager::RemoveCreatureFromGroup(CreatureGroup* group, Creatur
     }
 }
 
-void CreatureGroupManager::LoadCreatureFormations()
+void CreatureGroupManager::LoadCreatureGroups()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -78,19 +79,49 @@ void CreatureGroupManager::LoadCreatureFormations()
         delete itr->second;
     CreatureGroupMap.clear();
 
-    //Get group data
-    QueryResult result = WorldDatabase.Query("SELECT leaderGUID, memberGUID, dist, angle, groupAI FROM creature_formations ORDER BY leaderGUID");
+    CreatureGroupDataMap.clear();
 
-    if (!result)
+    //Check if groups without member exist
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUPS_WITHOUT_DATA);
+    PreparedQueryResult result = WorldDatabase.Query(stmt);
+
+    if (result)
+        sLog->outDetail(">> %u Groups without member found, groups skipped.",result->Fetch()->GetInt32());
+
+    //Check if member without group exist
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUP_DATA_WITHOUT_GROUP);
+    result = WorldDatabase.Query(stmt);
+
+    if (result)
+        sLog->outDetail(">> %u Member without group found, member skipped.",result->Fetch()->GetInt32());
+
+    //Get groups
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUPS);
+    PreparedQueryResult result_data = WorldDatabase.Query(stmt);
+
+    if (!result_data)
     {
-        sLog->outErrorDb(">>  Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
-        sLog->outString();
+        sLog->outString(">> Loaded 0 creature groups. DB table `creature_groups` is empty.");
+            sLog->outString();
         return;
     }
 
+    //Get member
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUP_DATA);
+    PreparedQueryResult result_member = WorldDatabase.Query(stmt);
+
+    if (!result_member)
+    {
+        sLog->outString(">> Loaded 0 creature groups. DB table `creature_group_data` is empty.");
+        sLog->outString();
+        return;
+    }    
+
     std::set<uint32> guidSet;
 
-    QueryResult guidResult = WorldDatabase.PQuery("SELECT guid FROM creature");
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREATURE_GUIDS);
+    PreparedQueryResult guidResult = WorldDatabase.Query(stmt);
+
     if (guidResult)
     {
         do
@@ -103,157 +134,131 @@ void CreatureGroupManager::LoadCreatureFormations()
         } while (guidResult->NextRow());
     }
 
-    uint32 count = 0;
-    Field *fields;
-    FormationInfo *group_member;
+    //Loading groups...
+
+    uint32 group_count = 0;
+    GroupInfo* group_member;
 
     do
     {
-        fields = result->Fetch();
+        Field* fields = result_data->Fetch();
 
         //Load group member data
-        group_member                        = new FormationInfo;
-        group_member->leaderGUID            = fields[0].GetUInt32();
-        uint32 memberGUID = fields[1].GetUInt32();
-        group_member->groupAI                = fields[4].GetUInt8();
-        //If creature is group leader we may skip loading of dist/angle
-        if (group_member->leaderGUID != memberGUID)
-        {
-            group_member->follow_dist       = fields[2].GetFloat();
-            group_member->follow_angle      = fields[3].GetFloat() * M_PI / 180;
-        }
-        else
-        {
-            group_member->follow_dist       = 0;
-            group_member->follow_angle      = 0;
-        }
+        uint32 groupId = fields[0].GetUInt32();
+        uint32 leaderGUID = fields[1].GetUInt32();
+        uint8  groupType = fields[2].GetUInt8(); 
+
+        group_member                        = new GroupInfo;
+        group_member->leaderGUID            = leaderGUID;
+        group_member->groupType             = groupType;        
 
         // check data correctness
+        if (guidSet.find(group_member->leaderGUID) == guidSet.end())
         {
-            if (guidSet.find(group_member->leaderGUID) == guidSet.end())
-            {
-                sLog->outErrorDb("creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
-                delete group_member;
-                continue;
-            }
-
-            if (guidSet.find(memberGUID) == guidSet.end())
-            {
-                sLog->outErrorDb("creature_formations table member guid %u incorrect (not exist)", memberGUID);
-                delete group_member;
-                continue;
-            }
+            sLog->outErrorDb("creature_groups table leader guid %u incorrect (not exist)", group_member->leaderGUID);
+            delete group_member;
+            return;
         }
 
-        CreatureGroupMap[memberGUID] = group_member;
-        ++count;
+        CreatureGroupMap[groupId] = group_member;
+
+        sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::LoadCreatureGroups: Load Group %u with Leader %u and groupType %u.", groupId, leaderGUID, groupType);
+        ++group_count;
+    }
+    while (result_data->NextRow()) ;
+
+    //Loading member...
+    uint32 member_count = 0;
+    do
+    {
+        Field* fields = result_member->Fetch();
+        
+        //Load group member data
+        uint32 groupId = fields[0].GetUInt32();
+        uint32 memberGUID = fields[1].GetUInt32();
+
+        // check data correctness
+        if (guidSet.find(memberGUID) == guidSet.end())
+        {
+            sLog->outErrorDb("creature_group_data table member guid %u incorrect (not exist)", memberGUID);
+            continue;
+        }
+
+        CreatureGroupDataMap[memberGUID] = groupId;
+
+        sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::LoadCreatureGroups: Load Member %u for Group with groupId %u.", memberGUID, groupId);
+        ++member_count;
     }
     while (result->NextRow()) ;
 
-    sLog->outString(">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u creatures in %u groups in %u ms", member_count, group_count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
 void CreatureGroup::AddMember(Creature* member)
 {
-    sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::AddMember: Adding unit GUID: %u.", member->GetGUIDLow());
+    if (!member)
+        return;
 
-    //Check if it is a leader
-    if (member->GetDBTableGUIDLow() == m_groupID)
-    {
-        sLog->outDebug(LOG_FILTER_UNITS, "Unit GUID: %u is formation leader. Adding group.", member->GetGUIDLow());
-        m_leader = member;
-    }
+    sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::AddMember: Adding unit GUID: %u to group.", member->GetGUIDLow());
 
-    m_members[member] = CreatureGroupMap.find(member->GetDBTableGUIDLow())->second;
-    member->SetFormation(this);
+    m_members[member] = CreatureGroupMap.find(m_groupID)->second;
+    member->SetGroup(this);
 }
 
 void CreatureGroup::RemoveMember(Creature* member)
 {
-    if (m_leader == member)
-        m_leader = NULL;
+    if (!member)
+        return;
 
     m_members.erase(member);
-    member->SetFormation(NULL);
+    member->SetGroup(NULL);
 }
 
 void CreatureGroup::MemberAttackStart(Creature* member, Unit* target)
 {
-    uint8 groupAI = CreatureGroupMap[member->GetDBTableGUIDLow()]->groupAI;
-    if (!groupAI)
-        return;
-
-    if (groupAI == 1 && member != m_leader)
-        return;
-
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        if (m_leader) // avoid crash if leader was killed and reset.
-            sLog->outDebug(LOG_FILTER_UNITS, "GROUP ATTACK: group instance id %u calls member instid %u", m_leader->GetInstanceId(), member->GetInstanceId());
+        Creature* creature = itr->first;
+
+        sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::MemberAttackStart: group member instanceId %u .",member->GetInstanceId());
 
         //Skip one check
-        if (itr->first == member)
+        if (creature == member)
             continue;
 
-        if (!itr->first->isAlive())
+        if (!creature->isAlive())
             continue;
 
-        if (itr->first->getVictim())
+        if (creature->getVictim())
             continue;
 
-        if (itr->first->IsValidAttackTarget(target) && itr->first->AI())
-            itr->first->AI()->AttackStart(target);
+        if (creature->IsAIEnabled)
+            if (creature->IsValidAttackTarget(target))
+                creature->AI()->AttackStart(target);
     }
 }
 
-void CreatureGroup::FormationReset(bool dismiss)
+bool CreatureGroup::IsAllowedToRespawn(Creature* member)
 {
+    uint8 groupType = CreatureGroupMap[m_groupID]->groupType;
+
+    if (!member->GetMap()->IsRaid() || groupType == 0)
+        return false;
+
+    bool exist = false;
+    //Check if at least one groupmember lives if no -> no respawn.
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-    {
-        if (itr->first != m_leader && itr->first->isAlive())
-        {
-            if (dismiss)
-                itr->first->GetMotionMaster()->Initialize();
-            else
-                itr->first->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
-            sLog->outDebug(LOG_FILTER_UNITS, "Set %s movement for member GUID: %u", dismiss ? "default" : "idle", itr->first->GetGUIDLow());
-        }
-    }
-    m_Formed = !dismiss;
-}
+        if (itr->first->isAlive())
+            exist = true;
 
-void CreatureGroup::LeaderMoveTo(float x, float y, float z)
-{
-    if (!m_leader)
-        return;
-
-    float pathangle    = atan2(m_leader->GetPositionY() - y, m_leader->GetPositionX() - x);
-
+    //Check if an groupmember is in combat, if yes -> no respawn.
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-    {
-        Creature* member = itr->first;
-        if (member == m_leader || !member->isAlive() || member->getVictim())
-            continue;
+       if (itr->first->isInCombat())
+            exist = false;
+    
+    if (exist)
+         sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::IsAllowedToRespawn: group member instanceId %u can respawn.",member->GetInstanceId());
 
-        float angle = itr->second->follow_angle;
-        float dist = itr->second->follow_dist;
-
-        float dx = x + cos(angle + pathangle) * dist;
-        float dy = y + sin(angle + pathangle) * dist;
-        float dz = z;
-
-        Trillium::NormalizeMapCoord(dx);
-        Trillium::NormalizeMapCoord(dy);
-
-        member->UpdateGroundPositionZ(dx, dy, dz);
-
-        if (member->IsWithinDist(m_leader, dist + MAX_DESYNC))
-            member->SetUnitMovementFlags(m_leader->GetUnitMovementFlags());
-        else
-            member->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
-
-        member->GetMotionMaster()->MovePoint(0, dx, dy, dz);
-        member->SetHomePosition(dx, dy, dz, pathangle);
-    }
+    return exist;
 }

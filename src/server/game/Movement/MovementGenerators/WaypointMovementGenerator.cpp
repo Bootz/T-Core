@@ -29,7 +29,7 @@
 //Creature-specific headers
 #include "Creature.h"
 #include "CreatureAI.h"
-#include "CreatureGroups.h"
+#include "CreatureFormations.h"
 //Player-specific
 #include "Player.h"
 

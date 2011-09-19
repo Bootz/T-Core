@@ -47,6 +47,7 @@
 #include "CellImpl.h"
 #include "OutdoorPvPMgr.h"
 #include "GameEventMgr.h"
+#include "CreatureFormations.h"
 #include "CreatureGroups.h"
 #include "Vehicle.h"
 #include "SpellAuraEffects.h"
@@ -146,7 +147,7 @@ m_PlayerDamageReq(0), m_lootMoney(0), m_lootRecipient(0), m_lootRecipientGroup(0
 m_respawnDelay(300), m_corpseDelay(60), m_respawnradius(0.0f), m_reactState(REACT_AGGRESSIVE),
 m_defaultMovementType(IDLE_MOTION_TYPE), m_DBTableGuid(0), m_equipmentId(0), m_AlreadyCallAssistance(false),
 m_AlreadySearchedAssistance(false), m_regenHealth(true), m_AI_locked(false), m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL),
-m_creatureInfo(NULL), m_creatureData(NULL), m_formation(NULL)
+m_creatureInfo(NULL), m_creatureData(NULL), m_formation(NULL), m_group(NULL)
 {
     m_regenTimer = CREATURE_REGEN_INTERVAL;
     m_valuesCount = UNIT_END;
@@ -186,6 +187,7 @@ void Creature::AddToWorld()
         sObjectAccessor->AddObject(this);
         Unit::AddToWorld();
         SearchFormation();
+        SearchGroup();
         AIM_Initialize();
         if (IsVehicle())
             GetVehicleKit()->Install();
@@ -199,7 +201,7 @@ void Creature::RemoveFromWorld()
         if (m_zoneScript)
             m_zoneScript->OnCreatureRemove(this);
         if (m_formation)
-            sFormationMgr->RemoveCreatureFromGroup(m_formation, this);
+            sFormationMgr->RemoveCreatureFromFormation(m_formation, this);
         Unit::RemoveFromWorld();
         sObjectAccessor->RemoveObject(this);
     }
@@ -224,15 +226,36 @@ void Creature::SearchFormation()
     if (!lowguid)
         return;
 
-    CreatureGroupInfoType::iterator frmdata = CreatureGroupMap.find(lowguid);
-    if (frmdata != CreatureGroupMap.end())
-        sFormationMgr->AddCreatureToGroup(frmdata->second->leaderGUID, this);
+    CreatureFormationDataType::iterator frmdata = CreatureFormationDataMap.find(lowguid);
+    if (frmdata != CreatureFormationDataMap.end())
+        sFormationMgr->AddCreatureToFormation(frmdata->second->formationId, this);
+}
+
+void Creature::SearchGroup()
+{
+    if (isSummon())
+        return;
+
+    uint32 lowguid = GetDBTableGUIDLow();
+    if (!lowguid)
+        return;
+
+    CreatureGroupDataType::iterator grpdata = CreatureGroupDataMap.find(lowguid);
+    if (grpdata != CreatureGroupDataMap.end()) 
+        sCreatureGroupMgr->AddCreatureToGroup(grpdata->second, this);
 }
 
 void Creature::RemoveCorpse(bool setSpawnTime)
 {
     if (getDeathState() != CORPSE)
         return;
+
+    if (GetGroup() && GetGroup()->IsAllowedToRespawn(this))
+    {
+        Respawn();
+        return;
+    }
+
 
     m_corpseRemoveTime = time(NULL);
     setDeathState(DEAD);
@@ -715,7 +738,7 @@ void Creature::Motion_Initialize()
         i_motionMaster.Initialize();
     else if (m_formation->getLeader() == this)
     {
-        m_formation->FormationReset(false);
+        m_formation->Reset(false);
         i_motionMaster.Initialize();
     }
     else if (m_formation->isFormed())
@@ -1511,7 +1534,7 @@ void Creature::setDeathState(DeathState s)
 
         //Dismiss group if is leader
         if (m_formation && m_formation->getLeader() == this)
-            m_formation->FormationReset(true);
+            m_formation->Reset(true);
 
         if (ZoneScript* zoneScript = GetZoneScript())
             zoneScript->OnCreatureDeath(this);

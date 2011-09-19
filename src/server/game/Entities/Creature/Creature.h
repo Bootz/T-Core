@@ -38,6 +38,7 @@ class CreatureAI;
 class Quest;
 class Player;
 class WorldSession;
+class CreatureFormation;
 class CreatureGroup;
 
 enum CreatureFlagsExtra
@@ -656,8 +657,12 @@ class Creature : public Unit, public GridObject<Creature>
         void UpdateWaypointID(uint32 wpID){m_waypointID = wpID;}
 
         void SearchFormation();
-        CreatureGroup *GetFormation() {return m_formation;}
-        void SetFormation(CreatureGroup *formation) {m_formation = formation;}
+        CreatureFormation *GetFormation() {return m_formation;}
+        void SetFormation(CreatureFormation *formation) {m_formation = formation;}
+
+        void SearchGroup();
+        CreatureGroup *GetGroup() {return m_group;}
+        void SetGroup(CreatureGroup *group) {m_group = group;}
 
         Unit *SelectVictim();
 
@@ -738,7 +743,9 @@ class Creature : public Unit, public GridObject<Creature>
         uint32 m_path_id;
 
         //Formation var
-        CreatureGroup *m_formation;
+        CreatureFormation* m_formation;
+        //Group var
+        CreatureGroup* m_group;
         bool TriggerJustRespawned;
 };
 

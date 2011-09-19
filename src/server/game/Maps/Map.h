@@ -47,6 +47,7 @@ class WorldObject;
 class TempSummon;
 class Player;
 class CreatureGroup;
+class CreatureFormation;
 struct ScriptInfo;
 struct ScriptAction;
 struct Position;
@@ -237,7 +238,8 @@ typedef UNORDERED_MAP<Creature*, CreatureMover> CreatureMoveList;
 #define DEFAULT_HEIGHT_SEARCH     10.0f                     // default search distance to find height at nearby locations
 #define MIN_UNLOAD_DELAY      1                             // immediate unload
 
-typedef std::map<uint32/*leaderDBGUID*/, CreatureGroup*>        CreatureGroupHolderType;
+typedef std::map<uint32/*leaderDBGUID*/, CreatureFormation*>    CreatureFormationHolderType;
+typedef std::map<uint32/*groupId*/, CreatureGroup*>    CreatureGroupHolderType;
 
 class Map : public GridRefManager<NGridType>
 {
@@ -423,6 +425,7 @@ class Map : public GridRefManager<NGridType>
         template<class NOTIFIER> void VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier);
         template<class NOTIFIER> void VisitWorld(const float &x, const float &y, float radius, NOTIFIER &notifier);
         template<class NOTIFIER> void VisitGrid(const float &x, const float &y, float radius, NOTIFIER &notifier);
+        CreatureFormationHolderType CreatureFormationHolder;
         CreatureGroupHolderType CreatureGroupHolder;
 
         void UpdateIteratorBack(Player* player);

@@ -24,6 +24,7 @@
 #include "Chat.h"
 #include "Transport.h"
 #include "CreatureGroups.h"
+#include "CreatureFormations.h"
 #include "TargetedMovementGenerator.h"                      // for HandleNpcUnFollowCommand
 
 class npc_commandscript : public CommandScript
@@ -36,6 +37,7 @@ public:
         static ChatCommand npcAddCommandTable[] =
         {
             { "formation",      SEC_MODERATOR,      false, &HandleNpcAddFormationCommand,      "", NULL },
+            { "group",          SEC_MODERATOR,      false, &HandleNpcAddGroupCommand,          "", NULL },
             { "item",           SEC_GAMEMASTER,     false, &HandleNpcAddVendorItemCommand,     "", NULL },
             { "move",           SEC_GAMEMASTER,     false, &HandleNpcAddMoveCommand,           "", NULL },
             { "temp",           SEC_GAMEMASTER,     false, &HandleNpcAddTempSpawnCommand,      "", NULL },
@@ -1180,7 +1182,30 @@ public:
         if (!*args)
             return false;
 
-        uint32 leaderGUID = (uint32) atoi((char*)args);
+        char* ldrGUID = strtok((char*)args, " ");
+
+        if (!ldrGUID)
+            return false;
+
+        uint32 leaderGUID = (uint32) atoi(ldrGUID);
+        
+        char* cmt = strtok(NULL, "");
+        char* commentText = "";
+
+        if (cmt)
+            commentText = handler->extractQuotedArg(cmt);
+
+        char* frmAI = strtok(NULL, " ");
+        uint8 formationAI = 0;
+
+        if (frmAI)
+            formationAI = (uint8) atoi(frmAI);
+
+        uint32 formationId = 0;
+        uint32 memberGUID = 0;
+        float follow_dist = 0;
+        float follow_angle = 0;
+
         Creature* creature = handler->getSelectedCreature();
 
         if (!creature || !creature->GetDBTableGUIDLow())
@@ -1190,32 +1215,211 @@ public:
             return false;
         }
 
-        uint32 lowguid = creature->GetDBTableGUIDLow();
+        Player* chr = handler->GetSession()->GetPlayer();
+
+        memberGUID = creature->GetDBTableGUIDLow();
+        follow_dist = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(),int(2))+pow(chr->GetPositionY()-creature->GetPositionY(),int(2))); 
+        follow_angle = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
+        
+        if (follow_angle < 0)
+            follow_angle = follow_angle + 360;
+
+        if (!memberGUID)
+            return false;
+
         if (creature->GetFormation())
         {
-            handler->PSendSysMessage("Selected creature is already member of group %u", creature->GetFormation()->GetId());
+            handler->PSendSysMessage("Selected creature is already member of formation %u", creature->GetFormation()->GetId());
             return false;
         }
 
-        if (!lowguid)
+        //Check if formation with given leaderGUID exist
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREFORMATIONS_BY_LEADER);
+        stmt->setUInt32(0, leaderGUID);
+        PreparedQueryResult result_FormationId = WorldDatabase.Query(stmt);
+
+        if (result_FormationId)
+        {
+            //Load FormationId
+            Field *fields = result_FormationId->Fetch();
+            formationId = fields[0].GetUInt32();
+            //Overwrite given Data
+            leaderGUID = fields[1].GetUInt32();
+            formationAI = fields[2].GetUInt8();
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREFORMATION_DATA);
+            stmt->setUInt32(0, formationId);
+            stmt->setUInt32(1, memberGUID);
+            stmt->setFloat(2, follow_dist);
+            stmt->setFloat(3, follow_angle);
+            WorldDatabase.Execute(stmt);
+
+            handler->PSendSysMessage("Creature %u added to formation %u with leader %u and formationAI %u", memberGUID, formationId, leaderGUID, formationAI);
+        }
+        else
+        {
+            //Create newFormation and load formationId
+            if (memberGUID != leaderGUID)
+            {
+                handler->PSendSysMessage("You should set the Leader for this Formation first.");
+                return false;
+            }
+           
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREFORMATIONS);
+            stmt->setUInt32(0, leaderGUID);
+            stmt->setUInt8(1, formationAI);
+            stmt->setString(2, commentText);
+            //Must be executed direct, not asyncron
+            WorldDatabase.DirectExecute(stmt);
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREFORMATIONS_MAXID);
+            PreparedQueryResult result_newFormationId = WorldDatabase.Query(stmt);
+             
+            formationId = result_newFormationId->Fetch()->GetInt32();
+
+            FormationInfo *formation_info;
+
+            formation_info                 = new FormationInfo;
+            formation_info->leaderGUID     = leaderGUID;
+            formation_info->formationAI    = formationAI;
+
+            CreatureFormationMap[formationId] = formation_info;
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREFORMATION_DATA);
+            stmt->setUInt32(0, formationId);
+            stmt->setUInt32(1, memberGUID);
+            stmt->setFloat(2, 0);
+            stmt->setFloat(3, 0);
+            WorldDatabase.Execute(stmt);
+
+            handler->PSendSysMessage("Creature %u added to new formation %u with leader %u and formationAI %u", memberGUID, formationId, leaderGUID, formationAI);
+        }
+
+        FormationData *formation_data;
+        
+        formation_data                        = new FormationData;
+        formation_data->formationId           = formationId;
+        formation_data->follow_dist           = follow_dist; 
+        formation_data->follow_angle          = follow_angle; 
+        
+        if (memberGUID == leaderGUID) {
+            formation_data->follow_dist       = 0; 
+            formation_data->follow_angle      = 0; 
+        }
+
+        CreatureFormationDataMap[memberGUID] = formation_data;
+        creature->SearchFormation();    
+
+        return true;
+    }
+
+    static bool HandleNpcAddGroupCommand(ChatHandler* handler, const char* args)
+    {
+        if (!*args)
             return false;
 
-        Player* chr = handler->GetSession()->GetPlayer();
-        FormationInfo *group_member;
+        char* ldrGUID = strtok((char*)args, " ");
 
-        group_member                 = new FormationInfo;
-        group_member->follow_angle   = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
-        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY() - creature->GetPositionY(), int(2)));
-        group_member->leaderGUID     = leaderGUID;
-        group_member->groupAI        = 0;
+        if (!ldrGUID)
+            return false;
+ 
+        uint32 leaderGUID = (uint32) atoi(ldrGUID);
+        
+        char* cmt = strtok(NULL, "");
+        char* commentText = "";
+ 
+        if (cmt)
+            commentText = handler->extractQuotedArg(cmt);
+ 
+        char* grpType = strtok(NULL, " ");
+        uint8 groupType = 0;
 
-        CreatureGroupMap[lowguid] = group_member;
-        creature->SearchFormation();
+        if (grpType)
+            groupType = (uint8) atoi(grpType);
+ 
+        uint32 groupId = 0;
+        uint32 memberGUID = 0;
 
-        WorldDatabase.PExecute("INSERT INTO creature_formations (leaderGUID, memberGUID, dist, angle, groupAI) VALUES ('%u', '%u', '%f', '%f', '%u')",
-            leaderGUID, lowguid, group_member->follow_dist, group_member->follow_angle, group_member->groupAI);
+        Creature *pCreature = handler->getSelectedCreature();
 
-        handler->PSendSysMessage("Creature %u added to formation with leader %u", lowguid, leaderGUID);
+        if (!pCreature || !pCreature->GetDBTableGUIDLow())
+        {
+            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        memberGUID = pCreature->GetDBTableGUIDLow();
+
+        if (!memberGUID)
+            return false;
+
+        if (pCreature->GetGroup())
+        {
+            handler->PSendSysMessage("Selected creature is already member of group %u", pCreature->GetGroup()->GetId());
+            return false;
+        }
+
+        //Check if group with given leaderGUID exist
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUPS_BY_LEADER);
+        stmt->setUInt32(0, leaderGUID);
+        PreparedQueryResult result_GroupId = WorldDatabase.Query(stmt);
+
+        if (result_GroupId)
+        {
+            //Load GroupId
+            Field *fields = result_GroupId->Fetch();
+            groupId = fields[0].GetUInt32();
+            //Overwrite given Data
+            leaderGUID = fields[1].GetUInt32();
+            groupType = fields[2].GetUInt8();
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREGROUP_DATA);
+            stmt->setUInt32(0, groupId);
+            stmt->setUInt32(1, memberGUID);
+            WorldDatabase.Execute(stmt);
+
+            handler->PSendSysMessage("Creature %u added to group %u with leader %u and GroupType %u", memberGUID, groupId, leaderGUID, groupType);
+        }
+        else
+        {
+            //Create newGroup and load groupId
+            if (memberGUID != leaderGUID)
+            {
+                handler->PSendSysMessage("You should set the Leader for this Group first.");
+                return false;
+            }
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREGROUPS);
+            stmt->setUInt32(0, leaderGUID);
+            stmt->setUInt8(1, groupType);
+            stmt->setString(2, commentText);
+            //Must be executed direct, not asyncron
+            WorldDatabase.DirectExecute(stmt);
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREGROUPS_MAXID);
+            PreparedQueryResult result_newGroupId = WorldDatabase.Query(stmt);
+             
+            groupId = result_newGroupId->Fetch()->GetInt32();
+
+            GroupInfo *group_member;
+
+            group_member                 = new GroupInfo;
+            group_member->leaderGUID     = leaderGUID;
+            group_member->groupType      = groupType;
+
+            CreatureGroupMap[groupId] = group_member;
+
+            stmt = WorldDatabase.GetPreparedStatement(WORLD_ADD_CREGROUP_DATA);
+            stmt->setUInt32(0, groupId);
+            stmt->setUInt32(1, memberGUID);
+            WorldDatabase.Execute(stmt);
+
+            handler->PSendSysMessage("Creature %u added to new group %u with leader %u and GroupType %u", memberGUID, groupId, leaderGUID, groupType);
+        }
+
+        CreatureGroupDataMap[memberGUID] = groupId;
+        pCreature->SearchGroup();
 
         return true;
     }
