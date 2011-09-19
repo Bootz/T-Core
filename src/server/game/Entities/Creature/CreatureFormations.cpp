@@ -30,7 +30,7 @@
 CreatureFormationInfoType   CreatureFormationMap;
 CreatureFormationDataType   CreatureFormationDataMap;
 
-void CreatureFormationManager::AddCreatureToFormation(uint32 formationId, Creature *member)
+void CreatureFormationManager::AddCreatureToFormation(uint32 formationId, Creature* member)
 {
     Map* map = member->FindMap();
     if (!map)
@@ -87,9 +87,7 @@ void CreatureFormationManager::LoadCreatureFormations()
     PreparedQueryResult result = WorldDatabase.Query(stmt);
 
     if (result)
-    {
         sLog->outDetail(">> %u Member without formation found, member skipped.",result->Fetch()->GetInt32());
-    }
 
     //Get formations
     stmt = WorldDatabase.GetPreparedStatement(WORLD_LOAD_CREFORMATIONS);
@@ -127,18 +125,18 @@ void CreatureFormationManager::LoadCreatureFormations()
 
             guidSet.insert(guid);
 
-        } while (guidResult->NextRow());
+        }
+        while (guidResult->NextRow());
     }
 
     //Loading formations...
     uint32 formation_count = 0;
-    Field *fields;
 
     FormationInfo *formation_info;
 
     do
     {
-        fields = result_data->Fetch();
+        Field* fields = result_data->Fetch();
         
         //Load formation member data
         uint32 formationId = fields[0].GetUInt32();
@@ -170,7 +168,7 @@ void CreatureFormationManager::LoadCreatureFormations()
 
     do
     {
-        fields = result_member->Fetch();
+        Field* fields = result_member->Fetch();
         
         //Load formation member data
         uint32 formationId = fields[0].GetUInt32();
@@ -210,7 +208,7 @@ void CreatureFormation::AddMember(Creature *member)
 
     sLog->outDebug(LOG_FILTER_UNITS, "CreatureFormation::AddMember: Adding unit GUID: %u to formation.", memberGUID);
     
-    Formation *formation;
+    Formation* formation;
     formation = new Formation;
 
     //Check if it is a leader
@@ -258,24 +256,24 @@ void CreatureFormation::MemberAttackStart(Creature *member, Unit *target)
 
     for (CreatureFormationMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        Creature* pCreature = itr->first;
+        Creature* creature = itr->first;
 
         if (m_leader) // avoid crash if leader was killed and reset.
             sLog->outDebug(LOG_FILTER_UNITS, "CreatureFormation::MemberAttackStart: formation instance id %u calls member instid %u", m_leader->GetInstanceId(), member->GetInstanceId());
 
         //Skip one check
-        if (pCreature == member)
+        if (creature == member)
             continue;
 
-        if (!pCreature->isAlive())
+        if (!creature->isAlive())
             continue;
 
-        if (pCreature->getVictim())
+        if (creature->getVictim())
             continue;
 
-        if (pCreature->IsAIEnabled)
-            if (pCreature->IsValidAttackTarget(target))
-                pCreature->AI()->AttackStart(target);
+        if (creature->IsAIEnabled)
+            if (creature->IsValidAttackTarget(target))
+                creature->AI()->AttackStart(target);
     }
 }
 
@@ -283,16 +281,16 @@ void CreatureFormation::Reset(bool dismiss)
 {
     for (CreatureFormationMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        Creature* pCreature = itr->first;
+        Creature* creature = itr->first;
 
-        if (pCreature != m_leader && pCreature->isAlive())
+        if (creature != m_leader && creature->isAlive())
         {
             if (dismiss)
-                pCreature->GetMotionMaster()->Initialize();
+                creature->GetMotionMaster()->Initialize();
             else
-                pCreature->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
+                creature->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
 
-            sLog->outDebug(LOG_FILTER_UNITS, "Set %s movement for member GUID: %u", dismiss ? "default" : "idle", pCreature->GetGUIDLow());
+            sLog->outDebug(LOG_FILTER_UNITS, "Set %s movement for member GUID: %u", dismiss ? "default" : "idle", creature->GetGUIDLow());
         }
     }
     m_Formed = !dismiss;
@@ -307,8 +305,8 @@ void CreatureFormation::LeaderMoveTo(float x, float y, float z)
 
     for (CreatureFormationMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        Creature *pCreature = itr->first;
-        if (pCreature == m_leader || !pCreature->isAlive() || pCreature->getVictim())
+        Creature* creature = itr->first;
+        if (creature == m_leader || !creature->isAlive() || creature->getVictim())
             continue;
 
         float angle = itr->second->follow_angle;
@@ -321,14 +319,14 @@ void CreatureFormation::LeaderMoveTo(float x, float y, float z)
         Trillium::NormalizeMapCoord(dx);
         Trillium::NormalizeMapCoord(dy);
 
-        pCreature->UpdateGroundPositionZ(dx, dy, dz);
+        creature->UpdateGroundPositionZ(dx, dy, dz);
 
-        if (pCreature->IsWithinDist(m_leader, dist + MAX_DESYNC))
-            pCreature->SetUnitMovementFlags(m_leader->GetUnitMovementFlags());
+        if (creature->IsWithinDist(m_leader, dist + MAX_DESYNC))
+            creature->SetUnitMovementFlags(m_leader->GetUnitMovementFlags());
         else
-            pCreature->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            creature->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
-        pCreature->GetMotionMaster()->MovePoint(0, dx, dy, dz);
-        pCreature->SetHomePosition(dx, dy, dz, pathangle);
+        creature->GetMotionMaster()->MovePoint(0, dx, dy, dz);
+        creature->SetHomePosition(dx, dy, dz, pathangle);
     }
 }

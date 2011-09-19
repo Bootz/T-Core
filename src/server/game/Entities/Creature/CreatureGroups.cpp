@@ -131,11 +131,11 @@ void CreatureGroupManager::LoadCreatureGroups()
 
             guidSet.insert(guid);
 
-        } while (guidResult->NextRow());
+        }
+        while (guidResult->NextRow());
     }
 
     //Loading groups...
-
     uint32 group_count = 0;
     GroupInfo* group_member;
 
