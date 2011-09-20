@@ -13,11 +13,10 @@ TODO-List for TrilliumEMU Developer #
 5.  Begin to fix spells (only casting and damage works)
 6.  Begin to fix guilds.
 7.  Begin to fix groups.
-8.  Fix Achievements.
-9. Research the Battleground Packets, some updates added to this packets.
-10. Update the rest of Opcodes to 4.2.0.
-11. Implement a New Terrain System.
-12. Implement new Transport System.
+8.  Research the Battleground Packets, some updates added to this packets.
+9.  Update the rest of Opcodes to 4.2.0.
+10. Implement a New Terrain System.
+11. Implement new Transport System.
 
 // Database Developer:
 1. Fix old spawns and duplicates from old WotLK
