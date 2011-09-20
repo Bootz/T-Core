@@ -420,7 +420,7 @@ void WorldSession::HandleLootMethodOpcode(WorldPacket & recv_data)
         return;
 
     /** error handling **/
-    if (!group->IsLeader(GetPlayer()->GetGUID()))
+    if (!group->IsLeader(GetPlayer()->GetGUID()) || group->isLFGGroup())
         return;
     /********************/
 
