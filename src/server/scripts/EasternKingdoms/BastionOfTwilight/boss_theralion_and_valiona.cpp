@@ -90,7 +90,7 @@ class boss_theralion : public CreatureScript
                 switch(action)
                 {
                     case ACTION_THERALION_AIRBORNE:
-                        me->GetMotionMaster()->MovePoint(POINT_VALIONA_AIRBORNE,Positions[0]);
+                        me->GetMotionMaster()->MoveTakeoff(POINT_THERALION_TAKEOFF,Positions[0]);
                         break;
                 }
             }
@@ -101,9 +101,13 @@ class boss_theralion : public CreatureScript
                 {
                     switch(id)
                     {
-                        case POINT_THERALION_AIRBORNE:
+                        case POINT_THERALION_TAKEOFF:
                             me->SetFlying(true);
                             me->SetSpeed(MOVE_FLIGHT, 1.0f);
+                            me->GetMotionMaster()->MovePoint(POINT_THERALION_PLACE,Positions[0].GetPositionX(),Positions[0].GetPositionY(),Positions[0].GetPositionZ());
+                        case POINT_THERALION_PLACE:
+                            me->GetMotionMaster()->Clear(false);
+                            me->GetMotionMaster()->MoveIdle();
                     }
                 }
             }
@@ -126,12 +130,11 @@ class boss_theralion : public CreatureScript
                             Valiona->AI()->DoAction(ACTION_VALIONA_AIRBORNE);
                             Valiona->SetHealth(me->GetHealth());
                             break;
-                        case 2:
+                        case 3:
                             uiPhase = 1;
                             me->SetHealth(Valiona->GetHealth());
                             break;
                     }
-                    uiPhaseTimer = 900000;
                 } else uiPhaseTimer -= uiDiff;
 
                 switch(uiPhase)
@@ -234,25 +237,27 @@ class boss_valiona : public CreatureScript
                 switch(action)
                 {
                     case ACTION_VALIONA_AIRBORNE:
-                        me->SetFlying(true);
-                        me->SetSpeed(MOVE_FLIGHT, 1.0f);
-                        me->GetMotionMaster()->MovePoint(POINT_VALIONA_AIRBORNE,Positions[0]);
+                        me->GetMotionMaster()->MovePoint(POINT_VALIONA_TAKEOFF,Positions[0]);
                         break;
                 }
             }
 
-            /*void MovementInform(uint32 type, uint32 id)
+            void MovementInform(uint32 type, uint32 id)
             {
                 if (type == POINT_MOTION_TYPE)
                 {
                     switch(id)
                     {
-                        case POINT_VALIONA_AIRBORNE:
+                        case POINT_VALIONA_TAKEOFF:
                             me->SetFlying(true);
                             me->SetSpeed(MOVE_FLIGHT, 1.0f);
+                            me->GetMotionMaster()->MovePoint(POINT_THERALION_PLACE,Positions[1].GetPositionX(),Positions[1].GetPositionY(),Positions[1].GetPositionZ());
+                        case POINT_VALIONA_PLACE:
+                            me->GetMotionMaster()->Clear(false);
+                            me->GetMotionMaster()->MoveIdle();
                     }
                 }
-            }*/
+            }
 
             void UpdateAI(const uint32 uiDiff)
             {
@@ -312,10 +317,6 @@ class spell_dazzling_destruction : public SpellScriptLoader
 
         class spell_dazzling_destructionSpellScript : public SpellScript
         {
-            enum eSpells
-            {
-                SPELL_DAZZLIN_DESTRUCTION_HIT = 92928,
-            };
             int32 spell_trigger;
             PrepareSpellScript(spell_dazzling_destructionSpellScript);
             bool Validate(SpellEntry const * spellEntry)
@@ -336,7 +337,7 @@ class spell_dazzling_destruction : public SpellScriptLoader
                 GetCaster()->CastSpell(GetTargetUnit(),spell_trigger,false);
             }
 
-            void OnHit()
+            void HandleOnHit()
             {
                 std::list<Unit*> players;
                 std::list<Unit*>::const_iterator itr;
@@ -345,7 +346,7 @@ class spell_dazzling_destruction : public SpellScriptLoader
                 {
                     if((*itr)->GetTypeId() == TYPEID_PLAYER)
                     {
-                        GetCaster()->CastSpell((*itr),SPELL_DAZZLIN_DESTRUCTION_HIT,false);
+                        GetCaster()->CastSpell((*itr),SPELL_DESTRUCTION_PROCS,false);
                     }
                 }
             }
@@ -353,7 +354,7 @@ class spell_dazzling_destruction : public SpellScriptLoader
             void Register()
             {
                 OnEffect += SpellEffectFn(spell_dazzling_destructionSpellScript::HandleDummy,EFFECT_0,SPELL_EFFECT_DUMMY);
-                //OnHit +=
+                OnHit += SpellHitFn(spell_dazzling_destructionSpellScript::HandleOnHit,EFFECT_0,SPELL_EFFECT_DUMMY);
             }
         };
 

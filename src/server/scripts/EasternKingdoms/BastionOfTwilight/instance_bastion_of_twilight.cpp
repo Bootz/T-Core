@@ -88,21 +88,21 @@ public:
             {
 				case BOSS_WYRMBREAKER:
 					uiWyrmbreaker = pCreature->GetGUID();
-					if(Unit * SlateDrake = instance->GetCreature(GetData64(NPC_SLATE_DRAKE)))
+					if(Creature * SlateDrake = instance->GetCreature(GetData64(NPC_SLATE_DRAKE)))
 					{
 						if(!SlateDrake->HasAura(SPELL_UNRESPONSIVE_DRAKE))
 						{
 							SlateDrake->AddAura(SPELL_MALEVOLENT_STRIKES,pCreature);
 						}
 					}
-					if(Unit * StormRider = instance->GetCreature(GetData64(NPC_STORM_RIDER)))
+					if(Creature * StormRider = instance->GetCreature(GetData64(NPC_STORM_RIDER)))
 					{
 						if(!StormRider->HasAura(SPELL_UNRESPONSIVE_DRAKE))
 						{
 							StormRider->AddAura(SPELL_SHADOW_WARPED,pCreature);
 						}
 					}
-					if(Unit * NetherScion = instance->GetCreature(GetData64(NPC_NETHER_SCION)))
+					if(Creature * NetherScion = instance->GetCreature(GetData64(NPC_NETHER_SCION)))
 					{
 						if(!NetherScion->HasAura(SPELL_UNRESPONSIVE_DRAKE))
 						{
@@ -362,23 +362,48 @@ public:
             OUT_LOAD_INST_DATA_COMPLETE;
         }
 
-        /*void ShiftPhase()
+        void ChangeState(uint64 guid,bool active,bool finalphase)
+        {
+            Creature * pCreature = instance->GetCreature(guid);
+            uint16 talkid;
+            uint16 wayid;
+            if(finalphase)
+            {
+                switch(pCreature->GetEntry())
+                {
+                case BOSS_FELUDIUS:
+                    talkid = SAY_PHASE3_FELUDIUS;
+                    wayid = WALK_FELUDIUS;
+                    break;
+                }
+                pCreature->AI()->Talk(talkid);
+                pCreature->UpdateWaypointID(wayid);
+            }
+            if(active)
+            {
+                pCreature->RemoveAura(pCreature->GetAura(8611,guid));
+            }
+            else
+            {              
+                pCreature->AddAura(8611,pCreature);
+            }
+        }
+
+        void ShiftPhase()
         {
             uiAscendantCouncilPhase++;
             if(uiAscendantCouncilPhase == 2)
             {
-                Creature * Feludius = instance->GetCreature(GetData64(DATA_FELUDIUS));
-                Creature * Ignacious = instance->GetCreature(GetData64(DATA_IGNACIOUS));
-                Feludius->DespawnOrUnsummon(500);
-                Feludius->Create(BOSS_ARION,);
-                Ignacious->DespawnOrUnsummon(500);
-                
+                ChangeState(GetData64(DATA_FELUDIUS),false,false);
+                ChangeState(GetData64(DATA_IGNACIOUS),false,false);
+                ChangeState(GetData64(DATA_ARION),true,false);
+                ChangeState(GetData64(DATA_TERRASTRA),true,false);
             }
             else if(uiAscendantCouncilPhase == 3)
             {
 
             }
-        }*/
+        }
 
 		void Update(uint32 diff)
 		{
