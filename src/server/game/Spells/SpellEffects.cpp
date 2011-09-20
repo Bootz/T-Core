@@ -895,6 +895,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
+                case 56989: // Glyph of Dragon's Breath
+    	        {
+		            if (unitTarget)
+		              m_caster->CastSpell(m_caster, 56373, false, NULL);
+		            return;
+		        }
                 case 26074:                                 // Holiday Cheer
                     // implemented at client side
                     return;
