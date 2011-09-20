@@ -90,7 +90,7 @@ class boss_theralion : public CreatureScript
                 switch(action)
                 {
                     case ACTION_THERALION_AIRBORNE:
-                        me->GetMotionMaster()->MoveTakeoff(POINT_THERALION_TAKEOFF,Positions[0]);
+                        me->GetMotionMaster()->MoveTakeoff(POINT_THERALION_TAKEOFF,Positions[0],1.0f);
                         break;
                 }
             }
