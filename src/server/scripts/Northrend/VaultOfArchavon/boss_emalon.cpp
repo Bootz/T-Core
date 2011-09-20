@@ -78,12 +78,13 @@ class boss_emalon : public CreatureScript
         {
             boss_emalonAI(Creature* creature) : BossAI(creature, DATA_EMALON)
             {
+            pInstance = creature->GetInstanceScript();
             }
-
+            InstanceScript* pInstance;
             void Reset()
             {
                 _Reset();
-
+                summons.DespawnAll();
                 for (uint8 i = 0; i < MAX_TEMPEST_MINIONS; ++i)
                     me->SummonCreature(MOB_TEMPEST_MINION, TempestMinions[i], TEMPSUMMON_CORPSE_DESPAWN, 0);
             }
