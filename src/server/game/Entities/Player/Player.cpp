@@ -925,12 +925,13 @@ void Player::CleanupsBeforeDelete(bool finalCleanup)
             itr->second.save->RemovePlayer(this);
 }
 
-bool Player::GuidCheckForCreation(uint32 newguid)
+bool Player::CanCreate(uint32 newguid)
 {
-    for (int i = 0; i < LastCharacter; ++i)
-        if (guids[i] == newguid)
-            return true;
-    return false;
+    if (newguid > 255)
+        for (int i = 256; i < signed(newguid+1); i+=256)
+            if (i+1 == newguid || i == newguid) // There will be no packet sending for these guids!
+                return false;
+    return true;
 }
 
 bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo, uint32 accountId)
@@ -942,47 +943,16 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo, uint32 acco
 
     if (accountId)
     {
-        if (guidlow > 0 && guidlow < 512)
+        if (guidlow == 1 || guidlow == 254) // There will be no packet sending for these guids!
+            ++guidlow;
+
+        if (guidlow != 1 && guidlow != 254)
         {
-            for (int i = 0; i < 1000; ++i)
-                if (guids[i])
-                    if (guids[i] != 0)
-                        guids[i] = 0; // Max 1000 characters for an account
-
-            LastCharacter = 0;
-            bool Pair = false;
-            QueryResult result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", accountId);
-            if (result)
-            {
-                do
-                {
-                    Field *fields = result->Fetch();
-                    guids[LastCharacter] = fields[0].GetUInt32();
-                    if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)
-                        guids[LastCharacter] = guids[LastCharacter]-256;
-                    ++LastCharacter;
-                }
-                while (result->NextRow());
-
-                for (int i = 0; i < LastCharacter; ++i)
-                    if (guids[i] == guidlow)
-                    {
-                        Pair = true;
-                        i = LastCharacter;
-                    }
-
-                if (Pair == true)
-                {
-                    do
-                        ++guidlow;
-                    while (GuidCheckForCreation(guidlow) == true);
-                }
-            }
+            do
+                ++guidlow;
+            while (CanCreate(guidlow) == false); // There will be no packet sending for these guids!
         }
     }
-
-    if (guidlow == 1 || guidlow == 254 || guidlow == 256 || guidlow == 257) // There will be no packet sending for these guids!
-        ++guidlow;
 
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
 

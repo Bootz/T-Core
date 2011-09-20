@@ -505,7 +505,6 @@ typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
 struct GCharacters
 {
     uint32 guid;
-    uint32 accountId;
 };
 
 typedef UNORDERED_MAP<uint32, GCharacters> CharactersMap;
@@ -738,6 +737,13 @@ class World
             if (itr != mCharacters.end())
                 return &itr->second;
             return NULL;
+        }
+        bool ExistGUID(uint32 guid) const
+        {
+            for (CharactersMap::const_iterator itr = mCharacters.begin(); itr != mCharacters.end(); ++itr)
+                if (itr->second.guid == guid)
+                    return true;
+            return false;
         }
     protected:
         void _UpdateGameTime();

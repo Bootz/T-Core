@@ -778,79 +778,9 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     recv_data >> packetGuid;
     recv_data >> byte;
 
-    uint32 realguids[1000]; // Max 1000 characters for an account
-    uint32 guids[1000]; // Max 1000 characters for an account
-    int LastCharacter = 0;
-    uint32 Pair = 0;
-    uint32 PairNumber = 0;
-
-    for (int i = 0; i < 2; ++i)
-    {
-        int number;
-        if (i == 0)
-            number = packetGuid;
-        else
-            number = byte;
-
-        if(number % 2 == 0)
-        {
-            if (i == 0)
-                ++packetGuid;
-            else
-            {
-                if (byte != 0)
-                    ++byte;
-            }
-        }
-        else
-        {
-            if (i == 0)
-                --packetGuid;
-            else
-                --byte;
-        }
-
-        if (i == 0)
-        {
-            if (byte == 0 && packetGuid != 0)
-            {
-                QueryResult charresult = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", GetAccountIdForCharDeletion());
-                if (!charresult)
-                    return;
-
-                do
-                {
-                    Field *fields = charresult->Fetch();
-                    realguids[LastCharacter] = fields[0].GetUInt32();
-                    guids[LastCharacter] = realguids[LastCharacter];
-                    if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)
-                        guids[LastCharacter] = guids[LastCharacter]-256;
-                    ++LastCharacter;
-                }
-                while (charresult->NextRow());
-
-                for (int i = 0; i < LastCharacter; ++i)
-                    if (guids[i] == packetGuid)
-                    {
-                        PairNumber = i;
-                        ++Pair;
-                    }
-            }
-        }
-    }
-
-    if (Pair == 1)
-        guid = realguids[PairNumber];
-    else
-    {
-        if (Pair == 0)
-            guid = (byte*256)+packetGuid;
-        else
-        {
-            sLog->outError("Can't delete anything, sorry!");
-            return;
-        }
-    }
+    guid = GetRealGUID(packetGuid, byte, "Can't delete anything, sorry!");
+    if (guid == -1)
+        return;
 
     // can't delete loaded character
     if (ObjectAccessor::FindPlayer(guid))
@@ -1295,11 +1225,19 @@ void WorldSession::HandleShowingCloakOpcode(WorldPacket & /*recv_data*/)
 
 void WorldSession::HandleCharRenameOpcode(WorldPacket& recv_data)
 {
-    uint64 guid;
+    uint64 guid = 0;
+    uint8 packetGuid, byte;
     std::string newname;
 
-    recv_data >> guid;
+    sLog->outStaticDebug("World: Received CMSG_CHAR_RENAME");
+
+    recv_data >> packetGuid;
+    recv_data >> byte;
     recv_data >> newname;
+
+    guid = GetRealGUID(packetGuid, byte, "Can't change name, sorry!");
+    if (guid == -1)
+        return;
 
     // prevent character rename to invalid name
     if (!normalizePlayerName(newname))
@@ -2077,4 +2015,84 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
     data << uint8(facialHair);
     data << uint8(race);
     SendPacket(&data);
+}
+
+uint64 WorldSession::GetRealGUID(uint8 packetGuid, uint8 byte, std::string ErrorMessage)
+{
+    uint64 guid;
+    uint32 realguids[1000]; // Max 1000 characters for an account
+    uint32 guids[1000]; // Max 1000 characters for an account
+    int LastCharacter = 0;
+    uint32 Pair = 0;
+    uint32 PairNumber = 0;
+
+    for (int i = 0; i < 2; ++i)
+    {
+        int number;
+        if (i == 0)
+            number = packetGuid;
+        else
+            number = byte;
+     
+        if(number % 2 == 0)
+        {
+           if (i == 0)
+                ++packetGuid;
+            else
+            {
+                if (byte != 0)
+                    ++byte;
+            }
+        }
+        else
+        {
+            if (i == 0)
+                --packetGuid;
+            else
+                --byte;
+        }
+
+        if (i == 0)
+        {
+            if (byte == 0 && packetGuid != 0)
+            {
+                QueryResult charresult = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", GetAccountIdForCharDeletion());
+                if (!charresult)
+                    return -1;
+
+                do
+                {
+                    Field *fields = charresult->Fetch();
+                    realguids[LastCharacter] = fields[0].GetUInt32();
+                    guids[LastCharacter] = realguids[LastCharacter];
+                    if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)
+                        guids[LastCharacter] = guids[LastCharacter]-256;
+                    ++LastCharacter;
+                }
+                while (charresult->NextRow());
+
+                for (int i = 0; i < LastCharacter; ++i)
+                    if (guids[i] == packetGuid)
+                    {
+                        PairNumber = i;
+                        ++Pair;
+                    }
+            }
+        }
+    }
+
+    if (Pair == 1)
+        guid = realguids[PairNumber];
+    else
+    {
+        if (Pair == 0)
+            guid = (byte*256)+packetGuid;
+        else
+        {
+            guid = -1;
+            sLog->outError(ErrorMessage.c_str());
+        }
+    }
+
+    return guid;
 }

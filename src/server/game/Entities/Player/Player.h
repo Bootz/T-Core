@@ -1161,7 +1161,7 @@ class Player : public Unit, public GridObject<Player>
         }
         void SummonIfPossible(bool agree);
 
-        bool GuidCheckForCreation(uint32 newguid);
+        bool CanCreate(uint32 newguid);
         bool Create(uint32 guidlow, CharacterCreateInfo* createInfo, uint32 accountId);
 
         void Update(uint32 time);
@@ -2894,9 +2894,6 @@ class Player : public Unit, public GridObject<Player>
         InstanceTimeMap _instanceResetTimes;
         uint32 _pendingBindId;
         uint32 _pendingBindTimer;
-
-        uint32 guids[1000]; // Max 1000 characters for an account
-        int LastCharacter;
 };
 
 void AddItemsSetItem(Player*player, Item *item);
