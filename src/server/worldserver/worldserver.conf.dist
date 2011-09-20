@@ -1962,9 +1962,9 @@ GM.LogTrade = 1
 #
 #    GM.StartLevel
 #        Description: GM character starting level.
-#        Default:     85
+#        Default:     1
 
-GM.StartLevel = 85
+GM.StartLevel = 1
 
 #
 #    GM.AllowInvite
