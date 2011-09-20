@@ -3085,12 +3085,17 @@ void Player::GiveLevel(uint8 level)
     data << uint32(int32(classInfo.basehealth) - int32(GetCreateHealth()));
     // for (int i = 0; i < MAX_POWERS; ++i)                  // Powers loop (0-6)
     data << uint32(int32(classInfo.basemana)   - int32(GetCreateMana()));
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
+    data << uint32(0); // rage
+    data << uint32(0); // focus
+    data << uint32(0); // energy
+    data << uint32(0); // happiness
+    data << uint32(0); // runes
+    data << uint32(0); // runic power
+    data << uint32(0); // soul shards
+    data << uint32(0); // eclipse
+    data << uint32(0); // holy power
+    data << uint32(0); // ??
+
     // end for
     for (uint8 i = STAT_STRENGTH; i < MAX_STATS; ++i)          // Stats loop (0-4)
         data << uint32(int32(info.stats[i]) - GetCreateStat(Stats(i)));
