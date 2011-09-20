@@ -555,6 +555,19 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_PRIEST:
             {
+                /* Evangelism */
+                if (m_caster->HasAura(81659)) //Rank 1
+                {
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
+                        m_caster->CastSpell(m_caster, 81660, true);
+                }
+                
+                if (m_caster->HasAura(81662)) //Rank 2
+                {
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
+                        m_caster->CastSpell(m_caster, 81661, true);
+                }
+
                 // Shadow Word: Death - deals damage equal to damage done to caster
                 if (m_spellInfo->SpellFamilyFlags[1] & 0x2)
                 {
