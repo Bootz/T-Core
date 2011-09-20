@@ -26,9 +26,9 @@ TODO-List for TrilliumEMU Developer #
 3. Add loot for missing creatures like cataclysm H dungeons
 4. Rewrite table creature_classlevelstats
 5. Rewrite exp/mindamage/maxmage based on unit_class + level formula
-6. Spawn all creatures not spawned from 4.1.0+
+6. Spawn all creatures not spawned from 4.2.0+
 7. Update WDBverified column with correct data
-8. Fix playercreateinfo for all races and classes.
+8. Clean console errors
 
 What need to merged:
 1. Merge Trinity to last Head (Venugh does this).
