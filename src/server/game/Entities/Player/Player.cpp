@@ -21616,6 +21616,7 @@ void Player::SendInitialPacketsBeforeAddToMap()
 
     SendInitialActionButtons();
     m_reputationMgr.SendInitialReputations();
+    m_achievementMgr.GetAchievementPoints();
     m_achievementMgr.SendAllAchievementData();
 
     SendEquipmentSetList();
