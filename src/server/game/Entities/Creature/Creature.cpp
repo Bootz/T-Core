@@ -1509,7 +1509,7 @@ void Creature::setDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
-        if(GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_RESPAWN_IGNORE)
+        if(GetCreatureInfo()->flags_extra)
         {
             m_corpseRemoveTime = time(NULL) + 10;
             m_respawnTime = time(NULL) + m_respawnDelay + 10;
