@@ -2228,7 +2228,7 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
             case  2060: /* Greater Heal*/
             case  2061: /* Flash Heal */
             case 32546: /* Binding Heal */
-               m_caster->CastSpell(m_Caster, 81208, true); /* Chakra: Serenity */
+               m_caster->CastSpell(m_caster, 81208, true); /* Chakra: Serenity */
                break;
                
             case 596: /* Prayer of Healing */
