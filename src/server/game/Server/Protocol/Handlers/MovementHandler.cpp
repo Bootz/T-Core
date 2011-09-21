@@ -385,6 +385,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
                 // cancel the death timer here if started
                 plMover->RepopAtGraveyard();
             }
+        } // Players falling under map in arenas will return instantly to the ground
+        else if (movementInfo.pos.GetPositionZ() < -50.0f)
+        {
+            if (plMover->InBattleground())
+                if (Battleground* bg = plMover->GetBattleground())
+         	    if (bg->isArena())
+		        bg->HandlePlayerUnderMap(_player);            
         }
     }
 }
