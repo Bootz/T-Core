@@ -78,7 +78,7 @@ class boss_emalon : public CreatureScript
         {
             boss_emalonAI(Creature* creature) : BossAI(creature, DATA_EMALON)
             {
-            pInstance = creature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
             InstanceScript* pInstance;
             void Reset()

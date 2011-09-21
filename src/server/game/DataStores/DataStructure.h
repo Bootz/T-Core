@@ -546,9 +546,9 @@ struct AreaTableEntry
         if (mapid == 609)
             return true;
         if (zone == 4395) // Dalaran City
-	    return true;
+            return true;
         if (zone == 3703) // Shattrath City
-	    return true;	    
+            return true;	    
         return (flags & AREA_FLAG_SANCTUARY);
     }
 };

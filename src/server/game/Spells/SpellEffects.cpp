@@ -896,11 +896,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
                 }
                 case 56989: // Glyph of Dragon's Breath
-    	        {
-		            if (unitTarget)
-		              m_caster->CastSpell(m_caster, 56373, false, NULL);
-		            return;
-		        }
+                {
+                    if (unitTarget)
+                        m_caster->CastSpell(m_caster, 56373, false, NULL);
+                    return;
+                }
                 case 26074:                                 // Holiday Cheer
                     // implemented at client side
                     return;
@@ -3047,9 +3047,9 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
                     if (m_spellInfo->Id == 18662 || // Curse of Doom
                         properties->Id == 2081)     // Mechanical Dragonling, Arcanite Dragonling, Mithril Dragonling TODO: Research on meaning of basepoints
                         amount = 1;
-                        
+
                     if ((properties->Id == 2081 || m_spellInfo->Id == 13258 || m_spellInfo->Id == 13166) && !m_CastItem)
-                    return;
+                        return;
 
                     TempSummonType summonType = (duration == 0) ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_DESPAWN;
 

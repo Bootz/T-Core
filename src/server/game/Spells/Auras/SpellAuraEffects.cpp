@@ -4899,27 +4899,26 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     break;
                 }
                 case 75572: // Eject Spell!
-		{
-		    if (Vehicle *vehicle = caster->GetVehicleKit())
-		        if (Unit *driver = vehicle->GetPassenger(0))
-		        {
-		            driver->ExitVehicle();
-
-                 driver->GetMotionMaster()->MoveJump(driver->GetPositionX(), driver->GetPositionY(), driver->GetPositionZ()+7.0f, 2.0f, 2.0f);
-		 }
-		break;
-		}
+                {
+                    if (Vehicle *vehicle = caster->GetVehicleKit())
+                        if (Unit *driver = vehicle->GetPassenger(0))
+                        {
+                            driver->ExitVehicle();
+                            driver->GetMotionMaster()->MoveJump(driver->GetPositionX(), driver->GetPositionY(), driver->GetPositionZ()+7.0f, 2.0f, 2.0f);
+                        }
+                        break;
+                }
                 case 71563:
                 {
                     if (Aura* newAura = target->AddAura(71564, target))
                         newAura->SetStackAmount(newAura->GetSpellInfo()->StackAmount);
                     break;
-		}
-		case 74401:
-		{
-		    caster->CastSpell(caster, GetAmount(), true);
-		    break;
-		}                        
+                }
+                case 74401:
+                {
+                    caster->CastSpell(caster, GetAmount(), true);
+                    break;
+                }
             }
         }
         // AT REMOVE

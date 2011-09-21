@@ -765,10 +765,10 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
             pl->SaveRecallPosition();
 
         if (pl->IsMounted())
-    	{
-	    pl->Unmount();
-	    pl->RemoveAurasByType(SPELL_AURA_MOUNTED);
-	}
+        {
+            pl->Unmount();
+            pl->RemoveAurasByType(SPELL_AURA_MOUNTED);
+        }
 
         // before GM
         float x, y, z;

@@ -129,9 +129,8 @@ Map* MapInstanced::CreateInstance(const uint32 mapId, Player* player)
         if (!NewInstanceId) return NULL;
         map = _FindMap(NewInstanceId);
         if (!map)
-    	// fixes #2254 issue in TC
-		if (Battleground* NewBattleground = player->GetBattleground())
-		                map = CreateBattleground(NewInstanceId, NewBattleground);
+            if (Battleground* NewBattleground = player->GetBattleground())
+                map = CreateBattleground(NewInstanceId, NewBattleground);
     }
     else
     {
