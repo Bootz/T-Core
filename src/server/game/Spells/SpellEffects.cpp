@@ -567,7 +567,22 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                     if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
                         m_caster->CastSpell(m_caster, 81661, true);
                 }
-
+                
+                // Chakra
+                if (m_caster->HasAura(14751))
+                {
+                    switch(m_spellInfo->Id)
+                    {
+                        case   585:  /* Smite */
+                        case 73510:  /* Mind Spike */
+                            {
+                                m_caster->CastSpell(m_caster, 81209, true); // Chakra : Chastise
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
                 // Shadow Word: Death - deals damage equal to damage done to caster
                 if (m_spellInfo->SpellFamilyFlags[1] & 0x2)
                 {
@@ -2204,6 +2219,23 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex)
 
 void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 {
+    /* Chakra */
+    if (m_caster->HasAura(14571))
+    {
+        switch(m_spellInfo->Id)
+        {
+            case  2050: /* Heal */
+            case  2060: /* Greater Heal*/
+            case  2061: /* Flash Heal */
+            case 32546: /* Binding Heal */
+               m_caster->CastSpell(m_Caster, 81208, true); /* Chakra: Serenity */
+               break;
+               
+            case 596: /* Prayer of Healing */
+               m_caster->CastSpell(m_caster, 81206, true); /* Chakra: Sanctuary */
+               break;
+        }
+    }
 }
 
 void Spell::SpellDamageHeal(SpellEffIndex /*effIndex*/)
