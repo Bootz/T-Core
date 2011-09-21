@@ -1509,9 +1509,16 @@ void Creature::setDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
+        if(GetCreatureInfo()->flags_extra)
+        {
+            m_corpseRemoveTime = time(NULL) + 10;
+            m_respawnTime = time(NULL) + m_respawnDelay + 10;
+        }
+        else
+        {        
         m_corpseRemoveTime = time(NULL) + m_corpseDelay;
         m_respawnTime = time(NULL) + m_respawnDelay + m_corpseDelay;
-
+        }
         // always save boss respawn time at death to prevent crash cheating
         if (sWorld->getBoolConfig(CONFIG_SAVE_RESPAWN_TIME_IMMEDIATELY) || isWorldBoss())
             SaveRespawnTime();

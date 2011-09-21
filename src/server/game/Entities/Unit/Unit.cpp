@@ -11227,8 +11227,12 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
 {
     //! Mobs can't crit with spells. Player Totems can
     //! Fire Elemental (from totem) can too - but this part is a hack and needs more research
-    if (IS_CREATURE_GUID(GetGUID()) && !(isTotem() && IS_PLAYER_GUID(GetOwnerGUID())) && GetEntry() != 15438)
-        return false;
+    //if (IS_CREATURE_GUID(GetGUID()) && !(isTotem() && IS_PLAYER_GUID(GetOwnerGUID())) && GetEntry() != 15438)
+    //    return false;
+
+    // Pets and Totems (Minions) from Player should crit - source WoWWiki
+    if(IS_CREATURE_GUID(GetGUID()))
+        if(!((m_unitTypeMask & (UNIT_MASK_SUMMON | UNIT_MASK_MINION | UNIT_MASK_GUARDIAN | UNIT_MASK_TOTEM | UNIT_MASK_PET | UNIT_MASK_HUNTER_PET)) && IS_PLAYER_GUID(GetOwnerGUID())))
 
     // not critting spell
     if ((spellProto->AttributesEx2 & SPELL_ATTR2_CANT_CRIT))

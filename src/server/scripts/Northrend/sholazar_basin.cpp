@@ -663,6 +663,31 @@ public:
     }
 };
 
+// at_sholazar_ungoro_portal
+class at_sholazar_ungoro_portal : public AreaTriggerScript
+{
+    public:
+        at_sholazar_ungoro_portal() : AreaTriggerScript("at_sholazar_ungoro_portal") { }
+
+        bool OnTrigger(Player* player, const AreaTriggerEntry* at)
+        {
+            if ((player->GetQuestStatus(12613) == QUEST_STATUS_REWARDED) && (!player->GetQuestStatus(12546) == QUEST_STATUS_COMPLETE))
+            {
+                if (player->GetMapId() == 571)// We're on Sholazar, Teleport to Un'Goro
+                {
+                    player->CastSpell(player, 52056, true);
+                    return true;
+                }
+                else if (player->GetMapId() == 1) //We're on Un'Goro, Teleport to Sholazar
+                {
+                    player->CastSpell(player, 52057, true);
+                    return true;
+                }
+            }
+            return false;
+        }
+};
+
 void AddSC_sholazar_basin()
 {
     new npc_injured_rainspeaker_oracle();
@@ -672,4 +697,5 @@ void AddSC_sholazar_basin()
     new npc_engineer_helice();
     new npc_adventurous_dwarf();
     new npc_jungle_punch_target();
+    new at_sholazar_ungoro_portal();
 }
