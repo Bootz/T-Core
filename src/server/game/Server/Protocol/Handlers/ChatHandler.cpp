@@ -153,8 +153,6 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
     uint32 lang;
 
     if (type != CHAT_MSG_EMOTE && type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
-        recv_data >> lang;
-    else
         lang = LANG_UNIVERSAL;
 
     DEBUG_LOG("CHAT: packet received. type %u, lang %u", type, lang );
@@ -175,37 +173,40 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
     if (!processChatmessageFurtherAfterSecurityChecks(msg, lang))
         return;
 
-    if(msg.empty())
+    if (msg.empty())
         return;
 
     Player* sender = GetPlayer();
 
-    // prevent talking at unknown language (cheating)
-    LanguageDesc const* langDesc = GetLanguageDescByID(lang);
-    if (!langDesc)
+    if (type != CHAT_MSG_EMOTE)
     {
-        SendNotification(LANG_UNKNOWN_LANGUAGE);
-        recv_data.rfinish();
-        return;
-    }
-    if (langDesc->skill_id != 0 && !sender->HasSkill(langDesc->skill_id))
-    {
-        // also check SPELL_AURA_COMPREHEND_LANGUAGE (client offers option to speak in that language)
-        Unit::AuraEffectList const& langAuras = sender->GetAuraEffectsByType(SPELL_AURA_COMPREHEND_LANGUAGE);
-        bool foundAura = false;
-        for (Unit::AuraEffectList::const_iterator i = langAuras.begin(); i != langAuras.end(); ++i)
+        recv_data >> lang;
+
+        // prevent talking at unknown language (cheating)
+        LanguageDesc const* langDesc = GetLanguageDescByID(lang);
+        if (!langDesc)
         {
-            if ((*i)->GetMiscValue() == int32(lang))
-            {
-                foundAura = true;
-                break;
-            }
-        }
-        if (!foundAura)
-        {
-            SendNotification(LANG_NOT_LEARNED_LANGUAGE);
-            recv_data.rfinish();
+            SendNotification(LANG_UNKNOWN_LANGUAGE);
             return;
+        }
+        if (langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
+        {
+            // also check SPELL_AURA_COMPREHEND_LANGUAGE (client offers option to speak in that language)
+            Unit::AuraEffectList const& langAuras = _player->GetAuraEffectsByType(SPELL_AURA_COMPREHEND_LANGUAGE);
+            bool foundAura = false;
+            for (Unit::AuraEffectList::const_iterator i = langAuras.begin(); i != langAuras.end(); ++i)
+            {
+                if ((*i)->GetMiscValue() == int32(lang))
+                {
+                    foundAura = true;
+                    break;
+                }
+            }
+            if (!foundAura)
+            {
+                SendNotification(LANG_NOT_LEARNED_LANGUAGE);
+                return;
+            }
         }
     }
 
