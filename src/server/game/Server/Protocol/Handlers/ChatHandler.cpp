@@ -153,6 +153,8 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
     uint32 lang;
 
     if (type != CHAT_MSG_EMOTE && type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+        recv_data >> lang;
+    else
         lang = LANG_UNIVERSAL;
 
     DEBUG_LOG("CHAT: packet received. type %u, lang %u", type, lang );
@@ -180,8 +182,6 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
 
     if (type != CHAT_MSG_EMOTE)
     {
-        recv_data >> lang;
-
         // prevent talking at unknown language (cheating)
         LanguageDesc const* langDesc = GetLanguageDescByID(lang);
         if (!langDesc)
