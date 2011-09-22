@@ -175,9 +175,6 @@ void WorldSession::HandleMessageChatOpcode(WorldPacket & recv_data, uint32 type)
     if (!processChatmessageFurtherAfterSecurityChecks(msg, lang))
         return;
 
-    if (msg.empty())
-        return;
-
     Player* sender = GetPlayer();
 
     if (type != CHAT_MSG_EMOTE)
