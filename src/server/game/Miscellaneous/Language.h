@@ -808,7 +808,9 @@ enum TrilliumStrings
     LANG_DISALLOW_TICKETS               = 1135,
     LANG_WEEK_RESET                     = 1136,
     LANG_CHAR_NOT_BANNED                = 1137,
-    // Room for more level 3              1138-1199 not used
+    LANG_DEV_ON                         = 1138,
+    LANG_DEV_OFF                        = 1139,
+    // Room for more level 3              1139-1199 not used
 
     // Debug commands
     LANG_CINEMATIC_NOT_EXIST            = 1200,
