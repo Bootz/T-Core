@@ -78,7 +78,7 @@
 #include "CreatureTextMgr.h"
 #include "SmartAI.h"
 #include "Channel.h"
-#include "ItemInfo.h"
+#include "ItemInfoMgr.h"
 
 volatile bool World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;

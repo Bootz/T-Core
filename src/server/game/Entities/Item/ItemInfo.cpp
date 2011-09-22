@@ -21,45 +21,6 @@
 
 #include "ItemInfo.h"
 
-/* ItemInfoMgr */
-
-ItemInfoMgr::ItemInfoMgr()
-{
-
-}
-
-ItemInfoMgr::~ItemInfoMgr()
-{
-    UnloadItemInfoStore();
-}
-
-void ItemInfoMgr::UnloadItemInfoStore()
-{
-    for (uint32 i = 0; i < mItemInfoMap.size(); ++i)
-    {
-        if (mItemInfoMap[i])
-            delete mItemInfoMap[i];
-    }
-    mItemInfoMap.clear();
-}
-
-void ItemInfoMgr::LoadItemInfo()
-{
-    uint32 oldMSTime = getMSTime();
-
-    UnloadItemInfoStore();
-    mItemInfoMap.resize(sItemSparseStore.GetNumRows(), NULL);
-
-    for (uint32 i = 0; i < sItemSparseStore.GetNumRows(); ++i)
-    {
-        if (ItemSparseEntry const* _itemSparse = sItemSparseStore.LookupEntry(i))
-            mItemInfoMap[i] = new ItemInfo(_itemSparse);
-    }
-
-    sLog->outString(">> Loaded %u Items Info in %u ms", mItemInfoMap.size(), GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}
-
 ItemSparseInfo::ItemSparseInfo()
 {
 

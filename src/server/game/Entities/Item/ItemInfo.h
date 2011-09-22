@@ -29,28 +29,6 @@ class ItemInfo;
 struct ItemEntry;
 struct ItemSparseEntry;
 
-class ItemInfoMgr
-{
-    friend class ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>;
-private:
-    ItemInfoMgr();
-    ~ItemInfoMgr();
-
-public:
-    typedef std::vector<ItemInfo*> ItemInfoMap;
-
-    ItemInfo const* GetItemInfo(uint32 ItemId) const { return ItemId < GetItemInfoStoreSize() ?  mItemInfoMap[ItemId] : NULL; }
-    uint32 GetItemInfoStoreSize() const { return mItemInfoMap.size(); }
-
-    void LoadItemInfo();
-    void UnloadItemInfoStore();
-
-private:
-    ItemInfoMap mItemInfoMap;
-};
-
-#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
-
 class ItemSparseInfo
 {
 public:
