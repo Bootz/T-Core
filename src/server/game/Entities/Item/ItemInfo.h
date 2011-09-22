@@ -117,7 +117,7 @@ public:
     int32 field_130; // related to archaeology (?)
     int32 field_131; // related to archaeology
 
-    ItemSparseInfo();
+    ItemSparseInfo(ItemEntry const* itemEntry);
     ItemSparseEntry const* GetSparseInfo() const;
 };
 
