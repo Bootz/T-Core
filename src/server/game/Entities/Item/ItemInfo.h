@@ -29,6 +29,23 @@ class ItemInfo;
 struct ItemEntry;
 struct ItemSparseEntry;
 
+class ItemInfo
+{
+public:
+    uint32   Id;
+    uint32   Class;
+    uint32   SubClass;
+    int32    Unk0;
+    int32    Material;
+    uint32   DisplayId;
+    uint32   InventoryType;
+    uint32   Sheath;
+
+    // Functions
+    ItemInfo(ItemSparseEntry const* itemSparse);
+    ItemEntry const* GetItemInfo() const;
+};
+
 class ItemSparseInfo
 {
 public:
@@ -102,23 +119,6 @@ public:
 
     ItemSparseInfo();
     ItemSparseEntry const* GetSparseInfo() const;
-};
-
-class ItemInfo
-{
-public:
-    uint32   Id;
-    uint32   Class;
-    uint32   SubClass;
-    int32    Unk0;
-    int32    Material;
-    uint32   DisplayId;
-    uint32   InventoryType;
-    uint32   Sheath;
-
-    // Functions
-    ItemInfo(ItemSparseEntry const* itemSparse);
-    ItemEntry const* GetItemInfo() const;
 };
 
 #endif // _ITEMINFO_H

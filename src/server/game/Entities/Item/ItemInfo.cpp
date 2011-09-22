@@ -21,11 +21,6 @@
 
 #include "ItemInfo.h"
 
-ItemSparseInfo::ItemSparseInfo()
-{
-
-}
-
 ItemInfo::ItemInfo(ItemSparseEntry const* itemSparse)
 {
     // Item.db2 including Blizzard test items, so we use the Item-sparse.db2 data
@@ -117,6 +112,11 @@ ItemInfo::ItemInfo(ItemSparseEntry const* itemSparse)
     //FoodType          = _proto ? _proto->FoodType : 0;
     //MinMoneyLoot      = _proto ? _proto->MinMoneyLoot : 0;
     //MaxMoneyLoot      = _proto ? _proto->MaxMoneyLoot : 0;
+}
+
+ItemSparseInfo::ItemSparseInfo()
+{
+
 }
 
 ItemSparseEntry const* ItemSparseInfo::GetSparseInfo() const
