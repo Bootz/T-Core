@@ -23,7 +23,7 @@
 
 ItemInfo::ItemInfo(ItemSparseEntry const* itemSparse)
 {
-    Id = itemSparse->ID;
+    Id = itemSparse->Id;
     Class = itemSparse->AllowableClass;
     SubClass = itemSparse->AllowableClass;
     Unk0;
