@@ -108,8 +108,3 @@ ItemSparseEntry const* ItemSparseInfo::GetSparseInfo() const
 {
     return sItemSparseStore.LookupEntry(Id);
 }
-
-ItemEntry const* ItemInfo::GetItemInfo() const
-{
-    return sItemStore.LookupEntry(Id);
-}

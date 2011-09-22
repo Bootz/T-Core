@@ -34,8 +34,8 @@ private:
 public:
     typedef std::vector<ItemInfo*> ItemInfoMap;
 
-    ItemInfo const* GetItemInfo(uint32 ItemId) const { return ItemId < GetItemInfoStoreSize() ?  mItemInfoMap[ItemId] : NULL; }
-    uint32 GetItemInfoStoreSize() const { return mItemInfoMap.size(); }
+    ItemInfo const* GetItemInfo(uint32 ItemId) const;
+    uint32 GetItemInfoStoreSize() const;
 
     void LoadItemInfo();
     void UnloadItemInfoStore();

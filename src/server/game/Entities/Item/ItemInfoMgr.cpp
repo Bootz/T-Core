@@ -59,3 +59,13 @@ void ItemInfoMgr::LoadItemInfo()
     sLog->outString(">> Loaded %u Items Info in %u ms", mItemInfoMap.size(), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
+
+ItemInfo const* ItemInfoMgr::GetItemInfo(uint32 ItemId) const
+{
+    return ItemId < GetItemInfoStoreSize() ? mItemInfoMap[ItemId] : NULL;
+}
+
+uint32 ItemInfoMgr::GetItemInfoStoreSize() const
+{
+    return mItemInfoMap.size();
+}

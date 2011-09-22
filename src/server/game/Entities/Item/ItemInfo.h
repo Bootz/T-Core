@@ -43,7 +43,6 @@ public:
 
     // Functions
     ItemInfo(ItemSparseEntry const* itemSparse);
-    ItemEntry const* GetItemInfo() const;
 };
 
 class ItemSparseInfo
