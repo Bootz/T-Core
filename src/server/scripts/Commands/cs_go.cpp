@@ -129,7 +129,7 @@ public:
         if (result->GetRowCount() > 1)
             handler->SendSysMessage(LANG_COMMAND_GOCREATMULTIPLE);
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         float x = fields[0].GetFloat();
         float y = fields[1].GetFloat();
         float z = fields[2].GetFloat();

@@ -546,7 +546,7 @@ void PoolMgr::Initialize()
     QueryResult result = WorldDatabase.Query("SELECT MAX(entry) FROM pool_template");
     if (result)
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         max_pool_id = fields[0].GetUInt32();
     }
 
@@ -579,7 +579,7 @@ void PoolMgr::LoadFromDB()
         uint32 count = 0;
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             uint32 pool_id = fields[0].GetUInt32();
 
@@ -613,7 +613,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 guid    = fields[0].GetUInt32();
                 uint32 pool_id = fields[1].GetUInt32();
@@ -671,7 +671,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 guid    = fields[0].GetUInt32();
                 uint32 pool_id = fields[1].GetUInt32();
@@ -741,7 +741,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 child_pool_id  = fields[0].GetUInt32();
                 uint32 mother_pool_id = fields[1].GetUInt32();
@@ -917,7 +917,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 uint32 pool_entry = fields[0].GetUInt32();
                 uint32 pool_pool_id = fields[1].GetUInt32();
 

@@ -60,7 +60,7 @@ void OutdoorPvPMgr::InitOutdoorPvP()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         typeId = fields[0].GetUInt32();
 

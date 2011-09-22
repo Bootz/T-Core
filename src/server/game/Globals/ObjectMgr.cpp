@@ -313,7 +313,7 @@ void ObjectMgr::LoadCreatureLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -349,7 +349,7 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint16 menuId   = fields[0].GetUInt16();
         uint16 id       = fields[1].GetUInt16();
@@ -381,7 +381,7 @@ void ObjectMgr::LoadPointOfInterestLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -427,7 +427,7 @@ void ObjectMgr::LoadCreatureTemplates()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -554,7 +554,7 @@ void ObjectMgr::LoadCreatureTemplateAddons()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -928,7 +928,7 @@ void ObjectMgr::LoadCreatureAddons()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 guid = fields[0].GetUInt32();
 
@@ -1155,7 +1155,7 @@ void ObjectMgr::LoadCreatureModelInfo()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 modelId = fields[0].GetUInt32();
 
@@ -1212,7 +1212,7 @@ void ObjectMgr::LoadLinkedRespawn()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 guidLow = fields[0].GetUInt32();
         uint32 linkedGuidLow = fields[1].GetUInt32();
@@ -1463,7 +1463,7 @@ void ObjectMgr::LoadCreatures()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 guid         = fields[ 0].GetUInt32();
         uint32 entry        = fields[ 1].GetUInt32();
@@ -1779,7 +1779,7 @@ void ObjectMgr::LoadGameobjects()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 guid         = fields[ 0].GetUInt32();
         uint32 entry        = fields[ 1].GetUInt32();
@@ -1938,7 +1938,7 @@ void ObjectMgr::LoadCreatureRespawnTimes()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 loguid       = fields[0].GetUInt32();
         uint32 respawn_time = fields[1].GetUInt32();
@@ -1972,7 +1972,7 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 loguid       = fields[0].GetUInt32();
         uint32 respawn_time = fields[1].GetUInt32();
@@ -2090,7 +2090,7 @@ void ObjectMgr::LoadItemLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -2154,7 +2154,7 @@ void ObjectMgr::LoadItemTemplates()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -2692,7 +2692,7 @@ void ObjectMgr::LoadVehicleTemplateAccessories()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 uiEntry      = fields[0].GetUInt32();
         uint32 uiAccessory  = fields[1].GetUInt32();
@@ -2748,7 +2748,7 @@ void ObjectMgr::LoadVehicleAccessories()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 uiGUID       = fields[0].GetUInt32();
         uint32 uiAccessory  = fields[1].GetUInt32();
@@ -3626,7 +3626,7 @@ void ObjectMgr::LoadQuests()
     // for example set of race quests can lead to single not race specific quest
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         Quest * newQuest = new Quest(fields);
         mQuestTemplates[newQuest->GetQuestId()] = newQuest;
@@ -4282,7 +4282,7 @@ void ObjectMgr::LoadQuestLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -4345,7 +4345,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         ScriptInfo tmp;
         tmp.type      = type;
         tmp.id           = fields[0].GetUInt32();
@@ -4749,7 +4749,7 @@ void ObjectMgr::LoadWaypointScripts()
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             uint32 action = fields[0].GetUInt32();
 
             actionSet.erase(action);
@@ -4781,7 +4781,7 @@ void ObjectMgr::LoadSpellScriptNames()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         int32 spellId         = fields[0].GetInt32();
         const char *scriptName = fields[1].GetCString();
@@ -4952,7 +4952,7 @@ void ObjectMgr::LoadPageTextLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -5127,7 +5127,7 @@ void ObjectMgr::LoadGossipText()
         ++count;
         cic = 0;
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 Text_ID    = fields[cic++].GetUInt32();
         if (!Text_ID)
@@ -5180,7 +5180,7 @@ void ObjectMgr::LoadNpcTextLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -5249,7 +5249,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         Mail *m = new Mail;
         m->messageID = fields[0].GetUInt32();
         m->messageType = fields[1].GetUInt8();
@@ -5353,7 +5353,7 @@ void ObjectMgr::LoadQuestAreaTriggers()
     {
         ++count;
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 trigger_ID = fields[0].GetUInt32();
         uint32 quest_ID   = fields[1].GetUInt32();
@@ -5412,7 +5412,7 @@ void ObjectMgr::LoadTavernAreaTriggers()
     {
         ++count;
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 Trigger_ID      = fields[0].GetUInt32();
 
@@ -5450,7 +5450,7 @@ void ObjectMgr::LoadAreaTriggerScripts()
     {
         ++count;
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 Trigger_ID      = fields[0].GetUInt32();
         const char *scriptName = fields[1].GetCString();
@@ -5593,7 +5593,7 @@ void ObjectMgr::LoadGraveyardZones()
     {
         ++count;
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 safeLocId = fields[0].GetUInt32();
         uint32 zoneId = fields[1].GetUInt32();
@@ -5875,7 +5875,7 @@ void ObjectMgr::LoadAreaTriggerTeleports()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         ++count;
 
@@ -5936,7 +5936,7 @@ void ObjectMgr::LoadAccessRequirements()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         ++count;
 
@@ -6237,7 +6237,7 @@ void ObjectMgr::LoadGameObjectLocales()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -6337,7 +6337,7 @@ void ObjectMgr::LoadGameObjectTemplate()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
 
@@ -6525,7 +6525,7 @@ void ObjectMgr::LoadExplorationBaseXP()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint8 level  = fields[0].GetUInt8();
         uint32 basexp = fields[1].GetUInt32();
         mBaseXPTable[level] = basexp;
@@ -6567,7 +6567,7 @@ void ObjectMgr::LoadPetNames()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         std::string word = fields[0].GetString();
         uint32 entry     = fields[1].GetUInt32();
         bool   half      = fields[2].GetBool();
@@ -6590,7 +6590,7 @@ void ObjectMgr::LoadPetNumber()
     QueryResult result = CharacterDatabase.Query("SELECT MAX(id) FROM character_pet");
     if (result)
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         m_hiPetNumber = fields[0].GetUInt32()+1;
     }
 
@@ -6636,7 +6636,7 @@ void ObjectMgr::LoadCorpses()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint32 guid = fields[16].GetUInt32();
 
         Corpse *corpse = new Corpse();
@@ -6674,7 +6674,7 @@ void ObjectMgr::LoadReputationRewardRate()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 factionId        = fields[0].GetUInt32();
 
@@ -6738,7 +6738,7 @@ void ObjectMgr::LoadCurrencyOnKill()
 
    do
    {
-       Field *fields = result->Fetch();
+       Field* fields = result->Fetch();
        
 
        uint32 creature_id = fields[0].GetUInt32();
@@ -6796,7 +6796,7 @@ void ObjectMgr::LoadReputationOnKill()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 creature_id = fields[0].GetUInt32();
 
@@ -6865,7 +6865,7 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 factionId                = fields[0].GetUInt32();
 
@@ -6979,7 +6979,7 @@ void ObjectMgr::LoadPointsOfInterest()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 point_id = fields[0].GetUInt32();
 
@@ -7032,14 +7032,14 @@ void ObjectMgr::LoadQuestPOI()
     if (points)
     {
         // The first result should have the highest questId
-        Field *fields = points->Fetch();
+        Field* fields = points->Fetch();
         uint32 questId = fields[0].GetUInt32();
         POIs.resize(questId + 1);
 
         do
         {
 
-            Field *fields = points->Fetch();
+            Field* fields = points->Fetch();
 
             uint32 questId            = fields[0].GetUInt32();
             uint32 id                 = fields[1].GetUInt32();
@@ -7056,7 +7056,7 @@ void ObjectMgr::LoadQuestPOI()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 questId            = fields[0].GetUInt32();
         uint32 id                 = fields[1].GetUInt32();
@@ -7098,7 +7098,7 @@ void ObjectMgr::LoadNPCSpellClickSpells()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 npc_entry = fields[0].GetUInt32();
         CreatureTemplate const* cInfo = GetCreatureTemplate(npc_entry);
@@ -7747,7 +7747,7 @@ bool ObjectMgr::LoadTrilliumStrings(char const* table, int32 min_value, int32 ma
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         int32 entry = fields[0].GetInt32();
 
@@ -7823,7 +7823,7 @@ void ObjectMgr::LoadFishingBaseSkillLevel()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint32 entry  = fields[0].GetUInt32();
         int32 skill   = fields[1].GetInt32();
 
@@ -7932,7 +7932,7 @@ void ObjectMgr::LoadGameTele()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 id         = fields[0].GetUInt32();
 
@@ -8058,7 +8058,7 @@ void ObjectMgr::LoadMailLevelRewards()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint8 level           = fields[0].GetUInt8();
         uint32 raceMask       = fields[1].GetUInt32();
@@ -8712,7 +8712,7 @@ void ObjectMgr::LoadCreatureClassLevelStats()
     uint32 count = 0;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint8 Level = fields[0].GetUInt8();
         uint8 Class = fields[1].GetUInt8();
@@ -8774,7 +8774,7 @@ void ObjectMgr::LoadFactionChangeAchievements()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
         uint32 horde = fields[1].GetUInt32();
@@ -8811,7 +8811,7 @@ void ObjectMgr::LoadFactionChangeItems()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
         uint32 horde = fields[1].GetUInt32();
@@ -8848,7 +8848,7 @@ void ObjectMgr::LoadFactionChangeSpells()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
         uint32 horde = fields[1].GetUInt32();
@@ -8885,7 +8885,7 @@ void ObjectMgr::LoadFactionChangeReputations()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
         uint32 horde = fields[1].GetUInt32();

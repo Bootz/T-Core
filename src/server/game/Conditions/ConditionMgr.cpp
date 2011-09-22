@@ -395,7 +395,7 @@ void ConditionMgr::LoadConditions(bool isReload)
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         Condition* cond = new Condition();
         int32 iSourceTypeOrReferenceId   = fields[0].GetInt32();

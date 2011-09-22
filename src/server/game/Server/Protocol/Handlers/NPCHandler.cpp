@@ -485,7 +485,7 @@ void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             data << uint32(fields[1].GetUInt32());          // petnumber
             data << uint32(fields[2].GetUInt32());          // creature entry
@@ -557,7 +557,7 @@ void WorldSession::HandleStablePetCallback(QueryResult result)
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             uint32 slot = fields[1].GetUInt32();
 
@@ -614,7 +614,7 @@ void WorldSession::HandleUnstablePetCallback(QueryResult result, uint32 petnumbe
     uint32 creature_id = 0;
     if (result)
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         creature_id = fields[0].GetUInt32();
     }
 
@@ -741,7 +741,7 @@ void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint32 petnum
         return;
     }
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
 
     uint32 slot        = fields[0].GetUInt8();
     uint32 creature_id = fields[1].GetUInt32();

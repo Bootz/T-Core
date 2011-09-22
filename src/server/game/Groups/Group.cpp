@@ -143,7 +143,7 @@ bool Group::Create(Player *leader)
     return true;
 }
 
-void Group::LoadGroupFromDB(Field *fields)
+void Group::LoadGroupFromDB(Field* fields)
 {
     m_dbStoreId = fields[15].GetUInt32();
     m_guid = MAKE_NEW_GUID(sGroupMgr->GenerateGroupId(), 0, HIGHGUID_GROUP);

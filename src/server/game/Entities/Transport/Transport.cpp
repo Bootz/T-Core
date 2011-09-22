@@ -48,7 +48,7 @@ void MapManager::LoadTransports()
     do
     {
 
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint32 lowguid = fields[0].GetUInt32();
         uint32 entry = fields[1].GetUInt32();
         std::string name = fields[2].GetString();
@@ -114,7 +114,7 @@ void MapManager::LoadTransports()
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             uint32 guid  = fields[0].GetUInt32();
             uint32 entry = fields[1].GetUInt32();
@@ -146,7 +146,7 @@ void MapManager::LoadTransportNPCs()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint32 guid = fields[0].GetUInt32();
         uint32 entry = fields[1].GetUInt32();
         uint32 transportEntry = fields[2].GetUInt32();

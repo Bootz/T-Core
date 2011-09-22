@@ -280,7 +280,7 @@ public:
 
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             lowguid = fields[0].GetUInt32();
             id =      fields[1].GetUInt32();
             x =       fields[2].GetFloat();
@@ -545,7 +545,7 @@ public:
         {
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 uint32 guid = fields[0].GetUInt32();
                 uint32 entry = fields[1].GetUInt32();
                 float x = fields[2].GetFloat();

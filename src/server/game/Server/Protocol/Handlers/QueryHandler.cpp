@@ -88,7 +88,7 @@ void WorldSession::SendNameQueryOpcodeFromDBCallBack(QueryResult result)
     if (!result)
         return;
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
     uint32 guid      = fields[0].GetUInt32();
     std::string name = fields[1].GetString();
     uint8 pRace = 0, pGender = 0, pClass = 0;

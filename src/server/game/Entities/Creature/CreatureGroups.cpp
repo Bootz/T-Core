@@ -126,7 +126,7 @@ void CreatureGroupManager::LoadCreatureGroups()
     {
         do
         {
-            Field *fields = guidResult->Fetch();
+            Field* fields = guidResult->Fetch();
             uint32 guid = fields[0].GetUInt32();
 
             guidSet.insert(guid);

@@ -65,7 +65,7 @@ Channel::Channel(const std::string& name, uint32 channel_id, uint32 Team)
 
             if (result) //load
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 m_announce = fields[0].GetBool();
                 m_ownership = fields[1].GetBool();
                 m_password  = fields[2].GetString();

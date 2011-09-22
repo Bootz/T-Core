@@ -160,7 +160,7 @@ public:
             ///- Cycle through them. Display username and GM level
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 const char* name = fields[0].GetCString();
                 uint8 security = fields[1].GetUInt8();
                 uint8 max = ((16 - strlen(name)) / 2);

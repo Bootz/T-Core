@@ -522,7 +522,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             uint16 acctCharCount = 0;
             if (result)
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 // SELECT SUM(x) is MYSQL_TYPE_NEWDECIMAL - needs to be read as string
                 const char* ch = fields[0].GetCString();
                 if (ch)
@@ -556,7 +556,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
         {
             if (result)
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 createInfo->CharCount = fields[0].GetUInt8();
 
                 if (createInfo->CharCount >= sWorld->getIntConfig(CONFIG_CHARACTERS_PER_REALM))
@@ -810,7 +810,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     QueryResult result = CharacterDatabase.PQuery("SELECT account, name FROM characters WHERE guid='%u'", GUID_LOPART(guid));
     if (result)
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         accountId = fields[0].GetUInt32();
         name = fields[1].GetString();
     }
@@ -1490,7 +1490,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recv_data)
         return;
     }
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
     uint32 at_loginFlags = fields[0].GetUInt16();
 
     if (!(at_loginFlags & AT_LOGIN_CUSTOMIZE))
@@ -1689,7 +1689,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         return;
     }
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
     uint32 playerClass = fields[0].GetUInt32();
     uint32 level = fields[1].GetUInt32();
     uint32 at_loginFlags = fields[2].GetUInt16();
@@ -2062,7 +2062,7 @@ uint64 WorldSession::GetRealGUID(uint8 packetGuid, uint8 byte, std::string Error
 
                 do
                 {
-                    Field *fields = charresult->Fetch();
+                    Field* fields = charresult->Fetch();
                     realguids[LastCharacter] = fields[0].GetUInt32();
                     guids[LastCharacter] = realguids[LastCharacter];
                     if (guids[LastCharacter] > 255 && guids[LastCharacter] < 512)

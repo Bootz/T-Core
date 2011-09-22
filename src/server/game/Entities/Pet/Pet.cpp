@@ -133,7 +133,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         return false;
     }
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
 
     // update for case of current pet "slot = 0"
     petentry = fields[1].GetUInt32();
@@ -1047,7 +1047,7 @@ void Pet::_LoadSpellCooldowns()
 
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             uint32 spell_id = fields[0].GetUInt32();
             time_t db_time  = time_t(fields[1].GetUInt32());
@@ -1103,7 +1103,7 @@ void Pet::_LoadSpells()
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             addSpell(fields[0].GetUInt32(), ActiveStates(fields[1].GetUInt8()), PETSPELL_UNCHANGED);
         }
@@ -1153,7 +1153,7 @@ void Pet::_LoadAuras(uint32 timediff)
         {
             int32 damage[3];
             int32 baseDamage[3];
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             uint64 caster_guid = fields[0].GetUInt64();
             uint32 spellid = fields[1].GetUInt32();
             uint8 effmask = fields[2].GetUInt8();
@@ -1638,7 +1638,7 @@ void Pet::resetTalentsForAllPetsOf(Player* owner, Pet* online_pet /*= NULL*/)
 
     do
     {
-        Field *fields = resultPets->Fetch();
+        Field* fields = resultPets->Fetch();
 
         uint32 id = fields[0].GetUInt32();
 
@@ -1656,7 +1656,7 @@ void Pet::resetTalentsForAllPetsOf(Player* owner, Pet* online_pet /*= NULL*/)
     bool need_execute = false;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 spell = fields[0].GetUInt32();
 

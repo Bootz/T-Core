@@ -1241,7 +1241,7 @@ public:
         if (result_FormationId)
         {
             //Load FormationId
-            Field *fields = result_FormationId->Fetch();
+            Field* fields = result_FormationId->Fetch();
             formationId = fields[0].GetUInt32();
             //Overwrite given Data
             leaderGUID = fields[1].GetUInt32();
@@ -1368,7 +1368,7 @@ public:
         if (result_GroupId)
         {
             //Load GroupId
-            Field *fields = result_GroupId->Fetch();
+            Field* fields = result_GroupId->Fetch();
             groupId = fields[0].GetUInt32();
             //Overwrite given Data
             leaderGUID = fields[1].GetUInt32();

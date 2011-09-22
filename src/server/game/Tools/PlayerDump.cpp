@@ -202,7 +202,7 @@ std::string CreateDumpString(char const* tableName, QueryResult result)
     if (!tableName || !result) return "";
     std::ostringstream ss;
     ss << "INSERT INTO "<< _TABLE_SIM_ << tableName << _TABLE_SIM_ << " VALUES (";
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
     for (uint32 i = 0; i < result->GetFieldCount(); ++i)
     {
         if (i == 0) ss << '\'';

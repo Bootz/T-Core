@@ -2102,7 +2102,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         stmt->setUInt32(0, lowguid);
         if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             pMember->SetStats(
                 fields[0].GetString(),
                 fields[1].GetUInt8(),
