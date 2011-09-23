@@ -41,8 +41,8 @@
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "Trillium ENCORE world service";
-char serviceDescription[] = "Trillium ENCORE World of Warcraft emulator world service";
+char serviceLongName[] = "Trillium EMU world service";
+char serviceDescription[] = "Trillium EMU World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
