@@ -16772,22 +16772,35 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         }
         else
         {
-            for (MapManager::TransportSet::iterator iter = sMapMgr->m_Transports.begin(); iter != sMapMgr->m_Transports.end(); ++iter)
+            if (Transport* trans = sTransportMgr->GetTransport(transGUID))
             {
-                if ((*iter)->GetGUIDLow() == transGUID)
-                {
-                    m_transport = *iter;
-                    m_transport->AddPassenger(this);
-                    mapId = (m_transport->GetMapId());
-                    break;
-                }
+                m_transport = trans;
+                m_transport->AddPassenger(this);
+                mapId = m_transport->GetMapId();
             }
             if (!m_transport)
             {
-                sLog->outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to bind location.",
-                    guid, transGUID);
+                if (!instanceId)
+                {
+                    sLog->outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to bind location.",
+                        guid, transGUID);
 
-                RelocateToHomebind();
+                    RelocateToHomebind();
+                }
+                else
+                {
+                    if (AreaTrigger const* at = sObjectMgr->GetGoBackTrigger(mapId))
+                    {
+                        sLog->outError("Player (guidlow %d) is teleported to gobacktrigger (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+                        Relocate(at->target_X, at->target_Y, at->target_Z, GetOrientation());
+                        mapId = at->target_mapId;
+                    }
+                    else
+                    {
+                        sLog->outError("Player (guidlow %d) is teleported to home (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+                        RelocateToHomebind();
+                    }
+                }
             }
         }
     }

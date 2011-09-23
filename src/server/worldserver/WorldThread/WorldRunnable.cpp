@@ -19,10 +19,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** \file
-    \ingroup Trilliumd
-*/
-
 #include "Common.h"
 #include "ObjectAccessor.h"
 #include "World.h"
@@ -33,6 +29,7 @@
 #include "MapManager.h"
 #include "Timer.h"
 #include "WorldRunnable.h"
+#include "TransportMgr.h"
 
 #define WORLD_SLEEP_CONST 50
 
@@ -93,6 +90,7 @@ void WorldRunnable::run()
 
     sWorldSocketMgr->StopNetwork();
 
+    sTransportMgr->Unload();
     sMapMgr->UnloadAll();                     // unload all grids (including locked in memory)
     sObjectAccessor->UnloadAll();             // unload 'i_player2corpse' storage and remove from world
     sScriptMgr->Unload();

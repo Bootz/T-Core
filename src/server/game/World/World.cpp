@@ -79,6 +79,7 @@
 #include "SmartAI.h"
 #include "Channel.h"
 #include "ItemInfoMgr.h"
+#include "TransportMgr.h"
 
 volatile bool World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
@@ -1293,6 +1294,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Game Object Templates...");         // must be after LoadPageTexts
     sObjectMgr->LoadGameObjectTemplate();
 
+    sLog->outString("Loading Transport Templates...");
+    sTransportMgr->LoadTransportTemplates();
+
     sLog->outString("Loading Spell Rank Data...");
     sSpellMgr->LoadSpellRanks();
 
@@ -1681,7 +1685,7 @@ void World::SetInitialWorldSettings()
     Player::InitVisibleBits();
 
     ///- Initialize MapManager
-    sLog->outString("Starting Map System");
+    sLog->outString("Starting Map System...");
     sMapMgr->Initialize();
 
     sLog->outString("Starting Game Event system...");
@@ -1703,18 +1707,15 @@ void World::SetInitialWorldSettings()
     LoadWorldStates();
 
     ///- Initialize Battlegrounds
-    sLog->outString("Starting Battleground System");
+    sLog->outString("Starting Battleground System...");
     sBattlegroundMgr->CreateInitialBattlegrounds();
 
     ///- Initialize outdoor pvp
-    sLog->outString("Starting Outdoor PvP System");
+    sLog->outString("Starting Outdoor PvP System...");
     sOutdoorPvPMgr->InitOutdoorPvP();
 
-    sLog->outString("Loading Transports...");
-    sMapMgr->LoadTransports();
-
-    sLog->outString("Loading Transport NPCs...");
-    sMapMgr->LoadTransportNPCs();
+    sLog->outString("Starting continent transports...");
+    sTransportMgr->SpawnContinentTransports();
 
     sLog->outString("Deleting expired bans...");
     LoginDatabase.Execute("DELETE FROM ip_banned WHERE unbandate <= UNIX_TIMESTAMP() AND unbandate<>bandate");
@@ -1722,10 +1723,10 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate next daily quest reset time...");
     InitDailyQuestResetTime();
 
-    sLog->outString("Calculate next weekly quest reset time..." );
+    sLog->outString("Calculate next weekly quest reset time...");
     InitWeeklyQuestResetTime();
 
-    sLog->outString("Calculate random battleground reset time..." );
+    sLog->outString("Calculate random battleground reset time...");
     InitRandomBGResetTime();
 
     sLogMgr->SetLogDb();

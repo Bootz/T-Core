@@ -34,6 +34,7 @@
 #include "InstanceSaveMgr.h"
 #include "ObjectMgr.h"
 #include "MovementStructures.h"
+#include "TransportMgr.h"
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recv_data*/)
 {
@@ -299,14 +300,10 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         if (plMover && !plMover->GetTransport())
         {
             // elevators also cause the client to send MOVEMENTFLAG_ONTRANSPORT - just unmount if the guid can be found in the transport list
-            for (MapManager::TransportSet::const_iterator iter = sMapMgr->m_Transports.begin(); iter != sMapMgr->m_Transports.end(); ++iter)
+            if (Transport* trans = sTransportMgr->GetTransport(movementInfo.t_guid))
             {
-                if ((*iter)->GetGUID() == movementInfo.t_guid)
-                {
-                    plMover->m_transport = (*iter);
-                    (*iter)->AddPassenger(plMover);
-                    break;
-                }
+                plMover->m_transport = trans;
+                trans->AddPassenger(plMover);
             }
         }
 
@@ -741,10 +738,6 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     
     mi->guid = *(uint64*)guid;
     mi->t_guid = *(uint64*)tguid;
-
-    if (HaveTransportData && mi->pos.m_positionX != mi->t_pos.m_positionX)
-        if (GetPlayer()->GetTransport())
-            GetPlayer()->GetTransport()->UpdatePosition(mi);
 }
 
 

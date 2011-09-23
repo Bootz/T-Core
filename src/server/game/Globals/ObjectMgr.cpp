@@ -8577,7 +8577,7 @@ void ObjectMgr::LoadScriptNames()
       "UNION "
       "SELECT DISTINCT(ScriptName) FROM spell_script_names WHERE ScriptName <> '' "
       "UNION "
-      "SELECT DISTINCT(ScriptName) FROM transports WHERE ScriptName <> '' "
+      "SELECT DISTINCT(ScriptName) FROM transport_template WHERE ScriptName <> '' "
       "UNION "
       "SELECT DISTINCT(ScriptName) FROM game_weather WHERE ScriptName <> '' "
       "UNION "

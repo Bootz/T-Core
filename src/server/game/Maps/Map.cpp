@@ -33,7 +33,7 @@
 #include "MapManager.h"
 #include "ObjectMgr.h"
 #include "Group.h"
-
+#include "TransportMgr.h"
 
 union u_map_magic
 {
@@ -1896,9 +1896,7 @@ void Map::SendInitSelf(Player* player)
 
     // attach to player data current transport data
     if (Transport* transport = player->GetTransport())
-    {
         transport->BuildCreateUpdateBlockForPlayer(&data, player);
-    }
 
     // build data for self presence in world at own client (one time for map)
     player->BuildCreateUpdateBlockForPlayer(&data, player);
@@ -1906,12 +1904,14 @@ void Map::SendInitSelf(Player* player)
     // build other passengers at transport also (they always visible and marked as visible and will not send at visibility update at add to map
     if (Transport* transport = player->GetTransport())
     {
-        for (Transport::PlayerSet::const_iterator itr = transport->GetPassengers().begin(); itr != transport->GetPassengers().end(); ++itr)
+        for (Transport::UnitSet::const_iterator itr = transport->GetPassengers().begin(); itr != transport->GetPassengers().end(); ++itr)
         {
-            if (player != (*itr) && player->HaveAtClient(*itr))
-            {
-                (*itr)->BuildCreateUpdateBlockForPlayer(&data, player);
-            }
+            if ((*itr)->GetTypeId() != TYPEID_PLAYER)
+                continue;
+
+            Player* passenger = (*itr)->ToPlayer();
+            if (player != passenger && player->HaveAtClient(passenger))
+                passenger->BuildCreateUpdateBlockForPlayer(&data, player);
         }
     }
 
@@ -1923,24 +1923,18 @@ void Map::SendInitSelf(Player* player)
 void Map::SendInitTransports(Player* player)
 {
     // Hack to send out transports
-    MapManager::TransportMap& tmap = sMapMgr->m_TransportsByMap;
+    std::vector<Transport*> transports;
 
     // no transports at map
-    if (tmap.find(player->GetMapId()) == tmap.end())
+    if (!sTransportMgr->GetTransportsForMap(transports, GetId(), GetInstanceId()))
         return;
 
     UpdateData transData(player->GetMapId());
 
-    MapManager::TransportSet& tset = tmap[player->GetMapId()];
-
-    for (MapManager::TransportSet::const_iterator i = tset.begin(); i != tset.end(); ++i)
-    {
-        // send data for current transport in other place
-        if ((*i) != player->GetTransport() && (*i)->GetMapId() == GetId())
-        {
-            (*i)->BuildCreateUpdateBlockForPlayer(&transData, player);
-        }
-    }
+    // except used transport
+    for (size_t i = 0; i < transports.size(); ++i)
+        if (transports[i] != player->GetTransport())
+            transports[i]->BuildOutOfRangeUpdateBlock(&transData);
 
     WorldPacket packet;
     transData.BuildPacket(&packet);
@@ -1950,20 +1944,18 @@ void Map::SendInitTransports(Player* player)
 void Map::SendRemoveTransports(Player* player)
 {
     // Hack to send out transports
-    MapManager::TransportMap& tmap = sMapMgr->m_TransportsByMap;
+    std::vector<Transport*> transports;
 
     // no transports at map
-    if (tmap.find(player->GetMapId()) == tmap.end())
+    if (!sTransportMgr->GetTransportsForMap(transports, GetId(), GetInstanceId()))
         return;
 
     UpdateData transData(player->GetMapId());
 
-    MapManager::TransportSet& tset = tmap[player->GetMapId()];
-
     // except used transport
-    for (MapManager::TransportSet::const_iterator i = tset.begin(); i != tset.end(); ++i)
-        if ((*i) != player->GetTransport() && (*i)->GetMapId() != GetId())
-            (*i)->BuildOutOfRangeUpdateBlock(&transData);
+    for (size_t i = 0; i < transports.size(); ++i)
+        if (transports[i] != player->GetTransport())
+            transports[i]->BuildOutOfRangeUpdateBlock(&transData);
 
     WorldPacket packet;
     transData.BuildPacket(&packet);

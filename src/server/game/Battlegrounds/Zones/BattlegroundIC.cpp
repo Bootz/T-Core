@@ -902,48 +902,7 @@ WorldSafeLocsEntry const* BattlegroundIC::GetClosestGraveYard(Player* player)
     return good_entry;
 }
 
-Transport* BattlegroundIC::CreateTransport(uint32 goEntry, uint32 period)
+Transport* BattlegroundIC::CreateTransport(uint32 goEntry, uint32 /*period*/)
 {
-    Transport* t = new Transport(period, 0);
-
-    const GameObjectTemplate* goinfo = sObjectMgr->GetGameObjectTemplate(goEntry);
-
-    if (!goinfo)
-    {
-        sLog->outErrorDb("Transport ID: %u will not be loaded, gameobject_template missing", goEntry);
-        delete t;
-        return NULL;
-    }
-
-    std::set<uint32> mapsUsed;
-
-    if (!t->GenerateWaypoints(goinfo->moTransport.taxiPathId, mapsUsed))
-        // skip transports with empty waypoints list
-    {
-        sLog->outErrorDb("Transport (path id %u) path size = 0. Transport ignored, check DBC files or transport GO data0 field.", goinfo->moTransport.taxiPathId);
-        delete t;
-        return NULL;
-    }
-
-    uint32 mapid = t->m_WayPoints[0].mapid;
-
-    float x = t->m_WayPoints[0].x;
-    float y = t->m_WayPoints[0].y;
-    float z =  t->m_WayPoints[0].z;
-    float o = 1;
-
-    // creates the Gameobject
-    if (!t->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_MO_TRANSPORT), goEntry, mapid, x, y, z, o, 100, 0))
-    {
-        delete t;
-        return NULL;
-    }
-
-    //If we someday decide to use the grid to track transports, here:
-    t->SetMap(GetBgMap());
-
-    for (uint8 i = 0; i < 5; i++)
-        t->AddNPCPassenger(0, (goEntry == GO_HORDE_GUNSHIP ? NPC_HORDE_GUNSHIP_CANNON : NPC_ALLIANCE_GUNSHIP_CANNON), (goEntry == GO_HORDE_GUNSHIP ? hordeGunshipPassengers[i].GetPositionX() : allianceGunshipPassengers[i].GetPositionX()) , (goEntry == GO_HORDE_GUNSHIP ? hordeGunshipPassengers[i].GetPositionY() : allianceGunshipPassengers[i].GetPositionY()), (goEntry == GO_HORDE_GUNSHIP ? hordeGunshipPassengers[i].GetPositionZ() : allianceGunshipPassengers[i].GetPositionZ()), (goEntry == GO_HORDE_GUNSHIP ? hordeGunshipPassengers[i].GetOrientation() : allianceGunshipPassengers[i].GetOrientation()));
-
-    return t;
+    return sTransportMgr->CreateTransport(goEntry, GetBgMap());
 }

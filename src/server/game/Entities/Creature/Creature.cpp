@@ -52,7 +52,7 @@
 #include "Vehicle.h"
 #include "SpellAuraEffects.h"
 #include "Group.h"
-// apply implementation of the singletons
+#include "Transport.h"
 
 TrainerSpell const* TrainerSpellData::Find(uint32 spell_id) const
 {
@@ -1080,15 +1080,24 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     }
 
     // data->guid = guid must not be updated at save
+    Position spawnPos;
+    if (!GetTransport())
+        GetPosition(&spawnPos);
+    else
+    {
+        m_movementInfo.t_pos.GetPosition(&spawnPos);
+        mapid = GetTransport()->GetGOInfo()->moTransport.mapID;
+    }
+
     data.id = GetEntry();
     data.mapid = mapid;
     data.phaseMask = phaseMask;
     data.displayid = displayId;
     data.equipmentId = GetEquipmentId();
-    data.posX = GetPositionX();
-    data.posY = GetPositionY();
-    data.posZ = GetPositionZ();
-    data.orientation = GetOrientation();
+    data.posX = spawnPos.GetPositionX();
+    data.posY = spawnPos.GetPositionY();
+    data.posZ = spawnPos.GetPositionZ();
+    data.orientation = spawnPos.GetOrientation();
     data.spawntimesecs = m_respawnDelay;
     // prevent add data integrity problems
     data.spawndist = GetDefaultMovementType() == IDLE_MOTION_TYPE ? 0 : m_respawnradius;
@@ -1117,10 +1126,10 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << uint16(GetPhaseMask()) << ','                    // prevent out of range error
         << displayId << ','
         << GetEquipmentId() << ','
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
+        << spawnPos.GetPositionX() << ','
+        << spawnPos.GetPositionY() << ','
+        << spawnPos.GetPositionZ() << ','
+        << spawnPos.GetOrientation() << ','
         << m_respawnDelay << ','                            //respawn time
         << (float) m_respawnradius << ','                   //spawn distance (float)
         << (uint32) (0) << ','                              //currentwaypoint
@@ -2423,17 +2432,16 @@ const char* Creature::GetNameForLocaleIdx(LocaleConstant loc_idx) const
 
 void Creature::FarTeleportTo(Map* map, float X, float Y, float Z, float O)
 {
-    InterruptNonMeleeSpells(true);
-    CombatStop();
-    ClearComboPointHolders();
+    RemoveAllAuras();
     DeleteThreatList();
-    GetMotionMaster()->Clear(false);
-    DestroyForNearbyPlayers();
-
-    RemoveFromWorld();
-    ResetMap();
+    CombatStop(true);
+    LoadCreaturesAddon();
+    SetLootRecipient(NULL);
+    ResetPlayerDamageReq();
+    ClearComboPointHolders();
+    GetMap()->Remove(this, false);
     SetMap(map);
-    AddToWorld();
+    map->Add(this);
 
     SetPosition(X, Y, Z, O, true);
 }

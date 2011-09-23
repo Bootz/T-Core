@@ -39,16 +39,20 @@ VisibleNotifier::SendToSelf()
     // at this moment i_clientGUIDs have guids that not iterate at grid level checks
     // but exist one case when this possible and object not out of range: transports
     if (Transport* transport = i_player.GetTransport())
-        for (Transport::PlayerSet::const_iterator itr = transport->GetPassengers().begin();itr != transport->GetPassengers().end();++itr)
+        for (Transport::UnitSet::const_iterator itr = transport->GetPassengers().begin(); itr != transport->GetPassengers().end(); ++itr)
         {
-            if (vis_guids.find((*itr)->GetGUID()) != vis_guids.end())
+            if ((*itr)->GetTypeId() != TYPEID_PLAYER)
+                continue;
+
+            Player* passenger = (*itr)->ToPlayer();
+            if (vis_guids.find(passenger->GetGUID()) != vis_guids.end())
             {
-                vis_guids.erase((*itr)->GetGUID());
+                vis_guids.erase(passenger->GetGUID());
 
-                i_player.UpdateVisibilityOf((*itr), i_data, i_visibleNow);
+                i_player.UpdateVisibilityOf(passenger, i_data, i_visibleNow);
 
-                if (!(*itr)->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
-                    (*itr)->UpdateVisibilityOf(&i_player);
+                if (!passenger->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+                    passenger->UpdateVisibilityOf(&i_player);
             }
         }
 

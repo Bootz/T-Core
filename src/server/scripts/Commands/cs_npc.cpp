@@ -128,10 +128,12 @@ public:
 
         if (chr->GetTransport())
         {
-            uint32 tguid = chr->GetTransport()->AddNPCPassenger(0, id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
-            if (tguid > 0)
-                WorldDatabase.PQuery("INSERT INTO creature_transport (guid, npc_entry, transport_entry,  TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO) values (%u, %u, %f, %f, %f, %f, %u)", tguid, id, chr->GetTransport()->GetEntry(), chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
-
+            x = chr->GetTransOffsetX();
+            y = chr->GetTransOffsetY();
+            z = chr->GetTransOffsetZ();
+            o = chr->GetTransOffsetO();
+            if (Creature* passenger = chr->GetTransport()->CreateNPCPassenger(id, x, y, z, o))
+                passenger->SaveToDB(chr->GetTransport()->GetGOInfo()->moTransport.mapID, 1, chr->GetPhaseMaskForSpawn());
             return true;
         }
 
@@ -649,10 +651,6 @@ public:
             handler->SetSentErrorMessage(true);
             return false;
         }
-
-        if (target->GetTransport())
-            if (target->GetGUIDTransport())
-                WorldDatabase.PQuery("UPDATE creature_transport SET emote=%u WHERE transport_entry=%u AND guid=%u", emote, target->GetTransport()->GetEntry(), target->GetGUIDTransport());
 
         target->SetUInt32Value(UNIT_NPC_EMOTESTATE, emote);
 
