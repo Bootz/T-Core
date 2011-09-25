@@ -6,16 +6,15 @@ TODO-List for TrilliumEMU Developer #
 ##########################
 
 // Core Developer:
-1.  Fix the Vendors, they dont show any items.
-2.  Implement Wintergrasp Battlefield.
-3.  Implement the new Battlegrounds.
-4.  Fix pet stables -- Already started.
-5.  Begin to fix spells (only casting and damage works)
-6.  Begin to fix guilds.
-7.  Begin to fix groups.
-8.  Research the Battleground Packets, some updates added to this packets.
-9.  Update the rest of Opcodes to 4.2.0.
-10. Implement a New Terrain System.
+1. Fix the Vendors, they dont show any items.
+2. Implement Wintergrasp Battlefield.
+3. Implement the new Battlegrounds.
+4. Begin to fix spells (only casting and damage works)
+5. Begin to fix guilds.
+6. Begin to fix groups.
+7. Research the Battleground Packets, some updates added to this packets.
+8. Update the rest of Opcodes to 4.2.0.
+9. Implement a New Terrain System.
 
 // Database Developer:
 1. Fix old spawns and duplicates from old WotLK
