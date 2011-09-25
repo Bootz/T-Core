@@ -2954,11 +2954,6 @@ void SpellMgr::LoadDbcDataCorrections()
                     if (!spellInfo->speed && !spellClass->SpellFamilyName)
                         spellInfo->speed = SPEED_CHARGE;
                     break;
-                case SPELL_EFFECT_TRIGGER_SPELL:
-                    if (SpellImplicitTargetInfo::IsPosition(spellEffect->EffectImplicitTargetA) ||
-                        spellTarget->Targets & (TARGET_FLAG_SOURCE_LOCATION | TARGET_FLAG_DEST_LOCATION))
-                        spellEffect->Effect = SPELL_EFFECT_TRIGGER_MISSILE;
-                    break;
             }
         }
 
@@ -3003,10 +2998,6 @@ void SpellMgr::LoadDbcDataCorrections()
             case 59372: // Energize Cores
                 spellEffect->EffectImplicitTargetA = TARGET_UNIT_SRC_AREA_ENTRY;
                 break;
-            case 3286:  // Bind
-                spellEffect->EffectImplicitTargetA = TARGET_UNIT_TARGET_ENEMY;
-                spellEffect->EffectImplicitTargetA = TARGET_UNIT_TARGET_ENEMY;
-                break;
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
                 spellAuOpt->procChance = 0;
@@ -3030,11 +3021,6 @@ void SpellMgr::LoadDbcDataCorrections()
             // Entries were not updated after spell effect change, we have to do that manually :/
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
                 break;
-            case 16007: // Draco-Incarcinatrix 900
-                // was 46, but effect is aura effect
-                spellEffect->EffectImplicitTargetA = TARGET_UNIT_NEARBY_ENTRY;
-                spellEffect->EffectImplicitTargetB = TARGET_DEST_NEARBY_ENTRY;
-                break;
             case 59725: // Improved Spell Reflection - aoe aura
                 // Target entry seems to be wrong for this spell :/
                 spellEffect->EffectImplicitTargetA = TARGET_UNIT_CASTER_AREA_PARTY;
@@ -3057,13 +3043,8 @@ void SpellMgr::LoadDbcDataCorrections()
             case 42611: // Shoot
             case 62374: // Pursued
             case 61588: // Blazing Harpoon
-                spellTarget->MaxAffectedTargets = 1;
-                break;
             case 52479: // Gift of the Harvester
                 spellTarget->MaxAffectedTargets = 1;
-                // a trap always has dst = src?
-                spellEffect->EffectImplicitTargetA = TARGET_DEST_CASTER;
-                spellEffect->EffectImplicitTargetA = TARGET_DEST_CASTER;
                 break;
             case 41376: // Spite
             case 39992: // Needle Spine
@@ -3142,15 +3123,10 @@ void SpellMgr::LoadDbcDataCorrections()
                 // add corruption to affected spells
                 spellEffect->EffectSpellClassMask[1] |= 2;
                 break;
-            case 49305: // Teleport to Boss 1 DND
-            case 64981: // Summon Random Vanquished Tentacle
-                spellEffect->EffectImplicitTargetB = TARGET_UNIT_CASTER;
-                break;
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellEffect->EffectMiscValue |= 1;
                 break;
-            case 18541: // Ritual of Doom Effect (temp hack, current targeting system requires implicit targets to be set. Was target_dest_caster)
-            case 51904: // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
+            case 51904: // Summon Ghouls On Scarlet Crusade (this should use conditions table, script for this spell needs to be fixed)
                 spellEffect->EffectImplicitTargetA = TARGET_UNIT_CASTER;
                 break;
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
@@ -3201,10 +3177,6 @@ void SpellMgr::LoadDbcDataCorrections()
             case 54836: // Wrath of the Plaguebringer
                 spellEffect->EffectImplicitTargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 spellEffect->EffectImplicitTargetB = TARGET_UNIT_SRC_AREA_ALLY;
-                break;
-            case 31687: // Summon Water Elemental
-                // 322-330 switch - effect changed to dummy, target entry not changed in client:(
-                spellEffect->EffectImplicitTargetA = TARGET_UNIT_CASTER;
                 break;
             case 57994: // Wind Shear - improper data for EFFECT_1 in 3.3.5 DBC, but is correct in 4.x
                 spellEffect->Effect = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
