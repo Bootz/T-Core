@@ -570,13 +570,13 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
                         m_caster->CastSpell(m_caster, 81660, true);
                 }
-                
+
                 if (m_caster->HasAura(81662)) //Rank 2
                 {
                     if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
                         m_caster->CastSpell(m_caster, 81661, true);
                 }
-                
+
                 // Chakra
                 if (m_caster->HasAura(14751))
                 {
@@ -608,7 +608,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                             m_caster->AddAura(95652, unitTarget); // Glyph of Shadow Word: Death - Marker
                             m_caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
                         }
-                    }						
+                    }
                 }
                 // Improved Mind Blast (Mind Blast in shadow form bonus)
                 else if (m_caster->GetShapeshiftForm() == FORM_SHADOW && (m_spellInfo->SpellFamilyFlags[0] & 0x00002000))
@@ -1273,7 +1273,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             break;
         }
         case SPELLFAMILY_PRIEST:
-        {   
+        {
             switch (m_spellInfo->Id)
             {
                 case 73325: // Leap of faith
@@ -1283,7 +1283,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
             }
         break;
-        }		
+        }
         case SPELLFAMILY_WARRIOR:
             // Charge
             if (m_spellInfo->SpellFamilyFlags & SPELLFAMILYFLAG_WARRIOR_CHARGE && m_spellInfo->SpellVisual[0] == 867)
@@ -1492,14 +1492,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
                         AddPctN(m_damage, damage);
                 }
-                // Improved Lava Lash				
+                // Improved Lava Lash
                 if (AuraEffect const* ill = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 4780, 1))
                 // Searing Flames
-                if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))			
-                {		
+                if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))
+                {
                     AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
                     unitTarget->RemoveAura(77661);
-                }			
+                }
                 return;
             }
             break;
@@ -2273,7 +2273,6 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
             case 32546: /* Binding Heal */
                m_caster->CastSpell(m_caster, 81208, true); /* Chakra: Serenity */
                break;
-               
             case 596: /* Prayer of Healing */
                m_caster->CastSpell(m_caster, 81206, true); /* Chakra: Sanctuary */
                break;
@@ -4403,11 +4402,11 @@ void Spell::EffectInterruptCast(SpellEffIndex effIndex)
         if (Spell* spell = unitTarget->GetCurrentSpell(CurrentSpellTypes(i)))
         {
             SpellInfo const* curSpellInfo = spell->m_spellInfo;
-            uint32 interruptFlags = (i == CURRENT_CHANNELED_SPELL) ? curSpellInfo->ChannelInterruptFlags : curSpellInfo->InterruptFlags;			
+            uint32 interruptFlags = (i == CURRENT_CHANNELED_SPELL) ? curSpellInfo->ChannelInterruptFlags : curSpellInfo->InterruptFlags;
             // check if we can interrupt spell
             if ((spell->getState() == SPELL_STATE_CASTING
                 || (spell->getState() == SPELL_STATE_PREPARING && spell->CalcCastTime() > 0.0f))
-                && (interruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)				
+                && (interruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
             {
                 if (m_originalCaster)
                 {
@@ -4580,7 +4579,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                    break;
                 case 35727:
                    m_caster->NearTeleportTo(530, 10038.7f, -7000.9f, 61.86f, 3.05f);
-                   break;                
+                   break;
                 case 45204: // Clone Me!
                     m_caster->CastSpell(unitTarget, damage, true);
                     break;
@@ -7369,7 +7368,7 @@ void Spell::EffectCastButtons(SpellEffIndex effIndex)
         if (!ab || ab->GetType() != ACTION_BUTTON_SPELL)
             continue;
 
-        //! Action button data is unverified when it's set so it can be "hacked" 
+        //! Action button data is unverified when it's set so it can be "hacked"
         //! to contain invalid spells, so filter here.
         uint32 spell_id = ab->GetAction();
         if (!spell_id)

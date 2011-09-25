@@ -1114,7 +1114,7 @@ void Battleground::AddPlayer(Player* plr)
     if (isArena())
     {
         plr->ResummonPetTemporaryUnSummonedIfAny();
-        
+
         // Removing pet's buffs and debuffs which are not permanent on Arena enter
         if (Pet* pet = plr->GetPet())
         {
@@ -1127,7 +1127,7 @@ void Battleground::AddPlayer(Player* plr)
                         if (!aura->IsPermanent())
                             pet->RemoveAura(itr);
         }
-        
+
         plr->RemoveArenaEnchantments(TEMP_ENCHANTMENT_SLOT);
         if (team == ALLIANCE)                                // gold
         {

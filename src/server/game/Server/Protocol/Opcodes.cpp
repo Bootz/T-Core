@@ -31,7 +31,6 @@ OpcodeHandler* opcodeTable[NUM_OPCODE_HANDLERS] = { };
 /// Correspondence between opcodes and their names
 void InitOpcodes()
 {
-
 #define DEFINE_OPCODE_HANDLER(opcode, status, processing, handler)                              \
     if (opcode < NUM_OPCODE_HANDLERS)                                                           \
     {                                                                                           \

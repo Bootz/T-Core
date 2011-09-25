@@ -237,8 +237,8 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
         {
             data->Initialize(SMSG_BATTLEFIELD_STATUS2, 100);
             *data << uint8(bg->isRated() ? 128 : 0);
-            *data << uint32(Time2); // 
-            *data << uint32(QueueSlot); // queueslot 
+            *data << uint32(Time2); //
+            *data << uint32(QueueSlot); // queueslot
             *data << uint32(bg->GetMapId()); // MapID
 
             // This is bg guid
@@ -252,7 +252,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint8(arenatype); // teamsize (0 if not arena)
             *data << uint8(bg->GetMaxLevel());
             *data << uint32(bg->GetClientInstanceID()); // instanceid
-            *data << uint8(bg->GetMinLevel());        
+            *data << uint8(bg->GetMinLevel());
         }
         break;
         case STATUS_WAIT_LEAVE:
@@ -260,7 +260,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             // Not used...
             data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1+4+1+1+1+4+1+4+1+4+1+8+1));
             *data << uint8(0); // flag
-            *data << uint32(Time1); // 
+            *data << uint32(Time1); //
             *data << uint8(bg->GetMinLevel()); // lowestLevel
             *data << uint8(0);
             *data << uint8(0);
@@ -269,7 +269,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint32(Time2); //
             *data << uint8(0); // teamsize (0 if not arena)
             *data << uint32(bg->GetClientInstanceID()); // instanceid
-            *data << uint8(0); 
+            *data << uint8(0);
 
             // This is bg guid
             *data << uint32(bg->GetTypeID()); // BGTypeID
@@ -361,7 +361,7 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
             }
             *data << uint8(updateFlags);
         }
-        flagCounter++;	
+        flagCounter++;
     }
     if (flagCounter > 0 && flagCounter % 2 != 0)
     {

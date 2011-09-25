@@ -525,7 +525,7 @@ bool SpellEffectInfo::IsAreaAuraEffect() const
 
 bool SpellEffectInfo::IsFarUnitTargetEffect() const
 {
-    return (Effect == SPELL_EFFECT_SUMMON_PLAYER) 
+    return (Effect == SPELL_EFFECT_SUMMON_PLAYER)
         || (Effect == SPELL_EFFECT_SUMMON_RAF_FRIEND)
         || (Effect == SPELL_EFFECT_RESURRECT)
         || (Effect == SPELL_EFFECT_RESURRECT_NEW)
@@ -587,7 +587,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
                 int32 randvalue = (randomPoints >= 1)
                     ? irand(1, randomPoints)
                     : irand(randomPoints, 1);
-           
+
                 basePoints += randvalue;
                 break;
         }

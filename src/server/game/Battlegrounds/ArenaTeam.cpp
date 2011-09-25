@@ -789,12 +789,12 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchmakerRating, int32 Mat
                 default:
                     CapReached = false;
             }
-            
+
             if (CapReached == false)       // if not go ahead.
             {
                 plr->ModifyCurrency(390, 268.6f);
 
-                // Conquest Point Soft Cap System - based on Personal Rating  
+                // Conquest Point Soft Cap System - based on Personal Rating
                 uint32 OldPoints = plr->GetCurrency(390);
                 uint32 OldRating = plr->GetArenaPersonalRating(GetSlot());
                 uint32 NewPoints = OldPoints;
@@ -803,12 +803,12 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchmakerRating, int32 Mat
                 // First Check, points - Total Conquest Points cannot exceed the Soft Cap, So:
                 if (OldRating <=1500 && OldPoints >= 1343)         // If this happens..
                 {
-                    NewPoints = 1343;                              // ..set points = Soft Cap, and set CapReached=1, 
+                    NewPoints = 1343;                              // ..set points = Soft Cap, and set CapReached=1,
                                                                    // so player cannot earn anymore points until next week
 
-                    // Second Check, rating - Rating has to remain the same 
+                    // Second Check, rating - Rating has to remain the same
                     // for all the week, when a new week starts, rating can raise
-                    // THIS IS TO AVOID RATING RAISING IN THE SAME WEEK. 
+                    // THIS IS TO AVOID RATING RAISING IN THE SAME WEEK.
                     // TODO: RATING RAISE WITHOUT EARNING POINTS.
                     if (Stats.WeekGames != 0 && OldRating > 1500)
                         NewRating = 1500;
