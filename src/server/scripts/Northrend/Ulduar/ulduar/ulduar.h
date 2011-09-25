@@ -135,6 +135,7 @@ enum UlduarGameObjects
     GO_FREYA_CHEST                        = 194324,
     GO_LEVIATHAN_DOOR                     = 194905,
     GO_LEVIATHAN_GATE                     = 194630,
+    GO_XT_002_DOOR                        = 194631,
     GO_VEZAX_DOOR                         = 194750,
     GO_MOLE_MACHINE                       = 194316,
     GO_RAZOR_HARPOON_1                    = 194542,
@@ -170,7 +171,7 @@ enum UlduarData
 {
     // Collosus (Leviathan)
     DATA_COLOSSUS                = 20,
-
+    
     // Razorscale
     DATA_EXPEDITION_COMMANDER,
     DATA_RAZORSCALE_CONTROL,
@@ -181,12 +182,14 @@ enum UlduarData
     DATA_TOY_PILE_2,
     DATA_TOY_PILE_3,
 
-    // Kologarn
-    DATA_LEFT_ARM,
-    DATA_RIGHT_ARM,
-
     // Hodir
     DATA_HODIR_RARE_CACHE,
+};
+
+enum UlduarAchievementData
+{
+    // FL Achievement boolean
+    DATA_UNBROKEN = 29052906, // 2905, 2906 are achievement IDs,
 };
 
 template<class AI>

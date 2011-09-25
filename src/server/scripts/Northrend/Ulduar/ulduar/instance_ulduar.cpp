@@ -26,8 +26,9 @@
 
 static DoorData const doorData[] =
 {
-    { GO_LEVIATHAN_DOOR, BOSS_LEVIATHAN, DOOR_TYPE_ROOM, BOUNDARY_S    },
-    { 0,                 0,              DOOR_TYPE_ROOM, BOUNDARY_NONE },
+    {   GO_LEVIATHAN_DOOR, BOSS_LEVIATHAN,    DOOR_TYPE_ROOM, BOUNDARY_S      },
+    {   GO_XT_002_DOOR,    BOSS_XT002,        DOOR_TYPE_ROOM, BOUNDARY_S      },   
+    {   0,                 0,                 DOOR_TYPE_ROOM, BOUNDARY_NONE   },
 };
 
 class instance_ulduar : public InstanceMapScript
@@ -83,6 +84,7 @@ class instance_ulduar : public InstanceMapScript
             uint32 ColossusData;
             uint8 elderCount;
             bool conSpeedAtory;
+            bool Unbroken;
 
             std::set<uint64> mRubbleSpawns;
 
@@ -121,6 +123,7 @@ class instance_ulduar : public InstanceMapScript
                 ColossusData                     = 0;
                 elderCount                       = 0;
                 conSpeedAtory                    = false;
+                Unbroken                         = true;
 
                 memset(Encounter, 0, sizeof(Encounter));
                 memset(XTToyPileGUIDs, 0, sizeof(XTToyPileGUIDs));
@@ -316,6 +319,9 @@ class instance_ulduar : public InstanceMapScript
                         if (GetBossState(BOSS_LEVIATHAN) == DONE)
                             gameObject->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                         break;
+                    case GO_XT_002_DOOR:
+                        AddDoor(gameObject, true);
+                        break;
                     case GO_VEZAX_DOOR:
                         VezaxDoorGUID = gameObject->GetGUID();
                         HandleGameObject(0, false, gameObject);
@@ -356,6 +362,8 @@ class instance_ulduar : public InstanceMapScript
                     case GO_LEVIATHAN_DOOR:
                         AddDoor(gameObject, false);
                         break;
+                    case GO_XT_002_DOOR:
+                        AddDoor(gameObject, false);
                     default:
                         break;
                 }
@@ -497,6 +505,9 @@ class instance_ulduar : public InstanceMapScript
                                     Hodir->RemoveGameObject(gameObject, false);
                         }
                         break;
+                    case DATA_UNBROKEN:
+                        Unbroken = bool(data);
+                        break;
                     default:
                         break;
                 }
@@ -584,6 +595,8 @@ class instance_ulduar : public InstanceMapScript
                         return ColossusData;
                     case DATA_HODIR_RARE_CACHE:
                         return HodirRareCacheData;
+                    case DATA_UNBROKEN:
+                        return uint32(Unbroken);
                     default:
                         break;
                 }
