@@ -3,7 +3,7 @@
 # Server version:               5.6.2-m5
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-09-20 19:34:36
+# Date/time:                    2011-09-25 11:49:52
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -196,7 +196,8 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `trans_o` float NOT NULL DEFAULT '0',
   `transguid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `extra_flags` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `stable_slots` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `petSlotUsed` int(10) DEFAULT NULL,
+  `currentPetSlot` int(10) DEFAULT NULL,
   `at_login` smallint(5) unsigned NOT NULL DEFAULT '0',
   `zone` smallint(5) unsigned NOT NULL DEFAULT '0',
   `death_expire_time` int(10) unsigned NOT NULL DEFAULT '0',
