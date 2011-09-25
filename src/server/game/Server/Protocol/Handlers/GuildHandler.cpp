@@ -521,7 +521,7 @@ void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
     std::string name, icon;
 
     recv_data >> GoGuid;
-    recv_data >> tabId;  
+    recv_data >> tabId;
     recv_data >> name;
     recv_data >> icon;
 

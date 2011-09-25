@@ -1029,7 +1029,7 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 dama
         damageInfo->damage = damage;
         return;
     }
-	
+
     Unit* victim = damageInfo->target;
     if (!victim || !victim->isAlive())
         return;
@@ -5718,18 +5718,18 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 }
                 // Permafrost
                 case 11175:
-                case 12569:				
-                case 12571:				
-                {						
+                case 12569:
+                case 12571:
+                {
                     if (!GetGuardianPet())
                         return false;
 
-                    // heal amount 
+                    // heal amount
                     basepoints0 = damage * triggerAmount/100;
                     target = this;
                     triggered_spell_id = 91394;
                     break;
-                }				
+                }
                 // Ignite
                 case 11119:
                 case 11120:
@@ -8670,7 +8670,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     CastSpell(this, 50422, true);
                     RemoveAuraFromStack(auraSpellInfo->Id);
                     return false;
-                }				
+                }
                 // Blood Presence (Improved)
                 else if (auraSpellInfo->Id == 63611)
                 {
@@ -8865,7 +8865,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             else
                 return false;
             break;
-        }		
+        }
         default:
             break;
     }
@@ -8914,7 +8914,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
-        // Auras which should proc on area aura source (caster in this case):		
+        // Auras which should proc on area aura source (caster in this case):
         // Turn the Tables
         case 52914:
         case 52915:
@@ -8955,7 +8955,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 30);
                 }
             }
-        break;		
+        break;
         case 96945: // Loom of Fate
         case 97129: // Loom of Fate
             if (HealthBelowPct(34) || (!HealthBelowPctDamaged(35, damage)))
@@ -8979,11 +8979,11 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             {
                 if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
                 {
-                    AddAura(trigger_spell_id, this);        
+                    AddAura(trigger_spell_id, this);
                     ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 120);
                 }
             }
-        break;		
+        break;
         // Cast positive spell on enemy target
         case 7099:  // Curse of Mending
         case 39703: // Curse of Mending
@@ -10138,14 +10138,14 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
                 SetPetGUID(minion->GetGUID());
                 SetMinionGUID(0);
             }
-            
+
             if (slot == PET_SLOT_UNK_SLOT)
             {
                 if (minion->isPet() && minion->ToPet()->getPetType() == HUNTER_PET)
                     assert(false);
                 slot = PET_SLOT_OTHER_PET;
             }
-            
+
             if (GetTypeId() == TYPEID_PLAYER)
             {
                 ToPlayer()->m_currentPetSlot = slot;
@@ -10655,7 +10655,7 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
     {
         if (spellProto->EquippedItemClass == -1 && (*i)->GetSpellInfo()->EquippedItemClass != -1)    //prevent apply mods from weapon specific case to non weapon specific spells (Example: thunder clap and two-handed weapon specialization)
             continue;
-    
+
         if ((*i)->GetMiscValue() & spellProto->GetSchoolMask())
         {
             if ((*i)->GetSpellInfo()->EquippedItemClass == -1)
@@ -13753,10 +13753,10 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
         case UNIT_MOD_RESISTANCE_FROST:
         case UNIT_MOD_RESISTANCE_SHADOW:
         case UNIT_MOD_RESISTANCE_ARCANE:   UpdateResistances(GetSpellSchoolByAuraGroup(unitMod));      break;
-        
-        case UNIT_MOD_ATTACK_POWER_POS:    
+
+        case UNIT_MOD_ATTACK_POWER_POS:
         case UNIT_MOD_ATTACK_POWER_NEG:    UpdateAttackPowerAndDamage();         break;
-        case UNIT_MOD_ATTACK_POWER_RANGED_POS: 
+        case UNIT_MOD_ATTACK_POWER_RANGED_POS:
         case UNIT_MOD_ATTACK_POWER_RANGED_NEG:UpdateAttackPowerAndDamage(true);     break;
 
         case UNIT_MOD_DAMAGE_MAINHAND:     UpdateDamagePhysical(BASE_ATTACK);    break;
@@ -17488,7 +17488,7 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
         data->writeBit(0); // Flag for time3. Not implemented.
     }
 
-    data->writeBit((GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) 
+    data->writeBit((GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
                    || (m_movementInfo.flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
 
     if (data->writeBit(m_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_TURNING))

@@ -336,7 +336,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *quest, uint64 npcGUID, 
     data << uint32(quest->GetFlags());                      // 3.3.3 questFlags
     data << uint32(quest->GetSuggestedPlayers());
     data << uint8(0);                                       //Empty?
-    data << uint8(quest->GetQuestStartType());   
+    data << uint8(quest->GetQuestStartType());
     data << uint32(quest->GetRequiredSpell());
 
     data << uint32(quest->GetRewChoiceItemsCount());

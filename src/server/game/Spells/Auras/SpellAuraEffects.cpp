@@ -720,7 +720,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 if (caster->GetTypeId() == TYPEID_PLAYER)
                 // Bonus from talent Spiritual Healing
                 if (AuraEffect* modHealing = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 46, 1))
-                    AddPctN(amount, modHealing->GetAmount());					
+                    AddPctN(amount, modHealing->GetAmount());
             }
             break;
         case SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN:
@@ -1966,7 +1966,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
 		case FORM_CREATURECAT:								// 0x0F
 			PowerType = POWER_ENERGY;
 			break;
-        
+
 
         case FORM_BEAR:                                     // 0x05
         case FORM_DIREBEAR:                                 // 0x08
@@ -5164,14 +5164,14 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case 57723: // Exhaustion
                 case 57724: // Sated
                 case 80354: // Temporal Displacement
-                case 95809: // Insanity					
+                case 95809: // Insanity
                 {
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 80353, apply); break; // Time Warp
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 90355, apply); break; // Ancient Hysteria
                     break;
-                }				
+                }
                 case 57819: // Argent Champion
                 case 57820: // Ebon Champion
                 case 57821: // Champion of the Kirin Tor
@@ -6545,7 +6545,7 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
     else
     {
         // Wild Growth = amount + (6 - 2*doneTicks) * ticks* amount / 100
-        int32 addition = 0;		
+        int32 addition = 0;
         if (m_spellInfo->SpellFamilyName == SPELLFAMILY_DRUID && m_spellInfo->SpellIconID == 2864)
         {
             addition = int32(float(damage * GetTotalTicks()) * ((6-float(2*(GetTickNumber()-1)))/100));

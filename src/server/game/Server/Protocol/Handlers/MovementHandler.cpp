@@ -389,7 +389,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
             if (plMover->InBattleground())
                 if (Battleground* bg = plMover->GetBattleground())
                     if (bg->isArena())
-                        bg->HandlePlayerUnderMap(_player);            
+                        bg->HandlePlayerUnderMap(_player);
         }
     }
 }
@@ -600,7 +600,7 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     for(uint32 i=0; i < MSE_COUNT; i++)
     {
         MovementStatusElements element = sequence[i];
-        
+
         if (element >= MSEGuidByte0 && element <= MSEGuidByte7)
         {
             data.ReadByteMask(guid[element - MSEGuidByte0]);
@@ -735,7 +735,7 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
                 WPError(false, "Incorrect sequence element detected at ReadMovementInfo");
         }
     }
-    
+
     mi->guid = *(uint64*)guid;
     mi->t_guid = *(uint64*)tguid;
 }
@@ -746,7 +746,7 @@ void WorldSession::WriteMovementInfo(WorldPacket &data, MovementInfo *mi)
         bool HaveTransportData = mi->HasMovementFlag(MOVEMENTFLAG_ONTRANSPORT),
         HaveTransportTime2 = (mi->flags2 & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT) != 0,
         HaveTransportTime3 = false,
-        HavePitch = (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))) 
+        HavePitch = (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)))
             || (mi->flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING),
         HaveFallData = mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING),
         HaveFallDirection = mi->HasMovementFlag(MOVEMENTFLAG_FALLING_SLOW),
@@ -761,7 +761,7 @@ void WorldSession::WriteMovementInfo(WorldPacket &data, MovementInfo *mi)
     for(uint32 i=0; i < MSE_COUNT; i++)
     {
         MovementStatusElements element = sequence[i];
-        
+
         if (element >= MSEGuidByte0 && element <= MSEGuidByte7)
         {
             data.WriteByteMask(guid[element - MSEGuidByte0]);

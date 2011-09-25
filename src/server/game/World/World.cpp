@@ -1551,7 +1551,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Gossip scripts...");
     sObjectMgr->LoadGossipScripts();                             // must be before gossip menu options
-    
+
     sLog->outString("Loading Gossip menu...");
     sObjectMgr->LoadGossipMenu();
 
@@ -1856,7 +1856,7 @@ void World::LoadCharacterCheck()
     // then the system will make a new guid for it.
 
     // How long It will take ?
-    // If you have characters more than 255 then generally it can took 1-20 secs but its just for once. 
+    // If you have characters more than 255 then generally it can took 1-20 secs but its just for once.
     // In the future it will be 1-30 ms.
 
     uint32 LastGUID;
@@ -2118,7 +2118,7 @@ void World::LoadCharacterCheck()
                         columnname = "leaderGuid";
                         break;
                     case 44:
-                        tablename = "groups"; 
+                        tablename = "groups";
                         columnname = "looterGuid";
                         break;
                     case 45:
@@ -2134,7 +2134,7 @@ void World::LoadCharacterCheck()
                         columnname = "PlayerGuid1";
                         break;
                     case 48:
-                        tablename = "guild_eventlog"; 
+                        tablename = "guild_eventlog";
                         columnname = "PlayerGuid2";
                         break;
                     case 49:
@@ -2201,7 +2201,7 @@ void World::LoadCharacterCheck()
                 }
 
                 if (!Multiple)
-                    CharacterDatabase.PExecute("UPDATE `%s` SET `%s`=%u WHERE `%s`=%u", 
+                    CharacterDatabase.PExecute("UPDATE `%s` SET `%s`=%u WHERE `%s`=%u",
                     tablename.c_str(), columnname.c_str(), newguid, columnname.c_str(), oldguid);
                 else
                 {
@@ -2309,7 +2309,7 @@ void World::LoadCharacterCheck()
 
                                     newtext = withoutlastspaces;
 
-                                    CharacterDatabase.PExecute("UPDATE `%s` SET `%s`=\"%s\" WHERE `%s`=\"%s\"", 
+                                    CharacterDatabase.PExecute("UPDATE `%s` SET `%s`=\"%s\" WHERE `%s`=\"%s\"",
                                         tablename.c_str(), columnname.c_str(), newtext.c_str(), columnname.c_str(), text.c_str());
                                 }
                             }

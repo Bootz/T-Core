@@ -115,7 +115,7 @@ void CreatureGroupManager::LoadCreatureGroups()
         sLog->outString(">> Loaded 0 creature groups. DB table `creature_group_data` is empty.");
         sLog->outString();
         return;
-    }    
+    }
 
     std::set<uint32> guidSet;
 
@@ -146,11 +146,11 @@ void CreatureGroupManager::LoadCreatureGroups()
         //Load group member data
         uint32 groupId = fields[0].GetUInt32();
         uint32 leaderGUID = fields[1].GetUInt32();
-        uint8  groupType = fields[2].GetUInt8(); 
+        uint8  groupType = fields[2].GetUInt8();
 
         group_member                        = new GroupInfo;
         group_member->leaderGUID            = leaderGUID;
-        group_member->groupType             = groupType;        
+        group_member->groupType             = groupType;
 
         // check data correctness
         if (guidSet.find(group_member->leaderGUID) == guidSet.end())
@@ -172,7 +172,7 @@ void CreatureGroupManager::LoadCreatureGroups()
     do
     {
         Field* fields = result_member->Fetch();
-        
+
         //Load group member data
         uint32 groupId = fields[0].GetUInt32();
         uint32 memberGUID = fields[1].GetUInt32();
@@ -256,7 +256,7 @@ bool CreatureGroup::IsAllowedToRespawn(Creature* member)
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
        if (itr->first->isInCombat())
             exist = false;
-    
+
     if (exist)
          sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::IsAllowedToRespawn: group member instanceId %u can respawn.",member->GetInstanceId());
 

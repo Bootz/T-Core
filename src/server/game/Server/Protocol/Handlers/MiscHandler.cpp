@@ -818,7 +818,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
 
     if (player->GetMapId() != atEntry->mapid)
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "Player '%s' (GUID: %u) too far (trigger map: %u player map: %u), ignore Area Trigger ID: %u", 
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "Player '%s' (GUID: %u) too far (trigger map: %u player map: %u), ignore Area Trigger ID: %u",
             player->GetName(), atEntry->mapid, player->GetMapId(), player->GetGUIDLow(), triggerId);
         return;
     }

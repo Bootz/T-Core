@@ -1917,10 +1917,10 @@ PetTalentType Pet::GetTalentType()
     CreatureTemplate const *ci = GetCreatureInfo();
     if (!ci)
         return PET_TALENT_TYPE_NOT_HUNTER_PET;
-    
+
     CreatureFamilyEntry const *pet_family = sCreatureFamilyStore.LookupEntry(ci->family);
     if (!pet_family)
         return PET_TALENT_TYPE_NOT_HUNTER_PET;
-    
+
     return (PetTalentType)pet_family->petTalentType;
 }

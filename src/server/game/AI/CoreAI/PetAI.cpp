@@ -330,7 +330,7 @@ Unit* PetAI::SelectNextTarget()
     // Check pet's attackers first to prevent dragging mobs back to owner
     if (target && !_CheckTargetCC(target))
         return target;
-		
+
     if (me->GetCharmerOrOwner())
     {
         // Check owner's attackers if pet didn't have any
@@ -344,10 +344,10 @@ Unit* PetAI::SelectNextTarget()
             return target;
     }
 
-    // Check LOS		
+    // Check LOS
     if (target && !me->IsWithinLOSInMap(target))
         return target;
-		
+
     // Default
     return NULL;
 }

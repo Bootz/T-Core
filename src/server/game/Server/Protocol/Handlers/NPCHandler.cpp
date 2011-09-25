@@ -540,7 +540,7 @@ void WorldSession::HandleStableChangeSlot(WorldPacket & recv_data)
     //If we move to the pet already summoned...
     if (pet && GetPlayer()->m_currentPetSlot == newslot)
         _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
-    
+
     _stableChangeSlotCallback.SetParam(newslot);
     _stableChangeSlotCallback.SetFutureResult(
         CharacterDatabase.PQuery("SELECT slot,entry,id FROM character_pet WHERE owner = '%u' AND id = '%u'",
@@ -583,7 +583,7 @@ void WorldSession::HandleStableChangeSlotCallback(QueryResult result, uint8 news
 
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u'", newslot, slot, GetPlayer()->GetGUIDLow());
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u' AND id<>'%u'", slot, newslot, GetPlayer()->GetGUIDLow(), pet_number);
-    
+
     SendStableResult(STABLE_SUCCESS_STABLE);
 }
 

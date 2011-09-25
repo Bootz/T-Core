@@ -76,7 +76,7 @@ void CreatureFormationManager::LoadCreatureFormations()
     uint32 oldMSTime = getMSTime();
 
     //Clear existing map
-    for (CreatureFormationInfoType::iterator itr = CreatureFormationMap.begin(); itr != CreatureFormationMap.end(); ++itr) // for reload case 
+    for (CreatureFormationInfoType::iterator itr = CreatureFormationMap.begin(); itr != CreatureFormationMap.end(); ++itr) // for reload case
         delete itr->second;
     CreatureFormationMap.clear();
 
@@ -118,7 +118,7 @@ void CreatureFormationManager::LoadCreatureFormations()
 
     if (guidResult)
     {
-        do 
+        do
         {
             Field* fields = guidResult->Fetch();
             uint32 guid = fields[0].GetUInt32();
@@ -137,7 +137,7 @@ void CreatureFormationManager::LoadCreatureFormations()
     do
     {
         Field* fields = result_data->Fetch();
-        
+
         //Load formation member data
         uint32 formationId = fields[0].GetUInt32();
         uint32 leaderGUID = fields[1].GetUInt32();
@@ -145,7 +145,7 @@ void CreatureFormationManager::LoadCreatureFormations()
 
         formation_info                        = new FormationInfo;
         formation_info->leaderGUID            = leaderGUID;
-        formation_info->formationAI           = formationAI; 
+        formation_info->formationAI           = formationAI;
 
         // check data correctness
         if (guidSet.find(formation_info->leaderGUID) == guidSet.end())
@@ -169,7 +169,7 @@ void CreatureFormationManager::LoadCreatureFormations()
     do
     {
         Field* fields = result_member->Fetch();
-        
+
         //Load formation member data
         uint32 formationId = fields[0].GetUInt32();
         uint32 memberGUID = fields[1].GetUInt32();
@@ -178,8 +178,8 @@ void CreatureFormationManager::LoadCreatureFormations()
 
         formation_data                        = new FormationData;
         formation_data->formationId           = formationId;
-        formation_data->follow_dist           = follow_dist; 
-        formation_data->follow_angle          = follow_angle; 
+        formation_data->follow_dist           = follow_dist;
+        formation_data->follow_angle          = follow_angle;
 
         // check data correctness
         if (guidSet.find(memberGUID) == guidSet.end())
@@ -207,7 +207,7 @@ void CreatureFormation::AddMember(Creature *member)
     uint32 memberGUID = member->GetDBTableGUIDLow();
 
     sLog->outDebug(LOG_FILTER_UNITS, "CreatureFormation::AddMember: Adding unit GUID: %u to formation.", memberGUID);
-    
+
     Formation* formation;
     formation = new Formation;
 
@@ -224,9 +224,9 @@ void CreatureFormation::AddMember(Creature *member)
         formation->follow_dist = CreatureFormationDataMap.find(memberGUID)->second->follow_dist;
         formation->follow_angle = CreatureFormationDataMap.find(memberGUID)->second->follow_angle;
     }
-    
-    formation->formationAI = CreatureFormationMap.find(m_formationID)->second->formationAI; 
-    formation->leaderGUID = CreatureFormationMap.find(m_formationID)->second->leaderGUID; 
+
+    formation->formationAI = CreatureFormationMap.find(m_formationID)->second->formationAI;
+    formation->leaderGUID = CreatureFormationMap.find(m_formationID)->second->leaderGUID;
 
     m_members[member] = formation;
     member->SetFormation(this);
@@ -239,7 +239,7 @@ void CreatureFormation::RemoveMember(Creature *member)
 
     if (m_leader == member)
         m_leader = NULL;
-    
+
     m_members.erase(member);
     member->SetFormation(NULL);
 }

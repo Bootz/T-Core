@@ -771,7 +771,7 @@ void Object::_LoadIntoDataField(char const* data, uint32 startOffset, uint32 cou
 
     if (tokens.size() != count)
         return;
- 
+
     for (uint32 index = 0; index < count; ++index)
     {
         m_uint32Values[startOffset + index] = atol(tokens[index]);
@@ -786,7 +786,7 @@ void Object::_SetUpdateBits(UpdateMask *updateMask, Player* target) const
     uint32 valuesCount = m_valuesCount;
     if (GetTypeId() == TYPEID_PLAYER && target != this)
         valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;
-    
+
     for (uint16 index = 0; index < m_valuesCount; ++index, ++indexes)
     {
         if (*indexes)
@@ -801,7 +801,7 @@ void Object::_SetCreateBits(UpdateMask *updateMask, Player* target) const
     uint32 valuesCount = m_valuesCount;
     if (GetTypeId() == TYPEID_PLAYER && target != this)
         valuesCount = PLAYER_FIELD_INV_SLOT_HEAD;
-    
+
     for (uint16 index = 0; index < valuesCount; index++, ++value)
     {
         if (*value)

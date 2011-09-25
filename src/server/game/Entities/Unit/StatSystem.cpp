@@ -252,12 +252,12 @@ void Player::UpdateArmor()
 void Player::UpdateSpellPower()
 {
     uint32 spellPowerFromIntellect = uint32(GetStat(STAT_INTELLECT)) - 10;
-    
+
     //apply only the diff between the last and the new value.
     ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
     for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
         ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
-    
+
     m_spellPowerFromIntellect = spellPowerFromIntellect;
 }
 
@@ -1178,7 +1178,7 @@ bool Guardian::UpdateStats(Stats stat)
         if (aurEff)
         {
             SpellInfo const* spellInfo = aurEff->GetSpellInfo();                                                 // Then get the SpellProto and add the dummy effect value
-            AddPctN(mod, spellInfo->Effects[EFFECT_1].CalcValue());   
+            AddPctN(mod, spellInfo->Effects[EFFECT_1].CalcValue());
         }
         // Glyph of the Ghoul
         aurEff = owner->GetAuraEffect(58686, 0);
@@ -1213,7 +1213,7 @@ bool Guardian::UpdateStats(Stats stat)
                         mod = 0.725f;
                         break;
                 }
-   
+
                 PetSpellMap::const_iterator itr = (ToPet()->m_spells.find(62758)); // Wild Hunt rank 1
                 if (itr == ToPet()->m_spells.end())
                     itr = ToPet()->m_spells.find(62762);                            // Wild Hunt rank 2
@@ -1457,7 +1457,7 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
     {
         SetModifierValue(UNIT_MOD_ATTACK_POWER_POS, BASE_VALUE, val + bonusAP);
     }
-    else 
+    else
     {
         SetModifierValue(UNIT_MOD_ATTACK_POWER_POS, BASE_VALUE, val);
         SetModifierValue(UNIT_MOD_ATTACK_POWER_NEG, BASE_VALUE, -bonusAP);

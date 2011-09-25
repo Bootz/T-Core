@@ -1176,11 +1176,11 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                                 caster->CastSpell(caster, spellId, true);
                         }
                         break;
-                    case 64343: // Impact          				
+                    case 64343: // Impact
                     {
                         // Reset cooldown on Fire Blast
                         caster->ToPlayer()->RemoveSpellCooldown(2136, true);
-                    }						
+                    }
                     case 44544: // Fingers of Frost
                     {
                         // See if we already have the indicator aura. If not, create one.
@@ -1208,7 +1208,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         // Reset cooldown on shield slam if needed
                         caster->ToPlayer()->RemoveSpellCooldown(23922, true);
                         break;
-                    }				
+                    }
                 }
                 break;
             case SPELLFAMILY_WARLOCK:
@@ -1253,8 +1253,8 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         if (Unit* owner = target->GetOwner())
                             if (AuraEffect* auraEff = owner->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 2234, 1))
                                 GetEffect(0)->SetAmount(auraEff->GetAmount());
-                        break;								
-                    }					
+                        break;
+                    }
                 }
                 break;
             case SPELLFAMILY_PRIEST:
@@ -1384,7 +1384,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     case 118: // Improved Polymorph
                     {
                         if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
-                            break;						
+                            break;
                         if (caster->HasAura(11210) && !target->HasAura(87515))
                         {
                             target->CastSpell(target, 83046, true);
@@ -1398,7 +1398,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                     }
                     case 1463: // Incanter's Absorption
-                    {						
+                    {
                         if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
                             break;
                         if (caster->HasAura(44394) || caster->HasAura(44395))

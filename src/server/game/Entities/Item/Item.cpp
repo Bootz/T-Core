@@ -1277,7 +1277,7 @@ void Item::SetNotRefundable(Player *owner, bool changestate /*=true*/, SQLTransa
     // Following is not applicable in the trading procedure
     if (changestate)
         SetState(ITEM_CHANGED, owner);
-     
+
     SetRefundRecipient(0);
     SetPaidMoney(0);
     SetPaidExtendedCost(0);

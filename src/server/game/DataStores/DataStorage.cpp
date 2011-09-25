@@ -517,7 +517,7 @@ void LoadDataStorages(const std::string& dataPath)
         if (SpellEffectEntry const *spellEffect = sSpellEffectStore.LookupEntry(i))
             sSpellEffectMap[spellEffect->EffectSpellId].effects[spellEffect->EffectIndex] = spellEffect;
     }
- 
+
     LoadData(availableDbcLocales, bad_dbc_files, sSpellEquippedItemsStore,  storagesPath,"SpellEquippedItems.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellInterruptsStore,     storagesPath,"SpellInterrupts.dbc");
     LoadData(availableDbcLocales, bad_dbc_files, sSpellLevelsStore,         storagesPath,"SpellLevels.dbc");
@@ -807,7 +807,7 @@ MapEntry const* GetMapEntry(uint32 map_id)
 {
     if (MapEntry const* mapEntry = sMapStore.LookupEntry(map_id))
         return mapEntry;
-    
+
     return NULL;
 }
 

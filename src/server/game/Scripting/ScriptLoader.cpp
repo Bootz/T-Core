@@ -876,10 +876,10 @@ void AddKalimdorScripts()
     AddSC_zulfarrak();                      //Zul'Farrak generic
     AddSC_instance_zulfarrak();             //Zul'Farrak instance script
 
-   
+
     AddSC_azuremyst_isle();
     AddSC_bloodmyst_isle();
-  
+
 #endif
 }
 

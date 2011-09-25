@@ -807,7 +807,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 
         m_talents[i] = new PlayerTalentMap();
         m_branchSpec[i] = 0;
-        
+
         m_freeTalentPoints = 0;
     }
 
@@ -1973,7 +1973,7 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
             uint32 enchantId = 0x0000FFFF & (enchants >> enchantSlot*16);
             if (!enchantId)
                 continue;
-	
+
             enchant = sSpellItemEnchantmentStore.LookupEntry(enchantId);
             if (enchant)
                 break;
@@ -2005,7 +2005,7 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
 
     if (uint8(guid) != 0)
         *data << uint8(guid); // + 296
-	
+
     *data << fields[1].GetString();                       // name
     *data << uint32(fields[9].GetUInt32());               // map
     *data << uint32(petLevel);                            // pet level
@@ -2422,13 +2422,13 @@ void Player::ProcessDelayedOperations()
             ContinueTaxiFlight();
         }
     }
-    
+
     if (m_DelayedOperations & DELAYED_BG_GROUP_RESTORE)
     {
         if (Group *g = GetGroup())
             g->SendUpdateToPlayer(GetGUID());
     }
-    
+
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
 }
@@ -4498,10 +4498,10 @@ bool Player::resetTalents(bool no_cost)
     for (uint32 j = 0; j < sTalentTreePrimarySpells.GetNumRows(); ++j)
     {
         TalentTreePrimarySpellsEntry const *talentTreeInfo = sTalentTreePrimarySpells.LookupEntry(j);
-		
+
         if (talentTreeInfo->TalentTab != TalentBranchSpec(m_activeSpec) || !talentTreeInfo)
             continue;
-		
+
         removeSpell(talentTreeInfo->Spell, true);
     }
 
@@ -6053,7 +6053,7 @@ void Player::UpdateRating(CombatRating cr)
             break;
         case CR_MASTERY:                                    // Implemented in Player::UpdateMastery
             UpdateMastery();
-            break;			
+            break;
         case CR_ARMOR_PENETRATION:
             if (affectStats)
                 UpdateArmorPenetration(amount);
@@ -7914,7 +7914,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
                 break;
             case ITEM_MOD_MASTERY_RATING:
                 ApplyRatingMod(CR_MASTERY, int32(val), apply);
-                break;				
+                break;
             // deprecated item mods
             case ITEM_MOD_SPELL_HEALING_DONE:
             case ITEM_MOD_SPELL_DAMAGE_DONE:
@@ -13872,7 +13872,7 @@ void Player::ApplyEnchantment(Item *item, EnchantmentSlot slot, bool apply, bool
                             break;
                         case ITEM_MOD_MASTERY_RATING:
                             ApplyRatingMod(CR_MASTERY, int32(enchant_amount), apply);
-                            break;							
+                            break;
                         case ITEM_MOD_SPELL_HEALING_DONE:   // deprecated
                         case ITEM_MOD_SPELL_DAMAGE_DONE:    // deprecated
                         default:
@@ -15331,7 +15331,7 @@ bool Player::SatisfyQuestReputation(Quest const* qInfo, bool msg)
             SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
         return false;
     }
-    
+
     // ReputationObjective2 does not seem to be an objective requirement but a requirement
     // to be able to accept the quest
     uint32 fIdObj = qInfo->GetRepObjectiveFaction2();
@@ -15910,7 +15910,7 @@ void Player::KilledPlayerCredit()
             {
                 uint32 reqkill = qInfo->GetPlayersSlain();
                 uint16 curkill = q_status.m_playercount;
-                
+
                 if (curkill < reqkill)
                 {
                     q_status.m_playercount = curkill + addkillcount;
@@ -17179,7 +17179,7 @@ bool Player::isAllowedToLoot(const Creature* creature)
 {
     if (!creature->isDead() || !creature->IsDamageEnoughForLootingAndReward())
         return false;
-       
+
     if (HasPendingBind())
         return false;
 
@@ -23679,9 +23679,9 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool learn /*= true
             for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
             {
                 const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
-                if (thisTalent) 
+                if (thisTalent)
                 {
-                    int thisrank = -1; // Set to -1 because of for () 
+                    int thisrank = -1; // Set to -1 because of for ()
 
                     for (int z = 0; z < 5; z++)
 
@@ -24596,14 +24596,14 @@ void Player::ActivateSpec(uint8 spec)
             //    plrTalent->second->state = PLAYERSPELL_REMOVED;
         }
     }
-    
+
     for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
         TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
-        
+
         if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(m_activeSpec))
             continue;
-        
+
         removeSpell(talentInfo->Spell, true);
     }
 
@@ -24651,13 +24651,13 @@ void Player::ActivateSpec(uint8 spec)
     for (uint32 i = 0; i < sTalentTreePrimarySpells.GetNumRows(); ++i)
     {
         TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpells.LookupEntry(i);
-        
+
         if (!talentInfo || talentInfo->TalentTab != TalentBranchSpec(spec))
             continue;
-        
+
         learnSpell(talentInfo->Spell, false);
     }
-    
+
     // set glyphs
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
     {

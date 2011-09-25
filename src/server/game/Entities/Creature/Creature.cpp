@@ -241,7 +241,7 @@ void Creature::SearchGroup()
         return;
 
     CreatureGroupDataType::iterator grpdata = CreatureGroupDataMap.find(lowguid);
-    if (grpdata != CreatureGroupDataMap.end()) 
+    if (grpdata != CreatureGroupDataMap.end())
         sCreatureGroupMgr->AddCreatureToGroup(grpdata->second, this);
 }
 
@@ -1524,7 +1524,7 @@ void Creature::setDeathState(DeathState s)
             m_respawnTime = time(NULL) + m_respawnDelay + 10;
         }
         else
-        {        
+        {
         m_corpseRemoveTime = time(NULL) + m_corpseDelay;
         m_respawnTime = time(NULL) + m_respawnDelay + m_corpseDelay;
         }
@@ -1596,11 +1596,11 @@ bool Creature::FallGround()
     float ground_Z = GetMap()->GetHeight(x, y, z, true, MAX_FALL_DISTANCE);
     if (fabs(ground_Z - z) < 0.1f)
         return false;
-    
+
     // Hack ... ground_Z should not be invalid
     // If Vmap is fixed remove this
     if (ground_Z == -200000.0f)
-    return false;        
+    return false;
     // End hack
     GetMotionMaster()->MoveFall(ground_Z, EVENT_FALL_GROUND);
     Unit::setDeathState(DEAD_FALLING);

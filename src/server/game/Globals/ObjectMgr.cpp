@@ -2122,9 +2122,9 @@ void ObjectMgr::LoadItemTemplates()
                                              "stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5,  "
     //                                            37           38           39          40           41           42          43           44           45           46
                                              "stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, "
-    //                                                   47                    48        49      50               51        52              53    
+    //                                                   47                    48        49      50               51        52              53
                                              "ScalingStatDistribution, ScalingStatValue, delay, RangedModRange, spellid_1, spelltrigger_1, spellcharges_1, "
-    //                                           54               55               56              57                      58          59            60                                    
+    //                                           54               55               56              57                      58          59            60
                                              "spellppmRate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, "
     //                                            61              62               63               64                      65        66               67
                                              "spellppmRate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, "
@@ -2134,7 +2134,7 @@ void ObjectMgr::LoadItemTemplates()
                                              "spellppmRate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, "
     //                                            82				83				84					85					86			87			88		89				90
                                              "spellppmRate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, description, PageText, LanguageID, PageMaterial, "
-    //                                          91			92		93		 94			95				96			97		98		99			  100  101    102	
+    //                                          91			92		93		 94			95				96			97		98		99			  100  101    102
                                              "startquest, lockid, Material, sheath, RandomProperty, RandomSuffix, block, itemset, MaxDurability, area, Map, BagFamily, "
     //                                          103				104				105				106				107				108				109				110
                                              "TotemCategory, socketColor_1, socketContent_1, socketColor_2, socketContent_2, socketColor_3, socketContent_3, socketBonus, "
@@ -6730,7 +6730,7 @@ void ObjectMgr::LoadCurrencyOnKill()
    QueryResult result = WorldDatabase.Query("SELECT creature_id, type, amount FROM creature_onkill_currency");
 
    if (!result)
-   { 
+   {
        sLog->outString();
        sLog->outErrorDb(">> Loaded 0 creature award currency definitions. DB table `creature_onkill_currency` is empty.");
        return;
@@ -6739,7 +6739,7 @@ void ObjectMgr::LoadCurrencyOnKill()
    do
    {
        Field* fields = result->Fetch();
-       
+
 
        uint32 creature_id = fields[0].GetUInt32();
 
@@ -8375,15 +8375,15 @@ void ObjectMgr::LoadGossipMenuItems()
     }
 
     uint32 count = 0;
-    
+
     std::set<uint32> gossipScriptSet;
-    
+
     for (ScriptMapMap::const_iterator itr = sGossipScripts.begin(); itr != sGossipScripts.end(); ++itr)
-        gossipScriptSet.insert(itr->first);  
+        gossipScriptSet.insert(itr->first);
 
     do
     {
-    	
+
         Field* fields = result->Fetch();
 
         GossipMenuItems gMenuItem;

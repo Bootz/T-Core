@@ -3013,7 +3013,7 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 90355:  // Ancient Hysteria
                 spellAura->excludeCasterAuraSpell = 95809; // Insanity
-                break;				
+                break;
             case 20335: // Heart of the Crusader
             case 20336:
             case 20337:
@@ -3072,7 +3072,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 45641: // Fire Bloom
             case 55665: // Life Drain - Sapphiron (H)
             case 28796: // Poison Bolt Volly - Faerlina
-            case 44203: // Tranquility		
+            case 44203: // Tranquility
                 spellTarget->MaxAffectedTargets = 5;
                 break;
             case 40827: // Sinful Beam
@@ -3263,7 +3263,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 64185: // Lifebinder's Gift
                 spellEffect->EffectImplicitTargetB = TARGET_UNIT_NEARBY_ENTRY;
                 spellEffect->EffectImplicitTargetB = TARGET_UNIT_NEARBY_ENTRY;
-                break;                
+                break;
             // ENDOF ULDUAR SPELLS
             //
             // TRIAL OF THE CRUSADER SPELLS
