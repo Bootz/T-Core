@@ -3186,6 +3186,28 @@ enum SpellFamilyNames
     SPELLFAMILY_PET         = 17
 };
 
+// stored in character_pet.slot
+enum PetSlot
+{
+    //Some not-in-db slots
+    PET_SLOT_UNK_SLOT        =  -3,        // Used in some scripts.
+    
+    PET_SLOT_ACTUAL_PET_SLOT =  -2,        // Save the pet in his actual slot.
+    PET_SLOT_DELETED         =  -1,        // Delete the pet
+    
+    //Hunter pet slots, sended to client at stable.
+    PET_SLOT_HUNTER_FIRST    =   0,        // PetType == HUNTER_PET
+    PET_SLOT_HUNTER_LAST     =   4,        // PetType == HUNTER_PET
+    PET_SLOT_STABLE_FIRST    =   5,
+    PET_SLOT_STABLE_LAST     =  24,
+    
+    //Non-hunter pet slot
+    PET_SLOT_OTHER_PET       = 100,        // PetType != HUNTER_PET
+
+    PET_SAVE_AS_DELETED        = -1,                        // not saved in fact
+};
+#define MAX_PET_STABLES         PET_SLOT_STABLE_LAST
+
 enum TradeStatus
 {
     TRADE_STATUS_BUSY           = 0,
@@ -3236,5 +3258,13 @@ enum RemoveMethod
 // because if client receive unsupported expansion level it think
 // that it not have expansion installed and reject
 #define MAX_EXPANSION 3
+
+enum PetTalentType
+{
+    PET_TALENT_TYPE_NOT_HUNTER_PET = -1,
+    PET_TALENT_TYPE_FEROCITY       = 0,
+    PET_TALENT_TYPE_TENACITY       = 1,
+    PET_TALENT_TYPE_CUNNING        = 2
+};
 
 #endif

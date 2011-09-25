@@ -600,14 +600,9 @@ class WorldSession
         void HandleNpcTextQueryOpcode(WorldPacket& recvPacket);
         void HandleBinderActivateOpcode(WorldPacket& recvPacket);
         void HandleListStabledPetsOpcode(WorldPacket& recvPacket);
-        void HandleStablePet(WorldPacket& recvPacket);
-        void HandleStablePetCallback(QueryResult result);
-        void HandleUnstablePet(WorldPacket& recvPacket);
-        void HandleUnstablePetCallback(QueryResult result, uint32 petnumber);
-        void HandleBuyStableSlot(WorldPacket& recvPacket);
         void HandleStableRevivePet(WorldPacket& recvPacket);
-        void HandleStableSwapPet(WorldPacket& recvPacket);
-        void HandleStableSwapPetCallback(QueryResult result, uint32 petnumber);
+        void HandleStableChangeSlot(WorldPacket& recvPacket);
+        void HandleStableChangeSlotCallback(QueryResult result, uint8 slot);
 
         void HandleDuelAcceptedOpcode(WorldPacket& recvPacket);
         void HandleDuelCancelledOpcode(WorldPacket& recvPacket);
@@ -930,11 +925,9 @@ class WorldSession
         ACE_Future_Set<QueryResult> _nameQueryCallbacks;
         QueryResultFuture _charEnumCallback;
         QueryResultFuture _addIgnoreCallback;
-        QueryResultFuture _stablePetCallback;
         QueryCallback<QueryResult, std::string> _charRenameCallback;
         QueryCallback<QueryResult, std::string> _addFriendCallback;
-        QueryCallback<QueryResult, uint32> _unstablePetCallback;
-        QueryCallback<QueryResult, uint32> _stableSwapCallback;
+        QueryCallback<QueryResult, uint8> _stableChangeSlotCallback;
         QueryCallback<QueryResult, uint64> _sendStabledPetCallback;
         QueryCallback<PreparedQueryResult, CharacterCreateInfo*> _charCreateCallback;
         QueryResultHolderFuture _charLoginCallback;

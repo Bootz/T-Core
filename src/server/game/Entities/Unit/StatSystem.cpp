@@ -1199,6 +1199,21 @@ bool Guardian::UpdateStats(Stats stat)
             mod = 0.45f;
             if (isPet())
             {
+                switch (ToPet()->GetTalentType())
+                {
+                    case PET_TALENT_TYPE_NOT_HUNTER_PET:
+                        break;
+                    case PET_TALENT_TYPE_FEROCITY:
+                        mod = 0.67f;
+                        break;
+                    case PET_TALENT_TYPE_TENACITY:
+                        mod = 0.78f;
+                        break;
+                    case PET_TALENT_TYPE_CUNNING:
+                        mod = 0.725f;
+                        break;
+                }
+   
                 PetSpellMap::const_iterator itr = (ToPet()->m_spells.find(62758)); // Wild Hunt rank 1
                 if (itr == ToPet()->m_spells.end())
                     itr = ToPet()->m_spells.find(62762);                            // Wild Hunt rank 2
@@ -1297,9 +1312,26 @@ void Guardian::UpdateArmor()
     float bonus_armor = 0.0f;
     UnitMods unitMod = UNIT_MOD_ARMOR;
 
-    // hunter and warlock pets gain 35% of owner's armor value
+    // warlock pets gain 35% of owner's armor value, for hunter pets it depends on pet talent type.
     if (isPet())
-        bonus_armor = float(CalculatePctN(m_owner->GetArmor(), 35));
+    {
+        float mod = 0.35f;
+        switch (ToPet()->GetTalentType())
+        {
+            case PET_TALENT_TYPE_NOT_HUNTER_PET:
+                break;
+            case PET_TALENT_TYPE_FEROCITY:
+                mod = 0.5f;
+                break;
+            case PET_TALENT_TYPE_TENACITY:
+                mod = 0.7f;
+                break;
+            case PET_TALENT_TYPE_CUNNING:
+                mod = 0.6f;
+                break;
+        }
+        bonus_armor = mod * float(m_owner->GetArmor());
+    }
 
     value  = GetModifierValue(unitMod, BASE_VALUE);
     value *= GetModifierValue(unitMod, BASE_PCT);
@@ -1393,7 +1425,7 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
             }
 
             bonusAP = owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.22f * mod;
-            SetBonusDamage(int32(owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.1287f * mod));
+            SetBonusDamage(int32(owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.425f * mod));
         }
         else if (IsPetGhoul()) //ghouls benefit from deathknight's attack power (may be summon pet or not)
         {

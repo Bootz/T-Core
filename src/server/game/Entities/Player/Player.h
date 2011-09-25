@@ -871,6 +871,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 30,
     PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 31,
     PLAYER_LOGIN_QUERY_LOADCURRENCY             = 32,
+    PLAYER_LOGIN_QUERY_LOADPETSLOT              = 33,
     MAX_PLAYER_LOGIN_QUERY,
 };
 
@@ -1255,8 +1256,8 @@ class Player : public Unit, public GridObject<Player>
         void UpdateInnerTime (time_t time) { time_inn_enter = time; }
 
         Pet* GetPet() const;
-        Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime);
-        void RemovePet(Pet* pet, PetSaveMode mode, bool returnreagent = false);
+        Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime, PetSlot slotID = PET_SLOT_UNK_SLOT);
+        void RemovePet(Pet* pet, PetSlot mode, bool returnreagent = false);
         uint32 GetPhaseMaskForSpawn() const;                // used for proper set phase for DB at GM-mode creature/GO spawn
 
         void Say(const std::string& text, const uint32 language);
@@ -1428,8 +1429,6 @@ class Player : public Unit, public GridObject<Player>
         void LoadPet();
 
         bool AddItem(uint32 itemId, uint32 count);
-
-        uint32 m_stableSlots;
 
         /*********************************************************/
         /***                    GOSSIP SYSTEM                  ***/
@@ -2388,6 +2387,28 @@ class Player : public Unit, public GridObject<Player>
 
         WorldLocation GetStartPosition() const;
 
+        // current pet slot
+        PetSlot m_currentPetSlot;
+        uint32 m_petSlotUsed;
+    
+        void setPetSlotUsed(PetSlot slot, bool used)
+        {
+            if (used)
+                m_petSlotUsed |=  (1 << uint32(slot));
+            else
+                m_petSlotUsed &= ~(1 << uint32(slot));
+        }
+    
+        PetSlot getSlotForNewPet()
+        {
+            for (uint32 i = (uint32)PET_SLOT_HUNTER_FIRST; i <= (uint32)PET_SLOT_HUNTER_LAST; i++)
+                if ((m_petSlotUsed & (1 << i)) == 0)
+                    return (PetSlot)i;
+            if (m_currentPetSlot >= PET_SLOT_HUNTER_FIRST && m_currentPetSlot <= PET_SLOT_HUNTER_LAST)
+                return m_currentPetSlot;
+            return PET_SLOT_HUNTER_LAST;
+        }
+ 
         // currently visible objects at player client
         typedef std::set<uint64> ClientGUIDs;
         ClientGUIDs m_clientGUIDs;
