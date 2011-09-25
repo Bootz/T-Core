@@ -363,6 +363,7 @@ class spell_dazzling_destruction : public SpellScriptLoader
             return new spell_dazzling_destructionSpellScript();
         }
 };
+
 void AddSC_boss_theralion()
 {
     new boss_theralion();

@@ -1276,7 +1276,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             else
                 // If there is no effect mask determine from spell proto
                 positive = m_spellInfo->IsPositiveEffect(m_spellInfo->Id);
-        }				
+        }
         switch (m_spellInfo->DmgClass)
         {
             case SPELL_DAMAGE_CLASS_MAGIC:
@@ -4641,7 +4641,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
             if (!(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS) && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
                 return SPELL_FAILED_LINE_OF_SIGHT;
-				
+
             if (m_spellInfo->AttributesEx7 & SPELL_ATTR7_HAS_CHARGE_EFFECT)
            {
                float z_diff = target->GetPositionZ() - m_caster->GetPositionZ();
