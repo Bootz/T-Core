@@ -134,7 +134,7 @@ int Master::Run()
     sLog->outString(" Welcome to TrilliumEMU" );
     sLog->outString("" );
     sLog->outString(" http://www.trilliumemu.org" );
-    sLog->outString("===========================================================\n" ); 
+    sLog->outString("===========================================================\n" );
 
 #ifdef USE_SFMT_FOR_RNG
     sLog->outString("\n");
@@ -478,9 +478,8 @@ void Master::_StopDB()
 void Master::clearOnlineAccounts()
 {
     // Cleanup online status for characters hosted at current realm
-    LoginDatabase.DirectPExecute(
-        "UPDATE account SET online = 0 WHERE online = %d "
-        "AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = '%d')", realmID, realmID);
+    LoginDatabase.DirectPExecute("UPDATE account SET online = 0 WHERE online <> 0 "
+        "AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = '%d')", realmID);
 
     CharacterDatabase.DirectExecute("UPDATE characters SET online = 0 WHERE online <> 0");
 
