@@ -145,7 +145,10 @@ bool ChatHandler::HandleSaveCommand(const char* /*args*/)
     // save if the player has last been saved over 20 seconds ago
     uint32 save_interval = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
     if (save_interval == 0 || (save_interval > 20*IN_MILLISECONDS && player->GetSaveTimer() <= save_interval - 20*IN_MILLISECONDS))
-        player->SaveToDB();
+    {
+        player->SaveToDB(); 
+        SendSysMessage(LANG_PLAYER_SAVED); 
+    }
 
     return true;
 }
