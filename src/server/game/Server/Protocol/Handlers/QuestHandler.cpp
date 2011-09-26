@@ -370,6 +370,9 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recv_data)
         }
         else
             _player->PlayerTalkClass->SendQuestGiverOfferReward(quest, guid, true);
+
+        // Don't forget to close window.
+        _player->SendQuestWindowClose(quest->GetQuestId());
     }
 }
 
@@ -720,10 +723,8 @@ uint32 WorldSession::getDialogStatus(Player *pPlayer, Object* questgiver, uint32
     return result;
 }
 
-void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket*/)
+void WorldSession::SendStatusOfQuestGivers(WorldPacket& /*recvPacket*/)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY");
-
     uint32 count = 0;
 
     WorldPacket data(SMSG_QUESTGIVER_STATUS_MULTIPLE, 16);
@@ -769,6 +770,13 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
 
     data.put<uint32>(0, count);                             // write real count
     SendPacket(&data);
+}
+
+void WorldSession::HandleQuestGiverStatusMultipleQuery(WorldPacket& /*recvPacket*/)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY");
+
+    SendStatusOfQuestGivers();
 }
 
 void WorldSession::HandleQueryQuestsCompleted(WorldPacket & /*recv_data*/)

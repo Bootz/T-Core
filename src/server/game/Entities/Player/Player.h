@@ -1546,6 +1546,7 @@ class Player : public Unit, public GridObject<Player>
         void SendQuestComplete(uint32 quest_id);
         void SendQuestReward(Quest const *pQuest, uint32 XP, Object* questGiver);
         void SendQuestFailed(uint32 questId, InventoryResult reason = EQUIP_ERR_OK);
+        void SendQuestWindowClose(uint32 questId);
         void SendQuestTimerFailed(uint32 quest_id);
         void SendCanTakeQuestResponse(uint32 msg);
         void SendQuestConfirmAccept(Quest const* pQuest, Player* pReceiver);
@@ -1881,7 +1882,7 @@ class Player : public Unit, public GridObject<Player>
         void SetRank(uint8 rankId) { SetUInt32Value(PLAYER_GUILDRANK, rankId); }
         uint8 GetRank() { return uint8(GetUInt32Value(PLAYER_GUILDRANK)); }
         void SetGuildIdInvited(uint32 GuildId) { m_GuildIdInvited = GuildId; }
-        
+
         static uint32 GetGuildIdFromDB(uint64 guid);
         static uint8 GetRankFromDB(uint64 guid);
         int GetGuildIdInvited() { return m_GuildIdInvited; }
@@ -1972,7 +1973,7 @@ class Player : public Unit, public GridObject<Player>
         float GetMasteryPoints() { return CalculateMasteryPoints(m_baseRatingValue[CR_MASTERY]); }
         float CalculateMasteryPoints(int32 curr_rating)  { return float(curr_rating * 0.0055779569892473); }
         int32 CalculateMasteryRating(float curr_mastery) { return int32(curr_mastery / 0.0055779569892473); }
-		
+
         void UpdateAllSpellCritChances();
         void UpdateSpellCritChance(uint32 school);
         void UpdateArmorPenetration(int32 amount);
@@ -2390,7 +2391,7 @@ class Player : public Unit, public GridObject<Player>
         // current pet slot
         PetSlot m_currentPetSlot;
         uint32 m_petSlotUsed;
-    
+
         void setPetSlotUsed(PetSlot slot, bool used)
         {
             if (used)
@@ -2398,7 +2399,7 @@ class Player : public Unit, public GridObject<Player>
             else
                 m_petSlotUsed &= ~(1 << uint32(slot));
         }
-    
+
         PetSlot getSlotForNewPet()
         {
             for (uint32 i = (uint32)PET_SLOT_HUNTER_FIRST; i <= (uint32)PET_SLOT_HUNTER_LAST; i++)
@@ -2408,7 +2409,7 @@ class Player : public Unit, public GridObject<Player>
                 return m_currentPetSlot;
             return PET_SLOT_HUNTER_LAST;
         }
- 
+
         // currently visible objects at player client
         typedef std::set<uint64> ClientGUIDs;
         ClientGUIDs m_clientGUIDs;
