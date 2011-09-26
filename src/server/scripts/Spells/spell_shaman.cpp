@@ -240,6 +240,4 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_fire_nova();
     new spell_sha_mana_tide_totem();
     new spell_sha_earthbind_totem();
-    new spell_sha_bloodlust();
-    new spell_sha_heroism();
 }

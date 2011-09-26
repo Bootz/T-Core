@@ -723,7 +723,7 @@ uint32 WorldSession::getDialogStatus(Player *pPlayer, Object* questgiver, uint32
     return result;
 }
 
-void WorldSession::SendStatusOfQuestGivers(WorldPacket& /*recvPacket*/)
+void WorldSession::SendStatusOfQuestGivers()
 {
     uint32 count = 0;
 
@@ -772,14 +772,14 @@ void WorldSession::SendStatusOfQuestGivers(WorldPacket& /*recvPacket*/)
     SendPacket(&data);
 }
 
-void WorldSession::HandleQuestGiverStatusMultipleQuery(WorldPacket& /*recvPacket*/)
+void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY");
 
     SendStatusOfQuestGivers();
 }
 
-void WorldSession::HandleQueryQuestsCompleted(WorldPacket & /*recv_data*/)
+void WorldSession::HandleQueryQuestsCompleted(WorldPacket& /*recv_data*/)
 {
     size_t rew_count = _player->GetRewardedQuestCount();
 
