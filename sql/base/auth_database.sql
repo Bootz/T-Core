@@ -110,23 +110,6 @@ CREATE TABLE IF NOT EXISTS `realmcharacters` (
 # Data exporting was unselected.
 
 
-# Dumping structure for table auth.realmlist
-DROP TABLE IF EXISTS `realmlist`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `realmlist` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(32) NOT NULL default '',
-  `address` varchar(32) NOT NULL default '127.0.0.1',
-  `port` int(11) NOT NULL default '8085',
-  `icon` tinyint(3) unsigned NOT NULL default '0',
-  `color` tinyint(3) unsigned NOT NULL default '2',
-  `timezone` tinyint(3) unsigned NOT NULL default '0',
-  `allowedSecurityLevel` tinyint(3) unsigned NOT NULL default '0',
-  `population` float unsigned NOT NULL default '0',
-  `gamebuild` int(11) unsigned NOT NULL default '14545',
-  PRIMARY KEY  (`id`),
-=======
 CREATE TABLE IF NOT EXISTS `realmlist` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
