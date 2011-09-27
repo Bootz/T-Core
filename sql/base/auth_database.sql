@@ -110,6 +110,9 @@ CREATE TABLE IF NOT EXISTS `realmcharacters` (
 # Data exporting was unselected.
 
 
+DROP TABLE IF EXISTS `realmlist`; 
+*!40101 SET @saved_cs_client     = @@character_set_client */; 
+*!40101 SET character_set_client = utf8 */; 
 CREATE TABLE IF NOT EXISTS `realmlist` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
