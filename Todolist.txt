@@ -13,7 +13,7 @@ TODO-List for TrilliumEMU Developer #
 5. Begin to fix guilds.
 6. Begin to fix groups.
 7. Research the Battleground Packets, some updates added to this packets.
-8. Update the rest of Opcodes to 4.2.0.
+8. Update all Opcodes for 422, so we can to 422 in master.
 9. Implement a New Terrain System.
 
 // Database Developer:
