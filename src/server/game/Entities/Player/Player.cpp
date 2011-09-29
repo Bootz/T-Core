@@ -1891,7 +1891,9 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
     uint32 guid = fields[0].GetUInt32();
     uint8 playerRace = fields[2].GetUInt8();
     uint8 playerClass = fields[3].GetUInt8();
+    uint8 gender = fields[4].GetUInt8();
     uint32 playerBytes = fields[5].GetUInt32();
+    uint8 level = fields[7].GetUInt8();
     uint32 playerFlags = fields[14].GetUInt32();
     uint32 atLoginFlags = fields[15].GetUInt32();
     uint32 zone = fields[8].GetUInt32();
@@ -1912,8 +1914,8 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
     }
 
     *data << uint8(playerBytes >> 24);                    // Hair color
-    *data << uint8(fields[4].GetUInt8());                 // Gender
-    *data << uint8(fields[7].GetUInt8());                 // Level
+    *data << uint8(gender);                               // Gender
+    *data << uint8(level);                                // Level
 
     *data << uint32(zone);                                // Zone id
     *data << uint32(petDisplayId);                        // Pet DisplayID
@@ -1944,6 +1946,7 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
     }
     else
         charFlags |= CHARACTER_FLAG_DECLINED;
+
     *data << uint32(charFlags);                           // character flags
 
     *data << uint32(petFamily);                           // Pet Family
@@ -2024,7 +2027,7 @@ bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
     *data << uint8(playerBytes2 & 0xFF);                  // facial hair
     *data << uint8(playerBytes);                          // skin
 
-    return false;
+    return true;
 }
 
 bool Player::ToggleAFK()

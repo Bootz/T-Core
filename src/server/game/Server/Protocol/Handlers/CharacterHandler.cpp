@@ -209,95 +209,102 @@ bool LoginQueryHolder::Initialize()
 
 void WorldSession::HandleCharEnum(QueryResult result)
 {
-    WorldPacket data(SMSG_CHAR_ENUM, 360);                  // we guess size
+    WorldPacket data(SMSG_CHAR_ENUM, 270);
 
-    uint32 num = 0;
-
-    data << uint8(1 << 7); // 0 causes the client to free memory of charlist
+    data << uint8(0x80); // 0 causes the client to free memory of charlist
     data << uint32(0); // unk loop counter
-    data << num;
+    data << uint32(0); // number of characters
 
-    _allowedCharsToLogin.clear();
     if (result)
     {
-        uint8 curRes = 0;
-        uint8 curPos = 0;
+        typedef std::pair<uint32, uint32> Guids;
+        std::vector<Guids> guidsVect;
+        ByteBuffer buffer;
+        _allowedCharsToLogin.clear();
+
         do
         {
             uint32 guidlow = (*result)[0].GetUInt32();
-            uint8 pRace = (*result)[2].GetUInt8();
-            uint8 pClass = (*result)[3].GetUInt8();
             uint32 atLoginFlags = (*result)[15].GetUInt32();
-
-            PlayerInfo const *info = sObjectMgr->GetPlayerInfo(pRace, pClass);
-            if (info != NULL)
+            guidsVect.push_back(std::make_pair(guidlow, atLoginFlags));
+            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
+            if (!Player::BuildEnumData(result, &buffer))
             {
-                _allowedCharsToLogin.insert(guidlow);
-                ++num;
+                sLog->outError("Building enum data for SMSG_CHAR_ENUM has failed, aborting");
+                return;
             }
-            else
-            {
-                sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guidlow);
-                continue;
-            }
+            _allowedCharsToLogin.insert(guidlow);
+        }
+        while (result->NextRow());
 
-            for (int i = 0; i < 17; ++i)
+        uint8 curRes = 0;
+        uint8 curPos = 0;
+
+        for (std::vector<Guids>::iterator itr = guidsVect.begin(); itr != guidsVect.end(); ++itr)
+        {
+            uint32 guid = (*itr).first;
+            uint32 loginFlags = (*itr).second;
+
+            for (uint8 i = 0; i < 17; ++i)
             {
                 if (curPos == 8)
                 {
                     data << curRes;
-                    curRes = curPos = 0;
+                    curRes = 0;
+                    curPos = 0;
                 }
 
                 ++curPos;
-                uint8 offset = 8-curPos;
-                // Low PlayerGUID
-                if (i == 0) // v79
-                {
-                    if (uint8(guidlow) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 7) // v68
-                {
-                    if (uint8(guidlow >> 8) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 12) // v70
-                {
-                    if (uint8(guidlow >> 16) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 11) // v78
-                {
-                    if (uint8(guidlow >> 24) != 0)
-                        curRes |= (1 << offset);
-                }
-                // Low PlayerGUID end
-                // First Login
-                else if (i == 1)
-                {
-                    if (atLoginFlags & AT_LOGIN_FIRST)
-                        curRes |= (1 << offset);
-                }
-                // Also sent in packet stream: Player High GUID, Guild GUID (8 bytes)
-            }
-        } while(result->NextRow(true));
+                uint8 offset = 8 - curPos;
 
-        // If some data is still there, but we didn't reach the max bit
+                switch (i)
+                {
+                    case 0:
+                    {
+                        if (uint8(guid) != 0)
+                            curRes |= (1 << offset);
+
+                        break;
+                    }
+                    case 1:
+                    {
+                        if (loginFlags & AT_LOGIN_FIRST)
+                            curRes |= (1 << offset);
+
+                        break;
+                    }
+                    case 7:
+                    {
+                        if (uint8(guid >> 8) != 0)
+                            curRes |= (1 << offset);
+
+                        break;
+                    }
+                    case 11:
+                    {
+                        if (uint8(guid >> 24) != 0)
+                            curRes |= (1 << offset);
+
+                        break;
+                    }
+                    case 12:
+                    {
+                        if (uint8(guid >> 16) != 0)
+                            curRes |= (1 << offset);
+
+                        break;
+                    }
+                }
+                // Missing from packet: Player High GUID, Guild GUID (8 bytes)
+            }
+        }
+
         if (curPos != 0)
             data << curRes;
 
-        result->Reset();
-        do
-        {
-            uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
-            Player::BuildEnumData(result, &data);
-        }
-        while (result->NextRow());
+        data.append(buffer);
+        data.put<uint32>(5, guidsVect.size());
     }
-
-    data.put<uint32>(5, num);
 
     SendPacket(&data);
 }
