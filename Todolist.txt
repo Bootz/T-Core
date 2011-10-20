@@ -1,0 +1,33 @@
+#####################################
+TODO-List for TrilliumEMU Developer #
+#####################################
+
+# What need to be Fixed:
+##########################
+
+// Core Developer:
+1. Fix the Vendors, they dont show any items.
+2. Implement Wintergrasp Battlefield.
+3. Implement the new Battlegrounds.
+4. Begin to fix spells (only casting and damage works)
+5. Begin to fix guilds.
+6. Begin to fix groups.
+7. Research the Battleground Packets, some updates added to this packets.
+8. Update all Opcodes for 422, so we can to 422 in master.
+9. Implement a New Terrain System.
+
+// Database Developer:
+1. Fix old spawns and duplicates from old WotLK
+2. Fix quests that doesnt work
+3. Fix creature_template from 4.1.0+ (level, faction)
+3. Add loot for missing creatures like cataclysm H dungeons
+4. Rewrite table creature_classlevelstats
+5. Rewrite exp/mindamage/maxmage based on unit_class + level formula
+6. Spawn all creatures not spawned from 4.2.0+
+7. Update WDBverified column with correct data
+8. Clean console errors
+
+What need to merged:
+1. Merge Trinity to last Head (Venugh does this).
+
+If you Fix anything from this List, remove it.
